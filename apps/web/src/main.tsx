@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { i18n, theme } from '@milesight/shared/src/services';
 import routes from '@/routes';
 import '@/styles/index.less';
+import 'virtual:svg-icons-register';
 
 const router = createBrowserRouter(routes, { basename: '/' });
 const root = createRoot(document.getElementById('root')!);

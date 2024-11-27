@@ -1,0 +1,49 @@
+{
+    "type": "weatherWidget",
+    "name": "Weather Widget",
+    "class": "operate",
+    "icon": "./icon.png",
+    "defaultRow": 6,
+    "defaultCol": 8,
+    "minRow": 4,
+    "minCol": 4,
+    "configProps": [
+        {
+            "style": "width: 100%",
+            "components": [
+                {
+                    "type": "entitySelect",
+                    "title": "Entity",
+                    "key": "entity",
+                    "style": "width: 100%",
+                    "getDataUrl": "",
+                    "componentProps": {
+                        "size": "small",
+                        "entityType": ["SERVICE"],
+                        "entityExcludeChildren": true
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "type": "input",
+                    "title": "Title",
+                    "key": "title",
+                    "defaultValue": "Title",
+                    "componentProps": {
+                        "size": "small",
+                        "inputProps": {
+                            "maxLength": 35
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "view": []
+}
