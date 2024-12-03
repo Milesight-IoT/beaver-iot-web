@@ -1,0 +1,46 @@
+@ms-table-pro-footer-button-height: 34px;
+
+.@{prefix}-table-pro {
+    & &__footer {
+        min-height: @ms-table-pro-footer-button-height + @padding-xxs;
+        padding-top: @padding-xxs;
+        border-top: none;
+    }
+
+    & &__refresh-btn {
+        width: @ms-table-pro-footer-button-height;
+        height: @ms-table-pro-footer-button-height;
+        color: var(--text-color-secondary);
+        border: 1px solid var(--border-color-base);
+        border-radius: @border-radius-base;
+    }
+
+    & &__pagination {
+        .@{mui-prefix}Toolbar-root {
+            min-height: @ms-table-pro-footer-button-height;
+        }
+
+        .@{mui-prefix}InputBase-root {
+            height: @ms-table-pro-footer-button-height;
+            border: 1px solid var(--border-color-base);
+            border-radius: @border-radius-base;
+        }
+
+        .@{mui-prefix}ButtonBase-root {
+            width: @ms-table-pro-footer-button-height;
+            height: @ms-table-pro-footer-button-height;
+            border: 1px solid var(--border-color-base);
+            border-radius: @border-radius-base;
+
+            &:last-child {
+                margin-left: @margin-sm;
+            }
+        }
+
+        .@{mui-prefix}TablePagination-selectLabel,
+        .@{mui-prefix}TablePagination-displayedRows {
+            margin: 0;
+        }
+
+    }
+}

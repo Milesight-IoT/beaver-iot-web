@@ -1,0 +1,69 @@
+.@{prefix}-int-card {
+    // width: 322px;
+    padding: @padding-sm;
+    background-color: var(--component-background);
+    border: 1px solid var(--component-background);
+    border-radius: @border-radius-base;
+    cursor: pointer;
+    transition: .3s;
+
+    &:hover {
+        border: 1px solid var(--border-color-main);
+        box-shadow: @shadow-2;
+    }
+
+    .icon {
+        width: 48px;
+        height: 48px;
+        margin: 0 0 @margin-xs 0;
+        overflow: hidden;
+        background-color: var(--component-background-gray);
+        background-size: 100%;
+        border-radius: @border-radius-base;
+
+        > img {
+            width: 100%;
+            -webkit-user-drag: none;
+        }
+    }
+
+    .title {
+        .text-size(@font-size-lg);
+
+        font-weight: @font-weight-medium;
+
+        > .@{prefix}-tooltip-cont {
+            display: block;
+            .ellipsis();
+        }
+    }
+
+    .desc {
+        height: 22px;
+        .text-size(@font-size-base);
+
+        color: var(--text-color-tertiary);
+
+        > .@{prefix}-tooltip-cont {
+            display: block;
+            .ellipsis();
+        }
+    }
+
+    .meta {
+        display: flex;
+        margin-top: @margin-md;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        margin-right: @margin-sm;
+        color: var(--text-color-secondary);
+
+        .@{mui-prefix}SvgIcon-root {
+            margin-right: @margin-xs;
+            font-size: @font-size-xl;
+        }
+    }
+}

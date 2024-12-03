@@ -1,0 +1,15 @@
+.@{prefix}-tooltip {
+    position: relative;
+
+    &-cont {
+        display: block;
+        .ellipsis();
+    }
+
+    &-virtual-cont {
+        position: absolute;
+        z-index: -1;
+        white-space: nowrap;
+        visibility: hidden;
+    }
+}

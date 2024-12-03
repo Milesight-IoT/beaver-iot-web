@@ -1,0 +1,16 @@
+@indicator-height: 1px;
+
+.@{prefix}-route-loading-indicator {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    height: @indicator-height;
+    opacity: 0;
+    transition: opacity .3s;
+
+    &.active {
+        opacity: 1;
+    }
+}

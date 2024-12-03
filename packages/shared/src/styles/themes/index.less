@@ -1,0 +1,82 @@
+/* stylelint-disable */
+@import './light/index.less';
+@import './dark/index.less';
+/* stylelint-enable */
+
+/**
+ * 注意：
+ * 1. themes 目录下只应存放主题切换/颜色切换相关变量
+ * 2. 本文件所有颜色相关变量值应引用 light/dark 中的变量定义（除特殊例外，如 白色、黑色）
+ * 3. 若颜色变量随主题切换取值不同，则该变量应置于各主题目录下的 index.less 中
+ * 4. 应优先使用语义化的色值变量，若无相应的语义化变量定义，则可在本文件或业务样式表的头部中新增（命名注意通用性）
+ */
+:root {
+    // ---------- Colors ----------
+    --primary-color-base: var(--purple-base);
+    --primary-color-1: var(--purple-1);
+    --primary-color-2: var(--purple-2);
+    --primary-color-3: var(--purple-3);
+    --primary-color-4: var(--purple-4);
+    --primary-color-5: var(--purple-5);
+    --primary-color-6: var(--purple-6);
+    --primary-color-7: var(--purple-7);
+    --primary-color-8: var(--purple-8);
+    --primary-color-9: var(--purple-9);
+    --primary-color-10: var(--purple-10);
+
+    // Semantic Color
+    --white: #fff;
+    --black: #000;
+    --normal-color: var(--gray-9);
+    --info-color: var(--primary-color-base);
+    --error-color: var(--red-base);
+    --success-color: var(--green-base);
+    --warning-color: var(--orange-base);
+
+    // Text Color
+    --text-color-main: var(--primary-color-base);
+    --text-color-light: var(--primary-color-6);
+    --text-color-dark: var(--primary-color-8);
+    --text-color-green: var(--green-base);
+    --text-color-orange: var(--orange-base);
+    --text-color-red: var(--error-color);
+    --text-color-link: var(--primary-color-base);
+    --text-color-success: var(--text-color-green);
+    --text-color-warning: var(--text-color-orange);
+    --text-color-error: var(--error-color);
+    --text-color-disable: var(--text-color-quaternary);
+    --text-color-hover: var(--text-color-main);
+    --text-color-active: var(--primary-color-base);
+
+    // Border Color
+    --border-color-main: var(--primary-color-base);
+    --border-color-green: var(--green-base);
+    --border-color-orange: var(--orange-base);
+    --border-color-red: var(--red-base);
+    --border-color-base: var(--border-color-gray);
+    --border-color-hover: var(--primary-color-6);
+    --border-color-active: var(--primary-color-7);
+
+    // Icon Color
+    --icon-color-base: var(--icon-color-gray);
+    --icon-color-hover: var(--primary-color-6);
+    --icon-color-active: var(--primary-color-7);
+    --icon-color-disable: var(--icon-color-gray-light);
+    --icon-color-info: var(--primary-color-base);
+    --icon-color-error: var(--red-base);
+    --icon-color-error-hover: var(--red-5);
+    --icon-color-error-active: var(--red-7);
+    --icon-color-success: var(--green-base);
+    --icon-color-warning: var(--orange-base);
+
+    // Interactive Color
+    --link-color: var(--primary-color-5);
+    --link-hover-color: var(--primary-color-6);
+    --link-focus-color: var(--primary-color-4);
+    --link-active-color: var(--primary-color-4);
+    --link-disabled-color: var(--primary-color-8);
+
+    // Background
+    --mask-background: var(--gray-transparent-5);
+    --component-background-primary: var(--primary-color-base);
+}

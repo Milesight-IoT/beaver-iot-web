@@ -1,0 +1,41 @@
+.@{prefix}-toast {
+    display: flex;
+    align-items: center;
+    padding: @padding-xs @padding-md;
+    background-color: var(--component-background);
+    border-radius: @border-radius-base;
+    box-shadow: @shadow-2;
+
+    .text-size(@font-size-lg);
+
+    &-icon {
+        display: flex;
+        align-items: center;
+        margin-right: @margin-xs;
+    }
+
+    &.info {
+        .@{prefix}-toast-icon {
+            color: var(--icon-color-info);
+        }
+    }
+
+    &.success {
+        .@{prefix}-toast-icon {
+            color: var(--icon-color-success);
+        }
+    }
+
+    &.warning {
+        .@{prefix}-toast-icon {
+            color: var(--icon-color-warning);
+        }
+    }
+
+    &.error {
+        .@{prefix}-toast-icon {
+            color: var(--icon-color-error);
+        }
+    }
+
+}

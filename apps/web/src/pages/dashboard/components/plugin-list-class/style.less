@@ -1,0 +1,51 @@
+.dashboard-plugin-class {
+    &-list {
+        width: 400px;
+        padding: 0 @padding-xxs @padding-md;
+    }
+
+    &-grid {
+        width: 100%;
+
+        &-title {
+            padding: @padding-md @padding-xs @padding-xs @padding-xs;
+            font-size: @font-size-sm;
+            color: var(--gray-color-7);
+        }
+    }
+
+    &-item {
+        padding: 0 @padding-xs;
+
+        &-content {
+            padding: @padding-xs @padding-sm;
+            margin-top: @margin-xs;
+            font-size: @font-size-sm;
+            text-align: center;
+            background: var(--gray-color-1);
+            border: 1px solid transparent;
+            border-radius: @border-radius-sm;
+            cursor: pointer;
+
+            &:hover {
+                background: var(--primary-color-1);
+                border: 1px solid var(--primary-color-base);
+            }
+
+            &-icon {
+                display: block;
+                width: 55px;
+                height: 55px;
+                margin: 0 auto @margin-xs;
+            }
+
+            &-name {
+                display: block;
+                overflow: hidden;
+                font-size: @font-size-sm !important;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
+}

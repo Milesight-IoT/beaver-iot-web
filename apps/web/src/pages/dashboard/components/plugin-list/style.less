@@ -1,0 +1,37 @@
+.dashboard-plugin {
+    &-list {
+        width: 80%;
+        margin: @margin-xxl auto;
+    }
+
+    &-list::after {
+        display: block;
+        clear: both;
+        content: '';
+    }
+
+    &-item {
+        padding: 0 @padding-sm;
+        margin-bottom: @margin-xxl;
+
+        &-content {
+            padding: @padding-sm @padding-md;
+            text-align: center;
+            background: var(--gray-color-1);
+            border: 1px solid transparent;
+            border-radius: @border-radius-sm;
+            cursor: pointer;
+
+            &:hover {
+                border: 1px solid var(--primary-color-base);
+            }
+
+            &-icon {
+                display: block;
+                width: 80px;
+                height: 80px;
+                margin: 0 auto @margin-xs;
+            }
+        }
+    }
+}

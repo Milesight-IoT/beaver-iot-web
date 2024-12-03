@@ -1,0 +1,17 @@
+{
+    "error.http.account_session_logout": "Your account has been signed out.",
+    "error.http.authentication_failed": "Authentication failed/not authenticated",
+    "error.http.dashboard_name_exist": "Dashboard name already exists",
+    "error.http.data_no_found": "Data not found",
+    "error.http.forbidden_permission": "No access rights, and access is prohibited.",
+    "error.http.method_not_allowed": "Disallowed Http Methods",
+    "error.http.network_timeout": "Network connection timeout.",
+    "error.http.page_not_found": "Sorry, the page you visited does not exist.",
+    "error.http.parameter_syntax_error": "Parameter syntax error",
+    "error.http.parameter_validation_failed": "Parameter validation failed",
+    "error.http.request_too_frequently": "Request too frequently",
+    "error.http.server_error": "Request error, please check and try again.",
+    "error.http.token_invalid": "The token is invalid, please try again.",
+    "error.http.token_not_found": "Your account hasn't been signed in.",
+    "error.http.user_register_email_exist": "This User Register Email Already Exists."
+}

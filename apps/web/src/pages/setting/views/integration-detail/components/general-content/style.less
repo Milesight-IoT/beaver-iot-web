@@ -1,0 +1,59 @@
+.@{prefix}-inte-detail-general {
+    position: relative;
+
+    .@{prefix}-tabpanel {
+        border-radius: @border-radius-base;
+
+        &-service,
+        &-property {
+            > .@{prefix}-empty {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+    }
+
+    .@{prefix}-entity-property {
+        .detail-title {
+            margin: 0 0 @margin-lg;
+        }
+
+        .detail-wrap {
+            padding: @padding-lg;
+            background-color: var(--component-background);
+            border-radius: @border-radius-base;
+
+            .@{prefix}-tooltip {
+                .ellipsis();
+            }
+
+            + .form-wrap {
+                margin-top: @margin-lg;
+            }
+        }
+
+        .form-wrap {
+            padding: @padding-lg;
+            background-color: var(--component-background);
+            border-radius: @border-radius-base;
+
+            .form-area {
+                max-width: 50%;
+
+                .@{mui-prefix}Switch-root + .@{mui-prefix}Typography-root {
+                    color: var(--text-color-secondary);
+                    .text-size(@font-size-base);
+                }
+            }
+        }
+
+        &.loading {
+            .form-area {
+                opacity: .5;
+                pointer-events: none;
+            }
+        }
+    }
+}

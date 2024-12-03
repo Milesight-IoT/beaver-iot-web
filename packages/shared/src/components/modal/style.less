@@ -1,0 +1,14 @@
+.@{prefix}-modal {
+    &-root {
+        &.loading {
+            .@{mui-prefix}DialogContent-root {
+                opacity: .5;
+                pointer-events: none;
+            }
+        }
+
+        .@{prefix}-modal-footer {
+            padding: 0 @padding-xl @padding-md;
+        }
+    }
+}

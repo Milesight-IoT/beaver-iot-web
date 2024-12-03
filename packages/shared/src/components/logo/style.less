@@ -1,0 +1,38 @@
+.@{prefix}-logo {
+    width: 120px;
+    height: 32px;
+
+    &-inner {
+        display: block;
+        height: 100%;
+        overflow: hidden;
+        text-indent: -999px;
+        background: url('./assets/logo-light.svg') no-repeat;
+        background-size: 100% auto;
+    }
+
+    &-mini {
+        width: 32px;
+        height: 32px;
+
+        .@{prefix}-logo-inner {
+            background: url('./assets/logo-light-mini.svg') no-repeat;
+            background-size: 100% auto;
+        }
+    }
+}
+
+// 深色主题
+[data-theme='dark'] .@{prefix}-logo {
+    &-inner {
+        background: url('./assets/logo-dark.svg') no-repeat;
+        background-size: 100% auto;
+    }
+
+    &-mini {
+        .@{prefix}-logo-inner {
+            background: url('./assets/logo-dark-mini.svg') no-repeat;
+            background-size: 100% auto;
+        }
+    }
+}

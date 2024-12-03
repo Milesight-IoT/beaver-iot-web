@@ -1,0 +1,36 @@
+.@{prefix}-view-error {
+    position: relative;
+    flex: 1;
+
+    .@{prefix}-logo {
+        margin: @margin-xl;
+    }
+
+    .@{prefix}-route-error {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        max-width: calc(100% - 300px);
+        transform: translate(-50%, -50%);
+
+        &-title {
+            margin: 0 0 @margin-lg;
+            .text-size(@font-size-6);
+        }
+
+        &-message {
+            color: var(--text-color-secondary);
+        }
+
+        &-pre {
+            max-height: 144px;
+            padding: @padding-sm;
+            margin: @margin-lg 0 40px;
+            overflow: auto;
+            font-family: @font-family-code;
+            color: var(--text-color-tertiary);
+            border: 1px solid var(--border-color-base);
+            border-radius: @border-radius-base;
+        }
+    }
+}

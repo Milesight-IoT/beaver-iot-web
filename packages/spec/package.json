@@ -1,0 +1,44 @@
+{
+    "name": "@milesight/spec",
+    "version": "0.0.1",
+    "license": "MIT",
+    "description": "Beaver IoT Assistant specifications",
+    "engines": {
+        "node": ">=20.0.0",
+        "pnpm": ">=8.0.0"
+    },
+    "files": [
+        "src"
+    ],
+    "dependencies": {
+        "@commitlint/config-conventional": "^19.4.1",
+        "@rushstack/eslint-patch": "^1.10.4",
+        "@typescript-eslint/eslint-plugin": "^8.4.0",
+        "@typescript-eslint/parser": "^8.4.0",
+        "eslint-config-airbnb": "^19.0.4",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-import-resolver-typescript": "^3.6.3",
+        "eslint-plugin-check-file": "^2.8.0",
+        "eslint-plugin-import": "^2.30.0",
+        "eslint-import-resolver-alias": "^1.1.2",
+        "eslint-plugin-jsx-a11y": "^6.10.0",
+        "eslint-plugin-prettier": "^5.2.1",
+        "eslint-plugin-react": "^7.35.2",
+        "eslint-plugin-react-hooks": "^4.6.2",
+        "postcss": "^8.4.45",
+        "postcss-html": "^1.7.0",
+        "postcss-less": "^6.0.0",
+        "postcss-scss": "^4.0.9",
+        "prettier": "^3.3.3",
+        "stylelint": "^15.11.0",
+        "stylelint-config-prettier": "^9.0.5",
+        "stylelint-config-property-sort-order-smacss": "^10.0.0",
+        "stylelint-config-standard": "^34.0.0",
+        "stylelint-order": "^6.0.4"
+    },
+    "devDependencies": {
+        "eslint": "^8.56.0",
+        "prettier": "^3.3.3",
+        "typescript": "^5.6.2"
+    }
+}

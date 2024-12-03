@@ -1,0 +1,22 @@
+.form {
+    &-box {
+        position: relative;
+        border: 1px solid rgba(var(--mui-palette-common-onBackgroundChannel) / 0.23);
+        padding: @padding-sm;
+        margin-bottom: @margin-md;
+        border-radius: @border-radius-base;
+
+        &-label {
+            position: absolute;
+            background: var(--main-background);
+            top: -(@padding-sm + @padding-xs);
+            left: @padding-md;
+            padding: @padding-xs;
+        }
+    }
+    &-item {
+        margin: 0 !important;
+        // margin-top: @margin-sm !important;
+        margin-bottom: @margin-xl !important;
+    }
+}

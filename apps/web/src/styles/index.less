@@ -1,0 +1,108 @@
+@import url('@milesight/shared/src/styles/index.less');
+@import url('./mui-polyfill.less');
+
+body {
+    background-color: var(--body-background);
+    .text-size(@font-size-base);
+}
+
+// ---------- Layout ----------
+.@{prefix}-layout {
+    display: flex;
+    height: 100vh;
+    min-height: 0;
+
+    &-left {
+        flex-shrink: 0;
+        width: 256px;
+    }
+
+    &-right {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        width: 0;
+        height: 100%;
+        background-color: var(--body-background);
+    }
+}
+
+.@{prefix}-main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    > .@{prefix}-view {
+        flex: 1;
+        height: 0;
+        // padding: @padding-lg;
+
+        > .@{prefix}-view__inner {
+            height: 100%;
+            background-color: var(--component-background);
+            border-radius: @border-radius-base;
+        }
+    }
+}
+
+.@{prefix}-main-blank {
+    flex: 1;
+}
+
+// ---------- Custom Tabs ----------
+.@{prefix}-tabs {
+    &.@{mui-prefix}Tabs-root {
+        height: 56px;
+        min-height: 44px;
+        padding-top: @padding-sm;
+        background-color: var(--component-background);
+    }
+
+    .@{mui-prefix}Tabs-flexContainer {
+        padding: 0 20px;
+        background-color: var(--component-background);
+        border-bottom: 1px solid var(--border-color-base);
+    }
+
+    .@{mui-prefix}Tab-root {
+        min-height: 43px;
+        padding: 0 @padding-md;
+        margin-right: 0;
+        color: var(--text-color-secondary);
+        border: 1px solid transparent;
+        border-bottom: none;
+
+        &.@{mui-prefix}-selected {
+            font-weight: @font-weight-bold;
+            color: var(--text-color-base);
+            background-color: var(--body-background);
+            border-color: var(--border-color-base);
+            border-radius: @border-radius-base @border-radius-base 0 0;
+        }
+
+        &:not(.@{mui-prefix}-selected):hover {
+            color: var(--text-color-main);
+        }
+
+        &::after {
+            display: block;
+            height: 1px;
+            margin-bottom: -1px;
+            overflow: hidden;
+            font-weight: @font-weight-bold;
+            visibility: hidden;
+            content: attr(title)
+        }
+    }
+
+    .@{mui-prefix}Tabs-indicator {
+        bottom: -1px;
+        background-color: var(--body-background);
+        transition: none;
+    }
+}
+
+// ---------- Custom Icon ----------
+.@{prefix}-icon {
+    fill: currentcolor;
+}

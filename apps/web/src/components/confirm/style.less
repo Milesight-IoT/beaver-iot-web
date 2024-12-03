@@ -1,0 +1,38 @@
+.@{prefix}-confirm {
+    .@{mui-prefix}DialogTitle-root {
+        display: flex;
+        align-items: center;
+        padding: @padding-md @padding-xl 0;
+
+        .@{prefix}-confirm-title {
+            display: flex;
+            align-items: center;
+            height: 32px;
+            margin-bottom: @margin-xxs;
+
+            .@{prefix}-confirm-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2px;
+                margin: -2px @margin-xs 0 0;
+
+                .@{mui-prefix}SvgIcon-root {
+                    font-size: @font-size-xxl;
+                }
+            }
+        }
+    }
+
+    &.@{prefix}-confirm-without-title {
+        .@{mui-prefix}DialogTitle-root {
+            padding-top: @padding-xl;
+        }
+    }
+
+    &.@{prefix}-confirm-with-icon {
+        .@{mui-prefix}DialogContent-root {
+            padding-left: @padding-xl + 32px;
+        }
+    }
+}

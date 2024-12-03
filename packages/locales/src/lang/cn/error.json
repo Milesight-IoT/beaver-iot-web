@@ -1,0 +1,17 @@
+{
+    "error.http.account_session_logout": "您的账户已退出登录。",
+    "error.http.authentication_failed": "认证失败/未认证",
+    "error.http.dashboard_name_exist": "仪表板名称已存在",
+    "error.http.data_no_found": "数据未找到",
+    "error.http.forbidden_permission": "没有访问权限，访问被禁止。",
+    "error.http.method_not_allowed": "不允许的HTTP方法",
+    "error.http.network_timeout": "网络连接超时。",
+    "error.http.page_not_found": "抱歉，您访问的页面不存在。",
+    "error.http.parameter_syntax_error": "参数语法错误",
+    "error.http.parameter_validation_failed": "参数验证失败",
+    "error.http.request_too_frequently": "请求过于频繁",
+    "error.http.server_error": "请求错误，请检查并重试。",
+    "error.http.token_invalid": "令牌无效，请重试。",
+    "error.http.token_not_found": "您的账户尚未登录。",
+    "error.http.user_register_email_exist": "用户注册邮箱已存在。"
+}

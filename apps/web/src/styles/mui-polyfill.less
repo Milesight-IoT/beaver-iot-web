@@ -1,0 +1,59 @@
+// ---------- Button ----------
+.@{mui-prefix}ButtonBase-root.@{mui-prefix}Button-root {
+    text-transform: none;
+}
+
+// ---------- Form ----------
+.@{mui-prefix}FormLabel-asterisk {
+    color: var(--text-color-error);
+}
+
+// ---------- Tabs ----------
+.@{mui-prefix}Tabs-root {
+    .@{mui-prefix}Tab-root {
+        padding-right: 0;
+        padding-left: 0;
+        margin-right: 32px;
+        text-transform: none;
+    }
+}
+
+// ---------- DataGrid ----------
+.@{mui-prefix}DataGrid-columnHeader .@{mui-prefix}Checkbox-root,
+.@{mui-prefix}DataGrid-cellCheckbox .@{mui-prefix}Checkbox-root {
+    &:not(.@{mui-prefix}-checked):not(.@{mui-prefix}-disabled) {
+        color: var(--text-color-tertiary);
+    }
+}
+
+.@{mui-prefix}DataGrid-filterForm {
+    .@{mui-prefix}FormControl-root > .@{mui-prefix}FormControl-root {
+        margin: 0;
+    }
+}
+
+// ---------- InputBase ----------
+// 去除浏览器的默认填充样式
+input.@{mui-prefix}InputBase-input {
+    &:focus {
+        box-shadow: 0 0 0 1000px var(--main-background) inset;
+    }
+
+    &:-webkit-autofill {
+        border-radius: unset;
+        box-shadow: 0 0 0 1000px var(--main-background) inset;
+        -webkit-text-fill-color: var(--text-color-base);
+    }
+}
+
+[data-theme='dark'] input.@{mui-prefix}InputBase-input {
+    &:focus {
+        box-shadow: 0 0 0 1000px #2b2b2b inset;
+    }
+
+    &:-webkit-autofill {
+        border-radius: unset;
+        box-shadow: 0 0 0 1000px #2b2b2b inset;
+        -webkit-text-fill-color: var(--text-color-base);
+    }
+}

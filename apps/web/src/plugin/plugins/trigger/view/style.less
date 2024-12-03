@@ -1,0 +1,47 @@
+.trigger-view {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: @padding-md;
+    background: var(--main-background);
+    border: 1px solid transparent;
+    border-radius: @border-radius-base;
+    cursor: pointer;
+
+    &:hover {
+        border: 1px solid var(--primary-color-6);
+    }
+
+    &-main {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    &-title {
+        font-size: @font-size-lg;
+    }
+
+    &-icon {
+        font-size: 56px !important;
+    }
+
+    &:hover &-icon {
+        color: var(--primary-color-6);
+    }
+
+    &-preview {
+        width: 152px;
+        height: 152px;
+        border-radius: @border-radius-base;
+    }
+
+    &-form {
+        padding-top: @padding-sm;
+    }
+}

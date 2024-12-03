@@ -1,0 +1,75 @@
+.@{prefix}-view-int-detail {
+    display: flex;
+    flex-direction: column;
+
+    &__header {
+        .detail {
+            display: flex;
+            align-items: center;
+            padding: @padding-lg;
+            background-color: var(--component-background);
+            border-bottom: 1px solid var(--border-color-base);
+
+            .logo {
+                width: 56px;
+                height: 56px;
+                margin: 0 @margin-lg 0 0;
+                overflow: hidden;
+                border-radius: @border-radius-base;
+
+                > img {
+                    width: 100%;
+                    -webkit-user-drag: none;
+                }
+            }
+
+            .title {
+                display: flex;
+                align-items: center;
+
+                h2 {
+                    margin: 0;
+                    .text-size(@font-size-xxl);
+                }
+
+                .meta {
+                    display: flex;
+                    margin-left: @margin-md;
+                }
+
+                .meta-item {
+                    display: flex;
+                    align-items: center;
+                    margin-right: @margin-sm;
+                    color: var(--text-color-secondary);
+
+                    .@{mui-prefix}SvgIcon-root {
+                        margin-right: @margin-xs;
+                        font-size: @font-size-xl;
+                    }
+                }
+            }
+
+            .desc {
+                height: 22px;
+                margin: @margin-xxs 0 0;
+                color: var(--text-color-secondary);
+                .text-size(@font-size-base);
+            }
+        }
+    }
+
+    &__body {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        height: 0;
+
+        .@{prefix}-tabs-content {
+            flex: 1;
+            height: 0;
+            padding: @padding-lg;
+            overflow: auto;
+        }
+    }
+}

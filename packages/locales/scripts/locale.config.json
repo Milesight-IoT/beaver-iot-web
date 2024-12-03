@@ -1,0 +1,22 @@
+{
+    "common": {
+        "extensions": [".json"]
+    },
+    "import": {
+        "sourcePath": "./import",
+        "outputPath": "./src/lang",
+        "langRules": {
+            "cn": ["zh", "zh_cn"]
+        },
+        "splitRules": {
+            "global": ["common", "valid", "auth"]
+        }
+    },
+    "export": {
+        "sourcePath": "./src/lang/en",
+        "basicSourcePath": "./import/en.json",
+        "outputPath": "./.export",
+        "errorKeyRule": "error.http.",
+        "errorMapOutputPath": "./src/error_keys_map.json"
+    }
+}

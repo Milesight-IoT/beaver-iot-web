@@ -1,0 +1,161 @@
+{
+    "type": "trigger",
+    "name": "Trigger",
+    "class": "operate",
+    "icon": "./icon.png",
+    "defaultRow": 4,
+    "defaultCol": 4,
+    "minRow": 3,
+    "minCol": 3,
+    "configProps": [
+        {
+            "style": "width: 100%",
+            "components": [
+                {
+                    "type": "entitySelect",
+                    "title": "Entity",
+                    "key": "entity",
+                    "style": "width: 100%",
+                    "valueType": "object",
+                    "getDataUrl": "",
+                    "componentProps": {
+                        "size": "small",
+                        "entityType": ["SERVICE", "PROPERTY"],
+                        "accessMods": ["W", "RW"],
+                        "entityExcludeChildren": true
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "type": "input",
+                    "title": "Title",
+                    "key": "title",
+                    "defaultValue": "Title",
+                    "componentProps": {
+                        "size": "small",
+                        "inputProps": {
+                            "maxLength": 15
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "type": "input",
+                    "title": "Label",
+                    "key": "label",
+                    "defaultValue": "Label",
+                    "componentProps": {
+                        "size": "small",
+                        "inputProps": {
+                            "maxLength": 15
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "title": "Appearance of status",
+            "style": "display: flex;",
+            "components": [
+                {
+                    "type": "iconSelect",
+                    "key": "icon",
+                    "style": "flex: 1;padding-right: 12px;",
+                    "defaultValue": "AdsClickIcon",
+                    "componentProps": {
+                        "size": "small"
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                },
+                {
+                    "type": "iconColorSelect",
+                    "key": "iconColor",
+                    "style": "flex: 1;",
+                    "defaultValue": "#A9AEB8",
+                    "componentProps": {
+                        "size": "small"
+                    }
+                }
+            ]
+        }
+    ],
+    "view": [
+        {
+            "tag": "div",
+            "class": "trigger-view",
+            "themes": {
+                "default": {
+                    "class": "trigger-view-light"
+                }
+            },
+            "children": [
+                {
+                    "tag": "Tooltip",
+                    "class": "trigger-view-title",
+                    "style": "white-space: nowrap;overflow: hidden;text-overflow: ellipsis;font-weight: 600;",
+                    "params": [
+                        "title"
+                    ],
+                    "themes": {
+                        "default": {
+                            "style": "color: #272E3B"
+                        },
+                        "dark": {
+                            "style": "color: rgba(247, 248, 250, 0.86)"
+                        }
+                    },
+                    "props": {
+                        "autoEllipsis": true
+                    }
+                },
+                {
+                    "tag": "div",
+                    "style": "display: flex;justify-content: center;flex: 1;align-items: center;flex-direction: column;",
+                    "children": [
+                        {
+                            "tag": "icon",
+                            "style": "font-size: 56px",
+                            "class": "trigger-view-icon",
+                            "styleDepended": {
+                                "color": "iconColor"
+                            },
+                            "params": [
+                                "icon"
+                            ]
+                        },
+                        {
+                            "tag": "Tooltip",
+                            "class": "trigger-view-title",
+                            "style": "white-space: nowrap;overflow: hidden;text-overflow: ellipsis;;text-align: center;margin-top: 8px;",
+                            "params": [
+                                "label"
+                            ],
+                            "themes": {
+                                "default": {
+                                    "style": "color: #6B7785"
+                                },
+                                "dark": {
+                                    "style": "color: rgba(247, 248, 250, 0.62)"
+                                }
+                            },
+                            "props": {
+                                "autoEllipsis": true
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

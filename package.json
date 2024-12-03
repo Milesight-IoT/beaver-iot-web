@@ -1,0 +1,54 @@
+{
+    "name": "ms-assistant-fe",
+    "version": "0.0.1",
+    "license": "MIT",
+    "description": "Milesight IoT Assistant",
+    "engines": {
+        "node": ">=20.0.0",
+        "pnpm": ">=8.0.0"
+    },
+    "scripts": {
+        "dev:apps": "pnpm --filter=@app/* -r run dev",
+        "dev:pkgs": "pnpm --filter=@milesight/* -r run watch",
+        "start": "pnpm run /^dev:.*/",
+        "build:apps": "pnpm --filter=@app/* -r run build",
+        "build:pkgs": "pnpm --filter=@milesight/* -r run build",
+        "build": "run-s build:pkgs build:apps",
+        "preview": "pnpm --filter=@app/* -r run preview",
+        "i18n:import": "pnpm --filter=@milesight/locales run import",
+        "i18n:export": "pnpm --filter=@milesight/locales run export",
+        "i18n:export-all": "pnpm --filter=@milesight/locales run exportall",
+        "clean": "rimraf -g node_modules */**/node_modules",
+        "clean:cache": "rimraf -g */**/node_modules/.vite */**/node_modules/.cache",
+        "lint:apps": "pnpm --filter=@app/* -r run lint:fix",
+        "lint:pkgs": "pnpm --filter=@milesight/* -r run lint:fix",
+        "stylelint:apps": "pnpm --filter=@app/* -r run stylelint:fix",
+        "stylelint:pkgs": "pnpm --filter=@milesight/* -r run stylelint:fix",
+        "commitlint": "commitlint",
+        "tsc": "pnpm run --filter=@milesight/* -r ts-check",
+        "lint-staged": "lint-staged",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prepare": "husky",
+        "preinstall": "node --import tsx ./scripts/only-allow.ts pnpm",
+        "postinstall": "pnpm run build:pkgs"
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^19.4.1",
+        "@commitlint/config-conventional": "^19.4.1",
+        "@changesets/cli": "^2.27.8",
+        "@milesight/spec": "workspace:*",
+        "@types/node": "^20.14.8",
+        "chalk": "^5.3.0",
+        "dotenv": "^16.4.5",
+        "fast-glob": "^3.3.2",
+        "husky": "^9.1.5",
+        "lint-staged": "^15.2.0",
+        "rimraf": "^6.0.1",
+        "npm-run-all": "^4.1.5",
+        "tsx": "^4.19.0",
+        "typescript": "^5.6.2"
+    },
+    "resolutions": {
+        "esbuild": "0.23.1"
+    }
+}

@@ -1,0 +1,65 @@
+/**
+ * 通用 Mixin，已通过工程工具注入全局，可直接使用，无需手动引入
+ */
+
+// ---------- Font ----------
+// 行高
+.line-height(@font-size) {
+    line-height: @font-size + 8;
+}
+
+// 字号&行高
+.text-size(@font-size) {
+    font-size: @font-size;
+    .line-height(@font-size);
+}
+
+// 单行省略号
+.ellipsis() {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+// 多行省略号（非兼容所有浏览器）
+.multipleEllipsis(@line: 2) {
+    display: box;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: @line;
+}
+
+// 必填项 * 号标识
+.required-mark(@color: var(--text-color-red), @font-size: @font-size-base) {
+    display: inline-block;
+    margin-right: @margin-xxs;
+    font-family: SimSun, sans-serif;
+    font-size: @font-size;
+    color: @color;
+    content: '*';
+}
+
+/**
+ * @width：border宽度
+ * @config：三角形位置及颜色配置
+ * 比如，下箭头 `{ top: #f00 }`
+ * 可根据自己的需要配置 config 值
+ */
+.triangle(@width, @config) {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    vertical-align: middle;
+    border: @width solid transparent;
+
+    /* stylelint-disable */
+    each(@config, {
+        border-@{key}-color: @value;
+    });
+    /* stylelint-enable */
+}
+
+

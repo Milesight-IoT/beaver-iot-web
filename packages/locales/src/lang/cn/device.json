@@ -1,0 +1,12 @@
+{
+    "device.detail.basic_info": "基本信息",
+    "device.detail.entity_data": "实体数据",
+    "device.label.param_device_id": "设备ID",
+    "device.label.param_device_name": "设备名称",
+    "device.label.param_entity_id": "实体ID",
+    "device.label.param_entity_name": "实体名称",
+    "device.label.param_external_id": "外部ID",
+    "device.label.param_founder": "创建者",
+    "device.label.param_source": "来源",
+    "device.message.delete_tip": "确定要删除吗？"
+}

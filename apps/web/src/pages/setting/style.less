@@ -1,0 +1,19 @@
+.@{prefix}-view.@{prefix}-view-setting {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+
+    .@{prefix}-tab-content {
+        position: relative;
+        flex: 1;
+        padding: @padding-lg;
+        overflow: auto;
+
+        .@{mui-prefix}CircularProgress-root {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+}

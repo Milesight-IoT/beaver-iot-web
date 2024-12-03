@@ -1,0 +1,85 @@
+/**
+ * 通用 Less 变量表
+ *
+ * 注意：
+ * 1. 所有颜色值需引用 themes 中相应的 CSS 变量，请勿自行定义
+ * 2. 该 Less 变量表会通过相关工程工具注入全局中，可直接使用，无需手动引入
+ */
+// ---------- Common ----------
+@prefix: ms;
+@mui-prefix: Mui;
+
+// ---------- Font ----------
+@font-family: '-apple-system', 'Helvetica Neue', 'Helvetica', 'PingFang SC', 'SegoeUI', 'Microsoft YaHei', '微软雅黑', 'Noto Sans CJK SC', 'Arial', sans-serif;
+@font-family-code: 'Courier', 'monospace';
+
+// Font Size
+@font-size-1: 12px;
+@font-size-2: 14px;
+@font-size-3: 16px;
+@font-size-4: 18px;
+@font-size-5: 20px;
+@font-size-6: 24px;
+@font-size-7: 30px;
+@font-size-8: 38px;
+@font-size-9: 46px;
+@font-size-10: 56px;
+@font-size-11: 68px;
+@font-size-sm: @font-size-1;
+@font-size-md: @font-size-2;
+@font-size-lg: @font-size-3;
+@font-size-xl: @font-size-4;
+@font-size-xxl: @font-size-5;
+@font-size-base: @font-size-md;
+
+// Font Weight
+@font-weight-regular: 400;
+@font-weight-medium: 500;
+@font-weight-bold: 600;
+@font-weight-xl: 700;
+@font-weight-base: @font-weight-regular;
+
+
+// ---------- Box Model ----------
+// Margin
+@margin-xxs: 4px;
+@margin-xs: 8px;
+@margin-sm: 12px;
+@margin-md: 16px;
+@margin-lg: 20px;
+@margin-xl: 24px;
+@margin-xxl: 28px;
+
+// Padding
+@padding-xxs: 4px;
+@padding-xs: 8px;
+@padding-sm: 12px;
+@padding-md: 16px;
+@padding-lg: 20px;
+@padding-xl: 24px;
+@padding-xxl: 28px;
+
+// Border Radius
+@border-radius-xxs: 2px;
+@border-radius-xs: 4px;
+@border-radius-sm: 8px;
+@border-radius-md: 16px;
+@border-radius-lg: 32px;
+@border-radius-xxl: 50%;
+@border-base: 1px solid var(--border-color-base);
+@border-radius-base: @border-radius-xs;
+
+// Box Shadow
+@shadow-1: 0 2px 4px 0 rgba(0, 0, 0, 0.01), 0 3px 6px 3px rgba(0, 0, 0, 0.01), 0 2px 6px 0 rgba(0, 0, 0, 0.03);
+@shadow-2: 0 -2px 4px 0 rgba(0, 0, 0, 0.02), 0 2px 6px 6px rgba(0, 0, 0, 0.02), 0 2px 6px 0 rgba(0, 0, 0, 0.06);
+@shadow-3: 0 0 8px 0 rgba(0, 0, 0, 0.04), 0 6px 12px 12px rgba(0, 0, 0, 0.04), 0 6px 10px 0 rgba(0, 0, 0, 0.08);
+@shadow-4: 0 4px 14px 0 rgba(0, 0, 0, 0.04), 0 12px 16px 16px rgba(0, 0, 0, 0.04), 0 10px 16px 0 rgba(0, 0, 0, 0.08);
+
+// ---------- Element ----------
+// Icon Size
+@icon-size-sm: 12px;
+@icon-size-md: 14px;
+@icon-size-lg: 16px;
+@icon-size-xl: 18px;
+@icon-size-xxl: 20px;
+@icon-size-base: 16px;

@@ -1,0 +1,4 @@
+{
+    "src/**/*.{js,ts,tsx}": "pnpm run lint:fix",
+    "src/**/*.{css,less}": "pnpm run stylelint:fix"
+}

@@ -1,0 +1,96 @@
+{
+    "type": "gaugeChart",
+    "name": "Gauge chart",
+    "class": "data_chart",
+    "icon": "./icon.png",
+    "defaultRow": 4,
+    "defaultCol": 6,
+    "minRow": 4,
+    "minCol": 4,
+    "configProps": [
+        {
+            "style": "width: 100%",
+            "components": [
+                {
+                    "type": "entitySelect",
+                    "title": "Entity",
+                    "key": "entity",
+                    "style": "width: 100%",
+                    "getDataUrl": "",
+                    "componentProps": {
+                        "size": "small",
+                        "entityType": ["PROPERTY"],
+                        "entityValueTypes": ["LONG", "DOUBLE"]
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "type": "input",
+                    "title": "Title",
+                    "key": "title",
+                    "style": "width: 100%",
+                    "defaultValue": "Title",
+                    "componentProps": {
+                        "size": "small",
+                        "inputProps": {
+                            "maxLength": 15
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "style": "width: 100%;",
+            "components": [
+                {
+                    "type": "ChartTimeSelect",
+                    "title": "Time",
+                    "key": "time",
+                    "style": "width: 100%;",
+                    "componentProps": {
+                        "size": "small"
+                    },
+                    "defaultValue": 86400000
+                }
+            ]
+        },
+        {
+            "style": "width: 100%;",
+            "components": [
+                {
+                    "type": "chartMetricsSelect",
+                    "title": "metrics",
+                    "key": "metrics",
+                    "style": "width: 100%;",
+                    "componentProps": {
+                        "size": "small"
+                    },
+                    "defaultValue": "LAST",
+                    "filters": ["SUM", "COUNT"]
+                }
+            ]
+        }
+    ],
+    "view": [
+        {
+            "tag": "div",
+            "themes": {
+                "default": {
+                    "class": "area-chart-view"
+                }
+            },
+            "children": [
+                {
+                    "tag": "canvas",
+                    "key": "gaugeChart"
+                }
+            ]
+        }
+    ]
+}
