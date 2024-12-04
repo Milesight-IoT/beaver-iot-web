@@ -5,7 +5,7 @@ Beaver IoT Web is a Monorepo-based frontend project that encompasses the web app
 ## Directory Structure
 
 ```
-mip-web
+beaver-iot-web
 ├── apps            # Application directory
 │   └── web         # Web application
 │
@@ -52,7 +52,7 @@ It is recommended to use Pnpm for managing the environment and dependencies of t
 
     ```bash
     # Press "Enter" through the prompts
-    ssh-keygen -t rsa -C "your_email@yeastar.com"
+    ssh-keygen -t rsa -C "your_email@domain.com"
 
     # Copy the public key
     # Git Bash on Windows
@@ -66,7 +66,7 @@ It is recommended to use Pnpm for managing the environment and dependencies of t
 
     ```bash
     # Clone the repository
-    git clone git@gitlab.milesight.com:oss/beaver-iot-web.git
+    git clone git@github.com:Milesight-IoT/beaver-iot-web.git
 
     # Enter the project directory
     cd beaver-iot-web
@@ -74,7 +74,7 @@ It is recommended to use Pnpm for managing the environment and dependencies of t
     # Configure the commit username and email
     # To modify globally, add the --global parameter
     git config user.name xxx
-    git config user.email xxx@yeastar.com
+    git config user.email xxx@domain.com
     ```
 
 ### Start Local Development Service

@@ -5,7 +5,7 @@ Beaver IoT Web 是基于 Monorepo 的前端项目，包含了 Web 应用及其�
 ## 目录结构
 
 ```
-mip-web
+beaver-iot-web
 ├── apps            # 应用目录
 │   └── web         # Web 应用
 │
@@ -52,7 +52,7 @@ mip-web
 
     ```bash
     # 一路「回车」即可
-    ssh-keygen -t rsa -C "your_email@yeastar.com"
+    ssh-keygen -t rsa -C "your_email@domain.com"
 
     # 拷贝公钥
     # Git Bash on Windows
@@ -66,7 +66,7 @@ mip-web
 
     ```bash
     # 克隆仓库
-    git clone git@gitlab.milesight.com:oss/beaver-iot-web.git
+    git clone git@github.com:Milesight-IoT/beaver-iot-web.git
 
     # 进入项目目录
     cd beaver-iot-web
@@ -74,7 +74,7 @@ mip-web
     # 配置提交的用户名及邮箱
     # 若需全局修改，可增加 --global 参数
     git config user.name xxx
-    git config user.email xxx@yeastar.com
+    git config user.email xxx@domain.com
     ```
 
 ### 启动本地开发服务
