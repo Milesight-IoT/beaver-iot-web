@@ -158,5 +158,7 @@
     "common.label.enable_status": "Enable Status",
     "common.label.update_time": "Update Time",
     "common.label.back": "Back",
-    "common.label.create": "Create"
+    "common.label.create": "Create",
+    "common.label.edit_workflow_modal": "Edit Workflow",
+    "common.label.workflow_name": "Workflow Name"
 }
