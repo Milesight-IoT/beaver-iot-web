@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from 'react';
-import { useMemoizedFn } from 'ahooks';
 import cls from 'classnames';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { useI18n } from '@milesight/shared/src/hooks';
@@ -9,66 +8,55 @@ import useWorkflowFormItems, {
     type FormDataKeys,
 } from './hook/useWorkflowFormItems';
 
-interface Props extends Omit<ModalProps, 'onOk'> {
+export interface Props extends Omit<ModalProps, 'onOk'> {
     /** confirm callback */
     onConfirm?: (params: FormDataProps) => Promise<void> | void;
 
-    /** table-row item */
+    /** When data is not empty, it is in edit mode */
     data?: FormDataProps;
-
-    /** table-row item */
-    isAdd?: boolean;
 }
 
 /**
  * workflow add/edit modal
  */
-const EditModal: React.FC<Props> = ({
-    visible,
-    isAdd = false,
-    data,
-    onCancel,
-    onConfirm,
-    ...props
-}) => {
+const EditModal: React.FC<Props> = ({ visible, data, onConfirm, ...props }) => {
     const { getIntlText } = useI18n();
 
     // ---------- forms processing ----------
-    const { control, formState, handleSubmit, reset, setValue } = useForm<FormDataProps>();
-    const formItems = useWorkflowFormItems(data);
-    // Update the initial form data
-    useEffect(() => {
-        Object.keys(data || { name: '', remark: '' }).forEach(key => {
-            setValue(key as FormDataKeys, data?.[key as FormDataKeys] ?? '');
-        });
-    }, [formItems]);
+    const { control, formState, handleSubmit, setValue, reset } = useForm<FormDataProps>();
+    const formItems = useEditFormItems();
+
+    const isEditMode = !!data;
     const modalTitle = useMemo(() => {
-        return isAdd
+        return !isEditMode
             ? getIntlText('workflow.modal.add_workflow_modal')
             : getIntlText('workflow.modal.edit_workflow_modal');
-    }, [isAdd]);
+    }, [getIntlText, isEditMode]);
 
     const onSubmit: SubmitHandler<FormDataProps> = async ({ ...params }) => {
         if (onConfirm) {
             await onConfirm(params);
         }
-        // Clear the form data upon confirmation.
-        reset();
     };
 
-    const handleCancel = useMemoizedFn(() => {
-        reset();
-        onCancel?.();
-    });
+    useEffect(() => {
+        if (!visible || !data) {
+            setTimeout(reset, 100);
+            return;
+        }
+
+        Object.entries(data).forEach(([key, value]) => {
+            setValue(key as keyof FormDataProps, value);
+        });
+    }, [data, visible, reset, setValue]);
 
     return (
         <Modal
+            size="lg"
             visible={visible}
             title={modalTitle}
             className={cls({ loading: formState.isSubmitting })}
             onOk={handleSubmit(onSubmit)}
-            onCancel={handleCancel}
-            sx={{ '& .MuiDialog-paper': { width: 600 } }}
             {...props}
         >
             {formItems.map(props => (

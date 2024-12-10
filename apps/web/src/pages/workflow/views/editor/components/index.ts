@@ -1,4 +1,4 @@
-export { default as Topbar } from './topbar';
+export { default as Topbar, type DesignMode } from './topbar';
 export { default as Controls, type ControlsProps } from './controls';
 export { default as ConfigPanel } from './config-panel';
 
@@ -9,3 +9,5 @@ export { default as Edge } from './edge';
 export { default as HelperLines, getHelperLines } from './helper-lines';
 export { default as NodeMenu } from './node-menu';
 export { default as EntryPanel } from './entry-panel';
+export { default as LogPanel } from './log-panel';
+export { default as TestButton } from './test-button';

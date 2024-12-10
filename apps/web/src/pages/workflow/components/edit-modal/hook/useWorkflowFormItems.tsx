@@ -12,17 +12,14 @@ export type FormDataProps = {
     remark?: string;
 };
 
-export type FormDataKeys = keyof FormDataProps;
-
-const useWorkflowFormItems = (initialData?: FormDataProps) => {
+const useWorkflowFormItems = () => {
     const { getIntlText } = useI18n();
-    const { name = '', remark = '' } = initialData || {};
     const formItems = useMemo(() => {
         const result: ControllerProps<FormDataProps>[] = [];
         result.push(
             {
                 name: 'name',
-                defaultValue: name,
+                defaultValue: '',
                 rules: {
                     validate: {
                         checkRequired: checkRequired(),
@@ -46,7 +43,7 @@ const useWorkflowFormItems = (initialData?: FormDataProps) => {
             },
             {
                 name: 'remark',
-                defaultValue: remark,
+                defaultValue: '',
                 rules: {
                     validate: { checkMaxLength: checkMaxLength({ max: 1000 }) },
                 },
@@ -55,6 +52,7 @@ const useWorkflowFormItems = (initialData?: FormDataProps) => {
                         <TextField
                             fullWidth
                             type="text"
+                            label={getIntlText('common.label.remark')}
                             error={!!error}
                             helperText={error ? error.message : null}
                             value={value}
@@ -66,7 +64,7 @@ const useWorkflowFormItems = (initialData?: FormDataProps) => {
         );
 
         return result;
-    }, [getIntlText, initialData]);
+    }, [getIntlText]);
 
     return formItems;
 };

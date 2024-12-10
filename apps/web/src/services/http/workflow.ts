@@ -31,7 +31,7 @@ export interface WorkflowAPISchema extends APISchema {
     addFlow: {
         request: {
             name: string;
-            description: string;
+            remark?: string;
         };
         response: {
             /** ID */
@@ -44,7 +44,7 @@ export interface WorkflowAPISchema extends APISchema {
         request: {
             id: ApiKey;
             name: string;
-            description: string;
+            remark?: string;
         };
         response: {
             /** ID */
@@ -89,6 +89,7 @@ export interface WorkflowAPISchema extends APISchema {
     enableFlow: {
         request: {
             id: ApiKey;
+            status: WorkflowStatus;
         };
         response: {
             /** ID */
@@ -143,8 +144,8 @@ export interface WorkflowAPISchema extends APISchema {
             id: ApiKey;
             /** Name */
             name: string;
-            /** Description */
-            description: string;
+            /** Remark */
+            remark?: string;
             /** Created At */
             created_at: number;
             /** Updated At */
@@ -154,7 +155,7 @@ export interface WorkflowAPISchema extends APISchema {
             /** User Email */
             user_email: string;
             /** Workflow DSL */
-            dsl: string;
+            dsl?: string;
         };
     };
 

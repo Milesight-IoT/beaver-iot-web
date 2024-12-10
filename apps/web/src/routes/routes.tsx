@@ -5,7 +5,6 @@ import {
     DevicesIcon,
     SettingsIcon,
     WorkflowIcon,
-    EntityFilledIcon,
 } from '@milesight/shared/src/components';
 import ErrorBoundaryComponent from './error-boundary';
 
