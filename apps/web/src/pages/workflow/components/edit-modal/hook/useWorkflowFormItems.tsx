@@ -12,7 +12,7 @@ export type FormDataProps = {
     remark?: string;
 };
 
-const useEditFormItems = () => {
+const useWorkflowFormItems = () => {
     const { getIntlText } = useI18n();
     const formItems = useMemo(() => {
         const result: ControllerProps<FormDataProps>[] = [];
@@ -69,4 +69,4 @@ const useEditFormItems = () => {
     return formItems;
 };
 
-export default useEditFormItems;
+export default useWorkflowFormItems;

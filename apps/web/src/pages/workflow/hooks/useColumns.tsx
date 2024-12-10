@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { Stack, IconButton } from '@mui/material';
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
-import { ListAltIcon, DeleteOutlineIcon } from '@milesight/shared/src/components';
+import { ListAltIcon, DeleteOutlineIcon, EditIcon } from '@milesight/shared/src/components';
 import { Tooltip, type ColumnType } from '@/components';
 import { type DeviceAPISchema } from '@/services/http';
 
-type OperationType = 'detail' | 'delete';
+type OperationType = 'detail' | 'delete' | 'edit';
 
 export type TableRowDataType = ObjectToCamelCase<
     DeviceAPISchema['getList']['response']['content'][0]
@@ -79,6 +79,14 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                             spacing="4px"
                             sx={{ height: '100%', alignItems: 'center', justifyContent: 'end' }}
                         >
+                            <Tooltip title={getIntlText('common.button.edit')}>
+                                <IconButton
+                                    sx={{ width: 30, height: 30 }}
+                                    onClick={() => onButtonClick('edit', row)}
+                                >
+                                    <EditIcon sx={{ width: 20, height: 20 }} />
+                                </IconButton>
+                            </Tooltip>
                             <Tooltip title={getIntlText('common.label.detail')}>
                                 <IconButton
                                     sx={{ width: 30, height: 30 }}

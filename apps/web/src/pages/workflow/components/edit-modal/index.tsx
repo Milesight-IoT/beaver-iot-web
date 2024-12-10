@@ -3,7 +3,10 @@ import cls from 'classnames';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { Modal, type ModalProps } from '@milesight/shared/src/components';
-import useEditFormItems, { type FormDataProps } from './hook/useWorkflowFormItems';
+import useWorkflowFormItems, {
+    type FormDataProps,
+    type FormDataKeys,
+} from './hook/useWorkflowFormItems';
 
 export interface Props extends Omit<ModalProps, 'onOk'> {
     /** confirm callback */

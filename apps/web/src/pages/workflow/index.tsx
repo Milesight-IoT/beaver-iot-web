@@ -12,8 +12,16 @@ import {
 } from '@milesight/shared/src/components';
 import { Breadcrumbs, TablePro, useConfirm } from '@/components';
 import { deviceAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
+import { type FormDataProps } from '@/pages/workflow/components/edit-modal/hook/useWorkflowFormItems';
+import { EditModal } from '@/pages/workflow/components';
 import { useColumns, type UseColumnsProps, type TableRowDataType } from './hooks';
 import './style.less';
+
+type ModalOption = {
+    isAdd: boolean;
+    openModal: boolean;
+    dataSource: FormDataProps;
+};
 
 const Workflow = () => {
     const navigate = useNavigate();
@@ -21,6 +29,14 @@ const Workflow = () => {
 
     // ---------- 列表数据相关逻辑 ----------
     const [keyword, setKeyword] = useState<string>();
+    const [editOption, SetEditOption] = useState<ModalOption>({
+        isAdd: false,
+        openModal: false,
+        dataSource: {
+            name: '',
+            remark: '',
+        },
+    });
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
     const [selectedIds, setSelectedIds] = useState<readonly ApiKey[]>([]);
     const {
@@ -89,7 +105,7 @@ const Workflow = () => {
                     variant="contained"
                     sx={{ height: 36, textTransform: 'none' }}
                     startIcon={<AddIcon />}
-                    onClick={() => navigate('/workflow/editor')}
+                    onClick={() => handlerEditModal(true, true)}
                 >
                     {getIntlText('common.label.add')}
                 </Button>
@@ -109,15 +125,50 @@ const Workflow = () => {
                     startIcon={<DeleteOutlineIcon />}
                     onClick={() => handleDeleteConfirm()}
                 >
-                    {getIntlText('common.label.delete')}
+                    {getIntlText('workflow.button.delete_filter')}
                 </Button>
             </Stack>
         );
     }, [getIntlText, handleDeleteConfirm, selectedIds]);
+    const handlerEditModal = (isAdd: boolean, isOpen: boolean, row?: FormDataProps): void => {
+        const newEditOption: ModalOption = {
+            isAdd,
+            openModal: isOpen,
+            dataSource: {
+                name: '',
+                remark: '',
+            },
+        };
+        if (!isAdd && isOpen) {
+            newEditOption.dataSource = {
+                name: row?.name ?? '',
+                remark: row?.remark ?? '',
+            };
+        }
+        SetEditOption(newEditOption);
+    };
+    const submitEditModal = async (data: FormDataProps) => {
+        const { isAdd } = editOption;
+        // const [error, res] = await awaitWrap(isAdd ? WorkflowAPI.addWorkflow(data) : WorkflowAPI.updateWorkflow(data));
+        // if (isRequestSuccess(res)) {
+        handlerEditModal(false, false);
+        if (isAdd) {
+            navigate('/workflow/editor', { state: data });
+        } else {
+            // toast.success(getIntlText('common.message.operation_success'));
+        }
+        // } else {
+        //     toast.error(error);
+        // }
+    };
     const handleTableBtnClick: UseColumnsProps<TableRowDataType>['onButtonClick'] = useCallback(
         (type, record) => {
             // console.log(type, record);
             switch (type) {
+                case 'edit': {
+                    handlerEditModal(false, true, record);
+                    break;
+                }
                 case 'detail': {
                     // TODO: workflow id 传参
                     navigate('/workflow/editor');
@@ -161,6 +212,13 @@ const Workflow = () => {
                     />
                 </div>
             </div>
+            <EditModal
+                visible={editOption.openModal}
+                isAdd={editOption.isAdd}
+                data={editOption.dataSource}
+                onCancel={() => handlerEditModal(false, false)}
+                onConfirm={submitEditModal}
+            />
         </div>
     );
 };
