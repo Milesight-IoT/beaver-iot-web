@@ -1,0 +1,29 @@
+.@{prefix}-params-input {
+    .@{prefix}-params-add {
+        display: flex;
+        align-items: center;
+        align-self: stretch;
+        justify-content: center;
+        width: 100%;
+        padding: @padding-xs @padding-md;
+        border: 1px solid var(--border-color-gray);
+        border-radius: @border-radius-xs;
+
+        &-label {
+            margin-left: @margin-xxs;
+            font-size: @font-size-2;
+            font-weight: @font-weight-medium;
+        }
+    }
+    .@{prefix}-params-list {
+        padding-left: 0;
+        .@{prefix}-params-item {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            .@{prefix}-params-arg {
+                width: calc((100% - 46px) / 2);
+            }
+        }
+    }
+}

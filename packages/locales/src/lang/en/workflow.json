@@ -34,5 +34,11 @@
     "workflow.editor.log_title_run": "Run Log",
     "workflow.editor.log_panel_title_test_run": "Test Run",
     "workflow.editor.log_panel_title_verification_result": "Verification Result",
-    "workflow.editor.save_warning_message": "The current workflow has been referenced, and saving it will update the workflow information synchronously. Are you sure you want to save it"
+    "workflow.editor.save_warning_message": "The current workflow has been referenced, and saving it will update the workflow information synchronously. Are you sure you want to save it",
+    "workflow.node.config_panel_type_string": "STRING",
+    "workflow.node.config_panel_type_long": "LONG",
+    "workflow.node.config_panel_type_double": "DOUBLE",
+    "workflow.node.config_panel_type_boolean": "BOOLEAN",
+    "workflow.node.config_panel_type_binary": "BINARY",
+    "workflow.node.config_panel_lable_arguments": "Arguments"
 }

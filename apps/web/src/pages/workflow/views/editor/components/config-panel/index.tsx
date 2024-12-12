@@ -15,6 +15,7 @@ import { useI18n } from '@milesight/shared/src/hooks';
 import { CloseIcon, PlayArrowIcon } from '@milesight/shared/src/components';
 import { basicNodeConfigs } from '@/pages/workflow/config';
 import { useCommonFormItems, type CommonFormDataProps } from './hooks';
+import { ParamInput } from './components';
 import './style.less';
 
 /**
@@ -25,6 +26,7 @@ const ConfigPanel = () => {
 
     // ---------- Handle Node-related logic ----------
     const nodes = useNodes();
+    console.log('💯 ~ ConfigPanel ~ nodes:', nodes);
     const { updateNode } = useReactFlow();
     const selectedNode = useMemo(() => {
         const selectedNodes = nodes.filter(item => item.selected);
@@ -45,7 +47,12 @@ const ConfigPanel = () => {
     // ---------- Handle Form-related logic ----------
     const { control, formState, handleSubmit, reset } = useForm<CommonFormDataProps>();
     const commonFormItems = useCommonFormItems();
-
+    const renderOtherArguments = () => {
+        if (nodeConfig?.type === 'trigger') {
+            return <ParamInput />;
+        }
+        return <span>Other Arguments...</span>;
+    };
     return (
         <Panel
             position="top-right"
@@ -95,7 +102,8 @@ const ConfigPanel = () => {
                                 control={control}
                             />
                         ))}
-                        <span>Other Arguments...</span>
+                        <div className="ms-divider-line" />
+                        {renderOtherArguments()}
                     </div>
                 </div>
             )}

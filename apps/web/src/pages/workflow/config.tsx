@@ -67,6 +67,10 @@ export type NodeConfigItemType = {
      * Independent testing enabled
      */
     testable?: boolean;
+    /**
+     * slot children
+     */
+    children?: React.ReactNode;
 };
 
 /**
