@@ -3,6 +3,7 @@ import { UseFormItemsProps } from './form/typings.d';
 export { default as Logo } from './logo';
 export { default as toast } from './toast';
 export { default as Modal, type ModalProps } from './modal';
+export { default as Select, type SelectProps } from './select';
 export { default as Form } from './form';
 export * from './form/typings.d';
 export type FormItemsType = UseFormItemsProps;

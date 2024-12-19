@@ -8,21 +8,21 @@ import {
     InputLabel,
 } from '@mui/material';
 
-type Props = {
+type Props<T extends ApiKey> = {
     /**
      * 下拉选项
      */
-    options: OptionsProps[];
+    options: OptionsProps<T>[];
     /**
      * 自定义下拉选项
      * @returns 返回自定义下拉选项内容
      */
-    renderOptions?: (options: (OptionsProps & { description?: string })[]) => any[];
+    renderOptions?: (options: (OptionsProps<T> & { description?: string })[]) => any[];
 };
 
-export type SelectProps = Props & MuiSelectProps;
+export type SelectProps<T extends ApiKey> = Props<T> & MuiSelectProps<T>;
 
-const Select = (props: SelectProps) => {
+const Select = <T extends ApiKey = ApiKey>(props: SelectProps<T>) => {
     const { options, renderOptions, style, label, ...rest } = props;
 
     // 转换下拉选项数据

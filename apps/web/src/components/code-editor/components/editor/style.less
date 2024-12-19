@@ -1,0 +1,82 @@
+.ms-code-editor-content {
+    flex: 1;
+    overflow: hidden;
+
+    .cm-editor {
+        height: 100%;
+        outline: none;
+
+        .cm-gutters {
+            border: unset;
+            user-select: none;
+
+            &:hover {
+                .cm-gutterElement {
+                    span {
+                        &::after {
+                            color: var(--text-color-tertiary);
+                            transition: color 0.2s ease-in-out;
+                        }
+                    }
+                }
+            }
+        }
+
+        .cm-foldGutter {
+            .cm-gutterElement {
+                position: relative;
+
+                span {
+                    color: transparent;
+
+                    &::after {
+                        position: absolute;
+                        top: 50%;
+                        left: 0;
+                        font-size: 12px;
+                        line-height: 1;
+                        color: transparent;
+                        transform: translateY(-50%);
+                    }
+                }
+
+                span[title='Fold line'] {
+                    &::after {
+                        content: '∨';
+                    }
+                }
+
+                span[title='Unfold line'] {
+                    &::after {
+                        content: '＞';
+                    }
+                }
+            }
+        }
+    }
+}
+
+.ms-editor {
+    &__lineNumbers {
+        &--hide {
+            .cm-lineNumbers,
+            .cm-foldGutter {
+                width: 0;
+            }
+        }
+    }
+
+    &__foldGutter {
+        &--hide {
+            .cm-foldGutter {
+                pointer-events: none;
+
+                .cm-gutterElement {
+                    span {
+                        visibility: hidden;
+                    }
+                }
+            }
+        }
+    }
+}

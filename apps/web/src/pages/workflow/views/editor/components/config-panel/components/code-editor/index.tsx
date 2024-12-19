@@ -1,23 +1,17 @@
 import React from 'react';
-import { TextField, type TextFieldProps } from '@mui/material';
-
-export type CodeEditorProps = TextFieldProps;
+import { CodeEditor as CodeMirror, type EditorProps } from '@/components';
+import './style.less';
 
 /**
  * Code Editor Component
  *
  * Note: Use in CodeNode, IfelseNode
  */
-const CodeEditor: React.FC<CodeEditorProps> = ({ ...props }) => {
+const CodeEditor: React.FC<EditorProps> = ({ value, onChange }) => {
     return (
-        <TextField
-            {...props}
-            multiline
-            fullWidth
-            placeholder="Content"
-            rows={5}
-            sx={{ margin: 0 }}
-        />
+        <div className="ms-code-editor-config">
+            <CodeMirror value={value} onChange={onChange} defaultEditorLang="javascript" />
+        </div>
     );
 };
 
