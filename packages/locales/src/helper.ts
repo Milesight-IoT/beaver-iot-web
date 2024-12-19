@@ -8,7 +8,7 @@ interface OptInterface {
 const languages = Object.values(LANGUAGE);
 /** 各应用依赖语言包模块配置 */
 const appLocalModules: Record<AppType, string[]> = {
-    web: ['global', 'dashboard', 'device', 'error', 'setting'],
+    web: ['global', 'dashboard', 'device', 'error', 'setting', 'entity'],
 };
 
 /**

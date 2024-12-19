@@ -45,13 +45,13 @@ const Select = (props: SelectProps) => {
     }, [options]);
 
     return (
-        <FormControl sx={{ ...style }}>
+        <FormControl sx={{ ...style }} fullWidth>
             {!!label && (
-                <InputLabel size={rest?.size as any} id="select-label">
+                <InputLabel size={rest?.size as any} required={rest?.required} id="select-label">
                     {label}
                 </InputLabel>
             )}
-            <MuiSelect {...rest} label={label} labelId="select-label">
+            <MuiSelect {...rest} label={label} labelId="select-label" notched>
                 {renderOptions
                     ? renderOptions(options)
                     : getMenuItems?.map((item: OptionsProps) => {

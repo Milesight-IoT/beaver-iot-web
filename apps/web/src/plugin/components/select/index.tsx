@@ -47,7 +47,7 @@ const Select = (props: SelectProps) => {
     return (
         <FormControl sx={{ ...style }}>
             {!!title && (
-                <InputLabel size={rest?.size as any} id="select-label">
+                <InputLabel size={rest?.size as any} required={rest?.required} id="select-label">
                     {title}
                 </InputLabel>
             )}

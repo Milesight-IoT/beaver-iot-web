@@ -4,6 +4,7 @@ import {
     DashboardCustomizeIcon,
     DevicesIcon,
     SettingsIcon,
+    EntityIcon,
 } from '@milesight/shared/src/components';
 import ErrorBoundaryComponent from './error-boundary';
 
@@ -76,6 +77,27 @@ const routes: RouteObjectType[] = [
                 },
                 async lazy() {
                     const { default: Component } = await import('@/pages/device/views/detail');
+                    return { Component };
+                },
+                ErrorBoundary,
+            },
+        ],
+    },
+    {
+        path: '/entity',
+        element: <Outlet />,
+        ErrorBoundary,
+        handle: {
+            get title() {
+                return intl.get('common.label.device');
+            },
+            icon: <EntityIcon fontSize="medium" />,
+        },
+        children: [
+            {
+                index: true,
+                async lazy() {
+                    const { default: Component } = await import('@/pages/entity');
                     return { Component };
                 },
                 ErrorBoundary,
