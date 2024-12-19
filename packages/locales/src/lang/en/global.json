@@ -162,5 +162,6 @@
     "common.label.test": "Test",
     "common.label.run": "Run",
     "common.label.target": "Target",
+    "common.label.ms": "ms",
     "common.label.week": "Week"
 }

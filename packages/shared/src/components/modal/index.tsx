@@ -61,7 +61,7 @@ export interface ModalProps {
     /**
      * 确认按钮回调
      */
-    onOk: () => void;
+    onOk?: () => void;
 
     /**
      * 取消按钮回调
@@ -133,7 +133,7 @@ const Modal: React.FC<ModalProps> = ({
 
     const handleOk = useMemoizedFn(async () => {
         setLoading(true);
-        await onOk();
+        await onOk?.();
         setLoading(false);
     });
 

@@ -1,0 +1,186 @@
+{
+    "traceInfo": [
+        {
+            "message_id": "msg_001",
+            "node_id": "node:1734403663609:tqhoyisd",
+            "node_label": "Trigger Node",
+            "status": "SUCCESS",
+            "time_cost": 100,
+            "start_time": 1672531200000,
+            "input": {
+                "trigger": "start"
+            },
+            "output": {
+                "result": "initiated"
+            }
+        },
+        {
+            "message_id": "msg_002",
+            "node_id": "node:1734403696051:mmijxipj",
+            "node_label": "Code Node",
+            "status": "SUCCESS",
+            "time_cost": 150,
+            "start_time": 1672531300000,
+            "input": {
+                "param1": "value1"
+            },
+            "output": {
+                "result": "processed"
+            }
+        },
+        {
+            "message_id": "msg_003",
+            "node_id": "node:1734403741746:cvlebfnk",
+            "node_label": "Code Node",
+            "status": "ERROR",
+            "time_cost": 200,
+            "start_time": 1672531400000,
+            "input": {
+                "param1": "value2"
+            },
+            "output": {
+                "error": "runtime error"
+            }
+        },
+        {
+            "message_id": "msg_004",
+            "node_id": "node:1734403754076:tunkfwyp",
+            "node_label": "Code Node",
+            "status": "SUCCESS",
+            "time_cost": 120,
+            "start_time": 1672531500000,
+            "input": {
+                "param1": "value3"
+            },
+            "output": {
+                "result": "completed"
+            }
+        },
+        {
+            "message_id": "msg_005",
+            "node_id": "node:1734403760131:nxrtmtqt",
+            "node_label": "Code Node",
+            "status": "SUCCESS",
+            "time_cost": 110,
+            "start_time": 1672531600000,
+            "input": {
+                "param1": "value4"
+            },
+            "output": {
+                "result": "validated"
+            }
+        },
+        {
+            "message_id": "msg_006",
+            "node_id": "node:1734403762609:tojsahsk",
+            "node_label": "Code Node",
+            "status": "SUCCESS",
+            "time_cost": 130,
+            "start_time": 1672531700000,
+            "input": {
+                "param1": "value5"
+            },
+            "output": {
+                "result": "executed"
+            }
+        },
+        {
+            "message_id": "msg_007",
+            "node_id": "node:1734403764786:iwvgqkbl",
+            "node_label": "Code Node",
+            "status": "ERROR",
+            "time_cost": 180,
+            "start_time": 1672531800000,
+            "input": {
+                "param1": "value6"
+            },
+            "output": {
+                "error": "timeout error"
+            }
+        },
+        {
+            "message_id": "msg_008",
+            "node_id": "node:1734403768531:pioadrla",
+            "node_label": "Code Node",
+            "status": "SUCCESS",
+            "time_cost": 90,
+            "start_time": 1672531900000,
+            "input": {
+                "param1": "value7"
+            },
+            "output": {
+                "result": "success"
+            }
+        },
+        {
+            "message_id": "msg_009",
+            "node_id": "node:1734403779597:krdbgvbs",
+            "node_label": "Code Node",
+            "status": "SUCCESS",
+            "time_cost": 140,
+            "start_time": 1672532000000,
+            "input": {
+                "param1": "value8"
+            },
+            "output": {
+                "result": "processed"
+            }
+        },
+        {
+            "message_id": "msg_010",
+            "node_id": "node:1734403781283:dwnkqolz",
+            "node_label": "Code Node",
+            "status": "SUCCESS",
+            "time_cost": 160,
+            "start_time": 1672532100000,
+            "input": {
+                "param1": "value9"
+            },
+            "output": {
+                "result": "executed"
+            }
+        },
+        {
+            "message_id": "msg_011",
+            "node_id": "node:1734403783794:wjhlqruk",
+            "node_label": "Code Node",
+            "status": "SUCCESS",
+            "time_cost": 110,
+            "start_time": 1672532200000,
+            "input": {
+                "param1": "value10"
+            },
+            "output": {
+                "result": "completed"
+            }
+        },
+        {
+            "message_id": "msg_012",
+            "node_id": "node:1734403795500:xceqicsa",
+            "node_label": "Code Node",
+            "status": "ERROR",
+            "time_cost": 170,
+            "start_time": 1672532300000,
+            "input": {
+                "param1": "value11"
+            },
+            "output": {
+                "error": "network error"
+            }
+        },
+        {
+            "message_id": "msg_013",
+            "node_id": "node:1734403803395:tcmtlast",
+            "node_label": "Code Node",
+            "status": "SUCCESS",
+            "time_cost": 100,
+            "start_time": 1672532400000,
+            "input": {
+                "param1": "value12"
+            },
+            "output": {
+                "result": "finalized"
+            }
+        }
+    ]
+}
