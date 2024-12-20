@@ -16,6 +16,8 @@ export interface EntityAPISchema extends APISchema {
              * 不包含子节点(在选择触发服务实体的时候，不能直接下发子实体/在更新属性实体时，不能只更新某个子实体)
              */
             exclude_children?: boolean;
+            /** 是否是自定义实体 */
+            customized?: boolean;
         };
         response: SearchResponseType<EntityData[]>;
     };
@@ -38,9 +40,11 @@ export interface EntityAPISchema extends APISchema {
             /** 实体 ID */
             entity_id: ApiKey;
             /** 开始时间戳，单位 ms */
-            start_timestamp: number;
+            start_timestamp?: number;
             /** 结束时间戳，单位 ms */
-            end_timestamp: number;
+            end_timestamp?: number;
+            page_size?: number;
+            page_number?: number;
         };
         response: SearchResponseType<EntityHistoryData[]>;
     };
@@ -130,6 +134,48 @@ export interface EntityAPISchema extends APISchema {
         };
         response: unknown;
     };
+
+    /** 删除实体 */
+    deleteEntities: {
+        request: {
+            entity_ids: ApiKey[];
+        };
+        response: unknown;
+    };
+
+    /** 编辑实体 */
+    editEntity: {
+        request: {
+            id: ApiKey;
+            entity_name: string;
+        };
+        response: unknown;
+    };
+
+    /** 创建实体 */
+    createCustomEntity: {
+        request: {
+            name: string;
+            access_mod: EntityAccessMode;
+            value_type: EntityValueDataType;
+            value_attribute: Record<string, any>;
+            type: EntityType;
+        };
+        response: unknown;
+    };
+
+    /** 编辑实体 */
+    editCustomEntity: {
+        request: {
+            name: string;
+            access_mod: EntityAccessMode;
+            value_type: EntityValueDataType;
+            value_attribute: Record<string, any>;
+            type: EntityType;
+            entityId: ApiKey;
+        };
+        response: unknown;
+    };
 }
 
 /**
@@ -147,5 +193,9 @@ export default attachAPI<EntityAPISchema>(client, {
         callService: `POST ${API_PREFIX}/entity/service/call`,
         getEntityStatus: `GET ${API_PREFIX}/entity/:id/status`,
         getChildrenEntity: `GET ${API_PREFIX}/entity/:id/children`,
+        deleteEntities: `POST ${API_PREFIX}/entity/delete`,
+        editEntity: `POST ${API_PREFIX}/entity/:id`,
+        createCustomEntity: `POST ${API_PREFIX}/entity`,
+        editCustomEntity: `PUT ${API_PREFIX}/entity/:entityId`,
     },
 });

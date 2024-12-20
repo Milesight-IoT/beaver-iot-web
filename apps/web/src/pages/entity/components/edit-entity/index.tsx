@@ -1,15 +1,15 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { Modal, Form } from '@milesight/shared/src/components';
-import { DashboardDetail } from '@/services/http/dashboard';
+import { TableRowDataType } from '../../hooks';
 
 interface IProps {
     onCancel: () => void;
-    onOk: (data: DashboardDetail) => void;
-    data?: DashboardDetail;
+    onOk: (entityName: string) => void;
+    data?: TableRowDataType;
 }
 
-const AddDashboard = (props: IProps) => {
+const EditEntity = (props: IProps) => {
     const { getIntlText } = useI18n();
     const { onOk, onCancel, data } = props;
     const formRef = useRef<any>();
@@ -17,14 +17,14 @@ const AddDashboard = (props: IProps) => {
     const formItems = [
         {
             label: getIntlText('dashboard.dashboard_name'),
-            name: 'name',
+            name: 'entityName',
             type: 'TextField',
-            defaultValue: data?.name,
+            defaultValue: data?.entityName,
             rules: {
                 required: true,
                 maxLength: {
                     value: 64,
-                    message: 'name is too long',
+                    message: '',
                 },
             },
         },
@@ -38,8 +38,8 @@ const AddDashboard = (props: IProps) => {
         formRef.current?.handleSubmit();
     };
 
-    const handleSubmit = (values: DashboardDetail) => {
-        onOk(values);
+    const handleSubmit = (values: { entityName: string }) => {
+        onOk(values.entityName);
     };
 
     return (
@@ -47,11 +47,11 @@ const AddDashboard = (props: IProps) => {
             visible
             onCancel={handleClose}
             onOk={handleOk}
-            title={`${getIntlText(!data?.dashboard_id ? 'dashboard.add_title' : 'dashboard.edit_title')}`}
+            title={getIntlText('common.label.edit')}
         >
-            <Form<DashboardDetail> ref={formRef} formItems={formItems} onOk={handleSubmit} />
+            <Form<{ entityName: string }> ref={formRef} formItems={formItems} onOk={handleSubmit} />
         </Modal>
     );
 };
 
-export default AddDashboard;
+export default EditEntity;

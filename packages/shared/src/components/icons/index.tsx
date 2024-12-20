@@ -70,6 +70,11 @@ export {
     Share as ShareIcon,
     Https as HttpsIcon,
     AdsClick as AdsClickIcon,
+    NoteAdd as NoteAddIcon,
+    Calculate as CalculateIcon,
+    Earbuds as EarbudsIcon,
+    IosShare as IosShareIcon,
+    FilterAlt as FilterAltIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';

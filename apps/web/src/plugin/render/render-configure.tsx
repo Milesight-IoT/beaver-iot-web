@@ -79,11 +79,11 @@ const CreatePlugin = forwardRef((props: IPlugin, ref: any) => {
                             if (!defaultValues[component.key] && value) {
                                 defaultValues[component.key] = value;
                             }
-
                             return (
                                 <Component
                                     {...restItem}
                                     {...componentProps}
+                                    required={!!rules?.required}
                                     error={error}
                                     helperText={error ? error.message : null}
                                     value={value || (component.valueType === 'array' ? [] : '')}

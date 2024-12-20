@@ -8,7 +8,9 @@ import { useEntitySelectOptions } from '../../hooks';
 import './style.less';
 
 type EntitySelectProps = AutocompleteProps<EntityOptionType, true, false, undefined> &
-    EntitySelectCommonProps<EntityOptionType[]>;
+    EntitySelectCommonProps<EntityOptionType[]> & {
+        required?: boolean;
+    };
 
 /**
  * 实体选择下拉框组件（多选）
@@ -22,6 +24,7 @@ const MultiEntitySelect = (props: EntitySelectProps) => {
         entityAccessMods,
         entityExcludeChildren,
         customFilterEntity,
+        required,
         /**
          * 默认最大可选择 5 个
          */
@@ -88,6 +91,7 @@ const MultiEntitySelect = (props: EntitySelectProps) => {
                     {...params}
                     label={getIntlText('common.label.entity')}
                     error={(restProps as any).error}
+                    required={!!required}
                     helperText={
                         (restProps as any).error ? (
                             <div style={{ marginLeft: -14 }}>

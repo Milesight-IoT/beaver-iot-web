@@ -7,7 +7,9 @@ import { useEntitySelectOptions } from '../../hooks';
 import './style.less';
 
 type EntitySelectProps = AutocompleteProps<EntityOptionType, undefined, false, undefined> &
-    EntitySelectCommonProps<EntityOptionType>;
+    EntitySelectCommonProps<EntityOptionType> & {
+        required?: boolean;
+    };
 
 /**
  * 实体选择下拉框组件（单选）
@@ -21,6 +23,7 @@ const EntitySelect = (props: EntitySelectProps) => {
         entityAccessMods,
         entityExcludeChildren,
         customFilterEntity,
+        required,
         ...restProps
     } = props;
 
@@ -73,6 +76,7 @@ const EntitySelect = (props: EntitySelectProps) => {
                     <TextField
                         {...params}
                         error={(restProps as any).error}
+                        required={!!required}
                         helperText={
                             (restProps as any).error ? (
                                 <div style={{ marginLeft: -14 }}>
