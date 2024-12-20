@@ -1,0 +1,54 @@
+.ms-log-accordion {
+    &::before {
+        display: none;
+    }
+
+    &.MuiPaper-root {
+        margin-bottom: @margin-xxs;
+        border: @border-base;
+        border-radius: @border-radius-sm;
+        box-shadow: none;
+
+        &:first-of-type {
+            border-radius: @border-radius-sm;
+        }
+
+        &.Mui-expanded {
+            margin-top: 0;
+            margin-bottom: @margin-xxs;
+        }
+    }
+
+    & &__header.MuiButtonBase-root {
+        display: flex;
+        flex-direction: row-reverse;
+        width: 100%;
+        min-height: unset;
+        padding: 0 @padding-sm;
+        overflow: hidden;
+
+        & > .MuiAccordionSummary {
+            &-content {
+                flex: 1;
+                margin: @padding-sm 0 @padding-sm @margin-xs;
+                overflow: hidden;
+            }
+
+            &-expandIconWrapper {
+                padding: @padding-xxs;
+
+                &.Mui-expanded {
+                    transform: rotate(90deg);
+                }
+
+                .MuiSvgIcon-root {
+                    font-size: @font-size-sm;
+                }
+            }
+        }
+    }
+
+    & &__content {
+        padding-top: 0;
+    }
+}

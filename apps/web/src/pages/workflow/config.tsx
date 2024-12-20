@@ -9,6 +9,8 @@ import {
     InputIcon,
     CallSplitIcon,
     FactCheckIcon,
+    CheckCircleIcon,
+    ErrorIcon,
     // FlagIcon,
 } from '@milesight/shared/src/components';
 
@@ -158,5 +160,20 @@ export const basicNodeConfigs: Record<WorkflowNodeType, NodeConfigItemType> = {
         iconBgColor: '#7E57C2',
         category: 'external',
         testable: true,
+    },
+};
+
+export type LogStatus = 'success' | 'failed';
+/**
+ * Status Render Map
+ */
+export const LogStatusMap: Record<LogStatus, { className: string; icon: React.ReactNode }> = {
+    success: {
+        className: 'ms-log-status__success',
+        icon: <CheckCircleIcon />,
+    },
+    failed: {
+        className: 'ms-log-status__error',
+        icon: <ErrorIcon />,
     },
 };

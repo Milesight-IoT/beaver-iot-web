@@ -1,0 +1,348 @@
+{
+    "nodes": [
+        {
+            "id": "node:1734403663609:tqhoyisd",
+            "type": "trigger",
+            "position": {
+                "x": 0,
+                "y": 0
+            },
+            "data": {},
+            "measured": {
+                "width": 240,
+                "height": 50
+            },
+            "zIndex": 0,
+            "selected": false,
+            "$$name": "START"
+        },
+        {
+            "id": "node:1734403696051:mmijxipj",
+            "type": "code",
+            "position": {
+                "x": 290,
+                "y": 0
+            },
+            "data": {},
+            "measured": {
+                "width": 240,
+                "height": 50
+            },
+            "selected": false,
+            "zIndex": 0,
+            "$$name": "CODE 1"
+        },
+        {
+            "id": "node:1734403741746:cvlebfnk",
+            "type": "code",
+            "position": {
+                "x": 580,
+                "y": 0
+            },
+            "data": {},
+            "measured": {
+                "width": 240,
+                "height": 50
+            },
+            "zIndex": 0,
+            "selected": false,
+            "$$name": "CODE 4"
+        },
+        {
+            "id": "node:1734403754076:tunkfwyp",
+            "type": "code",
+            "position": {
+                "x": 580,
+                "y": 100
+            },
+            "data": {},
+            "measured": {
+                "width": 240,
+                "height": 50
+            },
+            "zIndex": 0,
+            "selected": false,
+            "$$name": "CODE 2"
+        },
+        {
+            "id": "node:1734403760131:nxrtmtqt",
+            "type": "code",
+            "position": {
+                "x": 870,
+                "y": 100
+            },
+            "data": {},
+            "measured": {
+                "width": 240,
+                "height": 50
+            },
+            "selected": false,
+            "zIndex": 0,
+            "$$name": "CODE 6"
+        },
+        {
+            "id": "node:1734403762609:tojsahsk",
+            "type": "code",
+            "position": {
+                "x": 870,
+                "y": 200
+            },
+            "data": {},
+            "measured": {
+                "width": 240,
+                "height": 50
+            },
+            "selected": false,
+            "zIndex": 0,
+            "$$name": "CODE 12"
+        },
+        {
+            "id": "node:1734403764786:iwvgqkbl",
+            "type": "code",
+            "position": {
+                "x": 870,
+                "y": 300
+            },
+            "data": {},
+            "measured": {
+                "width": 240,
+                "height": 50
+            },
+            "selected": false,
+            "zIndex": 0,
+            "$$name": "代码 6"
+        },
+        {
+            "id": "node:1734403768531:pioadrla",
+            "type": "code",
+            "position": {
+                "x": 1293,
+                "y": -35.00000000000001
+            },
+            "data": {},
+            "measured": {
+                "width": 240,
+                "height": 50
+            },
+            "selected": false,
+            "dragging": false,
+            "$$name": "CODE 7"
+        },
+        {
+            "id": "node:1734403779597:krdbgvbs",
+            "type": "code",
+            "position": {
+                "x": 1176,
+                "y": 150
+            },
+            "data": {},
+            "measured": {
+                "width": 240,
+                "height": 50
+            },
+            "selected": false,
+            "dragging": false,
+            "$$name": "代码 9"
+        },
+        {
+            "id": "node:1734403781283:dwnkqolz",
+            "type": "code",
+            "position": {
+                "x": 1176,
+                "y": 226.99999999999997
+            },
+            "data": {},
+            "measured": {
+                "width": 240,
+                "height": 50
+            },
+            "selected": false,
+            "zIndex": 0,
+            "dragging": false,
+            "$$name": "代码 11"
+        },
+        {
+            "id": "node:1734403783794:wjhlqruk",
+            "type": "code",
+            "position": {
+                "x": 1176,
+                "y": 300
+            },
+            "data": {},
+            "measured": {
+                "width": 240,
+                "height": 50
+            },
+            "selected": false,
+            "dragging": false,
+            "zIndex": 0,
+            "$$name": "代码 7"
+        },
+        {
+            "id": "node:1734403795500:xceqicsa",
+            "type": "code",
+            "position": {
+                "x": 1176,
+                "y": 400
+            },
+            "data": {},
+            "measured": {
+                "width": 240,
+                "height": 50
+            },
+            "zIndex": 0,
+            "selected": false,
+            "dragging": false,
+            "$$name": "代码 8"
+        },
+        {
+            "id": "node:1734403803395:tcmtlast",
+            "type": "code",
+            "position": {
+                "x": 1466,
+                "y": 400
+            },
+            "data": {},
+            "measured": {
+                "width": 240,
+                "height": 50
+            },
+            "selected": false,
+            "$$name": "代码 12"
+        }
+    ],
+    "edges": [
+        {
+            "id": "edge:1734403696051:haikqpgy",
+            "type": "addable",
+            "source": "node:1734403663609:tqhoyisd",
+            "target": "node:1734403696051:mmijxipj",
+            "data": {
+                "$hovering": false
+            },
+            "selected": false,
+            "$$name": "start"
+        },
+        {
+            "id": "edge:1734403741746:dhqkxsqr",
+            "type": "addable",
+            "source": "node:1734403696051:mmijxipj",
+            "target": "node:1734403741746:cvlebfnk",
+            "data": {
+                "$hovering": false
+            },
+            "selected": false,
+            "$$name": "CODE 1"
+        },
+        {
+            "id": "edge:1734403754076:gbofxrfa",
+            "type": "addable",
+            "source": "node:1734403696051:mmijxipj",
+            "target": "node:1734403754076:tunkfwyp",
+            "selected": false,
+            "$$name": "CODE 4"
+        },
+        {
+            "id": "edge:1734403760131:lojptzjc",
+            "type": "addable",
+            "source": "node:1734403754076:tunkfwyp",
+            "target": "node:1734403760131:nxrtmtqt",
+            "data": {
+                "$hovering": false
+            },
+            "selected": false,
+            "$$name": "CODE 2"
+        },
+        {
+            "id": "edge:1734403762609:psbmmpcl",
+            "type": "addable",
+            "source": "node:1734403754076:tunkfwyp",
+            "target": "node:1734403762609:tojsahsk",
+            "data": {
+                "$hovering": false
+            },
+            "selected": false,
+            "$$name": "CODE 6"
+        },
+        {
+            "id": "edge:1734403764786:siwnxxoz",
+            "type": "addable",
+            "source": "node:1734403754076:tunkfwyp",
+            "target": "node:1734403764786:iwvgqkbl",
+            "selected": false,
+            "$$name": "CODE 12"
+        },
+        {
+            "id": "edge:1734403768531:rzwgnydv",
+            "type": "addable",
+            "source": "node:1734403741746:cvlebfnk",
+            "target": "node:1734403768531:pioadrla",
+            "selected": false,
+            "$$name": "代码 6"
+        },
+        {
+            "source": "node:1734403760131:nxrtmtqt",
+            "sourceHandle": null,
+            "target": "node:1734403768531:pioadrla",
+            "targetHandle": null,
+            "id": "edge:1734403776080:vlmahrru",
+            "type": "addable",
+            "data": {
+                "$hovering": false
+            },
+            "selected": false,
+            "$$name": "CODE 7"
+        },
+        {
+            "id": "edge:1734403779597:qjaweigh",
+            "type": "addable",
+            "source": "node:1734403762609:tojsahsk",
+            "target": "node:1734403779597:krdbgvbs",
+            "data": {
+                "$hovering": false
+            },
+            "selected": false,
+            "$$name": "代码 9"
+        },
+        {
+            "id": "edge:1734403781283:wiremvxr",
+            "type": "addable",
+            "source": "node:1734403762609:tojsahsk",
+            "target": "node:1734403781283:dwnkqolz",
+            "selected": false,
+            "$$name": "代码 11"
+        },
+        {
+            "id": "edge:1734403783794:yztayqju",
+            "type": "addable",
+            "source": "node:1734403764786:iwvgqkbl",
+            "target": "node:1734403783794:wjhlqruk",
+            "selected": false,
+            "data": {
+                "$hovering": false
+            },
+            "$$name": "代码 7"
+        },
+        {
+            "id": "edge:1734403795500:lflujxjh",
+            "type": "addable",
+            "source": "node:1734403764786:iwvgqkbl",
+            "target": "node:1734403795500:xceqicsa",
+            "selected": false,
+            "$$name": "代码 8"
+        },
+        {
+            "id": "edge:1734403803395:uwqdlnzp",
+            "type": "addable",
+            "source": "node:1734403795500:xceqicsa",
+            "target": "node:1734403803395:tcmtlast",
+            "selected": false,
+            "$$name": "代码 12"
+        }
+    ],
+    "viewport": {
+        "x": 119.37734719140894,
+        "y": 263.2629915858977,
+        "zoom": 0.49999999999999983
+    }
+}

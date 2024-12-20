@@ -89,6 +89,8 @@ export {
     History as HistoryIcon,
     UploadFile as UploadFileIcon,
     AttachFile as AttachFileIcon,
+    ArrowForwardIos as ArrowForwardIosIcon,
+    ArrowRight as ArrowRightIcon,
     SettingsOutlined as SettingsOutlinedIcon,
     KeyboardArrowUp as KeyboardArrowUpIcon,
     KeyboardArrowDown as KeyboardArrowDownIcon,

@@ -1,0 +1,53 @@
+.ms-log-tree {
+    &::before {
+        display: none;
+    }
+
+    &.MuiPaper-root {
+        box-shadow: none;
+
+        &.Mui-expanded {
+            margin-top: 0;
+        }
+    }
+
+    & &__header.MuiButtonBase-root {
+        flex-direction: row-reverse;
+        min-height: unset;
+        padding: calc(0 * var(--mui-spacing)) calc(2 * var(--mui-spacing) - 4px);
+
+        & > .MuiAccordionSummary {
+            &-content {
+                margin: 0 0 0 @margin-xxs;
+                font-weight: @font-weight-medium;
+                .text-size(@font-size-sm);
+            }
+
+            &-expandIconWrapper {
+                &.Mui-expanded {
+                    transform: rotate(90deg);
+                }
+
+                .MuiSvgIcon-root {
+                    font-size: @font-size-xxl;
+                }
+            }
+        }
+    }
+
+    & &__content {
+        position: relative;
+        padding: 0 0 0 calc(2 * var(--mui-spacing) + 20px);
+        margin-top: 2px;
+
+        &::before {
+            position: absolute;
+            top: 0;
+            left: calc((2 * var(--mui-spacing)) + 6px);
+            width: 1px;
+            height: 100%;
+            background: var(--border-color-base);
+            content: '';
+        }
+    }
+}

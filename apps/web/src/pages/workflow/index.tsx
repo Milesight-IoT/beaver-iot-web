@@ -13,7 +13,8 @@ import {
 } from '@milesight/shared/src/components';
 import { Breadcrumbs, TablePro, useConfirm } from '@/components';
 import { awaitWrap, isRequestSuccess, workflowAPI } from '@/services/http';
-import { ImportModal } from '@/pages/workflow/components';
+import { type FormDataProps as ImportFormDataProps } from '@/pages/workflow/components/import-modal/hook/useImportFormItems';
+import { ImportModal, LogModal } from '@/pages/workflow/components';
 import { useColumns, type UseColumnsProps, type TableRowDataType } from './hooks';
 import './style.less';
 
@@ -26,6 +27,7 @@ const Workflow = () => {
     const [importModal, setImportModal] = useState<boolean>(false);
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
     const [selectedIds, setSelectedIds] = useState<readonly ApiKey[]>([]);
+    const [logModalVisible, setLogModalVisible] = useState(false);
     const {
         data: workflowList,
         loading,
@@ -160,6 +162,7 @@ const Workflow = () => {
         [navigate, handleDeleteConfirm],
     );
     const columns = useColumns<TableRowDataType>({ onButtonClick: handleTableBtnClick });
+    const handleCloseLogModal = useCallback(() => setLogModalVisible(false), []);
     const isRowSelectable = useCallback(
         ({ row }: { row: TableRowDataType }) => {
             return !row.enabled;
@@ -191,6 +194,9 @@ const Workflow = () => {
                     />
                 </div>
             </div>
+            {logModalVisible && (
+                <LogModal visible={logModalVisible} onCancel={handleCloseLogModal} />
+            )}
             <ImportModal
                 visible={importModal}
                 onUpload={param => handlerImportModal(false, param)}
