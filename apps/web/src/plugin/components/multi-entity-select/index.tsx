@@ -1,4 +1,13 @@
-import { Autocomplete, TextField, Checkbox, Tooltip, Chip } from '@mui/material';
+import {
+    Autocomplete,
+    TextField,
+    Checkbox,
+    Tooltip,
+    Chip,
+    styled,
+    Popper,
+    autocompleteClasses,
+} from '@mui/material';
 
 import type { AutocompleteProps } from '@mui/material';
 
@@ -6,6 +15,7 @@ import { useI18n } from '@milesight/shared/src/hooks';
 import { useEntitySelectOptions } from '../../hooks';
 
 import './style.less';
+import ListboxComponent from './ListboxComponent';
 
 type EntitySelectProps = AutocompleteProps<EntityOptionType, true, false, undefined> &
     EntitySelectCommonProps<EntityOptionType[]>;
@@ -47,24 +57,32 @@ const MultiEntitySelect = (props: EntitySelectProps) => {
     });
 
     const renderOption: EntitySelectProps['renderOption'] = (optionProps, option, { selected }) => {
-        const { label, value, description } = option || {};
+        const { label, description } = option || {};
 
         return (
-            <li {...(optionProps || {})} key={value}>
-                <div className="ms-multi-entity-select">
-                    <Checkbox style={{ marginRight: 8 }} checked={selected} />
-                    <div className="ms-entity-select-item">
-                        <div className="ms-entity-select-item__label" title={label}>
-                            {label}
-                        </div>
-                        <div className="ms-entity-select-item__description" title={description}>
-                            {description}
-                        </div>
+            <div className="ms-multi-entity-select">
+                <Checkbox style={{ marginRight: 8 }} checked={selected} />
+                <div className="ms-entity-select-item">
+                    <div className="ms-entity-select-item__label" title={label}>
+                        {label}
+                    </div>
+                    <div className="ms-entity-select-item__description" title={description}>
+                        {description}
                     </div>
                 </div>
-            </li>
+            </div>
         );
     };
+
+    const StyledPopper = styled(Popper)({
+        [`& .${autocompleteClasses.listbox}`]: {
+            boxSizing: 'border-box',
+            '& ul': {
+                padding: 0,
+                margin: 0,
+            },
+        },
+    });
     return (
         <Autocomplete
             {...restProps}
@@ -99,7 +117,9 @@ const MultiEntitySelect = (props: EntitySelectProps) => {
                     }
                 />
             )}
-            renderOption={renderOption}
+            renderOption={(props, option, state) =>
+                [{ ...props, key: option.value }, option, state, renderOption] as React.ReactNode
+            }
             getOptionLabel={option => option?.label || ''}
             loading={loading}
             filterOptions={options => options}
@@ -108,7 +128,6 @@ const MultiEntitySelect = (props: EntitySelectProps) => {
                     getEntityOptions();
                     return;
                 }
-
                 getEntityOptions(keyword);
             }}
             isOptionEqualToValue={(option, currentVal) => option.value === currentVal.value}
@@ -122,6 +141,10 @@ const MultiEntitySelect = (props: EntitySelectProps) => {
                     );
                 })
             }
+            slots={{
+                popper: StyledPopper,
+                listbox: ListboxComponent,
+            }}
         />
     );
 };
