@@ -109,6 +109,7 @@ const View = (props: Props) => {
 
     const handleSubmit = (data: Record<string, any>) => {
         const newData: any = flattenObject(data);
+<<<<<<< HEAD
         const keys = Object.keys(newData);
         const resultData: any = {};
         keys.forEach((key: string) => {
@@ -119,6 +120,13 @@ const View = (props: Props) => {
             handleUpdateProperty(resultData);
         } else if (entityType === 'SERVICE') {
             handleCallService(resultData);
+=======
+        const entityType = config?.entity?.rawData?.entityType;
+        if (entityType === 'PROPERTY') {
+            handleUpdateProperty(newData);
+        } else if (entityType === 'SERVICE') {
+            handleCallService(newData);
+>>>>>>> 1e22786 (feat: Integrate with cloud ecosystem platform to develop complex and reusable components that support:)
         }
     };
 

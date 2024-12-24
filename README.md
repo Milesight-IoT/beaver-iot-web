@@ -1,6 +1,10 @@
 # Beaver IoT Web
 
+<<<<<<< HEAD
 Beaver IoT Web is a Monorepo-based frontend project that encompasses the web application and its dependent build scripts, project specifications, internationalization, and common code libraries. It is managed using Pnpm Workspace, providing a unified development environment and build process for ease of development and maintenance.
+=======
+Beaver IoT Web 是基于 Monorepo 的前端项目，包含了 Web 应用及其依赖的构建脚本、项目规范、国际化、公共代码等子库，利用 Pnpm Workspace 进行管理，提供了统一的开发环境和构建流程，方便开发和维护。
+>>>>>>> 1e22786 (feat: Integrate with cloud ecosystem platform to develop complex and reusable components that support:)
 
 ## Directory Structure
 

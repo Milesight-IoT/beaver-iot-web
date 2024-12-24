@@ -86,6 +86,7 @@ const ConfigPlugin = (props: ConfigPluginProps) => {
                                     <ComponentView
                                         config={formValues}
                                         configJson={{ ...config, isPreview: true }}
+                                        onChange={handleChange}
                                     />
                                 </Suspense>
                             ) : (

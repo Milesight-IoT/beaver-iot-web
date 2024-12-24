@@ -1,0 +1,53 @@
+{
+    "type": "toilet",
+    "name": "Toilet",
+    "class": "data_card",
+    "icon": "./icon.png",
+    "defaultRow": 4,
+    "defaultCol": 4,
+    "minRow": 3,
+    "minCol": 3,
+    "configProps": [
+        {
+            "style": "width: 100%",
+            "components": [
+                {
+                    "type": "multiEntitySelect",
+                    "title": "Entity",
+                    "key": "entity",
+                    "style": "width: 100%",
+                    "getDataUrl": "",
+                    "valueType": "array",
+                    "componentProps": {
+                        "size": "small",
+                        "entityType": ["PROPERTY"],
+                        "entityValueTypes": ["STRING"]
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "type": "input",
+                    "title": "Title",
+                    "key": "title",
+                    "defaultValue": "C09 1F",
+                    "componentProps": {
+                        "size": "small",
+                        "inputProps": {
+                            "maxLength": 50
+                        }
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                }
+            ]
+        }
+    ],
+    "view": []
+}

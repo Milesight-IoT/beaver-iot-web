@@ -96,7 +96,11 @@
             "class": "trigger-view",
             "themes": {
                 "default": {
+<<<<<<< HEAD
                     "class": "trigger-view-light"
+=======
+                    "class": "trigger-view"
+>>>>>>> 1e22786 (feat: Integrate with cloud ecosystem platform to develop complex and reusable components that support:)
                 }
             },
             "children": [

@@ -99,6 +99,7 @@ const Widgets = (props: WidgetProps) => {
                 const id = (data.widget_id || data.tempId) as ApiKey;
                 const pos = {
                     ...data.data.pos,
+<<<<<<< HEAD
                     w: data.data?.pos?.w || data.data.minCol || 3,
                     h: data.data?.pos?.h || data.data.minRow || 2,
                     minW: data.data.minCol || 3,
@@ -106,6 +107,15 @@ const Widgets = (props: WidgetProps) => {
                     i: data?.widget_id || data.data.tempId,
                     x: data.data.pos?.x || 0,
                     y: data.data.pos?.y || 0,
+=======
+                    w: data.data?.pos?.w || data.data.minCol,
+                    h: data.data?.pos?.h || data.data.minRow,
+                    minW: data.data.minCol || 3,
+                    minH: data.data.minRow || 2,
+                    i: data?.widget_id || data.data.tempId,
+                    x: data.data.pos.x || 0,
+                    y: data.data.pos.y || 0,
+>>>>>>> 1e22786 (feat: Integrate with cloud ecosystem platform to develop complex and reusable components that support:)
                 };
                 return (
                     <div
