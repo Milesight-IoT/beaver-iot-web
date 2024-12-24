@@ -5,6 +5,7 @@ import vitePluginImport from 'vite-plugin-imp';
 import stylelint from 'vite-plugin-stylelint';
 // import progress from 'vite-plugin-progress';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import {
     parseEnvVariables,
     getViteEnvVarsConfig,
@@ -79,6 +80,9 @@ export default defineConfig({
         }),
         react(),
         // progress(),
+        createSvgIconsPlugin({
+            iconDirs: [path.join(__dirname, 'src/plugin/plugins/weather-widget/view/assets/icons')],
+        }),
     ],
     resolve: {
         alias: {

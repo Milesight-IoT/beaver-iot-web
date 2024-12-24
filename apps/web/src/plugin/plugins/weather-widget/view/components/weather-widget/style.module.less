@@ -1,0 +1,136 @@
+.weather-widget-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 110px;
+    max-width: 1000px;
+    padding: @padding-sm;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .name {
+        margin-bottom: @margin-sm;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: @font-size-3;
+        font-weight: @font-weight-xl;
+        color: var(--white);
+        text-align: center;
+    }
+
+    .weather-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        height: 56px;
+        color: var(--white);
+
+        .num {
+            font-size: 45px;
+        }
+    }
+
+    .additional {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+
+        &-container {
+            display: flex;
+            margin: @margin-sm @margin-sm 0;
+
+            .item {
+                display: flex;
+                align-items: center;
+                margin-right: @margin-xl;
+
+                .text {
+                    padding-left: @padding-xs;
+                }
+            }
+        }
+    }
+
+    .divider {
+        width: 100%;
+        height: 1px;
+        padding: 0 @padding-sm;
+        margin: @margin-sm 0;
+        background-color: #ffffff3d;
+    }
+
+    .weather-hours-container {
+        position: relative;
+        user-select: none;
+
+        .hours-wrapper {
+            margin: 0 @margin-xl;
+            overflow: hidden;
+
+            .inner-hours {
+                display: flex;
+                align-items: center;
+                transition: all 0.6s ease-in-out;
+
+                .hour {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 50px;
+                    margin-right: @margin-xs;
+                    color: var(--white);
+
+                    .time {
+                        margin-bottom: @margin-xs;
+                        font-size: @font-size-1;
+                        opacity: 0.7;
+                    }
+
+                    .temperature {
+                        margin-top: @margin-xs;
+                        font-size: @font-size-base;
+                    }
+                }
+            }
+        }
+
+        .arrow-icon() {
+            position: absolute;
+            top: calc(50% - 7px);
+            cursor: pointer;
+        }
+
+        .forward {
+            right: 0;
+            .arrow-icon();
+        }
+
+        .back {
+            left: 0;
+            .arrow-icon();
+        }
+
+        .banned {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+    }
+
+    .refresh {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        color: var(--white);
+        cursor: pointer;
+    }
+
+    .date {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        font-weight: @font-weight-bold;
+        color: var(--white);
+    }
+}
