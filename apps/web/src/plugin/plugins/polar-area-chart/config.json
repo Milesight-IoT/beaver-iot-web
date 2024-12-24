@@ -1,0 +1,86 @@
+{
+    "type": "polarAreaChart",
+    "name": "polar Area Chart",
+    "class": "data_chart",
+    "icon": "./icon.png",
+    "defaultRow": 6,
+    "defaultCol": 8,
+    "minRow": 4,
+    "minCol": 4,
+    "configProps": [
+        {
+            "style": "width: 100%",
+            "components": [
+                {
+                    "type": "multiEntitySelect",
+                    "title": "Entity",
+                    "key": "entityList",
+                    "style": "width: 100%",
+                    "getDataUrl": "",
+                    "valueType": "array",
+                    "componentProps": {
+                        "size": "small",
+                        "entityType": ["PROPERTY", "EVENT"],
+                        "entityValueTypes": ["LONG", "DOUBLE"]
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "type": "input",
+                    "title": "Title",
+                    "key": "title",
+                    "defaultValue": "Title",
+                    "componentProps": {
+                        "size": "small",
+                        "inputProps": {
+                            "maxLength": 35
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "style": "width: 100%;",
+            "theme": {
+                "default": {
+                    "style": "font-size: 18px;"
+                }
+            },
+            "components": [
+                {
+                    "type": "ChartTimeSelect",
+                    "title": "Time",
+                    "key": "time",
+                    "style": "width: 100%;",
+                    "componentProps": {
+                        "size": "small"
+                    },
+                    "defaultValue": 86400000
+                }
+            ]
+        },
+        {
+            "style": "width: 100%;",
+            "components": [
+                {
+                    "type": "chartMetricsSelect",
+                    "title": "metrics",
+                    "key": "metrics",
+                    "style": "width: 100%;",
+                    "componentProps": {
+                        "size": "small"
+                    },
+                    "defaultValue": "LAST",
+                    "filters": ["SUM", "COUNT"]
+                }
+            ]
+        }
+    ],
+    "view": []
+}
