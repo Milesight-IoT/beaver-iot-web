@@ -106,5 +106,35 @@
             ]
         }
     ],
-    "view": []
+    "view": [
+        {
+            "tag": "div",
+            "class": "ms-icon-remaining",
+            "style": "display: inline-flex; flex-direction: column; width: 100%; min-width: 100%; height: 100%; padding: 16px; background: var(--main-background);",
+            "children": [
+                {
+                    "tag": "Tooltip",
+                    "class": "ms-icon-remaining__header",
+                    "style": "font-size: 16px; font-weight: bold;",
+                    "props": {
+                        "autoEllipsis": true
+                    },
+                    "params": ["title"]
+                },
+                {
+                    "tag": "div",
+                    "class": "ms-icon-remaining__content",
+                    "style": "display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; max-height: 40vh;",
+                    "children": [
+                        {
+                            "tag": "RemainChart",
+                            "adapter": {
+                                "model": "getAggregateHistory"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }

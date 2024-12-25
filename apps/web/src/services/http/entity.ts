@@ -60,8 +60,10 @@ export interface EntityAPISchema extends APISchema {
         response: {
             /** TODO: 待补充，只有在 LAST, MIN, MAX, AVG, SUM 出现 */
             value: number;
+            value_type: EntityValueDataType;
             count_result: {
                 value: unknown;
+                value_type: EntityValueDataType;
                 /** 数量 */
                 count: number;
             }[];

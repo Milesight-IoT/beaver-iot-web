@@ -2,6 +2,7 @@ import { isString } from 'lodash-es';
 import * as Icons from '@milesight/shared/src/components/icons';
 import { useTheme } from '@milesight/shared/src/hooks';
 import * as PluginView from '../view-components';
+import { ChartWrapper } from './components';
 import { parseStyleToReactStyle, parseStyleString, convertCssToReactStyle } from './util';
 import './style.less';
 
@@ -69,18 +70,21 @@ const View = (props: Props) => {
                     )
                 );
             }
+
             return (
-                <Tag
-                    key={`${JSON.stringify(tagProps)}${tabKey}`}
-                    className={`${tagProps.class || ''} ${theme?.class || ''}`}
-                    style={style ? parseStyleToReactStyle(style) : undefined}
-                    {...(tagProps.props || {})}
-                >
-                    {!tagProps?.params ? tagProps?.content : renderParams(tagProps?.params)}
-                    {tagProps?.children?.map((subItem, index) => {
-                        return renderTag(subItem, `${tabKey}-${index}`);
-                    })}
-                </Tag>
+                <ChartWrapper tag={tagProps.tag} viewProps={props} tagProps={tagProps}>
+                    <Tag
+                        key={`${JSON.stringify(tagProps)}${tabKey}`}
+                        className={`${tagProps.class || ''} ${theme?.class || ''}`}
+                        style={style ? parseStyleToReactStyle(style) : undefined}
+                        {...(tagProps.props || {})}
+                    >
+                        {!tagProps?.params ? tagProps?.content : renderParams(tagProps?.params)}
+                        {tagProps?.children?.map((subItem, index) => {
+                            return renderTag(subItem, `${tabKey}-${index}`);
+                        })}
+                    </Tag>
+                </ChartWrapper>
             );
         }
     };

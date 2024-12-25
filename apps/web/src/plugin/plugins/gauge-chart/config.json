@@ -80,15 +80,31 @@
     "view": [
         {
             "tag": "div",
-            "themes": {
-                "default": {
-                    "class": "area-chart-view"
-                }
-            },
+            "class": "ms-gauge-chart",
+            "style": "display: flex; flex-direction: column; justify-content: center; width: 100%; min-width: 100%; height: 100%; padding: 16px; background: var(--main-background);",
             "children": [
                 {
-                    "tag": "canvas",
-                    "key": "gaugeChart"
+                    "tag": "Tooltip",
+                    "class": "ms-gauge-chart__header",
+                    "style": "font-size: 16px; font-weight: bold;",
+                    "props": {
+                        "autoEllipsis": true
+                    },
+                    "params": ["title"]
+                },
+                {
+                    "tag": "div",
+                    "class": "ms-gauge-chart__content",
+                    "style": "display: flex; flex: 1; align-items: center; justify-content: center; overflow: hidden;",
+                    "children": [
+                        {
+                            "tag": "GaugeChart",
+                            "style": "width: 100%; height: 100%;",
+                            "adapter": {
+                                "model": "getAggregateHistory"
+                            }
+                        }
+                    ]
                 }
             ]
         }
