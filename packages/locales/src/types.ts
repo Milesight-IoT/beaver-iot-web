@@ -1,4 +1,4 @@
-export type AppType = 'web';
+export type AppType = 'web' | 'mobile';
 
 /**
  * 需国际化处理的第三方库

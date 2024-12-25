@@ -1,0 +1,33 @@
+{
+  "cli": {
+    "version": ">= 13.2.1",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "base": {
+      "node": "20.18.0",
+      "pnpm": "9.12.3",
+      "env": {
+        "EAS_LOCAL_BUILD_ARTIFACTS_DIR": "./dist"
+      }
+    },
+    "development": {
+      "extends": "base",
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "extends": "base",
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

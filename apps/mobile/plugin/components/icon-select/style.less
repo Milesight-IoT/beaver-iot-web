@@ -1,0 +1,42 @@
+.icon-select {
+    &-list {
+        max-height: 400px;
+        background: var(--main-background);
+
+        &-main {
+            width: 420px;
+
+            &::after {
+                display: block;
+                clear: both;
+                content: '';
+            }
+        }
+    }
+
+    &-menu:hover {
+        background: var(--main-background) !important;
+    }
+
+    &-icon {
+        display: block;
+        float: left;
+        padding: @padding-sm;
+        margin: @margin-xs;
+        line-height: 0;
+
+        &-active {
+            background: rgba(52, 145, 250, 0.08);
+            border-radius: 50%;
+        }
+
+        &-active &-img {
+            color: var(--blue-base);
+        }
+
+        &:hover {
+            background: rgba(0,0,0,.04);
+            border-radius: 50%;
+        }
+    }
+}

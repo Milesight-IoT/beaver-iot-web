@@ -106,6 +106,7 @@ dist
 .gz
 .zip
 .tar
+.history
 
 # i18n export & check directory
 packages/locales/.export

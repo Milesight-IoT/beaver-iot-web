@@ -2,7 +2,7 @@
  * 应用类型
  * @param web Web 应用
  */
-type AppType = 'web';
+type AppType = 'web' | 'mobile';
 
 /**
  * 请求参数通用 key 类型（通常用于 id, key 等字段）
