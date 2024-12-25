@@ -1,0 +1,110 @@
+{
+    "type": "iconRemaining",
+    "name": "Icon Remaining",
+    "class": "data_chart",
+    "icon": "./icon.png",
+    "defaultCol": 3,
+    "defaultRow": 5,
+    "minRow": 3,
+    "minCol": 2,
+    "configProps": [
+        {
+            "style": "width: 100%",
+            "theme": {
+                "default": {
+                    "style": "font-size: 18px;"
+                }
+            },
+            "components": [
+                {
+                    "type": "entitySelect",
+                    "title": "Entity",
+                    "key": "entity",
+                    "style": "width: 100%",
+                    "getDataUrl": "",
+                    "componentProps": {
+                        "size": "small",
+                        "entityType": ["PROPERTY"],
+                        "entityValueTypes": ["LONG", "DOUBLE"]
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "type": "input",
+                    "title": "Title",
+                    "key": "title",
+                    "style": "width: 100%",
+                    "defaultValue": "Title",
+                    "componentProps": {
+                        "size": "small",
+                        "inputProps": {
+                            "maxLength": 15
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "style": "width: 100%;",
+            "components": [
+                {
+                    "type": "ChartTimeSelect",
+                    "title": "Time",
+                    "key": "time",
+                    "style": "width: 100%;",
+                    "componentProps": {
+                        "size": "small"
+                    },
+                    "defaultValue": 86400000
+                }
+            ]
+        },
+        {
+            "style": "width: 100%;",
+            "components": [
+                {
+                    "type": "chartMetricsSelect",
+                    "title": "metrics",
+                    "key": "metrics",
+                    "style": "width: 100%;",
+                    "componentProps": {
+                        "size": "small"
+                    },
+                    "defaultValue": "LAST",
+                    "filters": ["SUM", "COUNT"]
+                }
+            ]
+        },
+        {
+            "title": "Appearance",
+            "style": "display: flex;",
+            "components": [
+                {
+                    "type": "iconSelect",
+                    "key": "icon",
+                    "style": "flex: 1;padding-right: 12px;",
+                    "componentProps": {
+                        "size": "small"
+                    },
+                    "defaultValue": "DeleteIcon"
+                },
+                {
+                    "type": "iconColorSelect",
+                    "key": "iconColor",
+                    "style": "flex: 1;",
+                    "componentProps": {
+                        "size": "small"
+                    },
+                    "defaultValue": "#3491FA"
+                }
+            ]
+        }
+    ],
+    "view": []
+}

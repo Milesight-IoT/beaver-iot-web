@@ -5,11 +5,12 @@
     "description": "Milesight IoT Assistant",
     "engines": {
         "node": ">=20.0.0",
-        "pnpm": ">=8.0.0"
+        "pnpm": ">=9.0.0"
     },
     "scripts": {
         "dev:apps": "pnpm --filter=@app/* -r run dev",
         "dev:pkgs": "pnpm --filter=@milesight/* -r run watch",
+        "dev:mobile": "pnpm --filter=@app/mobile run start",
         "start": "pnpm run /^dev:.*/",
         "build:apps": "pnpm --filter=@app/* -r run build",
         "build:pkgs": "pnpm --filter=@milesight/* -r run build",
@@ -30,7 +31,8 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "prepare": "husky",
         "preinstall": "node --import tsx ./scripts/only-allow.ts pnpm",
-        "postinstall": "pnpm run build:pkgs"
+        "postinstall": "pnpm run build:pkgs",
+        "clean-dep": "rm -rf node_modules && pnpm -r exec rm -rf node_modules"
     },
     "devDependencies": {
         "@commitlint/cli": "^19.4.1",
