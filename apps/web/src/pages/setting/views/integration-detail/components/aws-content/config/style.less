@@ -1,0 +1,103 @@
+.@{prefix}-int-config,
+.@{prefix}-int-service {
+    padding: @padding-lg;
+    margin-bottom: @margin-lg;
+    background-color: var(--component-background);
+    border-radius: @border-radius-base;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+
+        > h2 {
+            margin: 0;
+            .text-size(@font-size-xxl);
+        }
+
+        .@{mui-prefix}SvgIcon-root {
+            color: var(--text-color-secondary);
+            cursor: pointer;
+        }
+    }
+
+    &__body {
+        .status {
+            display: flex;
+            align-items: center;
+            margin: @margin-lg 0 @margin-md;
+
+            &-label {
+                margin-right: @margin-xs;
+                color: var(--text-color-secondary);
+            }
+        }
+
+        .form {
+            width: 45%;
+            min-width: 300px;
+            max-width: 500px;
+
+            &.loading {
+                opacity: .5;
+                pointer-events: none;
+            }
+        }
+
+        .@{prefix}-service-card {
+            margin-top: @margin-lg;
+            border: 1px solid var(--border-color-base);
+            border-radius: @border-radius-sm;
+
+            &__header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: @padding-md @padding-lg;
+
+                .title {
+                    margin-left: @margin-sm;
+                    font-weight: @font-weight-medium;
+                }
+
+                &-left {
+                    display: flex;
+                    flex: 1;
+                    align-items: center;
+                }
+            }
+
+            &__body {
+                padding: @padding-md @padding-lg;
+                border-top: 1px solid var(--border-color-base);
+
+                &.hidden {
+                    display: none;
+                }
+
+                .service-prop {
+                    margin-bottom: @margin-md;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+
+                    &-label {
+                        color: var(--text-color-secondary);
+                    }
+
+                    &-value {
+                        margin-left: @margin-xxs;
+                    }
+                }
+            }
+        }
+    }
+
+    .@{mui-prefix}Chip-root {
+        border-radius: @border-radius-base;
+    }
+}

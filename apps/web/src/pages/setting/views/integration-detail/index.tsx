@@ -13,7 +13,7 @@ import {
     isRequestSuccess,
 } from '@/services/http';
 import { genInteIconUrl } from '../../helper';
-import { GeneralContent, MscContent } from './components';
+import { GeneralContent, MscContent,  AwsContent } from './components';
 import './style.less';
 
 const IntegrationDetail = () => {
@@ -52,6 +52,7 @@ const IntegrationDetail = () => {
         },
     );
     const isMscIntegration = basicInfo?.id === 'msc-integration';
+    const isAwsIntegration = basicInfo?.id === 'aws-iot-integration';
 
     useLayoutEffect(() => {
         if (!state?.id || state.id !== integrationId) return;
@@ -111,6 +112,8 @@ const IntegrationDetail = () => {
                 <div className="ms-view-int-detail__body">
                     {isMscIntegration ? (
                         <MscContent entities={entityList} onUpdateSuccess={refreshInteDetail} />
+                    ) : isAwsIntegration ? (
+                        <AwsContent entities={entityList} onUpdateSuccess={refreshInteDetail} />
                     ) : (
                         <GeneralContent
                             loading={loading}
