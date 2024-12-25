@@ -7,3 +7,6 @@ export { default as ChartTimeSelect } from './chart-time-select';
 export { default as entitySelect } from './entity-select';
 export { default as chartMetricsSelect } from './chart-metrics-select';
 export { default as multiEntitySelect } from './multi-entity-select';
+export { default as multiDeviceSelect } from './multi-device-select';
+export { default as addressSelect } from './address-select';
+export { default as multiEntitySelectByDevice } from './multi-entity-select-by-device';

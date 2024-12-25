@@ -12,6 +12,7 @@ interface ConfigPluginProps {
 const Plugin = forwardRef((props: ConfigPluginProps, ref: any) => {
     const { value, config, onOk, onChange } = props;
     const { configure, handleChange } = useConnect({ value, config, onChange });
+    console.log('🚀 ~ Plugin ~ value ddd:', value);
 
     return (
         <RenderConfig

@@ -247,6 +247,7 @@ declare interface EntityOptionType {
  * 实体下拉选项组件通用 props
  */
 declare interface EntitySelectCommonProps<T = EntityOptionType> {
+    deviceId?: string;
     /**
      * 实体类型
      */
@@ -279,3 +280,40 @@ declare module 'chartjs-plugin-zoom' {
     const ChartZoom: any;
     export default ChartZoom;
 }
+
+/**
+ * 实体下拉框类型
+ */
+declare interface DeviceOptionType {
+    label: string;
+    value: ApiKey;
+}
+
+/**
+ * 实体下拉选项组件通用 props
+ */
+declare interface DeviceSelectCommonProps<T = DeviceOptionType> {
+    /**
+     * 最大选中数量
+     * 仅多选（multiple）时有效
+     */
+    maxCount?: number;
+    onChange: (value: T | null) => void;
+}
+
+declare interface AdressType {
+    label: string;
+    value: string;
+    lon: number;
+    lat: number;
+}
+
+declare interface EntityOptionTypeForDevice {
+    label: string | undefined;
+    value: string | undefined;
+    valueType: string;
+    type: string;
+    id?: string;
+    name?: string;
+}
+

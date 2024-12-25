@@ -1,0 +1,32 @@
+{
+    "type": "msMap",
+    "name": "msMap",
+    "class": "",
+    "icon": "./icon.png",
+    "defaultRow": 10,
+    "defaultCol": 10,
+    "minRow": 4,
+    "minCol": 4,
+    "configProps": [
+        {
+            "style": "width: 100%",
+            "components": [
+                {
+                    "type": "multiDeviceSelect",
+                    "title": "deviceSelect",
+                    "key": "device",
+                    "style": "width: 100%",
+                    "getDataUrl": "",
+                    "valueType": "array",
+                    "componentProps": {
+                        "size": "small"
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                }
+            ]
+        }
+    ],
+    "view": []
+}
