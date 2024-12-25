@@ -12,6 +12,10 @@ export const COMPONENTCLASS = {
         name: 'dashboard.plugin_class_data_card',
         value: 'data_card',
     },
+    meeting_room: {
+        name: 'Meeting Room',
+        value: 'meeting_room',
+    },
     other: {
         name: 'dashboard.plugin_class_other',
         value: 'other',

@@ -1,0 +1,70 @@
+{
+    "type": "meetingRoom",
+    "name": "Meeting Room",
+    "class": "meeting_room",
+    "icon": "./icon.png",
+    "defaultRow": 3,
+    "defaultCol": 5,
+    "minRow": 2,
+    "minCol": 4,
+    "configProps": [
+        {
+            "style": "width: 100%",
+            "components": [
+                {
+                    "type": "entitySelect",
+                    "title": "Entity",
+                    "key": "entity",
+                    "style": "width: 100%",
+                    "componentProps": {
+                        "size": "small",
+                        "entityType": ["PROPERTY"],
+                        "entityValueTypes": ["STRING", "LONG", "DOUBLE", "BOOLEAN"]
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                }
+            ]
+        },
+        {
+            "style": "width: 100%",
+            "components": [
+                {
+                    "type": "input",
+                    "title": "Label",
+                    "key": "title",
+                    "style": "width: 100%",
+                    "defaultValue": "Label",
+                    "componentProps": {
+                        "size": "small",
+                        "inputProps": {
+                            "maxLength": 15
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "view": [
+        {
+            "tag": "div",
+            "themes": {
+                "default": {
+                    "class": "data-view__container"
+                }
+            },
+            "children": [
+                {
+                    "tag": "span",
+                    "themes": {
+                        "default": {
+                            "class": "data-view__content"
+                        }
+                    },
+                    "params": ["entity"]
+                }
+            ]
+        }
+    ]
+}

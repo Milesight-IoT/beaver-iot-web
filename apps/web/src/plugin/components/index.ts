@@ -7,3 +7,4 @@ export { default as ChartTimeSelect } from './chart-time-select';
 export { default as entitySelect } from './entity-select';
 export { default as chartMetricsSelect } from './chart-metrics-select';
 export { default as multiEntitySelect } from './multi-entity-select';
+export { default as meetingRoom } from './switch';

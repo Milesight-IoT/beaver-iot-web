@@ -1,0 +1,280 @@
+
+.modal-content {
+    margin-bottom: 66px;
+}
+
+.meeting-button-cancel{
+    position: absolute;
+    right: 300px;
+    bottom: 12px;
+    width: 23%;
+    height: 40px;
+    padding: 2px 32px; /* 内边距 */
+    margin: 4px 20px; /* 外边距 */
+    font-size: 16px; /* 字体大小 */
+    color: white; /* 字体颜色 */
+    text-align: center; /* 文字居中 */
+    text-decoration: none; /* 去掉下划线 */
+    background-color: #3d3f4141; /* 背景颜色 */
+    border: none; /* 去掉默认边框 */
+    border-radius: 12px; /* 圆角半径 */
+    cursor: pointer; /* 鼠标指针 */
+    transition: background-color 0.3s; /* 背景颜色过渡效果 */
+}
+
+/* 鼠标悬停时的效果 */
+.meeting-button-cancel:hover {
+    background-color: #3d3f41af; /* 更深的绿色 */
+}
+
+.meeting-button-delete{
+    position: absolute;
+    right: 150px;
+    bottom: 12px;
+    width: 23%;
+    height: 40px;
+    padding: 2px 32px; /* 内边距 */
+    margin: 4px 20px; /* 外边距 */
+    font-size: 16px; /* 字体大小 */
+    color: white; /* 字体颜色 */
+    text-align: center; /* 文字居中 */
+    text-decoration: none; /* 去掉下划线 */
+    background-color: #f80b6e80; /* 背景颜色 */
+    border: none; /* 去掉默认边框 */
+    border-radius: 12px; /* 圆角半径 */
+    cursor: pointer; /* 鼠标指针 */
+    transition: background-color 0.3s; /* 背景颜色过渡效果 */
+}
+
+/* 鼠标悬停时的效果 */
+.meeting-button-delete:hover {
+    background-color: #e9072dd3; /* 更深的绿色 */
+}
+
+.meeting-button-primary{
+    position: absolute;
+    right: 0;
+    bottom: 12px;
+    width: 23%;
+    height: 40px;
+    padding: 2px 32px; /* 内边距 */
+    margin: 4px 20px; /* 外边距 */
+    font-size: 16px; /* 字体大小 */
+    color: white; /* 字体颜色 */
+    text-align: center; /* 文字居中 */
+    text-decoration: none; /* 去掉下划线 */
+    background-color: #0b7af880; /* 背景颜色 */
+    border: none; /* 去掉默认边框 */
+    border-radius: 12px; /* 圆角半径 */
+    cursor: pointer; /* 鼠标指针 */
+    transition: background-color 0.3s; /* 背景颜色过渡效果 */
+}
+
+/* 鼠标悬停时的效果 */
+.meeting-button-primary:hover {
+    background-color: #0770e9d3; /* 更深的绿色 */
+}
+
+
+
+.modal {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    padding: 20px;
+    margin-right: -50%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transform: translate(-50%, -50%);
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+.meeting-room-schedule {
+    cursor: pointer; /* 鼠标指针 */
+    user-select: none; /* 禁用文本选择 */
+
+   
+    .week-top{
+        display: flex;
+        height: 110px;
+
+
+        button.rounded-button1 {
+            top: 60px;
+            right: 20%;
+        }
+
+        button.rounded-button2 {
+            top: 60px;
+            right: 13%;
+        }
+
+        button.rounded-button3 {
+            top: 60px;
+            right: 6%;
+        }
+
+        .week-controls-top {
+            display: flex;
+            align-items: center;   /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+            width: 100%;
+
+            .data-view-icon {
+                top: 26px;
+                right: 50%;
+                font-size: 26px;
+                text-align: center;
+            }
+        }
+        
+        .week-controls {
+            display: flex;
+            align-items: center;   /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+            width: 30%;
+            margin-right: -2%;
+
+            .rounded-button1,
+            .rounded-button2,
+            .rounded-button3 {
+                padding: 10px 20px;
+                margin-left: 10%;
+                color: white;
+                background-color: #007bff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #0056b3;
+                }
+            }
+        }
+    }
+
+    .schedule-grid {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        margin-top: -20px;
+
+        .day-column {
+            position: relative;
+            flex: 1;
+            border-left: 1px solid #ccc;
+
+            &:first-child {
+                border-left: none;
+            }
+
+            .day-header {
+                padding: 10px;
+                font-size: 14px;
+                font-weight: bold;
+                text-align: center;
+                background-color: #f5f5f5;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .time-slot {
+                position: relative;
+                height: 26px;
+                border-bottom: 1px solid #eee;
+
+                &.past-time-slot {
+                    background-color: #f5f5f5;
+                }
+
+                &.selected-time-slot {
+                    background-color: #d3e0ff;
+                }
+
+                .meeting-room-label {
+                    position: absolute;
+                    top: 50%;
+                    left: 10px;
+                    font-size: 12px;
+                    transform: translateY(-50%);
+                }
+            }
+        }
+    }
+
+    .history-meeting {
+        position: absolute;
+        padding: 5px;
+        color: white;
+        background-color: rgba(0, 123, 255, 0.8);
+        border-left: 4px solid #007bff;
+        cursor: pointer;
+
+        &.past-meeting {
+            margin: 2px;
+            background-color: rgba(108, 117, 125, 8);
+            border-left-color: #6c757d;
+        }
+
+        .meeting-info {
+            .meeting-subject {
+                font-weight: bold;
+            }
+
+            .meeting-time {
+                font-size: 12px;
+            }
+        }
+    }
+
+    .modal-content {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 66px;
+
+        .meeting-button-cancel {
+            position: absolute;
+            right: 0;
+            bottom: 12px;
+            width: 23%;
+            color: white;
+            background-color: #6c757d;
+
+            &:hover {
+                background-color: #5a6268;
+            }
+        }
+
+        .meeting-button-delete {
+            position: absolute;
+            right: 0;
+            bottom: 12px;
+            width: 23%;
+            color: white;
+            background-color: #dc3545;
+
+            &:hover {
+                background-color: #c82333;
+            }
+        }
+
+        .meeting-button-primary {
+            position: absolute;
+            right: 0;
+            bottom: 12px;
+            width: 23%;
+            color: white;
+            background-color: #007bff;
+
+            &:hover {
+                background-color: #0069d9;
+            }
+        }
+    }
+}
+
