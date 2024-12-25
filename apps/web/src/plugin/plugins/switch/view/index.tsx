@@ -3,8 +3,8 @@ import { useMemo, useState, useCallback, useEffect } from 'react';
 import * as Icons from '@milesight/shared/src/components/icons';
 import { useI18n } from '@milesight/shared/src/hooks';
 import Switch from '@/plugin/components/switch';
-import { entityAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/services/http';
-import ws, { getExChangeTopic } from '@/services/ws';
+import { useModel } from '@/adapter/models/getEntityStatus';
+import { entityAPI } from '@/services/http';
 import { Tooltip } from '../../../view-components';
 
 import styles from './style.module.less';
@@ -18,9 +18,7 @@ export interface ViewProps {
         onIcon?: string;
         onIconColor?: string;
     };
-    configJson: {
-        isPreview?: boolean;
-    };
+    configJson: CustomComponentProps;
 }
 
 const View = (props: ViewProps) => {
@@ -31,64 +29,17 @@ const View = (props: ViewProps) => {
     const { getIntlText } = useI18n();
     const [isSwitchOn, setIsSwitchOn] = useState(false);
 
-    /**
-     * websocket 订阅主题
-     */
-    const topic = useMemo(
-        () => entity?.rawData?.entityKey && getExChangeTopic(entity.rawData.entityKey),
-        [entity],
-    );
+    const { data } = useModel({
+        viewProps: props,
+        adapter: {
+            model: 'entityStatus',
+        },
+    });
+    const { value } = data || {};
 
-    /**
-     * 请求实体状态函数
-     */
-    const requestEntityStatus = useCallback(async () => {
-        if (!entity) return;
-
-        const [error, res] = await awaitWrap(entityAPI.getEntityStatus({ id: entity.value }));
-
-        if (error || !isRequestSuccess(res)) {
-            /**
-             * 请求失败，以关闭 false 为默认值
-             */
-            setIsSwitchOn(false);
-            return;
-        }
-
-        const entityStatus = getResponseData(res);
-        setIsSwitchOn(Boolean(entityStatus?.value));
-    }, [entity]);
-
-    /**
-     * 获取所选实体的状态
-     */
     useEffect(() => {
-        (async () => {
-            if (entity) {
-                requestEntityStatus();
-            } else {
-                /**
-                 * 无实体，初始化数据
-                 */
-                setIsSwitchOn(false);
-            }
-        })();
-    }, [entity, requestEntityStatus]);
-
-    /**
-     * websocket 订阅
-     */
-    useEffect(() => {
-        /**
-         * 预览状态下不进行 websocket 订阅
-         */
-        if (!topic || Boolean(isPreview)) return;
-
-        /**
-         * 订阅主题时会返回取消订阅的函数，所以直接返回即可在卸载时取消订阅
-         */
-        return ws.subscribe(topic, requestEntityStatus);
-    }, [topic, requestEntityStatus, isPreview]);
+        setIsSwitchOn(value === 'true');
+    }, [value]);
 
     /**
      * 切换 switch 状态时，
