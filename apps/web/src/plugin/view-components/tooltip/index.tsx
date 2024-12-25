@@ -2,9 +2,23 @@ import { Tooltip } from '@/components';
 import { MSToolTipProps } from '@/components/tooltip';
 import './style.less';
 
-const pluginTooltip = (props: MSToolTipProps) => {
-    const { title, children, ...rest } = props;
+const pluginTooltip = (props: MSToolTipProps & { suffix?: React.ReactNode }) => {
+    const { title, children, suffix, ...rest } = props;
     const renderContent = () => {
+        if (suffix) {
+            return (
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                >
+                    {title || children}
+                    {suffix}
+                </div>
+            );
+        }
         return <span className="plugin-view-tooltip-title">{title || children}</span>;
     };
 

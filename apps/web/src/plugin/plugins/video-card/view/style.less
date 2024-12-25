@@ -1,0 +1,68 @@
+.video-view {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-width: 100%;
+    height: 100%;
+    padding: @padding-lg;
+    overflow: hidden;
+    background: var(--main-background);
+
+    &-preview {
+        flex: none;
+        width: 520px;
+        min-width: auto;
+        height: 100%;
+    }
+
+    &__icon {
+        padding: @padding-sm;
+        margin-right: @margin-md;
+        background-color: var(--gray-color-1);
+        border-radius: @border-radius-base;
+
+        svg {
+            display: block;
+            height: 100%;
+        }
+    }
+
+    &__video {
+        // flex布局
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        max-height: 100%;
+        overflow: hidden;
+    }
+
+    &__title {
+        margin-bottom: @margin-xxs;
+        font-size: @font-size-lg;
+        font-weight: @font-weight-bold;
+        line-height: 1;
+        color: var(--text-color-base);
+
+        .ms-tooltip-cont {
+            display: inline-block;
+            .text-size(@font-size-sm);
+        }
+    }
+
+    &__content {
+        display: inline-block;
+        color: var(--text-color-secondary);
+        .text-size(@font-size-xxl);
+    }
+
+    &__container {
+        // flex布局的第二个元素占满剩余高度
+        flex: 1;
+        height: 100%;
+    }
+
+    &__title-suffix {
+        display: flex;
+        align-items: center;
+    }
+}

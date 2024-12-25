@@ -1,0 +1,91 @@
+{
+    "type": "videoCard",
+    "name": "Video Card",
+    "class": "data_card",
+    "icon": "./icon.png",
+    "defaultRow": 9,
+    "defaultCol": 12,
+    "minRow": 9,
+    "minCol": 12,
+    "configProps": [
+        {
+            "style": "width: 100%",
+            "components": [
+                {
+                    "type": "entitySelect",
+                    "title": "Entity",
+                    "key": "entity",
+                    "style": "width: 100%",
+                    "componentProps": {
+                        "size": "small",
+                        "entityType": ["SERVICE"],
+                        "accessMods": ["W", "RW"],
+                        "entityExcludeChildren": true
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                }
+            ]
+        },
+        {
+            "style": "width: 100%",
+            "components": [
+                {
+                    "type": "input",
+                    "title": "Label",
+                    "key": "title",
+                    "style": "width: 100%",
+                    "defaultValue": "Label",
+                    "componentProps": {
+                        "size": "small",
+                        "inputProps": {
+                            "maxLength": 30
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "style": "width: 100%",
+            "components": [
+                {
+                    "type": "entitySelect",
+                    "title": "playbackEntity",
+                    "key": "playbackEntity",
+                    "style": "width: 100%",
+                    "componentProps": {
+                        "size": "small",
+                        "entityType": ["SERVICE"],
+                        "accessMods": ["W", "RW"],
+                        "entityExcludeChildren": true
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                }
+            ]
+        }
+    ],
+    "view": [
+        {
+            "tag": "div",
+            "themes": {
+                "default": {
+                    "class": "video-view__container"
+                }
+            },
+            "children": [
+                {
+                    "tag": "span",
+                    "themes": {
+                        "default": {
+                            "class": "video-view__content"
+                        }
+                    },
+                    "params": ["entity"]
+                }
+            ]
+        }
+    ]
+}

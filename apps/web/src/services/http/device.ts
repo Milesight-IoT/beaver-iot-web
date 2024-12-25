@@ -86,6 +86,14 @@ export interface DeviceAPISchema extends APISchema {
         };
         response: unknown;
     };
+
+    /** 图像分析 */
+    imageAnalyze: {
+        request: {
+            image: string;
+        };
+        response: unknown;
+    };
 }
 
 /**
@@ -98,5 +106,6 @@ export default attachAPI<DeviceAPISchema>(client, {
         addDevice: `POST ${API_PREFIX}/device`,
         deleteDevices: `POST ${API_PREFIX}/device/batch-delete`,
         updateDevice: `PUT ${API_PREFIX}/device/:id`,
+        imageAnalyze: `POST aaa/vms-integration/object-detection`,
     },
 });
