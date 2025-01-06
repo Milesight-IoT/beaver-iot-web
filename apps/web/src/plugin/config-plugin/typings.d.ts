@@ -1,11 +1,11 @@
 export interface ConfigProps {
     /**
-     * 插件名称
-     * @description 对应到plugins下同名插件
+     * Plug-in name
+     * @description Corresponding to the plug -in of the same name under Plugins
      */
     type: string;
     /**
-     * 插件配置值
+     * Plug-in configuration value
      */
     config?: any;
 }

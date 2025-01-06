@@ -1,0 +1,32 @@
+.@{prefix}-entity-filter-select {
+    &-item {
+        display: flex;
+        gap: @margin-xs;
+        margin-bottom: @margin-md;
+
+        .@{mui-prefix}FormControl-root {
+            margin: 0;
+        }
+
+        > .@{mui-prefix}FormControl-root,
+        > .@{mui-prefix}Autocomplete-root {
+            flex: 1;
+        }
+
+        > .@{mui-prefix}ButtonBase-root {
+            width: 40px;
+            height: 40px;
+        }
+    }
+
+    & &-add-btn {
+        font-weight: @font-weight-bold;
+        line-height: 24px;
+        color: var(--text-color-base);
+        border-color: var(--border-color-base);
+
+        &:hover {
+            background-color: var(--component-background-gray);
+        }
+    }
+}

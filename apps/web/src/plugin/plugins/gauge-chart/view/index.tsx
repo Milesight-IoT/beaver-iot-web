@@ -18,7 +18,7 @@ const View = (props: Props) => {
     const { blue, grey } = useTheme();
     const { aggregateHistoryData } = useSource({ entity, metrics, time });
 
-    // 计算最适合的最大刻度值
+    // Calculate the most suitable maximum scale value
     const calculateMaxTickValue = (maxValue: number) => {
         const magnitude = 10 ** Math.floor(Math.log10(maxValue));
         const normalizedMax = maxValue / magnitude;
@@ -36,7 +36,7 @@ const View = (props: Props) => {
         return maxTickValue * magnitude;
     };
 
-    // 计算合适的间隔
+    // Calculate the appropriate interval
     const calculateTickInterval = (maxTickValue: number) => {
         if (maxTickValue <= 1) {
             return 0.1;
@@ -47,7 +47,7 @@ const View = (props: Props) => {
         return 1;
     };
 
-    /** 渲染仪表图 */
+    /** Rendering instrument diagram */
     const renderGaugeChart = (datasets: {
         minValue?: number;
         maxValue?: number;
@@ -57,7 +57,7 @@ const View = (props: Props) => {
             const ctx = chartRef.current!;
             if (!ctx) return;
 
-            // 换成成符合条件的数据
+            // Replace it into qualified data
             const { minValue: min, maxValue: max, currentValue: value } = datasets || {};
             const currentValue = value || 0;
             const minValue = min || 0;
@@ -66,21 +66,21 @@ const View = (props: Props) => {
                 : Math.max(currentValue, DEFAULT_RANGE);
             let data = [...new Set([currentValue, maxValue])].filter(v => !isNil(v)) as number[];
             if (data.length === 1 && data[0] === 0) {
-                // 没有数据时，展示为空状态
+                // When there is no data, display as empty state
                 data = [0, DEFAULT_RANGE];
             }
             // const diff = maxValue - minValue;
             let tickCount = DEFAULT_RANGE;
-            // 计算当前最大值，需要是刻度数的整数
+            // Calculating the current maximum value, it needs to be an integer of the scale
             const tickMaxValue = calculateMaxTickValue(maxValue);
-            // 计算刻度间隔
+            // Calculating scale interval
             // const tickInterval = Math.ceil(tickMaxValue / tickCount);
             const tickInterval = calculateTickInterval(tickMaxValue);
-            // 最大值小于10，取最大值向上取整作为最大刻度数
+            // The maximum value is less than 10, take the maximum value and take it up as the maximum scale
             if (tickMaxValue < 10) {
                 tickCount = Math.ceil(tickMaxValue);
             }
-            // 如果最大值小于2，则按照默认0-10刻度
+            // If the maximum value is less than 2, according to the default 0-10 scale
             if (tickMaxValue < 2) {
                 tickCount = 10;
                 data = [currentValue, DEFAULT_RANGE];
@@ -88,8 +88,8 @@ const View = (props: Props) => {
                 data = [currentValue, tickMaxValue];
             }
             // 渲染图表
-            const circumference = 216; // 定义仪表盘的周长
-            const rotation = (360 - 216) / 2 + 180; // 根据周长，计算旋转的角度
+            const circumference = 216; // Define the length of the dashboard
+            const rotation = (360 - 216) / 2 + 180; // According to the length of the circumference, calculate the angle of rotation
             const chart = new Chart(ctx, {
                 type: 'gauge',
                 data: {
@@ -105,7 +105,7 @@ const View = (props: Props) => {
                     ],
                 },
                 options: {
-                    cutout: '90%', // 通过设置 cutout 属性调整圆环宽度，值越大圆环越细
+                    cutout: '90%', // Adjust the width of the ring attribute by setting the cutout attribute, the larger the values, the thinner the ring
                     needle: {
                         radiusPercentage: 1.5,
                         widthPercentage: 3,
@@ -123,7 +123,7 @@ const View = (props: Props) => {
                     },
                     hover: {
                         // @ts-ignore
-                        mode: null, // 禁用悬停效果
+                        mode: null, // Disable suspension effect
                     },
                     plugins: {
                         legend: {

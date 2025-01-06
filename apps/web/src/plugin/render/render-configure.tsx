@@ -7,19 +7,19 @@ import { parseStyleString } from './util';
 
 export interface IPlugin {
     /**
-     * 自定义组件配置
+     * Custom component configuration
      */
     config: CustomComponentProps;
     /**
-     * 表单数据提交
+     * Form data submission
      */
     onOk: (data: any) => void;
     /**
-     * 表单数据变更回调
+     * Form data change callback
      */
     onChange?: (data: any) => void;
     /**
-     * 传入的表单值
+     * The inlet value
      */
     value?: any;
 }
@@ -79,11 +79,11 @@ const CreatePlugin = forwardRef((props: IPlugin, ref: any) => {
                             if (!defaultValues[component.key] && value) {
                                 defaultValues[component.key] = value;
                             }
-
                             return (
                                 <Component
                                     {...restItem}
                                     {...componentProps}
+                                    required={!!rules?.required}
                                     error={error}
                                     helperText={error ? error.message : null}
                                     value={value || (component.valueType === 'array' ? [] : '')}

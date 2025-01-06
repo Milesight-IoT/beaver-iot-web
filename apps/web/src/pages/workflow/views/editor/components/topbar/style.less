@@ -1,0 +1,80 @@
+.@{prefix}-workflow-topbar {
+    padding: @padding-xs @padding-lg;
+    background-color: var(--component-background);
+    border-bottom: 1px solid var(--border-color-base);
+
+    .@{mui-prefix}Grid2-root > .@{mui-prefix}Grid2-root {
+        display: flex;
+        align-items: center;
+    }
+
+    .@{prefix}-workflow-topbar-left {
+        .btn-back {
+            flex-shrink: 0;
+            line-height: 24px;
+            color: var(--text-color-base);
+            border-color: var(--border-color-base);
+
+            &:hover {
+                background-color: var(--component-background-gray);
+            }
+        }
+
+        .title {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-left: @margin-md;
+
+            .@{prefix}-tooltip {
+                max-width: calc(100% - 150px);
+            }
+
+            .@{mui-prefix}IconButton-root {
+                margin-left: @margin-xs;
+                font-size: @font-size-lg;
+            }
+        }
+    }
+
+    .@{prefix}-workflow-topbar-center {
+        justify-content: center;
+
+        .@{mui-prefix}ButtonBase-root {
+            text-transform: none;
+        }
+
+        .@{prefix}-workflow-mode-buttons {
+            background-color: var(--gray-color-2);
+            border: 2px solid var(--gray-color-2);
+
+            .@{mui-prefix}ToggleButtonGroup-grouped {
+                display: inline-block;
+                padding: @padding-xs @padding-sm;
+                border: none;
+                border-radius: @border-radius-base;
+                .text-size(@font-size-base);
+
+                &::after {
+                    display: block;
+                    height: 1px;
+                    margin-bottom: -1px;
+                    overflow: hidden;
+                    font-weight: @font-weight-bold;
+                    visibility: hidden;
+                    content: attr(aria-label);
+                }
+
+                &.@{mui-prefix}-selected {
+                    font-weight: @font-weight-bold;
+                    background-color: var(--component-background);
+                }
+            }
+        }
+    }
+
+    .@{prefix}-workflow-topbar-right {
+        gap: @margin-sm;
+        justify-content: end;
+    }
+}

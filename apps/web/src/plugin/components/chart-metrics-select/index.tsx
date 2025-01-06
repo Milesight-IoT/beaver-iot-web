@@ -5,7 +5,7 @@ import Select, { type SelectProps } from '../select';
 
 type IProps = SelectProps & { filters: DataAggregateType[] };
 /**
- *  图表展示时间选择组件
+ *  Chart display time selection component
  */
 const ChartTimeSelect = (selectProps: IProps) => {
     const { getIntlText } = useI18n();

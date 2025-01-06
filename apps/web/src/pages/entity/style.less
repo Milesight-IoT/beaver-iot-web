@@ -1,0 +1,138 @@
+.@{prefix}-view-entity {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+
+    .topbar {
+        display: flex;
+        align-items: center;
+
+        .@{prefix}-tabs {
+            flex: 1;
+        }
+
+        .btn-wrap {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            padding: 0 @padding-lg;
+            background-color: var(--component-background);
+            border-bottom: 1px solid var(--border-color-base);
+        }
+    }
+
+    .@{prefix}-view__inner {
+        display: flex;
+        flex-direction: column;
+        padding: @padding-lg;
+    }
+
+    .@{prefix}-tab-content {
+        flex: 1;
+        height: 0;
+        padding: @padding-lg;
+        margin: @margin-lg;
+        overflow-y: auto;
+        background-color: var(--component-background);
+        border-radius: @border-radius-base;
+
+        .@{prefix}-tabpanel {
+            height: 100%;
+        }
+    }
+}
+
+.entity {
+    &-add-menu-group-name {
+        font-weight: @font-weight-medium;
+        color: var(--text-color-secondary);
+    }
+
+    &-add-menu-item {
+        display: flex;
+        align-items: center;
+        font-weight: @font-weight-medium;
+
+        &-icon {
+            margin-right: @margin-sm;
+            font-size: 24px;
+            color: var(--text-color-secondary);
+        }
+    }
+
+    &-modal-button-group {
+        margin-bottom: @margin-xl;
+    }
+
+    &-add-modal-form-boolean-label {
+        display: flex;
+        align-items: center;
+        height: 40px;
+    }
+
+    &-main {
+        margin: @margin-lg;
+        background: var(--main-background);
+    }
+
+    &-detail {
+        &-contain {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        &-table {
+            flex: 1;
+            height: 0;
+
+            & .@{prefix}-table-pro {
+                height: calc(100vh - 300px);
+            }
+        }
+
+        &-table-header {
+            display: flex;
+            align-items: center;
+            margin: @margin-xl 0 @margin-md;
+
+            &-title {
+                flex: 1;
+                font-size: @font-size-lg;
+                font-weight: @font-weight-medium;
+            }
+        }
+
+        &-columns {
+            &-header {
+                display: flex;
+                align-items: center;
+
+                &-label {
+                    flex: 1;
+                }
+
+                &-icon {
+                    color: var(--gray-color-7);
+
+                    &-active {
+                        color: var(--primary-color-7);
+                    }
+                }
+            }
+        }
+
+        &-filter-popover {
+            padding: @padding-lg;
+
+            &-footer {
+                display: flex;
+                margin-top: @margin-lg;
+
+                &-reset {
+                    flex: 1;
+                }
+            }
+        }
+    }
+}

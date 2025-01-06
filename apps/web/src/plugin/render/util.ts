@@ -2,7 +2,7 @@ export const parseStyleString = (styleString: string) => {
     return styleString.split(';').reduce((acc: any, style) => {
         const [property, value] = style.split(':').map(item => item.trim());
         if (property && value) {
-            // 将CSS属性转换为驼峰命名法
+            // Convert the CSS attribute to the hump naming method
             const camelCaseProperty = property.replace(/-([a-z])/g, (match, letter) =>
                 letter.toUpperCase(),
             );
@@ -15,7 +15,7 @@ export const parseStyleString = (styleString: string) => {
 export const parseStyleToReactStyle = (styleString: string) => {
     const styleObject: any = {};
 
-    // 去掉字符串中的多余空格
+    // Remove the excess space in the string
     const styleArray = styleString.split(';').map(style => style.trim());
 
     styleArray.forEach(style => {
@@ -31,7 +31,7 @@ export const parseStyleToReactStyle = (styleString: string) => {
     return styleObject;
 };
 
-// 将css转化为React的style命名
+// Convert CSS to the style of React
 export const convertCssToReactStyle = (property: string) => {
     const camelCaseProperty = property.replace(/-([a-z])/g, (match, letter) =>
         letter.toUpperCase(),

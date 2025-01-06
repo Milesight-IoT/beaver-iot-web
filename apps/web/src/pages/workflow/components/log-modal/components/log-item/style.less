@@ -1,0 +1,59 @@
+.ms-log-item {
+    display: flex;
+    padding: @padding-xs @padding-md;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--component-background-gray);
+        transition: background-color 0.3s;
+    }
+
+    &--active {
+        background-color: var(--main-background);
+
+        &:hover {
+            background-color: var(--main-background);
+        }
+    }
+
+    .ms-log-status {
+        display: flex;
+        margin-right: @margin-xxs;
+
+        &__success {
+            color: var(--icon-color-success);
+        }
+
+        &__error {
+            color: var(--icon-color-error);
+        }
+
+        &__loading {
+            display: flex;
+            align-items: center;
+            padding: 0 2px;
+            margin-top: -2px;
+        }
+    }
+
+    .ms-log-content {
+        flex: 1;
+        overflow: hidden;
+
+        p {
+            margin: 0;
+            .text-size(@font-size-md);
+        }
+
+        .ms-log-title {
+            font-weight: @font-weight-medium;
+            .text-size(@font-size-md);
+        }
+
+        .ms-log-timestamp {
+            font-weight: @font-weight-regular;
+            color: var(--text-color-secondary);
+            .text-size(@font-size-sm);
+        }
+    }
+}

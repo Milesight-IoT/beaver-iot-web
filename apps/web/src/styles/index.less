@@ -83,16 +83,6 @@ body {
         &:not(.@{mui-prefix}-selected):hover {
             color: var(--text-color-main);
         }
-
-        &::after {
-            display: block;
-            height: 1px;
-            margin-bottom: -1px;
-            overflow: hidden;
-            font-weight: @font-weight-bold;
-            visibility: hidden;
-            content: attr(title)
-        }
     }
 
     .@{mui-prefix}Tabs-indicator {

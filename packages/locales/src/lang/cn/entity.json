@@ -1,0 +1,6 @@
+{
+    "entity.label.create_property": "Create Property",
+    "entity.label.create_entity_only": "Create Entity Only",
+    "entity.label.create_service": "Create Service",
+    "entity.label.create_entity_from_workflow": "Create from Workflow"
+}

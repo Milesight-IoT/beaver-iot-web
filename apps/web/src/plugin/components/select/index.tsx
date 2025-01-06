@@ -10,12 +10,12 @@ import {
 
 type Props = {
     /**
-     * 下拉选项
+     * Drop-down option
      */
     options: OptionsProps[];
     /**
-     * 自定义下拉选项
-     * @returns 返回自定义下拉选项内容
+     * Custom drop-down option
+     * @returns Return to the customized drop -down option content
      */
     renderOptions?: (options: (OptionsProps & { description?: string })[]) => any[];
 };
@@ -25,7 +25,7 @@ export type SelectProps = Props & MuiSelectProps;
 const Select = (props: SelectProps) => {
     const { options, renderOptions, style, title, ...rest } = props;
 
-    // 转换下拉选项数据
+    // Conversion of down pull option data
     const getMenuItems = useMemo(() => {
         const list: OptionsProps[] = [];
         const loopItem = (item: OptionsProps): any => {
@@ -47,7 +47,7 @@ const Select = (props: SelectProps) => {
     return (
         <FormControl sx={{ ...style }}>
             {!!title && (
-                <InputLabel size={rest?.size as any} id="select-label">
+                <InputLabel size={rest?.size as any} required={rest?.required} id="select-label">
                     {title}
                 </InputLabel>
             )}

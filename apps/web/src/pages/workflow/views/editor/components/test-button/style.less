@@ -1,0 +1,95 @@
+.@{prefix}-workflow-test-button {
+    .@{mui-prefix}Button-root {
+        color: var(--text-color-base);
+        border-color: var(--border-color-base);
+
+        &:hover {
+            background-color: var(--component-background-gray);
+        }
+
+        &:first-child {
+            .@{mui-prefix}Button-startIcon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        &:last-child {
+            padding: @padding-xs;
+        }
+    }
+}
+
+.@{prefix}-workflow-test-popover {
+    width: 280px;
+    border-radius: @border-radius-base;
+
+    &-root {
+        .@{mui-prefix}Paper-root {
+            box-shadow: @shadow-2;
+        }
+    }
+
+    &-header {
+        padding: 0 @padding-md;
+        border-bottom: 1px solid var(--border-color-base);
+
+        .@{mui-prefix}Tabs-root {
+            margin-bottom: -1px;
+        }
+    }
+}
+
+.@{prefix}-workflow-com-log-list {
+    position: relative;
+    height: 248px;
+    padding-top: @padding-xs;
+    overflow: auto;
+
+    .@{prefix}-empty {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        &-img {
+            width: 80px;
+            height: 80px;
+        }
+    }
+
+    &-item {
+        display: flex;
+        gap: @margin-xxs;
+        padding: @padding-xs @padding-md;
+        cursor: pointer;
+        user-select: none;
+
+        &:hover,
+        &.selected {
+            background-color: var(--component-background-gray);
+        }
+
+        &:active {
+            opacity: .8;
+        }
+
+        &__left {
+            display: flex;
+            align-items: center;
+        }
+
+        &__title {
+            font-weight: @font-weight-bold;
+            .text-size(@font-size-base);
+        }
+
+        &__time {
+            color: var(--text-color-secondary);
+            .text-size(@font-size-sm);
+        }
+    }
+}

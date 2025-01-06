@@ -1,0 +1,27 @@
+.ms-code-editor-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: @padding-xs @padding-sm;
+    border-bottom: @border-base;
+
+    &__title {
+        color: var(--text-color-secondary);
+        .text-size(@font-size-md);
+    }
+
+    &__operations {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .ms-header-copy {
+            cursor: pointer;
+
+            &:hover {
+                color: var(--icon-color-hover);
+                transition: color 0.3s;
+            }
+        }
+    }
+}

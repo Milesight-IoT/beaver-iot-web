@@ -1,0 +1,20 @@
+.@{prefix}-view-wf_editor {
+    position: relative;
+
+    .react-flow__background {
+        background-color: var(--component-background-gray);
+    }
+
+    .@{prefix}-workflow-advance {
+        position: absolute;
+        inset: 0;
+        z-index: 1000;
+        overflow: auto;
+        background-color: var(--component-background);
+
+        .@{prefix}-code-editor {
+            background-color: var(--component-background);
+            border: none;
+        }
+    }
+}

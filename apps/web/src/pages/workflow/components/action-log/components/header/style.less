@@ -1,0 +1,53 @@
+.ms-accordion-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .ms-header-type {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+
+        &__icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            margin-right: @margin-xs;
+            color: var(--white);
+            border-radius: @border-radius-xs;
+
+            .MuiSvgIcon-root {
+                font-size: @font-size-md;
+            }
+        }
+
+        &__name {
+            flex: 1;
+            overflow: hidden;
+            font-weight: @font-weight-medium;
+        }
+    }
+
+    .ms-header-status,
+    .ms-header-ms {
+        display: flex;
+        align-items: center;
+        margin-left: @margin-xxs;
+    }
+
+    .ms-log-status {
+        &__success {
+            color: var(--icon-color-success);
+        }
+
+        &__error {
+            color: var(--icon-color-error);
+        }
+
+        &__loading {
+            padding: 0 2px;
+        }
+    }
+}

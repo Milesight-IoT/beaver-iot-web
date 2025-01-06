@@ -1,5 +1,5 @@
 /**
- * 系统主题相关 Hook
+ * System Theme Hook
  */
 import { useMemo, useCallback, useEffect } from 'react';
 import { useColorScheme } from '@mui/material/styles';
@@ -38,22 +38,23 @@ export default () => {
         [setMode, setTheme],
     );
 
-    // 主动变更 MUI 主题，否则首次进入时组件库主题默认跟随系统主题
+    // Change the MUI theme proactively, otherwise the component library
+    // theme will follow the system theme by default on first entry.
     useEffect(() => {
         changeTheme(theme, false);
     }, [theme, changeTheme]);
 
     return {
-        /** 当前主题 */
+        /** Current Theme */
         theme,
 
-        /** MUI 主题配置 */
+        /** MUI Theme Config */
         themeConfig,
 
-        /** 切换主题 */
+        /** Change Theme */
         changeTheme,
 
-        /** 根据传入的 CSS 变量名获取对应值 */
+        /** Get the value based on the CSS variable name passed in */
         getCSSVariableValue: useCallback<typeof themeService.getCSSVariableValue>(
             vars => {
                 return themeService.getCSSVariableValue(vars);
@@ -62,28 +63,31 @@ export default () => {
             [theme],
         ),
 
-        /** 主题色 - 白 */
+        /** Theme Color - white */
         white: themeService.white,
 
-        /** 主题色 - 黑 */
+        /** Theme Color - black */
         black: themeService.black,
 
-        /** 主题色 - 蓝 */
+        /** Theme Color - blue */
         blue: themeService.blue,
 
-        /** 主题色 - 绿 */
+        /** Theme Color - green */
         green: themeService.green,
 
-        /** 主题色 - 黄 */
+        /** Theme Color - yellow */
         yellow: themeService.yellow,
 
-        /** 主题色 - 橙 */
+        /** Theme Color - deepOrange */
         deepOrange: themeService.deepOrange,
 
-        /** 主题色 - 红 */
+        /** Theme Color - red */
         red: themeService.red,
 
-        /** 主题色 - 灰 */
+        /** Theme Color - grey */
         grey: themeService.grey,
+
+        /** Theme Color - purple */
+        purple: themeService.purple,
     };
 };

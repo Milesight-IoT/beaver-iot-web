@@ -32,7 +32,7 @@ const View = (props: ViewProps) => {
     const [isSwitchOn, setIsSwitchOn] = useState(false);
 
     /**
-     * websocket 订阅主题
+     * webSocket subscription theme
      */
     const topic = useMemo(
         () => entity?.rawData?.entityKey && getExChangeTopic(entity.rawData.entityKey),
@@ -40,7 +40,7 @@ const View = (props: ViewProps) => {
     );
 
     /**
-     * 请求实体状态函数
+     * Request physical state function
      */
     const requestEntityStatus = useCallback(async () => {
         if (!entity) return;
@@ -49,7 +49,7 @@ const View = (props: ViewProps) => {
 
         if (error || !isRequestSuccess(res)) {
             /**
-             * 请求失败，以关闭 false 为默认值
+             * The request failed, the default value was closed by closing the FALSE
              */
             setIsSwitchOn(false);
             return;
@@ -60,7 +60,7 @@ const View = (props: ViewProps) => {
     }, [entity]);
 
     /**
-     * 获取所选实体的状态
+     * Get the state of the selected entity
      */
     useEffect(() => {
         (async () => {
@@ -68,7 +68,7 @@ const View = (props: ViewProps) => {
                 requestEntityStatus();
             } else {
                 /**
-                 * 无实体，初始化数据
+                 * No entity, initialization data
                  */
                 setIsSwitchOn(false);
             }
@@ -76,30 +76,30 @@ const View = (props: ViewProps) => {
     }, [entity, requestEntityStatus]);
 
     /**
-     * websocket 订阅
+     * websocket subscription
      */
     useEffect(() => {
         /**
-         * 预览状态下不进行 websocket 订阅
+         * WEBSOCKET subscription is not performed in preview status
          */
         if (!topic || Boolean(isPreview)) return;
 
         /**
-         * 订阅主题时会返回取消订阅的函数，所以直接返回即可在卸载时取消订阅
+         * When the subscription theme, the function of canceling the subscription will be returned, so if you return directly, you can cancel the subscription when uninstalled
          */
         return ws.subscribe(topic, requestEntityStatus);
     }, [topic, requestEntityStatus, isPreview]);
 
     /**
-     * 切换 switch 状态时，
-     * 更新所选实体的状态数据
+     * When switching Switch state,
+     * Update the status data of the selected entity
      */
     const handleEntityStatus = useCallback(
         async (switchVal: boolean) => {
             const entityKey = entity?.rawData?.entityKey;
 
             /**
-             * 非预览状态，则可以进行数据更新
+             * For non -preview status, you can update data
              */
             if (!entityKey || Boolean(isPreview)) return;
 
@@ -120,14 +120,14 @@ const View = (props: ViewProps) => {
     );
 
     /**
-     * 右边大 icon 的展示的颜色
+     * The color of the big icon on the right
      */
     const iconColor = useMemo(() => {
         return isSwitchOn ? onIconColor : offIconColor;
     }, [isSwitchOn, onIconColor, offIconColor]);
 
     /**
-     * switch title
+     * Switch title
      */
     const switchTitle = useMemo(() => {
         return isSwitchOn
@@ -136,7 +136,7 @@ const View = (props: ViewProps) => {
     }, [isSwitchOn, getIntlText]);
 
     /**
-     * Icon 组件
+     * Icon component
      */
     const IconComponent = useMemo(() => {
         const iconName = isSwitchOn ? onIcon : offIcon;

@@ -9,9 +9,9 @@ import { copyText } from '../utils/clipboard';
 const useCopy = () => {
     const { getIntlText } = useI18n();
     const handleCopy = useCallback(
-        async (text: string) => {
+        async (text: string, container?: HTMLElement) => {
             if (!text) return;
-            const res = await copyText(text);
+            const res = await copyText(text, container);
             res &&
                 toast.success({
                     key: 'copy',

@@ -49,7 +49,7 @@ const ConfigPlugin = (props: ConfigPluginProps) => {
         onOk?.(formValues);
     };
 
-    // 切换tab页签
+    // Switch the tab page
     const handleChangeTabs = (_event: React.SyntheticEvent, newValue: string) => {
         setTabKey(newValue);
     };

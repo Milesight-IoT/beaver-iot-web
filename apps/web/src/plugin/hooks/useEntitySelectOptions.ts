@@ -14,7 +14,7 @@ function safeJsonParse(str: string) {
 }
 
 /**
- * 实体选项数据获取 hooks
+ * Entity option data Get HOOKS
  */
 export function useEntitySelectOptions(
     props: Pick<
@@ -40,7 +40,7 @@ export function useEntitySelectOptions(
     const { run: getEntityOptions, data: entityOptions } = useRequest(
         async (keyword?: string) => {
             /**
-             * 初始化加载状态
+             * Initialized loading status
              */
             setOptions([]);
             setLoading(true);
@@ -48,14 +48,15 @@ export function useEntitySelectOptions(
             const [error, resp] = await awaitWrap(
                 entityAPI.getList({
                     keyword,
+                    // @ts-ignore TODO: prop type is error, should be EntityType[]
                     entity_type: entityType,
                     entity_value_type: entityValueTypes,
                     entity_access_mod: entityAccessMods,
                     exclude_children: entityExcludeChildren,
                     page_number: 1,
                     /**
-                     * 默认不进行分页，请求最多为 999
-                     * 如无想要的数据，输入关键字再进行进一步的过滤
+                     * No pagination in the default, the request is up to 999
+                     * If there is no data you want, enter keywords and then filter further
                      */
                     page_size: 999,
                 }),
@@ -75,18 +76,18 @@ export function useEntitySelectOptions(
         },
     );
 
-    /** 初始化执行 */
+    /** Initialization execution */
     useEffect(() => {
         getEntityOptions();
     }, [getEntityOptions]);
 
     /**
-     * 根据实体数据转换为选项数据处理
+     * Convert to option data according to the physical data
      */
     useEffect(() => {
         let newOptions: EntityOptionType[] = (entityOptions || []).map(e => {
             const entityValueAttribute = safeJsonParse(
-                e.entity_value_attribute,
+                (e as any).entity_value_attribute,
             ) as EntityValueAttributeType;
 
             return {
@@ -102,9 +103,9 @@ export function useEntitySelectOptions(
         });
 
         /**
-         * 自定义过滤实体数据
-         * 若需自定义，通过 filterEntityMap 对象增加过滤函数往下扩展即可
-         * customFilterEntity 既为函数名称
+         * Customized filtering physical data
+         * If you need to be customized, add the filtering function to expand it down through the FilterEntityMap object
+         * CustomFilterEntity is the function name
          */
         const filterEntityFunction = Reflect.get(filterEntityMap, customFilterEntity || '');
         if (filterEntityFunction) {

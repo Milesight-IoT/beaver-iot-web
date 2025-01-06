@@ -1,0 +1,25 @@
+.@{prefix}-workflow {
+    // ---------- Edge style variable override ----------
+    --xy-edge-stroke: var(--gray-color-4);
+    --xy-edge-stroke-selected: var(--gray-color-5);
+    --xy-edge-stroke-width: 2;
+    --xy-connectionline-stroke-width: 2;
+}
+
+.@{prefix}-workflow-edge-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    color: var(--primary-color-base);
+    background-color: var(--component-background);
+    border-radius: 50%;
+    pointer-events: all;
+    cursor: pointer;
+
+    .@{mui-prefix}SvgIcon-root {
+        font-size: @font-size-lg;
+        pointer-events: none;
+    }
+}

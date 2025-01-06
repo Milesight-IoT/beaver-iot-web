@@ -10,52 +10,54 @@ import {
 } from '@mui/material';
 
 export type GlobalOptions = {
-    /** 确认按钮文案 */
+    /** Confirm Button Text */
     confirmButtonText?: string;
-    /** 取消按钮文案 */
+    /** Cancel Button Text */
     cancelButtonText?: string;
-    /** 点击取消时直接 reject */
+    /** Directly reject when clicking cancel */
     rejectOnCancel?: boolean;
-    /** 禁用背景蒙层点击关闭功能 */
+    /** Disable Close when click the backdrop */
     disabledBackdropClose?: boolean;
-    /** MUI Dialog 组件属性 */
+    /** MUI Dialog Props */
     dialogProps?: Omit<MUIDialogProps, 'open' | 'onClose'>;
-    /** MUI DialogTitle 组件属性 */
+    /** MUI DialogTitle Props */
     dialogTitleProps?: DialogTitleProps;
-    /** MUI DialogContent 组件属性 */
+    /** MUI DialogContent Props */
     dialogContentProps?: DialogContentProps;
-    /** MUI DialogContentText 组件属性 */
+    /** MUI DialogContentText Props */
     dialogContentTextProps?: DialogContentTextProps;
-    /** MUI DialogActions 组件属性 */
+    /** MUI DialogActions Props */
     dialogActionsProps?: DialogActionsProps;
-    /** MUI TextField 组件属性 */
+    /** MUI TextField Props */
     confirmTextFieldProps?: Omit<TextFieldProps, 'onChange' | 'value'>;
-    /** MUI LinearProgress 组件属性 */
+    /** MUI LinearProgress Props */
     timerProgressProps?: Partial<LinearProgressProps>;
-    /** 确认按钮组件属性 */
+    /** Confirm Button Props */
     confirmButtonProps?: Omit<ButtonProps, 'onClick' | 'disabled'>;
-    /** 取消按钮组件属性 */
+    /** Cancel Button Props */
     cancelButtonProps?: Omit<ButtonProps, 'onClick'>;
 };
 
 export type ConfirmOptions = GlobalOptions & {
-    /** 图标 */
+    /** Icon */
     icon?: React.ReactNode;
-    /** 标题 */
+    /** Type */
+    type?: 'success' | 'error' | 'warning' | 'info';
+    /** Title */
     title: string;
-    /** 描述 */
+    /** Description */
     description?: React.ReactNode;
-    /** 输入确认文案 */
+    /** Confirm Text to input */
     confirmText?: string;
-    /** 自动关闭倒计时，单位 ms */
+    /** Automatically turn off countdown (ms) */
     timer?: number;
-    /** 点击确认按钮回调 */
+    /** Confirm Callback */
     onConfirm?: () => Promise<void> | void;
 };
 
 export type FinalOptions = Partial<GlobalOptions & ConfirmOptions>;
 
-export type HandleConfirm = (options?: ConfirmOptions) => void;
+export type HandleConfirm = (options?: ConfirmOptions) => void | Promise<void>;
 
 export type DialogProps = {
     show: boolean;

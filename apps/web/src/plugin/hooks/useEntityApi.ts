@@ -10,7 +10,7 @@ export type CallServiceType = {
 };
 
 export const useEntityApi = () => {
-    // 获取子实体
+    // Get the sub -entity
     const getEntityChildren = async (params: GetEntityChildrenType) => {
         const [error, res]: any = await awaitWrap(entityAPI.getChildrenEntity(params));
         if (isRequestSuccess(res)) {
@@ -22,7 +22,7 @@ export const useEntityApi = () => {
         return { error };
     };
 
-    // 下发服务
+    // Issue service
     const callService = async (params: CallServiceType) => {
         const [error, res]: any = await awaitWrap(entityAPI.callService(params));
         if (isRequestSuccess(res)) {
@@ -34,7 +34,7 @@ export const useEntityApi = () => {
         return { error };
     };
 
-    // 更新属性
+    // Update attribute
     const updateProperty = async (params: CallServiceType) => {
         const [error, res]: any = await awaitWrap(entityAPI.updateProperty(params));
         if (isRequestSuccess(res)) {

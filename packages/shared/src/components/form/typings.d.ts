@@ -30,11 +30,16 @@ export interface renderType {
 export interface FormItemsProps {
     name: Path<T>;
     render: any;
+    customRender?: () => React.ReactNode; // Customize rendered other content
     multiple?: number;
     multipleIndex?: number;
     rules?: rulesType;
     style?: string;
     title?: string;
+    label?: string;
+    defaultValue?: any;
+    children?: FormItemsProps[]; // One line of multiple sub lines
+    col?: number; // Number of layouts
 }
 
 export type UseFormItemsType = Omit<FormItemsProps, 'render'>;
@@ -42,6 +47,5 @@ export type UseFormItemsType = Omit<FormItemsProps, 'render'>;
 export interface UseFormItemsProps extends UseFormItemsType {
     type?: string;
     props?: any;
-    label?: string;
-    render?: (data: renderType) => void;
+    render?: (data: any) => any;
 }

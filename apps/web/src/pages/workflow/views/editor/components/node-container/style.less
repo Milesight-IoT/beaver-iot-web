@@ -1,0 +1,129 @@
+.@{prefix}-workflow {
+    // ---------- Node style variable override ----------
+    --xy-node-border: none;
+    --xy-node-border-radius: @border-radius-sm;
+    --xy-node-boxshadow-selected: none;
+
+    // ---------- Node Style ----------
+    .react-flow__node {
+        width: 240px;
+        padding: 0;
+        border-radius: var(--xy-node-border-radius);
+
+        &.selectable {
+            &:hover {
+                box-shadow: var(--xy-node-boxshadow-hover-default);
+            }
+
+            &.selected {
+                .@{prefix}-workflow-node {
+                    border: 1px solid var(--border-color-main);
+                    box-shadow: 0 0 0 1px var(--border-color-main) inset;
+
+                    &.success,
+                    &.error {
+                        border-color: var(--border-color-main);
+                    }
+                }
+            }
+        }
+    }
+
+    &-node {
+        padding: (@padding-sm - 1) @padding-sm;
+        background-color: var(--component-background);
+        border: 1px solid var(--component-background);
+        border-radius: var(--xy-node-border-radius);
+
+        &.success {
+            border-color: var(--border-color-green);
+        }
+
+        &.error {
+            border-color: var(--border-color-red);
+        }
+    }
+
+    &-node-header {
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        &:has(> .@{prefix}-workflow-node-status) {
+            padding-right: @padding-lg + @padding-xxs;
+        }
+
+        .@{prefix}-workflow-node-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            margin-right: @margin-sm;
+            color: var(--white);
+            border-radius: @border-radius-sm;
+
+            .@{mui-prefix}SvgIcon-root {
+                font-size: @font-size-lg;
+            }
+        }
+
+        .@{prefix}-workflow-node-title {
+            flex: 1;
+            width: 0;
+            font-weight: @font-weight-bold;
+
+            .text-size(@font-size-base);
+        }
+
+        .@{prefix}-workflow-node-status {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            display: flex;
+            transform: translateY(-50%);
+
+            &.error {
+                color: var(--text-color-error);
+            }
+
+            &.success {
+                color: var(--text-color-success);
+            }
+        }
+    }
+
+    &-node-body {
+        margin-top: @margin-xs;
+    }
+}
+
+// ---------- Node ContextMenu ----------
+.@{prefix}-workflow-node-contextmenu  {
+    .@{mui-prefix}Menu-list {
+        width: 160px;
+    }
+}
+
+.@{prefix}-workflow-node-contextmenu-sub {
+    .@{mui-prefix}Menu-list {
+        width: 240px;
+    }
+
+    .@{mui-prefix}MenuItem-root {
+        .icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            margin-right: @margin-sm;
+            color: var(--white);
+            border-radius: @border-radius-sm;
+
+            .@{mui-prefix}SvgIcon-root {
+                font-size: @font-size-lg;
+            }
+        }
+    }
+}

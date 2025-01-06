@@ -113,12 +113,18 @@ declare interface EntityData {
     entity_key: string;
     /** 实体名称 */
     entity_name: string;
+    /** Entity Type */
+    entity_type: EntityType;
     /** 实体值属性 */
-    entity_value_attribute: string;
+    entity_value_attribute: Record<string, any>;
     /** 实体值类型 */
     entity_value_type: EntityValueDataType;
     /** 实体属性访问类型 */
     entity_access_mod: EntityAccessMode;
+    /** 唯一表示 */
+    identifier: string;
+    /** 父实体名称 */
+    entity_parent_name?: string;
 }
 
 /**

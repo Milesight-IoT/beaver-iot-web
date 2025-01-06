@@ -1,7 +1,7 @@
 import { isFileName } from '@milesight/shared/src/utils/tools';
 
 const folderNames = (() => {
-    /** 提取子文件夹名 */
+    /** Extract the name of the subfolder */
     const getFolderName = (modules: ModuleType) => {
         return Object.keys(modules).reduce((bucket, path) => {
             const [, folder] = path?.split('/') || [];

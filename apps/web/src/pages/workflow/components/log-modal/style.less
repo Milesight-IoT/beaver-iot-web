@@ -1,0 +1,46 @@
+.ms-log-modal {
+    .MuiPaper-root {
+        & > .MuiTypography-root {
+            border-bottom: @border-base;
+        }
+
+        & > .MuiDialogContent-root {
+            height: 500px;
+            padding: 0;
+        }
+    }
+}
+
+.ms-log-container {
+    display: flex;
+    height: 100%;
+
+    .ms-log-loading,
+    .ms-log-empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .ms-log-left-bar {
+        display: flex;
+        flex-direction: column;
+        width: 210px;
+        background-color: var(--body-background);
+
+        &__scroll {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+        }
+
+        &__more {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: @padding-xxs 0 @padding-sm 0;
+        }
+    }
+}

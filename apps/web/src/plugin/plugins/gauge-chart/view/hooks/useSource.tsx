@@ -40,7 +40,7 @@ export const useSource = (props: IProps) => {
         const entityKey = entity?.rawData?.entityKey?.toString();
         return entityKey && getExChangeTopic(entityKey);
     }, [entity]);
-    // 订阅 WS 主题
+    // Subscribe to WS theme
     useEffect(() => {
         if (!topic) return;
 

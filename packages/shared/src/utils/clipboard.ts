@@ -11,7 +11,10 @@ const copyErrorMessage = 'Failed to copy value to clipboard. Unknown type.';
  * @param content 待复制的文本
  * @returns `Promise<boolean>` 返回复制操作的结果，成功 `true`，失败 `false`
  */
-export const copyText = (content: string): Promise<boolean> => {
+export const copyText = (
+    content: string,
+    container: HTMLElement = document.body,
+): Promise<boolean> => {
     if (typeof content !== 'string') {
         try {
             content = JSON.stringify(content);
@@ -29,7 +32,7 @@ export const copyText = (content: string): Promise<boolean> => {
         textarea.setAttribute('readonly', '');
         textarea.style.cssText = cssText;
 
-        document.body.appendChild(textarea);
+        container.appendChild(textarea);
 
         if (isIOS()) {
             const { readOnly, contentEditable: editable } = textarea;
@@ -60,7 +63,7 @@ export const copyText = (content: string): Promise<boolean> => {
             cb(false);
         }
 
-        document.body.removeChild(textarea);
+        container.removeChild(textarea);
     };
 
     if (!isFallback) {

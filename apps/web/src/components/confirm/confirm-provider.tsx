@@ -27,7 +27,7 @@ export const ConfirmProvider: React.FC<Props> = ({ children, ...globalOptions })
 
     const confirm = React.useCallback(
         (confirmOptions?: ConfirmOptions) => {
-            return new Promise((resolve, reject) => {
+            return new Promise<void>((resolve, reject) => {
                 const finalOptions = handleOverrideOptions(globalOptions, confirmOptions);
                 setFinalOptions(finalOptions);
                 setPromise({ resolve, reject });

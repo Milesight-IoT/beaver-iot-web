@@ -2,6 +2,7 @@
  * 常用请求处理工具
  */
 import type { AxiosResponse, AxiosError } from 'axios';
+import iotStorage, { TOKEN_CACHE_KEY } from '../storage';
 
 /**
  * 判断 API 请求是否成功
@@ -52,4 +53,25 @@ export const awaitWrap = <T, U = AxiosError>(
 
             return [err, undefined];
         });
+};
+
+export type TokenDataType = {
+    /** 鉴权 Token */
+    access_token: string;
+    /** 刷新 Token */
+    refresh_token: string;
+    /**
+     * 过期时间，单位 ms
+     *
+     * 注意：该值为前端过期时间，仅用于判断何时需刷新 token，实际 token 在后端可能还未过期
+     */
+    expires_in: number;
+};
+
+/**
+ * 获取接口Authorization Token
+ */
+export const getAuthorizationToken = () => {
+    const token = iotStorage.getItem<TokenDataType>(TOKEN_CACHE_KEY);
+    return token?.access_token ? `Bearer ${token?.access_token}` : '';
 };

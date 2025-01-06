@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useMemo } from 'react';
 import { useRequest } from 'ahooks';
-import Chart from 'chart.js/auto'; // 引入 Chart.js
+import Chart from 'chart.js/auto';
 import {
     awaitWrap,
     entityAPI,
@@ -57,8 +57,8 @@ const View = (props: IProps) => {
         { refreshDeps: [entity, time, metrics] },
     );
 
-    /** 渲染雷达图 */
-    const renderRadarChart = () => {
+    /** Rendering cake map */
+    const renderChart = () => {
         try {
             const ctx = chartRef.current!;
             const data = countData?.data?.count_result || [];
@@ -67,32 +67,32 @@ const View = (props: IProps) => {
             const chart = new Chart(ctx, {
                 type: 'pie',
                 data: {
-                    labels: data?.map(item => String(item.value)), // 数据标签
+                    labels: data?.map(item => String(item.value)), // Data label
                     datasets: [
                         {
                             // label: 'My First Dataset',
-                            data: data?.map(item => item.count) as any, // 数据值, // 数据值
-                            borderWidth: 1, // 边框宽度
+                            data: data?.map(item => item.count) as any, // Data value
+                            borderWidth: 1, // Border width
                             backgroundColor: resultColor,
                         },
                     ],
                 },
                 options: {
-                    responsive: true, // 使图表响应式
+                    responsive: true, // Respond to the chart
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'right', // 图例位置
+                            position: 'right', // Legend position
                         },
                         tooltip: {
-                            enabled: true, // 启用提示工具
+                            enabled: true, // Enlightenment prompts
                         },
                     },
                 },
             });
             return () => {
                 /**
-                 * 清空图表数据
+                 * Clear chart data
                  */
                 chart.destroy();
             };
@@ -101,7 +101,7 @@ const View = (props: IProps) => {
         }
     };
     useEffect(() => {
-        return renderRadarChart();
+        return renderChart();
     }, [countData]);
 
     const topic = useMemo(() => {

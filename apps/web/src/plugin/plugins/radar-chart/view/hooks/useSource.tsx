@@ -55,7 +55,7 @@ export const useSource = (props: IProps) => {
             })
             .filter(Boolean) as string[];
     }, [entityList]);
-    // 订阅 WS 主题
+    // Subscribe to WS theme
     useEffect(() => {
         if (!topics?.length) return;
 

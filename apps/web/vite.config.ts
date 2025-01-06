@@ -60,6 +60,9 @@ export default defineConfig({
             cacheLocation: path.join(__dirname, 'node_modules/.cache/.stylelintcache'),
             emitWarning: !isProd,
         }),
+        /**
+         * 优化构建速度，减少在编译时的 Tree-Shaking 检查及资源处理
+         */
         vitePluginImport({
             libList: [
                 {
@@ -82,7 +85,7 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@': path.resolve(__dirname, 'src'),
+            '@': path.resolve(__dirname, 'src'), // src 路径别名
         },
     },
 
@@ -103,7 +106,7 @@ export default defineConfig({
             },
             '/websocket': {
                 target: WEB_SOCKET_PROXY,
-                ws: true, // Enable WebSocket Proxy
+                ws: true, // 启用 WebSocket 代理
                 changeOrigin: true,
             },
         },

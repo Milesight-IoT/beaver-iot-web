@@ -1,0 +1,44 @@
+.ms-entity-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: @padding-xs @padding-md;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--component-background-gray);
+    }
+
+    &--active {
+        font-weight: @font-weight-medium;
+        color: var(--text-color-main);
+        background-color: var(--purple-1);
+
+        &:hover {
+            background-color: var(--purple-1);
+        }
+    }
+
+    &--disabled {
+        opacity: 0.38;
+        pointer-events: none;
+    }
+
+    .ms-entity-option {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 42px;
+        overflow: hidden;
+
+        &__title {
+            font-weight: @font-weight-regular;
+            .text-size(@font-size-md);
+        }
+
+        &__description {
+            color: var(--text-color-tertiary);
+            .text-size(@font-size-sm);
+        }
+    }
+}

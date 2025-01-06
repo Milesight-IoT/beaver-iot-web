@@ -15,6 +15,20 @@
         padding-left: 0;
         margin-right: 32px;
         text-transform: none;
+
+        &.@{mui-prefix}-selected {
+            font-weight: @font-weight-bold;
+        }
+
+        &::after {
+            display: block;
+            height: 1px;
+            margin-bottom: -1px;
+            overflow: hidden;
+            font-weight: @font-weight-bold;
+            visibility: hidden;
+            content: attr(title);
+        }
     }
 }
 

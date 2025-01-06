@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Chart from 'chart.js/auto'; // 引入 Chart.js
+import Chart from 'chart.js/auto';
 import { useBasicChartEntity } from '@/plugin/hooks';
 import { getChartColor } from '@/plugin/utils';
 import { Tooltip } from '@/plugin/view-components';
@@ -45,7 +45,7 @@ const View = (props: ViewProps) => {
                         })),
                     },
                     options: {
-                        responsive: true, // 使图表响应式
+                        responsive: true, // Respond to the chart
                         maintainAspectRatio: false,
                         scales: {
                             y: {
@@ -58,13 +58,13 @@ const View = (props: ViewProps) => {
                                     tooltipFormat: format,
                                     displayFormats,
                                 },
-                                min: xAxisRange[0], // 时间范围的最小值
-                                max: xAxisRange[1], // 时间范围的最大值
+                                min: xAxisRange[0], // The minimum value of time range
+                                max: xAxisRange[1], // The maximum value of time range
                                 ticks: {
-                                    autoSkip: true, // 自动跳过刻度
+                                    autoSkip: true, // Automatically skip the scale
                                     maxTicksLimit: 8,
                                     major: {
-                                        enabled: true, // 启用主要刻度
+                                        enabled: true, // Enable the main scale
                                     },
                                 },
                             },
@@ -73,16 +73,16 @@ const View = (props: ViewProps) => {
                             zoom: {
                                 pan: {
                                     enabled: true,
-                                    mode: 'x', // 仅在 x 轴上平移
+                                    mode: 'x', // Only move on the X axis
                                 },
                                 zoom: {
                                     wheel: {
-                                        enabled: true, // 启用滚轮缩放
+                                        enabled: true, // Enable rolling wheel scaling
                                     },
                                     pinch: {
-                                        enabled: true, // 启用触摸缩放
+                                        enabled: true, // Enable touch shrinkage
                                     },
-                                    mode: 'x', // 仅在 x 轴上缩放
+                                    mode: 'x', // Only zoomed in the X axis
                                 },
                             },
                         } as any,
@@ -92,7 +92,7 @@ const View = (props: ViewProps) => {
 
             return () => {
                 /**
-                 * 清空图表数据
+                 * Clear chart data
                  */
                 chart?.destroy();
             };

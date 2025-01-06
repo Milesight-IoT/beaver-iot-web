@@ -1,5 +1,14 @@
-/** url 中标识当前 tab 的 key 参数 */
+/**
+ * The key parameter in the url that identifies the current tab
+ */
 export const URL_TAB_SEARCH_KEY = 'tab';
 
-/** 刷新token主题 */
+/**
+ * Refresh token event topic
+ */
 export const REFRESH_TOKEN_TOPIC = 'iot:token:refresh';
+
+/**
+ * Private property prefix
+ */
+export const PRIVATE_PROPERTY_PREFIX = '$';

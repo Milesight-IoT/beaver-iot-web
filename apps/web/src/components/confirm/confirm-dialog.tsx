@@ -32,6 +32,7 @@ export const ConfirmDialog: React.FC<DialogProps> = ({
     const [loading, setLoading] = React.useState(false);
 
     const className = cls(finalOptions.dialogProps?.className, 'ms-confirm', {
+        [`ms-confirm-${finalOptions.type}`]: finalOptions.type,
         'ms-confirm-with-icon': finalOptions.icon,
         'ms-confirm-without-title': !finalOptions.title && !finalOptions.icon,
     });

@@ -1,5 +1,6 @@
 import React, { useEffect, forwardRef, useImperativeHandle, useRef } from 'react';
 import { useForm, Controller, FieldValues, type SubmitHandler } from 'react-hook-form';
+import { Grid, Box } from '@mui/material';
 import { isEqual } from 'lodash-es';
 import useFormItems from './useForm';
 import { UseFormItemsProps, FormItemsProps } from './typings';
@@ -23,7 +24,7 @@ const Forms = <T extends FieldValues>(props: formProps<T>, ref: any) => {
     const forms: FormItemsProps[] = useFormItems({ formItems });
     const formValuesRef = useRef<T>();
 
-    // 监听所有表单字段的变化
+    // Listen to changes in all form fields
     const formValues = watch();
 
     useEffect(() => {
@@ -49,21 +50,37 @@ const Forms = <T extends FieldValues>(props: formProps<T>, ref: any) => {
             !!Object.keys(values)?.length
         ) {
             formValuesRef.current = { ...formValuesRef?.current, ...formValues };
-            // 表单值变更回调
+            // Form value change callback
             !!onChange && onChange({ ...formValuesRef?.current, ...formValues });
         }
     }, [formValues]);
 
     const onSubmit: SubmitHandler<T> = async (data: T) => {
-        const result = await trigger(); // 手动触发验证
+        const result = await trigger(); // Manually trigger validation
         if (result) {
-            onOk(data);
+            // To filter out fields that are not currently in the form.
+            const resultData: Record<string, any> = {};
+            const keys: string[] = [];
+            forms.forEach((item: FormItemsProps) => {
+                keys.push(item.name);
+                if (item?.children?.length) {
+                    item?.children?.forEach(subItem => {
+                        keys.push(subItem.name);
+                    });
+                }
+            });
+            Object.keys(data)?.forEach(key => {
+                if (keys.includes(key)) {
+                    resultData[key] = data[key];
+                }
+            });
+            onOk(resultData as T);
         } else {
             console.error('Validation failed');
         }
     };
 
-    /** 暴露给父组件的方法 */
+    /** How to expose to the father's component */
     useImperativeHandle(ref, () => ({
         handleSubmit: handleSubmit(onSubmit),
     }));
@@ -87,16 +104,52 @@ const Forms = <T extends FieldValues>(props: formProps<T>, ref: any) => {
         );
     };
 
+    const renderChildrenForm = (item: FormItemsProps) => {
+        return (
+            <div style={item.style as any} className="form-box">
+                {item?.label ? <div className="form-box-label">{item?.label}</div> : null}
+                <Box sx={{ flexGrow: 1 }} className="form-box-contain">
+                    <Grid container>
+                        {item?.children?.map((subItem: FormItemsProps) => {
+                            const size: number = subItem.col || (subItem.customRender ? 12 : 6);
+                            return (
+                                <Grid xs={size}>
+                                    <div className="form-box-item">
+                                        {subItem.customRender ? (
+                                            subItem.customRender()
+                                        ) : (
+                                            <Controller<T>
+                                                key={subItem.name}
+                                                {...subItem}
+                                                control={control}
+                                            />
+                                        )}
+                                    </div>
+                                </Grid>
+                            );
+                        })}
+                    </Grid>
+                </Box>
+            </div>
+        );
+    };
+
     return (
         // eslint-disable-next-line react/jsx-no-useless-fragment
-        <>
+        <div className="form-contain">
             {forms?.map((item: FormItemsProps, index: number) => {
                 if (item.multiple) {
                     return item.multipleIndex === 0 ? renderMulForm(index) : null;
                 }
+                if (item.children?.length) {
+                    return renderChildrenForm(item);
+                }
+                if (item.customRender) {
+                    return item.customRender();
+                }
                 return <Controller<T> key={item.name} {...item} control={control} />;
             })}
-        </>
+        </div>
     );
 };
 

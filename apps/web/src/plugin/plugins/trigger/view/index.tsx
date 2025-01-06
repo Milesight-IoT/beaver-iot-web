@@ -25,7 +25,7 @@ const View = (props: Props) => {
     const ref = useRef<any>();
     const tempRef = useRef<any>({});
 
-    // 调用服务
+    // Call service
     const handleCallService = async (data: Record<string, any>) => {
         const { error } = await callService({
             entity_id: (config?.entity as any)?.value as ApiKey,
@@ -142,7 +142,7 @@ const View = (props: Props) => {
                     visible
                 >
                     <div className="trigger-view-form">
-                        {/* @ts-ignore: Mock 数据字段缺失，暂忽略 ts 校验报错 */}
+                        {/* @ts-ignore: Mock data field is missing, temporarily ignore the TS verification error */}
                         <EntityForm ref={ref} entities={entities} onOk={handleSubmit} />
                     </div>
                 </Modal>

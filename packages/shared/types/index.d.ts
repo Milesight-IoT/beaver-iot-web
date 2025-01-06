@@ -6,3 +6,4 @@
 /// <reference path="./mui.d.ts" />
 /// <reference path="./device.d.ts" />
 /// <reference path="./entity.d.ts" />
+/// <reference path="./workflow.d.ts" />

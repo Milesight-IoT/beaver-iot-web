@@ -1,25 +1,25 @@
 import { chartColorList } from './constant';
 
 /**
- * 自定义过滤实体选项数据映射对象
- * 若需自定义，通过 filterEntityMap 增加过滤函数往下扩展即可
+ * Customized filtering entity option data mapping object
+ * If you need to customize, add the filtering function to expand it down through the FilterEntityMap
  */
 export const filterEntityMap: Record<
     string,
     ((entityOptions: EntityOptionType[]) => EntityOptionType[]) | undefined
 > = {
     /**
-     * 如果是枚举要过滤值类型是 string 并且有 enum 字段的
+     * If it is enumerated, the filter value type is string and has an ENUM field
      */
     filterEntityStringHasEnum: (entityOptions: EntityOptionType[]): EntityOptionType[] => {
-        // 如果是枚举要过滤值类型是string并且有enum字段的
+        // If it is enumerated, the filter value type is string and has an ENUM field
         return entityOptions.filter((e: EntityOptionType) => {
             return e.valueType !== 'STRING' || e.rawData?.entityValueAttribute?.enum;
         });
     },
 };
 
-// 获取实际图表渲染的颜色顺序
+// Get the color order of the rendering of the actual chart
 export const getChartColor = (data: any[]) => {
     const newChartColorList = [...chartColorList];
     if (data.length < newChartColorList.length) {

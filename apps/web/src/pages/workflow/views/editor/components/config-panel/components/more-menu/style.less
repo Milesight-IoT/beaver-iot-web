@@ -1,0 +1,31 @@
+.@{prefix}-config-panel-more-menu {
+    &-popover {
+        .@{mui-prefix}Paper-root {
+            border-radius: @border-radius-sm;
+        }
+
+        .node-info-root {
+            width: 240px;
+            padding: @padding-sm @padding-md @padding-md;
+        }
+
+        .node-info-item {
+            &-title {
+                color: var(--text-color-secondary);
+                .text-size(@font-size-base);
+            }
+
+            &-content {
+                display: flex;
+                gap: @margin-xs;
+                margin-top: @margin-xs;
+                .text-size(@font-size-lg);
+
+                .@{prefix}-tooltip {
+                    flex: 1;
+                    width: 0;
+                }
+            }
+        }
+    }
+}

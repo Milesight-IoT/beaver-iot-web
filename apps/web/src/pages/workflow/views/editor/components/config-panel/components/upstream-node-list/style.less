@@ -1,0 +1,40 @@
+.@{prefix}-upstream-node-list {
+    position: relative;
+
+    &-option-groupname.@{mui-prefix}ListSubheader-root {
+        .text-size(@font-size-sm);
+
+        margin-top: @margin-xs;
+    }
+
+    &-option.@{mui-prefix}MenuItem-root {
+        padding: @padding-xs @padding-md;
+
+        .@{prefix}-upstream-node-list-item {
+            display: flex;
+            width: 100%;
+            .text-size(@font-size-base);
+
+            .name {
+                flex: 1;
+                width: 0;
+            }
+
+            .type {
+                display: inline-block;
+                padding: 0 @padding-xxs;
+                margin-left: @margin-md;
+                color: var(--text-color-tertiary);
+                background-color: var(--component-background-gray);
+                border-radius: @border-radius-base;
+            }
+        }
+    }
+
+    &__empty.@{prefix}-empty-small {
+        .@{prefix}-empty-img {
+            width: 96px;
+            height: 96px;
+        }
+    }
+}

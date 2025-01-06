@@ -148,3 +148,12 @@ declare interface OptionsProps<T extends string | number = string | number> {
     value?: T;
     options?: OptionsProps<T>[];
 }
+
+/**
+ * forwardRef 定义 Hack
+ *
+ * Inspired by: https://fettblog.eu/typescript-react-generic-forward-refs/
+ */
+declare type FixedForwardRef = <T, P = object>(
+    render: (props: P, ref: React.Ref<T>) => React.ReactNode,
+) => (props: P & React.RefAttributes<T>) => React.ReactNode;

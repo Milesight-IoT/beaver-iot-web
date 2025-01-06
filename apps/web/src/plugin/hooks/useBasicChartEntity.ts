@@ -10,15 +10,15 @@ export interface UseBasicChartEntityProps {
     isPreview?: boolean;
 }
 
-/** 图表所需展示的数据的类型 */
+/** Types of the data required for the chart */
 export interface ChartShowDataProps {
     entityLabel: string;
     entityValues: (string | number | null)[];
 }
 
 /**
- * 基础图表数据统一处理逻辑 hooks
- * 目前使用于（柱状图、横向柱状图、折线图、面积图）
+ * Basic chart data uniform processing logic hooks
+ * Currently used in (column diagram, horizontal column diagram, folding drawing, area diagram)
  */
 export function useBasicChartEntity(props: UseBasicChartEntityProps) {
     const { entity, time, isPreview } = props;
@@ -26,20 +26,20 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
     const { getTimeFormat } = useTime();
 
     /**
-     * canvas ref
+     * Canvas ref
      */
     const chartRef = useRef<HTMLCanvasElement>(null);
 
     /**
-     * 图表所需展示的数据
+     * The data required for the chart
      */
     const [chartShowData, setChartShowData] = useState<ChartShowDataProps[]>([]);
     /**
-     * 图表 X 轴 label
+     * Chart x -axis label
      */
     const [chartLabels, setChartLabels] = useState<number[]>([]);
     /**
-     * websocket 订阅主题
+     * webSocket subscription theme
      */
     const topics = useMemo(() => {
         if (!entity) return;
@@ -55,11 +55,11 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
     }, [entity]);
 
     /**
-     * 请求图表数据
+     * Request chart data
      */
     const requestChartData = useCallback(() => {
         /**
-         * 初始化数据
+         * Initialization data
          */
         setChartShowData([]);
         setChartLabels([]);
@@ -67,7 +67,7 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
         if (!Array.isArray(entity)) return;
 
         /**
-         * 请求获取实体历史数据
+         * Request to obtain physical historical data
          */
         Promise.all(
             (entity || []).map(e =>
@@ -81,7 +81,7 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
             ),
         ).then(result => {
             /**
-             * 判断是否有请求失败的数据
+             * Determine whether there is a data that fails to fail
              */
             const isFailed = (result || []).some(res => !isRequestSuccess(res));
             if (isFailed) return;
@@ -92,7 +92,7 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
                 .map(d => d?.content || []);
 
             /**
-             * 去重处理，获取所有值的时间段
+             * Re -treatment, get all the time periods of all values
              */
             const newChartLabels = historyData
                 .reduce((a: number[], c) => {
@@ -106,13 +106,13 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
             const newChartShowData: ChartShowDataProps[] = [];
 
             /**
-             * 实体数据转换
+             * Physical data conversion
              */
             (historyData || []).forEach((h, index) => {
                 const entityLabel = (entity || [])[index]?.label || '';
 
                 /**
-                 * 根据时间戳判断当前实体在该时间段是否有数据
+                 * Determine whether the current entity has data in this time period according to the timestamp
                  */
                 const chartData = newChartLabels.map(l => {
                     const valueIndex = h.findIndex(item => item.timestamp === l);
@@ -136,29 +136,29 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
     }, [entity, time]);
 
     /**
-     * 获取数据
+     * Get data
      */
     useEffect(() => {
         requestChartData();
     }, [entity, time, requestChartData]);
 
     /**
-     * websocket 订阅
+     * Websocket subscription
      */
     useEffect(() => {
         /**
-         * 预览状态下不进行订阅
+         * Do not subscribe in preview status
          */
         if (!topics || !topics.length || Boolean(isPreview)) return;
 
         return ws.subscribe(topics, requestChartData);
     }, [topics, requestChartData, isPreview]);
 
-    // 计算间隔时间
+    // Calculate interval time
     const timeUnit: any = useMemo(() => {
-        // 小于一天按照小时刻度显示
+        // Show less than one day according to hours
         if (time <= 1440 * 60 * 1000) return 'hour';
-        // 大于一个月按照周刻度显示
+        // It is displayed as greater than one month according to the scales of the week
         if (time > 1440 * 60 * 1000 * 30) return 'week';
         return 'day';
     }, [time, chartShowData]);
@@ -179,39 +179,39 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
         };
     }, [format]);
 
-    // x轴刻度范围
+    // X -axis scale range
     const xAxisRange = useMemo(() => {
-        // 当前时间作为最后的刻度，往前推time时间作为开始刻度
+        // The current time is used as the final scale, and the time time is pushed forward as the start scale
         return [Date.now() - time, Date.now()];
     }, [time]);
 
     return {
         /**
-         * canvas ref
+         * Canvas ref
          */
         chartRef,
         /**
-         * 图表所需展示的数据
+         * The data required for the chart
          */
         chartLabels: chartLabels.map(l => getTimeFormat(Number(l))),
         /**
-         * 图表所需展示的数据
+         * The data required for the chart
          */
         chartShowData,
         /**
-         * 时间单位
+         * Time unit
          */
         timeUnit,
         /**
-         * 时间格式
+         * Time format
          */
         format,
         /**
-         * 显示在时间轴的格式设置
+         * Format settings displayed in the timeline
          */
         displayFormats,
         /**
-         * x轴刻度范围
+         * X -axis scale range
          */
         xAxisRange,
     };

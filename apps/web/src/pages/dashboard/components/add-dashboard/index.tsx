@@ -3,13 +3,13 @@ import { useI18n } from '@milesight/shared/src/hooks';
 import { Modal, Form } from '@milesight/shared/src/components';
 import { DashboardDetail } from '@/services/http/dashboard';
 
-interface ConfigPluginProps {
+interface IProps {
     onCancel: () => void;
     onOk: (data: DashboardDetail) => void;
     data?: DashboardDetail;
 }
 
-const AddDashboard = (props: ConfigPluginProps) => {
+const AddDashboard = (props: IProps) => {
     const { getIntlText } = useI18n();
     const { onOk, onCancel, data } = props;
     const formRef = useRef<any>();

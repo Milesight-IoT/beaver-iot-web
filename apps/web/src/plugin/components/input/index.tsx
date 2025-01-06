@@ -4,6 +4,7 @@ type InputType = TextFieldProps;
 
 const Input = (props: InputType) => {
     const { sx, title, ...rest } = props;
+
     return (
         <TextField
             {...rest}

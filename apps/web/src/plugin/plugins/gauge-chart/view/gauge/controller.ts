@@ -18,30 +18,30 @@ const getRatioAndOffset = (
     cutout: number,
     needleOpts: GaugeOptions['needle'],
 ) => {
-    // 初始化比例和偏移量
+    // Initialization ratio and offset
     let ratioX = 1;
     let ratioY = 1;
     let offsetX = 0;
     let offsetY = 0;
 
-    // 如果圆周不是完整圆，则计算比例和偏移量
+    // If the circle is not complete, the calculation ratio and offset
     if (circumference < TAU) {
-        // 计算起始角度、中间角度和结束角度
+        // Calculate the starting angle, middle angle and end angle
         const startAngle = rotation;
         const halfAngle = startAngle + circumference / 2;
         const endAngle = startAngle + circumference;
 
-        // 计算起始点和结束点的坐标
+        // Calculate the coordinates of the starting point and the end point
         const startX = Math.cos(startAngle);
         const startY = Math.sin(startAngle);
         const endX = Math.cos(endAngle);
         const endY = Math.sin(endAngle);
 
-        // 计算指针的宽度
+        // Calculate the width of the pointer
         const { radiusPercentage, widthPercentage, lengthPercentage } = needleOpts;
         const needleWidth = Math.max(radiusPercentage / 100, widthPercentage / 2 / 100);
 
-        // 辅助函数，用于计算最大和最小值
+        // Auxiliary function, used to calculate the maximum and minimum value
         const calcMax = (angle: number, a: number, b: number) =>
             _angleBetween(angle, startAngle, endAngle)
                 ? Math.max(1, lengthPercentage / 100)
@@ -51,13 +51,13 @@ const getRatioAndOffset = (
                 ? Math.min(-1, -lengthPercentage / 100)
                 : Math.min(a, a * cutout, b, b * cutout, -needleWidth);
 
-        // 计算最大和最小的 X 和 Y 坐标
+        // Calculate the maximum and smallest x and y coordinates
         const maxX = calcMax(0, startX, endX);
         const maxY = calcMax(HALF_PI, startY, endY);
         const minX = calcMin(PI, startX, endX);
         const minY = calcMin(PI + HALF_PI, startY, endY);
 
-        // 计算比例和偏移量
+        // Calculation ratio and offset
         ratioX = (maxX - minX) / 2;
         ratioY = (maxY - minY) / 2;
         offsetX = -(maxX + minX) / 2;
@@ -350,12 +350,12 @@ export default class GaugeController extends DoughnutController {
         const centerX = (chartArea.left + chartArea.right) / 2;
         const centerY = (chartArea.top + chartArea.bottom) / 2;
 
-        // 计算刻度线和刻度值的半径
+        // Calculate the radius of the scale line and scale value
         const tickRadius = innerRadius - (tickInnerPadding || 10); // 刻度值的半径
         const lineRadius = tickRadius - (tickLineLength || 5); // 刻度线的起点半径
         const textRadius = lineRadius - (tickOuterPadding || 5); // 刻度值的半径，调整数字与刻度线的距离
 
-        // 计算每个刻度的角度
+        // Calculate the angle of each scale
         const totalTicks = tickCount || 10;
         const angleStep = this._getCircumference() / totalTicks;
         const rotation = this._getRotation();
@@ -378,13 +378,13 @@ export default class GaugeController extends DoughnutController {
             const yText = textRadius * Math.sin(angle);
             const value = this._cachedMeta.minValue + (i / totalTicks) * this._cachedMeta.total;
 
-            // 绘制刻度线
+            // Drawing scale
             ctx.beginPath();
             ctx.moveTo(xStart, yStart);
             ctx.lineTo(xEnd, yEnd);
             ctx.stroke();
 
-            // 绘制刻度值
+            // Drawing scale value
             ctx.fillText(value.toFixed(0), xText, yText);
         }
 

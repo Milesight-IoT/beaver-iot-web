@@ -1,0 +1,24 @@
+.@{prefix}-workflow-controls-root {
+    &.react-flow__panel {
+        margin: @margin-lg;
+    }
+
+    &.hidden {
+        display: none;
+    }
+
+    .@{mui-prefix}Paper-root {
+        box-shadow: @shadow-2;
+    }
+
+    .@{mui-prefix}ButtonGroup-root {
+        .@{mui-prefix}ButtonBase-root {
+            color: var(--text-color-secondary);
+            border-color: var(--border-color-base);
+
+            &.@{mui-prefix}-disabled {
+                opacity: 0.5;
+            }
+        }
+    }
+}

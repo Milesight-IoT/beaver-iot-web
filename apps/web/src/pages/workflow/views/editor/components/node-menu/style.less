@@ -1,0 +1,30 @@
+.@{prefix}-workflow-node-menu {
+    .@{mui-prefix}Menu-paper {
+        box-shadow: @shadow-2;
+    }
+
+    .@{mui-prefix}MenuItem-root {
+        display: flex;
+
+        &.@{mui-prefix}-disabled {
+            .text-size(@font-size-base);
+
+            font-weight: @font-weight-medium;
+        }
+
+        .icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            margin-right: @margin-sm;
+            color: var(--white);
+            border-radius: @border-radius-sm;
+
+            .@{mui-prefix}SvgIcon-root {
+                font-size: @font-size-lg;
+            }
+        }
+    }
+}

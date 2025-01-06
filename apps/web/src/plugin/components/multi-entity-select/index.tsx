@@ -1,129 +1,53 @@
-import { Autocomplete, TextField, Checkbox, Tooltip, Chip } from '@mui/material';
+import React, { useCallback, useMemo } from 'react';
+import { EntitySelect, type EntitySelectProps } from '@/components';
+import { filterEntityMap } from '@/plugin/utils';
 
-import type { AutocompleteProps } from '@mui/material';
-
-import { useI18n } from '@milesight/shared/src/hooks';
-import { useEntitySelectOptions } from '../../hooks';
-
-import './style.less';
-
-type EntitySelectProps = AutocompleteProps<EntityOptionType, true, false, undefined> &
-    EntitySelectCommonProps<EntityOptionType[]>;
-
+type MultipleEntitySelectProps = EntitySelectProps<EntityOptionType, true, false>;
+interface IProps extends MultipleEntitySelectProps {
+    entityValueTypes: MultipleEntitySelectProps['entityValueType'];
+    entityAccessMods: MultipleEntitySelectProps['entityAccessMod'];
+    entityExcludeChildren: MultipleEntitySelectProps['excludeChildren'];
+    customFilterEntity: keyof typeof filterEntityMap;
+}
 /**
- * 实体选择下拉框组件（多选）
+ * Entity Select drop-down components (multiple selections)
  */
-const MultiEntitySelect = (props: EntitySelectProps) => {
+export default React.memo((props: IProps) => {
     const {
-        value,
-        onChange,
         entityType,
+        entityValueType,
         entityValueTypes,
+        entityAccessMod,
         entityAccessMods,
         entityExcludeChildren,
-        customFilterEntity,
-        /**
-         * 默认最大可选择 5 个
-         */
         maxCount = 5,
+        customFilterEntity,
         ...restProps
     } = props;
 
-    const { getIntlText } = useI18n();
+    const filterOption = useMemo(
+        () =>
+            Reflect.get(
+                filterEntityMap,
+                customFilterEntity,
+            ) as MultipleEntitySelectProps['filterOption'],
+        [customFilterEntity],
+    );
 
-    /**
-     * 动态从服务器获取 options
-     */
-    const {
-        loading,
-        getEntityOptions,
-        options = [],
-    } = useEntitySelectOptions({
-        entityType,
-        entityValueTypes,
-        entityAccessMods,
-        entityExcludeChildren,
-        customFilterEntity,
-    });
-
-    const renderOption: EntitySelectProps['renderOption'] = (optionProps, option, { selected }) => {
-        const { label, value, description } = option || {};
-
-        return (
-            <li {...(optionProps || {})} key={value}>
-                <div className="ms-multi-entity-select">
-                    <Checkbox style={{ marginRight: 8 }} checked={selected} />
-                    <div className="ms-entity-select-item">
-                        <div className="ms-entity-select-item__label" title={label}>
-                            {label}
-                        </div>
-                        <div className="ms-entity-select-item__description" title={description}>
-                            {description}
-                        </div>
-                    </div>
-                </div>
-            </li>
-        );
-    };
+    const getOptionValue = useCallback<
+        Required<EntitySelectProps<any, false, false>>['getOptionValue']
+    >(option => option?.value, []);
     return (
-        <Autocomplete
-            {...restProps}
-            value={value}
+        <EntitySelect
             multiple
-            onChange={(_, option) => onChange(option)}
-            options={options}
-            getOptionDisabled={option => {
-                const currentValue = value || [];
-                /**
-                 * 默认实体最多只能选择 5 个
-                 */
-                if (currentValue.length < maxCount) {
-                    return false;
-                }
-
-                return currentValue.every(e => e.value !== option.value);
-            }}
-            renderInput={params => (
-                <TextField
-                    {...params}
-                    label={getIntlText('common.label.entity')}
-                    error={(restProps as any).error}
-                    helperText={
-                        (restProps as any).error ? (
-                            <div style={{ marginLeft: -14 }}>
-                                {(restProps as any).error.message}
-                            </div>
-                        ) : (
-                            ''
-                        )
-                    }
-                />
-            )}
-            renderOption={renderOption}
-            getOptionLabel={option => option?.label || ''}
-            loading={loading}
-            filterOptions={options => options}
-            onInputChange={(_, keyword, reason) => {
-                if (reason !== 'input') {
-                    getEntityOptions();
-                    return;
-                }
-
-                getEntityOptions(keyword);
-            }}
-            isOptionEqualToValue={(option, currentVal) => option.value === currentVal.value}
-            renderTags={(value, getTagProps) =>
-                value.map((option, index) => {
-                    const { key, ...tagProps } = getTagProps({ index });
-                    return (
-                        <Tooltip key={key} title={option.description}>
-                            <Chip label={option.label} {...tagProps} />
-                        </Tooltip>
-                    );
-                })
-            }
+            maxCount={maxCount}
+            entityType={entityType}
+            entityValueType={entityValueTypes || entityValueType}
+            entityAccessMod={entityAccessMods || entityAccessMod}
+            excludeChildren={entityExcludeChildren}
+            filterOption={filterOption}
+            getOptionValue={getOptionValue}
+            {...restProps}
         />
     );
-};
-
-export default MultiEntitySelect;
+});

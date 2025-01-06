@@ -16,7 +16,7 @@ const View = (props: Props) => {
     const { aggregateHistoryData } = useSource({ entity, metrics, time });
     const { isPreview } = configJson || {};
 
-    // 百分比
+    // Get the percentage value
     const percent = useMemo(() => {
         const { rawData } = entity || {};
         const { entityValueAttribute } = rawData || {};

@@ -1,0 +1,21 @@
+.@{prefix}-entity-select {
+    &-options-container {
+        height: 300px;
+        overflow: auto;
+    }
+
+    &-item {
+        flex: 1;
+        width: 0;
+        height: 46px;
+
+        &__label {
+            .text-size(@font-size-lg);
+        }
+
+        &__description {
+            color: var(--text-color-tertiary);
+            .text-size(@font-size-md);
+        }
+    }
+}

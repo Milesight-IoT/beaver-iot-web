@@ -1,0 +1,97 @@
+.ms-code-editor-content {
+    flex: 1;
+    overflow: hidden;
+
+    .cm-scroller {
+        outline: none;
+    }
+
+    .cm-content {
+        padding-right: @padding-xs;
+    }
+
+    .cm-editor {
+        outline: none;
+
+        .cm-gutters {
+            border: unset;
+            user-select: none;
+
+            &:hover {
+                .cm-gutterElement {
+                    span {
+                        opacity: 1;
+                        transition: color 0.2s ease-in-out;
+                        // &::after {
+                        //     color: var(--text-color-tertiary);
+                        //     transition: color 0.2s ease-in-out;
+                        // }
+                    }
+                }
+            }
+        }
+
+        .cm-foldGutter {
+            .cm-gutterElement {
+                position: relative;
+                width: 12px;
+
+                span {
+                    color: transparent;
+                    opacity: 0;
+
+                    // &::after {
+                    //     position: absolute;
+                    //     top: 50%;
+                    //     left: 0;
+                    //     font-size: 12px;
+                    //     line-height: 1;
+                    //     color: transparent;
+                    //     transform: translateY(-50%);
+                    // }
+                }
+
+                span[title='Fold line'] {
+                    .triangle(6px, { top: var(--text-color-tertiary) });
+
+                    border-width: 6px 5px 0;
+                }
+
+                span[title='Unfold line'] {
+                    .triangle(6px, { left: var(--text-color-tertiary) });
+
+                    margin-left: 3px;
+                    border-width: 5px 0 5px 6px;
+                    // &::after {
+                    //     content: '＞';
+                    // }
+                }
+            }
+        }
+    }
+}
+
+.ms-editor {
+    &__lineNumbers {
+        &--hide {
+            .cm-lineNumbers,
+            .cm-foldGutter {
+                width: 0;
+            }
+        }
+    }
+
+    &__foldGutter {
+        &--hide {
+            .cm-foldGutter {
+                pointer-events: none;
+
+                .cm-gutterElement {
+                    span {
+                        visibility: hidden;
+                    }
+                }
+            }
+        }
+    }
+}

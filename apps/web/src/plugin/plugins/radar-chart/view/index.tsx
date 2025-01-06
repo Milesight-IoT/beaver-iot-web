@@ -17,7 +17,7 @@ const View = (props: IProps) => {
 
     const chartRef = useRef<HTMLCanvasElement>(null);
 
-    /** 渲染雷达图 */
+    /** Rendering radar map */
     const renderRadarChart = (
         data: ChartConfiguration['data'],
         aggregateHistoryList: AggregateHistoryList[],
@@ -44,20 +44,20 @@ const View = (props: IProps) => {
 
                                     const label = dataset.label || '';
 
-                                    // 获取单位
+                                    // Acquisition unit
                                     const getUnit = () => {
                                         const { entity } = aggregateHistoryList[dataIndex] || {};
                                         const { rawData: currentEntity } = entity || {};
                                         if (!currentEntity) return;
 
-                                        // 获取当前选中实体
+                                        // Get the current selection entity
                                         const { entityValueAttribute } = currentEntity || {};
                                         const { unit } = entityValueAttribute || {};
                                         return unit;
                                     };
                                     const unit = getUnit();
 
-                                    // 自定义悬停时显示的文字内容
+                                    // Customized text content displayed when hovering
                                     return `${label}${raw}${unit || ''}`;
                                 },
                             },
@@ -73,7 +73,7 @@ const View = (props: IProps) => {
 
             return () => {
                 /**
-                 * 清空图表数据
+                 * Clear chart data
                  */
                 chart.destroy();
             };

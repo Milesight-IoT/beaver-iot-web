@@ -5,27 +5,32 @@ import {
     ListSubheader,
     MenuItem,
     FormControl,
+    FormControlProps as MuiFormControlProps,
     InputLabel,
 } from '@mui/material';
 
-type Props = {
+type Props<T extends ApiKey> = {
     /**
-     * 下拉选项
+     * Drop-down option
      */
-    options: OptionsProps[];
+    options: OptionsProps<T>[];
     /**
-     * 自定义下拉选项
-     * @returns 返回自定义下拉选项内容
+     * Custom drop-down option
+     * @returns Return to the customized drop-down option content
      */
-    renderOptions?: (options: (OptionsProps & { description?: string })[]) => any[];
+    renderOptions?: (options: (OptionsProps<T> & { description?: string })[]) => any[];
+    /**
+     * Form control props
+     */
+    formControlProps?: MuiFormControlProps;
 };
 
-export type SelectProps = Props & MuiSelectProps;
+export type SelectProps<T extends ApiKey> = Props<T> & MuiSelectProps<T>;
 
-const Select = (props: SelectProps) => {
-    const { options, renderOptions, style, label, ...rest } = props;
+const Select = <T extends ApiKey = ApiKey>(props: SelectProps<T>) => {
+    const { options, renderOptions, style, label, formControlProps, ...rest } = props;
 
-    // 转换下拉选项数据
+    // Conversion of down pull option data on of down pull option data
     const getMenuItems = useMemo(() => {
         const list: OptionsProps[] = [];
         const loopItem = (item: OptionsProps): any => {
@@ -45,13 +50,13 @@ const Select = (props: SelectProps) => {
     }, [options]);
 
     return (
-        <FormControl sx={{ ...style }}>
+        <FormControl sx={{ ...style }} fullWidth {...(formControlProps || {})}>
             {!!label && (
-                <InputLabel size={rest?.size as any} id="select-label">
+                <InputLabel size={rest?.size as any} required={rest?.required} id="select-label">
                     {label}
                 </InputLabel>
             )}
-            <MuiSelect {...rest} label={label} labelId="select-label">
+            <MuiSelect {...rest} label={label} labelId="select-label" notched>
                 {renderOptions
                     ? renderOptions(options)
                     : getMenuItems?.map((item: OptionsProps) => {

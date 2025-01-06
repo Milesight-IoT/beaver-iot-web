@@ -29,7 +29,7 @@
         "lint-staged": "lint-staged",
         "test": "echo \"Error: no test specified\" && exit 1",
         "prepare": "husky",
-        "preinstall": "node --import tsx ./scripts/only-allow.ts pnpm",
+        "preinstall": "node --import tsx ./scripts/only-allow.ts pnpm@9",
         "postinstall": "pnpm run build:pkgs"
     },
     "devDependencies": {

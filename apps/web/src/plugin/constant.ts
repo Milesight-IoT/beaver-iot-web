@@ -1,4 +1,4 @@
-// 组件类别
+// Component category
 export const COMPONENTCLASS = {
     data_chart: {
         name: 'dashboard.plugin_class_data_chart',
@@ -18,38 +18,38 @@ export const COMPONENTCLASS = {
     },
 };
 
-// 图表颜色顺序
+// Chart color sequence
 export const chartColorList: any[] = [
     {
-        light: '#3491FA',
+        light: '#8F6FEB',
         dark: '#5EAFFF',
     },
     {
-        light: '#1EBA62',
+        light: '#25B4AA',
         dark: '#3CE7FA',
     },
     {
-        light: '#F13535',
+        light: '#3491FA',
         dark: '#FF6661',
     },
     {
-        light: '#F7BA1E',
+        light: '#FBCC3D',
         dark: '#FFD147',
     },
     {
-        light: '#1261BE',
+        light: '#EC5D74',
         dark: '#3380CC',
     },
     {
-        light: '#19C3DA',
+        light: '#5F7BD8',
         dark: '#40C776',
     },
     {
-        light: '#F77234',
+        light: '#57B573',
         dark: '#FF975E',
     },
     {
-        light: '#E935F1',
+        light: '#FB9644',
         dark: '#F754FF',
     },
     {

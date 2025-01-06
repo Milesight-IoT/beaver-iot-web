@@ -1,0 +1,30 @@
+.@{prefix}-param-input {
+    &-item {
+        display: flex;
+        gap: @margin-xs;
+        align-items: center;
+        > .@{mui-prefix}FormControl-root {
+            flex: 1;
+            &.@{prefix}-param-output-switch {
+                flex-direction: row;
+                align-items: center;
+
+                .@{prefix}-param-output-switch-label {
+                    font-size: @font-size-2;
+                    color: var(--gray-9);
+                }
+            }
+        }
+    }
+
+    & &-add-btn {
+        font-weight: @font-weight-bold;
+        line-height: 24px;
+        color: var(--text-color-base);
+        border-color: var(--border-color-base);
+
+        &:hover {
+            background-color: var(--component-background-gray);
+        }
+    }
+}

@@ -1,18 +1,18 @@
 /**
- * 主题
+ * theme
  */
 declare type ThemeType = 'default' | 'dark';
 
 /**
- * 主题样式设置
+ * Theme style setting
  */
 declare interface ThemeProps {
     /**
-     * 样式类名设置
+     * Style category settings
      */
     class?: string;
     /**
-     * 直连样式设置
+     * Direct connection style setting
      */
     style?: string;
 }
@@ -25,251 +25,251 @@ declare interface OptionsProps<T extends string | number = string | number> {
 
 declare interface ComponentProps {
     /**
-     * 表单组件类型
-     * @description 映射到components文件中组件，也可以直接是组件库支持的组件
+     * Form component type
+     * @description Motor components in the components file, or it can be directly supported by component library support
      */
     type: string;
     /**
-     * 组件绑定字段
+     * Component binding field
      */
     key: string;
     /**
-     * 表单组件标题
+     * Form component title
      */
     title?: string;
     /**
-     * 值类型，没有填默认 'string'
-     * 可选类型为：'string' | 'number' | 'boolean' | 'array' | 'object'
+     * Value type, no default 'string'
+     * Optional type is：'string' | 'number' | 'boolean' | 'array' | 'object'
      */
     valueType?: string;
     /**
-     * 默认值
+     * default value
      */
     defaultValue?: string | number | boolean | Array<string | number>;
     /**
-     * 组件样式
+     * Component style
      */
     style?: string;
     /**
-     * 依赖其他组件值的样式
-     * @description 键值为style普通的值，值为依赖组件的key
+     * Style dependent on other component values
+     * @description The key value is the ordinary value of style, the value is the key that depends on the component
      */
     styleDepended?: record<string, string>;
     /**
-     * 组件内置属性
-     * @description 可配置组件的内置属性，参考MUI官网文档
+     * Inside component attributes
+     * @description For the built -in attributes of the configuration component, refer to the MUI official website documentation
      */
     componentProps?: Record<string, any>;
     /**
-     * 从远程服务获取数据
-     * @description 未配置时取options配置
+     * Get data from remote service
+     * @description Take Options configuration when not configured
      */
     getDataUrl?: string;
     /**
-     * 下拉选项配置
-     * @description 无getDataUrl时生效
+     * Play option configuration
+     * @description It takes effect without getdataURL
      */
     options?: OptionsProps[];
     /**
-     * 校验规则
-     * @description 支持配置多个规则，参考react-hooks-form校验规则
+     * Verification rules
+     * @description Support configuration multiple rules, refer to React-Hooks-Form verification rules
      */
     rules?: rulesType;
 }
 
 declare interface ConfigProps {
     /**
-     * 表单组件标题
-     * @description 一个配置项显示的标题
+     * Form component title
+     * @description The title displayed by the configuration item
      */
     title?: string;
     /**
-     * 组件样式
+     * Component style
      */
     style?: string;
     /**
-     * 组件类名
+     * Component name
      */
     class?: string;
     /**
-     * 组件样式
-     * @description 支持填写多种风格，默认取default
+     * Component style
+     * @description Support fill in a variety of styles, default to default
      */
     theme?: Record<ThemeType, ThemeProps>;
     /**
-     * 组件集合
-     * @description 组件集合，用于配置表单组件，一个配置项集合，可由多个基础组件组合
+     * Assembly
+     * @description Component collection, for configuration form components, a configuration item collection, which can be combined by multiple basic components
      */
     components?: ComponentProps[];
 }
 
 declare interface ViewThemeProps {
     /**
-     * 样式类名
+     * Style category
      */
     class?: string;
     /**
-     * 直连样式
+     * Direct style
      */
     style?: string;
 }
 
 declare interface ViewProps {
     /**
-     * html标签名称
-     * @description 具体标签参考html支持的标签
+     * html tag name
+     * @description Specific label refer to the label supported by HTML
      */
     tag: string;
     /**
-     * html标签属性
-     * @description 具体标签属性参考html标签支持的属性
+     * html tag attribute
+     * @description Specific label attribute refer to the attribute supported by html label
      */
     props?: Record<string, any>;
     /**
-     * html标签id
+     * html tag ID
      */
     id?: string;
     /**
-     * html标签内容
-     * @description 固定的标签内容，params属性无值时生效
+     * html tag content
+     * @description For fixed label content, when the params attribute does not value, it takes effect without value
      */
     content?: string;
     /**
-     * html内容绑定的参数变量
-     * @description 支持绑定多个参数，绑定后默认显示绑定的变量值，多个直接拼接
+     * HTML content binding parameter variables
+     * @description Support binding multiple parameters, default to the binding variable value after binding, multiple direct stitching
      */
     params?: string[];
     /**
-     * html标签显示依赖
+     * HTML label display dependencies
      */
     showDepended?: Record<string, any>;
     /**
-     * html子节点
+     * html sub -node
      */
     children?: ViewProps[];
     /**
-     *  通用类名
+     *  Universal class name
      */
     class?: string;
     /**
-     *  通用样式
+     *  Universal style
      */
     style?: string;
     /**
-     * 依赖其他组件值的样式
-     * @description 键值为style普通的值，值为依赖组件的key
+     * Style dependent on other component values
+     * @description The key value is the ordinary value of style, the value is the key that depends on the component
      */
     styleDepended?: record<string, string>;
     /**
-     * html标签风格
-     * @description 支持配置多个风格
+     * html tag style
+     * @description Support configuration multiple styles
      */
     themes?: Record<ThemeType, ViewThemeProps>;
 }
 
 declare interface CustomComponentProps {
     /**
-     * 组件名称
-     * @description name是组件显示的名称，比如在选择使用哪个组件的时候作为显示使用
+     * Component name
+     * @description Name is the name displayed by the component. For example
      */
     name: string;
     /**
-     * 组件类型
-     * @description 用来区分被使用者使用组件的唯一标识，与plugins下文件夹名称一致
+     * Component type
+     * @description It is used to distinguish the unique identification of the user's use of the component, which is consistent with the folder name of the folder under Plugins
      */
     type: string;
     /**
-     * 组件配置属性，可配置多个
+     * Component configuration attributes, can be configured multiple
      */
     configProps: ConfigProps[];
     /**
-     * 预览界面配置
-     * @description 可以是json单独配置各个属性，也可以直接传入html字符串，其中${{}}包围的是参数变量，渲染的时候替换
+     * Preview interface configuration
+     * @description It can be JSON configured each attribute separately, or it can be passed directly into the HTML string. Among them, $ {{}} is surrounded by parameter variables. Replace it when rendering
      */
     view: ViewProps[] | string;
     /**
-     * 组件分类
-     * @description 用来区分组件的类别，比如图表、数据显示等，目前有data_chart/operate/data_card三种，未填则默认为其他类型
+     * Component classification
+     * @description The categories used to distinguish components, such as charts, data display, etc. There are currently three types: Data_Chart/Operate/Data_card.
      */
     class?: string;
     /**
-     * 当前组件已配置值
-     * @description 无需配置，在配置界面会默认传
+     * The current component has configured value
+     * @description No configuration is required, the configuration interface will be transmitted by default
      */
     config?: Record<string, any>;
     /**
-     * 组件唯一标识
-     * @description 存储到服务端后数据库自动生成，无需维护
+     * Motor unique logo
+     * @description The database is automatically generated after the storage to the server, no need to maintain
      */
     id?: string;
     /**
-     * 是否预览模式
-     * @description 默认非预览，不需要手动配置该项，在配置界面会默认传true
+     * Whether to preview mode
+     * @description The default non -preview, no manual configuration is required, the TRUE will be passed by default on the configuration interface
      */
     isPreview?: boolean;
     /**
-     * 设置组件显示默认占容器几列，最小值为1，最大为12
-     * @description 每行为容器高度是1/12
+     * Set the component to display the default container, the minimum value is 1, and the maximum is 12
+     * @description The height of each behavior container is 1/12
      */
     defaultCol: number;
     /**
-     * 设置组件显示默认占容器几行，最小值为1，最大为24
-     * @description 每行为容器高度是1/24
+     * Set the component to display the default container, the minimum value is 1, and the maximum is 24
+     * @description The height of each behavior container is 1/24
      */
     defaultRow: number;
     /**
-     * 设置组件显示最小占容器几列，最小值为1，最大为12
-     * @description 每行为容器高度是1/12
+     * Set the component to display the minimum container, the minimum value is 1, and the maximum is 12
+     * @description The height of each behavior container is 1/12
      */
     minCol: number;
     /**
-     * 设置组件显示最小占容器几行，最小值为1，最大为24
-     * @description 每行为容器高度是1/24
+     * Set the component to display the minimum container, the minimum value is 1, and the maximum is 24
+     * @description The height of each behavior container is 1/24
      */
     maxRow: number;
 }
 
 /**
- * 实体下拉框类型
+ * Physical drop frame type
  */
 declare interface EntityOptionType {
     label: string;
     value: string | number;
     valueType: string;
     description: string;
-    /** 源数据 */
+    /** Source data */
     rawData?: ObjectToCamelCase<Omit<EntityData, 'entity_value_attribute'>> & {
         entityValueAttribute: EntityValueAttributeType;
     };
 }
 
 /**
- * 实体下拉选项组件通用 props
+ * Sports drop -down option component universal props
  */
 declare interface EntitySelectCommonProps<T = EntityOptionType> {
     /**
-     * 实体类型
+     * Entity
      */
     entityType?: EntityType;
     /**
-     * 实体数据值类型
+     * Physical data value type
      */
     entityValueTypes?: EntityValueDataType[];
     /**
-     * 实体属性访问类型
+     * Entity attribute access type
      */
     entityAccessMods?: EntityAccessMode[];
     /**
-     * 实体是否排除子节点
+     * Whether the entity eliminates the child node
      */
     entityExcludeChildren?: boolean;
     /**
-     * 自定义实体过滤条件
+     * Customized physical filtration conditions
      */
     customFilterEntity?: string;
     /**
-     * 最大选中数量
-     * 仅多选（multiple）时有效
+     * Maximum selection quantity
+     * Effective when optional (Multiple)
      */
     maxCount?: number;
     onChange: (value: T | null) => void;

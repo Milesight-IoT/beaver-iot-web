@@ -15,17 +15,17 @@ const View = (props: Props) => {
     const { entityStatusValue } = useSource({ entity });
     const { isPreview } = configJson || {};
 
-    // 当前实体实时数据
+    // Current physical real -time data
     const currentEntityData = useMemo(() => {
         const { rawData: currentEntity, value: entityValue } = entity || {};
         if (!currentEntity) return;
 
-        // 获取当前选中实体
+        // Get the current selection entity
         const { entityValueAttribute } = currentEntity || {};
         const { enum: enumStruct, unit } = entityValueAttribute || {};
         const currentEntityStatus = entityStatusValue?.toString();
 
-        // 枚举类型
+        // Enumeration type
         if (enumStruct) {
             const currentKey = Object.keys(enumStruct).find(enumKey => {
                 return enumKey === currentEntityStatus;
@@ -38,13 +38,13 @@ const View = (props: Props) => {
             };
         }
 
-        // 非枚举类型
+        // Non -enumeration
         return {
             label: unit ? `${currentEntityStatus ?? '- '}${unit}` : `${currentEntityStatus ?? ''}`,
             value: entityValue,
         };
     }, [entity, entityStatusValue]);
-    // 当前实体图标
+    // Current physical icon
     const { Icon, iconColor } = useMemo(() => {
         const { value } = currentEntityData || {};
         const iconType = config?.[`Icon_${value}`];

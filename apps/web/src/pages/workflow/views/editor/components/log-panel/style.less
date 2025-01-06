@@ -1,0 +1,66 @@
+.@{prefix}-workflow-panel-log-root.react-flow__panel.right {
+    z-index: 20;
+    width: 445px;
+    height: 100%;
+    padding: @padding-xs;
+    margin: 0;
+
+    &.hidden {
+        display: none;
+    }
+
+    &.loading {
+        .@{prefix}-workflow-panel-config-body {
+            opacity: .5;
+            pointer-events: none;
+        }
+    }
+
+    &:not(.hidden) ~ .@{prefix}-workflow-panel-config-root {
+        right: 445px - @padding-xs;
+    }
+}
+
+.@{prefix}-workflow-panel-log {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--component-background);
+    border-radius: @border-radius-sm;
+    box-shadow: @shadow-2;
+
+    &-body {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        padding: 0 @padding-xl @padding-lg;
+        overflow: auto;
+    }
+
+    .input-area {
+        .@{prefix}-code-editor {
+            height: 200px;
+            margin-bottom: @margin-xl;
+        }
+
+        ~ .log-detail-area {
+            padding-top: @padding-xl;
+            margin-top: @margin-xl;
+            border-top: 1px solid var(--border-color-base);
+        }
+    }
+
+    .empty-area {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+
+    .@{mui-prefix}CircularProgress-root {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}

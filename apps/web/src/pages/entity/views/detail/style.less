@@ -1,0 +1,36 @@
+.@{prefix}-view-device-detail {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+
+    .topbar {
+        display: flex;
+        align-items: center;
+
+        .@{prefix}-tabs {
+            flex: 1;
+        }
+
+        .btn-wrap {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            padding: 0 @padding-lg;
+            background-color: var(--component-background);
+            border-bottom: 1px solid var(--border-color-base);
+        }
+    }
+
+    .@{prefix}-tab-content {
+        flex: 1;
+        height: 0;
+        padding: @padding-lg;
+        margin: @margin-lg;
+        background-color: var(--component-background);
+        border-radius: @border-radius-base;
+
+        .@{prefix}-tabpanel {
+            height: 100%;
+        }
+    }
+}

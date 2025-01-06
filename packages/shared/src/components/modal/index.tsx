@@ -17,68 +17,68 @@ import './style.less';
 
 export interface ModalProps {
     /**
-     * 取消按钮文字
+     * Cancel button text
      */
     onCancelText?: string;
     /**
-     * 确认按钮文字
+     * Confirm the button text
      */
     onOkText?: string;
     /**
-     * 是否显示弹框
+     * Whether to display a bomb frame
      */
     visible?: boolean;
     /**
-     * 弹框标题
+     * Bomber title
      */
     title?: string;
     /**
-     * 自定义弹框宽度
-     * @description 有值是size属性不生效
+     * Custom bomb frame width
+     * @description Value is that the size attribute does not take effect
      */
     width?: string;
     /**
-     * 弹框尺寸
-     * @description 选值：small(200px)、medium(450px)、large(600px)、full(100%)
+     * Bullet size
+     * @description Value selection：small(200px)、medium(450px)、large(600px)、full(100%)
      */
     size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
     /**
-     * 弹框类名
+     * Bombs
      */
     className?: string;
     /**
-     * 是否禁止点击遮罩层关闭弹框
+     * Whether to prohibit click the mask layer to close the bullet frame
      */
     disabledBackdropClose?: boolean;
     /**
-     * 弹框内容
+     * Bomber content
      */
     children?: React.ReactNode;
     /**
-     * 外部传入的样式
+     * External passing style
      */
     sx?: DialogProps['sx'];
     /**
-     * 确认按钮回调
+     * Confirm the button back
      */
-    onOk: () => void;
+    onOk?: () => void;
 
     /**
-     * 取消按钮回调
+     * Cancel the button back
      */
     onCancel: () => void;
 
     /**
-     * 挂载节点
+     * Mount node
      */
     container?: HTMLDivElement;
 
     /**
-     * 自定义页脚
+     * Customized
      */
     footer?: React.ReactNode;
     /**
-     * 是否显示右上角关闭图标，默认false
+     * Whether the icon is turned off in the upper right corner, the default FALSE
      */
     showCloseIcon?: boolean;
 }
@@ -133,7 +133,7 @@ const Modal: React.FC<ModalProps> = ({
 
     const handleOk = useMemoizedFn(async () => {
         setLoading(true);
-        await onOk();
+        await onOk?.();
         setLoading(false);
     });
 

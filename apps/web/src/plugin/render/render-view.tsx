@@ -15,7 +15,7 @@ const View = (props: Props) => {
     const { config, configJson, onClick } = props;
     const { theme: globalTheme } = useTheme();
 
-    // 处理显示依赖
+    // Process display dependencies
     const isShow = (depended?: Record<string, any>) => {
         if (depended) {
             for (const key in depended) {
@@ -27,7 +27,7 @@ const View = (props: Props) => {
         return true;
     };
 
-    // 渲染参数
+    // Rendering parameter
     const renderParams = (params?: Record<string, any>) => {
         if (params?.length) {
             const result = params.map((key: string) => {
@@ -38,7 +38,7 @@ const View = (props: Props) => {
         return null;
     };
 
-    // 渲染标签
+    // Rendering label
     const renderTag = (tagProps: ViewProps, tabKey: string) => {
         if (isShow(tagProps?.showDepended) && tagProps?.tag) {
             const Tag: any = (PluginView as any)[tagProps?.tag] || tagProps?.tag;
@@ -87,9 +87,9 @@ const View = (props: Props) => {
 
     const replaceTemplate = (template: string) => {
         return template.replace(/\${{(.*?)}}/g, (match, key) => {
-            // 去除 key 两端的空白字符并从 values 对象中获取对应的值
+            // Remove the blank characters at both ends of the key and get the corresponding value from the values object
             const value = config[key.trim()];
-            // 如果值不存在，返回原始的匹配字符串
+            // If the value does not exist, return the original matching string
             return value !== undefined ? value : match;
         });
     };

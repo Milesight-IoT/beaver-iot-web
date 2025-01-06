@@ -1,0 +1,27 @@
+.ms-action-log {
+    margin-bottom: @margin-sm;
+
+    .ms-log-branch {
+        color: var(--text-color-secondary);
+        .text-size(@font-size-sm);
+    }
+
+    &__input,
+    &__output {
+        margin-top: @margin-sm;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    &__alert {
+        .MuiPaper-root {
+            padding: 0 @padding-md;
+
+            .MuiAlert-message {
+                .text-size(@font-size-sm);
+            }
+        }
+    }
+}
