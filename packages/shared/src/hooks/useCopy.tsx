@@ -4,7 +4,7 @@ import useI18n from './useI18n';
 import { copyText } from '../utils/clipboard';
 
 /**
- * 通用文案复制逻辑
+ * Common copy copy logic
  */
 const useCopy = () => {
     const { getIntlText } = useI18n();

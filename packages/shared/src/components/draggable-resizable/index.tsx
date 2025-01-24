@@ -21,7 +21,7 @@ interface DraggableResizableBoxProps {
     onResize: (data: draggerType) => void;
     onMove: ({ id, left, top }: { id: ApiKey; left: number; top: number }) => void;
     /**
-     * 拖拽相对的元素
+     * Drag and drop opposite elements
      */
     parentRef: any;
     onStartMove: (id: ApiKey) => void;
@@ -87,22 +87,22 @@ const DraggableResizableBox = ({
             minConstraints={[limitMinWidth || 50, limitMinHeight || 50]}
             maxConstraints={[limitMaxWidth || 600, limitMaxHeight || 300]}
             onResizeStop={(e: any, data: any) => {
-                // 处理调整大小后的逻辑
+                // Process the resized logic
                 onResize({ ...data.size, id });
                 currentSize.current = { ...data.size };
             }}
             onResize={(e: any, data: any) => {
-                // 超出则不再允许拖拽大小
+                // Beyond that, drag-and-drop size is no longer allowed
                 if (isOverLimit({ ...data.size, id })) {
                     onResize({ ...currentSize.current, id });
-                    // 更新一次key强制重新渲染
+                    // Update the key once to force a re-rendering
                     setKey(`${data.size.width}-${data.size.height}`);
                     return;
                 }
-                // 存入当前调整大小值
+                // Stores the current resizing value
                 currentSize.current = { ...data.size };
             }}
-            resizeHandles={isEdit ? ['se'] : []} // 动态设置是否可调整大小
+            resizeHandles={isEdit ? ['se'] : []} // Dynamic setting whether to resize
             handle={<span className="drag-resizable-handle" />}
             style={{ ...style }}
         >

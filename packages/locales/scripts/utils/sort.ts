@@ -1,13 +1,13 @@
 import { sortBy, transform } from 'lodash';
 
 /**
- * @description 将对象内的元素按照字典大小升序排序
- * @params keyvalues: json对象
- * @params sortTarget: 排序的对象，默认是按照keyvalues的key来排序
+ * @description Sort the elements of an object in ascending order of dictionary size
+ * @params keyvalues: json object
+ * @params sortTarget: By default, objects are sorted according to the key of the keyvalues
  */
 export const sort = (keyvalues: ObjType<string>, sortTarget: 'k' | 'v' = 'k') => {
     if (sortTarget === 'k') {
-        // 1. 拿到所有的key
+        // 1. Get all the keys
         const sortedKeys = Object.keys(keyvalues).sort();
 
         return sortedKeys.reduce<ObjType<string>>((acc, cur) => {

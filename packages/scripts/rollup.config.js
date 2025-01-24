@@ -21,7 +21,7 @@ module.exports = {
         peerDepsExternal(),
         babel({
             babelHelpers: 'bundled',
-            exclude: 'node_modules/**', // 只编译源代码
+            exclude: 'node_modules/**', // Compile source code only
         }),
         nodeResolve(),
         commonjs({
@@ -31,6 +31,6 @@ module.exports = {
         typescript(),
         json(),
     ],
-    // 外部依赖不做打包
+    // External dependencies are not packaged
     external: Object.keys(dependencies),
 };

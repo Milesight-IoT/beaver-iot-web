@@ -14,7 +14,7 @@ export type TableRowDataType = ObjectToCamelCase<
 
 export interface UseColumnsProps<T> {
     /**
-     * 操作 Button 点击回调
+     * Operation Button click callback
      */
     onButtonClick: (type: OperationType, record: T) => void;
 }

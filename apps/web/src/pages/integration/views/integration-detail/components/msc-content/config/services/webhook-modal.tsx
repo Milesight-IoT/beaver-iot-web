@@ -10,13 +10,13 @@ import { Modal, ContentCopyIcon, type ModalProps } from '@milesight/shared/src/c
 import { API_PREFIX } from '@/services/http';
 
 export enum WEBHOOK_KEYS {
-    /** Webhook 状态 实体关键字 */
+    /** Webhook status entity keyword */
     STATUS = 'webhook_status',
-    /** Webhook 开关 实体关键字 */
+    /** Webhook Switch entity keyword */
     ENABLED_KEY = 'webhook.enabled',
-    /** Webhook Url 实体关键字 */
+    /** Webhook Url Entity keyword */
     URL_KEY = 'webhook.url',
-    /** Webhook 密钥 实体关键字 */
+    /** Webhook key entity keyword */
     SECRET_KEY = 'webhook.secret_key',
 }
 
@@ -24,26 +24,26 @@ export type WebhookFormDataProps = Partial<Record<WEBHOOK_KEYS, string | boolean
 
 interface Props extends Omit<ModalProps, 'onOk'> {
     /**
-     * 弹窗模式
-     * @param edit 编辑
-     * @param switch 开关
+     * Popup mode
+     * @param edit EDITOR
+     * @param switch Switch
      */
     mode: 'edit' | 'switch';
 
-    /** 表单数据 */
+    /** Form data */
     data?: WebhookFormDataProps;
 
-    /** 表单提交回调 */
+    /** Form submission callback */
     onSubmit?: (params: WebhookFormDataProps) => void;
 }
 
 /**
- * Webhook 地址
+ * Webhook address
  */
 export const WEBHOOK_URL = genApiUrl(apiOrigin, `${API_PREFIX}/public/integration/msc/webhook`);
 
 /**
- * Webhook 编辑弹窗
+ * Webhook Edit popup
  */
 const WebhookModal: React.FC<Props> = ({ mode, data, visible, onCancel, onSubmit }) => {
     const { getIntlText } = useI18n();
@@ -60,7 +60,7 @@ const WebhookModal: React.FC<Props> = ({ mode, data, visible, onCancel, onSubmit
         }
     }, [mode, getIntlText]);
 
-    // ---------- 表单数据处理 ----------
+    // ---------- Form data processing ----------
     const { control, formState, handleSubmit, reset, setValue } = useForm<WebhookFormDataProps>();
     const onInnerSubmit: SubmitHandler<WebhookFormDataProps> = async formData => {
         await onSubmit?.({
@@ -70,7 +70,7 @@ const WebhookModal: React.FC<Props> = ({ mode, data, visible, onCancel, onSubmit
         reset();
     };
 
-    // 填入表单值
+    // Fill in the form values
     useEffect(() => {
         Object.keys(data || {}).forEach(key => {
             setValue(key as WEBHOOK_KEYS, data?.[key as WEBHOOK_KEYS] as never);

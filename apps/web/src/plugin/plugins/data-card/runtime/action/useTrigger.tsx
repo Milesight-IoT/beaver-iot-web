@@ -12,9 +12,9 @@ export const useTrigger = ({ onChange }: IProps) => {
         // const { value: entityValue, rawData } = entity || {};
         // const prevEntityValue = prevStateRef.current?.entity?.value;
 
-        // // 如果实体变化时，更新title为当前选中实体名称
+        // // If the entity changes, update the title to the currently selected entity name
         // if (prevEntityValue !== entityValue) {
-        //     // 当前选中实体
+        //     // Currently selected entity
         //     const { entityName } = rawData || {};
         //     entityName && (value.title = entityName);
         // }

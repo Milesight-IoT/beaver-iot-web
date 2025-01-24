@@ -4,7 +4,7 @@ import { Command } from 'commander';
 import { get } from 'lodash';
 
 /**
- * @description 批量加载命令
+ * @description Batch load command
  */
 export function loadBinCommands(program: Command, config: ConfigType) {
     // eslint-disable-next-line @typescript-eslint/no-require-imports

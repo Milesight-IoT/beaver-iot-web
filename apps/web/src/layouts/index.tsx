@@ -4,9 +4,9 @@ import { CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import Chart from 'chart.js/auto'; // 引入 Chart.js
+import Chart from 'chart.js/auto'; // Introduce Chart.js
 import { registerables } from 'chart.js';
-import 'chartjs-adapter-date-fns'; // 引入日期适配器
+import 'chartjs-adapter-date-fns'; // Import date adapter
 import zoomPlugin from 'chartjs-plugin-zoom';
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 import { ConfirmProvider } from '@/components';
@@ -14,7 +14,7 @@ import BasicLayout from './BasicLayout';
 import BlankLayout from './BlankLayout';
 import { useWebsocket, useChartTheme } from './hooks';
 
-Chart.register(...registerables, zoomPlugin); // 注册所有组件和适配器
+Chart.register(...registerables, zoomPlugin); // Register all components and adapters
 
 const DEFAULT_LAYOUT = 'basic';
 const layouts: Record<string, React.ReactNode> = {

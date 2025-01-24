@@ -12,7 +12,7 @@ export type TableRowDataType = ObjectToCamelCase<
     EntityAPISchema['getList']['response']['content'][0]
 >;
 
-// 实体类型 Tag 颜色映射
+// Entity type Tag Color mapping
 const entityTypeColorMap: Record<string, ChipProps['color']> = {
     event: 'success',
     service: 'warning',
@@ -21,7 +21,7 @@ const entityTypeColorMap: Record<string, ChipProps['color']> = {
 
 export interface UseColumnsProps<T> {
     /**
-     * 操作 Button 点击回调
+     * Operation Button click callback
      */
     onButtonClick: (type: OperationType, record: T) => void;
 }

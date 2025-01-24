@@ -7,7 +7,7 @@ interface TabPanelProps {
 }
 
 /**
- * MUI Tab 选项卡面板组件
+ * MUI Tab TAB Panel components
  */
 const TabPanel = memo((props: TabPanelProps) => {
     const { children, value, index, ...other } = props;

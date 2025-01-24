@@ -12,26 +12,26 @@ import iotStorage, { TOKEN_CACHE_KEY } from '@milesight/shared/src/utils/storage
 import { API_PREFIX } from './constant';
 
 type TokenDataType = {
-    /** 鉴权 Token */
+    /** Authentication Token */
     access_token: string;
-    /** 刷新 Token */
+    /** Refresh Token */
     refresh_token: string;
     /**
-     * 过期时间，单位 ms
+     * Expiration time, unit: ms
      *
-     * 注意：该值为前端过期时间，仅用于判断何时需刷新 token，实际 token 在后端可能还未过期
+     * Note: This value is the front-end expiration time and is only used to determine when the token needs to be refreshed. The actual token may not have expired at the back-end
      */
     expires_in: number;
 };
 
 let timer: number | null = null;
-/** Token 延迟刷新时间 */
+/** Token delay refreshing time */
 const REFRESH_TOKEN_TIMEOUT = 1 * 1000;
-/** Token 刷新 API 路径 */
+/** Token refresh API path */
 const tokenApiPath = `${API_PREFIX}/oauth2/token`;
 /**
- * 生成 Authorization 请求头数据
- * @param token 登录凭证
+ * Generate Authorization request header data
+ * @param token Login certificate
  */
 const genAuthorization = (token?: string) => {
     if (!token) return;
@@ -39,10 +39,10 @@ const genAuthorization = (token?: string) => {
 };
 
 /**
- * Token 处理逻辑（静默处理）
+ * Token Processing Logic (Silent processing)
  *
- * 1. 判断缓存中 token 是否合法，若合法则写入请求 header 中
- * 2. 定时刷新 token，每 60 分钟刷新一次
+ * 1. Check whether the token in the cache is valid. If yes, write the token into the request header
+ * 2. Refresh the token periodically every 60 minutes
  */
 const oauthHandler = async (config: AxiosRequestConfig) => {
     const token = iotStorage.getItem<TokenDataType>(TOKEN_CACHE_KEY);
@@ -55,16 +55,16 @@ const oauthHandler = async (config: AxiosRequestConfig) => {
     }
 
     /**
-     * 1. 若为 oauth 请求，不做刷新 token 处理
-     * 2. 若本地无缓存 token，不做刷新 token 处理
-     * 3. 若本地缓存 token 未过期，不做刷新 token 处理
+     * 1. If the request is oauth, the token is not refreshed
+     * 2. If there is no local cache token, do not refresh the token
+     * 3. If the local cache token does not expire, do not refresh the token
      */
     if (isOauthRequest || !token?.access_token || !isExpired) {
         return config;
     }
 
     /**
-     * 延迟 1s 后发起 token 更新请求，保证在此 1s 内，使用旧 token 的请求依然可通过后端鉴权
+     * After one second of delay, a token update request is sent to ensure that the request using the old token can still pass the back-end authentication within one second
      */
     if (timer) window.clearTimeout(timer);
     timer = window.setTimeout(() => {
@@ -88,13 +88,13 @@ const oauthHandler = async (config: AxiosRequestConfig) => {
             .then(resp => {
                 const data = getResponseData(resp)!;
 
-                // 每 60 分钟刷新一次 token
+                // The token is refreshed every 60 minutes
                 data.expires_in = Date.now() + 60 * 60 * 1000;
                 iotStorage.setItem(TOKEN_CACHE_KEY, data);
                 eventEmitter.publish(REFRESH_TOKEN_TOPIC);
             })
             .catch(_ => {
-                // TODO: 若为 token 无效错误，则直接移除 token
+                // TODO: If the token is invalid, the token is directly removed
                 // iotStorage.removeItem(TOKEN_CACHE_KEY);
             });
     }, REFRESH_TOKEN_TIMEOUT);

@@ -22,7 +22,7 @@ function execute() {
 
     program.parseAsync(process.argv);
 
-    // locale 不带参数时, 告诉开发者一些简单 命令
+    // locale when it takes no arguments, it tells the developer some simple commands
     if (!process.argv.slice(2).length) {
         chalk.green(program.helpInformation());
     }

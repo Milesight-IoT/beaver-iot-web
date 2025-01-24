@@ -18,7 +18,7 @@ export default () => {
     const { getIntlText } = useI18n();
     const { hasPermission } = useUserPermissions();
 
-    // ---------- 列表数据相关 ----------
+    // ---------- list data related to ----------
     const [keyword, setKeyword] = useState<string>();
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
     const [selectedIds, setSelectedIds] = useState<readonly ApiKey[]>([]);
@@ -49,10 +49,10 @@ export default () => {
         },
     );
 
-    // ---------- 设备添加相关 ----------
+    // ---------- Device added related ----------
     const [modalOpen, setModalOpen] = useState(false);
 
-    // ---------- 数据删除相关 ----------
+    // ---------- Data Deletion related ----------
     const confirm = useConfirm();
     const handleDeleteConfirm = useCallback(
         (ids?: ApiKey[]) => {
@@ -80,7 +80,7 @@ export default () => {
         [confirm, getIntlText, getDeviceList, selectedIds],
     );
 
-    // ---------- Table 渲染相关 ----------
+    // ---------- Table rendering related to ----------
     const toolbarRender = useMemo(() => {
         return (
             <Stack className="ms-operations-btns" direction="row" spacing="12px">

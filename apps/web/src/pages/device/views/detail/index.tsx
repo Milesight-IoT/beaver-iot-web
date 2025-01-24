@@ -24,7 +24,7 @@ export default () => {
     const { getIntlText } = useI18n();
     const { handlePermissionsError } = usePermissionsError();
 
-    // ---------- 设备详情相关逻辑 ----------
+    // ---------- Device details related logic ----------
     const [deviceDetail, setDeviceDetail] = useState<DeviceDetailType>();
     const {
         loading,
@@ -52,7 +52,7 @@ export default () => {
         },
     );
 
-    // 填充默认数据
+    // Fill in default data
     useEffect(() => {
         if (!state?.id || state.id !== deviceId) return;
 
@@ -62,7 +62,7 @@ export default () => {
         });
     }, [state, deviceId]);
 
-    // ---------- Tab 切换相关逻辑 ----------
+    // ---------- Tab switches the related logic to ----------
     const tabs = useMemo(() => {
         return [
             {

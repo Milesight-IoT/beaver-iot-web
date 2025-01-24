@@ -6,13 +6,13 @@ interface OptInterface {
 }
 
 const languages = Object.values(LANGUAGE);
-/** 各应用依赖语言包模块配置 */
+/** Each application depends on the language pack module configuration */
 const appLocalModules: Record<AppType, string[]> = {
     web: ['global', 'dashboard', 'device', 'error', 'setting', 'workflow', 'entity', 'user'],
 };
 
 /**
- * 系统语言与外部依赖语言包映射关系
+ * Mapping relationship between system language and external dependent language package
  */
 const componentMapLanguage: Record<LanguageComponentType, Record<LANGUAGE, string>> = {
     moment: {
@@ -87,7 +87,7 @@ const componentMapLanguage: Record<LanguageComponentType, Record<LANGUAGE, strin
     },
 };
 
-/** 接口错误码文案 key 前缀 */
+/** Prefix of the interface error code copy key */
 export const HTTP_ERROR_CODE_PREFIX = 'error.http.';
 
 export class LocaleHelper {
@@ -103,7 +103,7 @@ export class LocaleHelper {
     }
 
     /**
-     * 获取第三方库语言包映射字符串，若无匹配则返回 EN
+     * Gets the third-party library language pack mapping string and returns EN if there is no match
      */
     getComponentLanguage(lang: OptInterface['defaultLanguage'], type: LanguageComponentType) {
         const localMapping = componentMapLanguage[type];
@@ -120,9 +120,9 @@ export class LocaleHelper {
     }
 
     /**
-     * 加载指定模块对应的语言包
-     * @param {String} moduleName 模块名字，必须与对应的语言包文件名相同
-     * @param {String} lang 语言字符
+     * Loads the language pack for the specified module
+     * @param {String} moduleName The module name must be the same as the corresponding language package name
+     * @param {String} lang Language character
      */
     private async loadLocaleByModule(
         moduleName: string,
@@ -141,9 +141,9 @@ export class LocaleHelper {
     }
 
     /**
-     * 加载语言包，并获取语言包json文件资源
-     * @param {String} appName 获取某端的语言包资源
-     * @param {String} lang 语言字符
+     * Load the language package and get the language package json file resource
+     * @param {String} appName Get an end's language pack resource
+     * @param {String} lang Language character
      */
     getLoadedLocales(
         appName: AppType,
@@ -155,8 +155,8 @@ export class LocaleHelper {
     }
 
     /**
-     * 获取接口错误码文案 Key
-     * @param errCode 接口错误码
+     * Gets the Interface error code copy Key
+     * @param errCode Interface error code
      */
     getHttpErrorKey(errCode?: string) {
         if (!errCode) return '';

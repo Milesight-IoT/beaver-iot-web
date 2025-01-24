@@ -12,34 +12,34 @@ import useFormItems, { OPENAPI_KEYS, type FormDataProps } from './useFormItems';
 import './style.less';
 
 interface Props {
-    /** 实体列表 */
+    /** Entity list */
     entities?: InteEntityType[];
 
-    /** 编辑成功回调 */
+    /** Edit successful callback */
     onUpdateSuccess?: () => void;
 }
 
 type OpenapiStatusItemType = {
-    /** 国际化文案 */
+    /** International copywriting */
     intlKey: string;
-    /** 样式 */
+    /** pattern */
     sx?: SxProps;
 };
 
 /**
- * OpenAPI 状态枚举
+ * OpenAPI state enumeration
  */
 type OpenapiStatusType = 'READY' | 'NOT_READY' | 'ERROR';
 
 /**
- * 集成配置组件
+ * Integrated configuration component
  */
 const Config: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
     const { getIntlText } = useI18n();
     const { blue, green, red } = useTheme();
     const { getEntityKey, getEntityValues } = useEntity({ entities });
 
-    // ---------- 表单相关处理逻辑 ----------
+    // ---------- form related processing logic ----------
     const formItems = useFormItems();
     const { control, formState, handleSubmit, setValue } = useForm<FormDataProps>();
     const onSubmit: SubmitHandler<FormDataProps> = async params => {
@@ -88,7 +88,7 @@ const Config: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
         [blue, green, red, getIntlText],
     );
 
-    // 表单数据回填
+    // Form data backfill
     useEffect(() => {
         const formData = getEntityValues([
             OPENAPI_KEYS.STATUS,

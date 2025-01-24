@@ -8,13 +8,13 @@ import { checkRequired } from '@milesight/shared/src/utils/validators';
 import { awaitWrap, deviceAPI, isRequestSuccess, type DeviceAPISchema } from '@/services/http';
 
 interface Props extends Omit<ModalProps, 'onOk'> {
-    /** 设备详情 */
+    /** Device details */
     data?: ObjectToCamelCase<DeviceAPISchema['getDetail']['response']>;
 
-    /** 编辑失败回调 */
+    /** Edit failure callback */
     onError?: (error?: any) => void;
 
-    /** 编辑成功回调 */
+    /** Edit successful callback */
     onSuccess?: () => void;
 }
 
@@ -42,7 +42,7 @@ const EditDialog: React.FC<Props> = ({ data, visible, onCancel, onError, onSucce
         toast.success(getIntlText('common.message.operation_success'));
     };
 
-    // 填充/重置表单
+    // Fill/reset the form
     useEffect(() => {
         if (!visible || !data) {
             setTimeout(reset, 100);

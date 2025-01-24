@@ -5,7 +5,7 @@ import './style.less';
 
 export interface Props {
     /**
-     * 描述列表数据
+     * Descriptive list data
      */
     data?: {
         key: ApiKey;
@@ -14,20 +14,20 @@ export interface Props {
     }[];
 
     /**
-     * 是否加载中
+     * Loading or not
      */
     loading?: boolean;
 
     /**
-     * 每行渲染数据对数量，默认为 2
+     * Number of rendered data pairs per row, default is 2
      *
-     * __注意__：当前样式仅支持 2 列，若要修改，请自行调整样式
+     * __ Note __ : The current style only supports 2 columns, to modify, please adjust the style yourself
      */
     columns?: number;
 }
 
 /**
- * 描述列表组件
+ * Description list component
  */
 const Descriptions: React.FC<Props> = ({ data, loading, columns = 2 }) => {
     const list = useMemo(() => {

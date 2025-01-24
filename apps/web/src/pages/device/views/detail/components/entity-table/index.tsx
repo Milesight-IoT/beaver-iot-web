@@ -8,13 +8,13 @@ import { type DeviceAPISchema } from '@/services/http';
 interface Props {
     data?: ObjectToCamelCase<DeviceAPISchema['getDetail']['response']>;
 
-    /** 点击 Table 刷新按钮回调 */
+    /** Click the Table refresh button to call back */
     onRefresh?: () => void;
 }
 
 type TableRowDataType = ObjectToCamelCase<DeviceAPISchema['getDetail']['response']['entities'][0]>;
 
-// 实体类型 Tag 颜色映射
+// Entity type Tag Color mapping
 const entityTypeColorMap: Record<string, ChipProps['color']> = {
     event: 'success',
     service: 'warning',
@@ -22,7 +22,7 @@ const entityTypeColorMap: Record<string, ChipProps['color']> = {
 };
 
 /**
- * 设备实体数据表格
+ * Device physical data table
  */
 const EntityTable: React.FC<Props> = ({ data, onRefresh }) => {
     const { getIntlText } = useI18n();

@@ -5,15 +5,15 @@ import { useInterval } from 'ahooks';
 import { LinearProgress } from '@mui/material';
 import './style.less';
 
-// 初始进度
+// Initial progress
 const INIT_PERCENT = 20;
-// 每秒步长
+// Steps per second
 const PERCENT_STEP = 2;
-// 进度变化时间间隔
+// Time interval for progress change
 const INTERVAL = 1000;
 
 /**
- * 路由加载指示器
+ * Route load indicator
  */
 const RouteLoadingIndicator = memo(() => {
     const { state } = useNavigation();

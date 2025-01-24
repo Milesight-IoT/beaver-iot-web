@@ -17,7 +17,7 @@ export default () => {
     const navigate = useNavigate();
     const { getIntlText } = useI18n();
 
-    // ---------- 表单相关处理逻辑 ----------
+    // ---------- form related processing logic ----------
     const { handleSubmit, control } = useForm<FormDataProps>();
     const formItems = useFormItems({ mode: 'login' });
 
@@ -36,14 +36,14 @@ export default () => {
 
         // console.log({ error, resp });
         if (error || !respData || !isRequestSuccess(resp)) return;
-        // 每 60 分钟刷新一次 token
+        // The token is refreshed every 60 minutes
         const result = { ...respData, expires_in: Date.now() + 60 * 60 * 1000 };
 
         navigate('/');
         iotLocalStorage.setItem(TOKEN_CACHE_KEY, result);
     };
 
-    // ---------- 判断是否已登录 ----------
+    // ---------- Check whether you are logged in to ----------
     const setUserInfo = useUserStore(state => state.setUserInfo);
     const [loading, setLoading] = useState<boolean>();
     const token = iotLocalStorage.getItem(TOKEN_CACHE_KEY);

@@ -1,5 +1,5 @@
 /**
- * 国际化相关 Hook
+ * Internationalization related hooks
  */
 import React, { Fragment, ReactElement, useCallback, useMemo } from 'react';
 import intl from 'react-intl-universal';
@@ -21,7 +21,7 @@ interface genComponentProps {
     id?: string;
 }
 type genComponentPropsCb = (value: genComponentProps) => void;
-/** 外部语言映射值 */
+/** External language mapping value */
 export const apiLangs: Partial<Record<LangType, string>> = {
     CN: 'zh',
     EN: 'en',
@@ -66,9 +66,9 @@ export default () => {
         (key: string, options?: Record<number | string, any>, onlyText?: boolean) => {
             if (!options) return intl.get(key).d(key);
 
-            // 用于生成组件列表的方法
+            // A method to generate a list of components
             const generateComponentList = (cb: genComponentPropsCb) => {
-                // 将options中的变量转成临时token，用于获取文案
+                // Convert the variable in options into a temporary token for getting copy
                 const { variables, strategy, tokenMap } = Object.keys(options || {}).reduce(
                     ({ variables, strategy, tokenMap }, key) => {
                         const token = genRandomString();
@@ -97,7 +97,7 @@ export default () => {
                 const message = intl.get(key, variables);
                 const regex = new RegExp(Object.values(variables).join('|'), 'g');
 
-                // 将临时token替换成options中的变量
+                // Replace the temporary token with a variable in options
                 const result: React.ReactNode[] = [];
                 let str = message;
                 message.replace(regex, (match, index, msg) => {
@@ -117,7 +117,7 @@ export default () => {
                 return result;
             };
 
-            // 组件 key 控制器
+            // Component key controller
             const ComponentKeyController = (() => {
                 const keyList: string[] = [];
                 const set = (key: string) => keyList.push(key);
@@ -125,13 +125,13 @@ export default () => {
 
                 return { set, get };
             })();
-            // 生成组件列表
+            // Generate component list
             const ComponentList = generateComponentList(({ type, id }) => {
                 if (type === 'component') {
                     ComponentKeyController.set(id!);
                 }
             });
-            // 生成组件的key
+            // Generates the key of the component
             const generateComponentKey = (item: ReactElement) => {
                 if (typeof item === 'string') return genRandomString();
 
@@ -157,40 +157,40 @@ export default () => {
     );
 
     return {
-        /** 当前语言 */
+        /** Current language */
         lang,
 
-        /** 当前语言的外部数据映射值 */
+        /** External data mapping values for the current language */
         apiLang: apiLangs[lang!] || (lang || '').toLocaleLowerCase(),
 
-        /** 当前存在的可选语言的外部数据映射值 */
+        /** External data map value for the currently existing optional language */
         apiLangs,
 
-        /** 语言列表 */
+        /** Language list */
         langs,
 
-        /** 组件库国际化文案 */
+        /** Component library internationalization copy */
         muiLocale: langs[lang || DEFAULT_LANGUAGE]?.muiLocale,
 
-        /** 接口错误码与文案 key 映射表 */
+        /** Mapping table between interface error codes and copy keys */
         httpErrorKeys,
 
-        /** 变更语言 */
+        /** Change language */
         changeLang,
 
-        /** 根据 key 获取文案 */
+        /** Get copy according to key */
         getIntlText,
 
-        /** 根据 key 获取带 ReactNode 的文案 */
+        /** Get the copy with the ReactNode based on the key */
         getIntlNode,
 
-        /** 根据 key 获取带 HTML 的文案 */
+        /** Get the copy with HTML based on the key */
         getIntlHtml,
 
-        /** 获取接口错误码文案 Key */
+        /** Obtain the interface error code copy Key */
         getHttpErrorKey,
 
-        /** 获取当前语言的 moment */
+        /** Gets the moment of the current language */
         getCurrentComponentLang,
     };
 };

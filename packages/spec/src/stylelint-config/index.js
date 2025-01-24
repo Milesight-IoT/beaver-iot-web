@@ -19,7 +19,7 @@ module.exports = {
         },
     ],
     rules: {
-        // 缩进
+        // retract
         indentation: null,
 
         'font-family-name-quotes': null,
@@ -30,10 +30,10 @@ module.exports = {
 
         'function-url-quotes': null,
 
-        // css属性排序
+        // css property sorting
         'order/properties-order': propertiesOrder,
 
-        // 忽略rpx单位校验
+        // Ignore the rpx unit check
         'unit-no-unknown': [true, { ignoreUnits: ['rpx'] }],
 
         'no-descending-specificity': null,
@@ -41,7 +41,7 @@ module.exports = {
         // webcomponent
         'selector-type-no-unknown': null,
 
-        // 允许空源，太过严格且有部分特殊写法。
+        // Allow empty source, too strict and some special writing.
         'no-empty-source': null,
 
         'font-family-no-missing-generic-family-keyword': null,
@@ -66,7 +66,7 @@ module.exports = {
                 ignorePseudoElements: ['v-deep', 'v-global'],
             },
         ],
-        // 类名校验
+        // Class name check
         'selector-class-pattern': null,
         'order/order': [
             [

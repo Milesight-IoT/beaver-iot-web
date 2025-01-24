@@ -5,10 +5,10 @@ export const THEME_PREFIX = 'ms-editor-theme';
 export const NAMESPACE = 'ms-lexical-editor';
 
 export const enum MODE {
-    /** 只读 */
+    /** Read only */
     READONLY = 1 << 0,
-    /** 编辑 */
+    /** EDITOR */
     EDITABLE = 1 << 1,
-    /** 可读可写 */
+    /** It can be read and written */
     ALL = MODE.EDITABLE + MODE.READONLY,
 }

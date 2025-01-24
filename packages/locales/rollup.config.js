@@ -20,7 +20,7 @@ module.exports = {
         peerDepsExternal(),
         babel({
             babelHelpers: 'bundled',
-            exclude: 'node_modules/**', // 只编译源代码
+            exclude: 'node_modules/**', // Compile source code only
         }),
         nodeResolve(),
         typescript(),

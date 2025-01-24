@@ -7,9 +7,9 @@ import { checkRequired, checkRangeValue } from '@milesight/shared/src/utils/vali
 import { Modal, type ModalProps } from '@milesight/shared/src/components';
 
 export enum OPENAPI_SCHEDULED_KEYS {
-    /** OpenAPI 定时任务 开关 关键字 */
+    /** OpenAPI Scheduled task switch keyword */
     ENABLED_KEY = 'scheduled_data_fetch.enabled',
-    /** OpenAPI 定时任务 周期 实体关键字 */
+    /** OpenAPI scheduled task period entity keyword */
     PERIOD_KEY = 'scheduled_data_fetch.period',
 }
 
@@ -17,21 +17,21 @@ export type OpenapiFormDataProps = Partial<Record<OPENAPI_SCHEDULED_KEYS, string
 
 interface Props extends Omit<ModalProps, 'onOk'> {
     /**
-     * 弹窗模式
-     * @param edit 编辑
-     * @param switch 开关
+     * Popup mode
+     * @param edit EDITOR
+     * @param switch Switch
      */
     mode: 'edit' | 'switch';
 
-    /** 表单数据 */
+    /** Form data */
     data?: OpenapiFormDataProps;
 
-    /** 表单提交回调 */
+    /** Form submission callback */
     onSubmit?: (params: OpenapiFormDataProps) => void;
 }
 
 /**
- * Openapi 编辑弹窗
+ * Openapi edit popup
  */
 const OpenapiModal: React.FC<Props> = ({ mode, data, visible, onCancel, onSubmit }) => {
     const { getIntlText } = useI18n();
@@ -47,7 +47,7 @@ const OpenapiModal: React.FC<Props> = ({ mode, data, visible, onCancel, onSubmit
         }
     }, [mode, getIntlText]);
 
-    // ---------- 表单数据处理 ----------
+    // ---------- Form data processing ----------
     const { control, formState, handleSubmit, reset, setValue } = useForm<OpenapiFormDataProps>();
     const onInnerSubmit: SubmitHandler<OpenapiFormDataProps> = async formData => {
         await onSubmit?.({
@@ -57,7 +57,7 @@ const OpenapiModal: React.FC<Props> = ({ mode, data, visible, onCancel, onSubmit
         reset();
     };
 
-    // 填入表单值
+    // Fill in the form values
     useEffect(() => {
         Object.keys(data || {}).forEach(key => {
             setValue(key as OPENAPI_SCHEDULED_KEYS, data?.[key as OPENAPI_SCHEDULED_KEYS] as never);

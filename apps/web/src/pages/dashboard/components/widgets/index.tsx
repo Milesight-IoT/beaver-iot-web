@@ -78,15 +78,15 @@ const Widgets = (props: WidgetProps) => {
         });
     };
 
-    // 编辑组件
+    // Edit component
     const handleEdit = useCallback((data: WidgetDetail) => {
         onEdit(data);
     }, []);
 
-    // 删除组件
+    // Remove component
     const handleDelete = useCallback(
         (data: WidgetDetail) => {
-            // 这里有点神奇，widgets一直取的是旧值，先用widgetRef.current确保最新值
+            // The magic here is that widgets always take the old value and use widgetRef.current to ensure the latest value
             let index = widgetRef.current?.findIndex(
                 (item: WidgetDetail) =>
                     (item.widget_id && item.widget_id === data.widget_id) ||

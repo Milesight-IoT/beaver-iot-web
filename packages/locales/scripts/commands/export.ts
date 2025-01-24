@@ -10,14 +10,14 @@ const escapeRegExp = (s: string) => {
     return String(s).replace(/([".*+?^=!:${}()|[\]\/\\])/g, '\\$1');
 };
 // eslint-disable-next-line prettier/prettier
-const DEFAULT_KEY_RULE = '^([a-z0-9_]+\.){1,3}[a-z0-9_]+$';
+const DEFAULT_KEY_RULE = '^([a-z0-9_]+.){1,3}[a-z0-9_]+$';
 
 /**
- * 对比文案中的存在的重复的 key
+ * Compare duplicate keys in the copy
  *
- * @param data 待校验数据
- * @param basicData 基准原始文案数据
- * @returns 返回重复的文案数据对象
+ * @param data Data to be verified
+ * @param basicData Baseline raw copy data
+ * @returns Returns duplicate copy data objects
  */
 const getRepeatResult = (data: ObjType, basicData?: ObjType) => {
     const repeatKeyArr: string[] = [];
@@ -46,11 +46,11 @@ const getRepeatResult = (data: ObjType, basicData?: ObjType) => {
 };
 
 /**
- * 对比文案中重复的内容
+ * Compare duplicate content in the copy
  *
- * @param data 待校验数据
- * @param basicData 基准原始文案数据
- * @returns 返回重复的文案数据对象
+ * @param data Data to be verified
+ * @param basicData Baseline raw copy data
+ * @returns Returns duplicate copy data objects
  */
 const getRepeatValueResult = (data: ObjType, basicData?: ObjType) => {
     const map: ObjType = {};
@@ -69,7 +69,7 @@ const getRepeatValueResult = (data: ObjType, basicData?: ObjType) => {
     });
 
     if (basicData) {
-        // 与基准数据做对比，若存在
+        // Compare with baseline data, if any
         Object.keys(basicData).forEach(key => {
             const val = basicData[key];
 
@@ -85,9 +85,9 @@ const getRepeatValueResult = (data: ObjType, basicData?: ObjType) => {
 };
 
 /**
- * 文案规范性校验，输出结果文件
- * @param data 待校验数据
- * @returns 返回违规的文案 key 集合
+ * Copy normative check, output result file
+ * @param data Data to be verified
+ * @returns Return the offending copy key collection
  */
 const getSpecCheckResult = (data: ObjType) => {
     const result: string[] = [];
@@ -103,9 +103,9 @@ const getSpecCheckResult = (data: ObjType) => {
 };
 
 /**
- * 获取新增/删除的文案内容
- * @param data 当前文案数据
- * @param basicData 基准原始文案数据
+ * Gets new/deleted copy content
+ * @param data Current copy data
+ * @param basicData Baseline raw copy data
  */
 const getUpdateResult = (data: ObjType, basicData: ObjType) => {
     const keys = Object.keys(data);
@@ -114,7 +114,7 @@ const getUpdateResult = (data: ObjType, basicData: ObjType) => {
     const deleteResult: ObjType = {};
 
     /**
-     * 遍历当前文案 key，在原始数据中查找，如果没有找到则为研发新增 key
+     * Iterate over the current copy key and look for it in the original data. If it is not found, add a new key for R&D
      */
     keys.forEach(key => {
         if (basicData[key] === undefined) {
@@ -123,7 +123,7 @@ const getUpdateResult = (data: ObjType, basicData: ObjType) => {
     });
 
     /**
-     * 遍历原始文案 key，在当前数据中查找，如果没有找到则为研发删除 key
+     * Iterate over the original copy key, look for it in the current data, and delete the key for development if it is not found
      */
     basicKeys.forEach(key => {
         if (data[key] === undefined) {
@@ -138,19 +138,19 @@ const getUpdateResult = (data: ObjType, basicData: ObjType) => {
 };
 
 type errorMapStatusType = {
-    /** 新增错误码文案数 */
+    /** Added the number of error code copies */
     add: number;
-    /** 删除错误码文案数 */
+    /** Delete the number of error code copies */
     delete: number;
-    /** 处理结果 */
+    /** Processing result */
     status: 'error' | 'success';
 };
 /**
- * 生成接口错误码映射表
- * @param data 当前文案数据
- * @param targetPath 目标映射表路径
- * @param rule 错误码匹配规则（包含该字符串的将识别为错误码）
- * @returns 返回处理结果
+ * The interface error code mapping table is generated
+ * @param data Current copy data
+ * @param targetPath Target mapping table path
+ * @param rule Error code matching rules (those containing this string are identified as error codes)
+ * @returns Return processing result
  */
 const genErrorMap = (
     data: ObjType,
@@ -169,7 +169,7 @@ const genErrorMap = (
         errorMap[targetKey] = key;
     });
 
-    // 移除冗余映射
+    // Remove a redundant mapping
     Object.entries(targetSource).forEach(([key, value]) => {
         if (keys.includes(value)) return;
 
@@ -190,7 +190,7 @@ const genErrorMap = (
 };
 
 type commandPropsType = ConfigType['export'] & ConfigType['common'];
-// 校验流程处理
+// Check flow processing
 async function checkFile({
     all = false,
     sourcePath,
@@ -234,7 +234,7 @@ async function checkFile({
         : getRepeatValueResult(source);
     let newResult = updateResult.new;
 
-    // 不翻译的 key，不做导出
+    // Do not translate the key, do not do export
     if (ignoreRules.length) {
         newResult = Object.keys(newResult).reduce((acc, key) => {
             if (ignoreRules.some(rule => key.startsWith(rule))) return acc;
@@ -244,23 +244,23 @@ async function checkFile({
     }
 
     createFile(
-        pathtool.resolve(cwd, outputPath, '新增文案.json'),
+        pathtool.resolve(cwd, outputPath, 'new_copy.json'),
         JSON.stringify(newResult, null, 4),
     );
     createFile(
-        pathtool.resolve(cwd, outputPath, '删除文案.json'),
+        pathtool.resolve(cwd, outputPath, 'deleted_copy.json'),
         JSON.stringify(updateResult.delete, null, 4),
     );
     createFile(
-        pathtool.resolve(cwd, outputPath, '违规 Key.json'),
+        pathtool.resolve(cwd, outputPath, 'invalid_key.json'),
         JSON.stringify(specResult, null, 4),
     );
     createFile(
-        pathtool.resolve(cwd, outputPath, '重复 key.json'),
+        pathtool.resolve(cwd, outputPath, 'duplicate_key.json'),
         JSON.stringify(repeatResult, null, 4),
     );
     createFile(
-        pathtool.resolve(cwd, outputPath, '重复内容.json'),
+        pathtool.resolve(cwd, outputPath, 'duplicate_content.json'),
         JSON.stringify(repeatValueResult, null, 4),
     );
     console.timeEnd('The export time is');
@@ -270,13 +270,13 @@ async function checkFile({
 
         switch (result.status) {
             case 'error':
-                logger.error('\n✘ 接口错误码映射表生成失败，请检查后重试。');
+                logger.error(
+                    '\n✘ Failed to generate the interface error code mapping table, please check and try again.',
+                );
                 break;
             case 'success':
                 logger.warning(
-                    `\n❖ 已匹配写入 ${result.add} 个接口错误码，同时删除 ${
-                        result.delete
-                    } 个错误码映射，请确认后手动提交代码库：\n${pathtool.join(
+                    `\n❖ Successfully matched and wrote ${result.add} interface error codes, and deleted ${result.delete} error code mappings. Please confirm and manually submit the code repository:\n${pathtool.join(
                         cwd,
                         errorMapOutputPath,
                     )}`,
@@ -293,23 +293,28 @@ async function checkFile({
         isEmpty(repeatResult) &&
         isEmpty(repeatValueResult)
     ) {
-        logger.success('\n✔ 未发现文案错误，Congratulations！');
+        logger.success('\n✔ No copy errors found, Congratulations!');
     } else {
         logger.error(
-            `\n✘ 存在错误，请检查 ${pathtool.join(cwd, outputPath)} 目录下的日志文件，尽快修复！`,
+            `\n✘ Errors found, please check the log files in the ${pathtool.join(cwd, outputPath)} directory and fix them as soon as possible!`,
         );
     }
 
-    logger.success(`\n✔ 新增文案已写入 ${pathtool.join(cwd, outputPath)} 目录\n`);
+    logger.success(
+        `\n✔ The new copy has been written to the ${pathtool.join(cwd, outputPath)} directory\n`,
+    );
 }
 
 export function exportCommand(program: Command, commandConfig: commandPropsType) {
     program
         .command('export')
-        .option('-a, --all', '是否输出全量文案校验数据（默认输出当前新增文案校验数据）')
-        .option('--error-map', '是否自动生成错误码映射表')
-        .option('--source-path [path]', '读取文案资源的路径')
-        .option('--output-path [path]', '导出文案资源的路径')
+        .option(
+            '-a, --all',
+            'Whether to output full copy verification data (default is to output current new copy verification data)',
+        )
+        .option('--error-map', 'Whether to automatically generate an error code mapping table')
+        .option('--source-path [path]', 'The path to read the copy resource')
+        .option('--output-path [path]', 'The path to export the copy resource')
         .description("Check every key's naming specification, duplication and error.")
         .action((options = {}) => {
             checkFile({ ...commandConfig, ...options });

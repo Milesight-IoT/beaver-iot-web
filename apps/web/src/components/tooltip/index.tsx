@@ -5,17 +5,17 @@ import { Tooltip as MTooltip, type TooltipProps } from '@mui/material';
 import './style.less';
 
 export interface MSToolTipProps extends Omit<TooltipProps, 'children'> {
-    /** 是否基于内容及容器宽度自动开启 */
+    /** Whether to open automatically based on content and container width */
     autoEllipsis?: boolean;
 
-    /** 引用元素 */
+    /** Reference element */
     children?: React.ReactElement;
 }
 
 /**
- * Tooltip 组件
+ * Tooltip component
  *
- * 可根据内容及容器宽度自动处理文案省略，当省略时，鼠标移到文案上 Tooltip 显示完整文案
+ * Copy omissions can be automatically processed based on the content and container width. When omitted, the mouse cursor moves over the copy and the Tooltip displays the full copy
  */
 const Tooltip: React.FC<MSToolTipProps> = ({
     autoEllipsis,
@@ -36,12 +36,12 @@ const Tooltip: React.FC<MSToolTipProps> = ({
         setContWidth(contSize.width);
     }, [autoEllipsis, contSize]);
 
-    // title 变更时，触发重新计算内容宽度
+    // When title changes, a recalculation of the content width is triggered
     useEffect(() => {
         setContWidth(null);
     }, [title]);
 
-    // 判断内容宽度是否超出容器宽度，超出则显示 Tooltip
+    // Determine if the content width exceeds the container width. If it does, Tooltip is displayed
     useDebounceEffect(
         () => {
             if (!autoEllipsis || !contWidth || !wrapSize?.width) {

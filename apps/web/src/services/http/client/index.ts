@@ -12,7 +12,7 @@ import oauthHandler from './oauth-handler';
 import errorHandler from './error-handler';
 
 /**
- * 业务请求头配置（非动态请求头直接在 headers 中配置即可）
+ * Configuring the service request header (You can configure the non-dynamic request header in headers)
  */
 const headersHandler = async (config: AxiosRequestConfig) => {
     config.headers = config.headers || {};
@@ -22,11 +22,11 @@ const headersHandler = async (config: AxiosRequestConfig) => {
 };
 
 /**
- * 接口请求地址配置
+ * Interface request address configuration
  */
 const apiOriginHandler = async (config: AxiosRequestConfig) => {
     const { baseURL } = config;
-    // 若接口已经做了 URL 替换，则不需要再处理
+    // If the interface has already replaced the URL, no further processing is required
     if (baseURL?.startsWith('http')) return config;
 
     if (apiOrigin) {
@@ -38,10 +38,10 @@ const apiOriginHandler = async (config: AxiosRequestConfig) => {
 
 const client = createRequestClient({
     baseURL: '/',
-    // TODO: 验证 oauthHandler
+    // TODO: authenticates the oauthHandler
     configHandlers: [headersHandler, apiOriginHandler, oauthHandler],
     onResponse(resp) {
-        // 错误处理
+        // Error handling
         errorHandler(resp.data.error_code, resp);
         return resp;
     },

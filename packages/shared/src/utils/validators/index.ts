@@ -231,7 +231,7 @@ export const hostChecker: TChecker = () => {
     };
 };
 /**
- * 端口号
+ * Port number
  * Port checker
  *
  * 1. Min 1, Max 5
@@ -268,7 +268,7 @@ export const userNameChecker: TChecker = () => {
 };
 
 /**
- * 密码
+ * password
  * Password checker
  *
  * 1. Min 8, Max 63
@@ -308,7 +308,7 @@ export const urlChecker: TChecker = () => {
 };
 
 /**
- * 秒数校验规则
+ * Second check rule
  * Seconds checker
  *
  * 1. Must be an integer

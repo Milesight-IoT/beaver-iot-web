@@ -19,8 +19,8 @@ module.exports = {
     'react/jsx-props-no-spreading': 0,
     'react/static-property-placement': 0,
     'react/no-unescaped-entities': 0,
-    // Hook 依赖校验
+    // Hook dependency check
     'react-hooks/exhaustive-deps': 1,
-    // 关闭强制函数组件类型定义
+    // Turns off mandatory function component type definition
     'react/function-component-definition': 0,
 };

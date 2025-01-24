@@ -15,7 +15,7 @@ module.exports = {
                 '*.test.{js,jsx,ts,tsx}': '**/__tests__/',
             },
         ],
-        // 文件名校验场景较多，暂时关闭
+        // Disable file name verification temporarily because there are many file name verification scenarios
         'check-file/filename-naming-convention': [
             0,
             {

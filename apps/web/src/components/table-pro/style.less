@@ -24,7 +24,7 @@
         flex: 1;
         overflow: auto;
 
-        // 覆盖 Mui 样式：移除 focus 时的边框
+        // Override Mui style: Remove the focus border
         .@{mui-prefix}DataGrid-cell:focus,
         .@{mui-prefix}DataGrid-cell:focus-within,
         .@{mui-prefix}DataGrid-columnHeader:focus,
@@ -32,7 +32,7 @@
             outline: none;
         }
 
-        // 覆盖 Mui 样式：避免 focus 时 Header 中的分隔线被隐藏
+        // Override the Mui style: Avoid hiding the separator line in the Header when focusing
         .@{mui-prefix}DataGrid-columnHeader:focus .@{mui-prefix}DataGrid-columnSeparator,
         .@{mui-prefix}DataGrid-columnHeader:focus-within .@{mui-prefix}DataGrid-columnSeparator,
         .@{mui-prefix}DataGrid-columnHeader:has(+ .@{mui-prefix}DataGrid-columnHeader:focus)
@@ -56,7 +56,7 @@
             outline: none;
         }
 
-        // 覆盖 Mui 样式：避免超出容器宽度，出现横向滚动问题
+        // Overlay Mui style: Avoid horizontal scrolling beyond the width of the container
         .@{mui-prefix}DataGrid-columnHeader {
             overflow: hidden;
         }

@@ -1,11 +1,11 @@
 import { EVENT_TYPE } from './constant';
 
-/** dashboard 订阅的主题包装函数 */
+/** dashboard subscription theme wrapper function */
 export const getExChangeTopic = (topic: string) => `${EVENT_TYPE.EXCHANGE}:${topic}`;
 
-/** 从主题中分离出类型和原始主题 */
+/** Separate the type from the original theme */
 export const splitExchangeTopic = (topics: string[]) => {
-    // 从主题中提取出Exchange类型
+    // Extract the Exchange type from the topic
     return topics.reduce(
         (bucket, topic) => {
             const [type, data] = topic.split(':');
@@ -20,9 +20,9 @@ export const splitExchangeTopic = (topics: string[]) => {
 };
 
 /**
- * 推送的消息转换
- * @param message - 推送的消息
- * @returns - 转换后的消息
+ * Push message transformation
+ * @param message - Push the message
+ * @returns - The converted message
  */
 export const transform = (message: string) => {
     try {
@@ -33,10 +33,10 @@ export const transform = (message: string) => {
 };
 
 /**
- * 将回调数据合并后批量推送
- * @param {Function} cb - 批量推送时的回调函数
- * @param {number} time - 推送间隔时间，单位：ms
- * @returns {Object} 返回一个对象，包含执行合并任务 `run` 和取消任务 `cancel`，以及获取当前状态 `getStatus`
+ * Merge the callback data and push it in batches
+ * @param {Function} cb - Callback function for batch push
+ * @param {number} time - Push interval, unit: ms
+ * @returns {Object} Returns an object containing the execution of the merge task, 'run' and cancel the task 'cancel', and get the current status' getStatus'
  */
 export const batchPush = <T extends (...params: any[]) => any>(
     cb: (data: Parameters<T>[]) => ReturnType<T>,
@@ -53,10 +53,10 @@ export const batchPush = <T extends (...params: any[]) => any>(
 
         timer = setTimeout(() => {
             status = 'complete';
-            // 执行回调
+            // Execute callback
             cb && cb(queue);
 
-            // 清除副作用
+            // Remove side effects
             queue = [];
             timer && clearTimeout(timer);
             timer = null;
@@ -72,15 +72,15 @@ export const batchPush = <T extends (...params: any[]) => any>(
 
     return {
         /**
-         * 执行合并数据
+         * Execute merge data
          */
         run,
         /**
-         * 取消合并数据
+         * Unmerge data
          */
         cancel,
         /**
-         * 获取当前状态
+         * Get current status
          */
         getStatus: () => status,
     };

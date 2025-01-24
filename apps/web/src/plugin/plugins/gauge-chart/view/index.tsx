@@ -93,7 +93,7 @@ const View = (props: Props) => {
                     currentValue = parseFloat(currentValue.toFixed(1));
                 }
             }
-            // 渲染图表
+            // Render chart
             const circumference = 216; // Define the length of the dashboard
             const rotation = (360 - 216) / 2 + 180; // According to the length of the circumference, calculate the angle of rotation
             const chart = new Chart(ctx, {
@@ -137,7 +137,7 @@ const View = (props: Props) => {
                         },
                         tooltip: {
                             enabled: true,
-                            filter: tooltipItem => tooltipItem.dataIndex === 0, // 只显示第一个数据项的 tooltip
+                            filter: tooltipItem => tooltipItem.dataIndex === 0, // Displays only the tooltip of the first data item
                             callbacks: {
                                 label: context => {
                                     const { raw, dataset } = context || {};

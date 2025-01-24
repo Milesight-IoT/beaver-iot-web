@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { type IntegrationAPISchema } from '@/services/http';
 
 /**
- * 集成中的实体数据类型
+ * Entity data types in the integration
  */
 export type InteEntityType = ObjectToCamelCase<
     IntegrationAPISchema['getDetail']['response']['integration_entities'][0]
@@ -13,7 +13,7 @@ interface Props {
 }
 
 /**
- * 集成实体 Hooks
+ * Integrated entity Hooks
  */
 const useEntity = ({ entities }: Props) => {
     const entityMap = useMemo(() => {
@@ -63,23 +63,23 @@ const useEntity = ({ entities }: Props) => {
 
     return {
         /**
-         * 根据 key 关键字获取准确实体 key
+         * Obtain the exact entity key based on the key keyword
          *
-         * 注意：若多个实体中均包含 key 关键字，则返回第一个匹配的实体 key
+         * Note: If multiple entities contain the key keyword, the first matching entity key is returned
          */
         getEntityKey,
 
         /**
-         * 根据 key 关键字获取准确实体 value
+         * Obtain the exact entity value based on the key keyword
          *
-         * 注意：若多个实体中均包含 key 关键字，则返回第一个匹配的实体 value
+         * Note: If multiple entities contain the key keyword, the value of the first matched entity is returned
          */
         getEntityValue,
 
         /**
-         * 根据 keys 关键字列表获取实体 values
+         * Gets entity values from the keys keyword list
          *
-         * 注意：若多个实体中均包含 key 关键字，则返回第一个匹配的实体 value
+         * Note: If multiple entities contain the key keyword, the value of the first matched entity is returned
          */
         getEntityValues,
     };

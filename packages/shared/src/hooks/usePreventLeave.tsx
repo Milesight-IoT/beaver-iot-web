@@ -13,7 +13,7 @@ interface showPreventProps {
 }
 
 /**
- * 路由拦截弹窗提示
+ * Pop-up message indicating route blocking
  */
 const usePreventLeave = (props: PreventLeaveProps) => {
     const { getIntlText } = useI18n();
@@ -36,7 +36,7 @@ const usePreventLeave = (props: PreventLeaveProps) => {
         });
     };
 
-    // 数据未保存弹窗提示
+    // A pop-up message indicating that data is not saved
     useEffect(() => {
         if (blocker.state === 'blocked') {
             showPrevent({

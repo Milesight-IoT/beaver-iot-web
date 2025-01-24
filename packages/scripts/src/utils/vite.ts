@@ -3,11 +3,10 @@ import { ESBuildOptions } from 'vite';
 import { staticImportedScan, CustomChunk } from '../plugins';
 
 /**
- * 拼接生成运行时变量
- * @param appVars 变量对象
+ * Concatenation generates runtime variables
+ * @param appVars Variable object
  *
- * 注意：该函数规定注入页面的变量必须命名为 `__${name}__`，不可将数据挂载在 `import.meta.env` 下，否则极易导致
- * 构建编译后 vendor chunk hash 不稳定，出现依赖未变更但 vendor 缓存失效问题。（例如：zustand, dayjs 内部依赖 `import.meta.env?.MODE` 做逻辑判断）
+ * Note: This function requires that the variables injected into the page must be named `__${name}__`. Do not mount data under `import.meta.env`, as this can easily lead to unstable vendor chunk hashes after build compilation, causing vendor cache invalidation even if dependencies have not changed. (For example: zustand, dayjs internally rely on `import.meta.env?.MODE` for logical judgments)
  */
 export const getViteEnvVarsConfig = (appVars: Record<string, any>) => {
     let hash = '';
@@ -23,7 +22,7 @@ export const getViteEnvVarsConfig = (appVars: Record<string, any>) => {
         );
     }
 
-    // 注意：注入的变量会影响编译构建后资源 hash 的稳定性，故此处暂不做导出
+    // Note: Injected variables will affect the stability of the resource hash after compilation and construction, so do not export
     const result: Record<string, any> = {
         [genKeyName('BUILD_TIMESTAMP')]: JSON.stringify(Date.now()),
         [genKeyName('GIT_BRANCH')]: JSON.stringify(branch || ''),
@@ -38,7 +37,7 @@ export const getViteEnvVarsConfig = (appVars: Record<string, any>) => {
 };
 
 /**
- * 获取通用 CSS 配置
+ * Get the general CSS configuration
  */
 export const getViteCSSConfig = (lessInjectModules: string[] = []) => {
     return {
@@ -53,7 +52,7 @@ export const getViteCSSConfig = (lessInjectModules: string[] = []) => {
 };
 
 /**
- * 获取通用构建配置
+ * Get the common build configuration
  */
 export const getViteBuildConfig = () => {
     return {
@@ -89,7 +88,7 @@ export const getViteBuildConfig = () => {
 };
 
 /**
- * 获取通用 Esbuild 配置
+ * Get the common Esbuild configuration
  */
 export const getViteEsbuildConfig = (config?: ESBuildOptions) => {
     const result: ESBuildOptions = {
@@ -101,10 +100,10 @@ export const getViteEsbuildConfig = (config?: ESBuildOptions) => {
 };
 
 /**
- * 通用 Vite 分包策略
+ * Common Vite subcontracting strategy
  */
 export const customChunkSplit: CustomChunk = ({ id }, { getModuleInfo }) => {
-    // CSS 分包
+    // CSS subcontracting
     if (/\.(css|less)/.test(id)) {
         if (/src\/styles\/index\.less/.test(id)) {
             return 'style-common';
@@ -117,7 +116,7 @@ export const customChunkSplit: CustomChunk = ({ id }, { getModuleInfo }) => {
         return 'style-pages';
     }
 
-    // 国际化文案分包
+    // International copywriting subcontracting
     if (/packages\/locales\//.test(id)) {
         const match = /\/lang\/(.+)\//.exec(id);
         const lang = match && match[1];
@@ -127,7 +126,7 @@ export const customChunkSplit: CustomChunk = ({ id }, { getModuleInfo }) => {
         return `i18n-helper`;
     }
 
-    // 组件库分包
+    // Component library subcontracting
     if (id.includes('node_modules') && id.includes('@mui')) {
         return 'mui';
     }

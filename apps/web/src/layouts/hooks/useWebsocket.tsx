@@ -17,7 +17,7 @@ export const useWebsocket = () => {
     const { userInfo } = useUserStore(useShallow(state => ({ userInfo: state.userInfo })));
     const isLogin = useMemo(() => Object.keys(userInfo || {}).length > 0, [userInfo]);
 
-    /** 连接WS */
+    /** Connecting WS */
     const connectSocket = () => {
         const data = iotStorage.getItem(TOKEN_CACHE_KEY);
         const token = data?.access_token;
@@ -31,12 +31,12 @@ export const useWebsocket = () => {
     useEffect(() => {
         if (!isLogin) return;
 
-        // 登录后，首次连接
+        // First connection after login
         return connectSocket();
     }, [isLogin]);
 
     useEffect(() => {
-        // 刷新token时，重新连接
+        // When refreshing the token, reconnect
         const cb = () => {
             ws?.close();
             connectSocket();

@@ -1,7 +1,7 @@
 import { client, attachAPI, API_PREFIX } from './client';
 
 /**
- * 设备详情定义
+ * Device detail definition
  */
 export interface DashboardDetail {
     dashboard_id: ApiKey;
@@ -11,30 +11,30 @@ export interface DashboardDetail {
 
 export interface WidgetDetail {
     widget_id?: ApiKey;
-    tempId?: number; // 临时id，用于前端使用
+    tempId?: number; // Temporary id for front-end use
     data: Record<string, any>;
 }
 
 /**
- * 设备相关接口定义
+ * Device related interface definition
  */
 export interface DashboardAPISchema extends APISchema {
-    /** 获取列表 */
+    /** Get list */
     getDashboards: {
         request: void;
         response: DashboardDetail[];
     };
 
-    /** 添加dashboard */
+    /** Add dashboard */
     addDashboard: {
         request: {
-            /** 名称 */
+            /** name */
             name: string;
         };
         response: unknown;
     };
 
-    /** 删dashboard */
+    /** Delete dashboard */
     deleteDashboard: {
         request: {
             id: ApiKey;
@@ -42,24 +42,24 @@ export interface DashboardAPISchema extends APISchema {
         response: unknown;
     };
 
-    /** 更新dashboard */
+    /** Update dashboard */
     updateDashboard: {
         request: {
             dashboard_id: ApiKey;
-            /** 名称 */
+            /** name */
             name?: string;
             widgets?: WidgetDetail[];
         };
         response: unknown;
     };
 
-    /** 添加组件 */
+    /** Add component */
     addWidget: {
         request: Record<string, any>;
         response: unknown;
     };
 
-    /** 删除组件 */
+    /** Remove component */
     deleteWidget: {
         request: {
             dashboard_id: ApiKey;
@@ -68,7 +68,7 @@ export interface DashboardAPISchema extends APISchema {
         response: unknown;
     };
 
-    /** 更新组件 */
+    /** Update component */
     updateWidget: {
         request: Record<string, any>;
         response: unknown;
@@ -76,7 +76,7 @@ export interface DashboardAPISchema extends APISchema {
 }
 
 /**
- * 设备相关 API 服务
+ * Device-related API services
  */
 export default attachAPI<DashboardAPISchema>(client, {
     apis: {

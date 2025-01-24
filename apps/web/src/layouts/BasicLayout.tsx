@@ -18,7 +18,7 @@ import { useRoutePermission } from './hooks';
 function BasicLayout() {
     const { lang } = useI18n();
 
-    // ---------- 用户信息&鉴权&跳转相关处理逻辑 ----------
+    // ---------- User information & Authentication & Jump related logic ----------
     const navigate = useNavigate();
     const [loading, setLoading] = useState<null | boolean>(null);
     const userInfo = useUserStore(state => state.userInfo);
@@ -27,7 +27,7 @@ function BasicLayout() {
 
     useRequest(
         async () => {
-            // 判断客户端是否已注册，若已注册则跳转登录页，否则跳转注册页
+            // Check whether the client is registered. If yes, go to the login page. If no, go to the registration page
             const target = iotLocalStorage.getItem(REGISTERED_KEY)
                 ? '/auth/login'
                 : '/auth/register';
@@ -36,7 +36,7 @@ function BasicLayout() {
                 navigate(target, { replace: true });
                 return;
             }
-            // store 已有用户信息，则无需再次请求
+            // store already has user information, you do not need to request again
             if (userInfo) {
                 setLoading(false);
                 return;

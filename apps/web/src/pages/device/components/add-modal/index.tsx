@@ -16,20 +16,20 @@ import {
 import useDynamicFormItems, { type FormDataProps } from './useDynamicFormItems';
 
 interface Props extends Omit<ModalProps, 'onOk'> {
-    /** 添加失败回调 */
+    /** Add a failed callback */
     onError?: (err: any) => void;
 
-    /** 添加成功回调 */
+    /** Adding a successful callback */
     onSuccess?: () => void;
 }
 
 /**
- * 设备添加弹窗
+ * The device added a pop-up window
  */
 const AddModal: React.FC<Props> = ({ visible, onCancel, onError, onSuccess, ...props }) => {
     const { getIntlText } = useI18n();
 
-    // ---------- 集成相关逻辑处理 ----------
+    // ---------- Integrates related logic processing ----------
     const [inteID, setInteID] = useState<ApiKey>('');
     const { data: inteList } = useRequest(
         async () => {
@@ -46,7 +46,7 @@ const AddModal: React.FC<Props> = ({ visible, onCancel, onError, onSuccess, ...p
         { debounceWait: 300, refreshDeps: [visible] },
     );
 
-    // ---------- 实体表单相关逻辑处理 ----------
+    // ---------- Entity form related logical processing ----------
     const { control, formState, handleSubmit, reset } = useForm<FormDataProps>();
     const { data: entities } = useRequest(
         async () => {

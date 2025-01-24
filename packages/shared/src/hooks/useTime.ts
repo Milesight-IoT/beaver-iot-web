@@ -3,9 +3,9 @@ import { dayjs, DEFAULT_DATA_TIME_FORMAT } from '../services/time';
 import { useSharedGlobalStore } from '../stores';
 
 /**
- * 时间相关 Hook
+ * Time-dependent Hook
  *
- * 注：为预留时间响应式处理故设计为 Hook，若确认无时区及时间格式相关业务需求，可将该处理逻辑调整为工具函数。
+ * Note: Hook is designed for time-responsive processing. If there are no business requirements related to time zone and time format, the processing logic can be adjusted to a tool function.
  */
 const useTime = () => {
     const timezone = useSharedGlobalStore(state => state.timezone);
@@ -30,19 +30,19 @@ const useTime = () => {
     );
 
     return {
-        /** Dayjs 对象 */
+        /** Dayjs object */
         dayjs,
 
-        /** 系统时区 */
+        /** System time zone */
         timezone,
 
-        /** 更新系统时区 */
+        /** Update system time zone */
         setTimezone,
 
-        /** 获取 Dayjs 对象时间 */
+        /** Gets the Dayjs object time */
         getTime,
 
-        /** 获取格式化后的时间 */
+        /** Gets the time after formatting */
         getTimeFormat,
     };
 };

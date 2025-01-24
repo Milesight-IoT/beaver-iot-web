@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 /**
- * 版本号比较 (ver1 >= ver2 => true)
+ * Version comparison (ver1 >= ver2 => true)
  * @param {String} ver1
  * @param {String} ver2
  * eg:
@@ -10,7 +10,7 @@ import * as path from 'path';
  * versionCompare('1.3.3', '1.12.3'); => false
  * versionCompare('1.3', '1.3.3'); => false
  * versionCompare('1.2.3', '1.2.3'); => true
- * versionCompare('1.3.3', '1.4'); => fasle
+ * versionCompare('1.3.3', '1.4'); => false
  */
 export const versionCompare = (ver1?: string, ver2?: string) => {
     if (!ver1 || !ver2) return;
@@ -40,8 +40,8 @@ export const versionCompare = (ver1?: string, ver2?: string) => {
 };
 
 /**
- * 获取对象类型
- * @param obj 任意对象
+ * Get the type of an object
+ * @param obj Any object
  * @returns
  */
 export const getObjectType = (obj: any) => {
@@ -50,10 +50,10 @@ export const getObjectType = (obj: any) => {
     const type = matched && matched[1].toLocaleLowerCase();
 
     return type;
-}
+};
 
 /**
- * 判断文件资源是否存在
+ * Check if a file resource exists
  */
 export const isFileExists = (filePath: string) => {
     try {
@@ -62,11 +62,11 @@ export const isFileExists = (filePath: string) => {
     } catch (err) {
         return false;
     }
-}
+};
 
 /**
- * 判断是否为目录
- * @param dirPath 目录路径
+ * Check if it is a directory
+ * @param dirPath Directory path
  * @returns
  */
 export const isDirectory = (dirPath: string) => {
@@ -76,21 +76,21 @@ export const isDirectory = (dirPath: string) => {
     } catch (err) {
         return false;
     }
-}
+};
 
-// 过滤函数类型定义
+// Filter function type definition
 type FilterFunction = (filePath: string) => boolean;
 /**
- * 获取指定目录下所有文件的路径列表
- * @param dirPath 目录路径
- * @param filter 过滤器，用于过滤需要返回的文件路径列表，可以为字符串、正则表达式或自定义过滤函数
- * @param filesArr 文件路径列表，可选参数。用于在递归时累加文件路径
- * @returns 包含指定目录下所有文件路径的数组
+ * Get the list of paths of all files in the specified directory
+ * @param dirPath Directory path
+ * @param filter Filter, used to filter the list of file paths to be returned. It can be a string, regular expression, or custom filter function
+ * @param filesArr List of file paths, optional parameter. Used to accumulate file paths during recursion
+ * @returns An array containing the paths of all files in the specified directory
  */
 export const getAllFiles = (
     dirPath: string,
     filter?: string | RegExp | FilterFunction,
-    filesArr: string[] = []
+    filesArr: string[] = [],
 ): string[] => {
     const files = fs.readdirSync(dirPath);
 
@@ -99,28 +99,27 @@ export const getAllFiles = (
         const filePath = path.join(dirPath, fileName);
 
         if (isDirectory(filePath)) {
-            // 如果是目录，则递归调用本函数，并将结果合并到文件路径列表
+            // If it is a directory, recursively call this function and merge the result into the file path list
             getAllFiles(filePath, filter, filesArr);
-        } else if (!filter
-            || (
-                typeof filter === 'string' && filePath.endsWith(filter))
-                    || (filter instanceof RegExp && filter.test(filePath))
-                    || (typeof filter === 'function' && filter(filePath)
-            )
+        } else if (
+            !filter ||
+            (typeof filter === 'string' && filePath.endsWith(filter)) ||
+            (filter instanceof RegExp && filter.test(filePath)) ||
+            (typeof filter === 'function' && filter(filePath))
         ) {
-            // 如果不是目录且符合过滤条件，则添加到文件路径列表
+            // If it is not a directory and meets the filter conditions, add it to the file path list
             filesArr.push(filePath);
         }
     }
 
     return filesArr;
-}
+};
 
 /**
- * 获取指定路径下的子目录列表
- * @param rootDir 根路径
- * @param depth 深度
- * @returns 返回所有子目录绝对路径列表
+ * Get the list of subdirectories under the specified path
+ * @param rootDir Root path
+ * @param depth Depth
+ * @returns Returns a list of absolute paths of all subdirectories
  */
 export const getSubDirs = (rootDir: string, depth: number = 1) => {
     const subdirectories: string[] = [];
@@ -129,7 +128,7 @@ export const getSubDirs = (rootDir: string, depth: number = 1) => {
         return subdirectories;
     }
 
-    fs.readdirSync(rootDir, { withFileTypes: true }).forEach((dirent) => {
+    fs.readdirSync(rootDir, { withFileTypes: true }).forEach(dirent => {
         if (dirent.isDirectory()) {
             subdirectories.push(path.join(rootDir, dirent.name));
             subdirectories.push(...getSubDirs(path.join(rootDir, dirent.name), depth - 1));
@@ -137,4 +136,4 @@ export const getSubDirs = (rootDir: string, depth: number = 1) => {
     });
 
     return subdirectories;
-}
+};

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import components from '@/plugin/plugins/components';
-// 定义可导入的模块集合
+// Defines a collection of modules that can be imported
 const modules = import.meta.glob('../../../plugin/plugins/*/config.json');
 const iconModules = import.meta.glob('../../../plugin/plugins/*/icon.svg');
 const PLUGIN_DIR = '../../../plugin';
@@ -20,7 +20,7 @@ export default () => {
         const isExit = pluginRef.current.some(item => item.name === jsonData.name);
         if (isExit) return;
 
-        // 保证组件顺序稳定
+        // Ensure component sequence stability
         const plugins = pluginRef.current;
         pluginRef.current[index] = { ...jsonData?.default, iconSrc: icon };
         setPluginsConfigs(plugins.filter(Boolean));

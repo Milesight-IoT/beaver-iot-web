@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import Chart, { ChartConfiguration } from 'chart.js/auto'; // 引入 Chart.js
+import Chart, { ChartConfiguration } from 'chart.js/auto'; // Introduce Chart.js
 import { useTheme } from '@milesight/shared/src/hooks';
 import { Tooltip } from '@/plugin/view-components';
 import { useSource } from './hooks';
@@ -36,7 +36,7 @@ const View = (props: IProps) => {
                         },
                         tooltip: {
                             filter: tooltipItem => {
-                                return tooltipItem.dataIndex <= aggregateHistoryList.length - 1; // 只显示真实的点
+                                return tooltipItem.dataIndex <= aggregateHistoryList.length - 1; // Show only real points
                             },
                             callbacks: {
                                 label: context => {
@@ -84,12 +84,12 @@ const View = (props: IProps) => {
     useEffect(() => {
         const historyList = aggregateHistoryList || [];
 
-        // 填充占位图表数据
+        // Fill the placeholder chart data
         const getFillList = <T,>(list: T[] = []): T[] => {
             const DEFAULT_COUNT = 5;
             if (list && list.length >= DEFAULT_COUNT) return list;
 
-            // 余量
+            // margin
             const surplus = 5 - list.length;
             const surplusList = new Array(surplus).fill({
                 entity: {

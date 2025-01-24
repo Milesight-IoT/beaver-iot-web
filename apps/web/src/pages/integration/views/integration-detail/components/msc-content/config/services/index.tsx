@@ -21,17 +21,17 @@ import '../style.less';
 type WebhookStatusType = 'READY' | 'NOT_READY' | 'ERROR';
 
 type WebhookStatusItemType = {
-    /** 国际化文案 */
+    /** International copywriting */
     intlKey: string;
-    /** 样式 */
+    /** pattern */
     sx?: SxProps;
 };
 
 interface Props {
-    /** 实体列表 */
+    /** Entity list */
     entities?: InteEntityType[];
 
-    /** 编辑成功回调 */
+    /** Edit successful callback */
     onUpdateSuccess?: () => void;
 }
 
@@ -41,7 +41,7 @@ const Services: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
     const { blue, green } = useTheme();
     const { getEntityKey, getEntityValues } = useEntity({ entities });
 
-    // ---------- Webhook 相关处理逻辑 ----------
+    // ---------- Webhook related processing logic ----------
     const [webhookModalVisible, setWebhookModalVisible] = useState(false);
     const [webhookData, setWebhookData] = useState<WebhookFormDataProps>();
     const webhookStatusMap = useMemo<Record<WebhookStatusType, WebhookStatusItemType>>(
@@ -88,7 +88,7 @@ const Services: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
         toast.success({ content: getIntlText('common.message.operation_success') });
     };
 
-    // ---------- OpenAPI 相关处理逻辑 ----------
+    // ---------- OpenAPI related processing logic ----------
     // const [openApiModalVisible, setOpenApiModalVisible] = useState(false);
     // const [openapiData, setOpenapiData] = useState<OpenapiFormDataProps>();
     // const handleOpenapiUpdate = async (params?: OpenapiFormDataProps) => {
@@ -119,7 +119,7 @@ const Services: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
     //     toast.success({ content: getIntlText('common.message.operation_success') });
     // };
 
-    // 获取 Service 数据
+    // Get Service data
     useEffect(() => {
         const webhookFormData = getEntityValues([
             WEBHOOK_KEYS.STATUS,

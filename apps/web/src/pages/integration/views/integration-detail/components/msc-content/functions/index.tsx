@@ -12,20 +12,20 @@ import './style.less';
 // }
 
 interface Props {
-    /** 实体列表 */
+    /** Entity list */
     entities?: InteEntityType[];
 
-    /** 编辑成功回调 */
+    /** Edit successful callback */
     onUpdateSuccess?: () => void;
 }
 
-// 「同步设备信息与历史数据」实体关键字
+// Synchronize device information with historical data entity keyword
 const SYNC_DEVICE_KEY = 'sync_device';
 
 const Functions: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
     const { getIntlText } = useI18n();
 
-    // ---------- 确认弹框相关处理逻辑 ----------
+    // ---------- Check the logic of the pop-up ----------
     const { getEntityKey } = useEntity({ entities });
     const confirm = useConfirm();
     // const [modalOpen, setModalOpen] = useState(false);

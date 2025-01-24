@@ -1,7 +1,7 @@
 {
     "name": "@milesight/locales",
     "version": "0.0.1",
-    "description": "Beaver IOT 项目国际化文案&工具包",
+    "description": "Beaver IOT Project internationalization Copy & Toolkit",
     "main": "./dist/index.js",
     "module": "dist/index.js",
     "types": "./dist/index.d.ts",

@@ -8,14 +8,14 @@ import '@/styles/index.less';
 const router = createBrowserRouter(routes, { basename: '/' });
 const root = createRoot(document.getElementById('root')!);
 
-// 国际化初始化
+// Internationalization initialization
 i18n.initI18n('web', 'EN');
 
-// 系统主题初始化
+// System topic initialization
 theme.initTheme();
 
 /**
- * 注意：严格模式，且开发环境下，React 应用初始化时会刻意执行两次渲染，用于突出显示潜在问题。
+ * Note: Strict mode, and in development environments, React applications are intentionally rendered twice during initialization to highlight potential problems.
  *
  * https://zh-hans.react.dev/reference/react/StrictMode
  */

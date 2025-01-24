@@ -12,30 +12,30 @@ export type NavsType = {
 
 type Props = {
     /**
-     * 自定义导航 title，kv 格式，key 为路由 pathname，value 为 title 值
+     * The value is in the kv format. The key is the route pathname and the value is the title value
      */
     // titles?: Record<string, string>;
 
     /**
-     * 自定义导航 path & title，该属性有值时 `titles` 属性无效
+     * Custom navigation path & title, the titles property is invalid when this property has a value
      */
     navs?: NavsType;
 
     /**
-     * 重写导航数据
-     * @param navs 当前导航数据
-     * @returns 返回最终导航数据
+     * Overwrite navigation data
+     * @param navs Current navigation data
+     * @returns Returns the final navigation data
      */
     rewrite?: (navs: NavsType) => NavsType;
 
     /**
-     * 自定义返回 Button 点击处理函数，默认回到第一个 nav 地址
+     * Custom return Button click handler, default goes back to the first nav address
      */
     // onBack?: () => void;
 };
 
 /**
- * 面包屑导航组件
+ * Breadcrumb navigation component
  */
 const MSBreadcrumbs: React.FC<Props> = memo(({ navs, rewrite }) => {
     const routes = useMatches();

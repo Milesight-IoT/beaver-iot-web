@@ -10,16 +10,16 @@ import { entityAPI, awaitWrap, isRequestSuccess } from '@/services/http';
 import { type InteEntityType } from '../../../hooks';
 
 interface Props {
-    /** 是否加载中 */
+    /** Loading or not */
     loading?: boolean;
 
-    /** 实体列表 */
+    /** Entity list */
     entities?: InteEntityType[];
 
-    /** 页面不做渲染的实体 Key */
+    /** The page does not render the entity Key */
     excludeKeys?: ApiKey[];
 
-    /** 编辑成功回调 */
+    /** Edit successful callback */
     onUpdateSuccess?: () => void;
 }
 
@@ -28,7 +28,7 @@ type InteServiceType = InteEntityType & {
 };
 
 /**
- * 属性实体渲染及操作组件
+ * Attribute entity rendering and manipulation components
  */
 const Service: React.FC<Props> = ({ loading, entities, excludeKeys, onUpdateSuccess }) => {
     const { getIntlText } = useI18n();
@@ -41,7 +41,7 @@ const Service: React.FC<Props> = ({ loading, entities, excludeKeys, onUpdateSucc
         });
         const result: InteServiceType[] = cloneDeep(services || []);
 
-        // TODO: 多层级(>2)服务参数处理
+        // TODO: Multi-level (>2) service parameter processing
         result?.forEach(item => {
             if (!item.parent) return;
 
@@ -55,7 +55,7 @@ const Service: React.FC<Props> = ({ loading, entities, excludeKeys, onUpdateSucc
         return result.filter(item => !item.parent);
     }, [entities, excludeKeys]);
 
-    // ---------- 卡片点击相关处理逻辑 ----------
+    // ---------- card Click on Related Processing logic ----------
     const confirm = useConfirm();
     const handleClick = (service: InteServiceType) => {
         if (service.children) {
@@ -78,7 +78,7 @@ const Service: React.FC<Props> = ({ loading, entities, excludeKeys, onUpdateSucc
         });
     };
 
-    // ---------- 弹窗表单相关处理逻辑 ----------
+    // ---------- pop-up form related processing logic ----------
     const [targetService, setTargetService] = useState<InteServiceType>();
     const { control, handleSubmit, setValue } = useForm<EntityFormDataProps>();
     const { formItems, decodeFormParams, encodeFormData } = useEntityFormItems({
@@ -112,7 +112,7 @@ const Service: React.FC<Props> = ({ loading, entities, excludeKeys, onUpdateSucc
         toast.success({ content: getIntlText('common.message.operation_success') });
     };
 
-    // 表单数据回填
+    // Form data backfill
     useEffect(() => {
         if (!targetService?.children?.length) return;
 

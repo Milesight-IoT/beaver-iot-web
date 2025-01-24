@@ -28,21 +28,21 @@ const logger = {
 };
 
 /**
- * @description 生成文件
- * @param fileName 文件名
- * @param data 文本内容
+ * @description Generate file
+ * @param fileName filename
+ * @param data Text content
  */
 const createFile = (fileName: string, data: string | NodeJS.ArrayBufferView) => {
     try {
         fse.ensureFileSync(fileName);
         fse.writeFileSync(fileName, data);
     } catch (error: any) {
-        logger.error(error.toString(), '创建文件失败');
+        logger.error(error.toString(), 'File creation failure');
     }
 };
 
 /**
- * 返回A关于B的补集
+ * Returns the complement of A about B
  */
 function getIncrementBetweenTwo(part: ObjType, whole: ObjType) {
     const res: ObjType = {};

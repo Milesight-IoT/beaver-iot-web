@@ -12,7 +12,7 @@ import { PRIVATE_PROPERTY_PREFIX } from '../config';
  * @returns
  */
 export const isLocalIP = (ip: string): boolean => {
-    // 判断是否为 IPv6 地址
+    // Check whether it is an IPv6 address
     if (ip.includes(':')) {
         return (
             /^fe80::/.test(ip) ||
@@ -23,7 +23,7 @@ export const isLocalIP = (ip: string): boolean => {
         );
     }
 
-    // 判断是否为 IPv4 地址
+    // Check whether it is an IPv4 address
     const ipParts = ip.split('.');
     if (ipParts.length !== 4) {
         return false;
@@ -32,7 +32,7 @@ export const isLocalIP = (ip: string): boolean => {
     const firstPart = parseInt(ipParts[0]);
     const secondPart = parseInt(ipParts[1]);
 
-    // 判断是否为私有地址
+    // Check whether it is a private address
     if (firstPart === 10) {
         return true;
     }
@@ -43,7 +43,7 @@ export const isLocalIP = (ip: string): boolean => {
         return true;
     }
 
-    // 判断是否为环回地址
+    // Check whether it is a loopback address
     return ip === '127.0.0.1' || ip === '::1';
 };
 

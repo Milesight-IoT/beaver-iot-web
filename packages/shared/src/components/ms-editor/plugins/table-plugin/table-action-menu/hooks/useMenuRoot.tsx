@@ -11,7 +11,7 @@ interface IProps {
 export const useMenuRoot = ({ anchorElem, menuRootRef, setIsMenuOpen }: IProps) => {
     const [editor] = useLexicalComposerContext();
 
-    /** 设置点击的位置 */
+    /** Set the location of the click */
     const setupMenuRootStyle = useMemoizedFn(({ x, y }: { x: number; y: number }) => {
         const menuRoot = menuRootRef.current;
         if (!menuRoot) return;
@@ -23,11 +23,11 @@ export const useMenuRoot = ({ anchorElem, menuRootRef, setIsMenuOpen }: IProps) 
         menuRoot.style.transform = `translate(${x - editorElemLeft}px, ${y - editorElemY - 4}px)`;
         menuRoot.style.opacity = '1';
     });
-    /** 右键 */
+    /** Right button */
     const handleContextMenu = useMemoizedFn(e => {
         setIsMenuOpen(false);
         const { target } = e;
-        // 判断点击的是否是表格
+        // Determine whether the table is being clicked
         const cell = getDOMCellFromTarget(target as HTMLElement);
         if (!cell) return;
 
@@ -37,11 +37,11 @@ export const useMenuRoot = ({ anchorElem, menuRootRef, setIsMenuOpen }: IProps) 
         e.preventDefault();
         e.stopPropagation();
 
-        // 设置点击位置
+        // Set click position
         setupMenuRootStyle(e);
 
         setTimeout(() => {
-            // 打开菜单
+            // Open menu
             setIsMenuOpen(true);
         }, 0);
     });
@@ -55,7 +55,7 @@ export const useMenuRoot = ({ anchorElem, menuRootRef, setIsMenuOpen }: IProps) 
         };
     }, [editor]);
 
-    // 目标元素外点击，关闭 dropdown
+    // Click outside the target element to close dropdown
     useClickAway(() => {
         setIsMenuOpen(false);
     }, [menuRootRef]);

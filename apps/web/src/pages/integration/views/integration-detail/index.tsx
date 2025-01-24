@@ -22,7 +22,7 @@ const IntegrationDetail = () => {
     const { integrationId } = useParams();
     const { handlePermissionsError } = usePermissionsError();
 
-    // ---------- 集成详情数据逻辑 ----------
+    // ---------- Integrated Detail data logic ----------
     const { state } = useLocation();
     const [basicInfo, setBasicInfo] =
         useState<ObjectToCamelCase<IntegrationAPISchema['getList']['response'][0]>>();

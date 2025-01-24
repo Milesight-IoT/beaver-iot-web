@@ -1,35 +1,35 @@
 import { client, attachAPI, API_PREFIX } from './client';
 
 export interface EntityAPISchema extends APISchema {
-    /** 获取实体列表 */
+    /** Get entity list */
     getList: {
         request: SearchRequestType & {
-            /** 搜索关键字 */
+            /** Search keyword */
             keyword?: string;
-            /** 实体类型 */
+            /** Entity type */
             entity_type?: EntitySchema['type'][];
-            /** 实体值类型 */
+            /** Entity value type */
             entity_value_type?: EntityValueDataType[];
-            /** 实体属性（可读、可写、只读） */
+            /** Entity attributes (read, write, read only) */
             entity_access_mod?: EntityAccessMode[];
             /**
-             * 不包含子节点(在选择触发服务实体的时候，不能直接下发子实体/在更新属性实体时，不能只更新某个子实体)
+             * Does not contain child nodes (when selecting the trigger service entity, the child entity cannot be delivered directly/when updating the attribute entity, only one child entity cannot be updated)
              */
             exclude_children?: boolean;
-            /** 是否是自定义实体 */
+            /** Whether it is a custom entity */
             customized?: boolean;
         };
         response: SearchResponseType<EntityData[]>;
     };
 
-    /** 获取历史数据 */
+    /** Get historical data */
     getHistory: {
         request: SearchRequestType & {
-            /** 实体 ID */
+            /** Entity ID */
             entity_id: ApiKey;
-            /** 开始时间戳，单位 ms */
+            /** Start time stamp, in ms */
             start_timestamp?: number;
-            /** 结束时间戳，单位 ms */
+            /** End time stamp, in ms */
             end_timestamp?: number;
             page_size?: number;
             page_number?: number;
@@ -37,30 +37,30 @@ export interface EntityAPISchema extends APISchema {
         response: SearchResponseType<EntityHistoryData[]>;
     };
 
-    /** 获取聚合历史数据 */
+    /** Get aggregated historical data */
     getAggregateHistory: {
         request: {
-            /** 实体 ID */
+            /** Entity ID */
             entity_id: ApiKey;
-            /** 开始时间戳，单位 ms */
+            /** Start time stamp, in ms */
             start_timestamp: number;
-            /** 结束时间戳，单位 ms */
+            /** End time stamp, in ms */
             end_timestamp: number;
-            /** 聚合类型 */
+            /** Aggregation type */
             aggregate_type: DataAggregateType;
         };
         response: {
-            /** TODO: 待补充，只有在 LAST, MIN, MAX, AVG, SUM 出现 */
+            /** TODO: To be added, only appears in LAST, MIN, MAX, AVG, and SUM */
             value: number;
             count_result: {
                 value: unknown;
-                /** 数量 */
+                /** quantity */
                 count: number;
             }[];
         };
     };
 
-    /** 获取元数据 */
+    /** Get metadata */
     getMeta: {
         request: {
             id: ApiKey;
@@ -73,7 +73,7 @@ export interface EntityAPISchema extends APISchema {
         };
     };
 
-    /** 获取实体 ApiDoc 表单数据 */
+    /** Gets entity ApiDoc form data */
     getApiDoc: {
         request: {
             entity_id_list: ApiKey[];
@@ -81,29 +81,29 @@ export interface EntityAPISchema extends APISchema {
         response: unknown;
     };
 
-    /** 更新属性类型实体 */
+    /** Update the attribute type entity */
     updateProperty: {
         request: {
             /**
-             * 实体 key, value
+             * Entity key, value
              * */
             exchange: Record<string, any>;
         };
         response: void;
     };
 
-    /** 调用服务类型实体 */
+    /** Invoke a service type entity */
     callService: {
         request: {
             /**
-             * 实体 key, value
+             * Entity key, value
              * */
             exchange: Record<string, any>;
         };
         response: void;
     };
 
-    /** 获取实体当前数据 */
+    /** Gets the entity's current data */
     getEntityStatus: {
         request: {
             id: ApiKey;
@@ -115,7 +115,7 @@ export interface EntityAPISchema extends APISchema {
         };
     };
 
-    /** 获取子实体 */
+    /** fruiting */
     getChildrenEntity: {
         request: {
             id: ApiKey;
@@ -123,7 +123,7 @@ export interface EntityAPISchema extends APISchema {
         response: unknown;
     };
 
-    /** 删除实体 */
+    /** Delete entity */
     deleteEntities: {
         request: {
             entity_ids: ApiKey[];
@@ -131,7 +131,7 @@ export interface EntityAPISchema extends APISchema {
         response: unknown;
     };
 
-    /** 编辑实体 */
+    /** Edit entity */
     editEntity: {
         request: {
             id: ApiKey;
@@ -140,7 +140,7 @@ export interface EntityAPISchema extends APISchema {
         response: unknown;
     };
 
-    /** 创建实体 */
+    /** Create entity */
     createCustomEntity: {
         request: {
             name: string;
@@ -152,13 +152,13 @@ export interface EntityAPISchema extends APISchema {
         response: unknown;
     };
 
-    /** 导出实体历史数据 */
+    /** Example Export historical entity data */
     exportEntityHistory: {
         request: {
             ids: ApiKey[];
-            /** 开始时间戳，单位 ms */
+            /** Start time stamp, in ms */
             start_timestamp?: number;
-            /** 结束时间戳，单位 ms */
+            /** End time stamp, in ms */
             end_timestamp?: number;
         };
         response: unknown;
@@ -166,7 +166,7 @@ export interface EntityAPISchema extends APISchema {
 }
 
 /**
- * 实体相关 API 服务
+ * Entity related API services
  */
 export default attachAPI<EntityAPISchema>(client, {
     apis: {

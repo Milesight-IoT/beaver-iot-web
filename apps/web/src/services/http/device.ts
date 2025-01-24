@@ -1,45 +1,45 @@
 import { client, attachAPI, API_PREFIX } from './client';
 
 /**
- * 设备详情定义
+ * Device detail definition
  */
 export interface DeviceDetail {
     /** ID */
     id: ApiKey;
     /** Key */
     key: ApiKey;
-    /** 名称 */
+    /** name */
     name: string;
-    /** 设备标识 */
+    /** Device identification */
     identifier: ApiKey;
-    /** 集成 ID */
+    /** Integration ID */
     integration: ApiKey;
-    /** 集成名称 */
+    /** Integrated name */
     integration_name: string;
-    /** 创建时间 */
+    /** Creation time */
     created_at: number;
-    /** 更新时间 */
+    /** Update time */
     updated_at: number;
-    /** 是否可删除 */
+    /** Whether it can be deleted */
     deletable: boolean;
-    /** 额外数据（通常为后端使用，前端暂不开放） */
+    /** Additional data (usually used by the back end, the front end is not open for now) */
     // additional_data?: Record<string, any>;
 }
 
 /**
- * 设备相关接口定义
+ * Device related interface definition
  */
 export interface DeviceAPISchema extends APISchema {
-    /** 获取设备列表 */
+    /** Get device list */
     getList: {
         request: SearchRequestType & {
-            /** 名称（模糊搜索） */
+            /** Name (Fuzzy search) */
             name?: string;
         };
         response: SearchResponseType<Omit<DeviceDetail, 'identifier'>[]>;
     };
 
-    /** 获取设备详情 */
+    /** Get Device Details */
     getDetail: {
         request: {
             id: ApiKey;
@@ -56,20 +56,20 @@ export interface DeviceAPISchema extends APISchema {
         };
     };
 
-    /** 添加设备 */
+    /** Add device */
     addDevice: {
         request: {
-            /** 名称 */
+            /** name */
             name?: string;
-            /** 集成 ID */
+            /** Integration ID */
             integration: ApiKey;
-            /** 集成新增设备需要的额外信息 */
+            /** Integrate additional information needed for new devices */
             param_entities: Record<string, any>;
         };
         response: unknown;
     };
 
-    /** 删除设备 */
+    /** Delete device */
     deleteDevices: {
         request: {
             device_id_list: ApiKey[];
@@ -77,11 +77,11 @@ export interface DeviceAPISchema extends APISchema {
         response: unknown;
     };
 
-    /** 更新设备 */
+    /** Replacement equipment */
     updateDevice: {
         request: {
             id: ApiKey;
-            /** 名称 */
+            /** name */
             name: string;
         };
         response: unknown;
@@ -89,7 +89,7 @@ export interface DeviceAPISchema extends APISchema {
 }
 
 /**
- * 设备相关 API 服务
+ * Device-related API services
  */
 export default attachAPI<DeviceAPISchema>(client, {
     apis: {

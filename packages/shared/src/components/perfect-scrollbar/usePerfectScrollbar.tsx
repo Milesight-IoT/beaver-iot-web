@@ -12,7 +12,7 @@ export type Options = {
 };
 
 /**
- * 系统滚动条宽度
+ * System scroll bar width
  */
 const OS_SCROLLBAR_WIDTH = (() => {
     const outer = document.createElement('div');

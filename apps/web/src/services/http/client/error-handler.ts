@@ -1,7 +1,7 @@
 /**
- * 错误码黑名单
+ * Error code blacklist
  *
- * 黑名单中的错误码由全局统一处理，业务中无需额外编写处理逻辑
+ * Error codes in the blacklist are processed globally, and no additional processing logic is required
  */
 import type { AxiosResponse } from 'axios';
 import { noop } from 'lodash-es';
@@ -17,20 +17,20 @@ import {
 import type { RequestFunctionOptions } from '@milesight/shared/src/utils/request/types';
 
 type ErrorHandlerConfig = {
-    /** 错误码集合 */
+    /** Error code set */
     errCodes: string[];
 
-    /** 处理函数 */
+    /** Processing function */
     handler: (errCode?: string, resp?: AxiosResponse<ApiResponse>) => void;
 };
 
-/** 服务端错误文案 key */
+/** Server error copy key */
 const serverErrorKey = getHttpErrorKey('server_error');
-/** 网络超时错误文案 key */
+/** Network timeout错误文案 key */
 const networkErrorKey = getHttpErrorKey('network_timeout');
 
 const handlerConfigs: ErrorHandlerConfig[] = [
-    // 统一 Message 弹窗提示
+    // Unified Message pop-up prompt
     {
         errCodes: ['authentication_failed'],
         handler(errCode, resp) {
@@ -105,7 +105,7 @@ const handler: ErrorHandlerConfig['handler'] = (errCode, resp) => {
         return;
     }
 
-    // 找到 handlerConfigs 中匹配到的第一个处理逻辑
+    // Find the first processing logic matched in handlerConfigs
     const config = handlerConfigs.find(item => item.errCodes.includes(errCode));
 
     if (!config) {

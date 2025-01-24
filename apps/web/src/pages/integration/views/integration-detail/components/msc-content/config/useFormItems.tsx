@@ -16,13 +16,13 @@ import { useI18n } from '@milesight/shared/src/hooks';
 import { VisibilityIcon, VisibilityOffIcon } from '@milesight/shared/src/components';
 
 export enum OPENAPI_KEYS {
-    /** OpenAPI Status 实体关键字 */
+    /** OpenAPI Status Entity keyword */
     STATUS = 'openapi_status',
-    /** OpenAPI Server Url 实体关键字 */
+    /** OpenAPI Server Url Entity keyword */
     SERVER_URL = 'openapi.server_url',
-    /** OpenAPI ClientID 实体关键字 */
+    /** OpenAPI ClientID entity keyword */
     CLIENT_ID = 'openapi.client_id',
-    /** OpenAPI ClientSecret 实体关键字 */
+    /** OpenAPI ClientSecret Entity keyword */
     CLIENT_SECRET = 'openapi.client_secret',
 }
 
@@ -51,7 +51,7 @@ const useFormItems = () => {
                 defaultValue: '',
                 render({ field: { onChange, value }, fieldState: { error } }) {
                     return (
-                        // TODO: 确认使用 Input / Select 组件
+                        // TODO: Verify that the Input/Select component is used
                         // <FormControl fullWidth size="small" sx={{ my: 1.5 }}>
                         //     <InputLabel id="select-label-address">
                         //         {getIntlText('setting.integration.param_server_address')}

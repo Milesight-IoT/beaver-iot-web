@@ -14,7 +14,7 @@ type OperationType = 'filter';
 
 export interface UseColumnsProps<T> {
     /**
-     * 操作 Button 点击回调
+     * Operation Button click callback
      */
     onButtonClick: (type: OperationType, e: React.MouseEvent<HTMLButtonElement>) => void;
     isShowFilter: boolean;

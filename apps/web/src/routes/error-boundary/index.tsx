@@ -6,15 +6,15 @@ import './style.less';
 import React from 'react';
 
 interface Props {
-    /** 是否内联显示 */
+    /** Whether to display inline */
     inline?: boolean;
 
-    /** 回调函数 */
+    /** Callback function */
     callback?: () => void;
 }
 
 /**
- * 路由渲染错误提示组件
+ * Route rendering error prompt component
  */
 const ErrorBoundary: React.FC<Props> = ({ inline, callback }) => {
     const error = useRouteError() as any;

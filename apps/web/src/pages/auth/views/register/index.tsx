@@ -18,7 +18,7 @@ import './style.less';
 export default () => {
     const navigate = useNavigate();
 
-    // ---------- 是否注册判断 ----------
+    // ---------- Register Judge ----------
     const [registered, setRegistered] = useState(false);
     const [loading, setLoading] = useState<boolean>();
 
@@ -40,13 +40,13 @@ export default () => {
         },
     );
 
-    // 若已注册账号，则自动跳转登录页
+    // If you have registered an account, the login page is automatically redirected
     useLayoutEffect(() => {
         if (!registered) return;
         navigate('/auth/login', { replace: true });
     }, [registered, navigate]);
 
-    // ---------- 表单数据处理 ----------
+    // ---------- Form data processing ----------
     const { getIntlText } = useI18n();
     const { handleSubmit, control } = useForm<FormDataProps>();
     const formItems = useFormItems({ mode: 'register' });
@@ -66,7 +66,7 @@ export default () => {
 
         navigate('/auth/login');
         iotLocalStorage.setItem(REGISTERED_KEY, true);
-        // 清除已有的 TOKEN 数据，避免影响新用户登录
+        // Clear existing TOKEN data to prevent new users from logging in
         iotLocalStorage.removeItem(TOKEN_CACHE_KEY);
         toast.success(getIntlText('auth.message.register_success'));
     };

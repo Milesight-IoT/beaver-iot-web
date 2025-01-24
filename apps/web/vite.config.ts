@@ -61,7 +61,7 @@ export default defineConfig({
             emitWarning: !isProd,
         }),
         /**
-         * 优化构建速度，减少在编译时的 Tree-Shaking 检查及资源处理
+         * Optimize build speed and reduce Tree-Shaking checks and resource processing at compile time
          */
         vitePluginImport({
             libList: [
@@ -85,7 +85,7 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@': path.resolve(__dirname, 'src'), // src 路径别名
+            '@': path.resolve(__dirname, 'src'), // src path alias
         },
     },
 
@@ -106,7 +106,7 @@ export default defineConfig({
             },
             '/websocket': {
                 target: WEB_SOCKET_PROXY,
-                ws: true, // 启用 WebSocket 代理
+                ws: true, // Enable the WebSocket proxy
                 changeOrigin: true,
             },
         },

@@ -4,14 +4,14 @@ import { type GlobalAPISchema } from '@/services/http';
 
 interface UserStore {
     /**
-     * 用户信息
+     * User information
      */
     userInfo?: null | GlobalAPISchema['getUserInfo']['response'];
 
     /**
-     * 更新用户信息
+     * Update User information
      *
-     * @param userInfo 用户信息
+     * @param userInfo User information
      */
     setUserInfo: (userInfo: UserStore['userInfo'] | null) => void;
 }

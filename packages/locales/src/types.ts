@@ -1,12 +1,12 @@
 export type AppType = 'web';
 
 /**
- * 需国际化处理的第三方库
+ * Third-party libraries that require internationalization
  */
 export type LanguageComponentType = 'moment' | 'antd' | 'mui' | 'dayjs';
 
 /**
- * 系统支持的国际化语言枚举
+ * Enumeration of internationalized languages supported by the system
  */
 export enum LANGUAGE {
     EN = 'EN',

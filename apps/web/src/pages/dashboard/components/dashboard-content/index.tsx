@@ -48,7 +48,7 @@ export default (props: DashboardContentProps) => {
     const widgetsRef = useRef<any[]>([]);
 
     useEffect(() => {
-        // 将数据库里的数据与本地的进行合并，确保组件配置是本地最新的
+        // Merge the data in the database with the local one to ensure that the component configuration is locally up to date
         const newWidgets = dashboardDetail.widgets?.map((item: WidgetDetail) => {
             const sourceJson = pluginsConfigs.find(plugin => item.data.type === plugin.type);
             if (sourceJson) {
@@ -69,7 +69,7 @@ export default (props: DashboardContentProps) => {
 
     const dashboardId = dashboardDetail.dashboard_id;
 
-    // 变更编辑状态
+    // Change edit status
     const setIsEdit = (edit: boolean) => {
         onChangeIsEdit(edit);
     };
@@ -122,19 +122,19 @@ export default (props: DashboardContentProps) => {
         setShowCustom(false);
     };
 
-    // 进入dashboard编辑状态
+    // The dashboard editing mode is displayed
     const changeEditStatus = () => {
         setIsEdit(true);
     };
 
-    // 退出dashboard编辑状态
+    // Exit dashboard editing status
     const cancelEditStatus = () => {
         setIsEdit(false);
         const newWidgets = cloneDeep(widgetsRef.current);
         setWidgets(newWidgets);
     };
 
-    // 编辑dashboard保存
+    // Edit dashboard Save
     const saveEditDashboard = async () => {
         const [_, res] = await awaitWrap(
             dashboardAPI.updateDashboard({
@@ -150,7 +150,7 @@ export default (props: DashboardContentProps) => {
         }
     };
 
-    // 删除dashboard
+    // Deleting a dashboard
     const handleDelete = async () => {
         confirm({
             title: getIntlText('common.label.delete'),
@@ -172,7 +172,7 @@ export default (props: DashboardContentProps) => {
         });
     };
 
-    // 显示编辑dashboard弹框
+    // The Edit dashboard pop-up is displayed
     const showEditDashboard = () => {
         setIsShowEditDashboard(true);
     };
@@ -181,7 +181,7 @@ export default (props: DashboardContentProps) => {
         setIsShowEditDashboard(false);
     };
 
-    // 添加dashboard
+    // Add dashboard
     const handleEditDashboard = async (data: AddDashboardType) => {
         const [_, res] = await awaitWrap(
             dashboardAPI.updateDashboard({
@@ -197,7 +197,7 @@ export default (props: DashboardContentProps) => {
         }
     };
 
-    // 进入全屏
+    // Go to full screen
     const enterFullscreen = () => {
         if (mainRef.current?.requestFullscreen) {
             mainRef.current.requestFullscreen();
@@ -223,7 +223,7 @@ export default (props: DashboardContentProps) => {
                                 sx={{ marginLeft: '20px' }}
                                 startIcon={<Add />}
                             >
-                                添加自定义组件
+                                {getIntlText('dashboard.add_custom_components')}
                             </Button> */}
                         </>
                     ) : (

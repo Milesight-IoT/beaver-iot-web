@@ -28,5 +28,6 @@
     "dashboard.label_nearly_three_month": "Nearly three months",
     "dashboard.label_nearly_half_year": "Nearly half year",
     "dashboard.label_nearly_one_year": "Nearly one year",
-    "dashboard.leave_to_new_dashboard_description": "Changes you made may not be saved. Are you sure you want to leave this page and switch to the new dashboard?"
+    "dashboard.leave_to_new_dashboard_description": "Changes you made may not be saved. Are you sure you want to leave this page and switch to the new dashboard?",
+    "dashboard.add_custom_components": "Add custom components"
 }

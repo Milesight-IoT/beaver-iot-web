@@ -7,23 +7,23 @@ import { type DeviceAPISchema } from '@/services/http';
 import EditDialog from './edit-dialog';
 
 interface Props {
-    /** 是否加载中 */
+    /** Loading or not */
     loading?: boolean;
 
-    /** 设备详情 */
+    /** Device details */
     data?: ObjectToCamelCase<DeviceAPISchema['getDetail']['response']>;
 
-    /** 编辑成功回调 */
+    /** Edit successful callback */
     onEditSuccess?: () => void;
 }
 
 export interface BasicTableInstance {
-    /** 打开编辑弹窗 */
+    /** Open the edit pop-up window */
     openEditDialog: () => void;
 }
 
 /**
- * 设备基本信息表格
+ * Table of basic device information
  */
 const BasicTable = (
     { data, loading, onEditSuccess }: Props,
@@ -85,7 +85,7 @@ const BasicTable = (
         setDialogOpen(false);
     }, []);
 
-    // 暴露给父组件的实例
+    // An instance that is exposed to the parent component
     useImperativeHandle(ref, () => {
         return {
             openEditDialog: () => {

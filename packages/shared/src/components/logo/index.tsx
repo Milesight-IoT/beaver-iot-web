@@ -3,21 +3,21 @@ import cls from 'classnames';
 import './style.less';
 
 interface Props {
-    /** 跳转地址 */
+    /** Jump address */
     to?: string;
 
-    /** 是否为 Mini Logo */
+    /** Whether the Logo is Mini */
     mini?: boolean;
 
-    /** 占位符 */
+    /** placeholder */
     placeholder?: string;
 
-    /** 自定义类名 */
+    /** Custom class name */
     className?: string;
 }
 
 /**
- * Logo 组件
+ * Logo component
  */
 const Logo: React.FC<Props> = ({ to, mini, className, placeholder = 'Milesight' }) => {
     return (

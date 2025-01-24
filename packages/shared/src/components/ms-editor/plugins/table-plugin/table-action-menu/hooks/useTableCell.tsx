@@ -10,7 +10,7 @@ interface IProps {
 export const useTableCell = ({ menuRootRef, setTableMenuCellNode }: IProps) => {
     const [editor] = useLexicalComposerContext();
 
-    /** 获取选中的表格 */
+    /** Gets the selected table */
     const $moveMenu = useCallback(() => {
         const menu = menuRootRef.current;
         const selection = $getSelection();
@@ -29,7 +29,7 @@ export const useTableCell = ({ menuRootRef, setTableMenuCellNode }: IProps) => {
             nativeSelection !== null &&
             rootElement.contains(nativeSelection.anchorNode)
         ) {
-            // 拿到选中的表格
+            // Get the selected form
             const tableCellNodeFromSelection = $getTableCellNodeFromLexicalNode(
                 selection.anchor.getNode(),
             );
@@ -39,7 +39,7 @@ export const useTableCell = ({ menuRootRef, setTableMenuCellNode }: IProps) => {
                 return;
             }
 
-            // 拿到表格的DOM节点
+            // Get the DOM node of the table
             const tableCellParentNodeDOM = editor.getElementByKey(
                 tableCellNodeFromSelection.getKey(),
             );
@@ -49,7 +49,7 @@ export const useTableCell = ({ menuRootRef, setTableMenuCellNode }: IProps) => {
                 return;
             }
 
-            // 保存表格选中的表格，供菜单定位使用
+            // Save Table The selected table is used for menu positioning
             setTableMenuCellNode(tableCellNodeFromSelection);
         } else if (!activeElement) {
             setTableMenuCellNode(null);

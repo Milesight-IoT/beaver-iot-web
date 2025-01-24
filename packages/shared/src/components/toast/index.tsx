@@ -30,7 +30,7 @@ const iconMap: Record<SeverityType, React.ReactNode> = {
 };
 
 /**
- * 全局消息提示框
+ * Global message prompt box
  */
 class ToastManager {
     private toasts: Toast[] = [];

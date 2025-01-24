@@ -351,9 +351,9 @@ export default class GaugeController extends DoughnutController {
         const centerY = (chartArea.top + chartArea.bottom) / 2;
 
         // Calculate the radius of the scale line and scale value
-        const tickRadius = innerRadius - (tickInnerPadding || 10); // 刻度值的半径
-        const lineRadius = tickRadius - (tickLineLength || 5); // 刻度线的起点半径
-        const textRadius = lineRadius - (tickOuterPadding || 5); // 刻度值的半径，调整数字与刻度线的距离
+        const tickRadius = innerRadius - (tickInnerPadding || 10); // The radius of the scale value
+        const lineRadius = tickRadius - (tickLineLength || 5); // The starting radius of the scale line
+        const textRadius = lineRadius - (tickOuterPadding || 5); // The radius of the scale value adjusts the distance between the number and the scale line
 
         // Calculate the angle of each scale
         const totalTicks = tickCount || 10;

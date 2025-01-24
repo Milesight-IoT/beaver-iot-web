@@ -33,11 +33,11 @@ export default () => {
             if (isRequestSuccess(res)) {
                 const data = getResponseData(res);
                 setTabs(data || []);
-                // 没有选择则默认选中第一个
+                // If no option is selected, the first option is selected by default
                 if (!tabKey) {
                     setTabKey(data?.[0]?.dashboard_id || '');
                 } else {
-                    // 已选中判断当前选中是否还存在，不存在默认选中第一个
+                    // Yes Check whether the current selection still exists. If no, the first one is selected by default
                     const isExist = data?.some(
                         (item: DashboardDetail) => item.dashboard_id === tabKey,
                     );
@@ -55,9 +55,9 @@ export default () => {
         getDashboards();
     }, []);
 
-    // 切换dashboard页签
+    // Switch dashboard tabs
     const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
-        // 判断是否编辑状态并阻止跳转
+        // Determine whether to edit the state and block the jump
         if (isEdit) {
             showPrevent({
                 onOk: () => {
@@ -70,7 +70,7 @@ export default () => {
         }
     };
 
-    // 显示新增dashboard弹框
+    // The new dashboard pop-up is displayed
     const showAddDashboard = () => {
         setShowAdd(true);
     };
@@ -79,7 +79,7 @@ export default () => {
         setShowAdd(false);
     };
 
-    // 添加dashboard
+    // Add dashboard
     const handleAdd = async (data: DashboardDetail) => {
         const [_, res] = await awaitWrap(dashboardAPI.addDashboard(data));
         if (isRequestSuccess(res)) {
@@ -87,7 +87,7 @@ export default () => {
             setTabs([...tabs, { ...data, dashboard_id: resData.dashboard_id, widgets: [] }]);
             setShowAdd(false);
             toast.success(getIntlText('common.message.operation_success'));
-            // 如果是新增的dashboard弹出提示是否要切换到新的tab页
+            // If the dashboard is newly added, a prompt is displayed indicating whether to switch to a new tab page
             if (!data.dashboard_id) {
                 if (isEdit) {
                     confirm({
@@ -154,11 +154,11 @@ export default () => {
                         sx={{
                             '& .MuiTabs-scrollButtons': {
                                 '&.Mui-disabled': {
-                                    width: 0, // 隐藏禁用的滚动按钮
+                                    width: 0, // Hide disabled scroll buttons
                                 },
                             },
                             '& .MuiTabs-scrollButtons.Mui-disabled': {
-                                display: 'none', // 完全隐藏禁用的滚动按钮
+                                display: 'none', // Completely hides disabled scroll buttons
                             },
                             '.MuiTabs-flexContainer': {
                                 borderBottom: 'none',

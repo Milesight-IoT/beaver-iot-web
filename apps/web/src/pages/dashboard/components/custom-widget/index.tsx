@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import { Modal } from '@milesight/shared/src/components';
+import { useI18n } from '@milesight/shared/src/hooks';
 import ConfigPlugin from '@/plugin/config-plugin';
 
 interface CustomWidgetProps {
@@ -8,6 +9,7 @@ interface CustomWidgetProps {
 }
 
 export default ({ onCancel }: CustomWidgetProps) => {
+    const { getIntlText } = useI18n();
     const [config, setConfig] = useState();
     const [json, setJson] = useState('');
 
@@ -25,13 +27,17 @@ export default ({ onCancel }: CustomWidgetProps) => {
                 const configJson = JSON.parse(json);
                 setConfig(configJson);
             } catch (error) {
-                console.error('json不合法');
+                console.error('json invalid');
             }
         }
     };
 
     return (
-        <Modal onCancel={handleClose} onOk={() => {}} title="添加自定义组件">
+        <Modal
+            onCancel={handleClose}
+            onOk={() => {}}
+            title={getIntlText('dashboard.add_custom_components')}
+        >
             <div className="dashboard-content">
                 <TextField
                     id="outlined-multiline-static"
@@ -43,7 +49,7 @@ export default ({ onCancel }: CustomWidgetProps) => {
                     fullWidth
                 />
                 <Button sx={{ marginTop: '20px' }} variant="outlined" onClick={handleCreatePlugin}>
-                    生成组件
+                    {getIntlText('dashboard.generate_component')}
                 </Button>
 
                 {!!config && (

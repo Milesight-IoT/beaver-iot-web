@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, ButtonProps, CircularProgress } from '@mui/material';
 
 /**
- * 加载按钮组件
+ * Load button assembly
  */
 const LoadingButton: React.FC<
     {

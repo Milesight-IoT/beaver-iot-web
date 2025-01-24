@@ -1,11 +1,11 @@
 // prettier-ignore
 module.exports = {
     'lines-between-class-members': [
-        // 要求或禁止在类成员之间出现空行
+        // Requires or disallows blank lines between class members
         2,
         'always',
         {
-            exceptAfterSingleLine: true, // 跳过对单行类成员之后的空行的检查
+            exceptAfterSingleLine: true, // Skip checking empty lines after single-line class members
         },
     ],
     'prefer-destructuring': [
@@ -22,17 +22,17 @@ module.exports = {
     'class-methods-use-this': 0,
     'no-void': 0,
     'no-plusplus': 0,
-    'no-nested-ternary': 0, // 禁止使用嵌套的三元表达式
-    'no-restricted-globals': 0, // 禁用特定的全局变量
-    'no-use-before-define': 0, // 禁止定义前使用
-    'no-underscore-dangle': 0, // 禁止标识符中有悬空下划线
-    'no-unused-expressions': 0, // 禁止未使用过的表达式
+    'no-nested-ternary': 0, // Nested ternary expressions are prohibited
+    'no-restricted-globals': 0, // Disable a specific global variable
+    'no-use-before-define': 0, // Do not use before definition
+    'no-underscore-dangle': 0, // Disallow dangling underscores in identifiers
+    'no-unused-expressions': 0, // Disallow unused expressions
     'no-empty': 1,
     'no-empty-function': [1, { allow: ['arrowFunctions'] }],
-    'no-shadow': 0, // 禁止局部变量与全局变量同名
-    'no-continue': 0, // 循环中 continue 语句
-    'no-param-reassign': 0, // 禁止变量重新赋值
-    'consistent-return': 0, // 函数中，前后一致的返回值
+    'no-shadow': 0, // Forbid local variables to have the same name as global variables
+    'no-continue': 0, // The continue statement in the loop
+    'no-param-reassign': 0, // Disallow variable reassignment
+    'consistent-return': 0, // Function, a consistent return value
     'radix': [1, 'as-needed'],
     'import/prefer-default-export': 0, // When there is only a single export from a module, prefer using default export over named export.
     'import/extensions': 0, // Ensure consistent use of file extension within the import path

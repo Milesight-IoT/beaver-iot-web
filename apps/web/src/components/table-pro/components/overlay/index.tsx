@@ -25,17 +25,17 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
 }));
 
 interface NoDataOverlayProps extends PropsFromSlot<GridSlots['noRowsOverlay']> {
-    /** 提示文案 */
+    /** Prompt copy */
     content?: React.ReactNode;
 }
 
 interface NoResultsOverlayProps extends PropsFromSlot<GridSlots['noResultsOverlay']> {
-    /** 提示文案 */
+    /** Prompt copy */
     content?: React.ReactNode;
 }
 
 /**
- * Table 空数据占位
+ * Table empty data occupies a position
  */
 const NoDataOverlay: React.FC<NoDataOverlayProps> = React.memo(({ content }) => {
     const { getIntlText } = useI18n();
@@ -48,7 +48,7 @@ const NoDataOverlay: React.FC<NoDataOverlayProps> = React.memo(({ content }) => 
 });
 
 /**
- * Table 筛选无数据占位
+ * Table filters no data occupied
  */
 const NoResultsOverlay: React.FC<NoResultsOverlayProps> = React.memo(({ content }) => {
     const { getIntlText } = useI18n();

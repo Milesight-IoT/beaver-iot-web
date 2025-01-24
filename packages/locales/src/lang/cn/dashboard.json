@@ -27,5 +27,7 @@
     "dashboard.label_nearly_one_month": "近1个月",
     "dashboard.label_nearly_three_month": "近三个月",
     "dashboard.label_nearly_half_year": "近半年",
-    "dashboard.label_nearly_one_year": "近1年"
+    "dashboard.label_nearly_one_year": "近1年",
+    "dashboard.add_custom_components": "添加自定义组件",
+    "dashboard.generate_component": "生成组件"
 }

@@ -15,50 +15,50 @@ import { useI18n } from '../../hooks';
 import './style.less';
 
 export interface JsonTextareaExposeProps {
-    /** 对编辑状态下的 json text 进行保存操作 */
+    /** Save the json text in the edit state */
     save: () => Promise<any>;
     getCurrentText?: () => void;
 }
 
 interface Props {
-    /** 待渲染 json 数据 */
+    /** json data to be rendered */
     value?: any;
 
-    /** 是否隐藏 json 内部的编辑操作按钮 */
+    /** Whether to hide the edit action button inside the json */
     readonly?: boolean;
 
-    /** 样式类 */
+    /** Style class */
     className?: string;
 
-    /** 修改数据后的回调 */
+    /** Callback after data modification */
     onChange?: (value: any) => void;
 
-    /** text 编辑状态的回调 */
+    /** text edit status callback */
     onEditStatusChange?: (isEdit: boolean) => void;
 
     /**
-     * 需要对用户保存编辑后的 json 数据进行校验的函数
-     * 返回 true 表示校验通过，返回 false 表示校验失败
+     * A function that needs to verify the edited json data saved by the user
+     * If true is returned, the verification succeeds. If false is returned, the verification fails
      */
     validateJson?: (value: any) => any;
 
     /**
-     * 维持组件为可编辑状态
+     * Keep the component editable
      */
     maintainEditStatus?: boolean;
 }
 
 /**
- * JSON 数据渲染组件（默认 readOnly）
+ * JSON data rendering component (default readOnly)
  */
 const JsonTextarea = forwardRef<JsonTextareaExposeProps, Props>(
     ({ readonly = true, className, maintainEditStatus = false, ...props }: Props, ref) => {
         const { getIntlText } = useI18n();
 
-        /** 将 json 数据转换为字符串 */
+        /** Converts json data to a string */
         const propValueStr = useMemo(() => {
             /**
-             * 如果 value 是空数组或空对象，则直接返回 [] 或 {}
+             * If value is an empty array or an empty object, return [] or {} directly.
              */
             if (
                 (Array.isArray(props.value) || isPlainObject(props.value)) &&
@@ -76,9 +76,9 @@ const JsonTextarea = forwardRef<JsonTextareaExposeProps, Props>(
         const cacheVal = useRef<string>('');
         const currentVal = useRef<string>('');
 
-        /** 暴露给父组件调用的方法 */
+        /** Exposes a method called by the parent component */
         useImperativeHandle(ref, () => ({
-            /** 父组件主动调用保存，则不分发变更回调事件 */
+            /** The parent component actively calls the save, and does not distribute the change callback event */
             save: () => handleSave(false),
             getCurrentText: () => {
                 return currentVal.current;
@@ -88,7 +88,7 @@ const JsonTextarea = forwardRef<JsonTextareaExposeProps, Props>(
         useEffect(() => {
             setState(propValueStr);
 
-            // 重置编辑状态
+            // Reset edit status
             setIsEdit(false);
             props?.onEditStatusChange?.(false);
         }, [props.value]);
@@ -122,12 +122,14 @@ const JsonTextarea = forwardRef<JsonTextareaExposeProps, Props>(
 
                     try {
                         const result = JSON.parse(state);
-                        // 校验 json 数据
+                        // Check json data
                         if (props?.validateJson && !props.validateJson(result)) {
-                            throw new Error('自定义 json 格式校验失败');
+                            throw new Error(
+                                'The user-defined json format verification fails. Procedure',
+                            );
                         }
 
-                        // 分发执行变更回调
+                        // Distribute execute change callbacks
                         if (emitChange) props.onChange?.(result);
                         resolve(result);
                     } catch (e) {
@@ -149,16 +151,16 @@ const JsonTextarea = forwardRef<JsonTextareaExposeProps, Props>(
             props?.onEditStatusChange?.(true);
         }, [state, props]);
 
-        /** text area 区域样式处理 */
+        /** text area Area style processing */
         const viewModeTextCls = useMemo(() => {
             return classNames('ms-view-mode-text', className, {
-                /** 根据编辑状态设置 border 样式 */
+                /** Set the border style according to the editing state */
                 'edit-mode-status': isEdit || maintainEditStatus,
             });
         }, [className, isEdit, maintainEditStatus]);
 
         /**
-         * 是否只读
+         * Read only or not
          */
         const isReadOnly = useMemo(() => {
             if (maintainEditStatus) {

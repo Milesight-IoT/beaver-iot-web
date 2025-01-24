@@ -7,7 +7,7 @@ import type { EntityFormProps } from './typings';
 const EntityForm = forwardRef((props: EntityFormProps, ref: any) => {
     const { entities, onOk } = props;
 
-    // 获取组件类型
+    // Get component type
     const getComponentType = (entity: EntitySchema & EntityData) => {
         const attr: any = entity?.value_attribute || {};
         const type: any = entity?.entity_value_type;
@@ -31,7 +31,7 @@ const EntityForm = forwardRef((props: EntityFormProps, ref: any) => {
         }
     };
 
-    // 获取组件配置
+    // Get component configuration
     const getComponentProps = (entity: EntitySchema & EntityData, resultType?: string) => {
         const attr: any = entity?.value_attribute || {};
         const type = resultType || entity?.entity_value_type;
@@ -52,7 +52,7 @@ const EntityForm = forwardRef((props: EntityFormProps, ref: any) => {
         return componentProps;
     };
 
-    // 获取组件校验规则
+    // Gets component verification rules
     const getComponentRules = (entity: EntitySchema & EntityData) => {
         const attr: any = entity?.value_attribute || {};
         const type: any = entity?.entity_value_type;

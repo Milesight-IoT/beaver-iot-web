@@ -14,7 +14,7 @@ import './style.less';
 
 export type ColumnType<R extends GridValidRowModel = any, V = any, F = V> = GridColDef<R, V, F> & {
     /**
-     * 文案是否自动省略
+     * Whether the copy is automatically omitted
      */
     ellipsis?: boolean;
 };
@@ -23,14 +23,14 @@ export interface Props<T extends GridValidRowModel> extends DataGridProps<T> {
     columns: ColumnType<T>[];
 
     /**
-     * 工具栏插槽（左侧自定义渲染 Node）
+     * Toolbar slot (Custom render Node on the left)
      */
     toolbarRender?: React.ReactNode;
 
-    /** 搜索框输入回调 */
+    /** Search box input callback */
     onSearch?: (value: string) => void;
 
-    /** 刷新按钮点击回调 */
+    /** Refresh button click callback */
     onRefreshButtonClick?: () => void;
 
     /**
@@ -39,14 +39,14 @@ export interface Props<T extends GridValidRowModel> extends DataGridProps<T> {
     toolbarSort?: React.ReactNode;
 }
 
-/** 默认每页显示数量选项 */
+/** The number of options per page is displayed by default */
 const DEFAULT_PAGE_SIZE_OPTIONS = [10, 20, 30, 40, 50];
 
-/** 默认分页模型 */
+/** Default paging model */
 const DEFAULT_PAGINATION_MODEL = { page: 0, pageSize: DEFAULT_PAGE_SIZE_OPTIONS[0] };
 
 /**
- * 数据表格组件
+ * Data form element
  */
 const TablePro = <DataType extends GridValidRowModel>({
     columns,

@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 /**
- * 抛出错误并退出进程
+ * Throw an error and exit the process
  * @param {String} message
  * @param {any[]} args
  */
@@ -11,8 +11,8 @@ export const throwError = (message: string, ...args: any[]) => {
 };
 
 /**
- * 命令行参数解析，将命令行参数解析为相应的键值对
- * @param {String} args 命令行参数字符串
+ * Command line parameter parsing: parses command line parameters into corresponding key-value pairs
+ * @param {String} args Command line parameter character string
  * @returns
  */
 export const parseArguments = (args: string[]) => {
@@ -24,7 +24,7 @@ export const parseArguments = (args: string[]) => {
         if (arg.startsWith('--')) {
             const key = arg.slice(2);
 
-            // 检查下一个参数是否存在且不是以连字符开头（代表下一个参数是值）
+            // Check that the next argument exists and does not start with a hyphen (meaning that the next argument is a value)
             if (i + 1 < args.length && !args[i + 1].startsWith('-')) {
                 parsedArgs[key] = args[i + 1];
                 i++;
@@ -38,7 +38,7 @@ export const parseArguments = (args: string[]) => {
 };
 
 /**
- * 判断文件资源是否存在
+ * Check whether the file resource exists
  */
 export const isFileExists = (filePath?: string) => {
     try {

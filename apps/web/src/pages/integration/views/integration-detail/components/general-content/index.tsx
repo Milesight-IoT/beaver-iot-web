@@ -16,21 +16,21 @@ type GeneralTabItem = {
 };
 
 interface Props {
-    /** 是否加载中 */
+    /** Loading or not */
     loading?: boolean;
 
-    /** 实体列表 */
+    /** Entity list */
     entities?: InteEntityType[];
 
-    /** Service 页面不做渲染的实体 Key */
+    /** Service Entity Key that the page does not render */
     excludeServiceKeys?: ApiKey[];
 
-    /** 编辑成功回调 */
+    /** Edit successful callback */
     onUpdateSuccess?: () => void;
 }
 
 /**
- * 通用集成详情内容
+ * Common integration details content
  */
 const GeneralContent: React.FC<Props> = ({
     loading,
@@ -40,7 +40,7 @@ const GeneralContent: React.FC<Props> = ({
 }) => {
     const { getIntlText } = useI18n();
 
-    // ---------- Tab 相关逻辑 ----------
+    // ---------- Tab related logic ----------
     const tabs = useMemo<GeneralTabItem[]>(() => {
         return [
             {

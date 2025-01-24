@@ -1,2 +1,2 @@
-/** API 前缀 */
+/** API prefix */
 export const API_PREFIX = '/api/v1';

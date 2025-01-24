@@ -1,9 +1,9 @@
 /**
  * MUI Icons
  *
- * 注意：
- * 1. 按需引入，需确保引入的 icon 均为系统用到的，否则会造成资源浪费，增加整体包体积；
- * 2. 重命名规范：`xxxIcon`；
+ * Attention:
+ * 1. Import ICONS on demand. Ensure that all ICONS are used by the system; otherwise, resources will be wasted and the overall package volume will be increased.
+ * 2. Rename specification: 'xxxIcon';
  */
 export {
     ChevronLeft as ChevronLeftIcon,
@@ -128,5 +128,5 @@ export {
 } from '@mui/icons-material';
 
 export * from './iot-icons';
-// 导出所有自定义 SVG Icon 组件
+// Export all custom SVG Icon components
 export * from './components';

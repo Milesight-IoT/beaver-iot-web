@@ -35,17 +35,17 @@ export default (props: WidgetProps) => {
         });
     };
 
-    // 重叠判断
+    // Overlap judgment
     const isOverlapping = (newBox: WidgetDetail) => {
         let isOver = false;
         widgets.forEach((widget: WidgetDetail) => {
-            // 如果已经重叠或者是自己，则直接返回
+            // If it already overlaps or is itself, return directly
             if (isOver) {
                 return true;
             }
             const unitHeight = (parentRef?.current?.clientHeight || 0) / 24;
             const unitWidth = (parentRef?.current?.clientWidth || 0) / 24;
-            // 判断当前移动后的组件的位置是否在遍历到的组件的位置中
+            // Determines whether the location of the currently moved component is in the traversed component location
             const right = (widget.data.pos?.left || 0) + (widget.data.pos?.width || 0) * unitWidth;
             const bottom =
                 (widget.data.pos?.top || 0) + (widget.data.pos?.height || 0) * unitHeight;
@@ -64,7 +64,7 @@ export default (props: WidgetProps) => {
         return isOver;
     };
 
-    // 计算新组件初始位置
+    // Calculate the initial position of the new component
     const getInitPos = (data: WidgetDetail) => {
         if (!widgets?.length) return { left: 0, top: 0 };
         const unitHeight = (parentRef?.current?.clientHeight || 0) / 24;
@@ -104,7 +104,7 @@ export default (props: WidgetProps) => {
 
     const handleOk = (data: any) => {
         const now = String(new Date().getTime());
-        // 计算最大y轴位置，并将新的组件放到该位置
+        // Calculate the maximum Y-axis position and place the new component in that position
         const y = Math.max(
             ...widgets.map(item => (item?.data?.pos.y || 0) + (item?.data?.pos?.h || 0)),
             0,
@@ -131,10 +131,10 @@ export default (props: WidgetProps) => {
         // const { left, top } = getInitPos(widgetData);
         // handleClose();
         // if (!left && !top && left !== 0 && top !== 0) {
-        //     toast.error('当前位置无法放置widget，请调整后再添加');
+        //     toast.error(' widget cannot be placed in the current location, please adjust it before adding it ');
         //     return;
         // }
-        // TODO: 插件配置保存
+        // TODO: Save the plug-in configuration
         onOk(widgetData);
         handleClose();
     };

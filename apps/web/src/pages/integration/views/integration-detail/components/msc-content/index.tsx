@@ -15,20 +15,20 @@ type MscTabItem = {
 };
 
 interface Props {
-    /** 实体列表 */
+    /** Entity list */
     entities?: InteEntityType[];
 
-    /** 编辑成功回调 */
+    /** Edit successful callback */
     onUpdateSuccess?: () => void;
 }
 
 /**
- * MSC 集成定制详情内容
+ * MSC integrated custom details
  */
 const MscContent: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
     const { getIntlText } = useI18n();
 
-    // ---------- Tab 相关逻辑 ----------
+    // ---------- Tab related logic ----------
     const tabs = useMemo<MscTabItem[]>(() => {
         return [
             {

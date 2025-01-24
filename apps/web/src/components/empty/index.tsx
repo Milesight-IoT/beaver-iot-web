@@ -6,30 +6,30 @@ import noDataImg from './assets/nodata.svg';
 import './style.less';
 
 export interface EmptyProps {
-    /** 内置占位图类型，默认为 nodata */
+    /** Built-in placeholder type, default is nodata */
     type?: 'nodata';
 
     /**
-     * 占位图尺寸
+     * Placeholders size
      * @param small 120x120
      * @param middle 200x200
      * @param large 300*300
      */
     size?: 'small' | 'middle' | 'large';
 
-    /** 提示文案 */
+    /** Prompt copy */
     text?: React.ReactNode;
 
-    /** 自定义占位图（type 属性失效） */
+    /** Custom placeholders (type attribute invalid) */
     image?: React.ReactNode;
 
-    /** 位于底部的冗余内容（如 button 等） */
+    /** Redundant content at the bottom (button, etc.) */
     extra?: React.ReactNode;
 
-    /** 是否显示加载中状态 */
+    /** Whether the loading status is displayed */
     loading?: boolean;
 
-    /** 自定义容器样式类 */
+    /** Custom container style classes */
     className?: string;
 }
 
@@ -48,7 +48,7 @@ const themeImagesMap = {
 };
 
 /**
- * 空状态组件
+ * Null state element
  */
 const Empty: EmptyType = ({ type, size = 'small', text, image, extra, loading, className }) => {
     const { theme } = useTheme();
@@ -70,7 +70,7 @@ const Empty: EmptyType = ({ type, size = 'small', text, image, extra, loading, c
     );
 };
 
-// 导出图片组件，供自定义使用
+// Export image components for customization
 Empty.IMAGE_NOT_DATA = themeImagesMap.light.nodata;
 Empty.IMAGE_NOT_DATA_DARK = themeImagesMap.dark.nodata;
 

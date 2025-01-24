@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { TextField, Button } from '@mui/material';
+import { useI18n } from '@milesight/shared/src/hooks';
 import ConfigPlugin from '@/plugin/config-plugin';
 import components from '@/plugin/plugins/components';
 
 const PLUGINDIR = '../../plugin';
 
 export default () => {
+    const { getIntlText } = useI18n();
     const [config, setConfig] = useState();
     const [json, setJson] = useState('');
 
@@ -25,7 +27,7 @@ export default () => {
                 const configJson = JSON.parse(json);
                 setConfig(configJson);
             } catch (error) {
-                console.error('json不合法');
+                console.error('json invalid');
             }
         }
     };
@@ -45,7 +47,7 @@ export default () => {
                 fullWidth
             />
             <Button sx={{ marginTop: '20px' }} variant="outlined" onClick={handleCreatPlugin}>
-                生成组件
+                {getIntlText('dashboard.generate_component')}
             </Button>
             {!!config && <ConfigPlugin onClose={handleClose} config={config} />}
         </div>

@@ -1,70 +1,70 @@
 import { client, attachAPI, API_PREFIX } from './client';
 
 type IntegrationDetailType = {
-    /** ID */
+    /** ID  */
     id: ApiKey;
-    /** 图标 */
+    /** icon */
     icon?: string;
-    /** 名称 */
+    /** name */
     name: string;
-    /** 描述 */
+    /** Description */
     description?: string;
     /**
-     * 添加设备表单实体 Key
+     * Add a device form entity Key
      *
-     * 说明：该字段标识的实体 key 仅用于添加设备
+     * Note: The entity key identified in this field is only used to add devices
      */
     add_device_service_key: ApiKey;
 
     /**
-     * 删除设备表单实体 Key
+     * Delete the device form entity Key
      *
-     * 说明：该字段标识的实体 key 仅用于删除设备
+     * Note: The entity key identified in this field is only used to delete the device
      */
     delete_device_service_key: ApiKey;
-    /** 设备数量 */
+    /** Number of equipment */
     device_count: number;
-    /** 实体数量 */
+    /** Number of entities */
     entity_count: number;
 };
 
 export interface IntegrationAPISchema extends APISchema {
-    /** 获取集成列表 */
+    /** Get integration list */
     getList: {
         request: void | {
-            /** 是否能添加设备 */
+            /** Whether devices can be added */
             device_addable?: boolean;
-            /** 是否能删除设备 */
+            /** Whether the device can be deleted */
             device_deletable?: boolean;
         };
         response: IntegrationDetailType[];
     };
 
-    /** 获取集成详情 */
+    /** Get integration details */
     getDetail: {
         request: {
-            /** 集成 ID */
+            /** Integration ID */
             id: ApiKey;
         };
         response: IntegrationDetailType & {
             integration_entities: {
-                /** 实体 ID */
+                /** Entity ID */
                 id: ApiKey;
-                /** 实体 Key */
+                /** Physical Key */
                 key: ApiKey;
-                /** 实体名称 */
+                /** Entity name */
                 name: string;
-                /** 实体类型 */
+                /** Entity type */
                 type: EntityType;
-                /** 实体父级 ID */
+                /** ID of the entity parent */
                 parent?: ApiKey;
-                /** 访问模式 */
+                /** Access mode */
                 access_mod?: EntityAccessMode;
-                /** 实体属性 */
+                /** Entity attribute */
                 value_attribute: Partial<EntityValueAttributeType>;
-                /** 实体值 */
+                /** Entity value */
                 value: string;
-                /** 实体值类型 */
+                /** Entity value type */
                 value_type: EntityValueDataType;
             }[];
         };
@@ -72,7 +72,7 @@ export interface IntegrationAPISchema extends APISchema {
 }
 
 /**
- * 集成相关 API 服务
+ * Integrate related API services
  */
 export default attachAPI<IntegrationAPISchema>(client, {
     apis: {

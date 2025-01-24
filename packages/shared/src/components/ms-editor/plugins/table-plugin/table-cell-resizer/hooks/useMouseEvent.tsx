@@ -37,7 +37,7 @@ export const useMouseEvent = ({
     /** Setting up active form items */
     const setupActiveCell = useMemoizedFn((cell: TableDOMCell, target: HTMLElement) => {
         editor.update(() => {
-            // 获取最近的表格单元格节点 tableCellNode。
+            // Gets the nearest table cell node, tableCellNode.
             const tableCellNode = $getNearestNodeFromDOMNode(cell.elem);
             if (!tableCellNode) {
                 throw new Error('TableCellResizer: Table cell node not found.');

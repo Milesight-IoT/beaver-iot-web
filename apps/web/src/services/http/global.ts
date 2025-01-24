@@ -3,32 +3,32 @@ import { client, attachAPI, API_PREFIX } from './client';
 import { type UserType, type UserMenuType } from './user';
 
 export interface GlobalAPISchema extends APISchema {
-    /** 登录 */
+    /** Log in */
     oauthLogin: {
         request: {
-            /** 用户名 */
+            /** username */
             username: string;
-            /** 密码 */
+            /** cipher */
             password: string;
-            /** 授权类型 */
+            /** Authorization type */
             grant_type: 'password';
-            /** Client ID */
+            /** Client ID  */
             client_id: string;
-            /** Client Secret */
+            /** Client Secret  */
             client_secret: string;
         };
-        // TODO: 待补充
+        // TODO: To be added
         response: {
-            /** 鉴权 Token */
+            /** Authentication Token */
             access_token: string;
-            /** 刷新 Token */
+            /** Refresh Token */
             refresh_token: string;
-            /** 过期时间，单位 s */
+            /** Expiration time, unit s */
             // expires_in: number;
         };
     };
 
-    /** 刷新 Token */
+    /** Refresh Token */
     // oauthRefresh: {
     //     request: {
     //         refresh_token: string;
@@ -37,18 +37,18 @@ export interface GlobalAPISchema extends APISchema {
     //     response: GlobalAPISchema['oauthLogin']['response'];
     // };
 
-    /** 用户注册 */
+    /** User registration */
     oauthRegister: {
         request: {
             email: string;
             nickname: string;
             password: string;
         };
-        // TODO: 待补充
+        // TODO: To be added
         response: GlobalAPISchema['oauthLogin']['response'];
     };
 
-    /** 获取用户注册状态 */
+    /** Get user registration status */
     getUserStatus: {
         request: void;
         response: {
@@ -56,7 +56,7 @@ export interface GlobalAPISchema extends APISchema {
         };
     };
 
-    /** 获取用户信息 */
+    /** Get user information */
     getUserInfo: {
         request: void;
         response: {
@@ -72,7 +72,7 @@ export interface GlobalAPISchema extends APISchema {
 }
 
 /**
- * 全局 API 服务（包括注册、登录及用户等）
+ * Global API services (including registration, login, users, etc.)
  */
 export default attachAPI<GlobalAPISchema>(client, {
     apis: {

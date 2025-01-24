@@ -109,7 +109,7 @@ const View = (props: IProps) => {
         return entityKey && getExChangeTopic(entityKey);
     }, [entity]);
 
-    // 订阅 WS 主题
+    // Subscribe to WS topics
     useEffect(() => {
         if (!topic || configJson.isPreview) return;
 

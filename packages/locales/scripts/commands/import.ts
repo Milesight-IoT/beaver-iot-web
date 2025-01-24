@@ -21,12 +21,12 @@ function writeFile({
     filePath: string;
 } & Partial<ConfigType['import']>) {
     /**
-     * 获取各模块文案文件名
-     * 规范：https://www.tapd.cn/51309724/prong/stories/view/1151309724001050183
+     * Gets the file name of each module copy
+     * Specification: https://www.tapd.cn/51309724/prong/stories/view/1151309724001050183
      */
     function getFileName(key: string) {
         const platformPrefix = platformKeyPrefixs?.find(item => key.startsWith(item));
-        // 移除平台前缀
+        // Remove platform prefix
         const realKey = !platformPrefix ? key : key.replace(new RegExp(`^${platformPrefix}.`), '');
         let filename = realKey.split('.')[0];
 
@@ -39,15 +39,15 @@ function writeFile({
             }
         });
 
-        // 文件名统一以 `-` 中划线命名
+        // The file name is named with the hyphen (-)
         return `${filename.replace(/_/g, '-')}.json`;
     }
 
     /**
-     * 1. key规范中，一级key是一个功能模块对应的文案文件名
-     * 2. filenames 是文件名与对应的json值构成的对象，
-     *    如: { 'app.json': {}, 'global.json': {} }
-     * 3. 对象的属性是文件名，值是具体的json值
+     * 1. In the key specification, Level 1 key is the file name corresponding to a function module
+     * 2. filenames is an object consisting of the filename and the corresponding json value.
+     *    For example: {'app.json': {}, 'global.json': {}}
+     * 3. The property of the object is the file name, and the value is the specific json value
      */
     const filenames = Object.keys(keyValues).reduce<ObjType<ObjType>>((acc, key) => {
         const filename = getFileName(key);
@@ -119,10 +119,10 @@ export function importCommand(
             {
                 type: 'confirm',
                 name: 'isOk',
-                message: `\n读取文案的路径是：${pathtool.join(
+                message: `\nThe path to read the copy is: ${pathtool.join(
                     process.cwd(),
                     sourcePath,
-                )}\n读取的文案将被导入到：${pathtool.join(process.cwd(), outputPath)}`,
+                )}\nThe copy will be imported to: ${pathtool.join(process.cwd(), outputPath)}`,
             },
         ]);
 
@@ -137,10 +137,10 @@ export function importCommand(
 
     program
         .command('import')
-        .option('--source-path [path]', '读取文案的路径')
-        .option('--output-path [path]', '导入文案的路径')
+        .option('--source-path [path]', 'The path to read the copy')
+        .option('--output-path [path]', 'The path to import the copy')
         .description(
-            'read the local locale json file from the <source-path>,\nand imoprt it to the <output-path>.',
+            'Read the local locale json file from the <source-path>,\nand import it to the <output-path>.',
         )
         .action(prompt);
 }

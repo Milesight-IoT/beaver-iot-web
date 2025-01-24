@@ -74,7 +74,7 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
                 entityAPI.getHistory({
                     entity_id: e.value,
                     start_timestamp: Date.now() - time,
-                    end_timestamp: Date.now(), // 当前时间
+                    end_timestamp: Date.now(), // Current time
                     page_number: 1,
                     page_size: 999,
                 }),

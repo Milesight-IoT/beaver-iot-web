@@ -10,12 +10,12 @@ import { RefreshIcon } from '@milesight/shared/src/components';
 import './style.less';
 
 interface CustomFooterProps extends GridFooterContainerProps {
-    /** 刷新按钮点击回调 */
+    /** Refresh button click callback */
     onRefreshButtonClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 /**
- * 自定义表格页脚组件
+ * Custom table footer components
  */
 const CustomFooter: React.FC<CustomFooterProps> = ({
     onRefreshButtonClick,
