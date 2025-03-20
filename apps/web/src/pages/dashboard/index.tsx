@@ -7,6 +7,7 @@ import { dashboardAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/se
 import { DashboardDetail } from '@/services/http/dashboard';
 import { TabPanel, useConfirm, PermissionControlHidden, Empty } from '@/components';
 import { PERMISSIONS } from '@/constants';
+import { useDashboardStore } from '@/stores';
 import DashboardContent from './components/dashboard-content';
 import AddDashboard from './components/add-dashboard';
 import './style.less';
@@ -14,6 +15,8 @@ import './style.less';
 export default () => {
     const { getIntlText } = useI18n();
     const confirm = useConfirm();
+    const { updateIsEditing } = useDashboardStore();
+
     const [tabs, setTabs] = useState<DashboardDetail[]>([]);
     const [tabKey, setTabKey] = useState<ApiKey>();
     const [showAdd, setShowAdd] = useState(false);
@@ -51,6 +54,11 @@ export default () => {
             setLoading(false);
         }
     };
+
+    /** To storage the dashboard isEditing status */
+    useEffect(() => {
+        updateIsEditing(isEdit);
+    }, [isEdit]);
 
     useEffect(() => {
         getDashboards();

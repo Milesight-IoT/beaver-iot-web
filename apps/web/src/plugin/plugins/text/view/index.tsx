@@ -1,6 +1,7 @@
 import { useMemo, useState, useCallback, useEffect, memo } from 'react';
 import { entityAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/services/http';
 import ws, { getExChangeTopic } from '@/services/ws';
+import { useDashboardStore } from '@/stores';
 
 import './style.less';
 
@@ -16,6 +17,8 @@ export interface ViewProps {
 }
 
 const View = (props: ViewProps) => {
+    const { isEditing } = useDashboardStore();
+
     const { config, configJson } = props;
     const { entity, label, fontSize = 14 } = config || {};
     const { isPreview } = configJson || {};
@@ -88,7 +91,7 @@ const View = (props: ViewProps) => {
                 className="text-wrapper__content bg-custom-scrollbar"
                 style={{ fontSize: `${fontSize}px`, lineHeight: `${Number(fontSize) + 8}px` }}
             >
-                {textContent}
+                {isEditing ? (textContent || '').slice(0, 6000) : textContent}
             </div>
         </div>
     );
