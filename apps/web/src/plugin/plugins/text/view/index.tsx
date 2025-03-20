@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback, useEffect } from 'react';
+import { useMemo, useState, useCallback, useEffect, memo } from 'react';
 import { entityAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/services/http';
 import ws, { getExChangeTopic } from '@/services/ws';
 
@@ -94,4 +94,4 @@ const View = (props: ViewProps) => {
     );
 };
 
-export default View;
+export default memo(View);

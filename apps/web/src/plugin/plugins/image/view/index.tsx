@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback, useEffect } from 'react';
+import { useMemo, useState, useCallback, useEffect, memo } from 'react';
 import { useMemoizedFn } from 'ahooks';
 
 import { BrokenImageIcon } from '@milesight/shared/src/components';
@@ -146,4 +146,4 @@ const View = (props: ViewProps) => {
     );
 };
 
-export default View;
+export default memo(View);
