@@ -256,6 +256,7 @@ const Widgets = (props: WidgetProps) => {
                         : data.data?.pos?.h || data.data.minRow || 2,
                     minW: data.data.minCol || 2,
                     minH: data.data.minRow || 2,
+                    maxW: GRID_LAYOUT_COLS - (data?.data?.pos?.x || 0),
                     i: data?.widget_id || data.data.tempId,
                     x: data.data.pos?.x || 0,
                     y: data.data.pos?.y || 0,
