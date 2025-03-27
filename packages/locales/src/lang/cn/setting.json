@@ -70,11 +70,12 @@
     "setting.integration.label.synced_device": "已同步设备",
     "setting.integration.label.syncable_device": "可同步设备 ({1})",
     "setting.integration.label.device_delete_tip" : "确认要删除该设备吗？",
-    "setting.integration.device.device_bulk_delete_tip" : "确认要批量删除这 {1} 个设备吗？",
+    "setting.integration.label.device_bulk_delete_tip" : "确认要批量删除这 {1} 个设备吗？",
     "setting.integration.device.update_codec_title" : "更新Codec",
     "setting.integration.device.update_codec" : "更新产品对应的Codec",
     "setting.integration.device.update_codec_desc": "用于从Repo中获取最新的产品Codec。注：新的Codec仅对新添加的设备生效。",
     "setting.integration.message.sync_device_title": "同步设备",
     "setting.integration.message.sync_device_tip": "设备同步操作会将网关上该节点设备所使用的codec置空，可能会影响该应用下的其他数据传输。确定同步吗？",
-    "setting.integration.codec.customize_tip": "请输入用于管理您自己Codec的Repo地址"
+    "setting.integration.codec.customize_tip": "请输入用于管理您自己Codec的Repo地址",
+    "setting.integration.sync_device_empty_model": "请完整填写所需信息"
 }
