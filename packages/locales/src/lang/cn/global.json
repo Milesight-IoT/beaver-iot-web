@@ -205,5 +205,5 @@
     "valid_http_address": "不合法的地址",
     "common.label.refresh": "刷新页面",
     "common.label.settings": "设置",
-    "common.confirm.execute": "是确认执行更新操作？"
+    "common.confirm.execute": "确认执行更新操作？"
 }

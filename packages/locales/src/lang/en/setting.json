@@ -67,14 +67,15 @@
     "setting.integration.label.device.sync_tip": "This operation will reset the Payload Codec of the node device you added to the gateway to empty. Please operate with caution.",
     "setting.integration.message.test_mqtt_fail": "Connection failed, please check configuration.",
     "setting.integration.message.device_sync_success": "Successful Sync",
-    "setting.integration.label.synced_device": "Device Synced",
-    "setting.integration.label.syncable_device": "Device Syncable ({1})",
+    "setting.integration.label.synced_device": "Synced Devices",
+    "setting.integration.label.syncable_device": "Syncable Devices ({1})",
     "setting.integration.label.device_delete_tip" : "Are you sure you want to delete this device?",
-    "setting.integration.device.device_bulk_delete_tip" : "Are you sure you want to delete these {1} devices in batches?",
+    "setting.integration.label.device_bulk_delete_tip" : "Are you sure you want to delete these {1} devices in batches?",
     "setting.integration.device.update_codec_title" : "Update Codec",
     "setting.integration.device.update_codec" : "Update Codec corresponding to the product",
     "setting.integration.device.update_codec_desc": "Used to obtain the latest product Codec from Repo. Note: The new Codec is only effective for newly added devices.",
     "setting.integration.message.sync_device_title": "Synchronize Devices",
     "setting.integration.message.sync_device_tip": "Device synchronization will clear the codec used by the node device on the gateway, which may affect other data transmission under the application. Are you sure to synchronize?",
-    "setting.integration.codec.customize_tip": "Please enter the Repo address used to manage your own Codec"
+    "setting.integration.codec.customize_tip": "Please enter the Repo address used to manage your own Codec",
+    "setting.integration.sync_device_empty_model": "Please fill in the required information completely"
 }

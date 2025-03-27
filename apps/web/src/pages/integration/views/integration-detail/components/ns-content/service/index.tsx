@@ -26,7 +26,7 @@ const Service: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
     const confirm = useConfirm();
     const handleConfirm = () => {
         confirm({
-            title: getIntlText('setting.integration.device.update_codec_title'),
+            title: getIntlText('common.label.tip'),
             description: getIntlText('common.confirm.execute'),
             async onConfirm() {
                 const entityKey = getEntityKey(SYNC_CODEC_KEY);
@@ -63,7 +63,11 @@ const Service: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
                             </IconButton>
                         </div>
                         <div className="desc">
-                            {getIntlText('setting.integration.device.update_codec_desc')}
+                            <Tooltip
+                                autoEllipsis
+                                className="title"
+                                title={getIntlText('setting.integration.device.update_codec_desc')}
+                            />
                         </div>
                     </div>
                 </Grid2>

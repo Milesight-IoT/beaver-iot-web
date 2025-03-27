@@ -36,10 +36,6 @@ interface Props {
     isAllRequired?: boolean;
 }
 
-const enum ENTITY_KEY {
-    SELECT_GATEWAY = 'add-device.gateway-eui',
-}
-
 /**
  * Form data type
  */
@@ -133,21 +129,6 @@ const useEntityFormItems = ({ entities, isAllRequired = false }: Props) => {
         [encodedEntityKeys],
     );
 
-    const updateFormItemDefaultValue = (
-        entityKey: ApiKey,
-        attrEnum: any,
-        formItem: ControllerProps<EntityFormDataProps>,
-    ) => {
-        // is select gateway key
-        if (typeof entityKey === 'string' && entityKey?.includes?.(ENTITY_KEY.SELECT_GATEWAY)) {
-            formItem.defaultValue =
-                Object.entries(attrEnum || {}).map(([key, value]) => ({
-                    label: value,
-                    value: key,
-                }))?.[0].value || '';
-        }
-    };
-
     const formItems = useMemo(() => {
         const result: ControllerProps<EntityFormDataProps>[] = [];
 
@@ -187,7 +168,6 @@ const useEntityFormItems = ({ entities, isAllRequired = false }: Props) => {
                     // If it is an enumeration type, render the drop-down box
                     if (attr.enum) {
                         formItem.defaultValue = '';
-                        updateFormItemDefaultValue(entity.key, attr.enum, formItem);
                         formItem.render = ({
                             field: { onChange, value, disabled },
                             fieldState: { error },

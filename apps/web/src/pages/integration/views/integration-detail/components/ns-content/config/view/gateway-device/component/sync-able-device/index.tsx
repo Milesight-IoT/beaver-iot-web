@@ -105,6 +105,7 @@ const SyncAbleDevice: React.FC<IProps> = props => {
             .filter((item: TableRowDataType) => selectedIds.includes(item.eui))
             .filter((item: TableRowDataType) => !item.guessModelId && !modelMap.get(item.eui));
         if (unSelectModel?.length) {
+            toast.error(getIntlText('setting.integration.sync_device_empty_model'));
             return;
         }
         confirm({

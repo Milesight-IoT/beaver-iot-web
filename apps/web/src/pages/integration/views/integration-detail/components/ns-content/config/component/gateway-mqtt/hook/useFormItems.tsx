@@ -9,7 +9,9 @@ import { CopyTextField, CopyPwdTextField } from '../../copy-text';
  * Form data type
  */
 export type FormDataProps = MqttCredentialBrokerType & {
-    block_el?: ReactNode;
+    block_credential?: ReactNode;
+    block_general?: ReactNode;
+    block_topic?: ReactNode;
     broker_address?: string;
 };
 
@@ -28,7 +30,7 @@ const useFormItems = () => {
 
         result.push(
             {
-                name: 'block_el',
+                name: 'block_credential',
                 render({ field: { onChange, value }, fieldState: { error } }) {
                     return (
                         <div className="block_element">
@@ -62,7 +64,7 @@ const useFormItems = () => {
                 },
             },
             {
-                name: 'block_el',
+                name: 'block_general',
                 render({ field: { onChange, value }, fieldState: { error } }) {
                     return (
                         <div className="block_element">
@@ -108,7 +110,7 @@ const useFormItems = () => {
                 },
             },
             {
-                name: 'block_el',
+                name: 'block_topic',
                 render({ field: { onChange, value }, fieldState: { error } }) {
                     return (
                         <div className="block_element">
