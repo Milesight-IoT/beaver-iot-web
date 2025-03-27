@@ -135,6 +135,10 @@
     "common.time.afternoon": "p.m.",
     "common.time.morning": "a.m.",
     "common.unit.second": "s",
+    "common.button.previous": "Previous",
+    "common.button.next": "Next",
+    "common.label.please_select": "Please select",
+    "common.button.loading": "Loading",
     "valid.date.selected_time_greater_than_now_time": "The time earlier than current time is not supported.",
     "valid.date.start_time_greater_than_end_time": "The start time cannot be later than end time.",
     "valid.date.start_time_less_than_pre_end_time": "The start time cannot be earlier than the last end time.",
@@ -199,6 +203,8 @@
     "valid.input.value": "Input value: {0} only.",
     "valid.input.version": "The version number does not comply with the specification.",
     "valid.resp.at_least_one": "Please select at least one {1}.",
+    "valid_http_address": "Invalid address",
     "common.label.refresh": "Refresh Page",
-    "common.label.settings": "Settings"
+    "common.label.settings": "Settings",
+    "common.confirm.execute": "Are you sure to execute the update operation?"
 }

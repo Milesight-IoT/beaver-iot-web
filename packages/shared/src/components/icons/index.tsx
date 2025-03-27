@@ -127,6 +127,8 @@ export {
     Logout as LogoutIcon,
     Language as LanguageIcon,
     ConnectWithoutContact as ConnectWithoutContactIcon,
+    CloudSyncOutlined as CloudSyncOutlinedIcon,
+    TuneOutlined as TuneOutlinedIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';
