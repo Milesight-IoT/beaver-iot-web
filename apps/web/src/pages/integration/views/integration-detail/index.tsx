@@ -14,7 +14,7 @@ import {
 } from '@/services/http';
 import { usePermissionsError } from '@/hooks';
 import { genInteIconUrl } from '../../helper';
-import { GeneralContent, MscContent } from './components';
+import { GeneralContent, MscContent, NSContent } from './components';
 
 import './style.less';
 
@@ -55,12 +55,29 @@ const IntegrationDetail = () => {
             refreshDeps: [integrationId],
         },
     );
-    const isMscIntegration = basicInfo?.id === 'msc-integration';
 
     useLayoutEffect(() => {
         if (!state?.id || state.id !== integrationId) return;
         setBasicInfo(state);
     }, [state, integrationId]);
+
+    // render content
+    const renderContent = () => {
+        if (basicInfo?.id === 'msc-integration') {
+            return <MscContent entities={entityList} onUpdateSuccess={refreshInteDetail} />;
+        }
+        if (basicInfo?.id === 'milesight-gateway') {
+            return <NSContent entities={entityList} onUpdateSuccess={refreshInteDetail} />;
+        }
+        return (
+            <GeneralContent
+                loading={loading}
+                entities={entityList}
+                excludeServiceKeys={excludeServiceKeys}
+                onUpdateSuccess={refreshInteDetail}
+            />
+        );
+    };
 
     return (
         <div className="ms-main">
@@ -114,18 +131,7 @@ const IntegrationDetail = () => {
                         </Stack>
                     </div>
                 </div>
-                <div className="ms-view-int-detail__body">
-                    {isMscIntegration ? (
-                        <MscContent entities={entityList} onUpdateSuccess={refreshInteDetail} />
-                    ) : (
-                        <GeneralContent
-                            loading={loading}
-                            entities={entityList}
-                            excludeServiceKeys={excludeServiceKeys}
-                            onUpdateSuccess={refreshInteDetail}
-                        />
-                    )}
-                </div>
+                <div className="ms-view-int-detail__body">{renderContent()}</div>
             </div>
         </div>
     );

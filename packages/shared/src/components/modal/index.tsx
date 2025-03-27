@@ -29,6 +29,10 @@ export interface ModalProps {
      */
     visible?: boolean;
     /**
+     * Customized header
+     */
+    header?: React.ReactNode;
+    /**
      * Bomber title
      */
     title?: string;
@@ -100,6 +104,7 @@ const Modal: React.FC<ModalProps> = ({
     onCancel,
     container,
     footer,
+    header,
     children,
     disabledBackdropClose = true,
     showCloseIcon = false,
@@ -156,15 +161,16 @@ const Modal: React.FC<ModalProps> = ({
             sx={{ '& .MuiDialog-paper': { width: ModalWidth, maxWidth: 'none' }, ...(sx || {}) }}
             disableScrollLock={disableScrollLock}
         >
-            {!!title && (
-                <DialogTitle
-                    id="customized-dialog-title"
-                    className="ms-modal-title"
-                    sx={{ m: 0, paddingX: 3, paddingY: 2 }}
-                >
-                    {title}
-                </DialogTitle>
-            )}
+            {header ||
+                (!!title && (
+                    <DialogTitle
+                        id="customized-dialog-title"
+                        className="ms-modal-title"
+                        sx={{ m: 0, paddingX: 3, paddingY: 2 }}
+                    >
+                        {title}
+                    </DialogTitle>
+                ))}
             {showCloseIcon && (
                 <IconButton
                     aria-label="close"

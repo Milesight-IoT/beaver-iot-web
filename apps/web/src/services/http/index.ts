@@ -20,3 +20,5 @@ export {
     type UserType,
     type RoleResourceType,
 } from './user';
+
+export { default as embeddedNSApi, type GatewayDetailType } from './embeddedNs';

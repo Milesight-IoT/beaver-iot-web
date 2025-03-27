@@ -1,0 +1,25 @@
+.@{prefix}-ns-device {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+
+    &-tip {
+        display: flex;
+        margin-bottom: @margin-lg;
+
+        .MuiAlert-root {
+            width: 100%;
+
+            .MuiAlert-message {
+                div {
+                    word-break: break-word;
+                    word-wrap: break-word;
+                }
+            }
+        }
+    }
+
+    .@{mui-prefix}FormControl-root:last-child {
+        margin-top: @margin-xxs;
+    }
+}

@@ -1,0 +1,35 @@
+.@{prefix}-ns-add-modal {
+    &-tip {
+        display: flex;
+        margin: @margin-lg 0;
+
+        .@{mui-prefix}Alert-message {
+            div {
+                word-break: break-word;
+                word-wrap: break-word;
+            }
+        }
+    }
+}
+
+.@{prefix}-view-gateway-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: @margin-md;
+
+    .block_element {
+        width: 100%;
+        margin-bottom: @margin-md;
+    }
+
+    .copy-textField  { 
+        width: calc(50% - @margin-sm);
+    }
+
+    .copy-textField:nth-last-child(1),
+    .copy-textField:nth-last-child(2) {
+        margin-bottom: 0;
+    }
+
+}
