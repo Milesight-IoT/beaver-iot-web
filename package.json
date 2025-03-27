@@ -24,6 +24,7 @@
         "lint:pkgs": "pnpm --filter=@milesight/* -r run lint:fix",
         "stylelint:apps": "pnpm --filter=@app/* -r run stylelint:fix",
         "stylelint:pkgs": "pnpm --filter=@milesight/* -r run stylelint:fix",
+        "changeset": "changeset",
         "commitlint": "commitlint",
         "tsc": "pnpm run --filter=@milesight/* -r ts-check",
         "lint-staged": "lint-staged",
