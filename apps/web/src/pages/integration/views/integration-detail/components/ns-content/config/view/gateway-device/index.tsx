@@ -96,10 +96,15 @@ const GatewayDevices: React.FC<IProps> = props => {
             header={
                 <Tabs value={activeTap} onChange={handleChangeTap}>
                     {tabs.map(props => (
-                        <Tab id={props.id} label={props.label} />
+                        <Tab key={props.label} id={props.id} label={props.label} />
                     ))}
                 </Tabs>
             }
+            sx={{
+                '& .MuiDialogContent-root': {
+                    height: '700px',
+                },
+            }}
         >
             {tabs[activeTap].component}
         </Modal>

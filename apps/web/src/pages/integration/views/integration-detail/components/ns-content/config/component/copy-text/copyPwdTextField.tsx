@@ -14,7 +14,7 @@ import './style.less';
  *
  */
 const CopyPwdTextField: React.FC<TextFieldProps> = props => {
-    const { value, endIcon, startIcon } = props;
+    const { value } = props;
     const { handleCopy } = useCopy();
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -35,8 +35,7 @@ const CopyPwdTextField: React.FC<TextFieldProps> = props => {
                 type={showPassword ? 'text' : 'password'}
                 slotProps={{
                     input: {
-                        startAdornment: startIcon || null,
-                        endAdornment: endIcon || (
+                        endAdornment: (
                             <InputAdornment position="end">
                                 <IconButton
                                     aria-label="toggle password visibility"

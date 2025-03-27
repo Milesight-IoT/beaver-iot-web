@@ -40,16 +40,6 @@ export interface MqttCredentialResponse {
     response_data_topic?: string;
 }
 
-// mqtt broker response
-export interface MqttBrokerResponse {
-    data: MqttBrokerInfo;
-    status: string;
-    requestId: string;
-    errorCode?: string;
-    errorMessage?: string;
-    detailMessage?: string;
-}
-
 // mqtt broker detail
 export interface MqttBrokerInfo {
     host?: string;
@@ -61,11 +51,7 @@ export interface MqttBrokerInfo {
 }
 
 // mqtt credential and broker detail
-export type MqttCredentialBrokerType = MqttCredentialResponse & {
-    host?: string;
-    mqtt_port?: string;
-    mqtts_port?: number;
-};
+export type MqttCredentialBrokerType = MqttCredentialResponse & MqttBrokerInfo;
 
 // mqtt check connect result
 export interface MqttConnectionValidateResponse {
@@ -162,7 +148,7 @@ export interface GatewayAPISchema extends APISchema {
     // get mqtt broke info
     getMqttBrokerInfo: {
         request: void;
-        response: MqttBrokerResponse;
+        response: MqttBrokerInfo;
     };
     // check mqtt connection
     checkMqttConnection: {
