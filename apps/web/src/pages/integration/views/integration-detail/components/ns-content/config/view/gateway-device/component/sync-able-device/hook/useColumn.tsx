@@ -1,12 +1,5 @@
 import { Dispatch, SetStateAction, useMemo } from 'react';
-import {
-    MenuItem,
-    Select,
-    FormHelperText,
-    Autocomplete,
-    TextField,
-    FormControl,
-} from '@mui/material';
+import { Autocomplete, TextField } from '@mui/material';
 import { type ColumnType } from '@/components';
 import { DeviceModelItem, GatewayAPISchema } from '@/services/http/embeddedNs';
 import { useI18n } from '@milesight/shared/src/hooks';
@@ -17,7 +10,7 @@ export type TableRowDataType = ObjectToCamelCase<
 >;
 
 export interface UseColumnsProps<T> {
-    modelOptions: DeviceModelItem[] | undefined;
+    modelOptions: DeviceModelItem[];
     selectedIds: readonly ApiKey[];
     modelMap: Map<string, string>;
     setModelMap: Dispatch<SetStateAction<Map<string, string>>>;
@@ -66,11 +59,7 @@ const useColumns = <T extends TableRowDataType>({
                     return (
                         <Autocomplete
                             options={modelOptions}
-                            isOptionEqualToValue={(option: string, value: unknown) =>
-                                isEqual(option, value)
-                            }
-                            helperText={null}
-                            placeholder={getIntlText('common.label.please_select')}
+                            isOptionEqualToValue={(option, value) => isEqual(option, value)}
                             renderInput={params => (
                                 <TextField
                                     {...params}
@@ -80,6 +69,8 @@ const useColumns = <T extends TableRowDataType>({
                                         !modelMap.get(row.eui) &&
                                         !row.guessModelId
                                     }
+                                    helperText={null}
+                                    placeholder={getIntlText('common.label.please_select')}
                                     InputProps={{
                                         ...params.InputProps,
                                         size: 'small',
@@ -87,7 +78,7 @@ const useColumns = <T extends TableRowDataType>({
                                 />
                             )}
                             value={value || modelMap?.get(row.eui)}
-                            onChange={(_, option) => {
+                            onChange={(_, option: any) => {
                                 handleChangeModel(row.eui, option?.value);
                             }}
                         />

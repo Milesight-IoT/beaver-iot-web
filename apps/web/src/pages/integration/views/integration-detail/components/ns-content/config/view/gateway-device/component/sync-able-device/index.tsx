@@ -39,8 +39,8 @@ const SyncAbleDevice: React.FC<IProps> = props => {
     // ---------- list data related to ----------
     const [keyword, setKeyword] = useState<string>();
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
-    const [selectedIds, setSelectedIds] = useState<ApiKey[]>([]);
-    const [modelOption, setModelOption] = useState<DeviceModelItem[]>();
+    const [selectedIds, setSelectedIds] = useState<readonly ApiKey[]>([]);
+    const [modelOption, setModelOption] = useState<DeviceModelItem[]>([]);
 
     // select device model map
     const [modelMap, setModelMap] = useState<Map<string, string>>(new Map());

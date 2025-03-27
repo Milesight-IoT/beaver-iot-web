@@ -22,8 +22,21 @@ export const useMqtt = () => {
             );
             const [brokerError, brokerResp] = await awaitWrap(embeddedNSApi.getMqttBrokerInfo());
 
+            let brokerInfo = getResponseData(brokerResp);
+            if (!brokerInfo?.host) {
+                try {
+                    // use request hostname
+                    const urls = new URL(brokerResp?.request?.responseURL);
+                    brokerInfo = {
+                        ...brokerInfo,
+                        host: urls.hostname,
+                    };
+                } catch (error) {
+                    console.log(error, 'parse url fail');
+                }
+            }
             return {
-                ...(brokerResp ? getResponseData(brokerResp) : {}),
+                ...(brokerResp ? brokerInfo : {}),
                 ...(credentialResp ? getResponseData(credentialResp) : {}),
             };
         },

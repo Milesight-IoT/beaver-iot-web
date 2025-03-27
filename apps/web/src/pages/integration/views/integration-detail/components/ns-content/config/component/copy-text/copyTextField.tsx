@@ -9,7 +9,7 @@ import './style.less';
  * can copy textField component
  */
 const CopyTextField: React.FC<TextFieldProps> = props => {
-    const { value, startIcon, endIcon } = props;
+    const { value } = props;
     const { handleCopy } = useCopy();
 
     // copy text value
@@ -23,8 +23,7 @@ const CopyTextField: React.FC<TextFieldProps> = props => {
                 {...props}
                 slotProps={{
                     input: {
-                        startAdornment: startIcon || null,
-                        endAdornment: endIcon || (
+                        endAdornment: (
                             <InputAdornment position="end">
                                 <IconButton
                                     aria-label="copy text"
