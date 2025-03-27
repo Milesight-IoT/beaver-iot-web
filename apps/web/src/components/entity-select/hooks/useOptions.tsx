@@ -81,6 +81,11 @@ export const useOptions = <
             // Convert entity data to camel case
             const entityData = objectToCamelCase(entity || {});
 
+            // ATTENTION: keep the entity enum value origin case
+            if (entityData.entityValueAttribute?.enum) {
+                entityData.entityValueAttribute.enum = entity.entity_value_attribute.enum;
+            }
+
             return getOptionValue(entityData);
         });
         return filterOption ? filterOption(result) : result;
