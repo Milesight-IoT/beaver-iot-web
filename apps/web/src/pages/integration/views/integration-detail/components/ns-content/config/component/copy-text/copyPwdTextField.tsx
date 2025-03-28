@@ -24,8 +24,11 @@ const CopyPwdTextField: React.FC<TextFieldProps> = props => {
     };
 
     // copy text value
-    const handleClickCopy = () => {
-        handleCopy(value ? String(value) : '');
+    const handleClickCopy = (e: React.ChangeEvent<HTMLDivElement>) => {
+        handleCopy(
+            value ? String(value) : '',
+            (e.target as HTMLElement).parentElement || undefined,
+        );
     };
 
     return (
