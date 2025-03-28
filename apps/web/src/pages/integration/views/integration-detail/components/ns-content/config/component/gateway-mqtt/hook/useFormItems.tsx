@@ -1,9 +1,10 @@
 import { ReactNode, useMemo } from 'react';
-import { TextField, type TextFieldProps } from '@mui/material';
+import { type TextFieldProps } from '@mui/material';
 import { type ControllerProps } from 'react-hook-form';
 import { useI18n } from '@milesight/shared/src/hooks';
-import { MqttCredentialBrokerType } from '@/services/http/embeddedNs';
-import { CopyTextField, CopyPwdTextField } from '../../copy-text';
+import { MqttCredentialBrokerType } from '@/services/http/embedded-ns';
+import { CopyTextField } from '@/components/copy-text';
+import { CopyTextFieldProps } from '@/components/copy-text/copyTextField';
 
 /**
  * Form data type
@@ -19,7 +20,7 @@ const useFormItems = () => {
     const { getIntlText } = useI18n();
 
     const formItems = useMemo(() => {
-        const props: Partial<TextFieldProps> = {
+        const props: Partial<CopyTextFieldProps> = {
             disabled: true,
             type: 'text',
             size: 'small',
@@ -55,8 +56,9 @@ const useFormItems = () => {
                 name: 'password',
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {
                     return (
-                        <CopyPwdTextField
+                        <CopyTextField
                             {...props}
+                            type="password"
                             label={getIntlText('common.label.password')}
                             value={value}
                         />

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { Alert, DialogActions, Button } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
-import { DeviceListAppItem, MqttCredentialBrokerType } from '@/services/http/embeddedNs';
+import { DeviceListAppItem, MqttCredentialBrokerType } from '@/services/http/embedded-ns';
 import { LoadingButton } from '@milesight/shared/src/components';
 import { useMemoizedFn } from 'ahooks';
 import { AddGateWayType, useMqtt } from './hook/useMqtt';
@@ -12,16 +12,17 @@ import useFormItems, { type FormDataProps } from './hook/useFormItems';
 import './style.less';
 
 interface IProps {
+    /** device eui */
     eui: string | undefined;
-    // show tip message
+    /** show tip message */
     showTip?: boolean;
-    // mqtt config
+    /** mqtt config */
     mqttConfig?: MqttCredentialBrokerType | null;
-    // credential id
+    /** credential id */
     credential_id?: string;
-    // back event
+    /** back event */
     onBack?: (mqttConfig: MqttCredentialBrokerType) => void;
-    // next event
+    /** next event */
     onNext?: (data: MqttValidateResultType) => void;
 }
 
@@ -126,7 +127,7 @@ const GatewayMqttInfo: React.FC<IProps> = props => {
                 <DialogActions>
                     <Button
                         variant="outlined"
-                        sx={{ height: 36, textTransform: 'none' }}
+                        sx={{ textTransform: 'none' }}
                         onClick={handleBackStep}
                     >
                         {getIntlText('common.button.previous')}
@@ -135,7 +136,6 @@ const GatewayMqttInfo: React.FC<IProps> = props => {
                         variant="contained"
                         loading={loading}
                         onClick={handleSubmit(handleNextStep)}
-                        sx={{ height: 36 }}
                     >
                         {getIntlText(loading ? 'common.button.loading' : 'common.button.next')}
                     </LoadingButton>

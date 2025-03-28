@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { Modal } from '@milesight/shared/src/components';
 import { Step, StepButton, Stepper } from '@mui/material';
-import { DeviceListAppItem, MqttCredentialBrokerType } from '@/services/http/embeddedNs';
+import { DeviceListAppItem, MqttCredentialBrokerType } from '@/services/http/embedded-ns';
 import GatewayMqttInfo, {
     type MqttValidateResultType,
 } from '../../component/gateway-mqtt/gatewayMqttInfo';

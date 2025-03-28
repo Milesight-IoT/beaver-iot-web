@@ -65,12 +65,6 @@ const useFormItems = () => {
             {
                 name: 'eui',
                 rules: {
-                    maxLength: {
-                        value: 127,
-                        message: getIntlText('valid.input.max_length', {
-                            1: 127,
-                        }),
-                    },
                     validate: {
                         checkRequired: checkRequired(),
                         ...SNLengthChecker(),

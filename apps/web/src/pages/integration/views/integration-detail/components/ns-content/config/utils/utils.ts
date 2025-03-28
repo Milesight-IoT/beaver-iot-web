@@ -1,17 +1,17 @@
 import type { AxiosError, AxiosResponse } from 'axios';
 
 interface RequestOptions<T> {
-    // request promise
+    /** request promise */
     promise: Promise<T>;
-    // error return object
+    /** error return object */
     errorExt?: object;
-    // search value
+    /** search value */
     search?: string;
-    // page size
+    /** page size */
     pageSize: number;
-    // page number
+    /** page number */
     pageNumber: number;
-    // list data key eg: content, gateways
+    /** list data key eg: content, gateways */
     listKey: string;
 }
 

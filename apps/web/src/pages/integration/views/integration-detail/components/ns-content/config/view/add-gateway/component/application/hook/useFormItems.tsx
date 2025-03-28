@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { type ControllerProps, type FieldValues } from 'react-hook-form';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { checkRequired } from '@milesight/shared/src/utils/validators';
-import { DeviceListAppItem } from '@/services/http/embeddedNs';
+import { DeviceListAppItem } from '@/services/http/embedded-ns';
 import { Select } from '@milesight/shared/src/components';
 
 /**

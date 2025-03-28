@@ -29,13 +29,9 @@ export interface ModalProps {
      */
     visible?: boolean;
     /**
-     * Customized header
-     */
-    header?: React.ReactNode;
-    /**
      * Bomber title
      */
-    title?: string;
+    title?: string | React.ReactNode;
     /**
      * Custom bomb frame width
      * @description Value is that the size attribute does not take effect
@@ -104,7 +100,6 @@ const Modal: React.FC<ModalProps> = ({
     onCancel,
     container,
     footer,
-    header,
     children,
     disabledBackdropClose = true,
     showCloseIcon = false,
@@ -161,8 +156,8 @@ const Modal: React.FC<ModalProps> = ({
             sx={{ '& .MuiDialog-paper': { width: ModalWidth, maxWidth: 'none' }, ...(sx || {}) }}
             disableScrollLock={disableScrollLock}
         >
-            {header ||
-                (!!title && (
+            {!!title &&
+                (typeof title === 'string' ? (
                     <DialogTitle
                         id="customized-dialog-title"
                         className="ms-modal-title"
@@ -170,6 +165,8 @@ const Modal: React.FC<ModalProps> = ({
                     >
                         {title}
                     </DialogTitle>
+                ) : (
+                    title
                 ))}
             {showCloseIcon && (
                 <IconButton

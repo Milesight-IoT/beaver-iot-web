@@ -89,7 +89,7 @@ const Config: React.FC<IProps> = ({ entities, onUpdateSuccess }) => {
                           })
                         : getIntlText('setting.integration.gateway.delete_tip'),
                 confirmButtonText: getIntlText('common.label.delete'),
-                icon: <ErrorIcon sx={{ color: 'var(--orange-base)' }} />,
+                type: 'warning',
                 onConfirm: async () => {
                     const [error, resp] = await awaitWrap(
                         embeddedNSApi.deleteGateWay({ gateways: idsToDelete }),
@@ -128,7 +128,7 @@ const Config: React.FC<IProps> = ({ entities, onUpdateSuccess }) => {
             <Stack className="ms-operations-btns" direction="row" spacing="12px">
                 <Button
                     variant="contained"
-                    sx={{ height: 36, textTransform: 'none' }}
+                    sx={{ textTransform: 'none' }}
                     startIcon={<AddIcon />}
                     onClick={() => setAddOpen(true)}
                 >
@@ -136,8 +136,8 @@ const Config: React.FC<IProps> = ({ entities, onUpdateSuccess }) => {
                 </Button>
                 <Button
                     variant="outlined"
-                    sx={{ height: 36, textTransform: 'none' }}
-                    startIcon={<CodeIcon sx={{ width: 18, height: 18 }} />}
+                    sx={{ textTransform: 'none' }}
+                    startIcon={<CodeIcon fontSize="small" />}
                     onClick={handleCusCodec}
                 >
                     {getIntlText('setting.integration.label.codec_repo_title')}
@@ -145,7 +145,7 @@ const Config: React.FC<IProps> = ({ entities, onUpdateSuccess }) => {
                 <Button
                     variant="outlined"
                     disabled={!selectedIds.length}
-                    sx={{ height: 36, textTransform: 'none' }}
+                    sx={{ textTransform: 'none' }}
                     startIcon={<DeleteOutlineIcon />}
                     onClick={() => handleDeleteConfirm()}
                 >

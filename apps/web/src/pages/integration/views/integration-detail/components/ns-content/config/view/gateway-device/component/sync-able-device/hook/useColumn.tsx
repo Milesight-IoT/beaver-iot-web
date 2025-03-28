@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useMemo } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import { type ColumnType } from '@/components';
-import { DeviceModelItem, GatewayAPISchema } from '@/services/http/embeddedNs';
+import { DeviceModelItem, GatewayAPISchema } from '@/services/http/embedded-ns';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { isEqual } from 'lodash-es';
 

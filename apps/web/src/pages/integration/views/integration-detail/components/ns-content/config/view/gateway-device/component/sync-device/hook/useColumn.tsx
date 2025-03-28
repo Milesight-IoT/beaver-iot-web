@@ -3,7 +3,7 @@ import { Stack, IconButton } from '@mui/material';
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
 import { DeleteOutlineIcon } from '@milesight/shared/src/components';
 import { Tooltip, type ColumnType } from '@/components';
-import { GatewayAPISchema } from '@/services/http/embeddedNs';
+import { GatewayAPISchema } from '@/services/http/embedded-ns';
 
 type OperationType = 'device' | 'detail' | 'delete';
 

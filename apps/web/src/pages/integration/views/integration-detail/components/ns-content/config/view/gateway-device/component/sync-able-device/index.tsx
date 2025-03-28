@@ -12,7 +12,7 @@ import {
 } from '@/services/http';
 import { useRequest } from 'ahooks';
 import { TablePro, useConfirm } from '@/components';
-import { DeviceModelItem } from '@/services/http/embeddedNs';
+import { DeviceModelItem } from '@/services/http/embedded-ns';
 import useColumns, { TableRowDataType } from './hook/useColumn';
 import { getRequestList } from '../../../../utils/utils';
 

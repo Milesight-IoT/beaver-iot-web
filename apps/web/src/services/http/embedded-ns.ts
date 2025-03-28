@@ -1,18 +1,18 @@
 import { client, attachAPI, API_PREFIX } from './client';
 
-// gateway detail
+/** gateway detail */
 export interface GatewayDetailType {
     device_id: string;
     device_key: string;
     name: string;
     status: 'ONLINE' | 'OFFLINE';
-    credential_id: string; // MqttCredentialResponse
+    credential_id: string;
     device_count: number;
     application_id: string;
     eui: string;
 }
 
-// synced device detail
+/** synced device detail */
 export interface SyncedDeviceType {
     id: string;
     ke?: string;
@@ -21,14 +21,14 @@ export interface SyncedDeviceType {
     create_at: string;
 }
 
-// syncAble device detail
+/** syncAble device detail */
 export type SyncAbleDeviceType = {
     eui: string;
     name: string;
     guess_model_id?: string;
 };
 
-// mqtt credential detail
+/** mqtt credential detail */
 export interface MqttCredentialResponse {
     credential_id?: string;
     username?: string;
@@ -40,7 +40,7 @@ export interface MqttCredentialResponse {
     response_data_topic?: string;
 }
 
-// mqtt broker detail
+/** mqtt broker detail */
 export interface MqttBrokerInfo {
     host?: string;
     mqtt_port?: number;
@@ -50,33 +50,33 @@ export interface MqttBrokerInfo {
     wss_port?: number;
 }
 
-// mqtt credential and broker detail
+/** mqtt credential and broker detail */
 export type MqttCredentialBrokerType = MqttCredentialResponse & MqttBrokerInfo;
 
-// mqtt check connect result
+/** mqtt check connect result */
 export interface MqttConnectionValidateResponse {
     app_result: DeviceListAppItem[];
     profile_result: DeviceListProfileItem[];
 }
 
-// mqtt check connect result  applications
+/** mqtt check connect result  applications */
 export interface DeviceListAppItem {
     app_name: string;
     application_id: string;
 }
 
-// model select options
+/** model select options */
 export interface DeviceModelItem {
     label: string;
     value: string;
 }
 
-// model response type
+/** model response type */
 type DeviceModelResponse = {
     [key: string]: string;
 };
 
-// ProfileType
+/** ProfileType */
 interface DeviceListProfileItem {
     profile_id: string;
     profile_name: string;
@@ -89,7 +89,7 @@ export interface GatewayAPISchema extends APISchema {
         request: void;
         response: GatewayDetailType[];
     };
-    // delete gateway
+    /** delete gateway */
     deleteGateWay: {
         request: {
             gateways: ApiKey[];
@@ -97,7 +97,7 @@ export interface GatewayAPISchema extends APISchema {
         response: void;
     };
 
-    // add gateway
+    /** add gateway */
     addGateway: {
         request: {
             name: string | undefined;
@@ -109,7 +109,7 @@ export interface GatewayAPISchema extends APISchema {
         response: unknown;
     };
 
-    // get synced subDevice
+    /** get synced subDevice */
     getSyncedDevices: {
         request: {
             eui: string;
@@ -117,7 +117,7 @@ export interface GatewayAPISchema extends APISchema {
         response: SyncedDeviceType[];
     };
 
-    // get sync able subsDevice
+    /** get sync able subsDevice */
     getSyncAbleDevices: {
         request: {
             eui: string;
@@ -125,7 +125,7 @@ export interface GatewayAPISchema extends APISchema {
         response: SyncAbleDeviceType[];
     };
 
-    // sync devices
+    /** sync devices */
     syncDevices: {
         request: {
             eui: string;
@@ -137,7 +137,7 @@ export interface GatewayAPISchema extends APISchema {
         response: unknown;
     };
 
-    // get credential info
+    /** get credential info */
     getCredential: {
         request: {
             eui: string;
@@ -145,12 +145,12 @@ export interface GatewayAPISchema extends APISchema {
         };
         response: MqttCredentialResponse;
     };
-    // get mqtt broke info
+    /** get mqtt broke info */
     getMqttBrokerInfo: {
         request: void;
         response: MqttBrokerInfo;
     };
-    // check mqtt connection
+    /** check mqtt connection */
     checkMqttConnection: {
         request: {
             eui: string;
@@ -164,7 +164,7 @@ export interface GatewayAPISchema extends APISchema {
         };
         response: void;
     };
-    // get device-model
+    /** get device-model */
     getDeviceModels: {
         request: void;
         response: DeviceModelResponse;

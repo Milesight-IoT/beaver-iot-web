@@ -89,11 +89,10 @@ const GatewayDevices: React.FC<IProps> = props => {
             size="xl"
             visible={visible}
             className="ms-gateway-device-modal"
-            title=""
             footer={null}
             showCloseIcon
             onCancel={onCancel}
-            header={
+            title={
                 <Tabs value={activeTap} onChange={handleChangeTap}>
                     {tabs.map(props => (
                         <Tab key={props.label} id={props.id} label={props.label} />

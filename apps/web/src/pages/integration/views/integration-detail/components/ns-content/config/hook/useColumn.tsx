@@ -7,7 +7,7 @@ import {
     TuneOutlinedIcon,
 } from '@milesight/shared/src/components';
 import { Tooltip, type ColumnType } from '@/components';
-import { GatewayAPISchema } from '@/services/http/embeddedNs';
+import { GatewayAPISchema } from '@/services/http/embedded-ns';
 import { GatewayStatus } from '../component';
 
 type OperationType = 'device' | 'detail' | 'delete';

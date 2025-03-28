@@ -1,7 +1,7 @@
 import { useI18n } from '@milesight/shared/src/hooks';
 import { useMemoizedFn } from 'ahooks';
 import { toast } from '@milesight/shared/src/components';
-import { DeviceListAppItem, MqttCredentialBrokerType } from '@/services/http/embeddedNs';
+import { DeviceListAppItem, MqttCredentialBrokerType } from '@/services/http/embedded-ns';
 import { awaitWrap, getResponseData, embeddedNSApi } from '@/services/http';
 
 export interface AddGateWayType {

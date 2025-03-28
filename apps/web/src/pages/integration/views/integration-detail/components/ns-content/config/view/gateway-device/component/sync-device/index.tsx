@@ -77,7 +77,7 @@ const SyncedDevice: React.FC<IProps> = props => {
                           })
                         : getIntlText('setting.integration.label.device_delete_tip'),
                 confirmButtonText: getIntlText('common.label.delete'),
-                icon: <ErrorIcon sx={{ color: 'var(--orange-base)' }} />,
+                type: 'warning',
                 onConfirm: async () => {
                     const [error, resp] = await awaitWrap(
                         deviceAPI.deleteDevices({ device_id_list: idsToDelete }),
