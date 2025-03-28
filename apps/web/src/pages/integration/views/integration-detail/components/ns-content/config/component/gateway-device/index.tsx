@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Tab, Tabs } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { Modal } from '@milesight/shared/src/components';
-import { awaitWrap, getResponseData, embeddedNSApi } from '@/services/http';
-import { TableRowDataType } from '../../hook/useColumn';
+import { awaitWrap, getResponseData, embeddedNSApi, GatewayDetailType } from '@/services/http';
 import SyncedDevices from './component/sync-device';
 import SyncAbleDevice from './component/sync-able-device';
 
@@ -11,7 +10,7 @@ import './style.less';
 
 interface IProps {
     visible: boolean;
-    gatewayInfo: TableRowDataType;
+    gatewayInfo: ObjectToCamelCase<GatewayDetailType>;
     onCancel: () => void;
     onUpdateSuccess?: () => void;
     refreshTable: () => void;

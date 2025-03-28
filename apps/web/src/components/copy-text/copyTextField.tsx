@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { IconButton, InputAdornment, TextField, type TextFieldProps } from '@mui/material';
+import { useCopy } from '@milesight/shared/src/hooks';
 import {
     ContentCopyIcon,
     VisibilityIcon,
     VisibilityOffIcon,
 } from '@milesight/shared/src/components';
-import { useCopy } from '@milesight/shared/src/hooks';
 
 import './style.less';
 

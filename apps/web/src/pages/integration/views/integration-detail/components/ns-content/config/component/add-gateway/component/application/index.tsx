@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
 import React, { useState } from 'react';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
-import { useI18n } from '@milesight/shared/src/hooks';
 import { Alert, DialogActions, Button } from '@mui/material';
-import { LoadingButton, toast } from '@milesight/shared/src/components';
 import { useMemoizedFn } from 'ahooks';
+import { useI18n } from '@milesight/shared/src/hooks';
+import { LoadingButton, toast } from '@milesight/shared/src/components';
 import { awaitWrap, isRequestSuccess, embeddedNSApi } from '@/services/http';
 import useFormItems, { ApplicationPropsType, ApplicationType } from './hook/useFormItems';
 

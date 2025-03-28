@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction, useMemo } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
+import { isEqual } from 'lodash-es';
+import { useI18n } from '@milesight/shared/src/hooks';
 import { type ColumnType } from '@/components';
 import { DeviceModelItem, GatewayAPISchema } from '@/services/http/embedded-ns';
-import { useI18n } from '@milesight/shared/src/hooks';
-import { isEqual } from 'lodash-es';
 
 export type TableRowDataType = ObjectToCamelCase<
     GatewayAPISchema['getSyncAbleDevices']['response'][0]

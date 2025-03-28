@@ -1,25 +1,16 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button, Stack } from '@mui/material';
+import { useRequest } from 'ahooks';
+import { useNavigate } from 'react-router-dom';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
-import {
-    AddIcon,
-    DeleteOutlineIcon,
-    ErrorIcon,
-    toast,
-    CodeIcon,
-} from '@milesight/shared/src/components';
-import { awaitWrap, isRequestSuccess, embeddedNSApi, getResponseData } from '@/services/http';
-import { useRequest } from 'ahooks';
+import { AddIcon, DeleteOutlineIcon, toast, CodeIcon } from '@milesight/shared/src/components';
 import { TablePro, useConfirm } from '@/components';
+import { awaitWrap, isRequestSuccess, embeddedNSApi, getResponseData } from '@/services/http';
 import useColumns, { TableRowDataType, UseColumnsProps } from './hook/useColumn';
-import GatewayDetail from './view/detail';
-import { AddGateway } from './view/add-gateway';
-import GatewayDevices from './view/gateway-device';
-import CodecRepo from './view/codec';
 import { InteEntityType } from '../../../hooks';
-import { getRequestList } from './utils/utils';
+import { paginationList } from './utils/utils';
+import { GatewayDetail, GatewayDevices, CodecRepo, AddGateway } from './component';
 
 import './style.less';
 
@@ -55,18 +46,18 @@ const Config: React.FC<IProps> = ({ entities, onUpdateSuccess }) => {
     } = useRequest(
         async () => {
             const { page, pageSize } = paginationModel;
-            const [error, resp] = await getRequestList({
-                promise: embeddedNSApi.getList(),
-                search: keyword,
-                pageSize,
-                pageNumber: page + 1,
-                listKey: 'gateways',
-            });
+            const [error, resp] = await awaitWrap(embeddedNSApi.getList());
             const data = getResponseData(resp);
             if (error || !data || !isRequestSuccess(resp)) {
                 return;
             }
-            return objectToCamelCase(data);
+            const pageData = paginationList({
+                dataList: data.gateways,
+                search: keyword,
+                pageSize,
+                pageNumber: page + 1,
+            });
+            return objectToCamelCase(pageData);
         },
         {
             debounceWait: 300,

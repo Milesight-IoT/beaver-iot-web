@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Stack, Alert } from '@mui/material';
+import { useRequest } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
+import { TablePro, useConfirm } from '@/components';
 import { ErrorIcon, CloudSyncOutlinedIcon, toast } from '@milesight/shared/src/components';
 import {
     awaitWrap,
@@ -10,11 +12,9 @@ import {
     getResponseData,
     GatewayDetailType,
 } from '@/services/http';
-import { useRequest } from 'ahooks';
-import { TablePro, useConfirm } from '@/components';
 import { DeviceModelItem } from '@/services/http/embedded-ns';
+import { paginationList } from '../../../../utils/utils';
 import useColumns, { TableRowDataType } from './hook/useColumn';
-import { getRequestList } from '../../../../utils/utils';
 
 import './style.less';
 
@@ -52,22 +52,24 @@ const SyncAbleDevice: React.FC<IProps> = props => {
     } = useRequest(
         async () => {
             const { page, pageSize } = paginationModel;
-            const [error, resp] = await getRequestList({
-                promise: embeddedNSApi.getSyncAbleDevices({ eui: gatewayInfo.eui }),
-                search: keyword,
-                pageSize,
-                pageNumber: page + 1,
-                listKey: '',
-            });
+            const [error, resp] = await awaitWrap(
+                embeddedNSApi.getSyncAbleDevices({ eui: gatewayInfo.eui }),
+            );
             const data = getResponseData(resp);
             if (error || !data || !isRequestSuccess(resp)) {
                 return;
             }
+            const pageData = paginationList({
+                dataList: data,
+                search: keyword,
+                pageSize,
+                pageNumber: page + 1,
+            });
             // not search to update top bar count
             if (!keyword) {
-                deviceCountChange(data.total);
+                deviceCountChange(pageData.total);
             }
-            return objectToCamelCase(data);
+            return objectToCamelCase(pageData);
         },
         {
             debounceWait: 300,

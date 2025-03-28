@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
+import { useMemoizedFn } from 'ahooks';
 import { Alert, DialogActions, Button } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { DeviceListAppItem, MqttCredentialBrokerType } from '@/services/http/embedded-ns';
 import { LoadingButton } from '@milesight/shared/src/components';
-import { useMemoizedFn } from 'ahooks';
 import { AddGateWayType, useMqtt } from './hook/useMqtt';
 import useFormItems, { type FormDataProps } from './hook/useFormItems';
 

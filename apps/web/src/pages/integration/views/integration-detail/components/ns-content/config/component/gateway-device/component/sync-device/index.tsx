@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Button, Stack } from '@mui/material';
 import { useRequest } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
-import { DeleteOutlineIcon, ErrorIcon, toast } from '@milesight/shared/src/components';
+import { DeleteOutlineIcon, toast } from '@milesight/shared/src/components';
+import { TablePro, useConfirm } from '@/components';
 import {
     awaitWrap,
     isRequestSuccess,
@@ -12,9 +13,8 @@ import {
     GatewayDetailType,
     deviceAPI,
 } from '@/services/http';
-import { TablePro, useConfirm } from '@/components';
+import { paginationList } from '../../../../utils/utils';
 import useColumns, { TableRowDataType, UseColumnsProps } from './hook/useColumn';
-import { getRequestList } from '../../../../utils/utils';
 
 interface IProps {
     /** Edit successful callback */
@@ -42,18 +42,20 @@ const SyncedDevice: React.FC<IProps> = props => {
     } = useRequest(
         async () => {
             const { page, pageSize } = paginationModel;
-            const [error, resp] = await getRequestList({
-                promise: embeddedNSApi.getSyncedDevices({ eui: gatewayInfo.eui }),
-                search: keyword,
-                pageSize,
-                pageNumber: page + 1,
-                listKey: '',
-            });
+            const [error, resp] = await awaitWrap(
+                embeddedNSApi.getSyncedDevices({ eui: gatewayInfo.eui }),
+            );
             const data = getResponseData(resp);
             if (error || !data || !isRequestSuccess(resp)) {
                 return;
             }
-            return objectToCamelCase(data);
+            const pageData = paginationList({
+                dataList: data,
+                search: keyword,
+                pageSize,
+                pageNumber: page + 1,
+            });
+            return objectToCamelCase(pageData);
         },
         {
             debounceWait: 300,
