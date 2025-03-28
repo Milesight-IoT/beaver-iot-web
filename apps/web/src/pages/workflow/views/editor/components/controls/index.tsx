@@ -7,9 +7,12 @@ import {
     ZoomOutIcon,
     MyLocationIcon,
     AddCircleIcon,
+    PointerIcon,
+    BackHandOutlinedIcon,
 } from '@milesight/shared/src/components';
 import NodeMenu from '../node-menu';
 import { MAX_PRETTY_ZOOM } from '../../constants';
+import type { MoveMode } from '../../typings';
 import './style.less';
 
 export interface ControlsProps {
@@ -27,15 +30,34 @@ export interface ControlsProps {
      * Whether disable add button
      */
     addable?: boolean;
+
+    /**
+     * Current edit mode
+     */
+    moveMode: MoveMode;
+
+    /**
+     * Move mode change callback
+     */
+    onMoveModeChange: (mode: MoveMode) => void;
 }
 
 /**
  * Workflow Editor Controls
  */
-const Controls: React.FC<ControlsProps> = ({ minZoom, maxZoom, addable = true }) => {
+const Controls: React.FC<ControlsProps> = ({
+    minZoom,
+    maxZoom,
+    addable = true,
+    moveMode,
+    onMoveModeChange,
+}) => {
     const nodes = useNodes();
     const { zoom } = useViewport();
-    const { zoomIn, zoomOut, fitView } = useReactFlow();
+    const { zoomIn, zoomOut, fitView, getNodes, setNodes, getEdges, setEdges } = useReactFlow<
+        WorkflowNode,
+        WorkflowEdge
+    >();
 
     // ---------- Add Button Click Callback ----------
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -43,6 +65,30 @@ const Controls: React.FC<ControlsProps> = ({ minZoom, maxZoom, addable = true })
         setAnchorEl(e.currentTarget);
         e.stopPropagation();
     }, []);
+
+    // ---------- Edit Mode Change ----------
+    const isPanMode = moveMode === 'hand';
+    const handleEditModeChange = useCallback(
+        (mode: MoveMode) => {
+            onMoveModeChange(mode);
+
+            if (mode === 'pointer') return;
+            const nodes = getNodes();
+            const edges = getEdges();
+            const newNodes = nodes.map(node => ({
+                ...node,
+                selected: false,
+            }));
+            const newEdges = edges.map(edge => ({
+                ...edge,
+                selected: false,
+            }));
+
+            setNodes(newNodes);
+            setEdges(newEdges);
+        },
+        [getNodes, setNodes, getEdges, setEdges, onMoveModeChange],
+    );
 
     return (
         <Panel
@@ -66,14 +112,28 @@ const Controls: React.FC<ControlsProps> = ({ minZoom, maxZoom, addable = true })
                     </ButtonGroup>
                 </Paper>
                 <Paper elevation={0}>
-                    <Button
-                        className="add-button"
-                        disabled={!addable}
-                        sx={{ minWidth: 'auto' }}
-                        onClick={handleClick}
-                    >
-                        <AddCircleIcon sx={{ fontSize: 20 }} />
-                    </Button>
+                    <ButtonGroup variant="text">
+                        <Button
+                            className="btn-add"
+                            disabled={!addable}
+                            sx={{ minWidth: 'auto' }}
+                            onClick={handleClick}
+                        >
+                            <AddCircleIcon sx={{ fontSize: 20 }} />
+                        </Button>
+                        <Button
+                            className={cls({ active: !isPanMode })}
+                            onClick={() => handleEditModeChange('pointer')}
+                        >
+                            <PointerIcon sx={{ fontSize: 18 }} />
+                        </Button>
+                        <Button
+                            className={cls({ active: isPanMode })}
+                            onClick={() => handleEditModeChange('hand')}
+                        >
+                            <BackHandOutlinedIcon sx={{ fontSize: 18 }} />
+                        </Button>
+                    </ButtonGroup>
                     <NodeMenu
                         anchorOrigin={{
                             vertical: -8,

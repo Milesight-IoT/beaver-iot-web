@@ -58,6 +58,7 @@ const Config: React.FC<IProps> = ({ entities, onUpdateSuccess }) => {
                 pageNumber: page + 1,
             });
             return objectToCamelCase(pageData);
+           
         },
         {
             debounceWait: 300,

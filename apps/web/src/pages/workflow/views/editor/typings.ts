@@ -5,6 +5,13 @@ import { type NodeConfigItemType } from '../../config';
  */
 export type DesignMode = 'canvas' | 'advanced';
 
+/**
+ * Workflow Move Mode
+ * @template pointer - Pointer mode
+ * @template hand - Hand mode
+ */
+export type MoveMode = 'pointer' | 'hand';
+
 export type NodeFormItemValueType =
     | 'string'
     | 'int'

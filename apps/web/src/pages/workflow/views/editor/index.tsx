@@ -45,7 +45,7 @@ import {
     TestButton,
     type TopbarProps,
 } from './components';
-import { type DesignMode } from './typings';
+import type { DesignMode, MoveMode } from './typings';
 
 import '@xyflow/react/dist/style.css';
 import './style.less';
@@ -329,7 +329,13 @@ const WorkflowEditor = () => {
                 const newNodes = normalizeNodes(nodes, [...FROZEN_NODE_PROPERTY_KEYS, 'measured']);
                 const newEdges = normalizeEdges(edges);
 
-                if (!checkWorkflowValid(newNodes, newEdges)) return;
+                if (!nodes.length) {
+                    // Allow switching when nodes is empty
+                    setDesignMode(mode);
+                } else if (!checkWorkflowValid(newNodes, newEdges)) {
+                    return;
+                }
+
                 const selectedNode = nodes.find(node => node.selected);
 
                 if (selectedNode) updateNode(selectedNode.id, { selected: false });
@@ -346,6 +352,11 @@ const WorkflowEditor = () => {
                 }
                 const { nodes, edges } = data;
 
+                // Allow switching when nodes is empty
+                if (!nodes?.length) {
+                    setDesignMode(mode);
+                    return;
+                }
                 if (!checkWorkflowValid(nodes, edges)) return;
                 if (
                     checkNodesId(nodes, { validateFirst: true }) ||
@@ -384,6 +395,10 @@ const WorkflowEditor = () => {
         if (!selectedNode?.id) return;
         updateNode(selectedNode?.id, { selected: false });
     };
+
+    // ---------- Move Mode Change ----------
+    const [moveMode, setMoveMode] = useState<MoveMode>('hand');
+    const isPanMode = moveMode === 'hand';
 
     // ---------- Save Workflow ----------
     const navigate = useNavigate();
@@ -544,7 +559,8 @@ const WorkflowEditor = () => {
                         minZoom={MIN_ZOOM}
                         maxZoom={MAX_ZOOM}
                         deleteKeyCode={DELETE_KEY_CODE}
-                        selectionOnDrag={false}
+                        panOnDrag={isPanMode}
+                        selectionOnDrag={!isPanMode}
                         selectNodesOnDrag={false}
                         selectionKeyCode={null}
                         multiSelectionKeyCode={null}
@@ -562,7 +578,13 @@ const WorkflowEditor = () => {
                         onEdgeMouseLeave={handleEdgeMouseLeave}
                     >
                         <Background />
-                        <Controls minZoom={MIN_ZOOM} maxZoom={MAX_ZOOM} addable={!isLogMode} />
+                        <Controls
+                            minZoom={MIN_ZOOM}
+                            maxZoom={MAX_ZOOM}
+                            addable={!isLogMode}
+                            moveMode={moveMode}
+                            onMoveModeChange={setMoveMode}
+                        />
                         <HelperLines
                             horizontal={helperLineHorizontal}
                             vertical={helperLineVertical}
