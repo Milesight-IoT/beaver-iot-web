@@ -75,13 +75,13 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                             <PermissionControlHidden permissions={PERMISSIONS.DEVICE_DELETE}>
                                 <Tooltip title={getIntlText('common.label.delete')}>
                                     <IconButton
-                                        color="error"
+                                        // color="error"
                                         disabled={!row.deletable}
                                         sx={{
                                             width: 30,
                                             height: 30,
                                             color: 'text.secondary',
-                                            '&:hover': { color: 'error.light' },
+                                            // '&:hover': { color: 'error.light' },
                                         }}
                                         onClick={() => onButtonClick('delete', row)}
                                     >

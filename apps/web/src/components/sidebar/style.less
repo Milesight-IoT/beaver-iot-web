@@ -7,6 +7,7 @@
     padding-bottom: @ms-sidebar-footer-height;
     background-color: var(--component-background);
     border-right: 1px solid var(--border-color-base);
+    transition: width 0.3s;
 
     &.hidden {
         display: none;
@@ -17,7 +18,7 @@
     }
 
     & &-menus {
-        padding: @padding-lg @padding-xs;
+        padding: @padding-xs;
     }
 
     & &-menu-item {
@@ -29,11 +30,13 @@
             display: flex;
             flex: 1;
             align-items: center;
-            padding: @padding-xs @padding-md;
+            padding: @padding-xs;
+            overflow: hidden;
             color: var(--text-color-base);
             text-decoration: none;
 
             .@{mui-prefix}SvgIcon-root {
+                margin: 2px;
                 color: var(--icon-color-gray-secondary);
             }
 
@@ -43,7 +46,8 @@
             }
 
             .@{prefix}-name {
-                margin-left: @margin-md;
+                margin-left: @margin-sm;
+                .text-size(@font-size-md);
             }
         }
 
@@ -70,14 +74,24 @@
         justify-content: space-between;
         width: 100%;
         height: @ms-sidebar-footer-height;
-        padding: 0 @padding-md 0 @padding-xl;
+        padding: 0 14px;
 
         .@{prefix}-sidebar-user-trigger {
             cursor: pointer;
+            transition: transform 0.3s ease-out;
+
+            .@{mui-prefix}Avatar-root {
+                font-size: @font-size-xl;
+                vertical-align: middle;
+            }
+
+            .@{prefix}-name {
+                margin-left: @margin-sm;
+            }
 
             .@{prefix}-name > .@{prefix}-tooltip-cont {
                 display: block;
-                max-width: 70px;
+                max-width: 120px;
                 .ellipsis();
             }
 
@@ -93,6 +107,8 @@
         }
 
         .@{prefix}-oprt-shrink {
+            position: absolute;
+            right: 8px;
             color: var(--icon-color-gray-secondary);
         }
     }
@@ -100,36 +116,69 @@
     &&-shrink {
         width: 56px;
         padding-bottom: @ms-sidebar-footer-height-shrink;
-        // transition: width 0.3s;
 
-        .@{prefix}-sidebar-menu-item {
-            &-link {
-                justify-content: center;
-                padding: 10px;
+        .@{prefix}-sidebar-footer {
+            .@{prefix}-sidebar-user-trigger {
+                transform: translateY(-46px);
 
-                .ms-name {
+                .@{prefix}-name {
                     display: none;
                 }
             }
         }
+    }
+}
 
-        .@{prefix}-sidebar-footer {
-            flex-direction: column;
-            justify-content: center;
-            height: @ms-sidebar-footer-height-shrink;
-            padding: 0 @padding-xs;
+.@{prefix}-sidebar-menu {
+    .@{mui-prefix}Paper-root {
+        .@{mui-prefix}List-root {
+            padding: 0 0 @padding-xxs 0;
+        }
+        .@{mui-prefix}ListItem-root {
+            padding: @padding-lg;
+        }
+    }
 
-            .@{prefix}-sidebar-user-trigger {
-                .@{prefix}-name,
-                .@{prefix}-icon {
-                    display: none;
-                }
-            }
+    & &__avatar {
+        min-width: unset;
+        margin-right: @margin-sm;
+    }
 
-            .@{prefix}-oprt-shrink {
-                margin-top: @margin-xs;
-                transform: rotate(180deg);
-            }
+    & &__text {
+        margin: 0;
+        .@{mui-prefix}ListItemText-primary {
+            font-weight: @font-weight-bold;
+        }
+
+        .@{mui-prefix}ListItemText-secondary {
+            .text-size(@font-size-sm);
+        }
+    }
+
+    &__divider {
+        &.@{mui-prefix}Divider-root {
+            margin-bottom: @margin-xxs;
+            border-color: var(--border-color-base);
+        }
+    }
+
+    .@{mui-prefix}MenuItem-root {
+        padding: @padding-xs @padding-lg;
+
+        .@{mui-prefix}ListItemIcon-root {
+            min-width: unset;
+            margin-right: @margin-sm;
+        }
+    }
+}
+
+.ms-sidebar-submenu__item {
+    .@{mui-prefix}MenuItem-root {
+        padding: @padding-xs @padding-md;
+    }
+    .@{mui-prefix}Paper-root {
+        .@{mui-prefix}List-root {
+            padding: @padding-xxs 0;
         }
     }
 }

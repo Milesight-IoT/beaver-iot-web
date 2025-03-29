@@ -22,6 +22,8 @@
                 padding: @padding-xxs @padding-sm;
                 margin-bottom: @margin-xxs;
                 border-radius: @border-radius-base;
+                cursor: pointer;
+                transition: background-color 0.1s ease;
 
                 &:hover {
                     background-color: var(--component-background-gray);
@@ -30,16 +32,39 @@
                 &.active {
                     color: var(--text-color-main);
                     background-color: var(--primary-color-1);
+
+                    .name-wrapper {
+                        .icon {
+                            :global {
+                                .MuiSvgIcon-root {
+                                    color: var(--text-color-main);
+                                }
+                            }
+                        }
+                    }
                 }
 
                 .name-wrapper {
                     display: flex;
+                    align-items: center;
                     overflow: hidden;
                     .text-size(@font-size-base);
 
                     .icon {
+                        display: flex;
+                        align-items: center;
                         margin-right: @margin-xs;
                     }
+                }
+            }
+
+            :global {
+                .ms-loading-wrapper {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                    height: 100%;
                 }
             }
         }

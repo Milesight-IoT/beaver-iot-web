@@ -12,6 +12,7 @@ import {
     Stack,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { merge } from 'lodash-es';
 import { LogoutIcon } from '@milesight/shared/src/components';
 import { iotLocalStorage, TOKEN_CACHE_KEY } from '@milesight/shared/src/utils/storage';
 import { useI18n } from '@milesight/shared/src/hooks';
@@ -79,6 +80,7 @@ const MoreUserInfo: React.FC<MoreUserInfoProps> = ({ userInfo }) => {
                         <Tooltip autoEllipsis className="ms-name" title={userInfo.nickname} />
                     </Stack>
                     <Menu
+                        className="ms-sidebar-menu"
                         {...bindMenu(state)}
                         anchorOrigin={{
                             vertical: -10,
@@ -89,16 +91,24 @@ const MoreUserInfo: React.FC<MoreUserInfoProps> = ({ userInfo }) => {
                             horizontal: 'left',
                         }}
                     >
-                        <ListItem sx={{ width: 230 }} alignItems="center">
-                            <ListItemAvatar>
-                                <Avatar {...stringAvatar(userInfo?.nickname || '')} />
+                        <ListItem sx={{ width: 255 }} alignItems="center">
+                            <ListItemAvatar className="ms-sidebar-menu__avatar">
+                                <Avatar
+                                    {...merge(stringAvatar(userInfo?.nickname || ''), {
+                                        sx: { width: 44, height: 44 },
+                                    })}
+                                />
                             </ListItemAvatar>
                             <ListItemText
+                                className="ms-sidebar-menu__text"
                                 primary={<Tooltip title={userInfo?.nickname || ''} autoEllipsis />}
                                 secondary={<Tooltip title={userInfo?.email || ''} autoEllipsis />}
                             />
                         </ListItem>
-                        <Divider sx={{ marginBottom: '8px' }} />
+                        <Divider
+                            sx={{ marginBottom: '8px' }}
+                            className="ms-sidebar-menu__divider"
+                        />
                         <LangItem onChange={() => state.close()} />
                         <MenuItem
                             onClick={() => {

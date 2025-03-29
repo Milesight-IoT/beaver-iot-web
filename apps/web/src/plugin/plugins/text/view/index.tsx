@@ -88,7 +88,7 @@ const View = (props: ViewProps) => {
         <div className={`text-wrapper ${isPreview ? 'text-wrapper__preview' : ''}`}>
             {label && <div className="text-wrapper__label">{label}</div>}
             <div
-                className="text-wrapper__content bg-custom-scrollbar"
+                className="text-wrapper__content bg-custom-scrollbar ms-perfect-scrollbar"
                 style={{ fontSize: `${fontSize}px`, lineHeight: `${Number(fontSize) + 8}px` }}
             >
                 {isEditing ? (textContent || '').slice(0, 6000) : textContent}

@@ -57,59 +57,56 @@ export default (props: PluginListProps) => {
     return (
         <div className="dashboard-plugin-class">
             <div className="dashboard-plugin-class-list">
-                <Grid container gap={1}>
-                    {pluginList
-                        ? Object.keys(pluginList).map((pluginClass: string) => {
-                              return (
-                                  <div
-                                      className="dashboard-plugin-class-grid"
-                                      key={pluginList[pluginClass].type}
-                                  >
-                                      <div className="dashboard-plugin-class-grid-title">
-                                          {getIntlText(pluginList[pluginClass].name)}
-                                      </div>
-                                      <Grid container gap={1}>
-                                          {pluginList[pluginClass]?.list?.map(
-                                              (pluginConfig: any) => {
-                                                  return (
-                                                      <Grid
-                                                          size={3}
-                                                          className="dashboard-plugin-class-item"
-                                                          sx={{ width: 80, height: 80 }}
-                                                      >
-                                                          <div
-                                                              className="dashboard-plugin-class-item-content"
-                                                              onClick={() =>
-                                                                  handleClick(pluginConfig)
-                                                              }
-                                                          >
-                                                              <img
-                                                                  className="dashboard-plugin-class-item-content-icon"
-                                                                  src={
-                                                                      pluginConfig.iconSrc
-                                                                          ?.default || pluginImg
-                                                                  }
-                                                                  alt="plugin"
-                                                              />
-                                                              <Tooltip
-                                                                  title={pluginConfig.name}
-                                                                  autoEllipsis
-                                                              >
-                                                                  <div className="dashboard-plugin-class-item-content-name">
-                                                                      {pluginConfig.name}
-                                                                  </div>
-                                                              </Tooltip>
-                                                          </div>
-                                                      </Grid>
-                                                  );
-                                              },
-                                          )}
-                                      </Grid>
+                {pluginList
+                    ? Object.keys(pluginList).map((pluginClass: string) => {
+                          return (
+                              <div
+                                  className="dashboard-plugin-class-grid"
+                                  key={pluginList[pluginClass].type}
+                              >
+                                  <div className="dashboard-plugin-class-grid-title">
+                                      {getIntlText(pluginList[pluginClass].name)}
                                   </div>
-                              );
-                          })
-                        : null}
-                </Grid>
+                                  <Grid
+                                      container
+                                      spacing={1}
+                                      className="dashboard-plugin-class-grid-container"
+                                  >
+                                      {pluginList[pluginClass]?.list?.map((pluginConfig: any) => {
+                                          return (
+                                              <Grid
+                                                  size={3}
+                                                  className="dashboard-plugin-class-item"
+                                              >
+                                                  <div
+                                                      className="dashboard-plugin-class-item-content"
+                                                      onClick={() => handleClick(pluginConfig)}
+                                                  >
+                                                      <img
+                                                          className="dashboard-plugin-class-item-content-icon"
+                                                          src={
+                                                              pluginConfig.iconSrc?.default ||
+                                                              pluginImg
+                                                          }
+                                                          alt="plugin"
+                                                      />
+                                                      <Tooltip
+                                                          title={pluginConfig.name}
+                                                          autoEllipsis
+                                                      >
+                                                          <div className="dashboard-plugin-class-item-content-name">
+                                                              {pluginConfig.name}
+                                                          </div>
+                                                      </Tooltip>
+                                                  </div>
+                                              </Grid>
+                                          );
+                                      })}
+                                  </Grid>
+                              </div>
+                          );
+                      })
+                    : null}
             </div>
         </div>
     );

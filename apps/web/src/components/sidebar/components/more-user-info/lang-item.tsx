@@ -20,19 +20,20 @@ const LangItem: React.FC<Props> = ({ onChange }) => {
                     <LanguageIcon />
                 </ListItemIcon>
                 <Stack sx={{ flex: 1 }}>{getIntlText('common.label.language')}</Stack>
-                <ArrowForwardIosIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
+                <ArrowForwardIosIcon sx={{ fontSize: 12, color: 'text.secondary' }} />
             </MenuItem>
             <HoverMenu
                 {...bindMenu(popupState)}
                 anchorOrigin={{
-                    vertical: 'bottom',
+                    vertical: 'top',
                     horizontal: 'right',
                 }}
                 transformOrigin={{
-                    vertical: 'bottom',
+                    vertical: 'top',
                     horizontal: 'left',
                 }}
                 sx={{ '& .MuiList-root': { width: 160 } }}
+                className="ms-sidebar-submenu__item"
             >
                 {Object.values(langs).map(item => {
                     const selected = item.key === lang;

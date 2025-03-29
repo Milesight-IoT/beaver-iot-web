@@ -29,8 +29,14 @@
         overflow-y: auto;
         border-top: 1px solid var(--border-color-base);
 
-        .form-contain .form-box:last-child {
-            margin-bottom: @margin-md !important;
+        // .form-contain .form-box:last-child {
+        //     margin-bottom: @margin-md !important;
+        // }
+
+        .form-contain {
+            .@{mui-prefix}FormControl-root:last-child {
+                margin-bottom: @margin-md;
+            }
         }
     }
 
@@ -53,8 +59,8 @@
         min-height: 300px;
     }
 
-    .MuiTextField-root:first-child {
-        margin: 0 !important;
-        margin-top: @margin-sm !important;
-    }
+    // .MuiTextField-root:first-child {
+    //     margin: 0 !important;
+    //     margin-top: @margin-sm !important;
+    // }
 }

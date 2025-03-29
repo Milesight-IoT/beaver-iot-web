@@ -323,7 +323,10 @@ export default (props: DashboardContentProps) => {
                     </div>
                 </PermissionControlDisabled>
             ) : (
-                <div className="dashboard-content-main bg-custom-scrollbar" ref={mainRef}>
+                <div
+                    className="dashboard-content-main bg-custom-scrollbar ms-perfect-scrollbar"
+                    ref={mainRef}
+                >
                     <Widgets
                         widgets={widgets}
                         onChangeWidgets={handleChangeWidgets}

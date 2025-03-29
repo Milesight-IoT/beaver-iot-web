@@ -13,9 +13,10 @@
 
     &-box {
         position: relative;
-        padding: @padding-md @padding-sm @padding-md;
+        padding: @padding-md @padding-sm 0 @padding-sm;
+        margin-top: @margin-sm;
         margin-bottom: @margin-md;
-        border: 1px solid rgba(0,0,0, 0.23);
+        border: @border-base;
         border-radius: @border-radius-base;
 
         &-label {
@@ -23,7 +24,9 @@
             top: -(@padding-sm + @padding-xs);
             left: @padding-md;
             padding: @padding-xs;
+            color: var(--text-color-primary);
             background: var(--main-background);
+            .text-size(@font-size-md);
         }
 
         &-item {
@@ -39,9 +42,9 @@
         }
     }
 
-    &-item {
-        margin: 0 !important;
-        // margin-top: @margin-sm !important;
-        margin-bottom: @margin-xl !important;
-    }
+    // &-item {
+    //     margin: 0 !important;
+    //     // margin-top: @margin-sm !important;
+    //     margin-bottom: @margin-xl !important;
+    // }
 }

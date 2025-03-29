@@ -21,6 +21,7 @@ export default React.memo((props: IProps) => {
         entityAccessMods,
         entityExcludeChildren,
         customFilterEntity,
+        title,
         ...restProps
     } = props;
 
@@ -39,6 +40,7 @@ export default React.memo((props: IProps) => {
     return (
         <EntitySelect
             fieldName="entityId"
+            label={title}
             entityType={entityType}
             entityValueType={entityValueTypes || entityValueType}
             entityAccessMod={entityAccessMods || entityAccessMod}

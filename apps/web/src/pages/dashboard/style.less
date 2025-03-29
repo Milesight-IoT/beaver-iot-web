@@ -9,7 +9,6 @@
 
     .@{prefix}-tab-content {
         flex: 1;
-        padding: @padding-lg 0 0 0;
         overflow: hidden;
         background: var(--gray-color-2);
 
@@ -75,7 +74,7 @@
         display: flex;
         min-height: 0 !important;
         padding: 0 !important;
-        background: #fff;
+        background: var(--component-background);
     }
 
     &-widget-grid-edit {
@@ -107,10 +106,11 @@
         }
 
         &-operate {
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 @padding-xxl 0 @padding-md;
+            padding: @padding-md @padding-xxl @padding-md @padding-md;
         }
 
         &-empty {
@@ -252,34 +252,4 @@
     &-confirm-delete-icon {
         color: var(--orange-6);
     }
-}
-
-.bg-custom-scrollbar::-webkit-scrollbar {
-    position: absolute;
-    inset: 0;
-    width: 11px;
-    height: 12px;
-}
-
-.bg-custom-scrollbar::-webkit-scrollbar-corner {
-    background-color: transparent;
-}
-
-.bg-custom-scrollbar::-webkit-scrollbar-thumb {
-    min-height: 24px;
-    background: transparent;
-    background-clip: padding-box;
-    border: 2px solid transparent;
-    border-radius: 6px;
-}
-
-.bg-custom-scrollbar:hover::-webkit-scrollbar-thumb:hover {
-    background: var(--gray-4);
-    background-clip: content-box;
-}
-
-.bg-custom-scrollbar:hover::-webkit-scrollbar-thumb {
-    background: var(--gray-4);
-    background-clip: padding-box;
-    border: 2px solid transparent;
 }

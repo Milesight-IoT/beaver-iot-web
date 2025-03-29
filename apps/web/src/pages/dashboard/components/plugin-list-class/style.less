@@ -1,16 +1,23 @@
 .dashboard-plugin-class {
     &-list {
         width: 400px;
-        padding: 0 @padding-xxs @padding-md;
     }
 
     &-grid {
         width: 100%;
 
         &-title {
-            padding: @padding-md @padding-xs @padding-xs @padding-xs;
-            font-size: @font-size-sm;
+            padding: @padding-md @padding-md @padding-xs @padding-md;
             color: var(--gray-color-7);
+            .text-size(@font-size-sm);
+        }
+
+        &-container {
+            padding: 0 @padding-md @margin-md @padding-md;
+        }
+
+        &:not(:last-child) &-container {
+            border-bottom: 1px solid var(--border-color-gray-light);
         }
     }
 
@@ -25,6 +32,7 @@
 
             &:hover {
                 border: 1px solid var(--primary-color-base);
+                transition: border 0.3s;
             }
 
             &-icon {

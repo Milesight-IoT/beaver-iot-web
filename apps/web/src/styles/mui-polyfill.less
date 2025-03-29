@@ -90,6 +90,26 @@ input.@{mui-prefix}InputBase-input {
         -webkit-text-fill-color: var(--text-color-base);
     }
 }
+// Adjust the default border style for the Input component
+.@{mui-prefix}InputBase-root.@{mui-prefix}OutlinedInput-root {
+    &:hover {
+        .@{mui-prefix}OutlinedInput-notchedOutline {
+            border-color: var(--primary-color-7);
+            transition: border 0.3s;
+        }
+    }
+    &.@{mui-prefix}-focused {
+        .@{mui-prefix}OutlinedInput-notchedOutline {
+            border-width: 1px;
+        }
+
+        &:hover {
+            .@{mui-prefix}OutlinedInput-notchedOutline {
+                transition: none;
+            }
+        }
+    }
+}
 
 // ---------- Dialog ----------
 .@{mui-prefix}Dialog-container {
@@ -110,15 +130,106 @@ input.@{mui-prefix}InputBase-input {
     }
 }
 
-// ---------- Select ----------
+// ---------- Checkbox ----------
 .@{mui-prefix}Checkbox-root.@{mui-prefix}-disabled {
     color: var(--border-color-gray);
 
-    &::after {
-        position: absolute;
-        inset: 13px;
-        background-color: var(--gray-color-1);
-        border-radius: 2px;
-        content: '';
+    &:not(.@{mui-prefix}-checked) {
+        color: var(--border-color-gray);
+
+        &::after {
+            position: absolute;
+            inset: 13px;
+            background-color: var(--gray-color-1);
+            border-radius: 2px;
+            content: '';
+        }
+    }
+
+    &.@{mui-prefix}-checked {
+        color: var(--border-color-gray);
+    }
+}
+
+// ---------- Paper ----------
+.@{mui-prefix}Paper-root {
+    &.@{mui-prefix}Paper-elevation {
+        box-shadow: @shadow-2;
+    }
+
+    .@{mui-prefix}List-root {
+        .@{mui-prefix}MenuItem-root {
+            .text-size(@font-size-md);
+        }
+    }
+}
+
+// ---------- Menu ----------
+.@{mui-prefix}List-root {
+    .@{mui-prefix}MenuItem-root {
+        &:hover {
+            background-color: var(--component-background-gray);
+            transition: background-color 0.1s ease;
+        }
+    }
+}
+
+// ---------- Form ----------
+.@{mui-prefix}FormControl-root {
+    div&,
+    &.@{mui-prefix}FormControl-fullWidth&,
+    &.@{mui-prefix}FormControl-marginDense {
+        margin: 0 0 @margin-md 0;
+    }
+
+    .@{mui-prefix}InputBase-root {
+        .@{mui-prefix}InputAdornment-root {
+            color: var(--text-color-tertiary);
+
+            .@{mui-prefix}ButtonBase-root {
+                color: var(--icon-color-gray-secondary);
+            }
+        }
+    }
+
+    .@{mui-prefix}FormLabel-root {
+        position: unset;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        margin-bottom: @margin-xxs;
+        color: var(--text-color-primary);
+        transform: unset;
+        .text-size(@font-size-md);
+
+        &.@{mui-prefix}-focused {
+            color: var(--text-color-primary);
+        }
+
+        .@{mui-prefix}FormLabel-asterisk {
+            margin-right: @margin-xxs;
+        }
+    }
+
+    .@{mui-prefix}OutlinedInput-notchedOutline {
+        top: 0;
+        border: @border-base;
+
+        legend {
+            display: none;
+        }
+    }
+
+    .@{mui-prefix}FormHelperText-root {
+        margin: 0;
+        color: var(--text-color-tertiary);
+        .text-size(@font-size-md);
+    }
+}
+
+// ---------- Dialog ----------
+.@{mui-prefix}Dialog-root {
+    .@{mui-prefix}Backdrop-root {
+        background-color: rgba(0, 0, 0, 0.38);
     }
 }

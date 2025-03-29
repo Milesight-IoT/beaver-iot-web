@@ -149,3 +149,27 @@ body {
         }
     }
 }
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-color);
+    border-radius: 8px;
+}
+
+.ms-perfect-scrollbar {
+    &::-webkit-scrollbar-thumb {
+        background: transparent;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb-color);
+    }
+}

@@ -47,11 +47,6 @@
         },
         {
             "style": "width: 100%;",
-            "theme": {
-                "default": {
-                    "style": "font-size: 18px;"
-                }
-            },
             "components": [
                 {
                     "type": "ChartTimeSelect",
