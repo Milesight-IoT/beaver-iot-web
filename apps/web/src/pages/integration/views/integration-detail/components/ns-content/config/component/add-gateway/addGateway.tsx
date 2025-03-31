@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
+import { Step, StepButton, Stepper } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { Modal } from '@milesight/shared/src/components';
-import { Step, StepButton, Stepper } from '@mui/material';
 import { DeviceListAppItem, MqttCredentialBrokerType } from '@/services/http/embedded-ns';
-import GatewayMqttInfo, {
-    type MqttValidateResultType,
-} from '../../component/gateway-mqtt/gatewayMqttInfo';
+import GatewayMqttInfo, { type MqttValidateResultType } from '../gateway-mqtt/gatewayMqttInfo';
 import GatewayBasic, { GatewayBasicType } from './component/basic';
 import { ApplicationType } from './component/application/hook/useFormItems';
 import Application from './component/application';

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { Modal } from '@milesight/shared/src/components';
-import { GatewayMqttInfo } from '../../component';
-import { TableRowDataType } from '../../hook/useColumn';
+import GatewayMqttInfo from '../gateway-mqtt/gatewayMqttInfo.tsx';
+import { TableRowDataType } from '../../hook/useColumn.tsx';
 
 import './style.less';
 

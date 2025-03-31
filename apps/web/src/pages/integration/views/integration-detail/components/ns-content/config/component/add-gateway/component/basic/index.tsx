@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Button, DialogActions } from '@mui/material';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import { useMemoizedFn } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { LoadingButton } from '@milesight/shared/src/components';
-import { useMemoizedFn } from 'ahooks';
 import { awaitWrap, isRequestSuccess, embeddedNSApi } from '@/services/http';
 import useFormItems, { GatewayBasicType } from './hook/useFormItems';
 

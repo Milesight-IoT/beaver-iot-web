@@ -8,11 +8,13 @@ import {
 } from '@milesight/shared/src/components';
 import { Tooltip, type ColumnType } from '@/components';
 import { GatewayAPISchema } from '@/services/http/embedded-ns';
-import { GatewayStatus } from '../component';
+import GatewayStatus from '../component/gateway-status';
 
 type OperationType = 'device' | 'detail' | 'delete';
 
-export type TableRowDataType = ObjectToCamelCase<GatewayAPISchema['getList']['response'][0]>;
+export type TableRowDataType = ObjectToCamelCase<
+    GatewayAPISchema['getList']['response']['gateways'][0]
+>;
 
 export interface UseColumnsProps<T> {
     /**

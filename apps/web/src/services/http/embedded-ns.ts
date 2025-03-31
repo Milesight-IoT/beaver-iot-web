@@ -87,7 +87,9 @@ export interface GatewayAPISchema extends APISchema {
     /** Get gateway list */
     getList: {
         request: void;
-        response: GatewayDetailType[];
+        response: {
+            gateways: GatewayDetailType[];
+        };
     };
     /** delete gateway */
     deleteGateWay: {
