@@ -2,12 +2,19 @@ import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Stack } from '@mui/material';
 import { useRequest } from 'ahooks';
+import { pickBy } from 'lodash-es';
+import {
+    FiltersRecordType,
+    TablePro,
+    PermissionControlHidden,
+    FilterValue,
+    TableProProps,
+} from '@/components';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { objectToCamelCase, xhrDownload } from '@milesight/shared/src/utils/tools';
 import { getCurrentComponentLang } from '@milesight/shared/src/services/i18n';
 import { getAuthorizationToken } from '@milesight/shared/src/utils/request/utils';
 import { IosShareIcon, toast } from '@milesight/shared/src/components';
-import { TablePro, useConfirm, PermissionControlHidden } from '@/components';
 import { DateRangePickerValueType } from '@/components/date-range-picker';
 import {
     entityAPI,
@@ -38,6 +45,7 @@ export default () => {
     const [detail, setDetail] = useState<TableRowDataType | null>(null);
     const [detailVisible, setDetailVisible] = useState<boolean>(false);
     const [editVisible, setEditVisible] = useState<boolean>(false);
+    const [filteredInfo, setFilteredInfo] = useState<FiltersRecordType>({});
 
     const {
         data: entityData,
@@ -46,6 +54,13 @@ export default () => {
     } = useRequest(
         async () => {
             const { page, pageSize } = paginationModel;
+            const searchParams = pickBy({
+                entity_names: filteredInfo?.entityName?.[0],
+                entity_keys: filteredInfo?.entityKey,
+                entity_type: filteredInfo?.entityType,
+                entity_value_type: filteredInfo?.entityValueType,
+                entity_source_name: filteredInfo.integrationName?.[0],
+            });
             const [error, resp] = await awaitWrap(
                 entityAPI.getList({
                     keyword,
@@ -57,6 +72,7 @@ export default () => {
                             property: 'key',
                         },
                     ],
+                    ...searchParams,
                 }),
             );
             const data = getResponseData(resp);
@@ -67,9 +83,15 @@ export default () => {
         },
         {
             debounceWait: 300,
-            refreshDeps: [keyword, paginationModel],
+            refreshDeps: [keyword, paginationModel, filteredInfo],
         },
     );
+
+    const handleFilterChange: TableProProps<TableRowDataType>['onFilterInfoChange'] = (
+        filters: Record<string, FilterValue | null>,
+    ) => {
+        setFilteredInfo(filters);
+    };
 
     const handleShowExport = () => {
         if (!selectedIds?.length) {
@@ -185,7 +207,10 @@ export default () => {
         },
         [navigate, handleExportConfirm],
     );
-    const columns = useColumns<TableRowDataType>({ onButtonClick: handleTableBtnClick });
+    const columns = useColumns<TableRowDataType>({
+        onButtonClick: handleTableBtnClick,
+        filteredInfo,
+    });
     const handleSearch = useCallback((value: string) => {
         setKeyword(value);
         setPaginationModel(model => ({ ...model, page: 0 }));
@@ -208,6 +233,7 @@ export default () => {
                 onRowSelectionModelChange={setSelectedIds}
                 onSearch={handleSearch}
                 onRefreshButtonClick={getList}
+                onFilterInfoChange={handleFilterChange}
             />
             {!!detailVisible && !!detail && <Detail onCancel={handleDetailClose} detail={detail} />}
             {!!editVisible && !!detail && (

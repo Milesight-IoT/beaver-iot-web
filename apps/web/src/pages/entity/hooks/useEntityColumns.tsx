@@ -3,7 +3,7 @@ import { Stack, IconButton, Chip, type ChipProps } from '@mui/material';
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
 import { ListAltIcon, EditIcon } from '@milesight/shared/src/components';
 import { Tooltip, type ColumnType, PermissionControlHidden } from '@/components';
-import { PERMISSIONS } from '@/constants';
+import { ENTITY_TYPE, ENTITY_VALUE_TYPE, PERMISSIONS } from '@/constants';
 import { type EntityAPISchema } from '@/services/http';
 
 type OperationType = 'detail' | 'edit';
@@ -24,9 +24,16 @@ export interface UseColumnsProps<T> {
      * Operation Button click callback
      */
     onButtonClick: (type: OperationType, record: T) => void;
+    /**
+     * filtered info
+     */
+    filteredInfo: Record<string, any>;
 }
 
-const useEntityColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsProps<T>) => {
+const useEntityColumns = <T extends TableRowDataType>({
+    onButtonClick,
+    filteredInfo,
+}: UseColumnsProps<T>) => {
     const { getIntlText } = useI18n();
     const { getTimeFormat } = useTime();
 
@@ -38,6 +45,8 @@ const useEntityColumns = <T extends TableRowDataType>({ onButtonClick }: UseColu
                 flex: 1,
                 minWidth: 250,
                 ellipsis: true,
+                filterSearchType: 'search',
+                filteredValue: filteredInfo?.entityName,
             },
             {
                 field: 'entityKey',
@@ -45,6 +54,8 @@ const useEntityColumns = <T extends TableRowDataType>({ onButtonClick }: UseColu
                 flex: 1,
                 minWidth: 300,
                 ellipsis: true,
+                filterSearchType: 'search',
+                filteredValue: filteredInfo?.entityKey,
             },
             {
                 field: 'entityType',
@@ -61,6 +72,11 @@ const useEntityColumns = <T extends TableRowDataType>({ onButtonClick }: UseColu
                         />
                     );
                 },
+                filteredValue: filteredInfo?.entityType,
+                filters: Object.keys(ENTITY_TYPE).map(key => ({
+                    text: ENTITY_TYPE[key as keyof typeof ENTITY_TYPE],
+                    value: ENTITY_TYPE[key as keyof typeof ENTITY_TYPE],
+                })),
             },
             {
                 field: 'entityValueType',
@@ -70,6 +86,11 @@ const useEntityColumns = <T extends TableRowDataType>({ onButtonClick }: UseColu
                 flex: 1,
                 minWidth: 150,
                 ellipsis: true,
+                filteredValue: filteredInfo?.entityValueType,
+                filters: Object.keys(ENTITY_VALUE_TYPE).map(key => ({
+                    text: ENTITY_VALUE_TYPE[key as keyof typeof ENTITY_VALUE_TYPE],
+                    value: ENTITY_VALUE_TYPE[key as keyof typeof ENTITY_VALUE_TYPE],
+                })),
             },
             {
                 field: 'integrationName',
@@ -77,6 +98,8 @@ const useEntityColumns = <T extends TableRowDataType>({ onButtonClick }: UseColu
                 flex: 1,
                 minWidth: 250,
                 ellipsis: true,
+                filteredValue: filteredInfo?.integrationName,
+                filterSearchType: 'search',
             },
             {
                 field: '$operation',
@@ -118,7 +141,7 @@ const useEntityColumns = <T extends TableRowDataType>({ onButtonClick }: UseColu
                 },
             },
         ];
-    }, [getIntlText, getTimeFormat, onButtonClick]);
+    }, [getIntlText, getTimeFormat, onButtonClick, filteredInfo]);
 
     return columns;
 };
