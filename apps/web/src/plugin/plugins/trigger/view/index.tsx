@@ -6,7 +6,7 @@ import { flattenObject, objectToCamelToSnake } from '@milesight/shared/src/utils
 import * as Icons from '@milesight/shared/src/components/icons';
 
 import { useConfirm } from '@/components';
-import { ENTITY_VALUE_TYPE } from '@/constants';
+import { ENTITY_DATA_VALUE_TYPE, ENTITY_VALUE_TYPE } from '@/constants';
 import { Tooltip } from '../../../view-components';
 import { useEntityApi, type CallServiceType } from '../../../hooks';
 import { ViewConfigProps } from './typings';
@@ -70,7 +70,7 @@ const View = (props: Props) => {
         const valueType = config?.entity?.rawData?.entityValueType;
         if (!error) {
             let list = res || [];
-            if (valueType !== ENTITY_VALUE_TYPE.OBJECT && !list.length) {
+            if (valueType !== ENTITY_DATA_VALUE_TYPE.OBJECT && !list.length) {
                 list = [objectToCamelToSnake(config?.entity?.rawData)];
             }
             const children =
@@ -99,7 +99,7 @@ const View = (props: Props) => {
                     onConfirm: async () => {
                         const entityKey = (config?.entity as any).rawData?.entityKey;
                         // If the entity itself is the object default is {}, otherwise it is null
-                        const resultValue = valueType === ENTITY_VALUE_TYPE.OBJECT ? {} : null;
+                        const resultValue = valueType === ENTITY_DATA_VALUE_TYPE.OBJECT ? {} : null;
                         if (entityType === 'SERVICE') {
                             await handleCallService({
                                 [entityKey]: resultValue,
