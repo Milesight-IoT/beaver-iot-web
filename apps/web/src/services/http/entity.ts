@@ -136,6 +136,7 @@ export interface EntityAPISchema extends APISchema {
         request: {
             id: ApiKey;
             name: string;
+            unit?: string;
         };
         response: unknown;
     };
@@ -149,6 +150,7 @@ export interface EntityAPISchema extends APISchema {
             value_type: EntityValueDataType;
             value_attribute: Record<string, any>;
             type: EntityType;
+            unit?: string;
         };
         response: unknown;
     };

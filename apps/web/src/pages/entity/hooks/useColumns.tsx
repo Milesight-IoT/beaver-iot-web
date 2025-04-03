@@ -4,7 +4,7 @@ import { useI18n, useTime } from '@milesight/shared/src/hooks';
 import { EditIcon, DeleteOutlineIcon } from '@milesight/shared/src/components';
 import { Tooltip, type ColumnType, PermissionControlDisabled } from '@/components';
 import { type EntityAPISchema } from '@/services/http';
-import { PERMISSIONS } from '@/constants';
+import { ENTITY_ACCESS_MODE, PERMISSIONS } from '@/constants';
 
 type OperationType = 'edit' | 'delete';
 
@@ -50,7 +50,7 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 field: 'entityType',
                 headerName: getIntlText('common.label.type'),
                 flex: 1,
-                minWidth: 200,
+                minWidth: 100,
                 renderCell({ value }) {
                     return (
                         <Chip
@@ -63,12 +63,37 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 },
             },
             {
+                field: 'entityAccessMod',
+                headerName: getIntlText('entity.label.entity_type_of_access'),
+                flex: 1,
+                minWidth: 100,
+                ellipsis: true,
+                renderCell({ value }) {
+                    let intlKey = 'entity.label.entity_type_of_access_read_and_write';
+                    if (value === ENTITY_ACCESS_MODE.W) {
+                        intlKey = 'entity.label.entity_type_of_access_write';
+                    } else if (value === ENTITY_ACCESS_MODE.R) {
+                        intlKey = 'entity.label.entity_type_of_access_readonly';
+                    }
+                    return getIntlText(intlKey);
+                },
+            },
+            {
                 field: 'entityValueType',
                 headerName: getIntlText('common.label.data_type'),
                 align: 'left',
                 headerAlign: 'left',
                 flex: 1,
-                minWidth: 200,
+                minWidth: 100,
+                ellipsis: true,
+            },
+            {
+                field: 'unit',
+                headerName: getIntlText('entity.label.unit'),
+                align: 'left',
+                headerAlign: 'left',
+                flex: 1,
+                minWidth: 100,
                 ellipsis: true,
             },
             {

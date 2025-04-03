@@ -34,10 +34,21 @@ export type FormDataProps = {
     maxLength?: number;
     boolEnums?: Record<string, string>;
     enums?: Record<string, string>;
+    unit?: string;
 };
 
 const useFormItems = () => {
     const { getIntlText } = useI18n();
+
+    const entityValueTypeOptions = useMemo(() => {
+        return [
+            ...entityTypeOptions,
+            {
+                label: 'entity.label.entity_type_of_enum',
+                value: 'ENUM',
+            },
+        ];
+    }, []);
 
     const formItems = useMemo(() => {
         const result: ExtendControllerProps<FormDataProps>[] = [];
@@ -145,7 +156,7 @@ const useFormItems = () => {
                             error={error}
                             disabled={disabled}
                             label={getIntlText('common.label.data_type')}
-                            options={entityTypeOptions.map(item => {
+                            options={entityValueTypeOptions.map(item => {
                                 return {
                                     label: getIntlText(item.label),
                                     value: item.value,
@@ -377,6 +388,27 @@ const useFormItems = () => {
                         data.dataType === 'enums' &&
                         (data.valueType === 'STRING' || data.valueType === 'LONG')
                     );
+                },
+            },
+            {
+                name: 'unit',
+                render({ field: { onChange, value, disabled }, fieldState: { error } }) {
+                    return (
+                        <TextField
+                            fullWidth
+                            type="text"
+                            autoComplete="off"
+                            label={getIntlText('entity.label.unit')}
+                            error={!!error}
+                            disabled={disabled}
+                            helperText={error ? error.message : null}
+                            value={value}
+                            onChange={onChange}
+                        />
+                    );
+                },
+                shouldRender(data) {
+                    return ['STRING', 'LONG', 'DOUBLE'].includes(String(data.valueType));
                 },
             },
         );
