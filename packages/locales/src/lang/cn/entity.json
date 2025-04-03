@@ -11,7 +11,7 @@
     "entity.label.entity_minimum_value": "最小值",
     "entity.label.entity_type_of_access": "访问类型",
     "entity.label.entity_type_of_access_read_and_write": "可读可写",
-    "entity.label.entity_type_of_access_readonly": "客户",
+    "entity.label.entity_type_of_access_readonly": "只读",
     "entity.label.entity_type_of_access_write": "只写",
     "entity.label.entity_type_of_boolean": "BOOLEAN",
     "entity.label.entity_type_of_double": "DOUBLE",

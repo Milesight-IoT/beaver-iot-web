@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { Button, Stack, Menu, MenuItem } from '@mui/material';
-import { useRequest } from 'ahooks';
+import { useMemoizedFn, useRequest } from 'ahooks';
+import { pickBy } from 'lodash-es';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
 import {
@@ -10,7 +11,13 @@ import {
     toast,
     ErrorIcon,
 } from '@milesight/shared/src/components';
-import { TablePro, useConfirm, PermissionControlHidden } from '@/components';
+import {
+    TablePro,
+    useConfirm,
+    PermissionControlHidden,
+    TableProProps,
+    FilterValue,
+} from '@/components';
 import { entityAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
 import { ENTITY_TYPE, PERMISSIONS } from '@/constants';
 import { useUserPermissions } from '@/hooks';
@@ -29,6 +36,7 @@ export default () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [workflowModalOpen, setWorkflowModalOpen] = useState(false);
     const [detail, setDetail] = useState<TableRowDataType | null>(null);
+    const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | null>>({});
 
     const {
         data: entityData,
@@ -37,13 +45,19 @@ export default () => {
     } = useRequest(
         async () => {
             const { page, pageSize } = paginationModel;
+            const searchParams = pickBy({
+                entity_access_mod: filteredInfo?.entityAccessMod,
+                entity_value_type: filteredInfo?.entityValueType,
+                unit: filteredInfo.unit?.[0],
+            });
             const [error, resp] = await awaitWrap(
                 entityAPI.getList({
                     keyword,
                     page_size: pageSize,
                     page_number: page + 1,
-                    customized: true,
-                    entity_type: [ENTITY_TYPE.PROPERTY],
+                    // customized: true,
+                    // entity_type: [ENTITY_TYPE.PROPERTY],
+                    ...searchParams,
                 }),
             );
             const data = getResponseData(resp);
@@ -61,7 +75,7 @@ export default () => {
         },
         {
             debounceWait: 300,
-            refreshDeps: [keyword, paginationModel],
+            refreshDeps: [keyword, paginationModel, filteredInfo],
         },
     );
 
@@ -96,6 +110,12 @@ export default () => {
         setDetail(null);
         setAnchorEl(null);
     }, []);
+
+    const handleFilterChange: TableProProps<TableRowDataType>['onFilterInfoChange'] = (
+        filters: Record<string, FilterValue | null>,
+    ) => {
+        setFilteredInfo(filters);
+    };
 
     const toolbarRender = useMemo(() => {
         return (
@@ -147,7 +167,10 @@ export default () => {
         },
         [handleDeleteConfirm],
     );
-    const columns = useColumns<TableRowDataType>({ onButtonClick: handleTableBtnClick });
+    const columns = useColumns<TableRowDataType>({
+        onButtonClick: handleTableBtnClick,
+        filteredInfo,
+    });
 
     // const handleAddFromWorkflow = () => {
     //     setWorkflowModalOpen(true);
@@ -176,6 +199,7 @@ export default () => {
                 onRowSelectionModelChange={setSelectedIds}
                 onSearch={handleSearch}
                 onRefreshButtonClick={getList}
+                onFilterInfoChange={handleFilterChange}
             />
             <AddModal
                 visible={modalOpen}

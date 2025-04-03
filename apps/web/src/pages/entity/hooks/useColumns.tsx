@@ -4,7 +4,7 @@ import { useI18n, useTime } from '@milesight/shared/src/hooks';
 import { EditIcon, DeleteOutlineIcon } from '@milesight/shared/src/components';
 import { Tooltip, type ColumnType, PermissionControlDisabled } from '@/components';
 import { type EntityAPISchema } from '@/services/http';
-import { ENTITY_ACCESS_MODE, PERMISSIONS } from '@/constants';
+import { ENTITY_ACCESS_MODE, ENTITY_VALUE_TYPE, PERMISSIONS } from '@/constants';
 
 type OperationType = 'edit' | 'delete';
 
@@ -24,9 +24,16 @@ export interface UseColumnsProps<T> {
      * Operation Button click callback
      */
     onButtonClick: (type: OperationType, record: T) => void;
+    /**
+     * filtered info
+     */
+    filteredInfo: Record<string, any>;
 }
 
-const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsProps<T>) => {
+const useColumns = <T extends TableRowDataType>({
+    onButtonClick,
+    filteredInfo,
+}: UseColumnsProps<T>) => {
     const { getIntlText } = useI18n();
     const { getTimeFormat } = useTime();
 
@@ -66,7 +73,7 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 field: 'entityAccessMod',
                 headerName: getIntlText('entity.label.entity_type_of_access'),
                 flex: 1,
-                minWidth: 100,
+                minWidth: 150,
                 ellipsis: true,
                 renderCell({ value }) {
                     let intlKey = 'entity.label.entity_type_of_access_read_and_write';
@@ -77,6 +84,11 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                     }
                     return getIntlText(intlKey);
                 },
+                filteredValue: filteredInfo?.entityAccessMod,
+                filters: Object.keys(ENTITY_ACCESS_MODE).map(key => ({
+                    text: ENTITY_ACCESS_MODE[key as keyof typeof ENTITY_ACCESS_MODE],
+                    value: ENTITY_ACCESS_MODE[key as keyof typeof ENTITY_ACCESS_MODE],
+                })),
             },
             {
                 field: 'entityValueType',
@@ -84,8 +96,13 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 align: 'left',
                 headerAlign: 'left',
                 flex: 1,
-                minWidth: 100,
+                minWidth: 150,
                 ellipsis: true,
+                filteredValue: filteredInfo?.entityValueType,
+                filters: Object.keys(ENTITY_VALUE_TYPE).map(key => ({
+                    text: ENTITY_VALUE_TYPE[key as keyof typeof ENTITY_VALUE_TYPE],
+                    value: ENTITY_VALUE_TYPE[key as keyof typeof ENTITY_VALUE_TYPE],
+                })),
             },
             {
                 field: 'unit',
@@ -95,6 +112,11 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 flex: 1,
                 minWidth: 100,
                 ellipsis: true,
+                renderCell({ row }) {
+                    return row?.entityValueAttribute?.unit;
+                },
+                filteredValue: filteredInfo?.unit,
+                filterSearchType: 'search',
             },
             {
                 field: 'entityCreatedAt',
@@ -157,7 +179,7 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 },
             },
         ];
-    }, [getIntlText, getTimeFormat, onButtonClick]);
+    }, [getIntlText, getTimeFormat, onButtonClick, filteredInfo]);
 
     return columns;
 };

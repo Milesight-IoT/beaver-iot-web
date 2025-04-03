@@ -3,7 +3,7 @@ import { Stack, IconButton, Chip, type ChipProps } from '@mui/material';
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
 import { ListAltIcon, EditIcon } from '@milesight/shared/src/components';
 import { Tooltip, type ColumnType, PermissionControlHidden } from '@/components';
-import { ENTITY_TYPE, ENTITY_VALUE_TYPE, PERMISSIONS } from '@/constants';
+import { ENTITY_TYPE, ENTITY_DATA_VALUE_TYPE, PERMISSIONS } from '@/constants';
 import { type EntityAPISchema } from '@/services/http';
 
 type OperationType = 'detail' | 'edit';
@@ -87,9 +87,9 @@ const useEntityColumns = <T extends TableRowDataType>({
                 minWidth: 150,
                 ellipsis: true,
                 filteredValue: filteredInfo?.entityValueType,
-                filters: Object.keys(ENTITY_VALUE_TYPE).map(key => ({
-                    text: ENTITY_VALUE_TYPE[key as keyof typeof ENTITY_VALUE_TYPE],
-                    value: ENTITY_VALUE_TYPE[key as keyof typeof ENTITY_VALUE_TYPE],
+                filters: Object.keys(ENTITY_DATA_VALUE_TYPE).map(key => ({
+                    text: ENTITY_DATA_VALUE_TYPE[key as keyof typeof ENTITY_DATA_VALUE_TYPE],
+                    value: ENTITY_DATA_VALUE_TYPE[key as keyof typeof ENTITY_DATA_VALUE_TYPE],
                 })),
             },
             {

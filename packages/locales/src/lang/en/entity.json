@@ -11,7 +11,7 @@
     "entity.label.entity_minimum_value": "Minimum Value",
     "entity.label.entity_type_of_access": "Type of Access",
     "entity.label.entity_type_of_access_read_and_write": "RW",
-    "entity.label.entity_type_of_access_readonly": "Client",
+    "entity.label.entity_type_of_access_readonly": "R",
     "entity.label.entity_type_of_access_write": "W",
     "entity.label.entity_type_of_boolean": "BOOLEAN",
     "entity.label.entity_type_of_double": "DOUBLE",
