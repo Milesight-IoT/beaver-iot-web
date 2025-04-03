@@ -7,8 +7,22 @@
         display: flex;
     }
 
-    .@{mui-prefix}InputBase-input.@{mui-prefix}-disabled {
-        background-color: var(--gray-color-1);
+    .@{mui-prefix}InputBase-formControl.@{mui-prefix}-disabled {
+        padding-right: @padding-xs;
+        
+        .@{mui-prefix}InputBase-input.@{mui-prefix}-disabled {
+            background-color: var(--gray-color-1);
+            -webkit-text-fill-color: var(--gray-color-5);
+        }
+
+        .@{mui-prefix}InputAdornment-root {
+            margin-left: @margin-xxs;
+        }
+    }
+    
+
+    .@{mui-prefix}InputLabel-root.@{mui-prefix}-disabled {
+        color: var(--gray-color-5);
     }
     
     .@{mui-prefix}FormControl-root:last-child {
