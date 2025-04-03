@@ -3,9 +3,10 @@ import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { v4 } from 'uuid';
 import cls from 'classnames';
 import { useMemoizedFn } from 'ahooks';
+import { pickBy } from 'lodash-es';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { Modal, toast, type ModalProps } from '@milesight/shared/src/components';
-import { entityAPI, awaitWrap, isRequestSuccess } from '@/services/http';
+import { entityAPI, awaitWrap, isRequestSuccess, EntityAPISchema } from '@/services/http';
 import { ENTITY_TYPE } from '@/constants';
 import { TableRowDataType } from '../../hooks/useColumns';
 import useFormItems, { type FormDataProps } from './useFormItems';
@@ -44,7 +45,14 @@ const AddModal: React.FC<Props> = ({ visible, data, onCancel, onError, onSuccess
 
         if (data?.entityId) {
             const { entityValueType, entityValueAttribute } = data;
-            const { min, max, minLength, maxLength, enum: enums } = entityValueAttribute || {};
+            const {
+                min,
+                max,
+                minLength,
+                maxLength,
+                enum: enums,
+                unit,
+            } = entityValueAttribute || {};
 
             setDisabled(true);
             setValue('name', data.entityName);
@@ -71,6 +79,9 @@ const AddModal: React.FC<Props> = ({ visible, data, onCancel, onError, onSuccess
                     setValue('maxLength', maxLength);
                 }
             }
+            if (unit) {
+                setValue('unit', unit);
+            }
         } else {
             setValue('dataType', 'value');
             setValue('identifier', v4().replace(/-/g, ''));
@@ -86,13 +97,13 @@ const AddModal: React.FC<Props> = ({ visible, data, onCancel, onError, onSuccess
     const onSubmit: SubmitHandler<FormDataProps> = useMemoizedFn(async (formData, all) => {
         // Edit entity
         if (entityId) {
-            const { name } = formData;
-            const [err, resp] = await awaitWrap(
-                entityAPI.editEntity({
-                    id: entityId,
-                    name,
-                }),
-            );
+            const { name, unit } = formData;
+            const params = pickBy({
+                id: entityId,
+                name,
+                unit,
+            }) as EntityAPISchema['editEntity']['request'];
+            const [err, resp] = await awaitWrap(entityAPI.editEntity(params));
 
             if (err || !isRequestSuccess(resp)) {
                 onError?.(err);
@@ -117,6 +128,7 @@ const AddModal: React.FC<Props> = ({ visible, data, onCancel, onError, onSuccess
             maxLength,
             enums,
             boolEnums,
+            unit,
         } = formData;
         const valueAttribute: Record<string, any> = {};
 
@@ -131,10 +143,12 @@ const AddModal: React.FC<Props> = ({ visible, data, onCancel, onError, onSuccess
                     valueAttribute.min = min;
                     valueAttribute.max = max;
                 }
+                valueAttribute.unit = unit;
                 break;
             case 'DOUBLE':
                 valueAttribute.min = min;
                 valueAttribute.max = max;
+                valueAttribute.unit = unit;
                 break;
             case 'STRING':
                 if (dataType === 'enums') {
@@ -143,6 +157,7 @@ const AddModal: React.FC<Props> = ({ visible, data, onCancel, onError, onSuccess
                     valueAttribute.min_length = minLength;
                     valueAttribute.max_length = maxLength;
                 }
+                valueAttribute.unit = unit;
                 break;
             default:
                 break;
@@ -195,7 +210,7 @@ const AddModal: React.FC<Props> = ({ visible, data, onCancel, onError, onSuccess
                         {...props}
                         key={props.name}
                         control={control}
-                        disabled={disabled && props.name !== 'name'}
+                        disabled={disabled && !['name', 'unit'].includes(props.name)}
                     />
                 );
             })}
