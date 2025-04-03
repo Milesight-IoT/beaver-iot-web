@@ -28,6 +28,7 @@ const Service: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
         confirm({
             title: getIntlText('common.label.tip'),
             description: getIntlText('common.confirm.execute'),
+            type: 'info',
             async onConfirm() {
                 const entityKey = getEntityKey(SYNC_CODEC_KEY);
                 if (!entityKey) {
