@@ -69,6 +69,17 @@ export interface GlobalAPISchema extends APISchema {
             menus: UserMenuType[];
         };
     };
+
+    fileUpload: {
+        request: {
+            file: File;
+        };
+        response: {
+            originalname: string;
+            filename: string;
+            location: string;
+        };
+    };
 }
 
 /**
@@ -86,5 +97,13 @@ export default attachAPI<GlobalAPISchema>(client, {
         oauthRegister: `POST ${API_PREFIX}/user/register`,
         getUserStatus: `GET ${API_PREFIX}/user/status`,
         getUserInfo: `GET ${API_PREFIX}/user`,
+        fileUpload: {
+            method: 'POST',
+            // TODO: Replace with the actual upload path
+            path: '/mock/api/v1/files/upload',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        },
     },
 });

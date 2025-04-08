@@ -1,4 +1,4 @@
-export { isRequestSuccess, getResponseData, awaitWrap, API_PREFIX } from './client';
+export { isRequestSuccess, getResponseData, awaitWrap, pLimit, API_PREFIX } from './client';
 
 export { default as deviceAPI, type DeviceDetail, type DeviceAPISchema } from './device';
 

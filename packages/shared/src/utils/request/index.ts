@@ -185,6 +185,9 @@ export const apiPrefixTask = `/task${apiPrefix}`;
 // Export all the tool functions
 export * from './utils';
 
+// Export the parallel limit function
+export { default as pLimit } from './parallel-limit';
+
 // Export request middlewares
 export * from './handlers';
 

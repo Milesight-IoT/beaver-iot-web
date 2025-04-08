@@ -49,3 +49,24 @@ export function isWebkitBrowser(): boolean {
 export function isWindows() {
     return /windows|win32|win64/i.test(UA);
 }
+
+/**
+ * Determine whether it is IE browser
+ */
+export function isIE() {
+    return UA.indexOf('MSIE') !== -1 || UA.indexOf('Trident/') !== -1;
+}
+
+/**
+ * Determine whether it is Edge browser
+ */
+export function isEdge() {
+    return UA.indexOf('Edge') !== -1;
+}
+
+/**
+ * Determine whether it is IE or Edge browser
+ */
+export function isIEorEdge() {
+    return isIE() || isEdge();
+}

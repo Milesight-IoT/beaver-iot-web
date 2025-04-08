@@ -1,3 +1,5 @@
+import { type UseFormSetValue, type UseFormHandleSubmit, type UseFormReset } from 'react-hook-form';
+
 export type rulesPatternType = {
     value: any;
     message: string;
@@ -40,6 +42,12 @@ export interface FormItemsProps {
     defaultValue?: any;
     children?: FormItemsProps[]; // One line of multiple sub lines
     col?: number; // Number of layouts
+}
+
+export interface FormInstance<T extends FieldValues> {
+    reset: UseFormReset<T>;
+    setValue: UseFormSetValue<T>;
+    handleSubmit: ReturnType<UseFormHandleSubmit<T>>;
 }
 
 export type UseFormItemsType = Omit<FormItemsProps, 'render'>;

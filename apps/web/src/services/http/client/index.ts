@@ -6,6 +6,7 @@ import {
     awaitWrap,
     getResponseData,
     isRequestSuccess,
+    pLimit,
 } from '@milesight/shared/src/utils/request';
 import { getCurrentComponentLang } from '@milesight/shared/src/services/i18n';
 import oauthHandler from './oauth-handler';
@@ -54,4 +55,4 @@ const client = createRequestClient({
 });
 
 export * from './constant';
-export { client, attachAPI, awaitWrap, getResponseData, isRequestSuccess };
+export { client, attachAPI, awaitWrap, getResponseData, isRequestSuccess, pLimit };

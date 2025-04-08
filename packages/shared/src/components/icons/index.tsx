@@ -130,6 +130,8 @@ export {
     BackHandOutlined as BackHandOutlinedIcon,
     CloudSyncOutlined as CloudSyncOutlinedIcon,
     TuneOutlined as TuneOutlinedIcon,
+    Image as ImageIcon,
+    // ImageOutlined as ImageOutlinedIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';

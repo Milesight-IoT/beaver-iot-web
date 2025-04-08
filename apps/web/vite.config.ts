@@ -26,6 +26,7 @@ const {
     OAUTH_CLIENT_ID,
     OAUTH_CLIENT_SECRET,
     WEB_SOCKET_PROXY,
+    MOCK_API_PROXY,
 } = parseEnvVariables([
     path.join(projectRoot, '.env'),
     path.join(projectRoot, '.env.local'),
@@ -108,6 +109,11 @@ export default defineConfig({
                 target: WEB_SOCKET_PROXY,
                 ws: true, // Enable the WebSocket proxy
                 changeOrigin: true,
+            },
+            '/mock': {
+                target: MOCK_API_PROXY,
+                changeOrigin: true,
+                rewrite: path => path.replace(/^\/mock/, ''),
             },
         },
     },

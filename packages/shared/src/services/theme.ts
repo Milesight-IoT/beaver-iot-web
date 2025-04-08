@@ -454,7 +454,10 @@ export const getMuiComponents = (mode: ThemeType = 'light') => {
                 select: {
                     height: '1.375rem',
                     lineHeight: '1.375rem',
-                    padding: '7px 12px',
+                    // padding: '7px 12px',
+                    '&.MuiInputBase-inputSizeSmall': {
+                        padding: '3px 12px',
+                    },
                 },
             },
         },

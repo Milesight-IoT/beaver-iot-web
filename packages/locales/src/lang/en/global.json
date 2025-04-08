@@ -206,5 +206,14 @@
     "valid_http_address": "Invalid address",
     "common.label.refresh": "Refresh Page",
     "common.label.settings": "Settings",
-    "common.confirm.execute": "Are you sure to execute the update operation?"
+    "common.confirm.execute": "Are you sure to execute the update operation?",
+    "common.label.uploading": "Uploading",
+    "common.message.click_to_upload_file": "Click here or drag file to this area to upload",
+    "common.message.upload_error_file_invalid_type": "File type must be {1}",
+    "common.message.upload_error_file_too_large": "File is larger than {1}",
+    "common.message.upload_error_file_too_small": "File is smaller than {1}",
+    "common.message.upload_error_too_many_files": "Too many files",
+    "common.message.upload_error_server_error": "Upload failed, please try again later",
+    "common.label.select_entity": "Select Entity",
+    "common.label.local_upload": "Local Upload"
 }

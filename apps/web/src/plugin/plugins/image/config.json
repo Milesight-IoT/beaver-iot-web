@@ -12,25 +12,6 @@
             "style": "width: 100%",
             "components": [
                 {
-                    "type": "entitySelect",
-                    "title": "Entity",
-                    "key": "entity",
-                    "style": "width: 100%",
-                    "componentProps": {
-                        "size": "small",
-                        "entityType": ["PROPERTY"],
-                        "entityValueTypes": ["STRING", "LONG", "DOUBLE", "BOOLEAN"]
-                    },
-                    "rules": {
-                        "required": true
-                    }
-                }
-            ]
-        },
-        {
-            "style": "width: 100%",
-            "components": [
-                {
                     "type": "input",
                     "title": "Label",
                     "key": "label",
