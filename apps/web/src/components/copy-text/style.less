@@ -6,6 +6,15 @@
     div {
         display: flex;
     }
+    
+    &-divider {
+        width: 1px;
+        height: 100%;
+        min-height: 35px;
+        margin-right: @margin-xxs;
+        margin-left: @margin-xxs;
+        background-color: var(--gray-4);
+    }
 
     .@{mui-prefix}InputBase-formControl.@{mui-prefix}-disabled {
         padding-right: @padding-xs;
@@ -15,11 +24,19 @@
             -webkit-text-fill-color: var(--gray-color-5);
         }
 
+        input {
+            border-right: 1px solid var(--gray-4);
+        }
+
         .@{mui-prefix}InputAdornment-root {
             margin-left: @margin-xxs;
+
+            svg {
+                font-size: @icon-size-lg;
+                fill: var(--black);
+            }
         }
     }
-    
 
     .@{mui-prefix}InputLabel-root.@{mui-prefix}-disabled {
         color: var(--gray-color-5);

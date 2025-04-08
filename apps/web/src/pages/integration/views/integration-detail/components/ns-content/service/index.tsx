@@ -5,6 +5,8 @@ import { useConfirm, Tooltip } from '@/components';
 import { entityAPI, awaitWrap, isRequestSuccess } from '@/services/http';
 import { InteEntityType, useEntity } from '../../../hooks';
 
+import './style.less';
+
 interface Props {
     /** Entity list */
     entities?: InteEntityType[];
@@ -49,10 +51,10 @@ const Service: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
     };
 
     return (
-        <div className="ms-int-functions">
+        <div className="ms-ns-service">
             <Grid2 container spacing={2}>
                 <Grid2 size={{ sm: 6, md: 4, xl: 3 }}>
-                    <div className="ms-int-feat-card" onClick={handleConfirm}>
+                    <div className="ms-ns-service-card" onClick={handleConfirm}>
                         <div className="header">
                             <Tooltip
                                 autoEllipsis

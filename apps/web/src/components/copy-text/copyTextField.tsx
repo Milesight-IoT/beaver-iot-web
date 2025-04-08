@@ -46,14 +46,21 @@ const CopyTextField: React.FC<CopyTextFieldProps> = props => {
                         endAdornment: (
                             <InputAdornment position="end">
                                 {type === 'password' && (
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword}
-                                        edge="end"
-                                        sx={{ mr: 0.1 }}
-                                    >
-                                        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                                    </IconButton>
+                                    <>
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            edge="end"
+                                            sx={{ mr: 0.1 }}
+                                        >
+                                            {showPassword ? (
+                                                <VisibilityIcon />
+                                            ) : (
+                                                <VisibilityOffIcon />
+                                            )}
+                                        </IconButton>
+                                        <div className="ms-copy-textField-divider" />
+                                    </>
                                 )}
                                 <IconButton
                                     aria-label="copy text"
