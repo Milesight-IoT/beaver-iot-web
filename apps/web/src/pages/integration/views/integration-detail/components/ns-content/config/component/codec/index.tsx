@@ -57,7 +57,7 @@ const CodecRepo: React.FC<IProps> = props => {
 
     return (
         <Modal
-            size="md"
+            size="lg"
             visible={visible}
             className="ms-gateway-codec-modal"
             title={getIntlText('setting.integration.label.codec_repo_title')}
