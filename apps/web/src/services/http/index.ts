@@ -22,3 +22,9 @@ export {
 } from './user';
 
 export { default as embeddedNSApi, type GatewayDetailType } from './embedded-ns';
+export {
+    default as credentialsApi,
+    type CredentialsAdditionalData,
+    type CredentialEncryption,
+    type CredentialType,
+} from './credentials';
