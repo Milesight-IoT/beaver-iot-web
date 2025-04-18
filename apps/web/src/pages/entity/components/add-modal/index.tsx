@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { v4 } from 'uuid';
 import cls from 'classnames';
 import { useMemoizedFn } from 'ahooks';
-import { pickBy } from 'lodash-es';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { Modal, toast, type ModalProps } from '@milesight/shared/src/components';
 import { entityAPI, awaitWrap, isRequestSuccess, EntityAPISchema } from '@/services/http';
-import { ENTITY_TYPE } from '@/constants';
+import { ENTITY_TYPE, ENTITY_VALUE_TYPE } from '@/constants';
 import { TableRowDataType } from '../../hooks/useColumns';
 import useFormItems, { type FormDataProps } from './useFormItems';
 
 interface Props extends Omit<ModalProps, 'onOk'> {
     data?: TableRowDataType | null;
+
+    /** is copy to add entity */
+    isCopyAddEntity: boolean;
 
     /** Add a failed callback */
     onError?: (err: any) => void;
@@ -21,10 +23,17 @@ interface Props extends Omit<ModalProps, 'onOk'> {
     onSuccess?: () => void;
 }
 
-const AddModal: React.FC<Props> = ({ visible, data, onCancel, onError, onSuccess, ...props }) => {
+const AddModal: React.FC<Props> = ({
+    visible,
+    data,
+    isCopyAddEntity,
+    onCancel,
+    onError,
+    onSuccess,
+    ...props
+}) => {
     const { getIntlText } = useI18n();
     const entityId = data?.entityId;
-
     // ---------- Render form items ----------
     const [disabled, setDisabled] = useState(false);
     const { control, formState, watch, handleSubmit, reset, setValue } = useForm<FormDataProps>({
@@ -35,58 +44,62 @@ const AddModal: React.FC<Props> = ({ visible, data, onCancel, onError, onSuccess
     const dataType = watch('dataType') || 'value';
 
     useEffect(() => {
-        if (!visible) {
-            setTimeout(() => {
-                reset();
-                setDisabled(false);
-            }, 100);
-            return;
-        }
+        setTimeout(() => {
+            if (data?.entityId) {
+                const { entityValueType, entityValueAttribute } = data;
+                const {
+                    min,
+                    max,
+                    minLength,
+                    maxLength,
+                    enum: enums,
+                    unit,
+                } = entityValueAttribute || {};
 
-        if (data?.entityId) {
-            const { entityValueType, entityValueAttribute } = data;
-            const {
-                min,
-                max,
-                minLength,
-                maxLength,
-                enum: enums,
-                unit,
-            } = entityValueAttribute || {};
+                setDisabled(true);
+                setValue('name', data.entityName);
+                setValue('identifier', data.entityKey?.split('.').pop() || '');
+                setValue('accessMod', data.entityAccessMod, { shouldDirty: true });
+                setValue('valueType', data.entityValueType);
 
-            setDisabled(true);
-            setValue('name', data.entityName);
-            setValue('identifier', data.entityKey?.split('.').pop() || '');
-            setValue('accessMod', data.entityAccessMod, { shouldDirty: true });
-            setValue('valueType', data.entityValueType);
-
-            if (enums) {
-                setValue('dataType', 'enums');
-
-                if (entityValueType === 'BOOLEAN') {
-                    setValue('boolEnums', enums);
+                if (enums) {
+                    if (entityValueType === 'BOOLEAN') {
+                        setValue('boolEnums', enums);
+                    } else {
+                        setValue('dataType', 'enums');
+                        // copy entity dataType default value cause data not display
+                        setTimeout(() => {
+                            setValue('enums', enums);
+                        }, 50);
+                    }
                 } else {
-                    setValue('enums', enums);
+                    setValue('dataType', 'value');
+
+                    if (entityValueType === 'LONG' || entityValueType === 'DOUBLE') {
+                        setValue('min', min);
+                        setValue('max', max);
+                    } else {
+                        setValue('minLength', minLength);
+                        setValue('maxLength', maxLength);
+                    }
+                }
+
+                if (unit) {
+                    setValue('unit', unit);
+                }
+
+                // add entity by copy
+                if (isCopyAddEntity) {
+                    setDisabled(false);
+                    setValue('name', data?.entityName);
+                    setValue('identifier', v4().replace(/-/g, ''));
                 }
             } else {
                 setValue('dataType', 'value');
-
-                if (entityValueType === 'LONG' || entityValueType === 'DOUBLE') {
-                    setValue('min', min);
-                    setValue('max', max);
-                } else {
-                    setValue('minLength', minLength);
-                    setValue('maxLength', maxLength);
-                }
+                setValue('identifier', v4().replace(/-/g, ''));
             }
-            if (unit) {
-                setValue('unit', unit);
-            }
-        } else {
-            setValue('dataType', 'value');
-            setValue('identifier', v4().replace(/-/g, ''));
-        }
-    }, [data, visible, reset, setValue]);
+        });
+    }, [data, setValue]);
 
     // ---------- Cancel & Submit ----------
     const handleCancel = useMemoizedFn(() => {
@@ -96,13 +109,26 @@ const AddModal: React.FC<Props> = ({ visible, data, onCancel, onError, onSuccess
 
     const onSubmit: SubmitHandler<FormDataProps> = useMemoizedFn(async (formData, all) => {
         // Edit entity
-        if (entityId) {
+        if (entityId && !isCopyAddEntity) {
             const { name, unit } = formData;
-            const params = pickBy({
+            const params: EntityAPISchema['editEntity']['request'] = {
                 id: entityId,
                 name,
-                unit,
-            }) as EntityAPISchema['editEntity']['request'];
+                value_attribute: {
+                    ...data.entityValueAttribute,
+                    unit,
+                },
+            };
+
+            if (
+                ![
+                    ENTITY_VALUE_TYPE.STRING,
+                    ENTITY_VALUE_TYPE.LONG,
+                    ENTITY_VALUE_TYPE.DOUBLE,
+                ].includes(data?.entityValueType as ENTITY_VALUE_TYPE)
+            ) {
+                delete params?.value_attribute?.unit;
+            }
             const [err, resp] = await awaitWrap(entityAPI.editEntity(params));
 
             if (err || !isRequestSuccess(resp)) {
@@ -196,12 +222,13 @@ const AddModal: React.FC<Props> = ({ visible, data, onCancel, onError, onSuccess
         >
             {formItems.map(({ shouldRender, ...props }) => {
                 const formData = {
-                    valueType: entityId ? data.entityValueType : valueType,
-                    dataType: entityId
-                        ? data.entityValueAttribute?.enum
-                            ? 'enums'
-                            : 'value'
-                        : dataType,
+                    valueType: entityId && !isCopyAddEntity ? data.entityValueType : valueType,
+                    dataType:
+                        entityId && !isCopyAddEntity
+                            ? data.entityValueAttribute?.enum
+                                ? 'enums'
+                                : 'value'
+                            : dataType,
                 };
 
                 if (shouldRender && !shouldRender(formData)) return null;

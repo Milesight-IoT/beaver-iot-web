@@ -11,8 +11,8 @@ import {
 } from '@mui/material';
 import { useMemoizedFn } from 'ahooks';
 import classNames from 'classnames';
+import { isEqual } from 'lodash-es';
 import { useI18n } from '@milesight/shared/src/hooks';
-import { getCssVariable } from '@/components/code-editor/helper';
 import { SearchIcon } from '@milesight/shared/src/components';
 import {
     ColumnFilterItem,
@@ -126,6 +126,9 @@ const FilterDropdown = (props: FilterDropdownProps) => {
 
     const onClose = () => {
         triggerVisible(false);
+        if (!isEqual(wrapStringListType(propFilteredKeys), filteredKeys)) {
+            internalTriggerFilter(filteredKeys);
+        }
     };
 
     /** click reset event */
@@ -156,13 +159,13 @@ const FilterDropdown = (props: FilterDropdownProps) => {
                             flexDirection: 'column',
                             mb: 1.5,
                             borderBottom: 1,
-                            borderColor: getCssVariable('--border-color-gray'),
+                            borderColor: 'var(--border-color-gray)',
                         }}
                     >
                         <Typography
                             sx={{
-                                color: getCssVariable('--text-color-tertiary'),
-                                fontSize: getCssVariable('--font-size-2'),
+                                color: 'var(--text-color-tertiary)',
+                                fontSize: 'var(--font-size-2)',
                             }}
                         >
                             {item.text}
@@ -181,7 +184,7 @@ const FilterDropdown = (props: FilterDropdownProps) => {
                             checked={filteredKeys.includes(key)}
                             onChange={() => handleCheckedChange(item)}
                             inputProps={{ 'aria-label': 'controlled' }}
-                            sx={{ '& .MuiSvgIcon-root': { fontSize: 24 } }}
+                            sx={{ '& .MuiSvgIcon-root': { fontSize: 23 } }}
                         />
                     }
                 />

@@ -136,7 +136,7 @@ export interface EntityAPISchema extends APISchema {
         request: {
             id: ApiKey;
             name: string;
-            unit?: string;
+            value_attribute?: Record<string, any>;
         };
         response: unknown;
     };

@@ -4,7 +4,9 @@ import { FilterValue, ColumnType, FilterState, FilterKey, SafeKey } from '../../
 import FilterDropdown from '../../components/filter-down/filterDown';
 
 export interface FilterConfigProps {
+    /** table columns */
     columns: ColumnType[];
+    /** filter info change */
     onFilterInfoChange?: (
         filters: Record<string, FilterValue | null>,
         filterStates?: FilterState[],
@@ -41,7 +43,7 @@ const useFilter = (props: FilterConfigProps) => {
      */
     const generateFilterInfo = useMemoizedFn((filterStates: FilterState[]) => {
         const currentFilters: Record<string, FilterValue | null> = {};
-        filterStates.forEach(({ key, filteredKeys, column }) => {
+        filterStates.forEach(({ key, filteredKeys }) => {
             const keyAsString = key as SafeKey;
             currentFilters[keyAsString] = filteredKeys || null;
         });
@@ -59,15 +61,11 @@ const useFilter = (props: FilterConfigProps) => {
      * merge column search value
      */
     const mergedFilterStates = useMemo(() => {
-        const collectedStates = collectFilterStates(columns);
-        if (collectedStates.length === 0) {
-            return collectedStates;
-        }
-        return collectedStates;
+        return collectFilterStates(columns);
     }, [columns, filterStates]);
 
     /**
-     * last all filter info
+     * latest all filter info
      */
     const filters = useMemo(() => generateFilterInfo(mergedFilterStates), [mergedFilterStates]);
 

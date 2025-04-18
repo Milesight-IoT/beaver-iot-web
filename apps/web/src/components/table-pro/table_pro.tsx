@@ -11,10 +11,10 @@ import { useI18n } from '@milesight/shared/src/hooks';
 import { SearchIcon } from '@milesight/shared/src/components';
 import Tooltip from '../tooltip';
 import { Footer, NoDataOverlay, NoResultsOverlay } from './components';
-import './style.less';
 import { ColumnType, FilterValue } from './interface';
-import useFilterProps from './hook/useFilter/useFilterProps';
-import useHeader from './hook/useheader';
+import { useFilterProps, useHeader } from './hook';
+
+import './style.less';
 
 export interface Props<T extends GridValidRowModel> extends DataGridProps<T> {
     /** table column */
@@ -88,7 +88,7 @@ const TablePro = <DataType extends GridValidRowModel>({
                 col.headerAlign = isUndefined(col.headerAlign) ? 'right' : col.headerAlign;
                 col.resizable = isUndefined(col.resizable) ? false : col.resizable;
             }
-
+            /** has filter condition */
             if (col.filterDropdown || col.filters) {
                 const originalRenderHeader = col.renderHeader;
                 col.renderHeader = originalRenderHeader || (() => renderHeader(col));

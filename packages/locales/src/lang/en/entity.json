@@ -22,5 +22,7 @@
     "entity.label.set_enumeration_items": "Set Enumeration Items",
     "entity.label.set_value": "Set Value",
     "entity.label.value_source": "Value Source",
-    "entity.label.unit": "Unit"
+    "entity.label.unit": "Unit",
+    "entity.label.bool_enum_true": "Value of True",
+    "entity.label.bool_enum_false": "Value of False"
 }
