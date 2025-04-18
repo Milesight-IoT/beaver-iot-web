@@ -33,11 +33,11 @@
     
             &-label {
                 flex: 1;
+                margin-right: @margin-xxs;
             }
     
             &-icon {
                 display: flex;
-                margin-left: @margin-xxs;
                 color: var(--gray-color-7);
     
                 &-active {
@@ -53,18 +53,20 @@
 
         &-filter {
             &-searchInput {
-                margin-bottom: @margin-xxl;
+                margin-bottom: @margin-xl;
 
                 input {
                     padding-left: @padding-lg;
                 }
             }
-            
+
+            .@{mui-prefix}FormGroup-root {
+                margin-bottom: @margin-md;
+            }
         }
 
         &-footer {
             display: flex;
-            margin-top: @margin-lg;
 
             &-reset {
                 flex: 1;

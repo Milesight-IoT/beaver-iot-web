@@ -12,6 +12,7 @@ const useFilterProps = () => {
     const searchInput = useRef<HTMLInputElement>(null);
     const rangePicker = useRef<any>(null);
 
+    /** assembly filterProps by filterSearchType */
     const getColumnFilterProps = useCallback(
         (type: ColumnType['filterSearchType']) => {
             if (!type) return {};

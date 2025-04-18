@@ -87,9 +87,9 @@ const useEntityColumns = <T extends TableRowDataType>({
                 minWidth: 150,
                 ellipsis: true,
                 filteredValue: filteredInfo?.entityValueType,
-                filters: Object.keys(ENTITY_DATA_VALUE_TYPE).map(key => ({
-                    text: ENTITY_DATA_VALUE_TYPE[key as keyof typeof ENTITY_DATA_VALUE_TYPE],
-                    value: ENTITY_DATA_VALUE_TYPE[key as keyof typeof ENTITY_DATA_VALUE_TYPE],
+                filters: Object.entries(ENTITY_DATA_VALUE_TYPE).map(([key, value]) => ({
+                    text: key,
+                    value,
                 })),
             },
             {

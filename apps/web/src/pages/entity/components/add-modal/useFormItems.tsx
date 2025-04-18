@@ -34,21 +34,12 @@ export type FormDataProps = {
     maxLength?: number;
     boolEnums?: Record<string, string>;
     enums?: Record<string, string>;
+    /** unit */
     unit?: string;
 };
 
 const useFormItems = () => {
     const { getIntlText } = useI18n();
-
-    const entityValueTypeOptions = useMemo(() => {
-        return [
-            ...entityTypeOptions,
-            {
-                label: 'entity.label.entity_type_of_enum',
-                value: 'ENUM',
-            },
-        ];
-    }, []);
 
     const formItems = useMemo(() => {
         const result: ExtendControllerProps<FormDataProps>[] = [];
@@ -156,7 +147,7 @@ const useFormItems = () => {
                             error={error}
                             disabled={disabled}
                             label={getIntlText('common.label.data_type')}
-                            options={entityValueTypeOptions.map(item => {
+                            options={entityTypeOptions.map(item => {
                                 return {
                                     label: getIntlText(item.label),
                                     value: item.value,
@@ -246,7 +237,10 @@ const useFormItems = () => {
             {
                 name: 'minLength',
                 rules: {
-                    validate: { checkNumber: checkNumber() },
+                    validate: {
+                        checkRequired: checkRequired(),
+                        checkNumber: checkNumber(),
+                    },
                 },
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {
                     return (

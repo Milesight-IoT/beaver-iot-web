@@ -36,6 +36,7 @@ export default () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [workflowModalOpen, setWorkflowModalOpen] = useState(false);
     const [detail, setDetail] = useState<TableRowDataType | null>(null);
+    const [isCopyAddEntity, setIsCopyAddEntity] = useState<boolean>(false);
     const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | null>>({});
 
     const {
@@ -48,15 +49,14 @@ export default () => {
             const searchParams = pickBy({
                 entity_access_mod: filteredInfo?.entityAccessMod,
                 entity_value_type: filteredInfo?.entityValueType,
-                unit: filteredInfo.unit?.[0],
             });
             const [error, resp] = await awaitWrap(
                 entityAPI.getList({
                     keyword,
                     page_size: pageSize,
                     page_number: page + 1,
-                    // customized: true,
-                    // entity_type: [ENTITY_TYPE.PROPERTY],
+                    customized: true,
+                    entity_type: [ENTITY_TYPE.PROPERTY],
                     ...searchParams,
                 }),
             );
@@ -107,6 +107,7 @@ export default () => {
 
     const handleShowAddOnly = useCallback(() => {
         setModalOpen(true);
+        setIsCopyAddEntity(false);
         setDetail(null);
         setAnchorEl(null);
     }, []);
@@ -153,6 +154,13 @@ export default () => {
             switch (type) {
                 case 'edit': {
                     setDetail(record);
+                    setIsCopyAddEntity(false);
+                    setModalOpen(true);
+                    break;
+                }
+                case 'copy': {
+                    setDetail(record);
+                    setIsCopyAddEntity(true);
                     setModalOpen(true);
                     break;
                 }
@@ -201,15 +209,18 @@ export default () => {
                 onRefreshButtonClick={getList}
                 onFilterInfoChange={handleFilterChange}
             />
-            <AddModal
-                visible={modalOpen}
-                data={detail}
-                onCancel={() => setModalOpen(false)}
-                onSuccess={() => {
-                    getList();
-                    setModalOpen(false);
-                }}
-            />
+            {modalOpen && (
+                <AddModal
+                    visible={modalOpen}
+                    data={detail}
+                    isCopyAddEntity={isCopyAddEntity}
+                    onCancel={() => setModalOpen(false)}
+                    onSuccess={() => {
+                        getList();
+                        setModalOpen(false);
+                    }}
+                />
+            )}
             {workflowModalOpen && (
                 <AddFromWorkflow
                     onCancel={() => setWorkflowModalOpen(false)}

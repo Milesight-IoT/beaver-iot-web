@@ -1,12 +1,13 @@
 import { useMemo } from 'react';
 import { Stack, IconButton, Chip, type ChipProps } from '@mui/material';
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
-import { EditIcon, DeleteOutlineIcon } from '@milesight/shared/src/components';
+import { ListAltIcon, DeleteOutlineIcon, ContentCopyIcon } from '@milesight/shared/src/components';
 import { Tooltip, type ColumnType, PermissionControlDisabled } from '@/components';
 import { type EntityAPISchema } from '@/services/http';
 import { ENTITY_ACCESS_MODE, ENTITY_VALUE_TYPE, PERMISSIONS } from '@/constants';
+import { useMemoizedFn } from 'ahooks';
 
-type OperationType = 'edit' | 'delete';
+type OperationType = 'edit' | 'delete' | 'copy';
 
 export type TableRowDataType = ObjectToCamelCase<
     EntityAPISchema['getList']['response']['content'][0]
@@ -37,6 +38,17 @@ const useColumns = <T extends TableRowDataType>({
     const { getIntlText } = useI18n();
     const { getTimeFormat } = useTime();
 
+    // get ENTITY_ACCESS_MODE intl text
+    const getAccessModeText = useMemoizedFn(value => {
+        if (value === ENTITY_ACCESS_MODE.W) {
+            return getIntlText('entity.label.entity_type_of_access_write');
+        }
+        if (value === ENTITY_ACCESS_MODE.R) {
+            return getIntlText('entity.label.entity_type_of_access_readonly');
+        }
+        return getIntlText('entity.label.entity_type_of_access_read_and_write');
+    });
+
     const columns: ColumnType<T>[] = useMemo(() => {
         return [
             {
@@ -57,7 +69,7 @@ const useColumns = <T extends TableRowDataType>({
                 field: 'entityType',
                 headerName: getIntlText('common.label.type'),
                 flex: 1,
-                minWidth: 100,
+                minWidth: 150,
                 renderCell({ value }) {
                     return (
                         <Chip
@@ -76,18 +88,12 @@ const useColumns = <T extends TableRowDataType>({
                 minWidth: 150,
                 ellipsis: true,
                 renderCell({ value }) {
-                    let intlKey = 'entity.label.entity_type_of_access_read_and_write';
-                    if (value === ENTITY_ACCESS_MODE.W) {
-                        intlKey = 'entity.label.entity_type_of_access_write';
-                    } else if (value === ENTITY_ACCESS_MODE.R) {
-                        intlKey = 'entity.label.entity_type_of_access_readonly';
-                    }
-                    return getIntlText(intlKey);
+                    return getAccessModeText(value);
                 },
                 filteredValue: filteredInfo?.entityAccessMod,
-                filters: Object.keys(ENTITY_ACCESS_MODE).map(key => ({
-                    text: ENTITY_ACCESS_MODE[key as keyof typeof ENTITY_ACCESS_MODE],
-                    value: ENTITY_ACCESS_MODE[key as keyof typeof ENTITY_ACCESS_MODE],
+                filters: Object.entries(ENTITY_ACCESS_MODE).map(([key, value]) => ({
+                    text: getAccessModeText(value),
+                    value: value as keyof typeof ENTITY_ACCESS_MODE,
                 })),
             },
             {
@@ -99,9 +105,9 @@ const useColumns = <T extends TableRowDataType>({
                 minWidth: 150,
                 ellipsis: true,
                 filteredValue: filteredInfo?.entityValueType,
-                filters: Object.keys(ENTITY_VALUE_TYPE).map(key => ({
-                    text: ENTITY_VALUE_TYPE[key as keyof typeof ENTITY_VALUE_TYPE],
-                    value: ENTITY_VALUE_TYPE[key as keyof typeof ENTITY_VALUE_TYPE],
+                filters: Object.entries(ENTITY_VALUE_TYPE).map(([key, value]) => ({
+                    text: key,
+                    value,
                 })),
             },
             {
@@ -115,8 +121,6 @@ const useColumns = <T extends TableRowDataType>({
                 renderCell({ row }) {
                     return row?.entityValueAttribute?.unit;
                 },
-                filteredValue: filteredInfo?.unit,
-                filterSearchType: 'search',
             },
             {
                 field: 'entityCreatedAt',
@@ -151,7 +155,17 @@ const useColumns = <T extends TableRowDataType>({
                                         sx={{ width: 30, height: 30 }}
                                         onClick={() => onButtonClick('edit', row)}
                                     >
-                                        <EditIcon sx={{ width: 20, height: 20 }} />
+                                        <ListAltIcon sx={{ width: 20, height: 20 }} />
+                                    </IconButton>
+                                </Tooltip>
+                            </PermissionControlDisabled>
+                            <PermissionControlDisabled permissions={PERMISSIONS.ENTITY_CUSTOM_EDIT}>
+                                <Tooltip title={getIntlText('common.label.copy')}>
+                                    <IconButton
+                                        sx={{ width: 30, height: 30 }}
+                                        onClick={() => onButtonClick('copy', row)}
+                                    >
+                                        <ContentCopyIcon sx={{ width: 18, height: 18 }} />
                                     </IconButton>
                                 </Tooltip>
                             </PermissionControlDisabled>

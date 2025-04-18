@@ -55,7 +55,7 @@ export default () => {
         async () => {
             const { page, pageSize } = paginationModel;
             const searchParams = pickBy({
-                entity_names: filteredInfo?.entityName?.[0],
+                entity_names: filteredInfo?.entityName,
                 entity_keys: filteredInfo?.entityKey,
                 entity_type: filteredInfo?.entityType,
                 entity_value_type: filteredInfo?.entityValueType,

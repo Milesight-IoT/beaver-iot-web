@@ -1,5 +1,5 @@
-import { FilterState, ChangeEventInfo, FiltersRecordType } from '../interface';
-import { type FilterConfigProps, useFilter } from './useFilter';
+import { FilterState, ChangeEventInfo, FiltersRecordType } from '../../interface';
+import useFilter, { type FilterConfigProps } from './useFilter';
 
 /**
  * table column header
@@ -7,6 +7,7 @@ import { type FilterConfigProps, useFilter } from './useFilter';
 const useHeader = (props: FilterConfigProps) => {
     const { onFilterInfoChange, columns } = props;
 
+    /** emit filtered info change */
     const triggerFilterInfoChange = (
         filters: Partial<ChangeEventInfo>,
         filterStates?: FilterState[],
