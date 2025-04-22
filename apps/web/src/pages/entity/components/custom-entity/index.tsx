@@ -17,6 +17,7 @@ import {
     PermissionControlHidden,
     TableProProps,
     FilterValue,
+    FiltersRecordType,
 } from '@/components';
 import { entityAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
 import { ENTITY_TYPE, PERMISSIONS } from '@/constants';
@@ -37,7 +38,7 @@ export default () => {
     const [workflowModalOpen, setWorkflowModalOpen] = useState(false);
     const [detail, setDetail] = useState<TableRowDataType | null>(null);
     const [isCopyAddEntity, setIsCopyAddEntity] = useState<boolean>(false);
-    const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | null>>({});
+    const [filteredInfo, setFilteredInfo] = useState<FiltersRecordType>({});
 
     const {
         data: entityData,
@@ -106,6 +107,7 @@ export default () => {
     );
 
     const handleShowAddOnly = useCallback(() => {
+        setIsCopyAddEntity(false);
         setModalOpen(true);
         setIsCopyAddEntity(false);
         setDetail(null);

@@ -20,6 +20,7 @@
     "entity.label.entity_type_of_enum": "ENUM",
     "entity.label.historical_data": "Historical Data",
     "entity.label.set_enumeration_items": "Set Enumeration Items",
+    "entity.label.enumeration_items": "Enumeration Items",
     "entity.label.set_value": "Set Value",
     "entity.label.value_source": "Value Source",
     "entity.label.unit": "Unit",

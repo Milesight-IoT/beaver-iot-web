@@ -16,16 +16,12 @@ type OperationType = 'filter';
 
 export interface UseColumnsProps<T> {
     /**
-     * Operation Button click callback
+     * filtered info
      */
-    onButtonClick: (type: OperationType, e: React.MouseEvent<HTMLButtonElement>) => void;
-    isShowFilter: boolean;
+    filteredInfo: Record<string, any>;
 }
 
-const useColumns = <T extends HistoryRowDataType>({
-    onButtonClick,
-    isShowFilter,
-}: UseColumnsProps<T>) => {
+const useColumns = <T extends HistoryRowDataType>({ filteredInfo }: UseColumnsProps<T>) => {
     const { getIntlText } = useI18n();
     const { getTimeFormat } = useTime();
 
@@ -47,27 +43,8 @@ const useColumns = <T extends HistoryRowDataType>({
                 flex: 1,
                 minWidth: 150,
                 ellipsis: true,
-                renderHeader() {
-                    return (
-                        <div className="entity-detail-columns-header">
-                            <div className="entity-detail-columns-header-label">
-                                {getIntlText('common.label.update_time')}
-                            </div>
-                            <IconButton
-                                aria-label="filter"
-                                onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-                                    onButtonClick('filter', e)
-                                }
-                            >
-                                <FilterAltIcon
-                                    className={classnames('entity-detail-columns-header-icon', {
-                                        'entity-detail-columns-header-icon-active': isShowFilter,
-                                    })}
-                                />
-                            </IconButton>
-                        </div>
-                    );
-                },
+                filterSearchType: 'datePicker',
+                filteredValue: filteredInfo?.timestamp,
                 renderCell({ value }) {
                     if (!value) {
                         return null;
@@ -85,7 +62,7 @@ const useColumns = <T extends HistoryRowDataType>({
                 ellipsis: true,
             },
         ];
-    }, [getIntlText, getTimeFormat, isShowFilter]);
+    }, [getIntlText, getTimeFormat, filteredInfo]);
 
     return columns;
 };

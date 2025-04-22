@@ -13,7 +13,7 @@ export type FilterKey = Key[] | null;
 /**
  * filter component type
  */
-export type FilterSearchType = 'search' | 'select';
+export type FilterSearchType = 'search' | 'datePicker';
 
 /**
  * table column type

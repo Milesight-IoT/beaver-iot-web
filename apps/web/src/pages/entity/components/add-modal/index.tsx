@@ -8,7 +8,7 @@ import { Modal, toast, type ModalProps } from '@milesight/shared/src/components'
 import { entityAPI, awaitWrap, isRequestSuccess, EntityAPISchema } from '@/services/http';
 import { ENTITY_TYPE, ENTITY_VALUE_TYPE } from '@/constants';
 import { TableRowDataType } from '../../hooks/useColumns';
-import useFormItems, { type FormDataProps } from './useFormItems';
+import useFormItems, { ENUM_TYPE_VALUE, type FormDataProps } from './useFormItems';
 
 interface Props extends Omit<ModalProps, 'onOk'> {
     data?: TableRowDataType | null;
@@ -44,6 +44,7 @@ const AddModal: React.FC<Props> = ({
     const dataType = watch('dataType') || 'value';
 
     useEffect(() => {
+        // Fixed when using setValue, watch return undefined
         setTimeout(() => {
             if (data?.entityId) {
                 const { entityValueType, entityValueAttribute } = data;
@@ -64,7 +65,8 @@ const AddModal: React.FC<Props> = ({
 
                 if (enums) {
                     if (entityValueType === 'BOOLEAN') {
-                        setValue('boolEnums', enums);
+                        setValue('boolEnumTrue', enums.true);
+                        setValue('boolEnumFalse', enums.false);
                     } else {
                         setValue('dataType', 'enums');
                         // copy entity dataType default value cause data not display
@@ -94,6 +96,15 @@ const AddModal: React.FC<Props> = ({
                     setValue('name', data?.entityName);
                     setValue('identifier', v4().replace(/-/g, ''));
                 }
+                // is enum type
+                if (
+                    data.entityValueType === ENTITY_VALUE_TYPE.STRING &&
+                    !!data.entityValueAttribute?.enum &&
+                    !!data.entityValueAttribute?.isEnum
+                ) {
+                    setValue('valueType', ENUM_TYPE_VALUE as EntityValueDataType);
+                    setValue('dataType', 'value');
+                }
             } else {
                 setValue('dataType', 'value');
                 setValue('identifier', v4().replace(/-/g, ''));
@@ -107,15 +118,44 @@ const AddModal: React.FC<Props> = ({
         onCancel?.();
     });
 
-    const onSubmit: SubmitHandler<FormDataProps> = useMemoizedFn(async (formData, all) => {
+    const assemblyBoolEnums = (
+        boolEnumTrue: string | undefined,
+        boolEnumFalse: string | undefined,
+    ) => {
+        return {
+            true: boolEnumTrue,
+            false: boolEnumFalse,
+        };
+    };
+
+    // get edit type enums data
+    const getEditAttributeEnum = (formData: FormDataProps) => {
+        if (
+            [ENTITY_VALUE_TYPE.STRING, ENTITY_VALUE_TYPE.LONG].includes(
+                data?.entityValueType as ENTITY_VALUE_TYPE,
+            ) &&
+            !!data?.entityValueAttribute.enum
+        ) {
+            return data?.entityValueAttribute?.isEnum
+                ? formData.enums
+                : data?.entityValueAttribute.enum;
+        }
+        if ((data?.entityValueType as ENTITY_VALUE_TYPE) === ENTITY_VALUE_TYPE.BOOLEAN) {
+            return data?.entityValueAttribute.enum;
+        }
+        return undefined;
+    };
+
+    const onSubmit: SubmitHandler<FormDataProps> = useMemoizedFn(async formData => {
         // Edit entity
         if (entityId && !isCopyAddEntity) {
-            const { name, unit } = formData;
+            const { name, unit, enums } = formData;
             const params: EntityAPISchema['editEntity']['request'] = {
                 id: entityId,
                 name,
                 value_attribute: {
                     ...data.entityValueAttribute,
+                    enum: getEditAttributeEnum(formData),
                     unit,
                 },
             };
@@ -129,6 +169,7 @@ const AddModal: React.FC<Props> = ({
             ) {
                 delete params?.value_attribute?.unit;
             }
+
             const [err, resp] = await awaitWrap(entityAPI.editEntity(params));
 
             if (err || !isRequestSuccess(resp)) {
@@ -141,7 +182,7 @@ const AddModal: React.FC<Props> = ({
             return;
         }
 
-        // Add entity
+        // Add or copy Add entity
         const {
             name,
             identifier,
@@ -153,22 +194,19 @@ const AddModal: React.FC<Props> = ({
             minLength,
             maxLength,
             enums,
-            boolEnums,
+            boolEnumTrue,
+            boolEnumFalse,
             unit,
         } = formData;
         const valueAttribute: Record<string, any> = {};
 
         switch (valueType) {
             case 'BOOLEAN':
-                valueAttribute.enum = boolEnums;
+                valueAttribute.enum = assemblyBoolEnums(boolEnumTrue, boolEnumFalse);
                 break;
             case 'LONG':
-                if (dataType === 'enums') {
-                    valueAttribute.enum = enums;
-                } else {
-                    valueAttribute.min = min;
-                    valueAttribute.max = max;
-                }
+                valueAttribute.min = min;
+                valueAttribute.max = max;
                 valueAttribute.unit = unit;
                 break;
             case 'DOUBLE':
@@ -177,13 +215,15 @@ const AddModal: React.FC<Props> = ({
                 valueAttribute.unit = unit;
                 break;
             case 'STRING':
-                if (dataType === 'enums') {
-                    valueAttribute.enum = enums;
-                } else {
-                    valueAttribute.min_length = minLength;
-                    valueAttribute.max_length = maxLength;
-                }
+                valueAttribute.min_length = minLength;
+                valueAttribute.max_length = maxLength;
                 valueAttribute.unit = unit;
+                break;
+            // current corresponding ENUM
+            case ENUM_TYPE_VALUE as EntityValueDataType:
+                valueAttribute.enum = enums;
+                // Distinguish the enumerations of the time-new string data types
+                valueAttribute.isEnum = true;
                 break;
             default:
                 break;
@@ -195,7 +235,7 @@ const AddModal: React.FC<Props> = ({
                 identifier,
                 type: ENTITY_TYPE.PROPERTY,
                 access_mod: accessMod,
-                value_type: valueType,
+                value_type: valueType.split('-')[0] as EntityValueDataType,
                 value_attribute: valueAttribute,
             }),
         );
@@ -207,6 +247,22 @@ const AddModal: React.FC<Props> = ({
 
         onSuccess?.();
         toast.success(getIntlText('common.message.add_success'));
+    });
+
+    // get form item disabled status
+    const getDisabledCol = useMemoizedFn((props: any) => {
+        if (['name', 'unit'].includes(props.name)) {
+            return false;
+        }
+
+        if (
+            props.name === 'enums' &&
+            data?.entityValueType === ENTITY_VALUE_TYPE.STRING &&
+            data?.entityValueAttribute?.isEnum
+        ) {
+            return false;
+        }
+        return true;
     });
 
     return (
@@ -222,6 +278,8 @@ const AddModal: React.FC<Props> = ({
         >
             {formItems.map(({ shouldRender, ...props }) => {
                 const formData = {
+                    isEdit: !!data && !isCopyAddEntity,
+                    entityValueAttribute: data?.entityValueAttribute,
                     valueType: entityId && !isCopyAddEntity ? data.entityValueType : valueType,
                     dataType:
                         entityId && !isCopyAddEntity
@@ -237,7 +295,7 @@ const AddModal: React.FC<Props> = ({
                         {...props}
                         key={props.name}
                         control={control}
-                        disabled={disabled && !['name', 'unit'].includes(props.name)}
+                        disabled={disabled && getDisabledCol(props)}
                     />
                 );
             })}

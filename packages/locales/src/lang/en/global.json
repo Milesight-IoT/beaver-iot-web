@@ -137,6 +137,8 @@
     "common.unit.second": "s",
     "common.button.previous": "Previous",
     "common.button.next": "Next",
+    "common.label.start_date":  "Start Date",
+    "common.label.end_date":  "End Date",
     "common.label.please_select": "Please select",
     "common.button.loading": "Loading",
     "valid.date.selected_time_greater_than_now_time": "The time earlier than current time is not supported.",

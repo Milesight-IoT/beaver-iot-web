@@ -136,6 +136,8 @@
     "common.unit.second": "秒",
     "common.button.previous": "上一步",
     "common.button.next": "下一步",
+    "common.label.start_date":  "开始时间",
+    "common.label.end_date":  "结束时间",
     "common.label.please_select": "请选择",
     "common.button.loading": "加载中",
     "valid.date.selected_time_greater_than_now_time": "不支持早于当前时间的时间。",

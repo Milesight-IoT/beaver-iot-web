@@ -10,7 +10,7 @@ import {
     isMaxLength,
 } from '@milesight/shared/src/utils/validators';
 import { ENTITY_ACCESS_MODE, entityTypeOptions } from '@/constants';
-import { BooleanInput, DataTypeRadio, type DataTypeRadioProps, EnumsInput } from './components';
+import { DataTypeRadio, type DataTypeRadioProps, EnumsInput, EnumsInputNew } from './components';
 
 type ExtendControllerProps<T extends FieldValues> = ControllerProps<T> & {
     /**
@@ -34,12 +34,33 @@ export type FormDataProps = {
     maxLength?: number;
     boolEnums?: Record<string, string>;
     enums?: Record<string, string>;
+    /** bool true value */
+    boolEnumTrue?: string;
+    /** bool false value */
+    boolEnumFalse?: string;
     /** unit */
     unit?: string;
+    /** is edit */
+    isEdit?: boolean;
+    /** entity valueAttribute */
+    entityValueAttribute: Record<string, any>;
 };
+
+// The interface has not changed, currently represented by STRING
+export const ENUM_TYPE_VALUE = 'STRING-ENUM';
 
 const useFormItems = () => {
     const { getIntlText } = useI18n();
+
+    const entityValueTypeOptions = useMemo(() => {
+        return [
+            ...entityTypeOptions,
+            {
+                label: 'entity.label.entity_type_of_enum',
+                value: ENUM_TYPE_VALUE,
+            },
+        ];
+    }, []);
 
     const formItems = useMemo(() => {
         const result: ExtendControllerProps<FormDataProps>[] = [];
@@ -147,7 +168,7 @@ const useFormItems = () => {
                             error={error}
                             disabled={disabled}
                             label={getIntlText('common.label.data_type')}
-                            options={entityTypeOptions.map(item => {
+                            options={entityValueTypeOptions.map(item => {
                                 return {
                                     label: getIntlText(item.label),
                                     value: item.value,
@@ -175,7 +196,12 @@ const useFormItems = () => {
                     );
                 },
                 shouldRender(data) {
-                    return data.valueType === 'LONG' || data.valueType === 'STRING';
+                    return (
+                        !!data.isEdit &&
+                        data.dataType === 'enums' &&
+                        (data.valueType === 'LONG' ||
+                            (data.valueType === 'STRING' && !data?.entityValueAttribute?.isEnum))
+                    );
                 },
             },
             {
@@ -288,46 +314,55 @@ const useFormItems = () => {
                 },
             },
             {
-                name: 'boolEnums',
+                name: 'boolEnumTrue',
                 rules: {
                     validate: {
-                        checkRequired(value) {
-                            if (
-                                !value ||
-                                !Object.values(value).length ||
-                                Object.values(value).some(item => !item)
-                            ) {
-                                return getIntlText('valid.input.required');
-                            }
-                        },
-                        checkMaxLength(value) {
-                            const maxLength = 25;
-                            const values = Object.values(value || {});
-                            let result: string | undefined;
-
-                            if (
-                                values.length &&
-                                values.some(item => !isMaxLength(item, maxLength))
-                            ) {
-                                return getIntlText('valid.input.max_length', { 1: maxLength });
-                            }
-
-                            return result;
-                        },
+                        checkRequired: checkRequired(),
+                        checkMaxLength: checkMaxLength({ max: 25 }),
                     },
                 },
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {
                     return (
-                        <FormControl fullWidth sx={{ my: 1.5 }}>
-                            <BooleanInput
-                                required
-                                error={!!error}
-                                disabled={disabled}
-                                value={(value as FormDataProps['boolEnums']) || {}}
-                                onChange={onChange}
-                            />
-                            {!!error && <FormHelperText error>{error?.message}</FormHelperText>}
-                        </FormControl>
+                        <TextField
+                            required
+                            fullWidth
+                            type="text"
+                            autoComplete="off"
+                            label={getIntlText('entity.label.bool_enum_true')}
+                            error={!!error}
+                            disabled={disabled}
+                            helperText={error ? error.message : null}
+                            value={value}
+                            onChange={onChange}
+                        />
+                    );
+                },
+                shouldRender(data) {
+                    return data.valueType === 'BOOLEAN';
+                },
+            },
+            {
+                name: 'boolEnumFalse',
+                rules: {
+                    validate: {
+                        checkRequired: checkRequired(),
+                        checkMaxLength: checkMaxLength({ max: 25 }),
+                    },
+                },
+                render({ field: { onChange, value, disabled }, fieldState: { error } }) {
+                    return (
+                        <TextField
+                            required
+                            fullWidth
+                            type="text"
+                            autoComplete="off"
+                            label={getIntlText('entity.label.bool_enum_false')}
+                            error={!!error}
+                            disabled={disabled}
+                            helperText={error ? error.message : null}
+                            value={value}
+                            onChange={onChange}
+                        />
                     );
                 },
                 shouldRender(data) {
@@ -356,7 +391,7 @@ const useFormItems = () => {
 
                             if (
                                 values.length &&
-                                values.some(item => !isMaxLength(item, maxLength))
+                                values.some(item => !isMaxLength(item as string, maxLength))
                             ) {
                                 return getIntlText('valid.input.max_length', { 1: maxLength });
                             }
@@ -379,8 +414,60 @@ const useFormItems = () => {
                 },
                 shouldRender(data) {
                     return (
+                        !!data.isEdit &&
                         data.dataType === 'enums' &&
+                        !data?.entityValueAttribute?.isEnum &&
                         (data.valueType === 'STRING' || data.valueType === 'LONG')
+                    );
+                },
+            },
+            {
+                name: 'enums',
+                rules: {
+                    validate: {
+                        checkRequired(value) {
+                            const values = [
+                                ...Object.keys(value || {}),
+                                ...Object.values(value || {}),
+                            ];
+                            if (!value || !values.length || values.some(item => !item)) {
+                                return getIntlText('valid.input.required');
+                            }
+                        },
+                        checkMaxLength(value) {
+                            const maxLength = 25;
+                            const values = [
+                                ...Object.keys(value || {}),
+                                ...Object.values(value || {}),
+                            ];
+
+                            if (
+                                values.length &&
+                                values.some(item => !isMaxLength(item as string, maxLength))
+                            ) {
+                                return getIntlText('valid.input.max_length', { 1: maxLength });
+                            }
+                        },
+                    },
+                },
+                render({ field: { onChange, value, disabled }, fieldState: { error } }) {
+                    return (
+                        <FormControl fullWidth sx={{ my: 1.5 }}>
+                            <EnumsInputNew
+                                required
+                                error={!!error}
+                                disabled={disabled}
+                                value={value as FormDataProps['enums']}
+                                onChange={onChange}
+                            />
+                            {!!error && <FormHelperText error>{error?.message}</FormHelperText>}
+                        </FormControl>
+                    );
+                },
+                shouldRender(data) {
+                    return (
+                        (data.valueType as string) === ENUM_TYPE_VALUE ||
+                        (data.dataType === 'enums' && !!data?.entityValueAttribute?.isEnum)
                     );
                 },
             },
@@ -402,7 +489,11 @@ const useFormItems = () => {
                     );
                 },
                 shouldRender(data) {
-                    return ['STRING', 'LONG', 'DOUBLE'].includes(String(data.valueType));
+                    return (
+                        data.valueType === 'DOUBLE' ||
+                        (['STRING', 'LONG'].includes(String(data.valueType)) &&
+                            data.dataType === 'value')
+                    );
                 },
             },
         );

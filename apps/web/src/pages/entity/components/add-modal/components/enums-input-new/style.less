@@ -1,0 +1,100 @@
+.@{prefix}-enums-input-new {
+    position: relative;
+    padding: @padding-md;
+    background-color: var(--gray-color-1);
+    border: 1px solid var(--gray-color-1);
+    border-radius: @border-radius-base;
+
+    &.error {
+        border-color: var(--border-color-red);
+
+        .@{prefix}-enums-input-label {
+            color: var(--text-color-error);
+        }
+    }
+
+    &.disabled {
+        .@{prefix}-enums-input-label {
+            color: var(--gray-color-3);
+        }
+    }
+
+    &-label {
+        position: absolute;
+        top: -(@font-size-sm / 2);
+        left: @margin-xs;
+        padding: 0 @padding-xxs;
+        font-size: @font-size-sm;
+        line-height: 1;
+        color: var(--black);
+
+        .asterisk {
+            margin-left: @margin-xxs;
+            color: var(--text-color-error);
+        }
+    }
+
+    &-field {
+        display: flex;
+        gap: @margin-xs;
+        align-items: center;
+        margin-bottom: @margin-sm;
+
+        .field-key {
+            flex: 1;
+        }
+        
+        .@{mui-prefix}FormLabel-root {
+            display: none;
+        }
+
+        .@{mui-prefix}ButtonBase-root  {
+            margin-top: @margin-xxs;
+        }
+
+        .@{mui-prefix}InputBase-root {
+            background-color: var(--white);
+        }
+    }
+
+    &-field:first-of-type {
+        .@{mui-prefix}ButtonBase-root  {
+            margin-top: @margin-xl;
+        }
+        .@{mui-prefix}FormLabel-root {
+            display: block;
+        }
+    }
+
+    &-field:last-of-type { 
+        margin-bottom: @margin-xs;
+    }
+
+    .@{prefix}-param-assign-input-add-btn {
+        display: flex;
+        align-items: center;
+        font-size: @font-size-base;
+        color: var(--primary-color-7);
+        cursor: pointer;
+
+        &-disabled {
+            color: var(--mui-palette-text-disabled);
+
+            &:hover {
+                color: var(--mui-palette-text-disabled)!important; 
+            }
+        }
+
+        &:hover {
+            color: var(--primary-color-8);
+        }
+
+        span {
+            margin-left: @margin-xxs;
+        }
+
+        .@{mui-prefix}SvgIcon-root {
+            font-size: @font-size-6;
+        }
+    }
+}

@@ -1,6 +1,7 @@
 import { useCallback, useRef } from 'react';
 import { OutlinedInput } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
+import DateRangePicker, { type DateRangePickerValueType } from '@/components/date-range-picker';
 import { ColumnType, FilterDropdownProps } from '../../interface';
 import { FilterDropdownFooter } from '../../components/filter-down/filterDown';
 
@@ -56,6 +57,23 @@ const useFilterProps = () => {
                                         onChange={e => {
                                             setSelectedKeys(e.target.value ? [e.target.value] : []);
                                         }}
+                                    />
+                                </div>
+                            );
+                        }
+                        case 'datePicker': {
+                            return (
+                                <div className="ms-table-pro-popover-filter-date-picker">
+                                    <DateRangePicker
+                                        label={{
+                                            start: getIntlText('common.label.start_date'),
+                                            end: getIntlText('common.label.end_date'),
+                                        }}
+                                        onChange={value => {
+                                            setSelectedKeys(value ? [value] : []);
+                                        }}
+                                        value={selectedKeys?.[0] as DateRangePickerValueType}
+                                        views={['year', 'month', 'day']}
                                     />
                                 </div>
                             );

@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
+import { useMemoizedFn } from 'ahooks';
 import { Stack, IconButton, Chip, type ChipProps } from '@mui/material';
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
-import { ListAltIcon, DeleteOutlineIcon, ContentCopyIcon } from '@milesight/shared/src/components';
+import { ContentCopyIcon, DeleteOutlineIcon, EditIcon } from '@milesight/shared/src/components';
 import { Tooltip, type ColumnType, PermissionControlDisabled } from '@/components';
 import { type EntityAPISchema } from '@/services/http';
 import { ENTITY_ACCESS_MODE, ENTITY_VALUE_TYPE, PERMISSIONS } from '@/constants';
-import { useMemoizedFn } from 'ahooks';
 
 type OperationType = 'edit' | 'delete' | 'copy';
 
@@ -104,11 +104,6 @@ const useColumns = <T extends TableRowDataType>({
                 flex: 1,
                 minWidth: 150,
                 ellipsis: true,
-                filteredValue: filteredInfo?.entityValueType,
-                filters: Object.entries(ENTITY_VALUE_TYPE).map(([key, value]) => ({
-                    text: key,
-                    value,
-                })),
             },
             {
                 field: 'unit',
@@ -155,7 +150,7 @@ const useColumns = <T extends TableRowDataType>({
                                         sx={{ width: 30, height: 30 }}
                                         onClick={() => onButtonClick('edit', row)}
                                     >
-                                        <ListAltIcon sx={{ width: 20, height: 20 }} />
+                                        <EditIcon sx={{ width: 20, height: 20 }} />
                                     </IconButton>
                                 </Tooltip>
                             </PermissionControlDisabled>
@@ -164,6 +159,12 @@ const useColumns = <T extends TableRowDataType>({
                                     <IconButton
                                         sx={{ width: 30, height: 30 }}
                                         onClick={() => onButtonClick('copy', row)}
+                                        disabled={
+                                            !!row.entityValueAttribute.enum &&
+                                            (row.entityValueType === ENTITY_VALUE_TYPE.LONG ||
+                                                (row.entityValueType === ENTITY_VALUE_TYPE.STRING &&
+                                                    !row.entityValueAttribute.isEnum))
+                                        }
                                     >
                                         <ContentCopyIcon sx={{ width: 18, height: 18 }} />
                                     </IconButton>
