@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
-import { Paper, Typography, Button } from '@mui/material';
+import { Paper, Button, Box } from '@mui/material';
 import cls from 'classnames';
 import { useRequest } from 'ahooks';
 import { oauthClientID, oauthClientSecret } from '@milesight/shared/src/config';
@@ -66,15 +66,14 @@ export default () => {
     );
 
     return (
-        <div className="ms-view-login">
-            <Logo />
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} className="ms-view-login">
             <Paper
                 className={cls('ms-auth-container', { hidden: loading !== false })}
                 elevation={3}
             >
-                <Typography variant="h5" align="center">
-                    {getIntlText('common.document.title')}
-                </Typography>
+                <div className="ms-auth-logo">
+                    <Logo />
+                </div>
                 <div className="ms-auth-form">
                     {formItems.map(props => (
                         <Controller<FormDataProps> key={props.name} {...props} control={control} />
@@ -82,13 +81,14 @@ export default () => {
                 </div>
                 <Button
                     fullWidth
-                    sx={{ mt: 2.5, textTransform: 'none' }}
-                    onClick={handleSubmit(onSubmit)}
+                    type="submit"
+                    sx={{ textTransform: 'none' }}
                     variant="contained"
+                    className="ms-auth-submit"
                 >
                     {getIntlText('common.label.login')}
                 </Button>
             </Paper>
-        </div>
+        </Box>
     );
 };

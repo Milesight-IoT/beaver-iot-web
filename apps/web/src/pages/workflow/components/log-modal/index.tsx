@@ -63,7 +63,10 @@ export default React.memo(({ visible, data, ...props }: IProps) => {
                 {!isEmpty && (
                     <>
                         <div className="ms-log-left-bar">
-                            <div className="ms-log-left-bar__scroll" ref={containerRef}>
+                            <div
+                                className="ms-log-left-bar__scroll ms-perfect-scrollbar"
+                                ref={containerRef}
+                            >
                                 <div className="ms-log-left-bar__list" ref={listRef}>
                                     {virtualList.map(({ data }) => {
                                         if (data?.$$isFooterNode) {

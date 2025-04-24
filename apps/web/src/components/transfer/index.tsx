@@ -99,6 +99,7 @@ const TransferList: React.FC<TransferListProps> = props => {
                     dense
                     component="div"
                     role="list"
+                    className="ms-perfect-scrollbar"
                 >
                     {renderList(items)}
                 </List>

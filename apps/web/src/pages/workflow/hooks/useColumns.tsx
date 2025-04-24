@@ -191,7 +191,7 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                                     }}
                                     sx={{
                                         color: 'text.secondary',
-                                        '&:hover': { color: 'error.light' },
+                                        // '&:hover': { color: 'error.light' },
                                     }}
                                 >
                                     <DeleteOutlineIcon sx={{ width: 20, height: 20 }} />

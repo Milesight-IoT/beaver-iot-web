@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
-import { isNil } from 'lodash-es';
+import { useEffect, useRef, useState } from 'react';
+import { debounce, isNil } from 'lodash-es';
+import { useMemoizedFn } from 'ahooks';
 import { useTheme } from '@milesight/shared/src/hooks';
 import { Tooltip } from '@/plugin/view-components';
 import Chart from './gauge';
@@ -11,12 +12,28 @@ interface Props {
     config: ViewConfigProps;
 }
 const DEFAULT_RANGE = 10;
+/** tick fontsize */
+const TICK_FONTSIZE: Record<string, number> = {
+    min: 10,
+    max: 16,
+    percent: 0.03,
+};
+/** value fontsize */
+const VALUE_FONTSIZE: Record<string, number> = {
+    min: 14,
+    max: 80,
+    percent: 0.07,
+};
+
 const View = (props: Props) => {
     const { config } = props;
     const { entity, title, time, metrics } = config || {};
     const chartRef = useRef<HTMLCanvasElement>(null);
-    const { blue, purple, grey } = useTheme();
+    const observerRef = useRef<any>(null);
+    const { purple, grey } = useTheme();
     const { aggregateHistoryData } = useSource({ entity, metrics, time });
+    const [valueFontSize, setValueFontSize] = useState<number>(28);
+    const [tickFontSize, setTickFontSize] = useState<number>(13);
 
     // Calculate the most suitable maximum scale value
     const calculateMaxTickValue = (maxValue: number) => {
@@ -105,7 +122,7 @@ const View = (props: Props) => {
                             minValue,
                             maxValue: tickMaxValue,
                             value: currentValue,
-                            backgroundColor: [blue[700], grey[100]],
+                            backgroundColor: [purple[600], grey[100]],
                             stepSize: tickInterval,
                         },
                     ],
@@ -115,17 +132,18 @@ const View = (props: Props) => {
                     needle: {
                         radiusPercentage: 1.5,
                         widthPercentage: 3,
-                        lengthPercentage: 80,
+                        lengthPercentage: 60,
                         color: purple[600],
                     },
                     circumference,
                     rotation,
                     valueLabel: {
-                        fontSize: 20,
+                        fontSize: valueFontSize,
+                        fontWeight: '500',
                         display: true,
                         formatter: null,
-                        color: grey[700],
-                        bottomMarginPercentage: -20,
+                        color: grey[900],
+                        bottomMarginPercentage: -25,
                     },
                     hover: {
                         // @ts-ignore
@@ -140,16 +158,21 @@ const View = (props: Props) => {
                             filter: tooltipItem => tooltipItem.dataIndex === 0, // Displays only the tooltip of the first data item
                             callbacks: {
                                 label: context => {
-                                    const { raw, dataset } = context || {};
-                                    const label = dataset.label || '';
+                                    const { raw } = context || {};
+                                    const { rawData } = entity || {};
+                                    const { entityValueAttribute } = rawData || {};
+                                    const { unit } = entityValueAttribute || {};
 
-                                    return `${label} ${raw}`;
+                                    if (!unit) return `${raw}`;
+                                    return `${raw}${unit}`;
                                 },
                             },
                         },
                     },
                     ticks: {
                         tickCount,
+                        tickFontSize,
+                        tickColor: grey[700],
                     },
                 },
             });
@@ -174,7 +197,42 @@ const View = (props: Props) => {
         const minValue = getNumData(min);
         const maxValue = getNumData(max);
         return renderGaugeChart({ minValue, maxValue, currentValue });
-    }, [aggregateHistoryData]);
+    }, [aggregateHistoryData, valueFontSize, tickFontSize]);
+
+    // chart resize event
+    const handleResize = useMemoizedFn(
+        debounce(entries => {
+            for (const entry of entries) {
+                const cr = entry.contentRect;
+                setValueFontSize(
+                    Math.min(
+                        Math.max(cr.width * VALUE_FONTSIZE.percent, VALUE_FONTSIZE.min),
+                        VALUE_FONTSIZE.max,
+                    ),
+                );
+
+                setTickFontSize(
+                    Math.min(
+                        Math.max(cr.width * TICK_FONTSIZE.percent, TICK_FONTSIZE.min),
+                        TICK_FONTSIZE.max,
+                    ),
+                );
+            }
+        }, 200),
+    );
+
+    useEffect(() => {
+        // observer chart resize
+        if (chartRef.current) {
+            observerRef.current = new ResizeObserver(handleResize);
+            observerRef.current.observe(chartRef.current);
+        }
+        return () => {
+            if (chartRef.current) {
+                observerRef?.current?.unobserve(chartRef.current);
+            }
+        };
+    }, [chartRef.current]);
 
     return (
         <div className="ms-gauge-chart">

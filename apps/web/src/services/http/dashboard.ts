@@ -7,6 +7,8 @@ export interface DashboardDetail {
     dashboard_id: ApiKey;
     name: string;
     widgets: WidgetDetail[];
+    /** is home dashboard */
+    home: boolean;
 }
 
 export interface WidgetDetail {
@@ -73,6 +75,21 @@ export interface DashboardAPISchema extends APISchema {
         request: Record<string, any>;
         response: unknown;
     };
+
+    /** set as home dashboard */
+    setAsHomeDashboard: {
+        request: {
+            dashboardId: ApiKey;
+        };
+        response: void;
+    };
+    /** cancel as home dashboard */
+    cancelAsHomeDashboard: {
+        request: {
+            dashboardId: ApiKey;
+        };
+        response: void;
+    };
 }
 
 /**
@@ -87,5 +104,7 @@ export default attachAPI<DashboardAPISchema>(client, {
         addWidget: `POST ${API_PREFIX}/dashboard/:id/widget`,
         updateWidget: `PUT ${API_PREFIX}/dashboard/:id/widget/:widget_id`,
         deleteWidget: `DELETE ${API_PREFIX}/dashboard/:id/widget/:widget_id`,
+        setAsHomeDashboard: `POST ${API_PREFIX}/dashboard/:dashboardId/home`,
+        cancelAsHomeDashboard: `POST ${API_PREFIX}/dashboard/:dashboardId/cancel-home`,
     },
 });

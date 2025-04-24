@@ -233,7 +233,7 @@ const ConfigPanel: React.FC<Props> = ({ readonly }) => {
                         />
                     </div>
                 </div>
-                <div className="ms-workflow-panel-config-body">
+                <div className="ms-workflow-panel-config-body ms-perfect-scrollbar">
                     {/* <div className="ms-common-form-items">
                         {commonFormItems.map(props => (
                             <Controller<CommonFormDataProps>

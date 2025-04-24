@@ -1,8 +1,9 @@
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useMatches } from 'react-router';
 import { Link } from 'react-router-dom';
 import cls from 'classnames';
 import { MenuList, MenuItem, IconButton, type MenuItemProps } from '@mui/material';
+import { iotLocalStorage, SIDEBAR_COLLAPSE_KEY } from '@milesight/shared/src/utils/storage';
 import { Logo, FormatIndentDecreaseIcon } from '@milesight/shared/src/components';
 import { useUserStore } from '@/stores';
 import Tooltip from '../tooltip';
@@ -28,9 +29,32 @@ const Sidebar: React.FC<Props> = memo(({ menus, logoLinkTo = '/' }) => {
     const routes = useMatches().slice(1);
     const userInfo = useUserStore(state => state.userInfo);
     const selectedKeys = routes.map(route => route.pathname);
-    const [shrink, setShrink] = useState(true);
 
-    // console.log({ userInfo });
+    // init storage status
+    const [shrink, setShrink] = useState(
+        iotLocalStorage.getItem(SIDEBAR_COLLAPSE_KEY) !== undefined
+            ? !!iotLocalStorage.getItem(SIDEBAR_COLLAPSE_KEY)
+            : true,
+    );
+
+    const changeShrink = () => {
+        setShrink(!shrink);
+        iotLocalStorage.setItem(SIDEBAR_COLLAPSE_KEY, !shrink);
+    };
+
+    useEffect(() => {
+        // Monitor screen changes
+        window.addEventListener('resize', () => {
+            const windowWidth =
+                document.body.clientWidth ||
+                document.documentElement.clientWidth ||
+                window.innerWidth;
+            const isTooSmall = windowWidth <= 720;
+
+            // When the small screen is reached, the sidebar automatically collapses
+            isTooSmall && setShrink(true);
+        });
+    }, []);
     return (
         <div
             className={cls('ms-layout-left ms-sidebar', {
@@ -68,7 +92,7 @@ const Sidebar: React.FC<Props> = memo(({ menus, logoLinkTo = '/' }) => {
                 )}
                 <IconButton
                     className="ms-oprt-shrink"
-                    onClick={() => setShrink(!shrink)}
+                    onClick={changeShrink}
                     sx={{
                         padding: '10px',
                     }}

@@ -1,6 +1,6 @@
 import React, { useEffect, forwardRef, useImperativeHandle, useRef } from 'react';
 import { useForm, Controller, FieldValues, type SubmitHandler } from 'react-hook-form';
-import { Grid, Box } from '@mui/material';
+import { Grid, Box, Tooltip } from '@mui/material';
 import { isEqual } from 'lodash-es';
 import useFormItems from './useForm';
 import { UseFormItemsProps, FormItemsProps } from './typings';
@@ -94,9 +94,16 @@ const Forms = <T extends FieldValues>(props: formProps<T>, ref: any) => {
         if (!list?.length) {
             return null;
         }
+        const title = list[0]?.title;
         return (
             <div style={list[0].style as any} className="form-box">
-                {list[0]?.title ? <div className="form-box-label">{list[0]?.title}</div> : null}
+                {title ? (
+                    <div className="form-box-label">
+                        <Tooltip title={title}>
+                            <span>{title}</span>
+                        </Tooltip>
+                    </div>
+                ) : null}
                 {list.map((item: FormItemsProps) => {
                     return <Controller<T> key={item.name} {...item} control={control} />;
                 })}

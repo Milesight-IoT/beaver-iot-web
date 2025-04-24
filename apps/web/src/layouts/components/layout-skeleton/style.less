@@ -1,0 +1,123 @@
+
+@skeletonBoxColor: var(--gray-2);
+.skeletonBoxSize(@size) {
+    width: @size;
+    height: @size;
+}
+
+.@{prefix}-skeleton-left {
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+    width: 56px;
+    height: 100%;
+    background-color: var(--component-background);
+
+    &-unCollapsed {
+        width: 240px;
+    }
+
+    div {
+        .@{mui-prefix}Skeleton-root {
+            .skeletonBoxSize(20px);
+
+            margin-top: @margin-xl;
+            background-color: @skeletonBoxColor;
+            border-radius: @border-radius-sm;
+        }
+    }
+
+    .@{prefix}-logo {
+        margin-top: @margin-xs;
+        margin-bottom: @margin-xxs;
+        margin-left: @margin-xs;
+    }
+
+    > div:nth-of-type(1) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 70%;
+        padding: 0 @padding-md;
+
+        div {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            .@{mui-prefix}Skeleton-root:nth-child(1) {
+                .skeletonBoxSize(20px);
+            }
+            .@{mui-prefix}Skeleton-root:nth-child(2) {
+                width: 168px;
+                height: 20px;
+            }
+        }
+
+    }
+
+    > div:nth-of-type(2) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        width: 100%;
+        height: 30%;
+        min-height: 200px;
+        padding: 0 @padding-md;
+        padding-bottom: @padding-lg;
+
+        .@{mui-prefix}Skeleton-root:first-child {
+            .skeletonBoxSize(32px);
+
+            border-radius: 50%;
+        }
+
+        div {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 50px;
+            .@{mui-prefix}Skeleton-root:nth-child(1) {
+                .skeletonBoxSize(32px);
+
+                border-radius: 50%;
+            }
+            .@{mui-prefix}Skeleton-root:nth-child(2) {
+                width: 68px;
+                height: 20px;
+            }
+            .@{mui-prefix}Skeleton-root:nth-child(3),
+            .@{mui-prefix}Skeleton-root:nth-child(4) {
+                .skeletonBoxSize(20px);
+            }
+        }
+    }
+}
+
+.@{prefix}-skeleton-top {
+    width: 100%;
+    height: 48px;
+    background-color: var(--component-background);
+
+    div {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+
+        .@{mui-prefix}Skeleton-root {
+            width: 47px;
+            height: 20px;
+            margin-left: @margin-xxl;
+            background-color: @skeletonBoxColor;
+            border-radius: @border-radius-sm;
+
+            &:last-child {
+                .skeletonBoxSize(20px);
+            }
+        }
+    }
+}

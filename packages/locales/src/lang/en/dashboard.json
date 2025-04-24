@@ -22,10 +22,17 @@
     "dashboard.label_sum_value": "Sum. Value",
     "dashboard.leave_to_new_dashboard_description": "Whether or not you want to jump to the newly created dashboard, please note that the current dashboard your changes will not be saved.",
     "dashboard.plugin.trigger_confirm_text": "Is the execution of the operation confirmed?",
-    "dashboard.plugin_class_data_card": "Data Card",
+    "dashboard.plugin_class_data_card": "Data Display",
     "dashboard.plugin_class_data_chart": "Data Charts",
     "dashboard.plugin_class_operate": "Operable Widgets",
     "dashboard.plugin_class_other": "Other",
     "dashboard.switch_title_off": "Off",
-    "dashboard.switch_title_on": "On"
+    "dashboard.switch_title_on": "On",
+    "dashboard.label.left_y_axis": "LeftY",
+    "dashboard.label.right_y_axis": "RightY",
+    "dashboard.label.y_axis": "Y Axis",
+    "dashboard.set_as_home_dashboard_tip": "Set as home dashboard",
+    "dashboard.unset_as_home_dashboard_tip": "Unset as home dashboard",
+    "dashboard.set_as_home_dashboard_description": "是否确认将当前仪表盘设为设置为主仪表盘，该操作将会 覆盖掉原有的主仪表盘？",
+    "dashboard.unset_as_home_dashboard_description": "是否确认取消将当前仪表盘设为设置为主仪表盘？"
 }

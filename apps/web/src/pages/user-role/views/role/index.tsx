@@ -8,6 +8,7 @@ import {
     SearchIcon,
     PermIdentityIcon,
     LoadingWrapper,
+    PerfectScrollbar,
 } from '@milesight/shared/src/components';
 import { useI18n } from '@milesight/shared/src/hooks';
 
@@ -129,7 +130,9 @@ const Role: React.FC = () => {
                         }
                     />
 
-                    <div className={styles['role-container']}>{renderRoleList()}</div>
+                    <PerfectScrollbar className={styles['role-container']}>
+                        {renderRoleList()}
+                    </PerfectScrollbar>
 
                     <div className={styles['add-btn']}>
                         <Button

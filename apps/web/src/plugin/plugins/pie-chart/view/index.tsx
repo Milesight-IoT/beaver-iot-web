@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useMemo } from 'react';
+import cls from 'classnames';
 import { useRequest } from 'ahooks';
 import Chart from 'chart.js/auto';
 import { isEmpty } from 'lodash-es';
@@ -27,6 +28,7 @@ interface AggregateHistoryList {
 }
 const View = (props: IProps) => {
     const { config, configJson } = props;
+    const { isPreview } = configJson || {};
     const { entity, title, metrics, time } = config || {};
 
     const { getCSSVariableValue } = useTheme();
@@ -93,7 +95,14 @@ const View = (props: IProps) => {
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'right', // Legend position
+                            // position: 'right', // Legend position
+                            labels: {
+                                // Legend box size
+                                boxWidth: 10,
+                                boxHeight: 10,
+                                useBorderRadius: true,
+                                borderRadius: 1,
+                            },
                         },
                         tooltip: {
                             enabled: Boolean(data?.length), // Enlightenment prompts
@@ -131,7 +140,7 @@ const View = (props: IProps) => {
     }, [topic]);
 
     return (
-        <div className="ms-pie-chart">
+        <div className={cls('ms-pie-chart', { 'ms-pie-chart--preview': isPreview })}>
             <Tooltip className="ms-pie-chart__header" autoEllipsis title={title} />
             <div className="ms-pie-chart__content">
                 <canvas id="pieChart" ref={chartRef} />

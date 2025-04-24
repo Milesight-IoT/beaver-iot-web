@@ -4,6 +4,7 @@ import { useMemoizedFn } from 'ahooks';
 import { get } from 'lodash-es';
 
 import { useTheme } from '@milesight/shared/src/hooks';
+import { hexToRgba } from '@milesight/shared/src/utils/tools';
 
 import { WidgetDetail } from '@/services/http/dashboard';
 import Widget from './widget';
@@ -12,7 +13,7 @@ import './style.less';
 
 const ReactGridLayout = WidthProvider(GRL);
 
-const GRID_LAYOUT_MARGIN = 16;
+const GRID_LAYOUT_MARGIN = 12;
 const GRID_LAYOUT_COLS = 12;
 const GRID_ROW_HEIGHT = 88;
 const HELPER_RECT_HEIGHT = GRID_LAYOUT_MARGIN + GRID_ROW_HEIGHT;
@@ -25,7 +26,17 @@ const DEFAULT_GRID_HEIGHT = {
     operate: 1,
     data_card: 2,
 };
+/**
+ * Gets the default height of the widget for a screen that is too small
+ */
+const getSmallScreenH = (data: WidgetDetail['data']) => {
+    const DEFAULT_HEIGHT = 3;
+    const { class: widgetClass, type: widgetType } = data || {};
+    if (!widgetClass || !widgetType) return DEFAULT_HEIGHT;
 
+    if (widgetType === 'iconRemaining') return 1;
+    return get(DEFAULT_GRID_HEIGHT, widgetClass, DEFAULT_HEIGHT);
+};
 interface WidgetProps {
     onChangeWidgets: (widgets: any[]) => void;
     widgets: WidgetDetail[];
@@ -163,7 +174,8 @@ const Widgets = (props: WidgetProps) => {
 
                 ctx.beginPath();
                 ctx.setLineDash([8, 8]);
-                ctx.strokeStyle = getCSSVariableValue('--gray-4') || '#C9CDD4';
+                const borderColor = hexToRgba(getCSSVariableValue('--gray-10'), 0.12);
+                ctx.strokeStyle = borderColor || '#C9CDD4';
                 ctx.lineWidth = 1;
                 ctx.strokeRect(1, 1, gridWidth - GRID_LAYOUT_MARGIN - 2, GRID_ROW_HEIGHT - 2);
                 ctx.closePath();
@@ -234,7 +246,11 @@ const Widgets = (props: WidgetProps) => {
             margin={[GRID_LAYOUT_MARGIN, GRID_LAYOUT_MARGIN]}
             onLayoutChange={handleChangeWidgets}
             draggableCancel=".dashboard-content-widget-icon-img,.dashboard-custom-resizable-handle"
-            className={`${isEdit ? 'dashboard-content-widget-grid-edit' : 'dashboard-content-widget-grid-not-edit'} slow-transition-react-grid-layout`}
+            className={`${
+                isEdit
+                    ? 'dashboard-content-widget-grid-edit'
+                    : 'dashboard-content-widget-grid-not-edit'
+            } slow-transition-react-grid-layout`}
             resizeHandle={
                 <span className="dashboard-custom-resizable-handle dashboard-custom-resizable-handle-se" />
             }
@@ -252,11 +268,12 @@ const Widgets = (props: WidgetProps) => {
                     ...data.data.pos,
                     w: isTooSmallScreen ? 12 : data.data?.pos?.w || data.data.minCol || 2,
                     h: isTooSmallScreen
-                        ? get(DEFAULT_GRID_HEIGHT, data?.data?.class, 3)
+                        ? getSmallScreenH(data?.data)
                         : data.data?.pos?.h || data.data.minRow || 2,
                     minW: data.data.minCol || 2,
                     minH: data.data.minRow || 2,
                     maxW: GRID_LAYOUT_COLS - (data?.data?.pos?.x || 0),
+                    maxH: data.data.maxRow,
                     i: data?.widget_id || data.data.tempId,
                     x: data.data.pos?.x || 0,
                     y: data.data.pos?.y || 0,

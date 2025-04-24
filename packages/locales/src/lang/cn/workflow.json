@@ -20,6 +20,7 @@
     "workflow.editor.form_param_timer_type_cycle": "周期执行",
     "workflow.editor.form_param_timer_type_interval": "间隔执行",
     "workflow.editor.form_param_timer_type_once": "单次执行",
+    "workflow.editor.input_placeholder_remark": "添加描述...",
     "workflow.editor.log_panel_title_test_run": "运行测试",
     "workflow.editor.log_panel_title_verification_result": "验证结果",
     "workflow.editor.log_title_run": "运行日志",
@@ -73,6 +74,7 @@
     "workflow.label.logic_keyword_elseif": "ELIF",
     "workflow.label.logic_keyword_if": "IF",
     "workflow.label.logic_keyword_or": "OR",
+    "workflow.label.mqtt_node_name": "MQTT",
     "workflow.label.no_log_record": "无日志记录",
     "workflow.label.node_category_action": "动作类",
     "workflow.label.node_category_control": "控制类",
@@ -118,7 +120,5 @@
     "workflow.valid.node_parameters_required": "需要 {1} 节点参数。",
     "workflow.valid.parameter_required": "{1} 节点参数为必填项。",
     "workflow.valid.range_length": "{1} 字段值的长度应大于或等于 {2}，小于或等于 {3}。",
-    "workflow.valid.required": "{1}字段为必填字段。",
-    "workflow.editor.input_placeholder_remark": "添加描述...",
-    "workflow.label.mqtt_node_name": "MQTT"
+    "workflow.valid.required": "{1}字段为必填字段。"
 }

@@ -1,7 +1,8 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { Modal, Form } from '@milesight/shared/src/components';
 import { DashboardDetail } from '@/services/http/dashboard';
+import './style.less';
 
 interface IProps {
     onCancel: () => void;
@@ -47,7 +48,10 @@ const AddDashboard = (props: IProps) => {
             visible
             onCancel={handleClose}
             onOk={handleOk}
-            title={`${getIntlText(!data?.dashboard_id ? 'dashboard.add_title' : 'dashboard.edit_title')}`}
+            title={`${getIntlText(
+                !data?.dashboard_id ? 'dashboard.add_title' : 'dashboard.edit_title',
+            )}`}
+            className="add-dashboard-modal"
         >
             <Form<DashboardDetail> ref={formRef} formItems={formItems} onOk={handleSubmit} />
         </Modal>

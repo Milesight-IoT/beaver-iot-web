@@ -79,13 +79,13 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                             <Tooltip title={tip}>
                                 <div className={styles['flex-layout']}>
                                     <IconButton
-                                        color="error"
+                                        // color="error"
                                         disabled={isDisabledRemove}
                                         sx={{
                                             width: 30,
                                             height: 30,
                                             color: 'text.secondary',
-                                            '&:hover': { color: 'error.light' },
+                                            // '&:hover': { color: 'error.light' },
                                         }}
                                         onClick={() => onButtonClick('remove', row)}
                                     >

@@ -38,14 +38,17 @@ export const useSourceData = (props: FilterParameters) => {
         if (!keyword) return hasFilterParams ? filterEntityList : entityList;
         return searchEntityList;
     }, [entityList, hasFilterParams, keyword, searchEntityList, filterEntityList]);
+
     const fetchLoading = useMemo(() => {
         if (!keyword) return hasFilterParams ? filterLoading : entityLoading;
         return searchLoading;
     }, [entityLoading, hasFilterParams, keyword, searchLoading, filterLoading]);
+
     const sourceList = useMemo(
         () => (hasFilterParams ? filterEntityList : entityList),
         [entityList, filterEntityList, hasFilterParams],
     );
+
     return {
         entityList: useMemo(() => fetchEntityList || [], [fetchEntityList]),
         loading: fetchLoading,

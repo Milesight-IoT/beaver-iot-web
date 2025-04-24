@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import cls from 'classnames';
 import { isEmpty, isNil } from 'lodash-es';
 import { Tabs, Tab, Toolbar, CircularProgress } from '@mui/material';
 import { AddIcon, toast } from '@milesight/shared/src/components';
@@ -213,7 +214,11 @@ export default () => {
                         })}
                     </Tabs>
                     <PermissionControlHidden permissions={PERMISSIONS.DASHBOARD_ADD}>
-                        <div className="dashboard-add-contain">
+                        <div
+                            className={cls('dashboard-add-contain', {
+                                'dashboard-add-contain-list': !!tabs?.length,
+                            })}
+                        >
                             <div className="dashboard-add" onClick={showAddDashboard}>
                                 <AddIcon className="dashboard-add-icon" />
                             </div>

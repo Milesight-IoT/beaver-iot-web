@@ -30,6 +30,12 @@
         flex: 1;
         overflow: auto;
 
+        .@{mui-prefix}DataGrid-columnHeaders {
+            .@{mui-prefix}DataGrid-row--borderBottom {
+                background-color: var(--gray-1);
+            }
+        }
+
         // Override Mui style: Remove the focus border
         .@{mui-prefix}DataGrid-cell:focus,
         .@{mui-prefix}DataGrid-cell:focus-within,
@@ -37,6 +43,12 @@
         .@{mui-prefix}DataGrid-columnHeader:focus-within {
             outline: none;
         }
+        //  Override Mui style: Remove the checkbox hover style
+        .@{mui-prefix}DataGrid-cellCheckbox .MuiCheckbox-root:hover,
+        .@{mui-prefix}DataGrid-columnHeader .MuiCheckbox-root:hover {
+            background-color: unset;
+        }
+
 
         // Override the Mui style: Avoid hiding the separator line in the Header when focusing
         .@{mui-prefix}DataGrid-columnHeader:focus .@{mui-prefix}DataGrid-columnSeparator,
@@ -62,6 +74,12 @@
             outline: none;
         }
 
+        .@{mui-prefix}DataGrid-row {
+            &:hover {
+                background-color: var(--gray-1);
+            }
+        }
+
         // Overlay Mui style: Avoid horizontal scrolling beyond the width of the container
         .@{mui-prefix}DataGrid-columnHeader {
             overflow: hidden;
@@ -71,6 +89,30 @@
             > span {
                 display: block;
                 .ellipsis();
+            }
+        }
+    }
+}
+
+.@{mui-prefix}DataGrid-filterForm {
+    .@{mui-prefix}FormControl-root {
+        margin-bottom: 0;
+
+        .@{mui-prefix}FormControl-root.@{mui-prefix}FormControl-fullWidth {
+            margin-bottom: 0;
+        }
+
+        .@{mui-prefix}InputBase-root {
+            margin-top: 0;
+
+            &::before {
+                border-bottom-color: var(--border-color-base);
+            }
+
+            &:hover:not(.Mui-disabled, .Mui-error) {
+                &::before {
+                    border-bottom-color: var(--border-color-hover);
+                }
             }
         }
     }

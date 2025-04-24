@@ -25,10 +25,12 @@ const CopyTextField: React.FC<CopyTextFieldProps> = props => {
 
     // copy text value
     const handleClickCopy = (event?: any) => {
-        handleCopy(
-            value ? String(value) : '',
-            (event?.target as HTMLElement).parentElement || undefined,
-        );
+        // fix when parentElement is svg or path copy fail
+        let parentElement = event?.target?.parentElement;
+        if (parentElement.localName === 'svg') {
+            parentElement = event?.target?.parentElement?.parentElement;
+        }
+        handleCopy(value ? String(value) : '', parentElement);
     };
 
     // switch password or text
@@ -46,14 +48,21 @@ const CopyTextField: React.FC<CopyTextFieldProps> = props => {
                         endAdornment: (
                             <InputAdornment position="end">
                                 {type === 'password' && (
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword}
-                                        edge="end"
-                                        sx={{ mr: 0.1 }}
-                                    >
-                                        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                                    </IconButton>
+                                    <>
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            edge="end"
+                                            sx={{ mr: 0.1 }}
+                                        >
+                                            {showPassword ? (
+                                                <VisibilityIcon />
+                                            ) : (
+                                                <VisibilityOffIcon />
+                                            )}
+                                        </IconButton>
+                                        <div className="ms-copy-textField-divider" />
+                                    </>
                                 )}
                                 <IconButton
                                     aria-label="copy text"

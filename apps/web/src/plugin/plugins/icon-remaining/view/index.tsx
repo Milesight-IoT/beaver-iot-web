@@ -48,9 +48,8 @@ const View = (props: Props) => {
             <div className="ms-icon-remaining__header">
                 <Tooltip autoEllipsis title={title} />
             </div>
-            <div className="ms-icon-remaining__percent">{percent}%</div>
             <div className="ms-icon-remaining__content">
-                <RemainChart Icon={Icon} iconColor={iconColor} percent={100 - percent} />
+                <RemainChart Icon={Icon} color={iconColor} percent={percent} />
             </div>
         </div>
     );

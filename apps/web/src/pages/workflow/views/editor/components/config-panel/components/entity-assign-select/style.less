@@ -2,16 +2,27 @@
     &-item {
         display: flex;
         gap: @margin-xs;
-        align-items: center;
+        align-items: flex-end;
         margin-bottom: @margin-md;
 
-        .@{mui-prefix}FormControl-root {
+        div.@{mui-prefix}FormControl-root {
             margin: 0;
         }
 
         > .@{prefix}-param-input-select,
         > .@{mui-prefix}Autocomplete-root {
             flex: 1;
+        }
+
+        .@{prefix}-param-input-select,
+        .@{mui-prefix}Autocomplete-root {
+            div.@{mui-prefix}FormControl-root {
+                margin-bottom: 0;
+            }
+        }
+
+        & > .@{mui-prefix}ButtonBase-root {
+            margin-bottom: @margin-xxs;
         }
     }
 }

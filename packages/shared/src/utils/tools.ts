@@ -728,3 +728,19 @@ export const checkPrivateProperty = (key?: string) => {
 
     return regx.test(key);
 };
+
+/**
+ * Converts hexadecimal colors to rgba colors with transparency
+ */
+export const hexToRgba = (hex: string, alpha: number) => {
+    // Remove the `#` sign from the front
+    const color = hex.replace('#', '');
+
+    // Converts hexadecimal colors to RGB
+    const r = parseInt(color.substring(0, 2), 16);
+    const g = parseInt(color.substring(2, 4), 16);
+    const b = parseInt(color.substring(4, 6), 16);
+
+    // Returns the rgba color with transparency
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+};

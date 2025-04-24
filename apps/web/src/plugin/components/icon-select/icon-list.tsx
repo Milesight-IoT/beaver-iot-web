@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { OutlinedInput, InputAdornment, Tooltip } from '@mui/material';
 import * as Icons from '@milesight/shared/src/components/icons';
+import { PerfectScrollbar } from '@milesight/shared/src/components';
 
 interface IconListProps {
     options: OptionsProps[];
@@ -30,32 +31,38 @@ const IconList = (props: IconListProps) => {
             }}
             className="icon-select-list"
         >
-            <OutlinedInput
-                sx={{ width: '100%' }}
-                startAdornment={
-                    <InputAdornment position="start">
-                        <Icons.SearchIcon />
-                    </InputAdornment>
-                }
-                value={searchValue}
-                onChange={(e: any) => setSearchValue(e.target.value)}
-                size="small"
-            />
-            <div className="icon-select-list-main">
-                {filterOptions().map((option: OptionsProps) => {
-                    const IconTag: any = (Icons as any)[option.label as string];
-                    return (
-                        <Tooltip title={option.label} key={option.value}>
-                            <span
-                                className={`icon-select-icon ${value === option.value ? 'icon-select-icon-active' : ''}`}
-                                onClick={() => onChange(option.value)}
-                            >
-                                <IconTag className="icon-select-icon-img" />
-                            </span>
-                        </Tooltip>
-                    );
-                })}
+            <div className="icon-select-list-search">
+                <OutlinedInput
+                    sx={{ width: '100%' }}
+                    startAdornment={
+                        <InputAdornment position="start">
+                            <Icons.SearchIcon />
+                        </InputAdornment>
+                    }
+                    value={searchValue}
+                    onChange={(e: any) => setSearchValue(e.target.value)}
+                    size="small"
+                />
             </div>
+            <PerfectScrollbar className="icon-select-list-container">
+                <div className="icon-select-list-main">
+                    {filterOptions().map((option: OptionsProps) => {
+                        const IconTag: any = (Icons as any)[option.label as string];
+                        return (
+                            <Tooltip title={option.label} key={option.value}>
+                                <span
+                                    className={`icon-select-icon ${
+                                        value === option.value ? 'icon-select-icon-active' : ''
+                                    }`}
+                                    onClick={() => onChange(option.value)}
+                                >
+                                    <IconTag className="icon-select-icon-img" />
+                                </span>
+                            </Tooltip>
+                        );
+                    })}
+                </div>
+            </PerfectScrollbar>
         </div>
     );
 };

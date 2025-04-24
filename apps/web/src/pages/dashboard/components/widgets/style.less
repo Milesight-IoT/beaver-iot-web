@@ -1,5 +1,3 @@
-@primary-color-8: #7b4efa;
-
 .react-grid-item {
     z-index: 9;
     touch-action: auto !important;
@@ -10,11 +8,13 @@
     }
 
     &.react-draggable-dragging {
+        z-index: 500;
         transition: none;
         will-change: transform;
     }
 
     &.resizing {
+        z-index: 500;
         transition: none;
         will-change: width, height;
 
@@ -25,11 +25,17 @@
 
     &.react-grid-placeholder {
         z-index: 2;
-        background: fade(@primary-color-8, 8%) !important;
+        background: fade(#1d2129, 4%) !important;
         border-radius: 16px !important;
         opacity: 1 !important;
         user-select: none;
         transition-duration: 0.1s;
+    }
+}
+
+[data-theme='dark'] .react-grid-item {
+    &.react-grid-placeholder {
+        background: fade(#f7f8fa, 4%) !important;
     }
 }
 

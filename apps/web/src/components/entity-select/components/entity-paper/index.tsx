@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Paper, PaperProps, Tab, Tabs } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { TabOptions } from '../../constant';
@@ -32,7 +32,7 @@ export default React.memo(({ children, tabType, setTabType, ...props }: IProps) 
                         <Tab label={getIntlText(label)} value={value} key={value} />
                     ))}
                 </Tabs>
-                <Fragment key={tabType}>{children}</Fragment>
+                {children}
             </Paper>
         </div>
     );

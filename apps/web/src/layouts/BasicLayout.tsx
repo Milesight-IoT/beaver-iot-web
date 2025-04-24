@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useRequest } from 'ahooks';
-import { Stack, Skeleton } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import {
     iotLocalStorage,
@@ -14,6 +13,7 @@ import { globalAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/servi
 import { Sidebar, RouteLoadingIndicator } from '@/components';
 import { useUserPermissions } from '@/hooks';
 import { useRoutePermission } from './hooks';
+import { LayoutSkeleton } from './components';
 
 function BasicLayout() {
     const { lang } = useI18n();
@@ -98,13 +98,7 @@ function BasicLayout() {
             <RouteLoadingIndicator />
             {loading !== false ? (
                 // <CircularProgress sx={{ marginX: 'auto', alignSelf: 'center' }} />
-                <Stack direction="row" spacing={1} sx={{ flex: 1 }}>
-                    <Skeleton variant="rectangular" width={64} height="100%" />
-                    <Stack spacing={1} sx={{ flex: 1 }}>
-                        <Skeleton variant="rectangular" animation="wave" height={45} />
-                        <Skeleton variant="rectangular" animation="wave" sx={{ flex: 1 }} />
-                    </Stack>
-                </Stack>
+                <LayoutSkeleton />
             ) : (
                 <>
                     <Sidebar menus={menus} />

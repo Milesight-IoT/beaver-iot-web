@@ -114,7 +114,8 @@ export default (props: IProps) => {
             width="900px"
             sx={{
                 '& .MuiDialogContent-root': {
-                    height: !entityData?.content?.length && !dataLoading ? '400px' : 'auto',
+                    // height: !entityData?.content?.length && !dataLoading ? '400px' : 'auto',
+                    height: 'auto',
                     display: 'flex',
                     flexDirection: 'column',
                 },

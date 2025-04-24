@@ -112,7 +112,7 @@ const GatewayMqttInfo: React.FC<IProps> = props => {
             {showTip && (
                 <div className="ms-ns-add-modal-tip">
                     <Alert severity="info">
-                        <div>{getIntlText('setting.integration.add.credential.tip')}</div>
+                        <div>{getIntlText('setting.integration.add.credential_tip')}</div>
                     </Alert>
                 </div>
             )}

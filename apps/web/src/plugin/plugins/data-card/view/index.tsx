@@ -63,17 +63,22 @@ const View = (props: Props) => {
 
     return (
         <div className={`data-view ${isPreview ? 'data-view-preview' : ''}`}>
-            <div className="data-view__header">
-                {Icon && (
-                    <Icon
-                        sx={{ color: iconColor || getCSSVariableValue('--gray-5'), fontSize: 20 }}
-                    />
-                )}
-                <Tooltip className="data-view__title" autoEllipsis title={title} />
+            <div className="data-view-card">
+                <div className="data-view-card__content">
+                    <div className="data-view-card__header">
+                        {Icon && (
+                            <Icon
+                                sx={{
+                                    color: iconColor || getCSSVariableValue('--gray-5'),
+                                    // fontSize: 20,
+                                }}
+                            />
+                        )}
+                        <Tooltip className="data-view-card__title" autoEllipsis title={title} />
+                    </div>
+                    <Tooltip autoEllipsis title={currentEntityData?.label || '-'} />
+                </div>
             </div>
-            <span className="data-view__content">
-                <Tooltip autoEllipsis title={currentEntityData?.label || '-'} />
-            </span>
         </div>
     );
 };

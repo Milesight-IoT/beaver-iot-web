@@ -18,6 +18,8 @@ interface IProps
     > {
     children: React.ReactNode;
 }
+// Give a large height for popper layer positioning
+const GREAT_HEIGHT = window.innerHeight;
 export default React.memo((props: IProps) => {
     const {
         children: _children,
@@ -78,6 +80,14 @@ export default React.memo((props: IProps) => {
         };
     }, [handleScroll]);
 
+    useEffect(() => {
+        if (tabType === 'device') return;
+
+        // Clear the submenu when switching to the Entity tab
+        setMenuAnchorEl(null);
+        setMenuList([]);
+    }, [tabType]);
+
     // Define popper modifiers
     const modifiers = useMemo(
         () => [
@@ -92,8 +102,8 @@ export default React.memo((props: IProps) => {
     );
     return (
         <>
-            <div {...rest} ref={containerRef}>
-                <div ref={listRef}>
+            <div {...rest} ref={containerRef} key={tabType}>
+                <div ref={listRef} style={{ height: GREAT_HEIGHT }}>
                     {(virtualList || []).map(({ data: option }) => {
                         const { value } = option || {};
 
@@ -127,15 +137,17 @@ export default React.memo((props: IProps) => {
                     })}
                 </div>
             </div>
-            <EntityMenuPopper
-                open={open}
-                anchorEl={menuAnchorEl}
-                menuList={menuList}
-                modifiers={modifiers}
-                maxCount={maxCount}
-                selectedEntityMap={selectedEntityMap}
-                onEntityChange={onEntityChange}
-            />
+            {tabType === 'device' && (
+                <EntityMenuPopper
+                    open={open}
+                    anchorEl={menuAnchorEl}
+                    menuList={menuList}
+                    modifiers={modifiers}
+                    maxCount={maxCount}
+                    selectedEntityMap={selectedEntityMap}
+                    onEntityChange={onEntityChange}
+                />
+            )}
         </>
     );
 });

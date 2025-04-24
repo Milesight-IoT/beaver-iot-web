@@ -12,7 +12,13 @@ import {
 } from '@mui/material';
 
 import { useI18n } from '@milesight/shared/src/hooks';
-import { LoadingWrapper, EditIcon, CheckIcon, CloseIcon } from '@milesight/shared/src/components';
+import {
+    LoadingWrapper,
+    EditIcon,
+    CheckIcon,
+    CloseIcon,
+    PerfectScrollbar,
+} from '@milesight/shared/src/components';
 
 import { type UserMenuType } from '@/services/http';
 import { useFunctions } from './hooks';
@@ -171,7 +177,7 @@ const FunctionsTable = () => {
     return (
         <div className={styles['functions-container']}>
             <div className={styles.operation}>{renderButtons()}</div>
-            <div className={styles.permissions}>
+            <PerfectScrollbar className={styles.permissions}>
                 <LoadingWrapper loading={loading}>
                     <TableContainer sx={{ minHeight: 400 }}>
                         <Table sx={{ border: '1px solid var(--border-color-base)' }}>
@@ -203,7 +209,7 @@ const FunctionsTable = () => {
                         </Table>
                     </TableContainer>
                 </LoadingWrapper>
-            </div>
+            </PerfectScrollbar>
         </div>
     );
 };

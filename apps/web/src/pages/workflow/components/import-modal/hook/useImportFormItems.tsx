@@ -30,7 +30,7 @@ const useImportFormItems = () => {
                         value={value}
                         error={error?.message}
                         uploadIcon={
-                            <UploadFileIcon sx={{ width: 20, height: 20, fill: '#6B7785' }} />
+                            <UploadFileIcon sx={{ width: 22, height: 22, fill: '#6B7785' }} />
                         }
                         uploadTips={getIntlText('workflow.modal.upload_tips')}
                         onChange={onChange}

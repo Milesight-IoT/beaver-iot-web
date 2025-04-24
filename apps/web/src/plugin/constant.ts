@@ -18,8 +18,8 @@ export const COMPONENTCLASS = {
     },
 };
 
-// Chart color sequence
-export const chartColorList: any[] = [
+/** Chart color sequence */
+export const chartColorList = [
     {
         light: '#8F6FEB',
         dark: '#5EAFFF',
@@ -148,4 +148,4 @@ export const chartColorList: any[] = [
         light: '#9B59B6',
         dark: '#C07CDC',
     },
-];
+] as const;

@@ -50,7 +50,7 @@ const useFormItems = ({ mode = 'login' }: UseFormItemsProps) => {
                     return (
                         <TextField
                             {...props}
-                            label={getIntlText('common.label.email')}
+                            placeholder={getIntlText('common.label.email')}
                             error={!!error}
                             helperText={error ? error.message : null}
                             value={value}
@@ -90,7 +90,7 @@ const useFormItems = ({ mode = 'login' }: UseFormItemsProps) => {
                     return (
                         <TextField
                             {...props}
-                            label={getIntlText('common.label.username')}
+                            placeholder={getIntlText('common.label.username')}
                             error={!!error}
                             helperText={error ? error.message : null}
                             value={value}
@@ -125,7 +125,7 @@ const useFormItems = ({ mode = 'login' }: UseFormItemsProps) => {
                         <TextField
                             {...props}
                             autoComplete={mode === 'login' ? undefined : 'new-password'}
-                            label={getIntlText('common.label.password')}
+                            placeholder={getIntlText('common.label.password')}
                             type={showPassword ? 'text' : 'password'}
                             error={!!error}
                             helperText={error ? error.message : null}
@@ -179,7 +179,7 @@ const useFormItems = ({ mode = 'login' }: UseFormItemsProps) => {
                     return (
                         <TextField
                             {...props}
-                            label={getIntlText('common.label.confirm_password')}
+                            placeholder={getIntlText('common.label.confirm_password')}
                             type={showPassword ? 'text' : 'password'}
                             error={!!error}
                             helperText={error ? error.message : null}

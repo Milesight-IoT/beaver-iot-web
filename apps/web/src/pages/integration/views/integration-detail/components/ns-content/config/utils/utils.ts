@@ -19,7 +19,11 @@ export const paginationList = <T>({
     let list: T[] = dataList;
     // filter search
     if (search) {
-        list = list.filter((item: any) => item?.name?.includes(search));
+        list = list.filter((item: any) => {
+            return ((item?.name || '') as string)
+                .toLocaleLowerCase()
+                .includes(search.toLocaleLowerCase());
+        });
     }
     const content = list?.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
     const paginationList: SearchResponseType<T[]> = {

@@ -2,25 +2,49 @@
     position: relative;
     flex: 1;
 
-    .@{prefix}-logo {
-        margin: @margin-xl;
+    .@{prefix}-auth-logo {
+        display: flex;
+        justify-content: center;
+        margin-bottom: @margin-xs;
+
+        .@{prefix}-logo {
+            margin: 0;
+        }
     }
 
     .@{prefix}-auth-container {
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 485px;
-        padding: 36px 40px 40px;
+        width: 444px;
+        padding: 48px;
         border-radius: @border-radius-sm;
         transform: translate(-50%, -50%);
 
         &.hidden {
             display: none;
         }
+
+        &.@{mui-prefix}Paper-root {
+            box-shadow: unset;
+        }
+
+        .@{mui-prefix}InputBase-root {
+            height: 40px;
+        }
+
+        .@{prefix}-auth-submit {
+            padding: @padding-xs @padding-md;
+            margin: 0;
+            .text-size(@font-size-lg);
+        }
     }
 
     .@{prefix}-auth-form {
-        margin-top: @margin-xl;
+        margin: 40px 0 @margin-md;
+
+        div.@{mui-prefix}FormControl-root {
+            margin-bottom: @margin-xl;
+        }
     }
 }

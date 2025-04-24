@@ -14,9 +14,60 @@ export interface UseBasicChartEntityProps {
 
 /** Types of the data required for the chart */
 export interface ChartShowDataProps {
+    id: ApiKey;
     entityLabel: string;
     entityValues: (string | number | null)[];
+    yAxisID?: string;
 }
+
+const MAX_TICKS_LIMIT = 7;
+const X_RANGE_MAP: Record<number, { stepSize: number; unit: 'minute' | 'hour' | 'day' }> = {
+    /** 3 hours */
+    [3 * 60 * 60 * 1000]: {
+        stepSize: 10,
+        unit: 'minute',
+    },
+    /** 6 hours */
+    [6 * 60 * 60 * 1000]: {
+        stepSize: 10,
+        unit: 'minute',
+    },
+    /** 12 hours */
+    [12 * 60 * 60 * 1000]: {
+        stepSize: 30,
+        unit: 'minute',
+    },
+    /** 1 day */
+    [24 * 60 * 60 * 1000]: {
+        stepSize: 60,
+        unit: 'minute',
+    },
+    /** 1 week */
+    [7 * 24 * 60 * 60 * 1000]: {
+        stepSize: 8,
+        unit: 'hour',
+    },
+    /** 1 month */
+    [30 * 24 * 60 * 60 * 1000]: {
+        stepSize: 6,
+        unit: 'day',
+    },
+    /** 3 months */
+    [90 * 24 * 60 * 60 * 1000]: {
+        stepSize: 6,
+        unit: 'day',
+    },
+    /** 6 months */
+    [180 * 24 * 60 * 60 * 1000]: {
+        stepSize: 10,
+        unit: 'day',
+    },
+    /** 1 year */
+    [365 * 24 * 60 * 60 * 1000]: {
+        stepSize: 15,
+        unit: 'day',
+    },
+};
 
 /**
  * Basic chart data uniform processing logic hooks
@@ -25,7 +76,7 @@ export interface ChartShowDataProps {
 export function useBasicChartEntity(props: UseBasicChartEntityProps) {
     const { entity, time, isPreview } = props;
 
-    const { getTimeFormat } = useTime();
+    const { getTimeFormat, getTime } = useTime();
 
     /**
      * Canvas ref
@@ -55,6 +106,10 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
         /** show chart reset zoom icon */
         show: () => {
             chartZoomIconRef.current?.style.setProperty('display', 'block');
+        },
+        /** hide chart reset zoom icon */
+        hide: () => {
+            chartZoomIconRef.current?.style.setProperty('display', 'none');
         },
         /** store chart reset zoom function */
         storeReset: (chart: { resetZoom: () => void; [key: string]: any }) => {
@@ -163,6 +218,7 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
 
                 if (entityLabel) {
                     newChartShowData.push({
+                        id: (entity || [])[index]?.rawData?.entityId || '',
                         entityLabel,
                         entityValues: chartData,
                     });
@@ -203,9 +259,9 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
 
     const format = useMemo(() => {
         if (timeUnit !== 'hour') {
-            return 'yyyy-MM-dd';
+            return 'yyyy-MM-dd HH:mm:ss';
         }
-        return 'MM-dd';
+        return 'MM-dd HH:mm:ss';
     }, [timeUnit]);
 
     const displayFormats = useMemo(() => {
@@ -225,6 +281,35 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
         // The current time is used as the final scale, and the time time is pushed forward as the start scale
         return [Date.now() - time, Date.now()];
     }, [time]);
+
+    // Calculate the suggested X-axis range
+    const xAxisConfig = useMemo(() => {
+        /** default configuration */
+        if (!xAxisRange?.length || !time || !X_RANGE_MAP[time as keyof typeof X_RANGE_MAP]) {
+            return {
+                suggestXAxisRange: xAxisRange,
+                maxTicksLimit: MAX_TICKS_LIMIT,
+                stepSize: void 0,
+                unit: void 0,
+            };
+        }
+
+        const { stepSize, unit } = X_RANGE_MAP[time as keyof typeof X_RANGE_MAP];
+
+        // Calculate the time range on the x-axis
+        const [, end] = xAxisRange || [];
+        const startTime = getTime(end)
+            .subtract(MAX_TICKS_LIMIT * stepSize, unit)
+            .valueOf();
+        const endTime = getTime(end).valueOf();
+
+        return {
+            suggestXAxisRange: [startTime, endTime],
+            stepSize,
+            unit,
+            maxTicksLimit: MAX_TICKS_LIMIT,
+        };
+    }, [xAxisRange, getTime, time]);
 
     return {
         /**
@@ -255,6 +340,10 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
          * X -axis scale range
          */
         xAxisRange,
+        /**
+         * X -axis scale configuration
+         */
+        xAxisConfig,
         /**
          * chart zoom ref
          */

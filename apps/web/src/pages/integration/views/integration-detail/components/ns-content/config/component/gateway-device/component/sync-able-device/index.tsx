@@ -154,7 +154,7 @@ const SyncAbleDevice: React.FC<IProps> = props => {
                     startIcon={<CloudSyncOutlinedIcon />}
                     onClick={() => handleSyncDevices()}
                 >
-                    {getIntlText('setting.integration.label.device.synchronize')}
+                    {getIntlText('setting.integration.label.synchronize')}
                 </Button>
             </Stack>
         );
@@ -171,7 +171,7 @@ const SyncAbleDevice: React.FC<IProps> = props => {
         <div className="ms-ns-device">
             <div className="ms-ns-device-tip">
                 <Alert severity="warning">
-                    <div>{getIntlText('setting.integration.label.device.sync_tip')}</div>
+                    <div>{getIntlText('setting.integration.device.sync_tip')}</div>
                 </Alert>
             </div>
             <div className="ms-ns-device-inner">

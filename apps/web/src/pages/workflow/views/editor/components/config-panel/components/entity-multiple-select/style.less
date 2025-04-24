@@ -2,8 +2,7 @@
     &-item {
         display: flex;
         gap: @margin-xs;
-        align-items: center;
-        margin-bottom: @margin-md;
+        align-items: flex-end;
 
         .@{mui-prefix}FormControl-root {
             margin: 0;
@@ -12,6 +11,10 @@
         > .@{mui-prefix}FormControl-root,
         > .@{mui-prefix}Autocomplete-root {
             flex: 1;
+        }
+
+        & > .@{mui-prefix}ButtonBase-root {
+            margin-bottom: @margin-lg;
         }
     }
 }

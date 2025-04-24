@@ -3,10 +3,11 @@
     "name": "Remaining",
     "class": "data_chart",
     "icon": "./icon.svg",
-    "defaultCol": 1,
-    "defaultRow": 2,
-    "minRow": 2,
-    "minCol": 1,
+    "defaultRow": 1,
+    "defaultCol": 2,
+    "minRow": 1,
+    "minCol": 2,
+    "maxRow": 1,
     "configProps": [
         {
             "style": "width: 100%",

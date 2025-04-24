@@ -91,7 +91,7 @@ const View = (props: ViewProps) => {
                 className="text-wrapper__content bg-custom-scrollbar ms-perfect-scrollbar"
                 style={{ fontSize: `${fontSize}px`, lineHeight: `${Number(fontSize) + 8}px` }}
             >
-                {isEditing ? (textContent || '').slice(0, 6000) : textContent}
+                {isEditing ? (textContent || '').toString().slice(0, 6000) : textContent}
             </div>
         </div>
     );

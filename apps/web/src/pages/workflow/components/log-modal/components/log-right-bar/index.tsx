@@ -18,7 +18,7 @@ export default React.memo(({ activeItem, data }: IProps) => {
     const isLoading = !!actionLoading;
     const isEmpty = !actionLoading && !workflowData;
     return (
-        <div className="ms-log-right-bar">
+        <div className="ms-log-right-bar ms-perfect-scrollbar">
             {isLoading && (
                 <div className="ms-log-loading">
                     <CircularProgress />

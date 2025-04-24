@@ -99,12 +99,12 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                             </Tooltip>
                             <Tooltip title={getIntlText('common.label.delete')}>
                                 <IconButton
-                                    color="error"
+                                    // color="error"
                                     sx={{
                                         width: 30,
                                         height: 30,
                                         color: 'text.secondary',
-                                        '&:hover': { color: 'error.light' },
+                                        // '&:hover': { color: 'error.light' },
                                     }}
                                     onClick={() => onButtonClick('delete', row)}
                                 >

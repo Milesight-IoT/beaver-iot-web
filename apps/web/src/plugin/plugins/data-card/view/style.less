@@ -4,9 +4,9 @@
     width: 100%;
     min-width: 100%;
     height: 100%;
-    padding: @padding-md;
     overflow: hidden;
     background: var(--main-background);
+    container-type: size;
 
     &-preview {
         flex: none;
@@ -16,39 +16,65 @@
         border-radius: @border-radius-md;
     }
 
-    &__icon {
-        padding: @padding-sm;
-        margin-right: @margin-md;
-        background-color: var(--gray-color-1);
-        border-radius: @border-radius-base;
+    &-card {
+        --title-font-size: clamp(14px, min(6.67cqw, 12.5cqh), 32px);
 
-        svg {
-            display: block;
-            height: 100%;
-        }
-    }
-
-    &__text {
-        flex: 1;
-        overflow: hidden;
-    }
-
-    &__header {
         display: flex;
-        align-items: center;
-        margin-bottom: @margin-xxs;
-    }
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        min-width: 100%;
+        height: 100%;
+        padding: @padding-md;
+        overflow: hidden;
 
-    &__title {
-        max-width: calc(100% - 28px);
-        margin-left: @margin-xxs;
-        .text-size(@font-size-base);
-    }
+        &__icon {
+            padding: @padding-sm;
+            margin-right: @margin-md;
+            background-color: var(--gray-color-1);
+            border-radius: @border-radius-base;
 
-    &__content {
-        display: inline-block;
-        font-weight: @font-weight-medium;
-        color: var(--text-color-primary);
-        .text-size(@font-size-xxl);
+            svg {
+                display: block;
+                height: 100%;
+            }
+        }
+
+        &__text {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        &__header {
+            display: flex;
+            align-items: center;
+            margin-bottom: @margin-xxs;
+
+            svg {
+                margin-right: @margin-xxs;
+                font-size: calc(var(--title-font-size) * 1.4);
+            }
+        }
+
+        &__title {
+            max-width: calc(100% - 28px);
+            font-size: var(--title-font-size);
+            font-weight: @font-weight-regular;
+            // .text-size(@font-size-base);
+            color: var(--text-color-secondary);
+        }
+
+        &__content {
+            display: flex;
+            flex-direction: column;
+            padding-left: 2cqw;
+
+            div:nth-of-type(2) {
+                display: inline-block;
+                max-width: 100%;
+                font-size: clamp(16px, min(10cqw, 25cqh), 120px);
+                font-weight: @font-weight-medium;
+            }
+        }
     }
 }

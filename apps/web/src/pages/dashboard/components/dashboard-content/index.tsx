@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Button, Popover } from '@mui/material';
+import { Button, Popover, Stack, Tooltip } from '@mui/material';
 import {
     AddIcon as Add,
     DeleteOutlineIcon as DeleteOutline,
@@ -10,13 +10,15 @@ import {
     InfoIcon,
     toast,
 } from '@milesight/shared/src/components';
+import cls from 'classnames';
 import { cloneDeep } from 'lodash-es';
+import { useFullscreen } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { dashboardAPI, awaitWrap, isRequestSuccess } from '@/services/http';
 import { DashboardDetail, WidgetDetail } from '@/services/http/dashboard';
 import { useConfirm, PermissionControlHidden, PermissionControlDisabled } from '@/components';
 import { PERMISSIONS } from '@/constants';
-import { useGetPluginConfigs } from '../../hooks';
+import { useGetPluginConfigs, useHomeDashboard } from '../../hooks';
 import AddWidget from '../add-widget';
 import PluginList from '../plugin-list';
 import PluginListClass from '../plugin-list-class';
@@ -33,10 +35,17 @@ interface DashboardContentProps {
 }
 
 export default (props: DashboardContentProps) => {
+    const { dashboardDetail, getDashboards, onChangeIsEdit, isEdit, isTooSmallScreen } = props;
+
     const { getIntlText } = useI18n();
     const { pluginsConfigs } = useGetPluginConfigs();
     const confirm = useConfirm();
-    const { dashboardDetail, getDashboards, onChangeIsEdit, isEdit, isTooSmallScreen } = props;
+    const { toggleHomeDashboard, homeDashboardClassName, homeDashboardIcon, homeDashboardTip } =
+        useHomeDashboard({
+            dashboardDetail,
+            refreshDashboards: getDashboards,
+        });
+
     const [isShowAddWidget, setIsShowAddWidget] = useState(false);
     const [isShowEditDashboard, setIsShowEditDashboard] = useState(false);
     const [widgets, setWidgets] = useState<WidgetDetail[]>([]);
@@ -49,6 +58,7 @@ export default (props: DashboardContentProps) => {
     const widgetsRef = useRef<any[]>([]);
     /** normal screen widget position info storage */
     const normalWidgetRef = useRef<any[]>([]);
+    const [isFullscreen, { enterFullscreen }] = useFullscreen(mainRef);
 
     useEffect(() => {
         // Merge the data in the database with the local one to ensure that the component configuration is locally up to date
@@ -210,13 +220,6 @@ export default (props: DashboardContentProps) => {
         }
     };
 
-    // Go to full screen
-    const enterFullscreen = () => {
-        if (mainRef.current?.requestFullscreen) {
-            mainRef.current.requestFullscreen();
-        }
-    };
-
     return (
         <div className="dashboard-content">
             <div className="dashboard-content-operate">
@@ -288,9 +291,14 @@ export default (props: DashboardContentProps) => {
                     </div>
                 ) : !widgets?.length && !loading ? null : (
                     <div className="dashboard-content-operate-right">
-                        <div onClick={enterFullscreen} className="dashboard-fullscreen">
-                            <FullscreenIcon className="dashboard-fullscreen-icon" />
-                        </div>
+                        <Stack direction="row" spacing={1.5}>
+                            <Tooltip onClick={toggleHomeDashboard} title={homeDashboardTip}>
+                                <div className={homeDashboardClassName}>{homeDashboardIcon}</div>
+                            </Tooltip>
+                            <div onClick={enterFullscreen} className="dashboard-button-icon">
+                                <FullscreenIcon />
+                            </div>
+                        </Stack>
                     </div>
                 )}
             </div>
@@ -324,7 +332,10 @@ export default (props: DashboardContentProps) => {
                 </PermissionControlDisabled>
             ) : (
                 <div
-                    className="dashboard-content-main bg-custom-scrollbar ms-perfect-scrollbar"
+                    className={cls(
+                        'dashboard-content-main bg-custom-scrollbar ms-perfect-scrollbar',
+                        { 'dashboard-content-main__fullscreen': isFullscreen },
+                    )}
                     ref={mainRef}
                 >
                     <Widgets

@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Box, MenuItem, Button } from '@mui/material';
 import { Sketch, type ColorResult } from '@uiw/react-color';
-import { useI18n } from '@milesight/shared/src/hooks';
+import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 import Select from '../select';
 import './style.less';
 
 const IconColorSelect = (props: any) => {
     const { getIntlText } = useI18n();
+    const { red, deepOrange, yellow, purple, grey, green, blue, black, white } = useTheme();
+
     const { value, onChange, ...rest } = props;
     const [open, setOpen] = useState(false);
 
@@ -17,6 +19,21 @@ const IconColorSelect = (props: any) => {
         onChange(color.hexa);
     };
 
+    // Default panel color
+    const presetColors = useMemo(
+        () => [
+            red['600'],
+            deepOrange['600'],
+            yellow['600'],
+            green['600'],
+            purple['600'],
+            blue['600'],
+            black,
+            grey['600'],
+            white,
+        ],
+        [black, blue, deepOrange, green, grey, purple, red, white, yellow],
+    );
     return (
         <Select
             {...rest}
@@ -51,7 +68,13 @@ const IconColorSelect = (props: any) => {
                                 e.stopPropagation();
                             }}
                         >
-                            <Sketch color={value} onChange={handleColorChange} />
+                            <Sketch
+                                color={value}
+                                onChange={handleColorChange}
+                                presetColors={presetColors}
+                                width={235}
+                                style={{ backgroundColor: 'var(--main-background)' }}
+                            />
                             <div className="icon-color-select-submit">
                                 <Button
                                     className="icon-color-select-button"

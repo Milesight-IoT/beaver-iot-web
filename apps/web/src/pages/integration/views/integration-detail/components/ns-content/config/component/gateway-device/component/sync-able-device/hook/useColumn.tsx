@@ -40,7 +40,7 @@ const useColumns = <T extends TableRowDataType>({
             },
             {
                 field: 'eui',
-                headerName: getIntlText('setting.integration.label.device.eui'),
+                headerName: getIntlText('setting.integration.label.device_eui'),
                 flex: 1,
                 minWidth: 200,
                 ellipsis: true,

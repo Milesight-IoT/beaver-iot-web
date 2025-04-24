@@ -14,7 +14,8 @@
     }
 
     &-logo {
-        margin: 10px;
+        margin: @margin-xs;
+        margin-left: @margin-xs;
     }
 
     & &-menus {
@@ -81,7 +82,7 @@
             transition: transform 0.3s ease-out;
 
             .@{mui-prefix}Avatar-root {
-                font-size: @font-size-xl;
+                font-family: Helvetica;
                 vertical-align: middle;
             }
 
@@ -95,15 +96,15 @@
                 .ellipsis();
             }
 
-            .@{prefix}-icon {
-                transition: 0.3s;
-            }
+            // .@{prefix}-icon {
+            //     transition: 0.3s;
+            // }
 
-            &.active {
-                .@{prefix}-icon {
-                    transform: rotate(180deg);
-                }
-            }
+            // &.active {
+            //     .@{prefix}-icon {
+            //         transform: rotate(180deg);
+            //     }
+            // }
         }
 
         .@{prefix}-oprt-shrink {
@@ -125,6 +126,9 @@
                     display: none;
                 }
             }
+            .@{prefix}-oprt-shrink {
+                transform: rotate(180deg);
+            }
         }
     }
 }
@@ -142,6 +146,7 @@
     & &__avatar {
         min-width: unset;
         margin-right: @margin-sm;
+        font-family: Helvetica;
     }
 
     & &__text {

@@ -65,7 +65,7 @@ const Application: React.FC<ApplicationPropsType> = props => {
         <div>
             <div className="ms-ns-add-modal-tip">
                 <Alert severity="warning">
-                    <div>{getIntlText('setting.integration.add.application.tip')}</div>
+                    <div>{getIntlText('setting.integration.add.application_tip')}</div>
                 </Alert>
             </div>
             <div className="ms-view-gateway-info">

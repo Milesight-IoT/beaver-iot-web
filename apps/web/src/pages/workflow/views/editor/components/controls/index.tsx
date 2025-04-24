@@ -121,7 +121,7 @@ const Controls: React.FC<ControlsProps> = ({
                         >
                             <AddCircleIcon sx={{ fontSize: 20 }} />
                         </Button>
-                        <Button
+                        {/* <Button
                             className={cls({ active: !isPanMode })}
                             onClick={() => handleEditModeChange('pointer')}
                         >
@@ -132,7 +132,7 @@ const Controls: React.FC<ControlsProps> = ({
                             onClick={() => handleEditModeChange('hand')}
                         >
                             <BackHandOutlinedIcon sx={{ fontSize: 18 }} />
-                        </Button>
+                        </Button> */}
                     </ButtonGroup>
                     <NodeMenu
                         anchorOrigin={{

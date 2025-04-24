@@ -53,7 +53,7 @@ const useFormItems = () => {
                         <TextField
                             {...props}
                             required
-                            label={getIntlText('setting.integration.label.name')}
+                            label={getIntlText('setting.integration.label.gateway_name')}
                             error={!!error}
                             helperText={error ? error.message : null}
                             value={value}
@@ -75,7 +75,7 @@ const useFormItems = () => {
                         <TextField
                             {...props}
                             required
-                            label={getIntlText('setting.integration.label.device.eui')}
+                            label={getIntlText('setting.integration.label.device_eui')}
                             error={!!error}
                             helperText={error ? error.message : null}
                             value={value}

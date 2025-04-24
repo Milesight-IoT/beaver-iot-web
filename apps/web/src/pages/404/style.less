@@ -6,4 +6,15 @@
     justify-content: center;
     height: 100%;
     text-align: center;
+
+    &__title {
+        margin: @margin-md 0 @margin-xs 0;
+        font-weight: @font-weight-bold;
+        .text-size(@font-size-xxl);
+    }
+
+    &__desc {
+        color: var(--text-color-secondary);
+        .text-size(@font-size-md);
+    }
 }

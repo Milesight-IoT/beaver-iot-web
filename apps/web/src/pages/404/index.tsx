@@ -1,5 +1,5 @@
-import { Typography } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
+import notfoundImg from '@/assets/404.svg';
 import './style.less';
 
 export default () => {
@@ -7,8 +7,9 @@ export default () => {
 
     return (
         <div className="ms-view-404">
-            <Typography variant="h2">404</Typography>
-            <Typography>{getIntlText('error.http.page_not_found')}</Typography>
+            <img src={notfoundImg} alt="404" />
+            <div className="ms-view-404__title">{getIntlText('common.label.404_not_found')}</div>
+            <div className="ms-view-404__desc">{getIntlText('error.http.page_not_found')}</div>
         </div>
     );
 };

@@ -33,7 +33,7 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
             },
             {
                 field: 'eui',
-                headerName: getIntlText('setting.integration.label.device.eui'),
+                headerName: getIntlText('setting.integration.label.device_eui'),
                 flex: 1,
                 minWidth: 180,
                 ellipsis: true,
@@ -64,13 +64,13 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                         >
                             <Tooltip title={getIntlText('common.label.delete')}>
                                 <IconButton
-                                    color="error"
+                                    // color="error"
                                     // disabled={!row.deletable}
                                     sx={{
                                         width: 30,
                                         height: 30,
                                         color: 'text.secondary',
-                                        '&:hover': { color: 'error.light' },
+                                        // '&:hover': { color: 'error.light' },
                                     }}
                                     onClick={() => onButtonClick('delete', row)}
                                 >

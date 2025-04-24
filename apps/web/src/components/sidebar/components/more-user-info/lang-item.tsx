@@ -1,9 +1,9 @@
 import React from 'react';
-import { Menu, MenuItem, ListItemIcon, Stack } from '@mui/material';
+import { MenuItem, ListItemIcon, Stack } from '@mui/material';
 import { usePopupState, bindHover, bindMenu } from 'material-ui-popup-state/hooks';
-import HoverMenu from 'material-ui-popup-state/HoverMenu';
 import { useI18n, type LangType } from '@milesight/shared/src/hooks';
 import { LanguageIcon, ArrowForwardIosIcon, CheckIcon } from '@milesight/shared/src/components';
+import HoverMenu from '@/components/hover-menu';
 
 interface Props {
     onChange?: (lang: LangType) => void;

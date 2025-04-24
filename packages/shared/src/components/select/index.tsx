@@ -1,4 +1,7 @@
-import { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
+import cls from 'classnames';
+import { isNil } from 'lodash-es';
+import { type FieldError } from 'react-hook-form';
 import {
     Select as MuiSelect,
     SelectProps as MuiSelectProps,
@@ -9,7 +12,8 @@ import {
     FormControlProps as MuiFormControlProps,
     InputLabel,
 } from '@mui/material';
-import { type FieldError } from 'react-hook-form';
+import { useI18n } from '../../hooks';
+import './style.less';
 
 type Props<T extends ApiKey> = {
     /**
@@ -33,13 +37,32 @@ type Props<T extends ApiKey> = {
      * Form control props
      */
     formControlProps?: MuiFormControlProps;
+    /**
+     * Custom empty content
+     */
+    renderEmpty?: () => React.ReactNode;
 };
 
 export type SelectProps<T extends ApiKey> = Props<T> & Omit<MuiSelectProps<T>, 'error'>;
 
 const Select = <T extends ApiKey = ApiKey>(props: SelectProps<T>) => {
-    const { options, renderOptions, style, label, error, disabled, formControlProps, ...rest } =
-        props;
+    const {
+        options,
+        renderOptions,
+        style,
+        label,
+        error,
+        disabled,
+        formControlProps,
+        className,
+        placeholder,
+        displayEmpty,
+        multiple,
+        renderValue,
+        renderEmpty,
+        ...rest
+    } = props;
+    const { getIntlText } = useI18n();
 
     // Conversion of down pull option data on of down pull option data
     const getMenuItems = useMemo(() => {
@@ -60,6 +83,30 @@ const Select = <T extends ApiKey = ApiKey>(props: SelectProps<T>) => {
         return list;
     }, [options]);
 
+    /** custom render value */
+    const customRenderValue = useCallback<Required<SelectProps<T>>['renderValue']>(
+        selected => {
+            const selectedValue = (
+                Array.isArray(selected) ? selected : selected ? [selected] : []
+            ) as T[];
+
+            if (!selectedValue?.length) {
+                return <div className="ms-select__placeholder">{placeholder}</div>;
+            }
+
+            if (renderValue) return renderValue(selected);
+            return selectedValue.filter(v => !isNil(v)).join(', ');
+        },
+        [placeholder, renderValue],
+    );
+    /** custom render empty content */
+    const customRenderEmpty = useCallback<Required<SelectProps<T>>['renderEmpty']>(() => {
+        if (options?.length) return null;
+        if (renderEmpty) return renderEmpty();
+
+        return <div className="ms-select__empty">{getIntlText('common.label.no_options')}</div>;
+    }, [options, renderEmpty, getIntlText]);
+
     return (
         <FormControl sx={{ ...style }} fullWidth {...(formControlProps || {})}>
             {!!label && (
@@ -75,13 +122,19 @@ const Select = <T extends ApiKey = ApiKey>(props: SelectProps<T>) => {
             )}
             <MuiSelect
                 {...rest}
+                className={cls('ms-select', className)}
+                multiple={multiple}
                 // @ts-ignore
                 notched
                 label={label}
                 labelId="select-label"
                 error={!!error}
                 disabled={disabled}
+                displayEmpty={!!placeholder || displayEmpty}
+                placeholder={placeholder}
+                renderValue={customRenderValue}
             >
+                {customRenderEmpty()}
                 {renderOptions
                     ? renderOptions(options)
                     : getMenuItems?.map((item: OptionsProps) => {

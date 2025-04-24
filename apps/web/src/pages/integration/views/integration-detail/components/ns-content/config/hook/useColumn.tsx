@@ -31,7 +31,7 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
         return [
             {
                 field: 'name',
-                headerName: getIntlText('setting.integration.label.name'),
+                headerName: getIntlText('setting.integration.label.gateway_name'),
                 flex: 1,
                 minWidth: 200,
                 ellipsis: true,
@@ -48,7 +48,7 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
             },
             {
                 field: 'credentialId',
-                headerName: getIntlText('setting.integration.label.credential_id'),
+                headerName: getIntlText('setting.integration.label.credential'),
                 ellipsis: true,
                 flex: 1,
                 minWidth: 200,
@@ -84,7 +84,7 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                             spacing="4px"
                             sx={{ height: '100%', alignItems: 'center', justifyContent: 'end' }}
                         >
-                            <Tooltip title={getIntlText('setting.integration.label.device')}>
+                            <Tooltip title={getIntlText('setting.integration.label.sub_device')}>
                                 <IconButton
                                     sx={{ width: 30, height: 30 }}
                                     onClick={() => onButtonClick('device', row)}
@@ -102,12 +102,12 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                             </Tooltip>
                             <Tooltip title={getIntlText('common.label.delete')}>
                                 <IconButton
-                                    color="error"
+                                    // color="error"
                                     sx={{
                                         width: 30,
                                         height: 30,
                                         color: 'text.secondary',
-                                        '&:hover': { color: 'error.light' },
+                                        // '&:hover': { color: 'error.light' },
                                     }}
                                     onClick={() => onButtonClick('delete', row)}
                                 >

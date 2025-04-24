@@ -56,35 +56,56 @@ body {
 // ---------- Custom Tabs ----------
 .@{prefix}-tabs {
     &.@{mui-prefix}Tabs-root {
-        height: 56px;
-        min-height: 44px;
+        min-height: 48px;
         padding-top: @padding-xs;
         background-color: var(--component-background);
     }
 
-    .@{mui-prefix}Tabs-flexContainer {
-        padding: 0 20px;
-        background-color: var(--component-background);
-        border-bottom: 1px solid var(--border-color-base);
+    .@{mui-prefix}Tabs-scroller {
+        .@{mui-prefix}Tabs-flexContainer {
+            padding: 0 0 0 @padding-md;
+            background-color: var(--component-background);
+        }
     }
 
     .@{mui-prefix}Tab-root {
+        position: relative;
         min-width: auto;
         min-height: 24px;
-        padding: @padding-xs @padding-md (@padding-md - 1);
+        padding: @padding-xs @padding-md (@padding-xs + 1);
         margin-right: 0;
         font-weight: @font-weight-base;
         color: var(--text-color-secondary);
         border: 1px solid transparent;
-        border-bottom: none;
-        .text-size(@font-size-lg);
+        border-bottom: unset;
+        .text-size(@font-size-md);
+
+        &:not(:first-child)::before {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 1px;
+            height: 14px;
+            background-color: var(--gray-3);
+            content: '';
+            transform: translateY(-50%);
+        }
 
         &.@{mui-prefix}-selected {
+            z-index: 1;
             font-weight: @font-weight-medium;
             color: var(--text-color-base);
             background-color: var(--body-background);
             border-color: var(--border-color-base);
+            border-bottom: unset;
             border-radius: @border-radius-base @border-radius-base 0 0;
+
+            &,
+            & + .@{mui-prefix}Tab-root {
+                &::before {
+                    opacity: 0;
+                }
+            }
         }
 
         &:not(.@{mui-prefix}-selected):hover {
@@ -93,15 +114,31 @@ body {
     }
 
     .@{mui-prefix}Tabs-scrollButtons {
-        height: 40px;
         margin-top: 1px;
         color: var(--text-color-secondary);
     }
 
     .@{mui-prefix}Tabs-indicator {
         bottom: -1px;
+        display: none;
         background-color: var(--body-background);
         transition: none;
+    }
+}
+
+.@{mui-prefix}Toolbar-root {
+    &:has(.@{prefix}-tabs) {
+        position: relative;
+
+        &::after {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 1px;
+            background-color: var(--border-color-base);
+            content: '';
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 import React, { ReactElement, JSXElementConstructor } from 'react';
 import { createSvgIcon } from '@mui/material/utils';
-import { loadSvgSource } from './helper';
+import { loadSvgSource } from '../helper';
 import svgSource from './source';
 
 loadSvgSource(svgSource);

@@ -5,11 +5,14 @@ export type GaugeNeedle = {
     widthPercentage: number;
     lengthPercentage: number;
     color: string;
+    /** needle Thinning factor is 0 - 1 */
+    taperFactor: number;
 };
 export type GaugeValueLabel = {
     display: boolean;
     formatter: ((value: number) => string) | null;
     fontSize?: number;
+    fontWeight?: string;
     color: string;
     backgroundColor: string;
     borderRadius: number;
@@ -37,6 +40,8 @@ export type GaugeTicks = {
     tickInnerPadding: number;
     tickOuterPadding: number;
     tickLineLength: number;
+    /** offset angle is 0 - 360 of Math.PI */
+    offsetAngle: number;
 };
 export type GaugeOptions = {
     cutout: string;

@@ -32,3 +32,4 @@ export { default as PasswordInput } from './password-input';
 export { default as PermissionControlHidden } from './permission-control-hidden';
 export { default as PermissionControlDisabled } from './permission-control-disabled';
 export { default as PermissionControlResource } from './permission-control-resource';
+export { default as GradientBgContainer } from './gradient-bg-container';

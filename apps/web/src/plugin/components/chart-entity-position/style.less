@@ -1,0 +1,59 @@
+.@{prefix}-entity-assign-select {
+    padding: @padding-xxl 0;
+
+    .list-content {
+        padding: @padding-md;
+        background: var(--component-background-gray);
+        border-radius: @border-radius-base;
+
+        .@{mui-prefix}InputBase-formControl {
+            background: var(--component-background);
+        }
+
+        .@{mui-prefix}TextField-root:first-child {
+            margin: 0 !important;
+        }
+    }
+
+    &-item {
+        display: flex;
+        gap: @margin-xs;
+        align-items: center;
+        margin-bottom: @margin-md;
+
+        .@{mui-prefix}FormControl-root {
+            margin: 0;
+        }
+
+        > .@{prefix}-param-input-select,
+        > .@{mui-prefix}Autocomplete-root {
+            flex: 1;
+        }
+    }
+
+    &__label {
+        margin-bottom: @margin-xxs;
+    }
+}
+
+.@{prefix}-entity-select {
+    &-options-container {
+        height: 300px;
+        overflow: auto;
+    }
+
+    &-item {
+        flex: 1;
+        width: 0;
+        height: 46px;
+
+        &__label {
+            .text-size(@font-size-lg);
+        }
+
+        &__description {
+            color: var(--text-color-tertiary);
+            .text-size(@font-size-md);
+        }
+    }
+}

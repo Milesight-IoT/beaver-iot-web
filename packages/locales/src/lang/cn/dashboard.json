@@ -22,7 +22,7 @@
     "dashboard.label_sum_value": "总值",
     "dashboard.leave_to_new_dashboard_description": "是否要跳转至新创建的仪表盘，请注意当前仪表盘您修改的内容不会被保存。",
     "dashboard.plugin.trigger_confirm_text": "是否确认执行此操作？",
-    "dashboard.plugin_class_data_card": "数据卡片",
+    "dashboard.plugin_class_data_card": "数据展示",
     "dashboard.plugin_class_data_chart": "数据图表",
     "dashboard.plugin_class_operate": "可操作组件",
     "dashboard.plugin_class_other": "其他",

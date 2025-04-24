@@ -3,6 +3,14 @@
     text-transform: none;
 }
 
+// ---------- IconButton ----------
+.@{mui-prefix}ButtonBase-root.@{mui-prefix}IconButton-root {
+    &:hover {
+        color: var(--primary-color-7);
+        background-color: unset;
+    }
+}
+
 .@{mui-prefix}ButtonBase-root.@{mui-prefix}Button-outlinedPrimary {
     color: var(--text-color-primary);
     background-color: var(--component-background);
@@ -22,21 +30,21 @@
 
 .@{mui-prefix}ButtonBase-root.@{mui-prefix}Button-containedPrimary {
     color: var(--white);
+    background-color: var(--primary-color-7);
 
     &:hover {
         color: var(--white);
-        background-color: var(--primary-color-9);
+        background-color: var(--primary-color-8);
+    }
+
+    &:active {
+        box-shadow: none;
     }
 
     &.@{mui-prefix}-disabled {
         color: var(--white);
         background-color: var(--primary-color-4);
     }
-}
-
-// ---------- Form ----------
-.@{mui-prefix}FormLabel-asterisk {
-    color: var(--text-color-error);
 }
 
 // ---------- Tabs ----------
@@ -59,6 +67,24 @@
             font-weight: @font-weight-medium;
             visibility: hidden;
             content: attr(title);
+        }
+    }
+}
+
+// ---------- Switch ----------
+.@{mui-prefix}Switch-root {
+    .@{mui-prefix}Switch-switchBase {
+        &.@{mui-prefix}-checked,
+        & {
+            &:hover {
+                background-color: unset;
+            }
+        }
+    }
+
+    .@{mui-prefix}-checked {
+        .@{mui-prefix}Switch-thumb {
+            background-color: var(--primary-color-7);
         }
     }
 }
@@ -90,6 +116,7 @@ input.@{mui-prefix}InputBase-input {
         -webkit-text-fill-color: var(--text-color-base);
     }
 }
+
 // Adjust the default border style for the Input component
 .@{mui-prefix}InputBase-root.@{mui-prefix}OutlinedInput-root {
     &:hover {
@@ -98,9 +125,11 @@ input.@{mui-prefix}InputBase-input {
             transition: border 0.3s;
         }
     }
+
     &.@{mui-prefix}-focused {
         .@{mui-prefix}OutlinedInput-notchedOutline {
             border-width: 1px;
+            box-shadow: 0 0 0 2px #7b4efa3d;
         }
 
         &:hover {
@@ -112,9 +141,19 @@ input.@{mui-prefix}InputBase-input {
 }
 
 // ---------- Dialog ----------
+.@{mui-prefix}Dialog-root {
+    .@{mui-prefix}Backdrop-root {
+        background-color: rgba(0, 0, 0, 0.38);
+    }
+}
+
 .@{mui-prefix}Dialog-container {
     .@{mui-prefix}Paper-root.@{mui-prefix}Dialog-paper {
         border-radius: @border-radius-md;
+
+        .@{mui-prefix}DialogContent-root {
+            min-width: 444px; // all dialog min width
+        }
     }
 }
 
@@ -150,6 +189,9 @@ input.@{mui-prefix}InputBase-input {
         color: var(--border-color-gray);
     }
 }
+.@{mui-prefix}Checkbox-root:hover {
+    background-color: unset;
+}
 
 // ---------- Paper ----------
 .@{mui-prefix}Paper-root {
@@ -160,6 +202,18 @@ input.@{mui-prefix}InputBase-input {
     .@{mui-prefix}List-root {
         .@{mui-prefix}MenuItem-root {
             .text-size(@font-size-md);
+        }
+    }
+}
+
+// ---------- Autocomplete ----------
+.@{mui-prefix}Autocomplete-listbox {
+    .@{mui-prefix}Autocomplete-option {
+        .text-size(@font-size-md);
+
+        &.@{mui-prefix}-focused:hover {
+            background-color: var(--component-background-gray);
+            transition: background-color 0.1s ease;
         }
     }
 }
@@ -175,6 +229,34 @@ input.@{mui-prefix}InputBase-input {
 }
 
 // ---------- Form ----------
+.@{mui-prefix}FormLabel-asterisk,
+.@{mui-prefix}FormControlLabel-asterisk {
+    color: var(--text-color-error);
+}
+
+label.@{mui-prefix}FormControlLabel-root {
+    // display: flex;
+    // flex-direction: column-reverse;
+    // align-items: flex-start;
+    margin-left: 0;
+
+    & > div {
+        display: flex;
+        flex-direction: row-reverse;
+    }
+
+    .@{mui-prefix}FormControlLabel-label {
+        display: inline-block;
+        margin-bottom: @margin-xxs;
+        color: var(--text-color-primary);
+        .text-size(@font-size-md);
+    }
+
+    .@{mui-prefix}FormControlLabel-asterisk {
+        margin-right: @margin-xxs;
+    }
+}
+
 .@{mui-prefix}FormControl-root {
     div&,
     &.@{mui-prefix}FormControl-fullWidth&,
@@ -183,12 +265,24 @@ input.@{mui-prefix}InputBase-input {
     }
 
     .@{mui-prefix}InputBase-root {
+        padding-right: @padding-sm;
+        padding-left: @padding-sm;
+
         .@{mui-prefix}InputAdornment-root {
             color: var(--text-color-tertiary);
+            .text-size(@font-size-1);
 
             .@{mui-prefix}ButtonBase-root {
                 color: var(--icon-color-gray-secondary);
+
+                &:hover {
+                    color: var(--primary-color-7);
+                }
             }
+        }
+
+        .@{mui-prefix}InputBase-input {
+            padding-left: 0;
         }
     }
 
@@ -206,8 +300,30 @@ input.@{mui-prefix}InputBase-input {
             color: var(--text-color-primary);
         }
 
+        &.@{mui-prefix}-disabled {
+            color: var(--text-color-primary);
+        }
+
         .@{mui-prefix}FormLabel-asterisk {
             margin-right: @margin-xxs;
+        }
+
+        &.@{mui-prefix}-error {
+            color: var(--text-color-primary);
+        }
+    }
+
+    .@{mui-prefix}-disabled {
+        &.@{mui-prefix}InputBase-root {
+            background: var(--border-color-gray-light);
+
+            .@{mui-prefix}InputBase-input {
+                -webkit-text-fill-color: var(--text-color-secondary);
+            }
+
+            .@{mui-prefix}OutlinedInput-notchedOutline {
+                border: 1px solid var(--gray-4);
+            }
         }
     }
 
@@ -224,12 +340,5 @@ input.@{mui-prefix}InputBase-input {
         margin: 0;
         color: var(--text-color-tertiary);
         .text-size(@font-size-md);
-    }
-}
-
-// ---------- Dialog ----------
-.@{mui-prefix}Dialog-root {
-    .@{mui-prefix}Backdrop-root {
-        background-color: rgba(0, 0, 0, 0.38);
     }
 }

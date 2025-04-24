@@ -23,10 +23,19 @@
             position: absolute;
             top: -(@padding-sm + @padding-xs);
             left: @padding-md;
+            max-width: calc(100% - 32px);
             padding: @padding-xs;
             color: var(--text-color-primary);
             background: var(--main-background);
             .text-size(@font-size-md);
+
+            span {
+                display: inline-block;
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
         }
 
         &-item {

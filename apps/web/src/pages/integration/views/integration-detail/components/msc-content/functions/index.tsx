@@ -71,7 +71,13 @@ const Functions: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
                             </IconButton>
                         </div>
                         <div className="desc">
-                            {getIntlText('setting.integration.function_data_sync_desc')}
+                            <Tooltip
+                                title={getIntlText('setting.integration.function_data_sync_desc')}
+                            >
+                                <span>
+                                    {getIntlText('setting.integration.function_data_sync_desc')}
+                                </span>
+                            </Tooltip>
                         </div>
                     </div>
                 </Grid2>

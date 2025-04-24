@@ -225,13 +225,13 @@ export default class GaugeController extends DoughnutController {
     drawNeedle() {
         const { ctx, chartArea } = this.chart;
         const { innerRadius, outerRadius } = this;
-        const { radiusPercentage, widthPercentage, lengthPercentage, color } = this.options.needle;
+        const { radiusPercentage, widthPercentage, lengthPercentage, color, taperFactor } =
+            this.options.needle;
 
         const width = chartArea.right - chartArea.left;
         const needleRadius = (radiusPercentage / 100) * width;
         const needleWidth = (widthPercentage / 100) * width;
-        const needleLength = (lengthPercentage / 100) * (outerRadius - innerRadius) + innerRadius;
-
+        const needleLength = (lengthPercentage / 100) * outerRadius;
         // center
         const { dx, dy } = this.getTranslation(this.chart);
 
@@ -253,10 +253,20 @@ export default class GaugeController extends DoughnutController {
         ctx.fill();
 
         // draw needle
+        const trapezoidTopWidth = needleWidth * taperFactor;
+        ctx.moveTo(0, needleWidth / 2);
+        ctx.lineTo(needleLength, trapezoidTopWidth / 2);
+        ctx.lineTo(needleLength, -trapezoidTopWidth / 2);
+        ctx.lineTo(0, -needleWidth / 2);
+        ctx.fill();
+
+        // draw needle circle
         ctx.beginPath();
         ctx.moveTo(0, needleWidth / 2);
-        ctx.lineTo(needleLength, 0);
+        ctx.lineTo(needleLength, trapezoidTopWidth / 2);
+        ctx.arc(needleLength, 0, trapezoidTopWidth / 2, Math.PI / 2, -Math.PI / 2, true);
         ctx.lineTo(0, -needleWidth / 2);
+        ctx.closePath();
         ctx.fill();
 
         ctx.restore();
@@ -270,6 +280,7 @@ export default class GaugeController extends DoughnutController {
         const {
             formatter,
             fontSize,
+            fontWeight,
             color,
             backgroundColor,
             borderRadius,
@@ -288,7 +299,7 @@ export default class GaugeController extends DoughnutController {
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
         if (fontSize) {
-            ctx.font = `${fontSize}px ${defaultFontFamily}`;
+            ctx.font = `${fontWeight || '400'} ${fontSize}px ${defaultFontFamily}`;
         }
 
         // const { width: textWidth, actualBoundingBoxAscent, actualBoundingBoxDescent } = ctx.measureText(valueText);
@@ -345,6 +356,7 @@ export default class GaugeController extends DoughnutController {
             tickInnerPadding,
             tickOuterPadding,
             tickLineLength,
+            offsetAngle,
         } = this.options.ticks;
 
         const centerX = (chartArea.left + chartArea.right) / 2;
@@ -357,7 +369,6 @@ export default class GaugeController extends DoughnutController {
 
         // Calculate the angle of each scale
         const totalTicks = tickCount || 10;
-        const angleStep = this._getCircumference() / totalTicks;
         const rotation = this._getRotation();
 
         ctx.save();
@@ -368,8 +379,16 @@ export default class GaugeController extends DoughnutController {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
+        // offset Angle, left right padding
+        const offsetRadius = Math.PI / offsetAngle;
+        const totalAngle = this._getCircumference() - offsetRadius * 2;
+        // effectively draw Angle range
+        const angleStep = totalAngle / totalTicks;
+
         for (let i = 0; i <= totalTicks; i++) {
-            const angle = rotation + i * angleStep;
+            // start offset Angle
+            const startAngle = rotation + offsetRadius;
+            const angle = startAngle + i * angleStep;
             const xStart = lineRadius * Math.cos(angle);
             const yStart = lineRadius * Math.sin(angle);
             const xEnd = tickRadius * Math.cos(angle);
@@ -414,10 +433,13 @@ GaugeController.overrides = {
         lengthPercentage: 80,
         // The color of the needle
         color: 'rgba(0, 0, 0, 1)',
+        // needle Thinning factor is 0 - 1
+        taperFactor: 0.33,
     },
     valueLabel: {
         // fontSize: undefined
         display: true,
+        fontWeight: '400',
         formatter: null,
         color: 'rgba(255, 255, 255, 1)',
         backgroundColor: 'rgba(0, 0, 0, 1)',
@@ -438,6 +460,7 @@ GaugeController.overrides = {
         tickInnerPadding: 4,
         tickOuterPadding: 12,
         tickLineLength: 4,
+        offsetAngle: 90,
     },
     // The percentage of the chart that we cut out of the middle.
     cutout: '50%',

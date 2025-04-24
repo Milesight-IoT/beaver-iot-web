@@ -54,7 +54,7 @@ const IconSelect = (props: any) => {
             }}
             MenuProps={{
                 classes: {
-                    paper: 'ms-perfect-scrollbar',
+                    paper: 'ms-icon-select-menu-paper',
                 },
             }}
         />

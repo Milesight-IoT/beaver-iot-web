@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useMemoizedFn } from 'ahooks';
 import Chart, { ChartConfiguration } from 'chart.js/auto'; // Introduce Chart.js
 import { useTheme } from '@milesight/shared/src/hooks';
 import { Tooltip } from '@/plugin/view-components';
@@ -17,6 +18,45 @@ const View = (props: IProps) => {
 
     const chartRef = useRef<HTMLCanvasElement>(null);
 
+    // handle text that is too long, resulting in a small chart scale.
+    // convert the long label into an array[label1,label2,...]
+    const formatLabel = useMemoizedFn((str: string, maxwidth: number = 10) => {
+        const sections: string[] = [];
+        const words = str.split(' ');
+        let temp = '';
+
+        words.forEach((item: string, index: number) => {
+            if (temp.length > 0) {
+                const concat = `${temp} ${item}`;
+
+                if (concat.length > maxwidth) {
+                    sections.push(temp);
+                    temp = '';
+                } else {
+                    if (index === words.length - 1) {
+                        sections.push(concat);
+                        return;
+                    }
+                    temp = concat;
+                    return;
+                }
+            }
+
+            if (index === words.length - 1) {
+                sections.push(item);
+                return;
+            }
+
+            if (item.length < maxwidth) {
+                temp = item;
+            } else {
+                sections.push(item);
+            }
+        });
+
+        return sections;
+    });
+
     /** Rendering radar map */
     const renderRadarChart = (
         data: ChartConfiguration['data'],
@@ -28,7 +68,12 @@ const View = (props: IProps) => {
 
             const chart = new Chart(ctx, {
                 type: 'radar',
-                data,
+                data: {
+                    ...data,
+                    labels: data?.labels?.map((value: unknown) => {
+                        return formatLabel(value as string);
+                    }),
+                },
                 options: {
                     plugins: {
                         legend: {

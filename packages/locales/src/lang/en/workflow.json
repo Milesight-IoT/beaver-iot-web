@@ -20,6 +20,7 @@
     "workflow.editor.form_param_timer_type_cycle": "Cycle Execution",
     "workflow.editor.form_param_timer_type_interval": "Interval Execution",
     "workflow.editor.form_param_timer_type_once": "Single Execution",
+    "workflow.editor.input_placeholder_remark": "Add descriptions...",
     "workflow.editor.log_panel_title_test_run": "Test Run",
     "workflow.editor.log_panel_title_verification_result": "Verification Result",
     "workflow.editor.log_title_run": "Runnng Logs",
@@ -73,6 +74,7 @@
     "workflow.label.logic_keyword_elseif": "ELIF",
     "workflow.label.logic_keyword_if": "IF",
     "workflow.label.logic_keyword_or": "OR",
+    "workflow.label.mqtt_node_name": "MQTT",
     "workflow.label.no_log_record": "No log is recorded",
     "workflow.label.node_category_action": "Action",
     "workflow.label.node_category_control": "Control",
@@ -118,7 +120,5 @@
     "workflow.valid.node_parameters_required": "The {1} node parameters is required.",
     "workflow.valid.parameter_required": "The {1} node parameter is required.",
     "workflow.valid.range_length": "The length of the {1} field value should be greater than or equal to {2} and less than or equal to {3}.",
-    "workflow.valid.required": "The {1} field is required.",
-    "workflow.editor.input_placeholder_remark": "Add descriptions...",
-    "workflow.label.mqtt_node_name": "MQTT"
+    "workflow.valid.required": "The {1} field is required."
 }

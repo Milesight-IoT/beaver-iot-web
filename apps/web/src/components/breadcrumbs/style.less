@@ -1,8 +1,14 @@
 .@{prefix}-breadcrumbs {
     display: flex;
     align-items: center;
-    height: 45px;
+    height: 49px;
     padding: 0 @padding-lg;
     background-color: var(--component-background);
     border-bottom: 1px solid var(--border-color-base);
+
+    &__inner {
+        .@{mui-prefix}Typography-root {
+            .text-size(@font-size-xl);
+        }
+    }
 }

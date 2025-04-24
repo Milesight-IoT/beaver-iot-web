@@ -6,48 +6,52 @@
 
     &__content {
         position: relative;
-        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 100%;
-        height: 100%;
+        height: 20px;
+        margin-top: @margin-sm;
         overflow: hidden;
     }
 
     &__icon {
         position: relative;
-        width: 100%;
+        width: 20px;
         height: 100%;
-        opacity: 0.2;
 
         svg {
             width: 100%;
             height: 100%;
+            color: var(--icon-color-gray-secondary);
         }
     }
 
-    &__mask {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 9999;
-        width: 100%;
-        height: 100%;
+    &__progress {
+        flex: 1;
 
-        &-icon {
-            width: 100%;
-            height: 100%;
+        &-bar {
+            position: relative;
+            height: 8px;
+            margin: 0 @margin-sm;
+            background-color: var(--gray-2);
+            border-radius: @border-radius-base;
 
-            svg {
-                width: 100%;
+            &::after {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: var(--remain-percent, 0%);
                 height: 100%;
-
-                path {
-                    clip-path: inset(calc(var(--ms-remain-percent) * 1%) 0 0 0);
-                }
-
-                use {
-                    clip-path: inset(calc(var(--ms-remain-percent) * 1%) 0 0 0);
-                }
+                background-color: var(--remain-color);
+                border-radius: @border-radius-base;
+                content: '';
             }
         }
+    }
+
+    &-percent {
+        font-weight: @font-weight-medium;
+        .text-size(@font-size-base);
     }
 }

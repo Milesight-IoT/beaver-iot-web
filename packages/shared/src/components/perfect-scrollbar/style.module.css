@@ -24,7 +24,7 @@
     top: 0;
     right: 0;
     z-index: 1;
-    width: 6px;
+    width: 8px;
     min-height: 30px;
     max-height: 100%;
     background: var(--scrollbar-thumb-color);

@@ -2,7 +2,8 @@
     &-item {
         display: flex;
         gap: @margin-xs;
-        align-items: center;
+        align-items: flex-end;
+
         > .@{mui-prefix}FormControl-root {
             flex: 1;
             &.@{prefix}-param-output-switch {
@@ -14,6 +15,14 @@
                     color: var(--gray-9);
                 }
             }
+
+            .@{mui-prefix}FormControl-root {
+                margin-bottom: 0;
+            }
+        }
+
+        > .@{mui-prefix}ButtonBase-root {
+            margin-bottom: @margin-lg;
         }
     }
 }

@@ -103,7 +103,7 @@ const useFormItems = () => {
                     return (
                         <CopyTextField
                             {...props}
-                            label={getIntlText('setting.integration.label.client_id')}
+                            label={getIntlText('setting.integration.param_client_id')}
                             value={value}
                         />
                     );

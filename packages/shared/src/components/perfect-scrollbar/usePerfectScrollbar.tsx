@@ -165,7 +165,7 @@ export default function usePerfectScrollbar(
         onMouseDown: disabled ? undefined : moveTrack,
         style: {
             right: isDraggingTrack ? 0 : undefined,
-            width: isDraggingTrack ? 6 : undefined,
+            width: isDraggingTrack ? 8 : undefined,
             height: `${scrollRatio * 100}%`,
             opacity: isDraggingTrack ? 1 : undefined,
             display: disabled || scrollRatio === 1 ? 'none' : undefined,

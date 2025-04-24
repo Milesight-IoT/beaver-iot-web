@@ -1,5 +1,4 @@
 import type { AutocompleteProps, TextFieldProps, PopperProps } from '@mui/material';
-import type { EntityAPISchema } from '@/services/http';
 
 /** Define the possible tab types */
 export type TabType = 'entity' | 'device';
