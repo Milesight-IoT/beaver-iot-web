@@ -145,6 +145,7 @@
     "common.time.afternoon": "下午",
     "common.time.morning": "上午",
     "common.unit.second": "秒",
+    "common.label.please_enter": "请输入",
     "valid.date.selected_time_greater_than_now_time": "不支持早于当前时间的时间。",
     "valid.date.start_time_greater_than_end_time": "开始时间不能晚于结束时间。",
     "valid.date.start_time_less_than_pre_end_time": "开始时间不能早于上次结束时间。",
@@ -208,6 +209,7 @@
     "valid.input.username": "用户名长度最小长度为5。",
     "valid.input.value": "输入值：仅{0}。",
     "valid.input.version": "版本号不符合规范。",
+    "valid.input.string_letter_num_special_char": "仅允许大写字母、小写字母、数字和_-.。",
     "valid.resp.at_least_one": "请至少选择一个{1}。",
     "valid_http_address": "无效地址"
 }

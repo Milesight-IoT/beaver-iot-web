@@ -145,6 +145,7 @@
     "common.time.afternoon": "p.m.",
     "common.time.morning": "a.m.",
     "common.unit.second": "s",
+    "common.label.please_enter": "Please enter",
     "valid.date.selected_time_greater_than_now_time": "The time earlier than current time is not supported.",
     "valid.date.start_time_greater_than_end_time": "The start time cannot be later than end time.",
     "valid.date.start_time_less_than_pre_end_time": "The start time cannot be earlier than the last end time.",
@@ -208,6 +209,7 @@
     "valid.input.username": "Minimum username length is 5.",
     "valid.input.value": "Input value: {0} only.",
     "valid.input.version": "The version number does not comply with the specification.",
+    "valid.input.string_letter_num_special_char": "Only uppercase letters, lowercase letters, numbers and _-. are allowed.",
     "valid.resp.at_least_one": "Please select at least one {1}.",
     "common.label.data_source": "Data Source",
     "valid_http_address": "Invalid address"

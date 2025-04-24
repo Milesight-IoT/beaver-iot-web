@@ -73,5 +73,17 @@
     "setting.integration.webhook_status_error": "Webhook Error",
     "setting.integration.webhook_status_ready": "Webhook Ready",
     "setting.integration.webhook_status_waiting": "Waiting For Config",
-    "setting.integration.webhook_url": "Webhook URL"
+    "setting.integration.webhook_url": "Webhook URL",
+    "setting.credentials.label.white_label": "white Label",
+    "setting.credentials.label.credential": "Credential",
+    "setting.credentials.label.smtp": "SMTP",
+    "setting.credentials.label.smtp_title": "System mail server settings（SMTP)",
+    "setting.credentials.label.edit_smtp": "Edit SMTP",
+    "setting.credentials.label.edit_mqtt": "Edit MQTT",
+    "setting.credentials.label.edit_http": "Edit HTTP",
+    "setting.credentials.label.mqtt": "MQTT",
+    "setting.credentials.label.http": "HTTP",
+    "setting.credentials.label.smtp_addr": "SMTP Address",
+    "setting.credentials.label.smtp_port": "SMTP Port",
+    "setting.credentials.label.smtp_encryption": "Encryption"
 }

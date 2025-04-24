@@ -73,5 +73,17 @@
     "setting.integration.webhook_status_error": "Webhook错误",
     "setting.integration.webhook_status_ready": "Webhook就绪",
     "setting.integration.webhook_status_waiting": "等待配置",
-    "setting.integration.webhook_url": "Webhook URL"
+    "setting.integration.webhook_url": "Webhook URL",
+    "setting.credentials.label.white_label": "White Label",
+    "setting.credentials.label.credential": "Credential",
+    "setting.credentials.label.smtp": "SMTP",
+    "setting.credentials.label.smtp_title": "系统邮件服务器设置（SMTP)",
+    "setting.credentials.label.edit_smtp": "编辑 SMTP",
+    "setting.credentials.label.edit_mqtt": "编辑 MQTT",
+    "setting.credentials.label.edit_http": "编辑 HTTP",
+    "setting.credentials.label.mqtt": "MQTT",
+    "setting.credentials.label.http": "HTTP",
+    "setting.credentials.label.smtp_addr": "SMTP服务器地址",
+    "setting.credentials.label.smtp_port": "SMTP服务端口",
+    "setting.credentials.label.smtp_encryption": "加密方式"
 }

@@ -56,6 +56,13 @@ export enum PERMISSIONS {
      */
     INTEGRATION_MODULE = 'integration',
     INTEGRATION_VIEW = 'integration.view',
+
+    /**
+     * credentials module
+     */
+    CREDENTIAL_MODULE = 'credentials',
+    CREDENTIAL_MODULE_VIEW = 'credentials.view',
+    CREDENTIAL_MODULE_EDIT = 'credentials.edit',
 }
 
 // Entity Pattern
