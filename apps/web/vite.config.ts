@@ -1,6 +1,7 @@
 import react from '@vitejs/plugin-react';
 import * as path from 'path';
 import { defineConfig } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 import vitePluginImport from 'vite-plugin-imp';
 import stylelint from 'vite-plugin-stylelint';
 // import progress from 'vite-plugin-progress';
@@ -83,6 +84,16 @@ export default defineConfig({
         }),
         react(),
         // progress(),
+        // @ts-ignore
+        VitePWA({
+            manifest: false,
+            injectRegister: 'inline',
+            workbox: {
+                cacheId: 'beaver',
+                cleanupOutdatedCaches: true,
+                maximumFileSizeToCacheInBytes: 5000000,
+            },
+        }),
     ],
     resolve: {
         alias: {

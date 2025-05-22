@@ -231,5 +231,7 @@
     "valid.input.username": "用户名长度最小长度为5。",
     "valid.input.value": "输入值：仅{0}。",
     "valid.input.version": "版本号不符合规范。",
-    "valid.resp.at_least_one": "请至少选择一个{1}。"
+    "valid.resp.at_least_one": "请至少选择一个{1}。",
+    "common.modal.title_system_upgrade": "系统升级",
+    "common.modal.title_system_upgrade_description": "系统已升级，是否立即刷新页面？"
 }
