@@ -231,5 +231,7 @@
     "valid.input.username": "Minimum username length is 5.",
     "valid.input.value": "Input value: {0} only.",
     "valid.input.version": "The version number does not comply with the specification.",
-    "valid.resp.at_least_one": "Please select at least one {1}."
+    "valid.resp.at_least_one": "Please select at least one {1}.",
+    "common.modal.title_system_upgrade": "System Upgrade",
+    "common.modal.title_system_upgrade_description": "The system has been upgraded, do you want to refresh the page now?"
 }

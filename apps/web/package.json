@@ -55,6 +55,7 @@
         "react-router": "^6.26.1",
         "react-router-dom": "^6.26.1",
         "uuid": "^11.0.3",
+        "workbox-window": "^7.3.0",
         "zustand": "^4.5.5"
     },
     "devDependencies": {
@@ -76,6 +77,7 @@
         "vite-plugin-imp": "^2.4.0",
         "vite-plugin-node-polyfills": "^0.22.0",
         "vite-plugin-progress": "^0.0.7",
+        "vite-plugin-pwa": "^1.0.0",
         "vite-plugin-stylelint": "^5.3.1"
     },
     "browserslist": {

@@ -1,0 +1,77 @@
+{
+    "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+    "name": "Beaver IoT Web",
+    "short_name": "BeaverIoT",
+    "description": "An open-source platform designed for rapid and intuitive IoT application development.",
+    "start_url": "/dashboard",
+    "display": "standalone",
+    "display_override": ["standalone", "minimal-ui", "browser"],
+    "theme_color": "#8e66ff",
+    "background_color": "#8e66ff",
+    "icons": [
+        {
+            "src": "icons/logo-32.svg",
+            "sizes": "32x32"
+        },
+        {
+            "src": "icons/logo-64.svg",
+            "sizes": "64x64"
+        },
+        {
+            "src": "icons/logo-96.svg",
+            "sizes": "96x96"
+        },
+        {
+            "src": "icons/logo-128.svg",
+            "sizes": "128x128"
+        },
+        {
+            "src": "icons/logo-168.svg",
+            "sizes": "168x168"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "screenshots/auth_mobile.png",
+            "sizes": "390x840",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "Auth page on mobile"
+        },
+        {
+            "src": "screenshots/dashboard_mobile.png",
+            "sizes": "390x840",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "Dashboard page on mobile"
+        },
+        {
+            "src": "screenshots/integration_mobile.png",
+            "sizes": "390x840",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "Integration page on mobile"
+        },
+        {
+            "src": "screenshots/auth.png",
+            "sizes": "1200x720",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Auth page"
+        },
+        {
+            "src": "screenshots/dashboard.png",
+            "sizes": "1200x720",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Dashboard page"
+        },
+        {
+            "src": "screenshots/integration.png",
+            "sizes": "1200x720",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Integration page"
+        }
+    ]
+}
