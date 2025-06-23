@@ -52,6 +52,10 @@ export type ColumnType<R extends GridValidRowModel = any, V = any, F = V> = Grid
      * dropdown component visible event
      */
     onFilterDropdownOpenChange?: (visible: boolean) => void;
+    /**
+     * column fixed direction，need width field and field cannot include special characters(eg: $/)
+     */
+    fixed?: 'left' | 'right';
 };
 
 /**

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { isUndefined } from 'lodash-es';
 import { OutlinedInput, InputAdornment, Popover, Button } from '@mui/material';
 import {
@@ -6,13 +6,18 @@ import {
     type DataGridProps,
     type GridValidRowModel,
     type GridColDef,
+    ElementSize,
+    MuiEvent,
+    GridCallbackDetails,
+    GridColumnResizeParams,
+    useGridApiRef,
 } from '@mui/x-data-grid';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { SearchIcon } from '@milesight/shared/src/components';
 import Tooltip from '../tooltip';
 import { Footer, NoDataOverlay, NoResultsOverlay } from './components';
 import { ColumnType, FilterValue } from './interface';
-import { useFilterProps, useHeader } from './hook';
+import { useFilterProps, useHeader, usePinnedColumn } from './hook';
 
 import './style.less';
 
@@ -63,14 +68,35 @@ const TablePro = <DataType extends GridValidRowModel>({
 }: Props<DataType>) => {
     const { getIntlText } = useI18n();
     const { getColumnFilterProps } = useFilterProps();
-
     const { renderHeader } = useHeader({
         onFilterInfoChange,
         columns,
     });
 
+    const [resizeColumns, setResizeColumns] = useState<ColumnType[]>(columns);
+    const { pinnedColumnPos, sxFieldClass, sortGroupByFixed, disableVirtual, onDataGridResize } =
+        usePinnedColumn<DataType>({
+            columns,
+            restProps: props,
+        });
+
+    useEffect(() => {
+        setResizeColumns(columns);
+    }, [columns]);
+
+    const handleColumnResize = (col: GridColumnResizeParams) => {
+        setResizeColumns(
+            columns.map(column => {
+                if (col.colDef.field === column.field) {
+                    return { ...column, width: col.width, flex: col.colDef.flex };
+                }
+                return { ...column };
+            }),
+        );
+    };
+
     const memoColumns = useMemo(() => {
-        const result = columns.map((column, index) => {
+        const result = resizeColumns.map((column, index) => {
             const filterDropdown = column.filterSearchType
                 ? getColumnFilterProps(column.filterSearchType)
                 : {};
@@ -92,6 +118,8 @@ const TablePro = <DataType extends GridValidRowModel>({
             if (col.filterDropdown || col.filters) {
                 col.renderHeader = col.renderHeader || (() => renderHeader(col));
             }
+            col.headerClassName = pinnedColumnPos[col.field]?.headerClassName || '';
+            col.cellClassName = pinnedColumnPos[col.field]?.cellClassName || '';
 
             if (col.ellipsis) {
                 const originalRenderCell = col.renderCell;
@@ -103,6 +131,16 @@ const TablePro = <DataType extends GridValidRowModel>({
                     return (
                         <Tooltip
                             autoEllipsis
+                            // Resolve: fast scroll while a tooltip is being shown produces a scrollbar
+                            // https://github.com/mui/material-ui/issues/14366
+                            PopperProps={{
+                                sx: {
+                                    '&[data-popper-reference-hidden]': {
+                                        display: 'none',
+                                        'pointer-events': 'none',
+                                    },
+                                },
+                            }}
                             title={title || '-'}
                             slotProps={{
                                 popper: {
@@ -117,8 +155,8 @@ const TablePro = <DataType extends GridValidRowModel>({
             return col;
         });
 
-        return result as readonly GridColDef<DataType>[];
-    }, [columns]);
+        return sortGroupByFixed(result);
+    }, [resizeColumns, pinnedColumnPos]);
 
     return (
         <div className="ms-table-pro">
@@ -149,9 +187,13 @@ const TablePro = <DataType extends GridValidRowModel>({
                     disableColumnSelector
                     disableRowSelectionOnClick
                     hideFooterSelectedRowCount
-                    sx={{ border: 0 }}
+                    sx={{
+                        border: 0,
+                        ...sxFieldClass,
+                    }}
                     columnHeaderHeight={44}
                     rowHeight={48}
+                    disableVirtualization={disableVirtual}
                     paginationMode={paginationMode}
                     pageSizeOptions={DEFAULT_PAGE_SIZE_OPTIONS}
                     columns={memoColumns}
@@ -179,6 +221,22 @@ const TablePro = <DataType extends GridValidRowModel>({
                         ...slotProps,
                     }}
                     {...props}
+                    onResize={(
+                        containerSize: ElementSize,
+                        event: MuiEvent,
+                        details: GridCallbackDetails,
+                    ) => {
+                        onDataGridResize(containerSize);
+                        props?.onResize?.(containerSize, event, details);
+                    }}
+                    onColumnWidthChange={(
+                        col: GridColumnResizeParams,
+                        event: MuiEvent,
+                        details: GridCallbackDetails,
+                    ) => {
+                        handleColumnResize(col);
+                        props?.onColumnWidthChange?.(col, event, details);
+                    }}
                 />
             </div>
         </div>
