@@ -1,6 +1,7 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { last, orderBy } from 'lodash-es';
 import { DataGridProps, ElementSize, GridColDef, GridValidRowModel } from '@mui/x-data-grid';
+import { useTheme } from '@milesight/shared/src/hooks';
 import { ColumnType } from '../interface';
 
 export interface PinnedColumnType<T extends GridValidRowModel> {
@@ -38,8 +39,9 @@ const ROW_CHECKBOX_CLASS = [
  * pinning column
  */
 const usePinnedColumn = <T extends GridValidRowModel>(props: PinnedColumnType<T>) => {
+    const { matchMobile } = useTheme();
     const { columns, restProps } = props;
-    const { scrollbarSize = 8, checkboxSelection, disableVirtualization } = restProps;
+    const { scrollbarSize = 8, checkboxSelection } = restProps;
 
     const gridObserver = useRef<any>(null);
     const [scrollYSize, setScrollYSize] = useState<number>(0);
@@ -75,6 +77,7 @@ const usePinnedColumn = <T extends GridValidRowModel>(props: PinnedColumnType<T>
 
     // Calculate the absolute positions of the columns that need to be fixed
     const pinnedColumnPos: Record<ColumnType['field'], PinnedColumn> = useMemo(() => {
+        if (matchMobile) return {};
         const pinnedColumns = columns
             .filter(
                 (column: ColumnType) =>
@@ -163,7 +166,7 @@ const usePinnedColumn = <T extends GridValidRowModel>(props: PinnedColumnType<T>
     }, [pinnedColumnPos, scrollYSize]);
 
     const onDataGridResize = (containerSize: ElementSize) => {
-        if (!columns.some((v: ColumnType) => !!v.fixed)) {
+        if (!columns.some((v: ColumnType) => !!v.fixed) || !!gridObserver.current || matchMobile) {
             return;
         }
         gridObserver.current?.disconnect();
@@ -208,10 +211,6 @@ const usePinnedColumn = <T extends GridValidRowModel>(props: PinnedColumnType<T>
             : (memoColumns as readonly GridColDef<T>[]);
     };
 
-    const disableVirtual = useMemo(() => {
-        return Object.values(pinnedColumnPos).some(v => v.fixed) ? true : disableVirtualization;
-    }, [pinnedColumnPos, disableVirtualization]);
-
     return {
         /** fixed column */
         pinnedColumnPos,
@@ -219,7 +218,6 @@ const usePinnedColumn = <T extends GridValidRowModel>(props: PinnedColumnType<T>
         sxFieldClass,
         /** sort group by fixed */
         sortGroupByFixed,
-        disableVirtual,
         onDataGridResize,
     };
 };

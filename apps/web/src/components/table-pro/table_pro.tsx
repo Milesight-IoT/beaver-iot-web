@@ -67,6 +67,7 @@ const TablePro = <DataType extends GridValidRowModel>({
     ...props
 }: Props<DataType>) => {
     const { getIntlText } = useI18n();
+    const apiRef = useGridApiRef();
     const { getColumnFilterProps } = useFilterProps();
     const { renderHeader } = useHeader({
         onFilterInfoChange,
@@ -74,11 +75,10 @@ const TablePro = <DataType extends GridValidRowModel>({
     });
 
     const [resizeColumns, setResizeColumns] = useState<ColumnType[]>(columns);
-    const { pinnedColumnPos, sxFieldClass, sortGroupByFixed, disableVirtual, onDataGridResize } =
-        usePinnedColumn<DataType>({
-            columns,
-            restProps: props,
-        });
+    const { pinnedColumnPos, sxFieldClass, sortGroupByFixed, onDataGridResize } = usePinnedColumn({
+        columns,
+        restProps: props,
+    });
 
     useEffect(() => {
         setResizeColumns(columns);
@@ -184,6 +184,7 @@ const TablePro = <DataType extends GridValidRowModel>({
             )}
             <div className="ms-table-pro__body">
                 <DataGrid<DataType>
+                    apiRef={apiRef}
                     disableColumnSelector
                     disableRowSelectionOnClick
                     hideFooterSelectedRowCount
@@ -193,7 +194,6 @@ const TablePro = <DataType extends GridValidRowModel>({
                     }}
                     columnHeaderHeight={44}
                     rowHeight={48}
-                    disableVirtualization={disableVirtual}
                     paginationMode={paginationMode}
                     pageSizeOptions={DEFAULT_PAGE_SIZE_OPTIONS}
                     columns={memoColumns}
@@ -226,6 +226,7 @@ const TablePro = <DataType extends GridValidRowModel>({
                         event: MuiEvent,
                         details: GridCallbackDetails,
                     ) => {
+                        apiRef?.current?.unstable_setColumnVirtualization(false);
                         onDataGridResize(containerSize);
                         props?.onResize?.(containerSize, event, details);
                     }}
