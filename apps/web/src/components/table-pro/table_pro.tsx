@@ -75,7 +75,8 @@ const TablePro = <DataType extends GridValidRowModel>({
     });
 
     const [resizeColumns, setResizeColumns] = useState<ColumnType[]>(columns);
-    const { pinnedColumnPos, sxFieldClass, sortGroupByFixed, onDataGridResize } = usePinnedColumn({
+    const { pinnedColumnPos, sxFieldClass, sortGroupByFixed } = usePinnedColumn({
+        apiRef,
         columns,
         restProps: props,
     });
@@ -221,15 +222,6 @@ const TablePro = <DataType extends GridValidRowModel>({
                         ...slotProps,
                     }}
                     {...props}
-                    onResize={(
-                        containerSize: ElementSize,
-                        event: MuiEvent,
-                        details: GridCallbackDetails,
-                    ) => {
-                        apiRef?.current?.unstable_setColumnVirtualization(false);
-                        onDataGridResize(containerSize);
-                        props?.onResize?.(containerSize, event, details);
-                    }}
                     onColumnWidthChange={(
                         col: GridColumnResizeParams,
                         event: MuiEvent,

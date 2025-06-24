@@ -1,10 +1,15 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { last, orderBy } from 'lodash-es';
-import { DataGridProps, ElementSize, GridColDef, GridValidRowModel } from '@mui/x-data-grid';
+import { DataGridProps, GridColDef, GridValidRowModel } from '@mui/x-data-grid';
+import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { useTheme } from '@milesight/shared/src/hooks';
 import { ColumnType } from '../interface';
 
 export interface PinnedColumnType<T extends GridValidRowModel> {
+    /**
+     * Hook that instantiate a [[GridApiRef]].
+     */
+    apiRef: React.MutableRefObject<GridApiCommunity>;
     /**
      * columns of type [[GridColDef]][].
      */
@@ -40,10 +45,9 @@ const ROW_CHECKBOX_CLASS = [
  */
 const usePinnedColumn = <T extends GridValidRowModel>(props: PinnedColumnType<T>) => {
     const { matchMobile } = useTheme();
-    const { columns, restProps } = props;
-    const { scrollbarSize = 8, checkboxSelection } = restProps;
+    const { apiRef, columns, restProps } = props;
+    const { checkboxSelection } = restProps;
 
-    const gridObserver = useRef<any>(null);
     const [scrollYSize, setScrollYSize] = useState<number>(0);
 
     const getCellClassName = (
@@ -165,34 +169,15 @@ const usePinnedColumn = <T extends GridValidRowModel>(props: PinnedColumnType<T>
         return sxProperty;
     }, [pinnedColumnPos, scrollYSize]);
 
-    const onDataGridResize = (containerSize: ElementSize) => {
-        if (!columns.some((v: ColumnType) => !!v.fixed) || !!gridObserver.current || matchMobile) {
+    useEffect(() => {
+        if (!columns.some(column => !!column.fixed)) {
             return;
         }
-        gridObserver.current?.disconnect();
-        const dataGridMain = document.querySelector('.MuiDataGrid-main') as HTMLDivElement;
-        gridObserver.current = new MutationObserver(changeMutations => {
-            changeMutations.forEach((node: MutationRecord) => {
-                const hasScrollY = (node?.addedNodes?.[0] as any)?.className?.includes(
-                    'MuiDataGrid-scrollbar--vertical',
-                );
-                const removeScrollY = (node?.removedNodes?.[0] as any)?.className?.includes(
-                    'MuiDataGrid-scrollbar--vertical',
-                );
-                if (hasScrollY || removeScrollY) {
-                    setScrollYSize(hasScrollY ? scrollbarSize : 0);
-                }
-            });
+        apiRef.current?.unstable_setColumnVirtualization(false);
+        apiRef.current.subscribeEvent('stateChange', state => {
+            setScrollYSize(state.dimensions.hasScrollY ? state.dimensions.scrollbarSize : 0);
         });
-        gridObserver.current.observe(dataGridMain, {
-            childList: true,
-            subtree: false,
-        });
-
-        return () => {
-            gridObserver?.current?.disconnect();
-        };
-    };
+    }, [apiRef.current, columns]);
 
     // Grouping based on the fixed value enables the aggregation of the same type
     const sortGroupByFixed = (memoColumns: ColumnType<T>[]) => {
@@ -218,7 +203,6 @@ const usePinnedColumn = <T extends GridValidRowModel>(props: PinnedColumnType<T>
         sxFieldClass,
         /** sort group by fixed */
         sortGroupByFixed,
-        onDataGridResize,
     };
 };
 
