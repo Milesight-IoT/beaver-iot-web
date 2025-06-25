@@ -1,0 +1,21 @@
+{
+    "error.http.account_session_logout": "アカウントがサインアウトされました",
+    "error.http.authentication_failed": "アカウントが存在しないか、パスワードが間違っています。再入力してください",
+    "error.http.dashboard_name_exist": "ダッシュボード名は既に存在します",
+    "error.http.data_no_found": "データが見つかりません",
+    "error.http.forbidden_permission": "アクセス権がなく、アクセスは拒否されました",
+    "error.http.method_not_allowed": "許可されていない HTTP メソッドです",
+    "error.http.name_repeated": "名前が重複しています",
+    "error.http.network_timeout": "ネットワーク接続がタイムアウトしました",
+    "error.http.page_not_found": "お探しのページは存在しません",
+    "error.http.parameter_syntax_error": "パラメーターの構文エラー",
+    "error.http.parameter_validation_failed": "パラメーター検証に失敗しました",
+    "error.http.request_too_frequently": "リクエストが多すぎます",
+    "error.http.role_does_not_exit": "ロールが存在しません",
+    "error.http.role_still_has_user": "まずロールに属するユーザーを削除してからロールを削除してください",
+    "error.http.server_error": "リクエストエラーです。確認して再試行してください",
+    "error.http.token_invalid": "トークンが無効です。再試行してください",
+    "error.http.token_not_found": "アカウントがログインしていません",
+    "error.http.user_has_no_permission": "現在のユーザーには権限がありません",
+    "error.http.user_register_email_exist": "このメールアドレスは既に登録されています"
+}

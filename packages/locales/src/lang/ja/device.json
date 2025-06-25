@@ -1,0 +1,12 @@
+{
+    "device.detail.basic_info": "基本情報",
+    "device.detail.entity_data": "エンティティデータ",
+    "device.label.param_device_id": "デバイスID",
+    "device.label.param_device_name": "デバイス名",
+    "device.label.param_entity_id": "エンティティID",
+    "device.label.param_entity_name": "エンティティ名",
+    "device.label.param_external_id": "外部デバイスID",
+    "device.label.param_founder": "作成者",
+    "device.label.param_source": "ソース",
+    "device.message.delete_tip": "削除してもよろしいですか？"
+}

@@ -1,0 +1,28 @@
+.text-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: @padding-md 0;
+    background-color: var(--white);
+    border-radius: @border-radius-md;
+
+    &__preview {
+        min-width: 300px;
+        max-width: 500px;
+        max-height: 300px;
+    }
+
+    &__label {
+        padding: 0 @padding-md;
+        margin-bottom: @margin-xs;
+        font-weight: @font-weight-medium;
+        .text-size(@font-size-lg);
+    }
+
+    &__content {
+        flex: 1;
+        padding: 0 @padding-md;
+        overflow: auto;
+        word-break: break-all;
+        .text-size(@font-size-base);
+    }
+}
