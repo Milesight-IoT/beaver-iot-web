@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { isUndefined } from 'lodash-es';
+import { isArray, isUndefined } from 'lodash-es';
 import { OutlinedInput, InputAdornment, Popover, Button } from '@mui/material';
 import {
     DataGrid,
@@ -17,7 +17,13 @@ import { SearchIcon } from '@milesight/shared/src/components';
 import Tooltip from '../tooltip';
 import { Footer, NoDataOverlay, NoResultsOverlay } from './components';
 import { ColumnType, FilterValue } from './interface';
-import { useFilterProps, useHeader, usePinnedColumn } from './hook';
+import {
+    useFilterProps,
+    useHeader,
+    usePinnedColumn,
+    useTablePro,
+    DEFAULT_PAGINATION_MODEL,
+} from './hook';
 
 import './style.less';
 
@@ -44,12 +50,6 @@ export interface Props<T extends GridValidRowModel> extends DataGridProps<T> {
     toolbarSort?: React.ReactNode;
 }
 
-/** The number of options per page is displayed by default */
-const DEFAULT_PAGE_SIZE_OPTIONS = [10, 20, 30, 40, 50];
-
-/** Default paging model */
-const DEFAULT_PAGINATION_MODEL = { page: 0, pageSize: DEFAULT_PAGE_SIZE_OPTIONS[0] };
-
 /**
  * Data form element
  */
@@ -73,6 +73,8 @@ const TablePro = <DataType extends GridValidRowModel>({
         onFilterInfoChange,
         columns,
     });
+
+    const { pageSizeOptions } = useTablePro(props);
 
     const [resizeColumns, setResizeColumns] = useState<ColumnType[]>(columns);
     const { pinnedColumnPos, sxFieldClass, sortGroupByFixed } = usePinnedColumn({
@@ -132,8 +134,6 @@ const TablePro = <DataType extends GridValidRowModel>({
                     return (
                         <Tooltip
                             autoEllipsis
-                            // Resolve: fast scroll while a tooltip is being shown produces a scrollbar
-                            // https://github.com/mui/material-ui/issues/14366
                             PopperProps={{
                                 sx: {
                                     '&[data-popper-reference-hidden]': {
@@ -196,7 +196,7 @@ const TablePro = <DataType extends GridValidRowModel>({
                     columnHeaderHeight={44}
                     rowHeight={48}
                     paginationMode={paginationMode}
-                    pageSizeOptions={DEFAULT_PAGE_SIZE_OPTIONS}
+                    pageSizeOptions={pageSizeOptions}
                     columns={memoColumns}
                     initialState={{
                         pagination: { paginationModel: DEFAULT_PAGINATION_MODEL },
@@ -212,6 +212,10 @@ const TablePro = <DataType extends GridValidRowModel>({
                         footer: {
                             // @ts-ignore
                             onRefreshButtonClick,
+                            selectedCount: isArray(props.rowSelectionModel)
+                                ? props.rowSelectionModel?.length
+                                : 0,
+                            totalCount: props.rowCount || 0,
                         },
                         baseCheckbox: {
                             // disabled: true,

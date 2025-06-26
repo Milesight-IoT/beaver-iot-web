@@ -1,48 +1,162 @@
 import React from 'react';
-import { IconButton } from '@mui/material';
+import { isObject } from 'lodash-es';
+import cls from 'classnames';
+import {
+    IconButton,
+    Box,
+    Typography,
+    Pagination,
+    PaginationItem,
+    PaginationProps,
+    Select,
+    MenuItem,
+} from '@mui/material';
 import {
     GridFooterContainer,
-    GridPagination,
-    type GridFooterContainerProps,
+    gridPageCountSelector,
+    gridPageSelector,
+    gridPageSizeSelector,
+    GridSlots,
+    PropsFromSlot,
+    useGridApiContext,
+    useGridRootProps,
+    useGridSelector,
 } from '@mui/x-data-grid';
-import cls from 'classnames';
+import { useI18n } from '@milesight/shared/src/hooks';
 import { RefreshIcon } from '@milesight/shared/src/components';
+
 import './style.less';
 
-interface CustomFooterProps extends GridFooterContainerProps {
+/**
+ * Custom Pagination by material ui Pagination
+ * @returns
+ */
+const CustomPagination: React.FC<PaginationProps> = ({
+    color = 'primary',
+    variant = 'outlined',
+    shape = 'rounded',
+    renderItem,
+    ...rest
+}) => {
+    const apiRef = useGridApiContext();
+    const rootProps = useGridRootProps();
+    const { pageSizeOptions } = rootProps;
+    const page = useGridSelector(apiRef, gridPageSelector);
+    const pageSize = useGridSelector(apiRef, gridPageSizeSelector);
+    const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+
+    return (
+        <Box sx={{ display: 'flex' }}>
+            <Pagination
+                color={color}
+                variant={variant}
+                shape={shape}
+                page={page + 1}
+                count={pageCount}
+                renderItem={props => {
+                    return renderItem ? renderItem(props) : <PaginationItem {...props} />;
+                }}
+                onChange={(event, value) => {
+                    apiRef.current.setPage(value - 1);
+                }}
+                {...rest}
+            />
+            <Select
+                id="pagination-size"
+                label=""
+                MenuProps={{
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'left',
+                    },
+                    transformOrigin: {
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    },
+                    sx: { mt: -1 },
+                }}
+                sx={{
+                    ml: 1,
+                    height: 28,
+                }}
+                value={pageSize}
+                onChange={event => {
+                    apiRef.current.setPageSize(Number(event.target.value));
+                }}
+                renderValue={(value: any) => {
+                    const size:
+                        | number
+                        | {
+                              value: number;
+                              label: string;
+                          }
+                        | undefined = pageSizeOptions.find(
+                        size => (isObject(size) ? size.value : size) === value,
+                    );
+                    return <span>{isObject(size) ? size.label : size}</span>;
+                }}
+            >
+                {pageSizeOptions.map(size => {
+                    return (
+                        <MenuItem
+                            key={isObject(size) ? size.value : size}
+                            value={isObject(size) ? size.value : size}
+                        >
+                            {isObject(size) ? size.label : size}
+                        </MenuItem>
+                    );
+                })}
+            </Select>
+        </Box>
+    );
+};
+
+type CustomFooterProps = PropsFromSlot<GridSlots['footer']> & {
     /** Refresh button click callback */
     onRefreshButtonClick?: React.MouseEventHandler<HTMLButtonElement>;
-}
+    /**
+     * The total number of rows currently selected
+     */
+    selectedCount: number;
+    /**
+     * The total number that meets the search criteria
+     */
+    totalCount: number;
+};
 
 /**
  * Custom table footer components
  */
 const CustomFooter: React.FC<CustomFooterProps> = ({
     onRefreshButtonClick,
+    selectedCount,
+    totalCount,
     className,
     ...props
 }) => {
+    const { getIntlText } = useI18n();
     return (
         <GridFooterContainer className={cls('ms-table-pro__footer', className)} {...props}>
-            <IconButton
-                size="small"
-                className="ms-table-pro__refresh-btn"
-                onClick={onRefreshButtonClick}
-            >
-                <RefreshIcon sx={{ width: 20, height: 20 }} />
-            </IconButton>
-            <GridPagination
-                className="ms-table-pro__pagination"
-                slotProps={{
-                    select: {
-                        MenuProps: {
-                            className: 'ms-table-pro__pagination-select',
-                            anchorOrigin: { vertical: 'top', horizontal: 'left' },
-                            transformOrigin: { vertical: 'bottom', horizontal: 'left' },
-                        },
-                    },
-                }}
-            />
+            <Box sx={{ display: 'flex' }}>
+                <IconButton
+                    size="small"
+                    className="ms-table-pro__refresh-btn"
+                    onClick={onRefreshButtonClick}
+                >
+                    <RefreshIcon sx={{ width: 20, height: 20 }} />
+                </IconButton>
+                <Box sx={{ ml: 1, display: 'flex', alignItems: 'center' }}>
+                    {!!selectedCount && (
+                        <Typography variant="subtitle2" sx={{ ml: 1 }}>
+                            {getIntlText('common.label.selected_count')}: {selectedCount} ,
+                        </Typography>
+                    )}
+                    <Typography variant="subtitle2" sx={{ ml: 1 }}>
+                        {getIntlText('common.label.total_count')}: {totalCount}
+                    </Typography>
+                </Box>
+            </Box>
+            <CustomPagination />
         </GridFooterContainer>
     );
 };
