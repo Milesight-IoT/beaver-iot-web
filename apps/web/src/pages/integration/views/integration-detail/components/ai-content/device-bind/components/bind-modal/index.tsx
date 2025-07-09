@@ -271,18 +271,12 @@ const BindModal: React.FC<Props> = ({
     useDebounceEffect(
         () => {
             if (!isImageOptionsReady || !isAiDynamicFormReady) return;
-            const formParams = decodeAiFormParams(getValues());
-
-            getInferResult(formParams);
+            handleSubmit(data => {
+                const formParams = decodeAiFormParams(data);
+                getInferResult(formParams);
+            })();
         },
-        [
-            formValues,
-            isImageOptionsReady,
-            isAiDynamicFormReady,
-            getValues,
-            decodeAiFormParams,
-            getInferResult,
-        ],
+        [formValues, isImageOptionsReady, isAiDynamicFormReady, decodeAiFormParams, getInferResult],
         { wait: 500 },
     );
 
