@@ -3,6 +3,9 @@ import { useTheme, useStoreShallow } from '@milesight/shared/src/hooks';
 import { MenuIcon, MenuOpenIcon } from '@milesight/shared/src/components';
 import useSidebarStore from './store';
 
+/**
+ * Sidebar open and shrink controller
+ */
 const Controller = () => {
     const { matchTablet } = useTheme();
     const { open, setOpen, setShrink } = useSidebarStore(

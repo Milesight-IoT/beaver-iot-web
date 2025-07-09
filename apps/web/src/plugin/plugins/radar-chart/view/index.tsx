@@ -64,9 +64,9 @@ const View = (props: IProps) => {
                     color: '#fff',
                 },
                 formatter: (params: any) => {
-                    const { value, dataIndex, marker } = params;
+                    const { value, marker } = params;
 
-                    const getUnit = () => {
+                    const getUnit = (dataIndex: number) => {
                         const { entity } = aggregateHistoryList[dataIndex] || {};
                         const { rawData: currentEntity } = entity || {};
                         if (!currentEntity) return;
@@ -75,7 +75,6 @@ const View = (props: IProps) => {
                         const { unit } = entityValueAttribute || {};
                         return unit;
                     };
-                    const unit = getUnit();
 
                     return renderToString(
                         <div>
@@ -89,7 +88,7 @@ const View = (props: IProps) => {
                                             <span dangerouslySetInnerHTML={{ __html: marker }} />
                                             <span>{data?.labels?.[i] || ''}:&nbsp;&nbsp;</span>
                                         </div>
-                                        <div>{`${v}${unit || ''}`}</div>
+                                        <div>{`${v}${getUnit(i) || ''}`}</div>
                                     </div>
                                 );
                             })}

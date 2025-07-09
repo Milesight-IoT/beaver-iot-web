@@ -129,6 +129,7 @@ export default () => {
         switch (type) {
             case 'rename': {
                 getDashboardList();
+                getDashboardDetail();
                 break;
             }
             case 'delete': {

@@ -98,7 +98,9 @@ const WebhookModal: React.FC<Props> = ({ mode, data, visible, onCancel, onSubmit
                                 <InputAdornment position="end">
                                     <IconButton
                                         aria-label="toggle password visibility"
-                                        onClick={e => handleCopy(webhookUrl, e.currentTarget)}
+                                        onClick={e => {
+                                            handleCopy(webhookUrl, e.currentTarget?.closest('div'));
+                                        }}
                                         onMouseDown={(e: any) => e.preventDefault()}
                                         onMouseUp={(e: any) => e.preventDefault()}
                                         edge="end"

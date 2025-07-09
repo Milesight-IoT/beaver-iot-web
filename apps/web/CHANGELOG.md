@@ -1,5 +1,14 @@
 # @app/web
 
+## 1.2.2
+
+### Patch Changes
+
+-   Fix the global bugs
+-   Refactor the execution logic of dashboard
+-   Use mqtt service to replace websocket
+-   Use Echarts instead of Chart.js for dashboard
+
 ## 1.2.1
 
 ### Patch Changes
