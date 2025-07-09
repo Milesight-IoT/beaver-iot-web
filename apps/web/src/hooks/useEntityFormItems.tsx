@@ -24,6 +24,8 @@ import {
     checkRangeLength,
     checkRegexp,
     checkHexNumber,
+    checkNumber,
+    checkDecimals,
     checkStartWithHttpOrHttps,
 } from '@milesight/shared/src/utils/validators';
 import { HelpOutlineIcon } from '@milesight/shared/src/components';
@@ -74,6 +76,21 @@ const getValidators = (entity: NonNullable<Props['entities']>[0], required = fal
     // Check required
     if (required && entity.valueType !== 'BOOLEAN') {
         result.checkRequired = checkRequired();
+    }
+
+    // Check value type
+    switch (entity.valueType) {
+        case 'LONG': {
+            result.checkNumber = checkNumber();
+            break;
+        }
+        case 'DOUBLE': {
+            result.checkDecimals = checkDecimals({});
+            break;
+        }
+        default: {
+            break;
+        }
     }
 
     // Check min/max value
