@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo, Fragment } from 'react';
 import cls from 'classnames';
-import { useRequest, useUpdateEffect } from 'ahooks';
+import { useRequest, useUpdateEffect, useMemoizedFn } from 'ahooks';
 import { FieldError } from 'react-hook-form';
 import { Button, IconButton, CircularProgress } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
@@ -56,7 +56,7 @@ export type UploadFile = FileWithPath & {
 
 export type FileValueType = Pick<UploadFile, 'name' | 'size' | 'path' | 'key' | 'url' | 'preview'>;
 
-type Props = UseDropzoneProps & {
+export type Props = UseDropzoneProps & {
     // type?: string;
 
     /**
@@ -241,6 +241,7 @@ const Upload: React.FC<Props> = ({
     // ---------- Handle uploading status ----------
     const [isUploading, setIsUploading] = useState(false);
     const [isAllDone, setIsAllDone] = useState(false);
+    const handleChange = useMemoizedFn(onChange || (() => {}));
     const handleCancel = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
         setFiles(files => {
@@ -350,8 +351,8 @@ const Upload: React.FC<Props> = ({
             }
         }
 
-        onChange?.(resultValues, resultFiles);
-    }, [files, multiple, onChange]);
+        handleChange?.(resultValues, resultFiles);
+    }, [files, multiple, handleChange]);
 
     useEffect(() => {
         if (!value) {
@@ -392,7 +393,10 @@ const Upload: React.FC<Props> = ({
                 <input {...getInputProps()} />
                 {children ||
                     (isAllDone ? (
-                        <div className="ms-upload-cont-uploaded" onClick={e => e.stopPropagation()}>
+                        <div
+                            className="ms-upload-cont ms-upload-cont-uploaded"
+                            onClick={e => e.stopPropagation()}
+                        >
                             <ImageIcon className="icon" />
                             <div className="hint">{renderDoneFiles()}</div>
                             <IconButton onClick={handleDelete}>
@@ -401,7 +405,7 @@ const Upload: React.FC<Props> = ({
                         </div>
                     ) : isUploading ? (
                         <div
-                            className="ms-upload-cont-uploading"
+                            className="ms-upload-cont ms-upload-cont-uploading"
                             onClick={e => e.stopPropagation()}
                         >
                             <CircularProgress className="icon" size={24} />
@@ -416,7 +420,7 @@ const Upload: React.FC<Props> = ({
                             </Button>
                         </div>
                     ) : (
-                        <div className="ms-upload-cont-default">
+                        <div className="ms-upload-cont ms-upload-cont-default">
                             <UploadFileIcon className="icon" />
                             <div className="hint">
                                 {getIntlText('common.message.click_to_upload_file')}

@@ -1,37 +1,20 @@
-.@{prefix}-view-inner {
-    .@{prefix}-tooltip {
-        height: 100%;
+.@{prefix}-view-gateway-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 25px;
+    padding: @padding-xs;
+    font-size: @font-size-2;
+    background-color: #fff;
+    border-radius: @border-radius-xs;
+    
+    &-online {
+        color: var(--green-6);
+        background-color: var(--green-1);
+    }
 
-        .@{prefix}-tooltip-cont {
-            height: 100%;
-            .@{prefix}-view-gateway-status {
-                display: flex;
-                align-items: center;
-                height: 100%;
-
-                div {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    height: 25px;
-                    padding: @padding-xs;
-                    font-size: @font-size-2;
-                    border-radius: @border-radius-xs;
-                }
-            
-                &-online {
-                    color: var(--green-6);
-                    background-color: var(--green-1);
-                }
-            
-                &-offline  {
-                    color: var(--orange-5); 
-                    background-color: var(--orange-1);
-                }
-            
-            }
-        }
-
+    &-offline  {
+        color: var(--orange-5); 
+        background-color: var(--orange-1);
     }
 }
-

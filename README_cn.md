@@ -114,7 +114,6 @@ pnpm run build
 | `pnpm run build`           | 开始构建编译                                         |
 | `pnpm run i18n:import`     | 国际化文案导入                                       |
 | `pnpm run i18n:export`     | 国际化文案导出，会同步执行文案校验（只校验新增文案） |
-| `pnpm run i18n:export-all` | 国际化文案导出，会同步执行文案校验（校验所有文案）   |
 
 ## 相关链接
 

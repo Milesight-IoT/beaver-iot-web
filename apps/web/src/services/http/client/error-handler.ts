@@ -54,6 +54,19 @@ const handlerConfigs: ErrorHandlerConfig[] = [
             iotLocalStorage.removeItem(TOKEN_CACHE_KEY);
         },
     },
+    {
+        // General error
+        errCodes: ['eventbus_execution_error'],
+        handler(errCode, resp) {
+            const dataList = resp?.data?.data || [];
+            let message = '';
+            dataList.forEach((err: any) => {
+                const errorKey = err.error_code || errCode;
+                message += `${intl.get(getHttpErrorKey(errorKey))} \n`;
+            });
+            message && toast.error({ content: message });
+        },
+    },
 ];
 
 const handler: ErrorHandlerConfig['handler'] = (errCode, resp) => {

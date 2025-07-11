@@ -4,7 +4,7 @@ import { Stack } from '@mui/material';
 import { useRequest } from 'ahooks';
 import { DevicesOtherIcon, EntityIcon } from '@milesight/shared/src/components';
 import { thousandSeparate, objectToCamelCase } from '@milesight/shared/src/utils/tools';
-import { Breadcrumbs, Tooltip } from '@/components';
+import { Breadcrumbs } from '@/components';
 import {
     integrationAPI,
     IntegrationAPISchema,
@@ -14,7 +14,8 @@ import {
 } from '@/services/http';
 import { usePermissionsError } from '@/hooks';
 import { genInteIconUrl } from '../../helper';
-import { GeneralContent, MscContent, NSContent } from './components';
+import { type InteEntityType } from './hooks';
+import { AiContent, GeneralContent, MscContent, NSContent, MqttContent } from './components';
 
 import './style.less';
 
@@ -30,10 +31,11 @@ const IntegrationDetail = () => {
     const {
         loading,
         data: entityList,
-        refresh: refreshInteDetail,
+        run: refreshInteDetail,
     } = useRequest(
-        async () => {
+        async (successCb?: (entityList: InteEntityType[], excludeKeys?: ApiKey[]) => void) => {
             if (!integrationId) return;
+
             const [error, resp] = await awaitWrap(integrationAPI.getDetail({ id: integrationId }));
             const respData = getResponseData(resp);
 
@@ -47,6 +49,7 @@ const IntegrationDetail = () => {
             );
 
             setBasicInfo(data);
+            successCb?.(data.integrationEntities, excludeKeys);
             setExcludeServiceKeys(excludeKeys);
             return data.integrationEntities;
         },
@@ -63,20 +66,39 @@ const IntegrationDetail = () => {
 
     // render content
     const renderContent = () => {
-        if (basicInfo?.id === 'msc-integration') {
-            return <MscContent entities={entityList} onUpdateSuccess={refreshInteDetail} />;
+        if (!basicInfo) return null;
+
+        switch (basicInfo.id) {
+            case 'msc-integration': {
+                return <MscContent entities={entityList} onUpdateSuccess={refreshInteDetail} />;
+            }
+            case 'milesight-gateway': {
+                return <NSContent entities={entityList} onUpdateSuccess={refreshInteDetail} />;
+            }
+            case 'camthink-ai-inference': {
+                return (
+                    <AiContent
+                        entities={entityList}
+                        onUpdateSuccess={refreshInteDetail}
+                        loading={loading}
+                        excludeServiceKeys={excludeServiceKeys}
+                    />
+                );
+            }
+            case 'mqtt-device': {
+                return <MqttContent entities={entityList} onUpdateSuccess={refreshInteDetail} />;
+            }
+            default: {
+                return (
+                    <GeneralContent
+                        loading={loading}
+                        entities={entityList}
+                        excludeServiceKeys={excludeServiceKeys}
+                        onUpdateSuccess={refreshInteDetail}
+                    />
+                );
+            }
         }
-        if (basicInfo?.id === 'milesight-gateway') {
-            return <NSContent entities={entityList} onUpdateSuccess={refreshInteDetail} />;
-        }
-        return (
-            <GeneralContent
-                loading={loading}
-                entities={entityList}
-                excludeServiceKeys={excludeServiceKeys}
-                onUpdateSuccess={refreshInteDetail}
-            />
-        );
     };
 
     return (

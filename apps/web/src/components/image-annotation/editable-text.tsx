@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { useControllableValue } from 'ahooks';
 import Konva from 'konva';
 import { Tag, Text, Label } from 'react-konva';
 import { Html } from 'react-konva-utils';
 import type { Vector2d } from 'konva/lib/types';
-import { useControllableValue } from 'ahooks';
+import type { ShapeConfig } from 'konva/lib/Shape';
 import { yellow, white, black } from '@milesight/shared/src/services/theme';
 
 interface Props {
@@ -29,7 +30,7 @@ interface Props {
     fontSize?: number;
 
     /** Background */
-    backgroundColor?: string;
+    backgroundColor?: ShapeConfig['stroke'];
 
     /** Content change Callback */
     onChange?: (content: string) => void;
@@ -67,13 +68,20 @@ const EditableText: React.FC<Props> = ({
     const isEditable = !!onChange;
 
     const handleDoubleClick = useCallback(() => {
-        // if (!isEditable) return;
+        if (!isEditable) return;
         setIsEditing(true);
     }, [isEditable]);
 
     // ---------- Render input ----------
     const [inputText, setInputText] = useState(text);
     const inputRef = useRef<HTMLInputElement>(null);
+    const innerPosition = useMemo(
+        () => ({
+            x: !position?.x || position.x < 0 ? 0 : position.x,
+            y: !position?.y || position.y < 0 ? 0 : position.y,
+        }),
+        [position],
+    );
     const inputStyle = useMemo(() => {
         const labelNode = labelRef.current;
         const result: React.CSSProperties = { display: 'none' };
@@ -81,14 +89,14 @@ const EditableText: React.FC<Props> = ({
         if (!isEditing || !labelNode) return result;
         result.display = 'block';
         result.position = 'absolute';
-        result.top = `${position?.y || 0}px`;
-        result.left = `${position?.x || 0}px`;
+        result.top = `${innerPosition.y}px`;
+        result.left = `${innerPosition.x}px`;
         result.width = `${labelNode.width()}px`;
         result.minWidth = `${MIN_INPUT_WIDTH / scale}px`;
         result.maxWidth = `${MAX_INPUT_WIDTH / scale}px`;
         result.height = `${labelNode.height()}px`;
         result.margin = '0px';
-        result.padding = `${padding / scale}px`;
+        result.padding = `${padding}px`;
 
         result.color = color;
         result.fontSize = `${fontSize / scale}px`;
@@ -104,7 +112,7 @@ const EditableText: React.FC<Props> = ({
         result.transform = transform;
 
         return result;
-    }, [backgroundColor, color, fontSize, padding, position?.x, position?.y, scale, isEditing]);
+    }, [backgroundColor, color, fontSize, padding, innerPosition, scale, isEditing]);
 
     const handleInputKeyDown = (e: any) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -133,8 +141,8 @@ const EditableText: React.FC<Props> = ({
         <>
             <Label
                 ref={labelRef}
-                x={position?.x}
-                y={position?.y}
+                x={innerPosition.x}
+                y={innerPosition.y}
                 visible={visible && !isEditing}
                 onDblClick={handleDoubleClick}
                 onDblTap={handleDoubleClick}

@@ -1,0 +1,45 @@
+.@{prefix}-view-ai-config {
+    padding: @padding-lg;
+    background-color: var(--component-background);
+    border-radius: @border-radius-md;
+
+    &-header {
+        display: flex;
+        align-items: center;
+
+        > h2 {
+            margin: 0;
+            .text-size(@font-size-xxl);
+        }
+
+        .@{mui-prefix}SvgIcon-root {
+            color: var(--text-color-secondary);
+            cursor: pointer;
+        }
+    }
+
+    &-body {
+        margin-top: @margin-lg;
+
+        .form {
+            width: 45%;
+            min-width: 300px;
+            max-width: 500px;
+
+            &.loading {
+                opacity: .5;
+                pointer-events: none;
+            }
+
+            .@{mui-prefix}FormControl-root:first-child {
+                .@{mui-prefix}-disabled.@{mui-prefix}InputBase-root {
+                    background: var(--component-background);
+
+                    .@{mui-prefix}OutlinedInput-notchedOutline {
+                        border: 1px solid var(--border-color-base)
+                    }
+                }
+            }
+        }
+    }
+}

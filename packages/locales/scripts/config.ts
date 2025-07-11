@@ -20,7 +20,7 @@ export const {
     PHRASE_WX_WORK_KEY,
     PHRASE_JOB_REVIEWERS,
     PHRASE_JOB_TRANSLATORS,
-    PHRASE_WX_WORK_MENTIONED_MOBILES,
+    PHRASE_WX_WORK_MENTIONED_USERS,
 } = parseEnvVariables([
     path.join(projectRoot, '.env'),
     path.join(projectRoot, '.env.local'),
@@ -32,8 +32,8 @@ export const {
  * The WxWork message template
  */
 export const msgTemplate = [
-    '📣 Transition Notice',
-    'There are new translation tasks, please handle them promptly',
+    '📣 I18N Notice',
+    'You have a new translation task, please handle it promptly',
     '--------------------',
     '✦ Project: {{projectName}}',
     '✦ Deadline: {{deadline}}',

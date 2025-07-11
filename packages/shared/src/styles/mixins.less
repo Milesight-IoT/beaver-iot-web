@@ -33,6 +33,7 @@
     -webkit-line-clamp: @line;
 }
 
+// ---------- UI ----------
 // Required mark *
 .required-mark(@color: var(--text-color-red), @font-size: @font-size-base) {
     display: inline-block;
@@ -63,6 +64,23 @@
         border-@{key}-color: @value;
     });
     /* stylelint-enable */
+}
+
+/**
+ * Opacity background
+ * @bg: Background color
+ * @opacity: Opacity
+ */
+.opacity-background(@bg, @opacity) {
+    position: relative;
+
+    &::before {
+        position: absolute;
+        inset: 0;
+        background-color: @bg;
+        opacity: @opacity;
+        content: '';
+    }
 }
 
 // ---------- Breakpoints ----------
