@@ -4,6 +4,7 @@ import cls from 'classnames';
 import { TextField, Divider } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { UploadFileIcon, AddLinkIcon, toast } from '@milesight/shared/src/components';
+import { API_PREFIX } from '@/services/http';
 import Upload, { type FileValueType, type Props as UploadProps } from '../upload';
 import './style.less';
 
@@ -24,6 +25,14 @@ export interface Props {
 }
 
 type DataType = 'file' | 'url';
+
+// Generate full url for uploading file
+const genFullUrl = (path?: string) => {
+    if (!path) return '';
+    return path.startsWith('http')
+        ? path
+        : `${API_PREFIX}${path.startsWith('/') ? '' : '/'}${path}`;
+};
 
 /**
  * Image input component
@@ -96,7 +105,7 @@ const ImageInput: React.FC<Props> = ({ accept, readOnly, ...props }) => {
                             const result = !Array.isArray(data) ? data : data[0];
 
                             setFile(result);
-                            if (result?.url) setValue(result.url);
+                            if (result?.url) setValue(genFullUrl(result.url));
                         }}
                         onDropRejected={rejections => {
                             const content = rejections[0]?.errors[0]?.message;
