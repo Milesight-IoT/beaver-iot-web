@@ -31,7 +31,7 @@ const genFullUrl = (path?: string) => {
     if (!path) return '';
     return path.startsWith('http')
         ? path
-        : `${API_PREFIX}${path.startsWith('/') ? '' : '/'}${path}`;
+        : `${location.origin}${API_PREFIX}${path.startsWith('/') ? '' : '/'}${path}`;
 };
 
 /**
