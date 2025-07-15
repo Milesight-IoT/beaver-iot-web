@@ -298,7 +298,7 @@
   "setting.integration.ai_bind_delete_tip": "是否要删除与设备绑定的模型？删除后，后续的设备数据更新将不再请求模型服务，历史数据则不受影响。",
   "setting.integration.ai_bind_detail": "推理详情",
   "setting.integration.ai_bind_device": "绑定设备",
-  "setting.integration.ai_bind_device_ai_settings": "AI 设备",
+  "setting.integration.ai_bind_device_ai_settings": "AI 设置",
   "setting.integration.ai_bind_device_choose_device": "选择设备",
   "setting.integration.ai_bind_label_ai_model_name": "AI 模型名称",
   "setting.integration.ai_bind_label_device_uplink_time": "设备上报时间",
