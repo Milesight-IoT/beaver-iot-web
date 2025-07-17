@@ -167,7 +167,7 @@ const Upload: React.FC<Props> = ({
                     const [err, resp] = await awaitWrap(
                         globalAPI.getUploadConfig({
                             file_name: file.name,
-                            tempResourceLiveMinutes: tempLiveMinutes,
+                            temp_resource_live_minutes: tempLiveMinutes,
                         }),
                     );
                     const uploadConfig = getResponseData(resp);
