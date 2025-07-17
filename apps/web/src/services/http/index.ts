@@ -29,3 +29,13 @@ export {
     type CredentialType,
     type CredentialAPISchema,
 } from './credentials';
+export { default as camthinkApi, type CamthinkAPISchema, type InferStatus } from './camthink';
+export {
+    default as mqttApi,
+    type TemplateType,
+    type TemplateDetailType,
+    type TemplateProperty,
+    type EntitySchemaType,
+    type MqttBrokerInfoType,
+    type DataReportResult,
+} from './mqtt';

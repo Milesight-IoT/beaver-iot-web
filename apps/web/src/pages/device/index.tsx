@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Stack } from '@mui/material';
 import { useRequest } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
@@ -15,8 +15,12 @@ import './style.less';
 
 export default () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { getIntlText } = useI18n();
     const { hasPermission } = useUserPermissions();
+
+    const queryParams = new URLSearchParams(location.search);
+    const templateKey = queryParams.get('template_key');
 
     // ---------- list data related to ----------
     const [keyword, setKeyword] = useState<string>();
@@ -34,6 +38,7 @@ export default () => {
                     name: keyword,
                     page_size: pageSize,
                     page_number: page + 1,
+                    template: templateKey as string,
                 }),
             );
             const data = getResponseData(resp);
@@ -45,7 +50,7 @@ export default () => {
         },
         {
             debounceWait: 300,
-            refreshDeps: [keyword, paginationModel],
+            refreshDeps: [keyword, paginationModel, templateKey],
         },
     );
 

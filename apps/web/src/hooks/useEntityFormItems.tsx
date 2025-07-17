@@ -5,7 +5,7 @@ import {
     FormControl,
     // FormLabel,
     FormControlLabel,
-    // InputLabel,
+    InputLabel,
     // Select,
     // MenuItem,
     FormHelperText,
@@ -24,10 +24,16 @@ import {
     checkRangeLength,
     checkRegexp,
     checkHexNumber,
+    checkNumber,
+    checkDecimals,
+    checkStartWithHttpOrHttps,
 } from '@milesight/shared/src/utils/validators';
+import { HelpOutlineIcon } from '@milesight/shared/src/components';
+import ImageInput, { type Props as ImageInputProps } from '@/components/image-input';
+import Tooltip from '@/components/tooltip';
 import { type IntegrationAPISchema } from '@/services/http';
 
-interface Props {
+export interface Props {
     entities?: ObjectToCamelCase<
         IntegrationAPISchema['getDetail']['response']['integration_entities']
     >;
@@ -37,12 +43,27 @@ interface Props {
      * @deprecated
      */
     isAllRequired?: boolean;
+
+    /**
+     * Whether all is read-only
+     */
+    isAllReadOnly?: boolean;
+
+    /**
+     * The props of image input component
+     */
+    imageUploadProps?: Omit<ImageInputProps, 'value' | 'onChange'>;
 }
 
 /**
  * Form data type
  */
 export type EntityFormDataProps = Record<string, any>;
+
+/**
+ * This keyword in format field indicates that this entity will be rendered as an image input
+ */
+export const IMAGE_ENTITY_KEYWORD = 'IMAGE:';
 
 /**
  * Gets entity verification rules
@@ -55,6 +76,21 @@ const getValidators = (entity: NonNullable<Props['entities']>[0], required = fal
     // Check required
     if (required && entity.valueType !== 'BOOLEAN') {
         result.checkRequired = checkRequired();
+    }
+
+    // Check value type
+    switch (entity.valueType) {
+        case 'LONG': {
+            result.checkNumber = checkNumber();
+            break;
+        }
+        case 'DOUBLE': {
+            result.checkDecimals = checkDecimals({});
+            break;
+        }
+        default: {
+            break;
+        }
     }
 
     // Check min/max value
@@ -87,17 +123,20 @@ const getValidators = (entity: NonNullable<Props['entities']>[0], required = fal
         }
     }
 
-    // Check format (HEX/REGEX)
+    // Check format
     if (attr.format) {
-        const [type, pattern] = attr.format.split(':');
+        if (attr.format.startsWith('REGEX:')) {
+            const [, pattern] = attr.format.split(':');
+            result.checkRegexp = checkRegexp({ regexp: new RegExp(pattern || '') });
+        }
 
-        switch (type) {
+        switch (attr.format) {
             case 'HEX': {
                 result.checkHexNumber = checkHexNumber();
                 break;
             }
-            case 'REGEX': {
-                result.checkRegexp = checkRegexp({ regexp: new RegExp(pattern || '') });
+            case 'IMAGE:URL': {
+                result.checkStartWithHttpOrHttps = checkStartWithHttpOrHttps();
                 break;
             }
             default: {
@@ -112,7 +151,7 @@ const getValidators = (entity: NonNullable<Props['entities']>[0], required = fal
 /**
  * Entity dynamic form entry
  */
-const useEntityFormItems = ({ entities, isAllRequired = false }: Props) => {
+const useEntityFormItems = ({ entities, isAllReadOnly, imageUploadProps }: Props) => {
     /**
      * Entity Key & Form Key mapping table
      * { [entityKey]: [formKey] }
@@ -168,6 +207,18 @@ const useEntityFormItems = ({ entities, isAllRequired = false }: Props) => {
 
     const formItems = useMemo(() => {
         const result: ControllerProps<EntityFormDataProps>[] = [];
+        const renderLabel = (label?: string, helperText?: string) => {
+            if (!helperText) return label;
+
+            return (
+                <>
+                    {label}
+                    <Tooltip className="ms-form-label-help" title={helperText}>
+                        <HelpOutlineIcon sx={{ fontSize: 16 }} />
+                    </Tooltip>
+                </>
+            );
+        };
 
         if (!entities?.length) return result;
 
@@ -190,9 +241,14 @@ const useEntityFormItems = ({ entities, isAllRequired = false }: Props) => {
                                     fullWidth
                                     type="text"
                                     sx={{ my: 1.5 }}
+                                    slotProps={{
+                                        input: {
+                                            readOnly: !!isAllReadOnly,
+                                        },
+                                    }}
                                     required={!attr.optional}
                                     disabled={disabled}
-                                    label={entity.name}
+                                    label={renderLabel(entity.name, entity.description)}
                                     error={!!error}
                                     helperText={error ? error.message : null}
                                     value={value}
@@ -202,7 +258,7 @@ const useEntityFormItems = ({ entities, isAllRequired = false }: Props) => {
                         },
                     };
 
-                    // If it is an enumeration type, render the drop-down box
+                    // If it is an enumeration type, rendered as drop-down box
                     if (attr.enum) {
                         // formItem.defaultValue = '';
                         formItem.render = ({
@@ -230,12 +286,13 @@ const useEntityFormItems = ({ entities, isAllRequired = false }: Props) => {
                                         renderInput={params => (
                                             <TextField
                                                 {...params}
-                                                label={entity.name}
+                                                label={renderLabel(entity.name, entity.description)}
                                                 error={!!error}
                                                 required={!attr.optional}
                                                 InputProps={{
                                                     ...params.InputProps,
                                                     size: 'medium',
+                                                    readOnly: !!isAllReadOnly,
                                                 }}
                                             />
                                         )}
@@ -248,6 +305,36 @@ const useEntityFormItems = ({ entities, isAllRequired = false }: Props) => {
                                 </FormControl>
                             );
                         };
+                    }
+
+                    // If it is an image type, rendered as image input
+                    if (attr.format?.includes(IMAGE_ENTITY_KEYWORD)) {
+                        formItem.render = ({
+                            field: { onChange, value, disabled },
+                            fieldState: { error },
+                        }) => (
+                            <FormControl
+                                required
+                                disabled
+                                fullWidth
+                                className={error ? 'Mui-error' : ''}
+                            >
+                                <InputLabel>
+                                    {renderLabel(entity.name, entity.description)}
+                                </InputLabel>
+                                <ImageInput
+                                    readOnly={disabled || !!isAllReadOnly}
+                                    {...imageUploadProps}
+                                    value={value}
+                                    onChange={onChange}
+                                />
+                                {error && (
+                                    <FormHelperText error sx={{ mt: 1 }}>
+                                        {error.message}
+                                    </FormHelperText>
+                                )}
+                            </FormControl>
+                        );
                     }
 
                     result.push(formItem);
@@ -268,11 +355,11 @@ const useEntityFormItems = ({ entities, isAllRequired = false }: Props) => {
                                     sx={{ my: 1.5 }}
                                 >
                                     <FormControlLabel
-                                        label={entity.name}
+                                        label={renderLabel(entity.name, entity.description)}
                                         required={!attr.optional}
                                         checked={!!value}
                                         onChange={onChange}
-                                        control={<Switch size="small" />}
+                                        control={<Switch size="small" readOnly={!!isAllReadOnly} />}
                                         sx={{ fontSize: '12px' }}
                                     />
                                     {!!error && (
@@ -296,9 +383,14 @@ const useEntityFormItems = ({ entities, isAllRequired = false }: Props) => {
                                     multiline
                                     type="text"
                                     rows={4}
+                                    slotProps={{
+                                        input: {
+                                            readOnly: !!isAllReadOnly,
+                                        },
+                                    }}
                                     required={!attr.optional}
                                     disabled={disabled}
-                                    label={entity.name}
+                                    label={renderLabel(entity.name, entity.description)}
                                     error={!!error}
                                     helperText={error ? error.message : null}
                                     value={value}
@@ -316,10 +408,15 @@ const useEntityFormItems = ({ entities, isAllRequired = false }: Props) => {
         });
 
         return result;
-    }, [entities, encodedEntityKeys]);
+    }, [entities, isAllReadOnly, imageUploadProps, encodedEntityKeys]);
 
     return {
         formItems,
+
+        /**
+         * Encoded entity keys
+         */
+        encodedEntityKeys,
 
         /**
          * Decode the entity key

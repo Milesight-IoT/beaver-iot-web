@@ -19,14 +19,13 @@ const GatewayStatus: React.FC<IProps> = props => {
     const { getIntlText } = useI18n();
 
     return (
-        <div className="ms-view-gateway-status">
-            <div
-                className={classNames('ms-view-gateway-status-online', {
-                    'ms-view-gateway-status-offline': status === 'OFFLINE',
-                })}
-            >
-                {getIntlText(STATUS_INTL_KEY[status])}
-            </div>
+        <div
+            className={classNames('ms-view-gateway-status', {
+                'ms-view-gateway-status-online': status === 'ONLINE',
+                'ms-view-gateway-status-offline': status === 'OFFLINE',
+            })}
+        >
+            {getIntlText(STATUS_INTL_KEY[status])}
         </div>
     );
 };

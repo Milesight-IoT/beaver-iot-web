@@ -160,6 +160,7 @@ const Service: React.FC<Props> = ({ loading, entities, excludeKeys, onUpdateSucc
                 ))}
             </Grid2>
             <Modal
+                size="lg"
                 visible={!!targetService}
                 title={targetService?.name}
                 onCancel={() => setTargetService(undefined)}
