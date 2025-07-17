@@ -17,6 +17,11 @@ export interface Props {
     /** is read only */
     readOnly?: boolean;
 
+    /**
+     * Temporary resource live minutes
+     */
+    tempLiveMinutes?: UploadProps['tempLiveMinutes'];
+
     /** Text value */
     value?: string;
 
@@ -40,7 +45,7 @@ const genFullUrl = (path?: string) => {
  * @example
  * <ImageInput value={value} onChange={setValue} />
  */
-const ImageInput: React.FC<Props> = ({ accept, readOnly, ...props }) => {
+const ImageInput: React.FC<Props> = ({ accept, readOnly, tempLiveMinutes, ...props }) => {
     const { getIntlText } = useI18n();
     const [value, setValue] = useControllableValue(props);
     const [file, setFile] = useState<FileValueType | null>();
@@ -96,6 +101,7 @@ const ImageInput: React.FC<Props> = ({ accept, readOnly, ...props }) => {
                     <Upload
                         accept={accept}
                         disabled={!!readOnly}
+                        tempLiveMinutes={tempLiveMinutes}
                         value={file}
                         onChange={data => {
                             if (!data) {

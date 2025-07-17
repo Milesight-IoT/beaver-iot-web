@@ -100,6 +100,11 @@ export type Props = UseDropzoneProps & {
     className?: string;
 
     /**
+     * Temporary resource live minutes
+     */
+    tempLiveMinutes?: number;
+
+    /**
      * Customize the contents in upload area
      */
     children?: React.ReactNode;
@@ -128,6 +133,7 @@ const Upload: React.FC<Props> = ({
     multiple,
     style,
     className,
+    tempLiveMinutes,
     children,
     onChange,
     ...props
@@ -159,7 +165,10 @@ const Upload: React.FC<Props> = ({
             const uploadTasks = files.map(file =>
                 limit(async () => {
                     const [err, resp] = await awaitWrap(
-                        globalAPI.getUploadConfig({ file_name: file.name }),
+                        globalAPI.getUploadConfig({
+                            file_name: file.name,
+                            tempResourceLiveMinutes: tempLiveMinutes,
+                        }),
                     );
                     const uploadConfig = getResponseData(resp);
 

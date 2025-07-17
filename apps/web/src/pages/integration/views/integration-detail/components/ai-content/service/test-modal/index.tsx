@@ -70,7 +70,7 @@ const TestModal: React.FC<Props> = ({ modelName, entities, visible, onCancel, ..
     const { control, formState, handleSubmit, reset } = useForm<EntityFormDataProps>();
     const { formItems, decodeFormParams } = useEntityFormItems({
         entities,
-        imageUploadProps: { accept: imageAccept },
+        imageUploadProps: { accept: imageAccept, tempLiveMinutes: 360 },
     });
     const isLoading = formState.isSubmitting;
     const formValues = useWatch({ control });

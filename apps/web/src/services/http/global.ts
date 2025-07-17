@@ -76,6 +76,7 @@ export interface GlobalAPISchema extends APISchema {
             name?: string;
             file_name: string;
             description?: string;
+            tempResourceLiveMinutes?: number;
         };
         response: {
             key: string;
