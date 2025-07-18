@@ -33,16 +33,21 @@ interface Props {
 }
 
 /**
+ * Exclude service keys that should not be rendered in service list
+ */
+const excludeServices: ApiKey[] = ['camthink-ai-inference.integration.draw_result_image'];
+
+/**
  * ai model services component
  */
 const Service: React.FC<Props> = ({ loading, entities, excludeKeys, onUpdateSuccess }) => {
     const { getIntlText } = useI18n();
 
     // ---------- Render service list ----------
-    const serviceEntities = useMemo(
-        () => entitiesCompose(entities, excludeKeys),
-        [entities, excludeKeys],
-    );
+    const serviceEntities = useMemo(() => {
+        const result = entitiesCompose(entities, excludeKeys);
+        return result.filter(item => !excludeServices.includes(item.key));
+    }, [entities, excludeKeys]);
 
     // ---------- Handle service calls ----------
     const confirm = useConfirm();
