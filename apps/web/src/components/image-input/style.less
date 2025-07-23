@@ -2,15 +2,16 @@
     background-color: var(--component-background-gray);
     border: 1px dashed var(--border-color-base);
     border-radius: @border-radius-base;
+    .text-size(@font-size-base);
 
     .@{prefix}-upload {
         &-cont {
             min-height: 136px;
+            border: none;
         }
 
         &-cont-default {
             background-color: transparent;
-            border: none;
         }
 
         &-cont-uploading {

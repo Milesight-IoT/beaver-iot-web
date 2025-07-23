@@ -28,7 +28,7 @@ import {
     checkDecimals,
     checkStartWithHttpOrHttps,
 } from '@milesight/shared/src/utils/validators';
-import { HelpOutlineIcon } from '@milesight/shared/src/components';
+import { InfoOutlinedIcon } from '@milesight/shared/src/components';
 import ImageInput, { type Props as ImageInputProps } from '@/components/image-input';
 import Tooltip from '@/components/tooltip';
 import { type IntegrationAPISchema } from '@/services/http';
@@ -214,7 +214,7 @@ const useEntityFormItems = ({ entities, isAllReadOnly, imageUploadProps }: Props
                 <>
                     {label}
                     <Tooltip className="ms-form-label-help" title={helperText}>
-                        <HelpOutlineIcon sx={{ fontSize: 16 }} />
+                        <InfoOutlinedIcon sx={{ fontSize: 16 }} />
                     </Tooltip>
                 </>
             );
