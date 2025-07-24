@@ -1,0 +1,59 @@
+.@{prefix}-view-mqtt {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: 0;
+
+    .@{prefix}-tabpanel {
+        height: 100%;
+    }
+
+    .@{mui-prefix}Tabs-flexContainer {
+        height: 100%;
+
+        .@{mui-prefix}Tab-root:not(:first-child) {
+            &::before {
+                display: none;
+            }
+        }
+    }
+
+    &-template {
+        height: 100%;
+        padding: 20px;
+        background-color: var(--component-background);
+        border-radius: @border-radius-md;
+        
+        .@{prefix}-view-inner {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+    }
+}
+
+.@{prefix}-view-mqtt-template-add {
+    &-content {
+        position: relative;
+        height: 640px;
+
+        .@{mui-prefix}FormControl-root:nth-of-type(2) {
+            .@{mui-prefix}InputAdornment-root  {
+                max-width: 150px;
+
+                span:nth-child(2) {
+                    max-width: 150px;
+                    .ellipsis();
+                }
+            }
+        }
+
+        .@{mui-prefix}FormControl-root:last-child {
+            margin-bottom: @margin-md!important;
+        }
+    }
+    .@{prefix}-modal-content {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}

@@ -39,6 +39,8 @@ export interface DeviceAPISchema extends APISchema {
         request: SearchRequestType & {
             /** Name (Fuzzy search) */
             name?: string;
+            /** Device template key */
+            template?: string;
         };
         response: SearchResponseType<Omit<DeviceDetail, 'identifier'>[]>;
     };

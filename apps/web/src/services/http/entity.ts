@@ -106,7 +106,8 @@ export interface EntityAPISchema extends APISchema {
              * */
             exchange: Record<string, any>;
         };
-        response: void;
+        // Different services have different responses
+        response: any;
     };
 
     /** Gets the entity's current data */

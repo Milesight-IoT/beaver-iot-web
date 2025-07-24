@@ -114,7 +114,6 @@ This command will build all sub-applications and dependency libraries in the Mon
 | `pnpm run build` | Start the build compilation |
 | `pnpm run i18n:import` | Import internationalization text |
 | `pnpm run i18n:export` | Export internationalization text, with validation of new text |
-| `pnpm run i18n:export-all` | Export all internationalization text, with validation of all text |
 
 ## Relevant Links
 
