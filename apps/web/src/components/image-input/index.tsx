@@ -56,7 +56,7 @@ const ImageInput: React.FC<Props> = ({ accept, readOnly, tempLiveMinutes, ...pro
         setDataType(type);
         switch (type) {
             case 'file':
-                setValue(file?.url || '');
+                setValue(!file?.url ? '' : genFullUrl(file.url));
                 break;
             case 'url':
                 setValue(inputValue || '');
@@ -110,8 +110,9 @@ const ImageInput: React.FC<Props> = ({ accept, readOnly, tempLiveMinutes, ...pro
                             }
                             const result = !Array.isArray(data) ? data : data[0];
 
-                            setFile(result);
                             if (result?.url) setValue(genFullUrl(result.url));
+
+                            setFile(result);
                         }}
                         onDropRejected={rejections => {
                             const content = rejections[0]?.errors[0]?.message;
