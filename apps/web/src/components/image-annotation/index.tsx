@@ -171,6 +171,7 @@ const ImageAnnotation = forwardRef<ImageAnnotationInstance, ImageAnnotationProps
             return () => {
                 img.src = '';
                 img.onload = null;
+                img.onerror = null;
             };
         }, [imgSrc, containerWidth, containerHeight, handleImageLoaded, handleImageError]);
 
