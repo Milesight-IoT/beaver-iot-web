@@ -89,6 +89,10 @@ export interface ImageAnnotationProps {
 
     /** Image loaded callback */
     onImageLoaded?: (imgSize: ImageSize) => void;
+
+    /** Load image error callback */
+    onImageError?: OnErrorEventHandler;
+
     /** Points change callback */
     onPointsChange?: (newPoints: PointType[]) => void;
 }
@@ -116,6 +120,7 @@ const ImageAnnotation = forwardRef<ImageAnnotationInstance, ImageAnnotationProps
             containerWidth,
             containerHeight,
             onImageLoaded,
+            onImageError,
             onPointsChange,
         },
         ref,
@@ -130,6 +135,7 @@ const ImageAnnotation = forwardRef<ImageAnnotationInstance, ImageAnnotationProps
         const [image, setImage] = useState<HTMLImageElement | null>(null);
         const [scale, setScale] = useState(1);
         const handleImageLoaded = useMemoizedFn(onImageLoaded || (() => {}));
+        const handleImageError = useMemoizedFn(onImageError || (() => {}));
 
         // Get size of image
         useEffect(() => {
@@ -158,11 +164,15 @@ const ImageAnnotation = forwardRef<ImageAnnotationInstance, ImageAnnotationProps
                 handleImageLoaded?.(size);
             };
 
+            img.onerror = e => {
+                handleImageError?.(e);
+            };
+
             return () => {
                 img.src = '';
                 img.onload = null;
             };
-        }, [imgSrc, containerWidth, containerHeight, handleImageLoaded]);
+        }, [imgSrc, containerWidth, containerHeight, handleImageLoaded, handleImageError]);
 
         // ---------- Polygon Interaction ----------
         const [selectedId, setSelectedId] = useState<number | null>(null);
