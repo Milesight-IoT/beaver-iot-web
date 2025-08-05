@@ -63,7 +63,7 @@ export type EntityFormDataProps = Record<string, any>;
 /**
  * This keyword in format field indicates that this entity will be rendered as an image input
  */
-export const IMAGE_ENTITY_KEYWORD = 'IMAGE:';
+export const IMAGE_ENTITY_KEYWORD = 'IMAGE';
 
 /**
  * Gets entity verification rules
@@ -135,6 +135,7 @@ const getValidators = (entity: NonNullable<Props['entities']>[0], required = fal
                 result.checkHexNumber = checkHexNumber();
                 break;
             }
+            case 'IMAGE':
             case 'IMAGE:URL': {
                 result.checkStartWithHttpOrHttps = checkStartWithHttpOrHttps();
                 break;

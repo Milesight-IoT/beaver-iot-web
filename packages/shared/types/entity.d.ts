@@ -106,10 +106,11 @@ declare interface EntityValueAttributeType {
      *
      * @template HEX Hexadecimal
      * @template REGEX Regular Expression, format `REGEX:${string}`, e.g. `REGEX:^[0-9a-fA-F]{6}$`
+     * @template IMAGE Image, format `IMAGE`
      * @template `IMAGE:URL` Image URL, format `IMAGE:URL`
      * @template `IMAGE:BASE64` Image Base64, format `IMAGE:BASE64`
      */
-    format: 'HEX' | `REGEX:${string}` | 'IMAGE:URL' | 'IMAGE:BASE64';
+    format: 'HEX' | `REGEX:${string}` | 'IMAGE' | 'IMAGE:URL' | 'IMAGE:BASE64';
     /** Fraction Digits */
     fraction_digits: number;
     /** Optional */
