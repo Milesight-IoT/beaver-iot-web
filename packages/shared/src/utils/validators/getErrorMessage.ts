@@ -199,6 +199,10 @@ export enum EErrorMessages {
      * Match regular expression
      */
     regexp = 'valid.input.match_regexp',
+    /**
+     * Must start with specify characters
+     */
+    startWithSpecialChar = 'valid.input.start_with_special_char',
 }
 
 // let intlInstance: typeof intl;

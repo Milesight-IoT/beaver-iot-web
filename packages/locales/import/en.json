@@ -530,6 +530,7 @@
   "valid.input.value": "Input value: {0} only.",
   "valid.input.version": "The version number does not comply with the specification.",
   "valid.resp.at_least_one": "Please select at least one {1}.",
+  "valid.input.start_with_special_char": "Must start with {0}",
   "workflow.button.label_import_from_dsl": "Import from DSL",
   "workflow.context_menu.title_change_node": "Change Node",
   "workflow.editor.config_panel_test_title": "Test {1}",

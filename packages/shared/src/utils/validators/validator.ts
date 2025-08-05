@@ -683,6 +683,29 @@ export const checkStartWithNormalChar: TValidator = rule => {
 };
 
 /**
+ * Check start with specify characters
+ */
+export const checkStartWithSpecialChar: TValidator<{ char: string }> = rule => {
+    const message =
+        rule?.message ||
+        getErrorMessage(EErrorMessages.startWithSpecialChar, {
+            0: rule.char,
+        });
+
+    return value => {
+        try {
+            if (value && !value.startsWith(rule.char)) {
+                return message;
+            }
+        } catch (e) {
+            return message;
+        }
+
+        return Promise.resolve(true);
+    };
+};
+
+/**
  * Check URL
  *
  * I18N key: EErrorMessages.url

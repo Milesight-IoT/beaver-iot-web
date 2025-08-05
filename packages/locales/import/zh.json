@@ -530,6 +530,7 @@
   "valid.input.value": "输入值：仅{0}。",
   "valid.input.version": "版本号不符合规范。",
   "valid.resp.at_least_one": "请至少选择一个{1}。",
+  "valid.input.start_with_special_char": "必须以{0}开头",
   "workflow.button.label_import_from_dsl": "导入DSL",
   "workflow.context_menu.title_change_node": "更改节点",
   "workflow.editor.config_panel_test_title": "测试{1}",

@@ -9,7 +9,11 @@ import {
     Link,
 } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
-import { checkMaxLength, checkRequired } from '@milesight/shared/src/utils/validators';
+import {
+    checkMaxLength,
+    checkRequired,
+    checkStartWithSpecialChar,
+} from '@milesight/shared/src/utils/validators';
 import { OpenInNewIcon } from '@milesight/shared/src/components';
 import CodeEditor from '../../code-editor';
 
@@ -47,7 +51,7 @@ const useFormItems = ({ prefixTopic }: { prefixTopic: string }) => {
                         checkRequired: checkRequired(),
                         checkMaxLength: checkMaxLength({ max: 64 }),
                         checkValidChar: value => {
-                            if (!/^[a-zA-Z0-9_@#$\\/[\]-]+$/.test(value.toString())) {
+                            if (!/^[a-zA-Z0-9_@#$/[\]-]+$/.test(value.toString())) {
                                 return getIntlText('common.valid.input_letter_num_special_char', {
                                     1: '_@#$-/[]',
                                 });
@@ -87,6 +91,7 @@ const useFormItems = ({ prefixTopic }: { prefixTopic: string }) => {
                             }
                             return true;
                         },
+                        checkStartWithSpecialChar: checkStartWithSpecialChar({ char: '/' }),
                     },
                 },
                 render({ field: { onChange, value }, fieldState: { error } }) {
