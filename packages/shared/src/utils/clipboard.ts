@@ -14,6 +14,7 @@ const copyErrorMessage = 'Failed to copy value to clipboard. Unknown type.';
 export const copyText = (
     content: string,
     container: HTMLElement = document.body,
+    fallbackHtmlType: string = 'div',
 ): Promise<boolean> => {
     if (typeof content !== 'string') {
         try {
@@ -25,9 +26,13 @@ export const copyText = (
 
     // Whether fallback to use `document.execCommand` to copy
     const isFallback = !navigator.clipboard;
-    const fallbackCopy = (txt: string, cb: (success: boolean) => void = () => {}) => {
+    const fallbackCopy = (
+        txt: string,
+        fallbackHtmlType: string,
+        cb: (success: boolean) => void = () => {},
+    ) => {
         let textarea: HTMLTextAreaElement | undefined;
-        let div: HTMLDivElement | undefined;
+        let div: HTMLElement | undefined;
 
         if (isIOS()) {
             textarea = document.createElement('textarea');
@@ -51,7 +56,7 @@ export const copyText = (
             textarea.contentEditable = editable;
             textarea.readOnly = readOnly;
         } else {
-            div = document.createElement('div');
+            div = document.createElement(fallbackHtmlType);
             div.innerText = txt;
             div.style.cssText = cssText;
             container.appendChild(div);
@@ -88,13 +93,13 @@ export const copyText = (
                     resolve(true);
                 },
                 () => {
-                    fallbackCopy(content, resolve);
+                    fallbackCopy(content, fallbackHtmlType, resolve);
                 },
             );
         });
     }
 
     return new Promise(resolve => {
-        fallbackCopy(content, resolve);
+        fallbackCopy(content, fallbackHtmlType, resolve);
     });
 };
