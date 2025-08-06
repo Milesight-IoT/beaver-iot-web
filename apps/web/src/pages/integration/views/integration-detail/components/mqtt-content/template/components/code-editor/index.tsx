@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Box, IconButton, InputLabel, FormHelperText, CircularProgress } from '@mui/material';
 import { type FieldError } from 'react-hook-form';
 import classNames from 'classnames';
@@ -115,6 +115,13 @@ const CodeEditor: React.FC<IProps> = ({
         [title, extendable, copyable, handleCopy, codeFull],
     );
 
+    const editorContentStyle = useMemo(() => {
+        if (!codeFull) {
+            return { height: 300 };
+        }
+        return { height: `calc(100% - ${!error ? 30 : 100}px)` };
+    }, [error, codeFull]);
+
     return (
         <div
             className={classNames('ms-code-editor-wrap', {
@@ -145,20 +152,26 @@ const CodeEditor: React.FC<IProps> = ({
                     </div>
                 )
             ) : (
-                <CodeMirror
-                    {...props}
-                    readOnly={readOnly}
-                    editable={!readOnly}
-                    editorLang={editorLang}
-                    supportLangs={supportLangs}
-                    renderHeader={renderHeader}
-                    value={value}
-                    onChange={onChange}
-                />
+                <div className="ms-code-editor-wrap-content" style={editorContentStyle}>
+                    <CodeMirror
+                        {...props}
+                        readOnly={readOnly}
+                        editable={!readOnly}
+                        editorLang={editorLang}
+                        supportLangs={supportLangs}
+                        renderHeader={renderHeader}
+                        value={value}
+                        onChange={onChange}
+                    />
+                </div>
             )}
 
             <div className={classNames('ms-code-editor-wrap-footer')}>
-                {!!error && <FormHelperText error>{error?.message}</FormHelperText>}
+                {!!error && (
+                    <FormHelperText error sx={{ whiteSpace: 'pre-wrap' }}>
+                        {error?.message}
+                    </FormHelperText>
+                )}
             </div>
         </div>
     );
