@@ -19,6 +19,7 @@ export interface IProps extends Omit<EditorProps, 'value' | 'onChange'> {
     loading?: boolean;
     loadingSlot?: React.ReactNode;
     loadingText?: string;
+    defaultHeight?: number;
     /**
      * Whether to enable read-only mode
      */
@@ -60,6 +61,7 @@ const CodeEditor: React.FC<IProps> = ({
     loading = false,
     loadingSlot = null,
     loadingText = '',
+    defaultHeight = 300,
     variableSelectable = false,
     autoFillDefaultValue,
     defaultValues,
@@ -117,7 +119,7 @@ const CodeEditor: React.FC<IProps> = ({
 
     const editorContentStyle = useMemo(() => {
         if (!codeFull) {
-            return { height: 300 };
+            return { height: defaultHeight };
         }
         return { height: `calc(100% - ${!error ? 30 : 100}px)` };
     }, [error, codeFull]);

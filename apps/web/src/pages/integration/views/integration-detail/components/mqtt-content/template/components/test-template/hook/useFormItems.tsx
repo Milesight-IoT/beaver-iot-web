@@ -40,6 +40,7 @@ const useFormItems = ({ simulatedDataLoading, genSimulatedData }: FormItemsType)
                             required={false}
                             editorLang="json"
                             title="JSON"
+                            defaultHeight={500}
                             value={value}
                             onChange={onChange}
                             placeholder={getIntlText('common.placeholder.input')}
