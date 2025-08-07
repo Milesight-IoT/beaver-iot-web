@@ -1,3 +1,5 @@
+import type { CustomControlItem } from '@/plugin/types';
+
 export const parseStyleString = (styleString: string) => {
     return styleString.split(';').reduce((acc: any, style) => {
         const [property, value] = style.split(':').map(item => item.trim());
@@ -38,3 +40,11 @@ export const convertCssToReactStyle = (property: string) => {
     );
     return camelCaseProperty;
 };
+
+// Judge Whether is custom control item
+export const isCustomControlItem = (obj: unknown): obj is CustomControlItem =>
+    typeof obj === 'object' &&
+    obj !== null &&
+    typeof ('name' in obj && obj.name) === 'string' &&
+    typeof ('config' in obj && obj.config) === 'object' &&
+    (obj as CustomControlItem).config !== null;

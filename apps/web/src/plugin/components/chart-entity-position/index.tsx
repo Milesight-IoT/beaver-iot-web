@@ -40,11 +40,11 @@ export interface ChartEntityPositionProps
     value?: ChartEntityPositionValueType[];
     defaultValue?: ChartEntityPositionValueType[];
     onChange?: (value: ChartEntityPositionValueType[]) => void;
-    entityType: SingleEntitySelectProps['entityType'];
-    entityValueTypes: SingleEntitySelectProps['entityValueType'];
-    entityAccessMods: SingleEntitySelectProps['entityAccessMod'];
-    entityExcludeChildren: SingleEntitySelectProps['excludeChildren'];
-    customFilterEntity: keyof typeof filterEntityMap;
+    entityType?: SingleEntitySelectProps['entityType'];
+    entityValueTypes?: SingleEntitySelectProps['entityValueType'];
+    entityAccessMods?: SingleEntitySelectProps['entityAccessMod'];
+    entityExcludeChildren?: SingleEntitySelectProps['excludeChildren'];
+    customFilterEntity?: keyof typeof filterEntityMap;
 }
 
 const MAX_VALUE_LENGTH = 5;
