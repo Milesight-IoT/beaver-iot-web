@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import { isPlainObject, isEmpty } from 'lodash-es';
+
 import { AnyDict } from './types';
 
 interface ControlPanelStore {
@@ -10,15 +12,15 @@ interface ControlPanelStore {
     /**
      * Control panel config update effect
      */
-    configUpdateEffect?: (data?: AnyDict) => void;
+    configUpdateEffect?: (newData?: AnyDict, formData?: AnyDict) => void;
     /**
      * Register the config update effect
      */
-    registerConfigUpdateEffect: (effect?: (data?: AnyDict) => void) => void;
+    registerConfigUpdateEffect: (effect?: (newData?: AnyDict, formData?: AnyDict) => void) => void;
     /**
-     * Update the control panel config
+     * Update the control panel config form data
      */
-    updateConfig: (data: AnyDict) => void;
+    setValuesToFormConfig: (data: AnyDict) => void;
 }
 
 /**
@@ -36,18 +38,21 @@ const useControlPanelStore = create(
                 state.configUpdateEffect = effect;
             });
         },
-        updateConfig(data) {
-            if (!data) return;
+        setValuesToFormConfig(newData) {
+            if (!isPlainObject(newData) || isEmpty(newData)) return;
 
-            const { configUpdateEffect } = get();
+            const { formData, configUpdateEffect } = get();
             if (!configUpdateEffect) {
                 return;
             }
 
             set(state => {
-                state.formData = data;
+                state.formData = {
+                    ...formData,
+                    ...newData,
+                };
             });
-            configUpdateEffect?.(data);
+            configUpdateEffect?.(newData, formData);
         },
     })),
 );

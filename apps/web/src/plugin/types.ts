@@ -26,7 +26,22 @@ export type ControlConfigMap = {
         description?: ReactNode;
         controllerProps?: PartialOptional<ControllerProps, 'render'>;
         componentProps?: ControlTypePropsMap[K];
-        visibility?: (formData: AnyDict) => boolean;
+        /**
+         * A function that uses control panel props
+         * to check whether a control should be visible.
+         */
+        visibility?: (formData?: AnyDict) => boolean;
+        /**
+         * A function that receives the form data and return an object of k/v
+         * to overwrite configuration at runtime. This is useful to alter a component based on
+         * anything external to it, like another control's value. For instance it's possible to
+         * show a warning based on the value of another component.
+         */
+        mapStateToProps?: (oldConfig: BaseControlConfig, formData?: AnyDict) => BaseControlConfig;
+        /**
+         * To update config form data
+         */
+        setValuesToFormConfig?: (update: (newData: AnyDict) => void, formData?: AnyDict) => void;
     };
 };
 

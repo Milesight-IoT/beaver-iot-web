@@ -1,4 +1,61 @@
-import type { ControlPanelConfig } from '@/plugin/types';
+import { isEmpty, isNil } from 'lodash-es';
+
+import type { ControlPanelConfig, AnyDict } from '@/plugin/types';
+import {
+    POSITION_AXIS,
+    type ChartEntityPositionValueType,
+} from '@/plugin/components/chart-entity-position';
+
+/**
+ * Whether the unit is displayed depends on whether the current unit's position exists.
+ */
+const isAxisUnitVisibility = (position: POSITION_AXIS, formData?: AnyDict) => {
+    const positions = formData?.entityPosition;
+    if (!Array.isArray(positions) || isEmpty(positions)) {
+        return false;
+    }
+
+    const isExisted = positions?.find(p => p?.position === position);
+    return Boolean(isExisted);
+};
+
+/**
+ * If entityPosition changes and the current unit has no value,
+ * set the default entity unit.
+ */
+const axisUnitSetValue = (
+    position: POSITION_AXIS,
+    update: (newData: AnyDict) => void,
+    formData?: AnyDict,
+) => {
+    const key = position === POSITION_AXIS.LEFT ? 'leftYAxisUnit' : 'rightYAxisUnit';
+
+    const isExisted = ((formData?.entityPosition || []) as ChartEntityPositionValueType[])?.find(
+        p => p?.position === position,
+    );
+
+    if (!isExisted) {
+        if (formData?.[key]) {
+            update?.({
+                [key]: null,
+            });
+        }
+
+        return;
+    }
+
+    if (!isNil(formData?.[key])) {
+        return;
+    }
+
+    const entityName = isExisted?.entity?.rawData?.entityName;
+    const unit = isExisted?.entity?.rawData?.entityValueAttribute?.unit;
+    const newUnitName = entityName && unit ? `${entityName}(${unit})` : entityName || '';
+
+    update?.({
+        [key]: newUnitName,
+    });
+};
 
 /**
  * The Line Control Panel Config
@@ -25,9 +82,6 @@ const lineControlPanelConfig: ControlPanelConfig = {
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Title',
-                                rules: {
-                                    required: true,
-                                },
                             },
                             componentProps: {
                                 slotProps: {
@@ -54,6 +108,7 @@ const lineControlPanelConfig: ControlPanelConfig = {
                                 },
                             },
                             componentProps: {
+                                required: true,
                                 entityType: ['PROPERTY'],
                                 entityValueTypes: ['LONG', 'DOUBLE'],
                                 entityAccessMod: ['R', 'RW'],
@@ -102,6 +157,12 @@ const lineControlPanelConfig: ControlPanelConfig = {
                                     },
                                 },
                             },
+                            visibility(formData) {
+                                return isAxisUnitVisibility(POSITION_AXIS.LEFT, formData);
+                            },
+                            setValuesToFormConfig(update, formData) {
+                                axisUnitSetValue?.(POSITION_AXIS.LEFT, update, formData);
+                            },
                         },
                     },
                 ],
@@ -127,6 +188,12 @@ const lineControlPanelConfig: ControlPanelConfig = {
                                         },
                                     },
                                 },
+                            },
+                            visibility(formData) {
+                                return isAxisUnitVisibility(POSITION_AXIS.RIGHT, formData);
+                            },
+                            setValuesToFormConfig(update, formData) {
+                                axisUnitSetValue?.(POSITION_AXIS.RIGHT, update, formData);
                             },
                         },
                     },

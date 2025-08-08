@@ -58,11 +58,17 @@ export function useFormControl(props: UseFormControlProps) {
      * To Register the update config function
      */
     useEffect(() => {
-        registerConfigUpdateEffect((data?: AnyDict) => {
-            if (!data) return;
+        registerConfigUpdateEffect((newData?: AnyDict, formData?: AnyDict) => {
+            if (!newData) return;
 
-            onChange?.(data);
-            reset?.(data);
+            onChange?.({
+                ...formData,
+                ...newData,
+            });
+            reset({
+                ...formData,
+                ...newData,
+            });
         });
     }, [registerConfigUpdateEffect, onChange, reset]);
 

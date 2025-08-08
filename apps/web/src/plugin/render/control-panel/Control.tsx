@@ -1,8 +1,11 @@
 import React from 'react';
 import { type Control, type ControllerProps, Controller } from 'react-hook-form';
 
+import { useI18n } from '@milesight/shared/src/hooks';
+
 import type { CustomControlItem } from '@/plugin/types';
 import * as controlMap from '@/plugin/components';
+import { useControl } from './hooks';
 
 export interface ControlProps {
     control: Control;
@@ -15,10 +18,27 @@ export interface ControlProps {
 const Control: React.FC<ControlProps> = props => {
     const { control, controlItem } = props;
 
-    const controllerProps = controlItem?.config?.controllerProps;
+    const { getIntlText } = useI18n();
+    const { newConfig, isVisibility } = useControl({
+        config: controlItem?.config,
+    });
+
+    if (!isVisibility) {
+        return null;
+    }
+
+    const controllerProps = newConfig?.controllerProps;
     if (!controllerProps) return null;
 
-    const newControllerProps = controllerProps;
+    const newControllerProps = {
+        ...controllerProps,
+        rules: {
+            ...controllerProps.rules,
+            required: controllerProps?.rules?.required
+                ? getIntlText('valid.input.required')
+                : false,
+        },
+    };
 
     /**
      * Custom render function by control panel
@@ -27,7 +47,7 @@ const Control: React.FC<ControlProps> = props => {
         return <Controller {...(newControllerProps as ControllerProps)} control={control} />;
     }
 
-    const type = controlItem.config?.type;
+    const type = newConfig?.type;
     if (!type) return null;
 
     const ControlComponent = (typeof type === 'string'
@@ -43,12 +63,12 @@ const Control: React.FC<ControlProps> = props => {
     newControllerProps.render = ({ field: { onChange, value }, fieldState: { error } }) => {
         return (
             <ControlComponent
-                title={controlItem?.config?.label || ''}
+                title={newConfig?.label || ''}
                 error={!!error}
                 helperText={error ? error.message : null}
                 value={value}
                 onChange={onChange}
-                {...controlItem?.config?.componentProps}
+                {...newConfig?.componentProps}
             />
         );
     };
