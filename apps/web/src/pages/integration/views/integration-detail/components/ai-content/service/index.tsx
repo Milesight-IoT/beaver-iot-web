@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import cls from 'classnames';
 import { Grid2, IconButton } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { ChevronRightIcon, toast } from '@milesight/shared/src/components';
@@ -48,6 +49,7 @@ const Service: React.FC<Props> = ({ loading, entities, excludeKeys, onUpdateSucc
         const result = entitiesCompose(entities, excludeKeys);
         return result.filter(item => !excludeServices.includes(item.key));
     }, [entities, excludeKeys]);
+    const hasDescription = serviceEntities.some(item => item.description);
 
     // ---------- Handle service calls ----------
     const confirm = useConfirm();
@@ -121,15 +123,15 @@ const Service: React.FC<Props> = ({ loading, entities, excludeKeys, onUpdateSucc
                                     <ChevronRightIcon />
                                 </IconButton>
                             </div>
-                            {!!service?.description && (
-                                <div className="desc">
+                            <div className={cls('desc', { 'd-none': !hasDescription })}>
+                                {!!service?.description && (
                                     <Tooltip
                                         autoEllipsis
                                         className="title"
                                         title={service.description}
                                     />
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </Grid2>
                 ))}
