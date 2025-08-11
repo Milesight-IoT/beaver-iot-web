@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { type Control, type ControllerProps, Controller } from 'react-hook-form';
 
 import { useI18n } from '@milesight/shared/src/hooks';
@@ -22,6 +22,10 @@ const Control: React.FC<ControlProps> = props => {
     const { newConfig, isVisibility } = useControl({
         config: controlItem?.config,
     });
+
+    const renderController = (children: ReactNode) => {
+        return <div className="control-item">{children}</div>;
+    };
 
     if (!isVisibility) {
         return null;
@@ -48,7 +52,9 @@ const Control: React.FC<ControlProps> = props => {
      * Custom render function by control panel
      */
     if (newControllerProps?.render) {
-        return <Controller {...(newControllerProps as ControllerProps)} control={control} />;
+        return renderController(
+            <Controller {...(newControllerProps as ControllerProps)} control={control} />,
+        );
     }
 
     const type = newConfig?.type;
@@ -77,7 +83,9 @@ const Control: React.FC<ControlProps> = props => {
         );
     };
 
-    return <Controller {...(newControllerProps as ControllerProps)} control={control} />;
+    return renderController(
+        <Controller {...(newControllerProps as ControllerProps)} control={control} />,
+    );
 };
 
 export default Control;

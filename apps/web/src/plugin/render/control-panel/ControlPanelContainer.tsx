@@ -1,10 +1,4 @@
-import {
-    useState,
-    type ReactElement,
-    isValidElement,
-    forwardRef,
-    useImperativeHandle,
-} from 'react';
+import { useState, isValidElement, forwardRef, useImperativeHandle } from 'react';
 import { Tabs, Tab } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import {
@@ -14,7 +8,7 @@ import {
     type UseFormGetFieldState,
 } from 'react-hook-form';
 
-import type { ControlPanelSectionConfig } from '@/plugin/types';
+import type { ControlPanelSectionConfig, CustomControlItem } from '@/plugin/types';
 import { isCustomControlItem } from '../util';
 import Control from './Control';
 import { useFormControl } from './hooks';
@@ -78,43 +72,29 @@ const ControlPanelContainer = forwardRef<
         };
     });
 
-    const renderControlItem = (control: ReactElement | null, key: string) => {
-        return (
-            <div key={key} className="control-item">
-                {control}
-            </div>
-        );
+    const renderControlItem = (controlItem: CustomControlItem, key: string) => {
+        return <Control key={key} control={control} controlItem={controlItem} />;
     };
 
     const renderControlPanelSection = (section: ControlPanelSectionConfig, key: string) => {
         return (
             <div className="control-section" key={key}>
                 {section.controlSetItems.map((controlItem, itemIndex) => {
-                    const currentItem = () => {
-                        // When the item is invalid
-                        if (!controlItem) {
-                            return null;
-                        }
-
-                        // When the item is a React element
-                        if (isValidElement(controlItem)) {
-                            return controlItem;
-                        }
-
-                        if (isCustomControlItem(controlItem)) {
-                            return <Control control={control} controlItem={controlItem} />;
-                        }
-
-                        return null;
-                    };
-
-                    const renderedControl = currentItem();
-                    // Don't show the row if it is empty
-                    if (!renderControlItem) {
+                    // When the item is invalid
+                    if (!controlItem) {
                         return null;
                     }
 
-                    return renderControlItem(renderedControl, `control_item_${itemIndex}`);
+                    // When the item is a React element
+                    if (isValidElement(controlItem)) {
+                        return controlItem;
+                    }
+
+                    if (isCustomControlItem(controlItem)) {
+                        return renderControlItem(controlItem, `control_item_${itemIndex}`);
+                    }
+
+                    return null;
                 })}
             </div>
         );
