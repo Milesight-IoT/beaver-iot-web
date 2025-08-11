@@ -7,6 +7,12 @@ import {
 } from 'react';
 import { Tabs, Tab } from '@mui/material';
 import { isEmpty } from 'lodash-es';
+import {
+    type UseFormReset,
+    type UseFormSetValue,
+    type UseFormGetValues,
+    type UseFormGetFieldState,
+} from 'react-hook-form';
 
 import type { ControlPanelSectionConfig } from '@/plugin/types';
 import { isCustomControlItem } from '../util';
@@ -17,6 +23,10 @@ import './style.less';
 
 export interface ControlPanelContainerExposeProps {
     handleSubmit: () => void;
+    reset: UseFormReset<AnyDict>;
+    setValue: UseFormSetValue<AnyDict>;
+    getValues: UseFormGetValues<AnyDict>;
+    getFieldState: UseFormGetFieldState<AnyDict>;
 }
 
 export interface ControlPanelContainerProps {
@@ -49,7 +59,7 @@ const ControlPanelContainer = forwardRef<
 
     const [tabKey, setTabKey] = useState<ApiKey>(0);
 
-    const { control, handleSubmit } = useFormControl({
+    const { control, handleSubmit, reset, setValue, getValues, getFieldState } = useFormControl({
         initialValues,
         onOk,
         onChange,
@@ -61,6 +71,10 @@ const ControlPanelContainer = forwardRef<
     useImperativeHandle(ref, () => {
         return {
             handleSubmit,
+            reset,
+            setValue,
+            getValues,
+            getFieldState,
         };
     });
 

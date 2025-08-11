@@ -4,6 +4,8 @@
 import { stringify } from 'qs';
 import axios, { type Canceler } from 'axios';
 import { camelCase, isPlainObject } from 'lodash-es';
+import intl from 'react-intl-universal';
+
 import { PRIVATE_PROPERTY_PREFIX } from '../config';
 
 /**
@@ -760,3 +762,8 @@ export const hexToRgba = (hex: string, alpha: number) => {
     // Returns the rgba color with transparency
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
+
+/**
+ * Text internationalization translation
+ */
+export const t = (key: string) => intl.get(key).d(key);

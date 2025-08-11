@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, Suspense, useMemo } from 'react';
-import { Tabs, Tab, DialogActions, Button } from '@mui/material';
-import { Modal, JsonView, LoadingButton } from '@milesight/shared/src/components';
+import { Tabs, Tab, DialogActions, Button, List } from '@mui/material';
+import { Modal, JsonView, LoadingButton, LoadingWrapper } from '@milesight/shared/src/components';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { TabPanel } from '@/components';
 import { RenderConfig, RenderView } from '../render';
@@ -141,7 +141,17 @@ const ConfigPlugin = (props: ConfigPluginProps) => {
                             <JsonView value={formValues} maintainEditStatus />
                         </TabPanel> */}
                     {ComponentConfig ? (
-                        <Suspense>
+                        <Suspense
+                            fallback={
+                                <LoadingWrapper loading>
+                                    <List
+                                        sx={{
+                                            height: 100,
+                                        }}
+                                    />
+                                </LoadingWrapper>
+                            }
+                        >
                             <ComponentConfig
                                 config={config}
                                 onChange={handleChange}

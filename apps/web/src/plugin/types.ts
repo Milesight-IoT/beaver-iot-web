@@ -2,15 +2,25 @@ import { ReactNode } from 'react';
 import { ControllerProps } from 'react-hook-form';
 
 import { type TextFieldProps } from '@mui/material';
+import { type ToggleRadioProps, type EntitySelectProps, type UploadProps } from '@/components';
 import { type SelectProps as PluginSelectProps, type ChartEntityPositionProps } from './components';
 import { COMPONENTCLASS } from './constant';
 
-export type ControlType = 'input' | 'chartEntityPosition' | 'ChartTimeSelect';
+export type ControlType =
+    | 'input'
+    | 'chartEntityPosition'
+    | 'ChartTimeSelect'
+    | 'ToggleRadio'
+    | 'entitySelect'
+    | 'Upload';
 
 export type ControlTypePropsMap = {
     input: Partial<TextFieldProps>;
     chartEntityPosition: Partial<ChartEntityPositionProps>;
     ChartTimeSelect: Partial<PluginSelectProps>;
+    ToggleRadio: Partial<ToggleRadioProps>;
+    entitySelect: Partial<EntitySelectProps>;
+    Upload: Partial<UploadProps>;
 };
 
 // Check the completeness of ControlTypePropsMap

@@ -7,7 +7,7 @@ import {
 } from '@/plugin/components/chart-entity-position';
 import LineChartIcon from '../icon.svg';
 
-export interface LineControlPanelProps {
+export interface LineChartControlPanelProps {
     title?: string;
     entityPosition: ChartEntityPositionValueType[];
     time: number;
@@ -18,7 +18,7 @@ export interface LineControlPanelProps {
 /**
  * Whether the unit is displayed depends on whether the current unit's position exists.
  */
-const isAxisUnitVisibility = (position: POSITION_AXIS, formData?: LineControlPanelProps) => {
+const isAxisUnitVisibility = (position: POSITION_AXIS, formData?: LineChartControlPanelProps) => {
     const positions = formData?.entityPosition;
     if (!Array.isArray(positions) || isEmpty(positions)) {
         return false;
@@ -34,8 +34,8 @@ const isAxisUnitVisibility = (position: POSITION_AXIS, formData?: LineControlPan
  */
 const axisUnitSetValue = (
     position: POSITION_AXIS,
-    update: (newData: Partial<LineControlPanelProps>) => void,
-    formData?: LineControlPanelProps,
+    update: (newData: Partial<LineChartControlPanelProps>) => void,
+    formData?: LineChartControlPanelProps,
 ) => {
     const key = position === POSITION_AXIS.LEFT ? 'leftYAxisUnit' : 'rightYAxisUnit';
 
@@ -65,9 +65,9 @@ const axisUnitSetValue = (
 };
 
 /**
- * The Line Control Panel Config
+ * The Line Chart Control Panel Config
  */
-const lineControlPanelConfig = (): ControlPanelConfig<LineControlPanelProps> => {
+const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanelProps> => {
     return {
         class: 'data_chart',
         type: 'lineChart',
@@ -196,4 +196,4 @@ const lineControlPanelConfig = (): ControlPanelConfig<LineControlPanelProps> => 
     };
 };
 
-export default lineControlPanelConfig;
+export default lineChartControlPanelConfig;

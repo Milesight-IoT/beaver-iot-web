@@ -63,7 +63,7 @@ export type FileValueType = Pick<
     'name' | 'size' | 'path' | 'key' | 'url' | 'preview' | 'original'
 >;
 
-type Props = UseDropzoneProps & {
+export type Props = UseDropzoneProps & {
     // type?: string;
 
     /**

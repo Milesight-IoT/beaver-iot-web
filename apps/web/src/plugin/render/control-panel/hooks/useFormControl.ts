@@ -26,7 +26,7 @@ export interface UseFormControlProps {
 export function useFormControl(props: UseFormControlProps) {
     const { onOk, onChange, initialValues } = props || {};
 
-    const { control, handleSubmit, reset, getValues } = useForm<AnyDict>();
+    const { control, handleSubmit, reset, getValues, setValue, getFieldState } = useForm<AnyDict>();
     const newFormValues = useWatch({
         control,
     });
@@ -37,7 +37,7 @@ export function useFormControl(props: UseFormControlProps) {
         onOk?.(params);
     };
 
-    const handleDataChange = useMemoizedFn((newData: AnyDict) => {
+    const handleDataChange = useMemoizedFn((newData: AnyDict, wait: number = 100) => {
         if (watchTimeoutRef.current) {
             clearTimeout(watchTimeoutRef.current);
         }
@@ -49,7 +49,7 @@ export function useFormControl(props: UseFormControlProps) {
 
             onChange?.(newData);
             updateFormData(newData);
-        }, 300);
+        }, wait);
     });
 
     /**
@@ -80,7 +80,7 @@ export function useFormControl(props: UseFormControlProps) {
          * use the form default value as the initial value
          */
         if (!initialValues) {
-            handleDataChange(allValues);
+            handleDataChange(allValues, 0);
             return;
         }
 
@@ -124,5 +124,9 @@ export function useFormControl(props: UseFormControlProps) {
     return {
         control,
         handleSubmit: handleSubmit(onSubmit),
+        reset,
+        setValue,
+        getValues,
+        getFieldState,
     };
 }
