@@ -56,6 +56,7 @@ const EditDialog: React.FC<Props> = ({ data, visible, onCancel, onError, onSucce
 
     return (
         <Modal
+            size="lg"
             visible={visible}
             title={getIntlText('common.label.edit_title', { 1: data?.name })}
             className={cls({ loading: formState.isSubmitting })}

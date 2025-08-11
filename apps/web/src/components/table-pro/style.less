@@ -1,5 +1,10 @@
 @table-pro: ~'@{prefix}-table-pro';
 
+.sticky-class(@bg-color: var(--component-background)) {
+    position: sticky;
+    background-color: @bg-color;
+}
+
 .@{prefix}-table-pro {
     display: flex;
     flex-direction: column;
@@ -30,10 +35,17 @@
         &-header {
             display: flex;
             align-items: center;
+            width: 100%;
+
+            > .@{prefix}-tooltip {
+                max-width: calc(100% - 20px);
+            }
     
             &-label {
-                flex: 1;
-                margin-right: @margin-xxs;
+                overflow: hidden;
+                font-weight: @font-weight-medium;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
     
             &-icon {
@@ -98,9 +110,92 @@
         flex: 1;
         overflow: auto;
 
+        // columnHeader gridCell fixed style
+        .@{prefix}-table-cell-fix-left,
+        .@{prefix}-table-header-fix-left {
+            z-index: 6;
+            .sticky-class();
+
+            .@{mui-prefix}DataGrid-columnSeparator--sideRight {
+                display: none;
+            }
+        }
+    
+        .@{prefix}-table-cell-fix-right,
+        .@{prefix}-table-header-fix-right {
+            z-index: 6;
+            .sticky-class();
+    
+            .@{mui-prefix}DataGrid-columnSeparator--sideRight {
+                display: none;
+            }
+        }
+
+        // gridCell shadow style
+        .@{prefix}-table-cell-fix-right-first {
+            box-shadow: -4px 0 4px rgba(0, 0, 0, 0.06);
+        }
+        .@{prefix}-table-cell-fix-left-last {
+            box-shadow: 4px 0 4px rgba(0, 0, 0, 0.06);
+        }
+
+        // muti checkbox style
+        .@{mui-prefix}DataGrid-cellCheckbox.@{mui-prefix}DataGrid-cell {
+            background-color: var(--component-background);
+        }
+
+        // scrollbarY fixed style 
+        .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--borderTop,
+        .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--header {
+            right: 0;
+            .sticky-class();
+        }
+
+        // columnHeader bg style
+        .@{prefix}-table-header-fix-right,
+        .@{prefix}-table-header-fix-left,
+        .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--header,
+        .@{mui-prefix}DataGrid-columnHeader.@{mui-prefix}DataGrid-columnHeaderCheckbox {
+            z-index: 40;
+            background-color: var(--gray-color-1);
+        }
+
+        // cover selected hover style
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected  .@{prefix}-table-cell-fix-right,
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected  .@{prefix}-table-cell-fix-left,
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected  
+            .@{mui-prefix}DataGrid-cellCheckbox.@{mui-prefix}DataGrid-cell,
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected  
+            .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--borderTop,
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected 
+            .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--header {
+            background-color: var(--purple-1)!important;
+        }
+
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected:hover,
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected:hover .@{prefix}-table-cell-fix-right,
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected:hover .@{prefix}-table-cell-fix-left,
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected:hover 
+            .@{mui-prefix}DataGrid-cellCheckbox.@{mui-prefix}DataGrid-cell,
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected:hover 
+            .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--borderTop,
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected:hover 
+            .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--header {
+            background-color: var(--purple-2) !important;
+        }
+
+        .@{mui-prefix}DataGrid-row:hover .@{prefix}-table-cell-fix-right,
+        .@{mui-prefix}DataGrid-row:hover .@{prefix}-table-cell-fix-left,
+        .@{mui-prefix}DataGrid-row:hover .@{mui-prefix}DataGrid-cellCheckbox.@{mui-prefix}DataGrid-cell,
+        .@{mui-prefix}DataGrid-row:hover 
+            .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--borderTop,
+        .@{mui-prefix}DataGrid-row:hover 
+            .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--header {
+            background-color: var(--gray-color-1);
+        }
         .@{mui-prefix}DataGrid-columnHeaders {
             .@{mui-prefix}DataGrid-row--borderBottom {
-                background-color: var(--gray-1);
+                background-color: var(--gray-color-1);
             }
         }
 

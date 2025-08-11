@@ -50,7 +50,11 @@ const Integration = () => {
 
     const renderList = () => {
         if (loading || isNil(loading)) {
-            return <CircularProgress />;
+            return (
+                <div className="ms-int-card__loading">
+                    <CircularProgress />
+                </div>
+            );
         }
 
         if (!Array.isArray(intList) || isEmpty(intList)) {

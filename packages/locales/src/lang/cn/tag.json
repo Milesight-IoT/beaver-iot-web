@@ -1,0 +1,20 @@
+{
+    "tag.label.append_tag": "追加所选标签",
+    "tag.label.overwrite_tag": "覆盖所选标签",
+    "tag.label.remove_tag": "移除所选标签",
+    "tag.label.replace_tag": "替换所选标签",
+    "tag.label.tags": "标签",
+    "tag.tip.bulk_delete_tag": "删除后，所有使用了这些标签的实体，都将不再展示该标签。确认删除这 {1} 个标签吗？",
+    "tag.tip.edit_tag_info": "如果您修改了该标签的信息，所有使用该标签的实体，都会同步该修改。",
+    "tag.tip.not_any_tags": "没有标签",
+    "tag.tip.selected_entities_contain_follow_tags": "{1}个实体已被选中，包含以下标签：",
+    "tag.tip.single_delete_tag": "删除后，所有使用了该标签的实体，都将不再展示该标签。确认删除标签: {1} 吗？",
+    "tag.title.add_tag": "添加标签",
+    "tag.title.edit_tag": "编辑标签",
+    "tag.title.manage_tags": "管理标签",
+    "tag.title.original_tag": "原标签",
+    "tag.title.replace_with": "替换",
+    "tag.title.tag_management": "标签管理",
+    "tag.title.tag_name": "标签名称",
+    "tag.title.tagged_entities": "关联的实体"
+}

@@ -1,0 +1,50 @@
+.batch-add-progress {
+    position: relative;
+
+    .progress-wrapper {
+        display: flex;
+        flex-direction: column;
+
+        .statistics {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .progress {
+            padding: @padding-xs 0;
+        }
+    }
+
+    .result {
+        display: flex;
+
+        &:not(:first-child) {
+            margin-top: @margin-xs;
+        }
+
+        svg {
+            margin-top: 1px;
+        }
+
+        .text {
+            margin-left: @margin-xs;
+        }
+
+        .download {
+            display: flex;
+            align-items: center;
+            margin-left: @margin-md;
+            color: var(--primary-color-base);
+            cursor: pointer;
+
+            &:hover {
+                color: var(--icon-color-hover);
+            }
+
+            .text {
+                margin-left: @margin-xxs;
+            }
+        }
+    }
+}

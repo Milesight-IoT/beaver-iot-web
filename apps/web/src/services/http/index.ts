@@ -1,6 +1,12 @@
 export { isRequestSuccess, getResponseData, awaitWrap, pLimit, API_PREFIX } from './client';
 
-export { default as deviceAPI, type DeviceDetail, type DeviceAPISchema } from './device';
+export {
+    default as deviceAPI,
+    type DeviceDetail,
+    type DeviceAPISchema,
+    type DeviceGroupItemProps,
+    type AddDeviceProps,
+} from './device';
 
 export { default as entityAPI, type EntityAPISchema } from './entity';
 export { default as integrationAPI, type IntegrationAPISchema } from './integration';
@@ -21,7 +27,13 @@ export {
     type RoleResourceType,
 } from './user';
 
-export { default as embeddedNSApi, type GatewayDetailType } from './embedded-ns';
+export {
+    default as embeddedNSApi,
+    type SyncedDeviceType,
+    type SyncAbleDeviceType,
+    type DeviceModelItem,
+    type GatewayDetailType,
+} from './embedded-ns';
 export {
     default as credentialsApi,
     type CredentialsAdditionalData,
@@ -39,3 +51,4 @@ export {
     type MqttBrokerInfoType,
     type DataReportResult,
 } from './mqtt';
+export { default as tagAPI, type TagItemProps, TagOperationEnums } from './tag';

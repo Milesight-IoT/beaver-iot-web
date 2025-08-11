@@ -1,4 +1,10 @@
-import { type UseFormSetValue, type UseFormHandleSubmit, type UseFormReset } from 'react-hook-form';
+import {
+    type UseFormSetValue,
+    type UseFormHandleSubmit,
+    type UseFormReset,
+    UseControllerProps,
+    RegisterOptions,
+} from 'react-hook-form';
 
 export type rulesPatternType = {
     value: any;
@@ -12,6 +18,7 @@ export type rulesType = {
     maxLength?: rulesPatternType;
     min?: rulesPatternType;
     max?: rulesPatternType;
+    validate?: RegisterOptions['validate'];
 };
 
 export type fieldType = {

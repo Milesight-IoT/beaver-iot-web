@@ -116,7 +116,6 @@ const Dashboards: React.FC = () => {
                 }
 
                 getRoleDashboards();
-                setSelectedIds([]);
                 toast.success(getIntlText('common.message.remove_success'));
             },
         });
@@ -169,6 +168,7 @@ const Dashboards: React.FC = () => {
     return (
         <>
             <TablePro<TableRowDataType>
+                filterCondition={[keyword]}
                 checkboxSelection
                 loading={loading}
                 columns={columns}

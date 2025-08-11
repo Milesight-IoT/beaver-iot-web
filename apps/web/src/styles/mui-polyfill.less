@@ -90,12 +90,11 @@
 }
 
 // ---------- Date Picker ----------
-.@{mui-prefix}PickersLayout-root  {
+.@{mui-prefix}PickersLayout-root {
     .@{mui-prefix}PickersYear-yearButton.@{mui-prefix}-selected,
     .@{mui-prefix}PickersMonth-monthButton.@{mui-prefix}-selected,
     .@{mui-prefix}PickersWeek-weekButton.@{mui-prefix}-selected,
-    .@{mui-prefix}DateCalendar-root
-        .@{mui-prefix}ButtonBase-root.@{mui-prefix}-selected,
+    .@{mui-prefix}DateCalendar-root .@{mui-prefix}ButtonBase-root.@{mui-prefix}-selected,
     .@{mui-prefix}MultiSectionDigitalClockSection-root
         .@{mui-prefix}MenuItem-root.@{mui-prefix}-selected {
         background-color: var(--primary-color-7);
@@ -158,7 +157,7 @@ input.@{mui-prefix}InputBase-input {
     &.@{mui-prefix}-focused {
         .@{mui-prefix}OutlinedInput-notchedOutline {
             border-width: 1px;
-            box-shadow: 0 0 0 2px #7b4efa3d;
+            box-shadow: 0 0 0 2px var(--primary-color-1);
         }
 
         &:hover {
@@ -202,7 +201,7 @@ input.@{mui-prefix}InputBase-input {
 .@{mui-prefix}Checkbox-root.@{mui-prefix}-disabled {
     color: var(--border-color-gray);
 
-    &:not(.@{mui-prefix}-checked) {
+    &:not(.@{mui-prefix}-checked):not(.@{mui-prefix}Checkbox-indeterminate) {
         color: var(--border-color-gray);
 
         &::after {
@@ -214,7 +213,8 @@ input.@{mui-prefix}InputBase-input {
         }
     }
 
-    &.@{mui-prefix}-checked {
+    &.@{mui-prefix}-checked,
+    &.@{mui-prefix}Checkbox-indeterminate {
         color: var(--border-color-gray);
     }
 }
@@ -226,6 +226,10 @@ input.@{mui-prefix}InputBase-input {
 .@{mui-prefix}Paper-root {
     &.@{mui-prefix}Paper-elevation {
         box-shadow: @shadow-2;
+
+        &.@{mui-prefix}Alert-root {
+            box-shadow: none;
+        }
     }
 
     .@{mui-prefix}List-root {

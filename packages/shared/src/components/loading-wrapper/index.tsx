@@ -11,6 +11,8 @@ export interface LoadingWrapperProps {
     className?: string;
     /** Whether Loading */
     loading?: boolean;
+    /** style of wrapper */
+    wrapperStyle?: React.CSSProperties;
     /** Style of loading */
     style?: React.CSSProperties;
     /**
@@ -35,7 +37,16 @@ export interface LoadingWrapperProps {
  * Loading wrapper component
  */
 const LoadingWrapper: React.FC<LoadingWrapperProps> = props => {
-    const { className, wrapperClassName, loading, style, size = 40, tip, children } = props;
+    const {
+        className,
+        wrapperClassName,
+        loading,
+        wrapperStyle,
+        style,
+        size = 40,
+        tip,
+        children,
+    } = props;
 
     const loadingClassName = useMemo(() => {
         return classNames('ms-loading', className, {
@@ -60,7 +71,7 @@ const LoadingWrapper: React.FC<LoadingWrapperProps> = props => {
     );
 
     return (
-        <div className={classNames('ms-loading-wrapper', wrapperClassName)}>
+        <div style={wrapperStyle} className={classNames('ms-loading-wrapper', wrapperClassName)}>
             {loading && <div key="loading">{loadingElement}</div>}
             <div className={containerClassName} key="container">
                 {children}

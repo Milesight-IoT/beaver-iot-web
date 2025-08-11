@@ -1,0 +1,22 @@
+.@{prefix}-device-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 240px;
+    padding: @padding-lg 0 @padding-lg @padding-lg;
+    overflow: hidden;
+    border-right: @border-base;
+    transition: width 0.1s;
+
+    &.shrink {
+        width: 0;
+        padding: 0;
+        border-right: none;
+        visibility: hidden;
+    }
+
+    &__loading-wrapper {
+        flex: 1;
+        height: 0;
+    }
+}

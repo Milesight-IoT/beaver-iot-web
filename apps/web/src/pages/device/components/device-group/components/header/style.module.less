@@ -1,0 +1,49 @@
+.header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 @margin-lg @margin-lg 0;
+
+    .left {
+        font-weight: @font-weight-medium;
+        .text-size(@font-size-3);
+    }
+
+    .right {
+        display: flex;
+        align-items: center;
+
+        &.disabled {
+            :global(svg) {
+                color: var(--text-color-disable);
+                cursor: default;
+
+                &:hover {
+                    color: var(--text-color-disable);
+                }
+            }
+        }
+
+        :global {
+            .@{prefix}-tooltip {
+                display: flex;
+            }
+
+            svg {
+                color: var(--text-color-secondary);
+                cursor: pointer;
+
+                &:hover {
+                    color: var(--primary-color-base);
+                }
+            }
+        }
+    }
+
+    .search {
+        position: absolute;
+        top: -4px;
+        right: 25px;
+    }
+}

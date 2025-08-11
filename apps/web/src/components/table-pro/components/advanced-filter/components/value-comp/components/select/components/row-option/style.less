@@ -1,0 +1,40 @@
+.@{prefix}-advanced-filter-select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: @padding-xxs @padding-md;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--component-background-gray);
+    }
+
+    &-active {
+        font-weight: @font-weight-medium;
+        color: var(--text-color-main);
+        background-color: var(--purple-1);
+
+        &:hover {
+            background-color: var(--purple-1);
+        }
+    }
+
+    &-disabled {
+        opacity: 0.38;
+        pointer-events: none;
+    }
+
+    &-option {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 30px;
+        overflow: hidden;
+
+        &-title {
+            padding-right: @padding-md;
+            font-weight: @font-weight-regular;
+            .text-size(@font-size-md);
+        }
+    }
+}

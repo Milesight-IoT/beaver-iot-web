@@ -184,6 +184,10 @@ export enum EErrorMessages {
      */
     integerPositiveZero = 'valid.input.integer_positive_zero',
     /**
+     * Positive integer validation (positive integer)
+     */
+    integerPositive = 'valid.input.integer_positive',
+    /**
      * Must start with http/https
      */
     startWithHttpOrHttps = 'valid.input.start_with_http_https',

@@ -116,7 +116,6 @@ const IntegrationPermission: React.FC = () => {
                 }
 
                 getRoleIntegrations();
-                setSelectedIds([]);
                 toast.success(getIntlText('common.message.remove_success'));
             },
         });
@@ -169,6 +168,7 @@ const IntegrationPermission: React.FC = () => {
     return (
         <>
             <TablePro<TableRowDataType>
+                filterCondition={[keyword]}
                 checkboxSelection
                 loading={loading}
                 columns={columns}

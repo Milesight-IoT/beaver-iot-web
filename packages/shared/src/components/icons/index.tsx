@@ -145,6 +145,18 @@ export {
     PlayCircleOutline as PlayCircleOutlineIcon,
     CloseFullscreen as CloseFullscreenIcon,
     OpenInNewSharp as OpenInNewSharpIcon,
+    Sell as SellIcon,
+    ArrowBackIos as ArrowBackIosIcon,
+    FolderOpenOutlined as FolderOpenOutlinedIcon,
+    Dashboard as DashboardIcon,
+    HelpOutlined as HelpOutlinedIcon,
+    DriveFileMoveOutlined as DriveFileMoveOutlinedIcon,
+    FileDownloadOutlined as FileDownloadOutlinedIcon,
+    SellOutlined as SellOutlinedIcon,
+    CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon,
+    CheckBox as CheckBoxIcon,
+    DragIndicator as DragIndicatorIcon,
+    FilterListOutlined as FilterListOutlinedIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';

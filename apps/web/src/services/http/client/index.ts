@@ -1,4 +1,4 @@
-import type { AxiosRequestConfig } from 'axios';
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { apiOrigin } from '@milesight/shared/src/config';
 import {
     createRequestClient,
@@ -37,6 +37,55 @@ const apiOriginHandler = async (config: AxiosRequestConfig) => {
     return config;
 };
 
+/**
+ * Judge the response whether Blob
+ */
+const isBlobResponse = (response?: AxiosResponse) => {
+    if (!response || !response?.data) return false;
+
+    const isBlob = response.data instanceof Blob;
+    if (!isBlob || (response.data as Blob)?.type !== 'application/json') return false;
+
+    return true;
+};
+
+/**
+ * Handle Response Blob error data
+ */
+const handleResponseBlob = (props: { resp?: AxiosResponse; data: Blob; error: AxiosError }) => {
+    const { resp, data, error } = props || {};
+
+    const defaultHandle = () => {
+        // @ts-ignore
+        errorHandler(resp?.data?.error_code || error.code, resp || error);
+    };
+
+    if (!data?.text) {
+        defaultHandle?.();
+        return;
+    }
+
+    data.text()
+        .then(data => {
+            try {
+                if (typeof data !== 'string') {
+                    defaultHandle?.();
+                    return;
+                }
+
+                const responseData: ApiResponse = JSON.parse(data);
+
+                // @ts-ignore
+                errorHandler(responseData?.error_code || error.code, resp || error);
+            } catch {
+                defaultHandle?.();
+            }
+        })
+        .catch(() => {
+            defaultHandle?.();
+        });
+};
+
 const client = createRequestClient({
     baseURL: '/',
     configHandlers: [headersHandler, apiOriginHandler, oauthHandler],
@@ -47,8 +96,18 @@ const client = createRequestClient({
     },
     onResponseError(error) {
         const resp = error.response;
-        // @ts-ignore
-        errorHandler(resp?.data?.error_code || error.code, resp || error);
+
+        if (isBlobResponse(resp)) {
+            handleResponseBlob({
+                data: resp?.data as Blob,
+                resp,
+                error,
+            });
+        } else {
+            // @ts-ignore
+            errorHandler(resp?.data?.error_code || error.code, resp || error);
+        }
+
         return error;
     },
 });

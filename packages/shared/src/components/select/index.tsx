@@ -103,7 +103,7 @@ const Select = <T extends ApiKey = ApiKey>(props: SelectProps<T>) => {
                 })
                 .join(', ');
         },
-        [placeholder, renderValue],
+        [placeholder, renderValue, options],
     );
     /** custom render empty content */
     const customRenderEmpty = useCallback<Required<SelectProps<T>>['renderEmpty']>(() => {

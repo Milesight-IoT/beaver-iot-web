@@ -7,8 +7,10 @@ import {
     Descriptions,
     FiltersRecordType,
     FilterValue,
+    MultiTag,
     TablePro,
     TableProProps,
+    Tag,
 } from '@/components';
 import {
     entityAPI,
@@ -23,6 +25,10 @@ interface IProps {
     detail: ObjectToCamelCase<DeviceAPISchema['getDetail']['response']['entities'][0]>;
     onCancel: () => void;
 }
+
+type EntityTagType = NonNullable<
+    ObjectToCamelCase<DeviceAPISchema['getDetail']['response']['entities'][0]>['entityTags']
+>[0];
 
 export default (props: IProps) => {
     const { getIntlText } = useI18n();
@@ -85,6 +91,34 @@ export default (props: IProps) => {
                 key: 'dataType',
                 label: getIntlText('common.label.type'),
                 content: detail.valueType,
+            },
+            {
+                key: 'entityTags',
+                label: getIntlText('tag.label.tags'),
+                content: (
+                    <MultiTag<EntityTagType>
+                        data={(detail.entityTags || []).map((tag: EntityTagType) => ({
+                            ...tag,
+                            key: tag.id,
+                            label: tag.name,
+                            desc: tag.description,
+                        }))}
+                        renderItem={(tag, maxItemWidth) => {
+                            return (
+                                <Tag
+                                    key={tag.id}
+                                    label={tag.name}
+                                    arbitraryColor={tag.color}
+                                    tip={tag.description}
+                                    sx={{ maxWidth: maxItemWidth }}
+                                />
+                            );
+                        }}
+                    />
+                ),
+                contentCellProps: {
+                    colSpan: 3,
+                },
             },
         ];
     }, [detail]);

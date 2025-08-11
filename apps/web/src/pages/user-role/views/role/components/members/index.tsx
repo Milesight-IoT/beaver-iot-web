@@ -106,7 +106,6 @@ const Members: React.FC = () => {
                 }
 
                 getUserMembers();
-                setSelectedIds([]);
                 toast.success(getIntlText('common.message.remove_success'));
             },
         });
@@ -163,6 +162,7 @@ const Members: React.FC = () => {
     return (
         <>
             <TablePro<TableRowDataType>
+                filterCondition={[keyword]}
                 checkboxSelection
                 loading={loading}
                 columns={columns}

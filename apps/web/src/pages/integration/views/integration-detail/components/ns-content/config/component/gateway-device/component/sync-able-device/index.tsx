@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Stack, Alert } from '@mui/material';
-import { useRequest } from 'ahooks';
+import { useDebounceEffect, useRequest } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
 import { TablePro, useConfirm } from '@/components';
@@ -11,8 +11,9 @@ import {
     embeddedNSApi,
     getResponseData,
     GatewayDetailType,
+    SyncAbleDeviceType,
+    DeviceModelItem,
 } from '@/services/http';
-import { DeviceModelItem } from '@/services/http/embedded-ns';
 import { paginationList } from '../../../../utils/utils';
 import useColumns, { TableRowDataType } from './hook/useColumn';
 
@@ -21,19 +22,21 @@ import './style.less';
 interface IProps {
     // gateway detail
     gatewayInfo: ObjectToCamelCase<GatewayDetailType>;
-    // device count change event
-    deviceCountChange: (count: number) => void;
     // update event
     onUpdateSuccess?: () => void;
     // refresh table
     refreshTable: () => void;
+    devicesData: ObjectToCamelCase<SyncAbleDeviceType>[];
+    loading: boolean;
+    getDevicesList: (reset?: boolean) => void;
 }
 
 /**
  * syncAble device component
  */
 const SyncAbleDevice: React.FC<IProps> = props => {
-    const { gatewayInfo, deviceCountChange, onUpdateSuccess, refreshTable } = props;
+    const { gatewayInfo, onUpdateSuccess, refreshTable, devicesData, loading, getDevicesList } =
+        props;
     const { getIntlText } = useI18n();
 
     // ---------- list data related to ----------
@@ -45,42 +48,28 @@ const SyncAbleDevice: React.FC<IProps> = props => {
     // select device model map
     const [modelMap, setModelMap] = useState<Map<string, string>>(new Map());
 
-    const {
-        data: deviceData,
-        loading,
-        run: getDevicesList,
-    } = useRequest(
-        async () => {
-            const { page, pageSize } = paginationModel;
-            const [error, resp] = await awaitWrap(
-                embeddedNSApi.getSyncAbleDevices({ eui: gatewayInfo.eui }),
-            );
-            const data = getResponseData(resp);
-            if (error || !data || !isRequestSuccess(resp)) {
-                return;
-            }
-            const pageData = paginationList({
-                dataList: data,
-                search: keyword,
-                pageSize,
-                pageNumber: page + 1,
-                filterCondition: (item, search: string) => {
-                    return [item?.name, item.eui]
-                        .map(v => v?.toLocaleLowerCase() || '')
-                        .filter(i => !!i)
-                        .some(value => value.includes(search.toLocaleLowerCase()));
-                },
-            });
-            // not search to update top bar count
-            if (!keyword) {
-                deviceCountChange(pageData.total);
-            }
-            return objectToCamelCase(pageData);
+    const deviceData = useMemo(() => {
+        const { page, pageSize } = paginationModel;
+        return paginationList({
+            dataList: devicesData || [],
+            search: keyword,
+            pageSize,
+            pageNumber: page + 1,
+            filterCondition: (item, search: string) => {
+                return [item?.name, item.eui]
+                    .map(v => v?.toLocaleLowerCase() || '')
+                    .filter(Boolean)
+                    .some(value => value.includes(search.toLocaleLowerCase()));
+            },
+        });
+    }, [devicesData, keyword, paginationModel]);
+
+    useDebounceEffect(
+        () => {
+            getDevicesList(true);
         },
-        {
-            debounceWait: 300,
-            refreshDeps: [keyword, paginationModel],
-        },
+        [],
+        { wait: 300 },
     );
 
     useEffect(() => {
@@ -95,7 +84,7 @@ const SyncAbleDevice: React.FC<IProps> = props => {
             }
         });
         setModelMap(modelMapTmp);
-    }, deviceData?.content);
+    }, [deviceData?.content]);
 
     // get model option
     const initModelOption = async () => {
@@ -152,8 +141,8 @@ const SyncAbleDevice: React.FC<IProps> = props => {
                 getDevicesList();
                 onUpdateSuccess?.();
                 refreshTable();
-                setSelectedIds([]);
                 setModelMap(new Map());
+                setSelectedIds([]);
                 toast.success(getIntlText('setting.integration.message.device_sync_success'));
             },
         });
@@ -192,6 +181,7 @@ const SyncAbleDevice: React.FC<IProps> = props => {
             </div>
             <div className="ms-ns-device-inner">
                 <TablePro<TableRowDataType>
+                    filterCondition={[keyword]}
                     checkboxSelection
                     getRowId={(row: TableRowDataType) => row.eui}
                     loading={loading}
@@ -207,7 +197,7 @@ const SyncAbleDevice: React.FC<IProps> = props => {
                         setKeyword(value);
                         setPaginationModel(model => ({ ...model, page: 0 }));
                     }}
-                    onRefreshButtonClick={getDevicesList}
+                    onRefreshButtonClick={() => getDevicesList(false)}
                 />
             </div>
         </div>

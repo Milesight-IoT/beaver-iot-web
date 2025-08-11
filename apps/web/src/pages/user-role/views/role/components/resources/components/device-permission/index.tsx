@@ -117,7 +117,6 @@ const Devices: React.FC = () => {
                 }
 
                 getRoleDevices();
-                setSelectedIds([]);
                 toast.success(getIntlText('common.message.remove_success'));
             },
         });
@@ -170,6 +169,7 @@ const Devices: React.FC = () => {
     return (
         <>
             <TablePro<TableRowDataType>
+                filterCondition={[keyword]}
                 checkboxSelection
                 loading={loading}
                 columns={columns}

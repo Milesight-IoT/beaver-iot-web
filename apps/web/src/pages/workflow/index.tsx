@@ -125,7 +125,6 @@ const Workflow = () => {
                         : item,
                 ),
             });
-            setSelectedIds([]);
         },
         [workflowList, updateWorkflowList],
     );
@@ -229,6 +228,7 @@ const Workflow = () => {
             <div className="ms-view ms-view-workflow">
                 <div className="ms-view__inner">
                     <TablePro<TableRowDataType>
+                        filterCondition={[keyword]}
                         checkboxSelection={hasPermission(PERMISSIONS.WORKFLOW_DELETE)}
                         loading={loading}
                         columns={columns}

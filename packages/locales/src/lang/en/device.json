@@ -1,6 +1,12 @@
 {
     "device.detail.basic_info": "Basic Information",
     "device.detail.entity_data": "Entity Data",
+    "device.label.add_device_group": "Create a Device Group",
+    "device.label.all_devices": "All Devices",
+    "device.label.batch_add_device": "Bulk Add Devices",
+    "device.label.change_device_group": "Change Group",
+    "device.label.device_group": "Device Group",
+    "device.label.edit_device_group": "Edit Device Group",
     "device.label.param_device_id": "Device ID",
     "device.label.param_device_name": "Device Name",
     "device.label.param_entity_id": "Entity ID",
@@ -8,5 +14,13 @@
     "device.label.param_external_id": "External Device ID",
     "device.label.param_founder": "Founder",
     "device.label.param_source": "Source",
-    "device.message.delete_tip": "Are you sure to delete?"
+    "device.label.ungrouped_devices": "Ungrouped Devices",
+    "device.message.delete_tip": "Are you sure to delete?",
+    "device.tip.delete_device_group": "Once deleted, the devices will no longer belong to any device group. Are you sure you want to delete the device group: {1}?",
+    "device.tip.device_add_failed": "{1} Device(s) failed to be added. Please download the file for details.",
+    "device.tip.device_add_successful": "{1} Device(s) added successfully.",
+    "device.tip.move_device_to_group": "You have selected {1} device(s). Please choose a group to place them in.",
+    "device.tip.move_device_to_ungrouped": "{1} device(s) selected. If marked as ungrouped, the original group information of these {1} device(s) will be cleared.",
+    "device.title.mark_device_to_ungrouped": "Marked as Ungrouped",
+    "device.title.move_device_to_group": "Move to the Group"
 }

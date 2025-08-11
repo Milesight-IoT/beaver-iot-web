@@ -1,6 +1,9 @@
 /** Default cache prefix，Short for 「Milesight Open Source」 */
 export const DEFAULT_CACHE_PREFIX = 'mos.';
 
+/** User cache key */
+export const USER_CACHE_PREFIX = 'user';
+
 /** Token cache key */
 export const TOKEN_CACHE_KEY = 'token';
 

@@ -52,9 +52,16 @@ export type UploadFile = FileWithPath & {
      * Uploaded file url
      */
     url?: string;
+    /**
+     * original file data
+     */
+    original?: File;
 };
 
-export type FileValueType = Pick<UploadFile, 'name' | 'size' | 'path' | 'key' | 'url' | 'preview'>;
+export type FileValueType = Pick<
+    UploadFile,
+    'name' | 'size' | 'path' | 'key' | 'url' | 'preview' | 'original'
+>;
 
 export type Props = UseDropzoneProps & {
     // type?: string;
@@ -105,6 +112,11 @@ export type Props = UseDropzoneProps & {
     tempLiveMinutes?: number;
 
     /**
+     * Whether to upload files automatically
+     */
+    autoUpload?: boolean;
+
+    /**
      * Customize the contents in upload area
      */
     children?: React.ReactNode;
@@ -114,6 +126,14 @@ export type Props = UseDropzoneProps & {
      * @param files Uploaded file(s)
      */
     onChange?: (data: Props['value'], files?: null | UploadFile | UploadFile[]) => void;
+
+    /**
+     * Customize the inner error
+     *
+     * Note: The error interceptor can only intercept and modify the error prompt,
+     * and cannot prevent the error.
+     */
+    errorInterceptor?: (error: FileError) => FileError | null;
 };
 
 const Upload: React.FC<Props> = ({
@@ -134,8 +154,10 @@ const Upload: React.FC<Props> = ({
     style,
     className,
     tempLiveMinutes,
+    autoUpload = true,
     children,
     onChange,
+    errorInterceptor = error => error,
     ...props
 }) => {
     const { getIntlText } = useI18n();
@@ -159,6 +181,7 @@ const Upload: React.FC<Props> = ({
     // ---------- Upload files to server ----------
     const [files, setFiles] = useState<UploadFile[]>();
     const [fileError, setFileError] = useState<FileError | null>();
+    const memoErrorInterceptor = useMemoizedFn(errorInterceptor);
     const { run: uploadFiles } = useRequest(
         async (files: UploadFile[]) => {
             const limit = pLimit<{ key: string; resource: string } | undefined>(parallel);
@@ -225,7 +248,7 @@ const Upload: React.FC<Props> = ({
         if (fileRejections?.length) {
             const firstError = fileRejections[0].errors[0];
 
-            setFileError(firstError);
+            setFileError(memoErrorInterceptor(firstError));
             return;
         }
 
@@ -234,7 +257,7 @@ const Upload: React.FC<Props> = ({
 
         const result = acceptedFiles.map(file => {
             const newFile: UploadFile = Object.assign(file, {
-                status: UploadStatus.Uploading,
+                status: autoUpload ? UploadStatus.Uploading : UploadStatus.Done,
                 progress: 0,
                 preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
                 abortController: new AbortController(),
@@ -244,8 +267,11 @@ const Upload: React.FC<Props> = ({
         });
 
         setFiles(result);
-        uploadFiles(result);
-    }, [acceptedFiles, fileRejections, uploadFiles]);
+
+        if (autoUpload) {
+            uploadFiles(result);
+        }
+    }, [autoUpload, acceptedFiles, fileRejections, uploadFiles, memoErrorInterceptor]);
 
     // ---------- Handle uploading status ----------
     const [isUploading, setIsUploading] = useState(false);
@@ -274,9 +300,10 @@ const Upload: React.FC<Props> = ({
         const [file, ...rest] = files?.filter(file => file.status === UploadStatus.Done) || [];
 
         if (!file) return result;
+
         result.push(
             <Fragment key={file.path}>
-                <Tooltip autoEllipsis className="name" title={file.name} />
+                <Tooltip autoEllipsis className="name" title={file?.name || file?.url || ''} />
                 {`(${getSizeString(file.size)})`}
             </Fragment>,
         );
@@ -285,7 +312,7 @@ const Upload: React.FC<Props> = ({
             const names = rest
                 .map(file => (
                     <Fragment key={file.path}>
-                        {`${file.url} (${getSizeString(file.size)})`}
+                        {`${file?.url || file?.name || ''} (${getSizeString(file.size)})`}
                     </Fragment>
                 ))
                 .join('\n');
@@ -311,10 +338,13 @@ const Upload: React.FC<Props> = ({
         const hasError = error || files?.some(file => file.status === UploadStatus.Error);
 
         if (hasError) {
-            setFileError({
-                code: SERVER_ERROR,
-                message: helperText || error?.message || getIntlText(errorIntlKey[SERVER_ERROR]),
-            });
+            setFileError(
+                memoErrorInterceptor({
+                    code: SERVER_ERROR,
+                    message:
+                        helperText || error?.message || getIntlText(errorIntlKey[SERVER_ERROR]),
+                }),
+            );
             setIsUploading(false);
             setIsAllDone(false);
             return;
@@ -328,7 +358,7 @@ const Upload: React.FC<Props> = ({
         setFileError(null);
         setIsUploading(uploading);
         setIsAllDone(isAllDone);
-    }, [files, error, helperText, getIntlText]);
+    }, [files, error, helperText, getIntlText, memoErrorInterceptor]);
 
     // Trigger callback when files change
     useUpdateEffect(() => {
@@ -341,8 +371,15 @@ const Upload: React.FC<Props> = ({
                     return file.status !== UploadStatus.Canceled;
                 })
                 ?.map(file => {
-                    const { name, size, path, key, url, preview } = file;
-                    const result: FileValueType = { name, size, path, key, url };
+                    const { name, size, path, key, url, preview, original } = file;
+                    const result: FileValueType = {
+                        name,
+                        size,
+                        path,
+                        key,
+                        url,
+                        original: autoUpload ? undefined : original || file,
+                    };
 
                     if (!url) {
                         result.preview = preview;
@@ -361,7 +398,7 @@ const Upload: React.FC<Props> = ({
         }
 
         handleChange?.(resultValues, resultFiles);
-    }, [files, multiple, handleChange]);
+    }, [files, multiple, autoUpload, handleChange]);
 
     useEffect(() => {
         if (!value) {

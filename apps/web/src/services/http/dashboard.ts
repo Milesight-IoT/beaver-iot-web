@@ -9,7 +9,7 @@ export interface DashboardDetail {
     widgets: WidgetDetail[];
     /** is home dashboard */
     home: boolean;
-    create_at: string;
+    created_at: string;
 }
 
 export interface WidgetDetail {

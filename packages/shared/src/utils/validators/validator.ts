@@ -912,6 +912,25 @@ export const checkIsPositiveInt: TValidator = rule => {
 };
 
 /**
+ * Check positive integer
+ */
+export const checkPositiveInt: TValidator = rule => {
+    const message = rule?.message || getErrorMessage(EErrorMessages.integerPositive);
+
+    return value => {
+        try {
+            if (value && !isInt(value, { gt: 0 })) {
+                return message;
+            }
+        } catch (e) {
+            return message;
+        }
+
+        return Promise.resolve(true);
+    };
+};
+
+/**
  * Check if it starts with http/https
  */
 export const checkStartWithHttpOrHttps: TValidator = rule => {

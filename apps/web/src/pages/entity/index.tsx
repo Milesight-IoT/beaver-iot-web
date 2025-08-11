@@ -15,21 +15,21 @@ export default () => {
     const tabs = useMemo(() => {
         return [
             {
-                key: 'custom-entity',
-                label: getIntlText('entity.label.custom_entity'),
-                component: <CustomEntity />,
-                permission: PERMISSIONS.ENTITY_CUSTOM_MODULE,
-            },
-            {
                 key: 'entity-data',
                 label: getIntlText('device.detail.entity_data'),
                 component: <Entity />,
                 permission: PERMISSIONS.ENTITY_DATA_MODULE,
             },
+            {
+                key: 'custom-entity',
+                label: getIntlText('entity.label.custom_entity'),
+                component: <CustomEntity />,
+                permission: PERMISSIONS.ENTITY_CUSTOM_MODULE,
+            },
         ].filter(t => hasPermission(t.permission));
     }, [getIntlText, hasPermission]);
 
-    const [tabKey, setTabKey] = useRouteTab(tabs?.[0]?.key || 'custom-entity');
+    const [tabKey, setTabKey] = useRouteTab(tabs?.[0]?.key || 'entity-data');
 
     return (
         <div className="ms-main">

@@ -24,6 +24,22 @@ export interface EntityAPISchema extends APISchema {
             not_scan_key?: boolean;
             /** Whether it is a custom entity */
             customized?: boolean;
+            /** Advanced filter */
+            entity_filter?: AdvancedConditionsType<EntityData>;
+        };
+        response: SearchResponseType<EntityData[]>;
+    };
+    /** Advanced search entity */
+    advancedSearch: {
+        request: SearchRequestType & {
+            /** Advanced filter */
+            entity_filter?: AdvancedConditionsType<EntityData>;
+            sorts?: [
+                {
+                    direction: 'ASC' | 'DESC';
+                    property: string;
+                },
+            ];
         };
         response: SearchResponseType<EntityData[]>;
     };
@@ -181,6 +197,7 @@ export interface EntityAPISchema extends APISchema {
 export default attachAPI<EntityAPISchema>(client, {
     apis: {
         getList: `POST ${API_PREFIX}/entity/search`,
+        advancedSearch: `POST ${API_PREFIX}/entity/advanced-search`,
         getHistory: `POST ${API_PREFIX}/entity/history/search`,
         getAggregateHistory: `POST ${API_PREFIX}/entity/history/aggregate`,
         getMeta: `GET ${API_PREFIX}/entity/:id/meta`,

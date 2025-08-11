@@ -90,7 +90,7 @@
     "setting.integration.label.setup_app": "设置应用",
     "setting.integration.label.status": "网关状态",
     "setting.integration.label.sub_device": "子设备",
-    "setting.integration.label.syncable_device": "可同步的设备({1})",
+    "setting.integration.label.syncable_device": "可同步的设备",
     "setting.integration.label.synced_device": "已添加的设备",
     "setting.integration.label.synchronize": "同步",
     "setting.integration.label.topic": "MQTT 主题",

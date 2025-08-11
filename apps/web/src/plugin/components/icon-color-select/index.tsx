@@ -1,15 +1,24 @@
 import React, { useMemo, useState } from 'react';
 import { Box, MenuItem, Button } from '@mui/material';
 import { Sketch, type ColorResult } from '@uiw/react-color';
+import { isEmpty } from 'lodash-es';
+
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
-import Select from '../select';
+import Select, { type SelectProps } from '../select';
+
 import './style.less';
 
-const IconColorSelect = (props: any) => {
+export type IconColorSelectProps = Omit<SelectProps, 'value' | 'onChange' | 'options'> & {
+    value?: string;
+    onChange: (color: string) => void;
+    defaultColors?: string[];
+};
+
+const IconColorSelect = (props: IconColorSelectProps) => {
     const { getIntlText } = useI18n();
     const { red, deepOrange, yellow, purple, grey, green, blue, black, white } = useTheme();
 
-    const { value, onChange, ...rest } = props;
+    const { value, onChange, defaultColors, ...rest } = props;
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => setOpen(true);
@@ -20,8 +29,12 @@ const IconColorSelect = (props: any) => {
     };
 
     // Default panel color
-    const presetColors = useMemo(
-        () => [
+    const presetColors = useMemo(() => {
+        if (Array.isArray(defaultColors) && !isEmpty(defaultColors)) {
+            return defaultColors;
+        }
+
+        return [
             red['600'],
             deepOrange['600'],
             yellow['600'],
@@ -31,9 +44,8 @@ const IconColorSelect = (props: any) => {
             black,
             grey['600'],
             white,
-        ],
-        [black, blue, deepOrange, green, grey, purple, red, white, yellow],
-    );
+        ];
+    }, [black, blue, deepOrange, green, grey, purple, red, white, yellow, defaultColors]);
     return (
         <Select
             {...rest}
@@ -42,6 +54,7 @@ const IconColorSelect = (props: any) => {
             onClose={handleClose}
             open={open}
             value={value}
+            options={[]}
             renderValue={() => (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box
@@ -50,7 +63,6 @@ const IconColorSelect = (props: any) => {
                             backgroundColor: value,
                         }}
                     />
-                    {rest.value}
                 </Box>
             )}
             MenuProps={{
@@ -61,8 +73,13 @@ const IconColorSelect = (props: any) => {
                 },
             }}
             renderOptions={() => {
-                return (
-                    <MenuItem disableRipple onClick={handleOpen} className="icon-color-select-menu">
+                return [
+                    <MenuItem
+                        key="icon-color-select-menu-item"
+                        disableRipple
+                        onClick={handleOpen}
+                        className="icon-color-select-menu"
+                    >
                         <div
                             onClick={(e: React.MouseEvent) => {
                                 e.stopPropagation();
@@ -86,8 +103,8 @@ const IconColorSelect = (props: any) => {
                                 </Button>
                             </div>
                         </div>
-                    </MenuItem>
-                );
+                    </MenuItem>,
+                ];
             }}
         />
     );

@@ -1,5 +1,7 @@
 import { useMemo, forwardRef } from 'react';
 import { isNil } from 'lodash-es';
+import useI18n from '../../hooks/useI18n';
+import { isMaxValue, isMinValue, isRangeValue } from '../../utils/validators';
 import Form from '../form';
 import { rulesType, UseFormItemsProps } from '../form/typings';
 import { entityType } from './constant';
@@ -9,6 +11,8 @@ const isValidNumber = (num: any): num is number => !isNil(num) && !isNaN(+num);
 
 const EntityForm = forwardRef((props: EntityFormProps, ref: any) => {
     const { entities, onOk } = props;
+
+    const { getIntlText } = useI18n();
 
     // Get component type
     const getComponentType = (entity: EntitySchema & EntityData) => {
@@ -45,10 +49,6 @@ const EntityForm = forwardRef((props: EntityFormProps, ref: any) => {
                     return { label: attr?.enum[key], value: key };
                 });
                 break;
-            case entityType.double:
-            case entityType.long:
-                componentProps.type = 'number';
-                break;
             default:
         }
         return componentProps;
@@ -78,12 +78,36 @@ const EntityForm = forwardRef((props: EntityFormProps, ref: any) => {
                 break;
             case entityType.double:
             case entityType.long:
-                if (isValidNumber(attr.min)) {
-                    rules.min = { value: attr.min, message: `最小值为${attr.min}` };
-                }
-                if (isValidNumber(attr.max)) {
-                    rules.max = { value: attr.max, message: `最大值为${attr.max}` };
-                }
+                rules.validate = {};
+                // The type="number" configuration will result in an empty input box callback value
+                // when two plus or minus signs are entered, and e will be regarded as a valid input.
+                // Therefore, the type is manually determined
+                rules.validate.checkNumber = value => {
+                    if (isNaN(parseFloat(value))) {
+                        return getIntlText('valid.input.number');
+                    }
+                    if (
+                        isValidNumber(attr.min) &&
+                        isValidNumber(attr.max) &&
+                        !isRangeValue(value as number, +attr.min, +attr.max)
+                    ) {
+                        return getIntlText('valid.input.range_value', {
+                            0: attr.min,
+                            1: attr.max,
+                        });
+                    }
+                    if (isValidNumber(attr.min) && !isMinValue(value as number, +attr.min)) {
+                        return getIntlText('valid.input.min_value', {
+                            0: attr.min,
+                        });
+                    }
+                    if (isValidNumber(attr.max) && !isMaxValue(value as number, +attr.max)) {
+                        return getIntlText('valid.input.max_value', {
+                            0: attr.max,
+                        });
+                    }
+                    return true;
+                };
                 break;
             case entityType.boolean:
                 // if switch has required will validate fail then click not response

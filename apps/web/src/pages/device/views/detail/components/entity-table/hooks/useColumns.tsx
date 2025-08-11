@@ -97,6 +97,7 @@ const useColumns = <T extends TableRowDataType>({
                 display: 'flex',
                 align: 'left',
                 headerAlign: 'left',
+                fixed: 'right',
                 renderCell({ row }) {
                     return (
                         <Stack

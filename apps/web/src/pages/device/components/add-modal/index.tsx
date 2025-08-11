@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRequest, useMemoizedFn } from 'ahooks';
 import cls from 'classnames';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
@@ -14,6 +14,8 @@ import {
     isRequestSuccess,
 } from '@/services/http';
 import useDynamicFormItems, { type FormDataProps } from './useDynamicFormItems';
+import { FixedGroupEnum } from '../../constants';
+import useDeviceStore from '../../store';
 
 interface Props extends Omit<ModalProps, 'onOk'> {
     /** Add a failed callback */
@@ -28,6 +30,7 @@ interface Props extends Omit<ModalProps, 'onOk'> {
  */
 const AddModal: React.FC<Props> = ({ visible, onCancel, onError, onSuccess, ...props }) => {
     const { getIntlText } = useI18n();
+    const { activeGroup } = useDeviceStore();
 
     // ---------- Integrates related logic processing ----------
     const [inteID, setInteID] = useState<ApiKey>('');
@@ -47,7 +50,7 @@ const AddModal: React.FC<Props> = ({ visible, onCancel, onError, onSuccess, ...p
     );
 
     // ---------- Entity form related logical processing ----------
-    const { control, formState, handleSubmit, reset } = useForm<FormDataProps>();
+    const { control, formState, handleSubmit, reset, setValue } = useForm<FormDataProps>();
     const { data: entities } = useRequest(
         async () => {
             if (!inteID) return;
@@ -80,12 +83,13 @@ const AddModal: React.FC<Props> = ({ visible, onCancel, onError, onSuccess, ...p
         },
     );
     const { formItems, decodeFormParams } = useDynamicFormItems({ entities });
-    const onSubmit: SubmitHandler<FormDataProps> = async ({ name, ...params }) => {
+    const onSubmit: SubmitHandler<FormDataProps> = async ({ name, group, ...params }) => {
         const entityParams = decodeFormParams(params);
 
         const [error, resp] = await awaitWrap(
             deviceAPI.addDevice({
                 name,
+                group_name: group,
                 integration: inteID,
                 param_entities: entityParams,
             }),
@@ -98,6 +102,7 @@ const AddModal: React.FC<Props> = ({ visible, onCancel, onError, onSuccess, ...p
         }
 
         reset();
+        setValue('group', null);
         setInteID('');
         onSuccess?.();
         toast.success(getIntlText('common.message.add_success'));
@@ -108,6 +113,19 @@ const AddModal: React.FC<Props> = ({ visible, onCancel, onError, onSuccess, ...p
         setInteID('');
         onCancel?.();
     });
+
+    useEffect(() => {
+        if (!visible || !activeGroup) return;
+
+        /** set group form item default value */
+        const defaultValue = [FixedGroupEnum.ALL, FixedGroupEnum.UNGROUPED].includes(
+            activeGroup.id as FixedGroupEnum,
+        )
+            ? undefined
+            : activeGroup.name;
+
+        setValue('group', defaultValue);
+    }, [visible, activeGroup, setValue]);
 
     return (
         <Modal

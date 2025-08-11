@@ -22,10 +22,10 @@ export const useMqtt = () => {
             let brokerInfo = getResponseData(brokerResp);
             if (!brokerInfo?.host) {
                 try {
-                    // use location host
+                    // use location hostname
                     brokerInfo = {
                         ...brokerInfo,
-                        host: location.host,
+                        host: location.hostname,
                     };
                 } catch (error) {
                     console.error(error, 'parse url fail');

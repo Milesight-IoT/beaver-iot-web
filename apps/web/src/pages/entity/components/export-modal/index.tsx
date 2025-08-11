@@ -29,6 +29,7 @@ const ExportModal = (props: IProps) => {
 
     return (
         <Modal
+            size="lg"
             visible
             onCancel={handleClose}
             onOk={handleOk}

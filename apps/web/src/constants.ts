@@ -1,9 +1,9 @@
 /**
- * permissions configuration code
+ * Permissions configuration code
  */
 export enum PERMISSIONS {
     /**
-     * dashboard module
+     * Dashboard module
      */
     DASHBOARD_MODULE = 'dashboard',
     DASHBOARD_VIEW = 'dashboard.view',
@@ -11,17 +11,18 @@ export enum PERMISSIONS {
     DASHBOARD_EDIT = 'dashboard.edit',
 
     /**
-     * device module
+     * Device module
      */
     DEVICE_MODULE = 'device',
     DEVICE_VIEW = 'device.view',
     DEVICE_ADD = 'device.add',
     DEVICE_EDIT = 'device.edit',
     DEVICE_DELETE = 'device.delete',
+    DEVICE_GROUP_MANAGE = 'device.group_manage',
 
     /**
-     * entity module
-     * custom entity module
+     * Entity module
+     * Custom entity module
      */
     ENTITY_MODULE = 'entity',
     ENTITY_CUSTOM_MODULE = 'entity_custom',
@@ -30,7 +31,7 @@ export enum PERMISSIONS {
     ENTITY_CUSTOM_EDIT = 'entity_custom.edit',
     ENTITY_CUSTOM_DELETE = 'entity_custom.delete',
     /**
-     * entity data module
+     * Entity data module
      */
     ENTITY_DATA_MODULE = 'entity_data',
     ENTITY_DATA_VIEW = 'entity_data.view',
@@ -38,12 +39,12 @@ export enum PERMISSIONS {
     ENTITY_DATA_EXPORT = 'entity_data.export',
 
     /**
-     * user role module
+     * User role module
      */
     USER_ROLE_MODULE = 'user_role',
 
     /**
-     * workflow module
+     * Workflow module
      */
     WORKFLOW_MODULE = 'workflow',
     WORKFLOW_VIEW = 'workflow.view',
@@ -52,17 +53,26 @@ export enum PERMISSIONS {
     WORKFLOW_DELETE = 'workflow.delete',
 
     /**
-     * integration module
+     * Integration module
      */
     INTEGRATION_MODULE = 'integration',
     INTEGRATION_VIEW = 'integration.view',
 
     /**
-     * credentials module
+     * Setting module
+     * Credentials module
      */
+    SETTING_MODULE = 'settings',
     CREDENTIAL_MODULE = 'credentials',
     CREDENTIAL_MODULE_VIEW = 'credentials.view',
     CREDENTIAL_MODULE_EDIT = 'credentials.edit',
+
+    /**
+     * Tag module
+     */
+    TAG_MODULE = 'tag',
+    TAG_MODULE_VIEW = 'entity_tag.view',
+    TAG_MODULE_MANAGE = 'entity_tag.manage',
 }
 
 // Entity Pattern
@@ -74,8 +84,8 @@ export enum ENTITY_ACCESS_MODE {
 
 // Entity Type
 export enum ENTITY_TYPE {
-    SERVICE = 'SERVICE',
     PROPERTY = 'PROPERTY',
+    SERVICE = 'SERVICE',
     EVENT = 'EVENT',
 }
 

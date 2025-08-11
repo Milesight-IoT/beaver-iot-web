@@ -7,3 +7,4 @@ export { default as useEntity } from './useEntity';
 export { default as usePreventLeave } from './usePreventLeave';
 export { default as useVirtualList } from './useVirtualList';
 export { default as useSignalState } from './useSignalState';
+export { default as usePopoverCloseDelay } from './usePopoverCloseDelay';

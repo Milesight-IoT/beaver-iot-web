@@ -22,6 +22,24 @@ declare type ApiResponse<T = any> = {
 };
 
 /**
+ * Common API Base Error Data type
+ */
+declare type ApiErrorData = {
+    error_code: string;
+    error_message: string;
+    args: Record<string, any>;
+};
+
+/**
+ * Common API Multiple Error Data type
+ */
+declare type ApiMultiErrorData = {
+    error_code: string;
+    error_message: string;
+    args: ApiErrorData[];
+};
+
+/**
  * API basic type definition
  */
 declare type APISchema = Record<
@@ -169,3 +187,36 @@ declare type HttpMethodType =
     | 'CONNECT'
     | 'TRACE'
     | 'PATCH';
+
+/**
+ * Filter Operator used in the table advanced filter
+ * @param CONTAINS contains
+ * @param NOT_CONTAINS not contains
+ * @param START_WITH start witch
+ * @param END_WITH end witch
+ * @param EQ equal
+ * @param NE not equal
+ * @param IS_EMPTY is empty
+ * @param IS_NOT_EMPTY is not empty
+ * @param ANY_EQUALS any one is equal
+ */
+declare type FilterOperatorType =
+    | 'CONTAINS'
+    | 'NOT_CONTAINS'
+    | 'START_WITH'
+    | 'END_WITH'
+    | 'EQ'
+    | 'NE'
+    | 'IS_EMPTY'
+    | 'IS_NOT_EMPTY'
+    | 'ANY_EQUALS';
+
+/**
+ * The conditions after advanced filtering transformation
+ */
+declare type AdvancedConditionsType<T> = Partial<{
+    [key in keyof T as Uppercase<key & string>]: {
+        operator: FilterOperatorType;
+        values: ApiKey[];
+    };
+}>;

@@ -44,6 +44,7 @@ const FunctionsTable = () => {
         isPageChecked,
         isPageIndeterminate,
         handleSave,
+        getPermissionLabel,
     } = useFunctions();
 
     /**
@@ -110,7 +111,7 @@ const FunctionsTable = () => {
                     <TableCell {...cellSx}>
                         <FormControlLabel
                             key={page.menuId}
-                            label={page.name}
+                            label={getPermissionLabel(page.name)}
                             disabled={!isEditing}
                             control={
                                 <Checkbox
@@ -133,9 +134,7 @@ const FunctionsTable = () => {
                             return (
                                 <FormControlLabel
                                     key={func.menuId}
-                                    label={String(func?.name || '')
-                                        .split('.')
-                                        .pop()}
+                                    label={getPermissionLabel(func.name)}
                                     disabled={isDisabledFunction({
                                         permission: func,
                                         siblingPermissions: functions,
@@ -199,7 +198,7 @@ const FunctionsTable = () => {
                                     <React.Fragment key={model.menuId}>
                                         <TableRow>
                                             <TableCell rowSpan={getModelTableRowSpan(model)}>
-                                                {model.name}
+                                                {getPermissionLabel(model.name)}
                                             </TableCell>
                                         </TableRow>
                                         {renderPageFunctions(model, model.children)}

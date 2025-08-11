@@ -1,6 +1,6 @@
 import { useMatches } from 'react-router';
 import { useTitle } from 'ahooks';
-import { CssBaseline } from '@mui/material';
+import { CssBaseline, GlobalStyles } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -34,6 +34,15 @@ function Layout() {
     return (
         <ThemeProvider theme={muiTheme}>
             <CssBaseline />
+            <GlobalStyles
+                styles={{
+                    body: {
+                        backgroundColor: 'var(--body-background)',
+                        fontSize: '14px',
+                        lineHeight: '22px',
+                    },
+                }}
+            />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <ConfirmProvider
                     cancelButtonText={getIntlText('common.button.cancel')}

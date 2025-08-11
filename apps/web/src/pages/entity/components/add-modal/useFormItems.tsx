@@ -8,6 +8,7 @@ import {
     checkNumber,
     checkMaxLength,
     isMaxLength,
+    checkPositiveInt,
 } from '@milesight/shared/src/utils/validators';
 import { ENTITY_ACCESS_MODE, entityTypeOptions } from '@/constants';
 import { DataTypeRadio, type DataTypeRadioProps, EnumsInput, SingleEnumsInput } from './components';
@@ -272,9 +273,8 @@ const useFormItems = () => {
                 name: 'minLength',
                 rules: {
                     validate: {
-                        // checkRequired: checkRequired(),
-                        checkNumber: checkNumber(),
                         checkMaxLength: checkMaxLength({ max: 25 }),
+                        checkPositiveInt: checkPositiveInt(),
                     },
                 },
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {
@@ -302,8 +302,8 @@ const useFormItems = () => {
                 rules: {
                     validate: {
                         checkRequired: checkRequired(),
-                        checkNumber: checkNumber(),
                         checkMaxLength: checkMaxLength({ max: 25 }),
+                        checkPositiveInt: checkPositiveInt(),
                     },
                 },
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {

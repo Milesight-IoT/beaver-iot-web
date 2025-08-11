@@ -6,3 +6,4 @@ export { default as DevicesFilledIcon } from './devices-filled';
 export { default as BrokenImageIcon } from './broken-image';
 export { default as PointerIcon } from './pointer';
 export { default as MqttIcon } from './mqtt';
+export { default as ColumnSettingIcon } from './column-setting';

@@ -1,10 +1,14 @@
 import { useMemo } from 'react';
 import { type ControllerProps } from 'react-hook-form';
-import { TextField } from '@mui/material';
+import { isEqual } from 'lodash-es';
+import { TextField, FormControl, FormHelperText, Autocomplete } from '@mui/material';
+
 import { useI18n } from '@milesight/shared/src/hooks';
 import { checkRequired, checkMaxLength } from '@milesight/shared/src/utils/validators';
+
 import { type IntegrationAPISchema } from '@/services/http';
 import { useEntityFormItems } from '@/hooks';
+import useDeviceStore from '../../store';
 
 interface Props {
     entities?: ObjectToCamelCase<
@@ -26,39 +30,80 @@ const useDynamicFormItems = ({ entities }: Props) => {
         entities,
         // isAllRequired: true,
     });
+    const { deviceGroups } = useDeviceStore();
 
     const formItems = useMemo(() => {
-        const result: ControllerProps<FormDataProps>[] = [];
+        if (!entityFormItems?.length) return [];
 
-        if (!entityFormItems?.length) return result;
-
-        result.push({
-            name: 'name',
-            rules: {
-                validate: {
-                    checkRequired: checkRequired(),
-                    checkMaxLength: checkMaxLength({ max: 64 }),
+        const prefixItems: ControllerProps<FormDataProps>[] = [
+            {
+                name: 'name',
+                rules: {
+                    validate: {
+                        checkRequired: checkRequired(),
+                        checkMaxLength: checkMaxLength({ max: 64 }),
+                    },
+                },
+                defaultValue: '',
+                render({ field: { onChange, value }, fieldState: { error } }) {
+                    return (
+                        <TextField
+                            required
+                            fullWidth
+                            type="text"
+                            label={getIntlText('common.label.name')}
+                            error={!!error}
+                            helperText={error ? error.message : null}
+                            value={value}
+                            onChange={onChange}
+                        />
+                    );
                 },
             },
-            defaultValue: '',
-            render({ field: { onChange, value }, fieldState: { error } }) {
-                return (
-                    <TextField
-                        required
-                        fullWidth
-                        type="text"
-                        label={getIntlText('common.label.name')}
-                        error={!!error}
-                        helperText={error ? error.message : null}
-                        value={value}
-                        onChange={onChange}
-                    />
-                );
-            },
-        });
+        ];
 
-        return [...result, ...entityFormItems];
-    }, [entityFormItems, getIntlText]);
+        const suffixItems: ControllerProps<FormDataProps>[] = [
+            {
+                name: 'group',
+                defaultValue: '',
+                render({ field: { onChange, value }, fieldState: { error } }) {
+                    const options = (deviceGroups || []).map(d => ({
+                        label: d.name,
+                        value: d.name,
+                    }));
+
+                    const innerValue = options.find(item => item.value === value);
+
+                    return (
+                        <FormControl fullWidth size="small" sx={{ mb: 1.5 }}>
+                            <Autocomplete
+                                options={options}
+                                isOptionEqualToValue={(option, value) => isEqual(option, value)}
+                                getOptionKey={option => option.value}
+                                renderInput={params => (
+                                    <TextField
+                                        {...params}
+                                        label={getIntlText('device.label.device_group')}
+                                        error={!!error}
+                                    />
+                                )}
+                                value={innerValue || null}
+                                onChange={(_, option) => onChange(option?.value || null)}
+                                ListboxProps={{
+                                    sx: {
+                                        height: '240px',
+                                    },
+                                }}
+                            />
+                            {!!error && <FormHelperText error>{error.message}</FormHelperText>}
+                        </FormControl>
+                    );
+                },
+            },
+        ];
+
+        return [...prefixItems, ...entityFormItems, ...suffixItems];
+    }, [entityFormItems, getIntlText, deviceGroups]);
 
     return { formItems, decodeFormParams };
 };

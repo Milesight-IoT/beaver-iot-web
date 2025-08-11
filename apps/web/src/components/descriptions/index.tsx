@@ -1,5 +1,12 @@
 import { useMemo, Fragment } from 'react';
-import { Table, TableBody, TableRow, TableCell, CircularProgress } from '@mui/material';
+import {
+    Table,
+    TableBody,
+    TableRow,
+    TableCell,
+    CircularProgress,
+    TableCellProps,
+} from '@mui/material';
 import cls from 'classnames';
 import './style.less';
 
@@ -11,6 +18,8 @@ export interface Props {
         key: ApiKey;
         label: React.ReactNode;
         content: React.ReactNode;
+        labelCellProps?: Partial<TableCellProps>;
+        contentCellProps?: Partial<TableCellProps>;
     }[];
 
     /**
@@ -54,10 +63,16 @@ const Descriptions: React.FC<Props> = ({ data, loading, columns = 2 }) => {
                         <TableRow key={index}>
                             {items.map(item => (
                                 <Fragment key={item.key}>
-                                    <TableCell className="ms-descriptions-label">
+                                    <TableCell
+                                        {...item.labelCellProps}
+                                        className="ms-descriptions-label"
+                                    >
                                         {item.label}
                                     </TableCell>
-                                    <TableCell className="ms-descriptions-content">
+                                    <TableCell
+                                        {...item.contentCellProps}
+                                        className="ms-descriptions-content"
+                                    >
                                         {item.content}
                                     </TableCell>
                                 </Fragment>

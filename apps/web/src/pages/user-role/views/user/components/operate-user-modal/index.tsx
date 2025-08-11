@@ -22,6 +22,7 @@ interface Props extends Omit<ModalProps, 'onOk'> {
     /** on form submit */
     onFormSubmit: (data: OperateUserProps, callback: () => void) => Promise<void>;
     data?: OperateUserProps;
+    onSuccess?: (operateType: OperateModalType) => void;
 }
 
 export interface OperateUserProps {
@@ -35,7 +36,7 @@ export interface OperateUserProps {
  * operate user Modal
  */
 const OperateUserModal: React.FC<Props> = props => {
-    const { visible, onCancel, onFormSubmit, data, operateType, ...restProps } = props;
+    const { visible, onCancel, onFormSubmit, data, operateType, onSuccess, ...restProps } = props;
 
     const { getIntlText } = useI18n();
     const { control, formState, handleSubmit, reset, setValue } = useForm<OperateUserProps>();
@@ -188,6 +189,7 @@ const OperateUserModal: React.FC<Props> = props => {
     const onSubmit: SubmitHandler<OperateUserProps> = async params => {
         await onFormSubmit(params, () => {
             reset();
+            onSuccess?.(operateType);
         });
     };
 

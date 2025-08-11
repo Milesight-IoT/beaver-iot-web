@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import { ChevronLeftIcon, ChevronRightIcon } from '@milesight/shared/src/components';
 
 import { type GridValidRowModel } from '@mui/x-data-grid';
-import { type Props as TableProProps } from '../table-pro';
+import { type TableProProps } from '../table-pro';
 import { TableLeft, TableRight } from './components';
 import { useTransfer } from './hooks';
 

@@ -1,5 +1,14 @@
 # @app/web
 
+## 1.2.3
+
+### Minor Changes
+
+-   Add Tag Management function and support batch processing
+-   Add device grouping function
+-   Entity list classification and search enhancement
+-   Table component functionality enhancement
+
 ## 1.2.2
 
 ### Patch Changes

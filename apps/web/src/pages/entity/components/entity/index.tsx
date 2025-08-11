@@ -1,21 +1,28 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Stack } from '@mui/material';
+import { Button, Divider, Stack } from '@mui/material';
 import { useRequest } from 'ahooks';
 import { pickBy } from 'lodash-es';
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
 import { genRandomString, objectToCamelCase, xhrDownload } from '@milesight/shared/src/utils/tools';
 import { getCurrentComponentLang } from '@milesight/shared/src/services/i18n';
 import { getAuthorizationToken } from '@milesight/shared/src/utils/request/utils';
-import { IosShareIcon, toast } from '@milesight/shared/src/components';
+import { IosShareIcon, toast, SellOutlinedIcon } from '@milesight/shared/src/components';
 import {
     FiltersRecordType,
     TablePro,
     PermissionControlHidden,
     FilterValue,
     TableProProps,
+    ManageTagsModal,
+    AdvancedFilter,
+    AdvancedFilterHandler,
+    FILTER_OPERATORS,
+    ToggleRadio,
+    ColumnSettingProps,
 } from '@/components';
 import { DateRangePickerValueType } from '@/components/date-range-picker';
+import { useManageTagsModal } from '@/components/manage-tags-modal/hooks';
 import {
     entityAPI,
     awaitWrap,
@@ -23,7 +30,7 @@ import {
     isRequestSuccess,
     API_PREFIX,
 } from '@/services/http';
-import { PERMISSIONS } from '@/constants';
+import { ENTITY_TYPE, PERMISSIONS } from '@/constants';
 import { useUserPermissions } from '@/hooks';
 import errorHandler from '@/services/http/client/error-handler';
 import useColumns, {
@@ -39,6 +46,12 @@ export default () => {
     const { getIntlText } = useI18n();
     const { getTimeFormat, dayjs } = useTime();
     const { hasPermission } = useUserPermissions();
+    // Advanced filter
+    const advancedFilterRef = useRef<AdvancedFilterHandler>(null);
+    const [entityType, setEntityType] = useState<ENTITY_TYPE>(ENTITY_TYPE.PROPERTY);
+    const [advancedConditions, setAdvancedConditions] = useState<
+        AdvancedConditionsType<TableRowDataType>
+    >({});
 
     const [keyword, setKeyword] = useState<string>();
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
@@ -48,6 +61,7 @@ export default () => {
     const [detailVisible, setDetailVisible] = useState<boolean>(false);
     const [editVisible, setEditVisible] = useState<boolean>(false);
     const [filteredInfo, setFilteredInfo] = useState<FiltersRecordType>({});
+    const [allEntities, setAllEntities] = useState<Record<ApiKey, TableRowDataType>>({});
 
     const {
         data: entityData,
@@ -56,16 +70,13 @@ export default () => {
     } = useRequest(
         async () => {
             const { page, pageSize } = paginationModel;
-            const searchParams = pickBy({
-                entity_names: filteredInfo?.entityName,
-                entity_keys: filteredInfo?.entityKey,
-                entity_type: filteredInfo?.entityType,
-                entity_value_type: filteredInfo?.entityValueType,
-                entity_source_name: filteredInfo.integrationName?.[0],
-            });
+            const advancedFilter = { ...advancedConditions };
+            advancedFilter['ENTITY_TYPE' as keyof AdvancedConditionsType<TableRowDataType>] = {
+                operator: 'ANY_EQUALS',
+                values: [entityType],
+            };
             const [error, resp] = await awaitWrap(
-                entityAPI.getList({
-                    keyword,
+                entityAPI.advancedSearch({
                     page_size: pageSize,
                     page_number: page + 1,
                     sorts: [
@@ -74,20 +85,34 @@ export default () => {
                             property: 'key',
                         },
                     ],
-                    ...searchParams,
+                    entity_filter: advancedFilter,
                 }),
             );
             const data = getResponseData(resp);
 
             if (error || !data || !isRequestSuccess(resp)) return;
 
-            return objectToCamelCase(data);
+            const result = objectToCamelCase(data);
+            result.content.forEach(entity => {
+                allEntities[entity.entityId] = entity;
+            });
+            return result;
         },
         {
             debounceWait: 300,
-            refreshDeps: [keyword, paginationModel, filteredInfo],
+            refreshDeps: [paginationModel, entityType, advancedConditions],
         },
     );
+
+    const {
+        manageTagsModalVisible,
+        openManageTagsModalAtEntity,
+        closeManageTagsModal,
+        manageTagsFormSubmit,
+        selectedEntities,
+    } = useManageTagsModal(getList, () => {
+        setSelectedIds([]);
+    });
 
     const handleFilterChange: TableProProps<TableRowDataType>['onFilterInfoChange'] = (
         filters: Record<string, FilterValue | null>,
@@ -136,8 +161,7 @@ export default () => {
             },
         })
             .then(() => {
-                getList();
-                setSelectedIds([]);
+                refreshListByOperator();
                 handleCloseExport();
                 toast.success(getIntlText('common.message.operation_success'));
             })
@@ -179,6 +203,12 @@ export default () => {
         setDetail(null);
     };
 
+    // Operator then reset selected
+    const refreshListByOperator = () => {
+        getList();
+        setSelectedIds([]);
+    };
+
     const handleEdit = async (name: string) => {
         const [error, resp] = await awaitWrap(
             entityAPI.editEntity({ name, id: detail?.entityId || '' }),
@@ -187,32 +217,28 @@ export default () => {
         if (error || !isRequestSuccess(resp)) return;
 
         setEditVisible(false);
-        getList();
+        refreshListByOperator();
         setDetail(null);
         toast.success(getIntlText('common.message.operation_success'));
     };
 
-    const toolbarRender = useMemo(() => {
-        return (
-            <Stack className="ms-operations-btns" direction="row" spacing="12px">
-                <PermissionControlHidden permissions={PERMISSIONS.ENTITY_DATA_EXPORT}>
-                    <Button
-                        variant="outlined"
-                        className="md:d-none"
-                        sx={{ height: 36, textTransform: 'none' }}
-                        startIcon={<IosShareIcon />}
-                        onClick={handleShowExport}
-                        disabled={!selectedIds.length}
-                    >
-                        {getIntlText('common.label.export')}
-                    </Button>
-                </PermissionControlHidden>
-            </Stack>
-        );
-    }, [getIntlText, handleExportConfirm, selectedIds]);
+    // Filter by click tag
+    const handleFilterByTag = (tag?: NonNullable<TableRowDataType['entityTags']>[0]) => {
+        advancedFilterRef.current?.appendConditionValue({
+            column: 'entityTags',
+            operator: FILTER_OPERATORS.ANY_EQUALS,
+            value: [
+                {
+                    label: tag?.name || '',
+                    value: tag?.name || '',
+                },
+            ],
+            valueCompType: 'select',
+        });
+    };
 
     const handleTableBtnClick: UseColumnsProps<TableRowDataType>['onButtonClick'] = useCallback(
-        (type, record) => {
+        (type, record, tag) => {
             switch (type) {
                 case 'detail': {
                     handleDetail(record);
@@ -220,6 +246,10 @@ export default () => {
                 }
                 case 'edit': {
                     showEdit(record);
+                    break;
+                }
+                case 'filter': {
+                    handleFilterByTag(tag);
                     break;
                 }
                 default: {
@@ -233,29 +263,126 @@ export default () => {
         onButtonClick: handleTableBtnClick,
         filteredInfo,
     });
+    const handleAdvancedSearch = useCallback(
+        (filters: AdvancedConditionsType<TableRowDataType>) => {
+            setAdvancedConditions(filters);
+            setPaginationModel(model => ({ ...model, page: 0 }));
+        },
+        [],
+    );
+
     const handleSearch = useCallback((value: string) => {
         setKeyword(value);
         setPaginationModel(model => ({ ...model, page: 0 }));
     }, []);
 
+    const toolbarRender = useMemo(() => {
+        return (
+            <Stack className="ms-operations-btns" direction="row" spacing="12px">
+                <ToggleRadio
+                    options={Object.entries(ENTITY_TYPE).map(([key]) => ({
+                        label: key,
+                        value: key,
+                    }))}
+                    value={entityType}
+                    onChange={val => {
+                        setEntityType(val as ENTITY_TYPE);
+                        setPaginationModel(model => ({ ...model, page: 0 }));
+                    }}
+                    sx={{ height: 36, width: 'auto' }}
+                />
+                <Divider
+                    orientation="vertical"
+                    flexItem
+                    className="md:d-none"
+                    sx={{
+                        width: '1px',
+                        borderColor: 'var(--gray-color-3)',
+                    }}
+                />
+                <PermissionControlHidden permissions={PERMISSIONS.ENTITY_DATA_EDIT}>
+                    <Button
+                        disabled={!selectedIds.length}
+                        variant="outlined"
+                        className="md:d-none"
+                        sx={{ height: 36, textTransform: 'none' }}
+                        startIcon={<SellOutlinedIcon />}
+                        onClick={() =>
+                            openManageTagsModalAtEntity(Object.values(allEntities), selectedIds)
+                        }
+                    >
+                        {getIntlText('tag.label.tags')}
+                    </Button>
+                </PermissionControlHidden>
+                <PermissionControlHidden permissions={PERMISSIONS.ENTITY_DATA_EXPORT}>
+                    <Button
+                        variant="outlined"
+                        className="md:d-none"
+                        sx={{ textTransform: 'none' }}
+                        startIcon={<IosShareIcon />}
+                        onClick={handleShowExport}
+                        disabled={!selectedIds.length}
+                    >
+                        {getIntlText('common.label.export')}
+                    </Button>
+                </PermissionControlHidden>
+                <PermissionControlHidden
+                    permissions={[PERMISSIONS.ENTITY_DATA_EXPORT, PERMISSIONS.ENTITY_DATA_EDIT]}
+                >
+                    <Divider
+                        orientation="vertical"
+                        flexItem
+                        className="md:d-none"
+                        sx={{
+                            width: '1px',
+                            borderColor: 'var(--gray-color-3)',
+                        }}
+                    />
+                </PermissionControlHidden>
+                <AdvancedFilter<TableRowDataType>
+                    ref={advancedFilterRef}
+                    columns={columns}
+                    onChange={handleAdvancedSearch}
+                    variant="outlined"
+                    className="md:d-none"
+                >
+                    {getIntlText('entity.label.filter')}
+                </AdvancedFilter>
+            </Stack>
+        );
+    }, [getIntlText, handleExportConfirm, selectedIds, openManageTagsModalAtEntity, entityData]);
+
     return (
         <div className="ms-main">
             <TablePro<TableRowDataType>
-                checkboxSelection={hasPermission(PERMISSIONS.ENTITY_DATA_EXPORT)}
+                keepNonExistentRowsSelected
+                filterCondition={[advancedConditions, entityType]}
+                tableName="entity_data"
+                columnSetting
+                checkboxSelection={hasPermission([
+                    PERMISSIONS.ENTITY_DATA_EXPORT,
+                    PERMISSIONS.ENTITY_DATA_EDIT,
+                ])}
                 loading={loading}
                 columns={columns}
                 getRowId={record => record.entityId}
                 rows={entityData?.content}
                 rowCount={entityData?.total || 0}
                 paginationModel={paginationModel}
+                pageSizeOptions={[10, 20, 30, 40, 50, 100]}
                 rowSelectionModel={selectedIds}
                 // isRowSelectable={({ row }) => row.deletable}
                 toolbarRender={toolbarRender}
                 onPaginationModelChange={setPaginationModel}
                 onRowSelectionModelChange={setSelectedIds}
-                onSearch={handleSearch}
+                // onSearch={handleSearch}
                 onRefreshButtonClick={getList}
                 onFilterInfoChange={handleFilterChange}
+                filterSettingColumns={(settingColumns: ColumnSettingProps<TableRowDataType>[]) => {
+                    return entityType !== ENTITY_TYPE.PROPERTY
+                        ? settingColumns.filter(col => col.field !== 'entityLatestValue')
+                        : settingColumns;
+                }}
             />
             {!!detailVisible && !!detail && <Detail onCancel={handleDetailClose} detail={detail} />}
             {!!editVisible && !!detail && (
@@ -263,6 +390,17 @@ export default () => {
             )}
             {!!exportVisible && (
                 <ExportModal onCancel={handleCloseExport} onOk={handleExportConfirm} />
+            )}
+            {manageTagsModalVisible && (
+                <ManageTagsModal
+                    visible={manageTagsModalVisible}
+                    onCancel={closeManageTagsModal}
+                    onFormSubmit={manageTagsFormSubmit}
+                    selectedEntities={selectedEntities}
+                    tip={getIntlText('tag.tip.selected_entities_contain_follow_tags', {
+                        1: selectedIds?.length || 0,
+                    })}
+                />
             )}
         </div>
     );
