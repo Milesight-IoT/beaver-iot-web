@@ -1,15 +1,24 @@
 import { isEmpty, isNil } from 'lodash-es';
 
-import type { ControlPanelConfig, AnyDict } from '@/plugin/types';
+import type { ControlPanelConfig } from '@/plugin/types';
 import {
     POSITION_AXIS,
     type ChartEntityPositionValueType,
 } from '@/plugin/components/chart-entity-position';
+import LineChartIcon from '../icon.svg';
+
+export interface LineControlPanelProps {
+    title?: string;
+    entityPosition: ChartEntityPositionValueType[];
+    time: number;
+    leftYAxisUnit?: string;
+    rightYAxisUnit?: string;
+}
 
 /**
  * Whether the unit is displayed depends on whether the current unit's position exists.
  */
-const isAxisUnitVisibility = (position: POSITION_AXIS, formData?: AnyDict) => {
+const isAxisUnitVisibility = (position: POSITION_AXIS, formData?: LineControlPanelProps) => {
     const positions = formData?.entityPosition;
     if (!Array.isArray(positions) || isEmpty(positions)) {
         return false;
@@ -25,14 +34,12 @@ const isAxisUnitVisibility = (position: POSITION_AXIS, formData?: AnyDict) => {
  */
 const axisUnitSetValue = (
     position: POSITION_AXIS,
-    update: (newData: AnyDict) => void,
-    formData?: AnyDict,
+    update: (newData: Partial<LineControlPanelProps>) => void,
+    formData?: LineControlPanelProps,
 ) => {
     const key = position === POSITION_AXIS.LEFT ? 'leftYAxisUnit' : 'rightYAxisUnit';
 
-    const isExisted = ((formData?.entityPosition || []) as ChartEntityPositionValueType[])?.find(
-        p => p?.position === position,
-    );
+    const isExisted = (formData?.entityPosition || [])?.find(p => p?.position === position);
 
     if (!isExisted) {
         if (formData?.[key]) {
@@ -60,20 +67,20 @@ const axisUnitSetValue = (
 /**
  * The Line Control Panel Config
  */
-const lineControlPanelConfig: ControlPanelConfig = {
-    class: 'data_chart',
-    type: 'lineChart',
-    name: 'Line',
-    icon: './icon.svg',
-    defaultRow: 4,
-    defaultCol: 4,
-    minRow: 2,
-    minCol: 2,
-    configProps: [
-        {
-            description: 'This is line chart config',
-            controlSetRows: [
-                [
+const lineControlPanelConfig = (): ControlPanelConfig<LineControlPanelProps> => {
+    return {
+        class: 'data_chart',
+        type: 'lineChart',
+        name: 'Line',
+        icon: LineChartIcon,
+        defaultRow: 4,
+        defaultCol: 4,
+        minRow: 2,
+        minCol: 2,
+        configProps: [
+            {
+                label: 'Line Chart Config',
+                controlSetItems: [
                     {
                         name: 'input',
                         config: {
@@ -94,8 +101,6 @@ const lineControlPanelConfig: ControlPanelConfig = {
                             },
                         },
                     },
-                ],
-                [
                     {
                         name: 'chartEntityPosition',
                         config: {
@@ -115,8 +120,6 @@ const lineControlPanelConfig: ControlPanelConfig = {
                             },
                         },
                     },
-                ],
-                [
                     {
                         name: 'chartTimeSelect',
                         config: {
@@ -133,8 +136,6 @@ const lineControlPanelConfig: ControlPanelConfig = {
                             },
                         },
                     },
-                ],
-                [
                     {
                         name: 'input',
                         config: {
@@ -143,9 +144,6 @@ const lineControlPanelConfig: ControlPanelConfig = {
                             controllerProps: {
                                 name: 'leftYAxisUnit',
                                 defaultValue: '',
-                                rules: {
-                                    required: true,
-                                },
                             },
                             componentProps: {
                                 size: 'small',
@@ -165,8 +163,6 @@ const lineControlPanelConfig: ControlPanelConfig = {
                             },
                         },
                     },
-                ],
-                [
                     {
                         name: 'input',
                         config: {
@@ -175,9 +171,6 @@ const lineControlPanelConfig: ControlPanelConfig = {
                             controllerProps: {
                                 name: 'rightYAxisUnit',
                                 defaultValue: '',
-                                rules: {
-                                    required: true,
-                                },
                             },
                             componentProps: {
                                 size: 'small',
@@ -198,9 +191,9 @@ const lineControlPanelConfig: ControlPanelConfig = {
                         },
                     },
                 ],
-            ],
-        },
-    ],
+            },
+        ],
+    };
 };
 
 export default lineControlPanelConfig;

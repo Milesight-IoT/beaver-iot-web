@@ -1,7 +1,14 @@
-import { type ReactElement, isValidElement, forwardRef, useImperativeHandle } from 'react';
+import {
+    useState,
+    type ReactElement,
+    isValidElement,
+    forwardRef,
+    useImperativeHandle,
+} from 'react';
+import { Tabs, Tab } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 
-import type { AnyDict, ControlPanelSectionConfig } from '@/plugin/types';
+import type { ControlPanelSectionConfig } from '@/plugin/types';
 import { isCustomControlItem } from '../util';
 import Control from './Control';
 import { useFormControl } from './hooks';
@@ -40,6 +47,8 @@ const ControlPanelContainer = forwardRef<
 >((props, ref) => {
     const { initialValues, configProps, onOk, onChange } = props;
 
+    const [tabKey, setTabKey] = useState<ApiKey>(0);
+
     const { control, handleSubmit } = useFormControl({
         initialValues,
         onOk,
@@ -63,56 +72,89 @@ const ControlPanelContainer = forwardRef<
         );
     };
 
-    const renderControlRow = (controls: (ReactElement | null)[], key: string) => {
-        return (
-            <div key={key} className="control-row">
-                {controls.map((control, i) => renderControlItem(control, `control_item_${i}`))}
-            </div>
-        );
-    };
-
     const renderControlPanelSection = (section: ControlPanelSectionConfig, key: string) => {
         return (
             <div className="control-section" key={key}>
-                {section.controlSetRows.map((controlSets, rowIndex) => {
-                    const renderedControls = controlSets
-                        .map(controlItem => {
-                            // When the item is invalid
-                            if (!controlItem) {
-                                return null;
-                            }
-
-                            // When the item is a React element
-                            if (isValidElement(controlItem)) {
-                                return controlItem;
-                            }
-
-                            if (isCustomControlItem(controlItem)) {
-                                return <Control control={control} controlItem={controlItem} />;
-                            }
-
+                {section.controlSetItems.map((controlItem, itemIndex) => {
+                    const currentItem = () => {
+                        // When the item is invalid
+                        if (!controlItem) {
                             return null;
-                        })
-                        .filter(Boolean);
+                        }
 
+                        // When the item is a React element
+                        if (isValidElement(controlItem)) {
+                            return controlItem;
+                        }
+
+                        if (isCustomControlItem(controlItem)) {
+                            return <Control control={control} controlItem={controlItem} />;
+                        }
+
+                        return null;
+                    };
+
+                    const renderedControl = currentItem();
                     // Don't show the row if it is empty
-                    if (!Array.isArray(renderedControls) || isEmpty(renderedControls)) {
+                    if (!renderControlItem) {
                         return null;
                     }
 
-                    return renderControlRow(renderedControls, `control_row_${rowIndex}`);
+                    return renderControlItem(renderedControl, `control_item_${itemIndex}`);
                 })}
             </div>
         );
     };
 
-    return (
-        <div className="control-panel-container">
-            {configProps?.map((section, i) =>
+    const renderConfig = () => {
+        if (!Array.isArray(configProps) || isEmpty(configProps)) {
+            return null;
+        }
+
+        if (configProps.length === 1) {
+            return configProps?.map((section, i) =>
                 renderControlPanelSection(section, `control_section_${i}`),
-            )}
-        </div>
-    );
+            );
+        }
+
+        const renderTab = (section: ControlPanelSectionConfig, tabIndex: number) => {
+            return <Tab disableRipple key={tabIndex} label={section.label} value={tabIndex} />;
+        };
+
+        const renderTabPanel = (section: ControlPanelSectionConfig, panelIndex: number) => {
+            return (
+                <div
+                    key={panelIndex}
+                    role="tabpanel"
+                    hidden={tabKey !== panelIndex}
+                    id={`ms-tabpanel-${panelIndex}`}
+                    className={`ms-tabpanel ms-tabpanel-${panelIndex}`}
+                    aria-labelledby={`ms-tab-${panelIndex}`}
+                >
+                    {renderControlPanelSection(section, `control_section_${panelIndex}`)}
+                </div>
+            );
+        };
+
+        return (
+            <>
+                <Tabs
+                    variant="fullWidth"
+                    value={tabKey}
+                    onChange={(_, newValue: ApiKey) => {
+                        setTabKey(newValue);
+                    }}
+                >
+                    {configProps.map((section, tabIndex) => renderTab(section, tabIndex))}
+                </Tabs>
+                <div className="ms-tab-content">
+                    {configProps.map((section, panelIndex) => renderTabPanel(section, panelIndex))}
+                </div>
+            </>
+        );
+    };
+
+    return <div className="control-panel-container">{renderConfig()}</div>;
 });
 
 export default ControlPanelContainer;

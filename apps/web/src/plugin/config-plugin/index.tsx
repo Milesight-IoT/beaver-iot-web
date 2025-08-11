@@ -117,8 +117,8 @@ const ConfigPlugin = (props: ConfigPluginProps) => {
                             value="advanced"
                         />
                     </Tabs> */}
-                    <div className="ms-tab-content">
-                        {/* <TabPanel value={tabKey} index="basic">
+                    {/* <div className="ms-tab-content"> */}
+                    {/* <TabPanel value={tabKey} index="basic">
                             {ComponentConfig ? (
                                 <ComponentConfig
                                     config={config}
@@ -140,26 +140,26 @@ const ConfigPlugin = (props: ConfigPluginProps) => {
                         <TabPanel value={tabKey} index="advanced">
                             <JsonView value={formValues} maintainEditStatus />
                         </TabPanel> */}
-                        {ComponentConfig ? (
-                            <Suspense>
-                                <ComponentConfig
-                                    config={config}
-                                    onChange={handleChange}
-                                    value={formValues}
-                                    ref={formRef}
-                                    onOk={handleSubmit}
-                                />
-                            </Suspense>
-                        ) : (
-                            <RenderConfig
+                    {ComponentConfig ? (
+                        <Suspense>
+                            <ComponentConfig
                                 config={config}
-                                onOk={handleSubmit}
-                                ref={formRef}
                                 onChange={handleChange}
                                 value={formValues}
+                                ref={formRef}
+                                onOk={handleSubmit}
                             />
-                        )}
-                    </div>
+                        </Suspense>
+                    ) : (
+                        <RenderConfig
+                            config={config}
+                            onOk={handleSubmit}
+                            ref={formRef}
+                            onChange={handleChange}
+                            value={formValues}
+                        />
+                    )}
+                    {/* </div> */}
                     <DialogActions className="config-plugin-container-footer">
                         <Button
                             variant="outlined"

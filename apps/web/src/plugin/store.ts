@@ -2,8 +2,6 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { isPlainObject, isEmpty } from 'lodash-es';
 
-import { AnyDict } from './types';
-
 interface ControlPanelStore {
     /** Current form data */
     formData?: AnyDict;

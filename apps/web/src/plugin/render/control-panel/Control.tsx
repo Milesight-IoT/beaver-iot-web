@@ -30,13 +30,17 @@ const Control: React.FC<ControlProps> = props => {
     const controllerProps = newConfig?.controllerProps;
     if (!controllerProps) return null;
 
+    const isRequired = controllerProps?.rules?.required;
     const newControllerProps = {
         ...controllerProps,
         rules: {
             ...controllerProps.rules,
-            required: controllerProps?.rules?.required
-                ? getIntlText('valid.input.required')
-                : false,
+            required:
+                typeof isRequired === 'string'
+                    ? isRequired
+                    : isRequired
+                      ? getIntlText('valid.input.required')
+                      : false,
         },
     };
 

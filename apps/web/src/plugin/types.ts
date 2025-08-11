@@ -5,8 +5,6 @@ import { type TextFieldProps } from '@mui/material';
 import { type SelectProps as PluginSelectProps, type ChartEntityPositionProps } from './components';
 import { COMPONENTCLASS } from './constant';
 
-export type AnyDict = Record<string, any>;
-
 export type ControlType = 'input' | 'chartEntityPosition' | 'ChartTimeSelect';
 
 export type ControlTypePropsMap = {
@@ -19,7 +17,7 @@ export type ControlTypePropsMap = {
 export type CheckMapCompleteness<T extends Record<ControlType, any>> = T;
 export type CheckedControlTypePropsMap = CheckMapCompleteness<ControlTypePropsMap>;
 
-export type ControlConfigMap = {
+export type ControlConfigMap<T extends AnyDict = AnyDict> = {
     [K in ControlType]: {
         type?: K;
         label?: ReactNode;
@@ -30,44 +28,47 @@ export type ControlConfigMap = {
          * A function that uses control panel props
          * to check whether a control should be visible.
          */
-        visibility?: (formData?: AnyDict) => boolean;
+        visibility?: (formData?: T) => boolean;
         /**
          * A function that receives the form data and return an object of k/v
          * to overwrite configuration at runtime. This is useful to alter a component based on
          * anything external to it, like another control's value. For instance it's possible to
          * show a warning based on the value of another component.
          */
-        mapStateToProps?: (oldConfig: BaseControlConfig, formData?: AnyDict) => BaseControlConfig;
+        mapStateToProps?: (oldConfig: BaseControlConfig<T>, formData?: T) => BaseControlConfig<T>;
         /**
          * To update config form data
          */
-        setValuesToFormConfig?: (update: (newData: AnyDict) => void, formData?: AnyDict) => void;
+        setValuesToFormConfig?: (update: (newData: Partial<T>) => void, formData?: T) => void;
     };
 };
 
-export type BaseControlConfig = ControlConfigMap[ControlType] & AnyDict;
+export type BaseControlConfig<T extends AnyDict = AnyDict> = ControlConfigMap<T>[ControlType] &
+    AnyDict;
 
-export type CustomControlItem = {
+export type CustomControlItem<T extends AnyDict = AnyDict> = {
     name: string;
-    config: BaseControlConfig;
+    groupName?: string;
+    config: BaseControlConfig<T>;
 };
 
-export type ExpandedControlItem = CustomControlItem | ReactNode | null;
+export type ExpandedControlItem<T extends AnyDict = AnyDict> =
+    | CustomControlItem<T>
+    | ReactNode
+    | null;
 
-export type ControlSetItem = ExpandedControlItem;
+export type ControlSetItem<T extends AnyDict = AnyDict> = ExpandedControlItem<T>;
 
-export type ControlSetRow = ControlSetItem[];
-
-export interface ControlPanelSectionConfig {
-    label?: ReactNode;
+export interface ControlPanelSectionConfig<T extends AnyDict = AnyDict> {
+    label: ReactNode;
     description?: ReactNode;
-    controlSetRows: ControlSetRow[];
+    controlSetItems: ControlSetItem<T>[];
 }
 
 /**
  * The plugin control panel config
  */
-export interface ControlPanelConfig {
+export interface ControlPanelConfig<T extends AnyDict = AnyDict> {
     /**
      * Component name
      * @description Name is the name displayed by the component. For example
@@ -81,7 +82,7 @@ export interface ControlPanelConfig {
     /**
      * Component configuration attributes, can be configured multiple
      */
-    configProps: ControlPanelSectionConfig[];
+    configProps: ControlPanelSectionConfig<T>[];
     /**
      * Preview interface configuration
      * @description It can be JSON configured each attribute separately, or it can be passed directly into the HTML string. Among them, $ {{}} is surrounded by parameter variables. Replace it when rendering

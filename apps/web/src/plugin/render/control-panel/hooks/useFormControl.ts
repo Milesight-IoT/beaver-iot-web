@@ -5,8 +5,6 @@ import { useMemoizedFn } from 'ahooks';
 
 import useControlPanelStore from '@/plugin/store';
 
-import type { AnyDict } from '@/plugin/types';
-
 export interface UseFormControlProps {
     /**
      * Form initial values
