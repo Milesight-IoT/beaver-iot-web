@@ -53,7 +53,7 @@ const dataCardControlPanelConfig = (): ControlPanelConfig<DataCardControlPanelCo
                             label: 'Label',
                             controllerProps: {
                                 name: 'title',
-                                defaultValue: 'Title',
+                                defaultValue: 'Label',
                             },
                             componentProps: {
                                 slotProps: {
