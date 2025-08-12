@@ -13,6 +13,7 @@ import {
     Autocomplete,
 } from '@mui/material';
 import { isNil, isEqual } from 'lodash-es';
+import { useI18n } from '@milesight/shared/src/hooks';
 import {
     checkRequired,
     checkMinValue,
@@ -153,6 +154,8 @@ const getValidators = (entity: NonNullable<Props['entities']>[0], required = fal
  * Entity dynamic form entry
  */
 const useEntityFormItems = ({ entities, isAllReadOnly, imageUploadProps }: Props) => {
+    const { getIntlText } = useI18n();
+
     /**
      * Entity Key & Form Key mapping table
      * { [entityKey]: [formKey] }
@@ -290,6 +293,9 @@ const useEntityFormItems = ({ entities, isAllReadOnly, imageUploadProps }: Props
                                                 label={renderLabel(entity.name, entity.description)}
                                                 error={!!error}
                                                 required={!attr.optional}
+                                                placeholder={getIntlText(
+                                                    'common.placeholder.select',
+                                                )}
                                                 InputProps={{
                                                     ...params.InputProps,
                                                     size: 'medium',
@@ -409,7 +415,7 @@ const useEntityFormItems = ({ entities, isAllReadOnly, imageUploadProps }: Props
         });
 
         return result;
-    }, [entities, isAllReadOnly, imageUploadProps, encodedEntityKeys]);
+    }, [entities, isAllReadOnly, imageUploadProps, encodedEntityKeys, getIntlText]);
 
     return {
         formItems,

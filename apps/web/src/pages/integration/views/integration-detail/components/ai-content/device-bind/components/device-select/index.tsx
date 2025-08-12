@@ -165,9 +165,10 @@ const DeviceSelect = <
                 }}
                 label={label}
                 required={required}
+                placeholder={getIntlText('common.placeholder.select')}
             />
         ),
-        [size, label, required],
+        [size, label, required, getIntlText],
     );
 
     /**

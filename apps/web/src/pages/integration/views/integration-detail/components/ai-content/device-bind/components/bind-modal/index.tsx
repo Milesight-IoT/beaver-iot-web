@@ -535,7 +535,11 @@ const BindModal: React.FC<Props> = ({
                         </div>
                         <div className="modal-infer-mode-setting-body" ref={inferResultRef}>
                             {!selectedImageEntity?.value ? (
-                                <Empty />
+                                <Empty
+                                    text={getIntlText(
+                                        'setting.integration.ai_model_bind_device_tip',
+                                    )}
+                                />
                             ) : (
                                 <ImageAnnotation
                                     // imgSrc="http://192.168.43.48:9000/beaver-iot-resource/beaver-iot-public/abc856a0-5d17-46e3-bdd3-26b3aa7ec343-20200108-213609-uqZwL.jpg"

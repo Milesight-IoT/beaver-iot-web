@@ -137,6 +137,7 @@ const useFormItems = ({ visible, readonly, entities, device, modelId }: Props) =
                         <Select
                             required
                             label={getIntlText('common.label.ai_model')}
+                            placeholder={getIntlText('common.placeholder.select')}
                             error={error}
                             disabled={disabled}
                             options={options}
