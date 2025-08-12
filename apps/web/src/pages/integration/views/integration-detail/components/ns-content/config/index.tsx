@@ -58,11 +58,12 @@ const Config: React.FC<IProps> = ({ entities, onUpdateSuccess }) => {
     );
 
     const nsData = useMemo(() => {
+        const { page, pageSize } = paginationModel;
         return paginationList({
             dataList: gatewaysData?.gateways || [],
             search: keyword,
-            pageSize: 9999,
-            pageNumber: 1,
+            pageSize,
+            pageNumber: page + 1,
             filterCondition: (item, search: string) => {
                 return [item?.name]
                     .map(v => v?.toLocaleLowerCase() || '')
@@ -70,11 +71,7 @@ const Config: React.FC<IProps> = ({ entities, onUpdateSuccess }) => {
                     .some(value => value.includes(search.toLocaleLowerCase()));
             },
         });
-    }, [gatewaysData, keyword]);
-
-    useEffect(() => {
-        setSelectedIds([]);
-    }, [paginationModel.page]);
+    }, [gatewaysData, keyword, paginationModel]);
 
     // ---------- Data Deletion related ----------
     const handleDeleteConfirm = useCallback(
@@ -185,7 +182,6 @@ const Config: React.FC<IProps> = ({ entities, onUpdateSuccess }) => {
         <div className="ms-view ms-view-ns">
             <div className="ms-view-inner">
                 <TablePro<TableRowDataType>
-                    paginationMode="client"
                     filterCondition={[keyword]}
                     checkboxSelection
                     getRowId={(row: TableRowDataType) => row.eui}

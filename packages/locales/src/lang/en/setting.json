@@ -90,7 +90,7 @@
     "setting.integration.label.setup_app": "Setup an App",
     "setting.integration.label.status": "Gateway Status",
     "setting.integration.label.sub_device": "Subdevices",
-    "setting.integration.label.syncable_device": "Syncable Devices",
+    "setting.integration.label.syncable_device": "Syncable Devices ",
     "setting.integration.label.synced_device": "Added devices",
     "setting.integration.label.synchronize": "Synchronize",
     "setting.integration.label.topic": "Topic",

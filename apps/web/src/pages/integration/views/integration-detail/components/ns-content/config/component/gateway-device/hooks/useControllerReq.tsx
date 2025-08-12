@@ -14,15 +14,21 @@ export default function useControllerReq() {
     /**
      * The exported request function that can be called externally
      * @param request {Promise}
+     * @param reset {boolean}
      * @returns {Promise}
      */
-    const getList = async (request: (reqOptions: Partial<AxiosRequestConfig>) => Promise<any>) => {
+    const getList = async (
+        request: (reqOptions: Partial<AxiosRequestConfig>) => Promise<any>,
+        reset: boolean,
+    ) => {
         const signal = startRequest();
         if (!signal) {
             return;
         }
         try {
-            dataRef.current = [];
+            if (reset) {
+                dataRef.current = [];
+            }
             const [error, resp] = await awaitWrap(request({ signal }));
             const data = getResponseData(resp);
             if (error || !data || !isRequestSuccess(resp)) {

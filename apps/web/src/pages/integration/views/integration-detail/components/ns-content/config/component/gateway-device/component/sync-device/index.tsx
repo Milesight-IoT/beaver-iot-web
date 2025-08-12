@@ -26,7 +26,7 @@ interface IProps {
     refreshTable: () => void;
     devicesData: ObjectToCamelCase<SyncedDeviceType>[];
     loading: boolean;
-    getDevicesList: () => void;
+    getDevicesList: (reset?: boolean) => void;
 }
 
 /**
@@ -44,18 +44,19 @@ const SyncedDevice: React.FC<IProps> = props => {
 
     useDebounceEffect(
         () => {
-            getDevicesList();
+            getDevicesList(true);
         },
         [],
         { wait: 300 },
     );
 
     const deviceData = useMemo(() => {
+        const { page, pageSize } = paginationModel;
         return paginationList({
             dataList: devicesData || [],
             search: keyword,
-            pageSize: 9999,
-            pageNumber: 1,
+            pageSize,
+            pageNumber: page + 1,
             filterCondition: (item, search: string) => {
                 return [item?.name, item.eui]
                     .map(v => v?.toLocaleLowerCase() || '')
@@ -63,11 +64,7 @@ const SyncedDevice: React.FC<IProps> = props => {
                     .some(value => value.includes(search.toLocaleLowerCase()));
             },
         });
-    }, [devicesData, keyword]);
-
-    useEffect(() => {
-        setSelectedIds([]);
-    }, [paginationModel.page]);
+    }, [devicesData, keyword, paginationModel]);
 
     // ---------- Data Deletion related ----------
     const confirm = useConfirm();
@@ -143,11 +140,11 @@ const SyncedDevice: React.FC<IProps> = props => {
         <div className="ms-ns-device">
             <div className="ms-ns-device-inner ms-ns-synced-device">
                 <TablePro<TableRowDataType>
-                    paginationMode="client"
                     filterCondition={[keyword]}
                     checkboxSelection
                     loading={loading}
                     columns={columns}
+                    getRowId={record => record.id}
                     rows={deviceData?.content}
                     rowCount={deviceData?.total || 0}
                     paginationModel={paginationModel}
@@ -159,7 +156,7 @@ const SyncedDevice: React.FC<IProps> = props => {
                         setKeyword(value);
                         setPaginationModel(model => ({ ...model, page: 0 }));
                     }}
-                    onRefreshButtonClick={getDevicesList}
+                    onRefreshButtonClick={() => getDevicesList(false)}
                 />
             </div>
         </div>

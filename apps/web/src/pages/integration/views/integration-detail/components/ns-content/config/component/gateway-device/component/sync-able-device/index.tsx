@@ -28,7 +28,7 @@ interface IProps {
     refreshTable: () => void;
     devicesData: ObjectToCamelCase<SyncAbleDeviceType>[];
     loading: boolean;
-    getDevicesList: () => void;
+    getDevicesList: (reset?: boolean) => void;
 }
 
 /**
@@ -49,11 +49,12 @@ const SyncAbleDevice: React.FC<IProps> = props => {
     const [modelMap, setModelMap] = useState<Map<string, string>>(new Map());
 
     const deviceData = useMemo(() => {
+        const { page, pageSize } = paginationModel;
         return paginationList({
             dataList: devicesData || [],
             search: keyword,
-            pageSize: 9999,
-            pageNumber: 1,
+            pageSize,
+            pageNumber: page + 1,
             filterCondition: (item, search: string) => {
                 return [item?.name, item.eui]
                     .map(v => v?.toLocaleLowerCase() || '')
@@ -61,19 +62,15 @@ const SyncAbleDevice: React.FC<IProps> = props => {
                     .some(value => value.includes(search.toLocaleLowerCase()));
             },
         });
-    }, [devicesData, keyword]);
+    }, [devicesData, keyword, paginationModel]);
 
     useDebounceEffect(
         () => {
-            getDevicesList();
+            getDevicesList(true);
         },
         [],
         { wait: 300 },
     );
-
-    useEffect(() => {
-        setSelectedIds([]);
-    }, [paginationModel.page]);
 
     useEffect(() => {
         initModelOption();
@@ -87,7 +84,7 @@ const SyncAbleDevice: React.FC<IProps> = props => {
             }
         });
         setModelMap(modelMapTmp);
-    }, deviceData?.content);
+    }, [deviceData?.content]);
 
     // get model option
     const initModelOption = async () => {
@@ -184,7 +181,6 @@ const SyncAbleDevice: React.FC<IProps> = props => {
             </div>
             <div className="ms-ns-device-inner">
                 <TablePro<TableRowDataType>
-                    paginationMode="client"
                     filterCondition={[keyword]}
                     checkboxSelection
                     getRowId={(row: TableRowDataType) => row.eui}
@@ -201,7 +197,7 @@ const SyncAbleDevice: React.FC<IProps> = props => {
                         setKeyword(value);
                         setPaginationModel(model => ({ ...model, page: 0 }));
                     }}
-                    onRefreshButtonClick={getDevicesList}
+                    onRefreshButtonClick={() => getDevicesList(false)}
                 />
             </div>
         </div>

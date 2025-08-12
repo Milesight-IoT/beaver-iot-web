@@ -35,17 +35,27 @@ const GatewayDevices: React.FC<IProps> = props => {
         resetList: resetSyncAbleDevices,
     } = useControllerReq();
 
-    const getSyncedDevices = useCallback(() => {
-        reqSyncedDevices(({ signal }) =>
-            embeddedNSApi.getSyncedDevices({ eui: gatewayInfo.eui }, { signal }),
-        );
-    }, [reqSyncedDevices]);
+    const getSyncedDevices = useCallback(
+        (reset: boolean = false) => {
+            reqSyncedDevices(
+                ({ signal }) =>
+                    embeddedNSApi.getSyncedDevices({ eui: gatewayInfo.eui }, { signal }),
+                reset,
+            );
+        },
+        [reqSyncedDevices],
+    );
 
-    const getSyncAbleDevices = useCallback(() => {
-        reqSyncAbleDevices(({ signal }) =>
-            embeddedNSApi.getSyncAbleDevices({ eui: gatewayInfo.eui }, { signal }),
-        );
-    }, [reqSyncAbleDevices]);
+    const getSyncAbleDevices = useCallback(
+        (reset: boolean = false) => {
+            reqSyncAbleDevices(
+                ({ signal }) =>
+                    embeddedNSApi.getSyncAbleDevices({ eui: gatewayInfo.eui }, { signal }),
+                reset,
+            );
+        },
+        [reqSyncAbleDevices],
+    );
 
     useEffect(() => {
         resetSyncAbleDevices();

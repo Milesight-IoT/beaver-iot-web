@@ -1,6 +1,9 @@
 import React from 'react';
 import { ToggleButton, ToggleButtonGroup, ToggleButtonGroupProps } from '@mui/material';
 import { useControllableValue } from 'ahooks';
+import classNames from 'classnames';
+
+import './style.less';
 
 type ValueType = string | number;
 
@@ -40,14 +43,16 @@ const ToggleRadio: React.FC<Props> = ({ options, disabled, sx, ...props }) => {
                 if (!val) return;
                 setValue(val);
             }}
-            sx={{ my: 1.5, lineHeight: 1, ...sx }}
+            sx={{ my: 1.5, ...sx }}
         >
             {options?.map(option => (
                 <ToggleButton
                     key={option.value}
                     value={option.value}
                     aria-label={option.label}
-                    sx={{ fontWeight: value === option.value ? 500 : 400 }}
+                    className={classNames('ms-toggle-button-group-item', {
+                        'ms-toggle-button-group-item__active': value === option.value,
+                    })}
                 >
                     {option.label}
                 </ToggleButton>
