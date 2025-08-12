@@ -3,7 +3,11 @@ import { ControllerProps } from 'react-hook-form';
 
 import { type TextFieldProps } from '@mui/material';
 import { type ToggleRadioProps, type EntitySelectProps, type UploadProps } from '@/components';
-import { type SelectProps as PluginSelectProps, type ChartEntityPositionProps } from './components';
+import {
+    type SelectProps as PluginSelectProps,
+    type ChartEntityPositionProps,
+    type AppearanceIconProps,
+} from './components';
 import { COMPONENTCLASS } from './constant';
 
 export type ControlType =
@@ -12,7 +16,8 @@ export type ControlType =
     | 'ChartTimeSelect'
     | 'ToggleRadio'
     | 'entitySelect'
-    | 'Upload';
+    | 'Upload'
+    | 'AppearanceIcon';
 
 export type ControlTypePropsMap = {
     input: Partial<TextFieldProps>;
@@ -21,6 +26,7 @@ export type ControlTypePropsMap = {
     ToggleRadio: Partial<ToggleRadioProps>;
     entitySelect: Partial<EntitySelectProps>;
     Upload: Partial<UploadProps>;
+    AppearanceIcon: AppearanceIconProps;
 };
 
 // Check the completeness of ControlTypePropsMap

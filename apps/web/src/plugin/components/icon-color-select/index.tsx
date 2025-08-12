@@ -79,6 +79,7 @@ const IconColorSelect = (props: IconColorSelectProps) => {
                         disableRipple
                         onClick={handleOpen}
                         className="icon-color-select-menu"
+                        value={value}
                     >
                         <div
                             onClick={(e: React.MouseEvent) => {
