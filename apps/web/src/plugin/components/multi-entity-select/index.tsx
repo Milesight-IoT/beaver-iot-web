@@ -3,7 +3,7 @@ import { EntitySelect, type EntitySelectProps } from '@/components';
 import { filterEntityMap } from '@/plugin/utils';
 
 type MultipleEntitySelectProps = EntitySelectProps<EntityOptionType, true, false>;
-interface IProps extends MultipleEntitySelectProps {
+export interface IProps extends MultipleEntitySelectProps {
     entityValueTypes: MultipleEntitySelectProps['entityValueType'];
     entityAccessMods: MultipleEntitySelectProps['entityAccessMod'];
     entityExcludeChildren: MultipleEntitySelectProps['excludeChildren'];

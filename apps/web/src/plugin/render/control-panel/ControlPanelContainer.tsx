@@ -1,4 +1,4 @@
-import { useState, isValidElement, forwardRef, useImperativeHandle } from 'react';
+import { useState, useMemo, isValidElement, forwardRef, useImperativeHandle } from 'react';
 import { Tabs, Tab } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import {
@@ -8,7 +8,11 @@ import {
     type UseFormGetFieldState,
 } from 'react-hook-form';
 
-import type { ControlPanelSectionConfig, CustomControlItem } from '@/plugin/types';
+import type {
+    ControlPanelSectionConfig,
+    CustomControlItem,
+    ControlPanelConfig,
+} from '@/plugin/types';
 import { isCustomControlItem } from '../util';
 import Control from './Control';
 import { useFormControl } from './hooks';
@@ -31,7 +35,7 @@ export interface ControlPanelContainerProps {
     /**
      * Control panel config
      */
-    configProps: ControlPanelSectionConfig[];
+    controlPanel: ControlPanelConfig | (() => ControlPanelConfig);
     /**
      * Form data submission
      */
@@ -49,7 +53,7 @@ const ControlPanelContainer = forwardRef<
     ControlPanelContainerExposeProps,
     ControlPanelContainerProps
 >((props, ref) => {
-    const { initialValues, configProps, onOk, onChange } = props;
+    const { initialValues, controlPanel, onOk, onChange } = props;
 
     const [tabKey, setTabKey] = useState<ApiKey>(0);
 
@@ -58,6 +62,14 @@ const ControlPanelContainer = forwardRef<
         onOk,
         onChange,
     });
+
+    const configProps = useMemo(() => {
+        if (typeof controlPanel === 'function') {
+            return controlPanel?.()?.configProps;
+        }
+
+        return controlPanel?.configProps;
+    }, [controlPanel]);
 
     /**
      * An instance that is exposed to the parent component

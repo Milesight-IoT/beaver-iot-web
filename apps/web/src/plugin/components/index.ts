@@ -9,7 +9,10 @@ export { default as iconColorSelect } from './icon-color-select';
 export { default as ChartTimeSelect } from './chart-time-select';
 export { default as entitySelect } from './entity-select';
 export { default as chartMetricsSelect } from './chart-metrics-select';
-export { default as multiEntitySelect } from './multi-entity-select';
+export {
+    default as multiEntitySelect,
+    type IProps as MultipleEntitySelectProps,
+} from './multi-entity-select';
 export {
     default as chartEntityPosition,
     type ChartEntityPositionProps,

@@ -22,7 +22,7 @@ interface ControlPanelStore {
 }
 
 /**
- * The plugin control panel global data
+ * Real-time form data when editing plugin
  */
 const useControlPanelStore = create(
     immer<ControlPanelStore>((set, get) => ({
