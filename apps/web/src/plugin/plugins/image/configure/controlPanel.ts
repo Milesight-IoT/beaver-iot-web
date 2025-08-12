@@ -2,7 +2,7 @@ import { t } from '@milesight/shared/src/utils/tools';
 
 import type { ControlPanelConfig } from '@/plugin/types';
 import type { ImageConfigType } from '../typings';
-import ImageChartIcon from '../icon.svg';
+import ImageIcon from '../icon.svg';
 
 /**
  * The Image Control Panel Config
@@ -12,7 +12,7 @@ const imageControlPanelConfig = (): ControlPanelConfig<ImageConfigType> => {
         class: 'data_card',
         type: 'image',
         name: 'image',
-        icon: ImageChartIcon,
+        icon: ImageIcon,
         defaultRow: 2,
         defaultCol: 3,
         minRow: 1,

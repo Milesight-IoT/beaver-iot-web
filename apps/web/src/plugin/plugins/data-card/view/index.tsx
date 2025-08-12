@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useTheme } from '@milesight/shared/src/hooks';
+import { get } from 'lodash-es';
 
 import * as Icons from '@milesight/shared/src/components/icons';
 import { useActivityEntity } from '@/plugin/hooks';
@@ -66,9 +67,9 @@ const View = (props: Props) => {
     // Current physical icon
     const { Icon, iconColor } = useMemo(() => {
         const { value } = currentEntityData || {};
-        const iconType = config?.[`Icon_${value}`];
+        const iconType = get(config?.icons, `${value}.icon`, config?.[`Icon_${value}`]);
         const Icon = iconType && Icons[iconType as keyof typeof Icons];
-        const iconColor = config?.[`IconColor_${value}`];
+        const iconColor = get(config?.icons, `${value}.color`, config?.[`IconColor_${value}`]);
 
         return {
             Icon,

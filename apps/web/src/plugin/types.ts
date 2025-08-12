@@ -7,6 +7,7 @@ import {
     type SelectProps as PluginSelectProps,
     type ChartEntityPositionProps,
     type AppearanceIconProps,
+    type MultiAppearanceIconProps,
 } from './components';
 import { COMPONENTCLASS } from './constant';
 
@@ -17,7 +18,8 @@ export type ControlType =
     | 'ToggleRadio'
     | 'entitySelect'
     | 'Upload'
-    | 'AppearanceIcon';
+    | 'AppearanceIcon'
+    | 'MultiAppearanceIcon';
 
 export type ControlTypePropsMap = {
     input: Partial<TextFieldProps>;
@@ -27,6 +29,7 @@ export type ControlTypePropsMap = {
     entitySelect: Partial<EntitySelectProps>;
     Upload: Partial<UploadProps>;
     AppearanceIcon: AppearanceIconProps;
+    MultiAppearanceIcon: MultiAppearanceIconProps;
 };
 
 // Check the completeness of ControlTypePropsMap

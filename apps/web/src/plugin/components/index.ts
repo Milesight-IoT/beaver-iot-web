@@ -14,4 +14,12 @@ export {
     default as chartEntityPosition,
     type ChartEntityPositionProps,
 } from './chart-entity-position';
-export { default as AppearanceIcon, type AppearanceIconProps } from './appearance-icon';
+export {
+    default as AppearanceIcon,
+    type AppearanceIconProps,
+    type AppearanceIconValue,
+} from './appearance-icon';
+export {
+    default as MultiAppearanceIcon,
+    type MultiAppearanceIconProps,
+} from './multi-appearance-icon';
