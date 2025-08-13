@@ -40,7 +40,7 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                             },
                             componentProps: {
                                 required: true,
-                                entityType: ['SERVICE', 'PROPERTY'],
+                                entityType: ['PROPERTY'],
                                 entityValueTypes: ['BOOLEAN'],
                                 entityAccessMods: ['W', 'RW'],
                                 entityExcludeChildren: true,

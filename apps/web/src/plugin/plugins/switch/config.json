@@ -20,7 +20,7 @@
                     "style": "width: 100%",
                     "getDataUrl": "",
                     "componentProps": {
-                        "entityType": ["SERVICE", "PROPERTY"],
+                        "entityType": ["PROPERTY"],
                         "entityValueTypes": ["BOOLEAN"],
                         "entityAccessMods": ["W", "RW"],
                         "entityExcludeChildren": true
