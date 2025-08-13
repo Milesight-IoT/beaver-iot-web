@@ -69,6 +69,7 @@ const LogModal: React.FC<Props> = ({ visible, device, ...props }) => {
                 minWidth: 150,
                 ellipsis: true,
                 renderCell({ value }) {
+                    if (!value) return '-';
                     return getTimeFormat(value);
                 },
             },
@@ -79,6 +80,7 @@ const LogModal: React.FC<Props> = ({ visible, device, ...props }) => {
                 flex: 1,
                 minWidth: 150,
                 renderCell({ value }) {
+                    if (!value) return '-';
                     return getTimeFormat(value);
                 },
             },

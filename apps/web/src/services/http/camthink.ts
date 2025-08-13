@@ -118,8 +118,8 @@ export interface CamthinkAPISchema extends APISchema {
                 /** JSON string */
                 infer_outputs_data: string;
                 infer_status: InferStatus;
-                uplink_at: number;
-                infer_at: number;
+                uplink_at?: number;
+                infer_at?: number;
                 create_at: number;
                 infer_history_entity_id: ApiKey;
                 infer_history_entity_key: string;
