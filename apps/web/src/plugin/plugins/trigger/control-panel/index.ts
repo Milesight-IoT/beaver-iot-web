@@ -1,23 +1,22 @@
 import type { ControlPanelConfig, BaseControlConfig } from '@/plugin/types';
 import type { AppearanceIconValue } from '@/plugin/components';
-import SwitchIcon from '../icon.svg';
+import TriggerIcon from '../icon.svg';
 
-export interface SwitchControlPanelConfig {
+export interface TriggerControlPanelConfig {
     entity?: EntityOptionType;
     title?: string;
-    onAppearanceIcon?: AppearanceIconValue;
-    offAppearanceIcon?: AppearanceIconValue;
+    appearanceIcon?: AppearanceIconValue;
 }
 
 /**
- * The switch Control Panel Config
+ * The trigger Control Panel Config
  */
-const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig> => {
+const triggerControlPanelConfig = (): ControlPanelConfig<TriggerControlPanelConfig> => {
     return {
         class: 'operate',
-        type: 'switch',
-        name: 'Switch',
-        icon: SwitchIcon,
+        type: 'trigger',
+        name: 'Trigger',
+        icon: TriggerIcon,
         defaultRow: 1,
         defaultCol: 2,
         minRow: 1,
@@ -25,7 +24,7 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
         maxRow: 1,
         configProps: [
             {
-                label: 'Switch Config',
+                label: 'Trigger Config',
                 controlSetItems: [
                     {
                         name: 'entitySelect',
@@ -41,7 +40,6 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                             componentProps: {
                                 required: true,
                                 entityType: ['SERVICE', 'PROPERTY'],
-                                entityValueTypes: ['BOOLEAN'],
                                 entityAccessMods: ['W', 'RW'],
                                 entityExcludeChildren: true,
                             },
@@ -51,9 +49,9 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                         name: 'input',
                         config: {
                             type: 'input',
-                            label: 'Title',
+                            label: 'Label',
                             controllerProps: {
-                                name: 'title',
+                                name: 'label',
                                 defaultValue: 'Label',
                             },
                             componentProps: {
@@ -68,48 +66,20 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                         },
                     },
                     {
-                        name: 'appearanceOfOffStatus',
+                        name: 'appearanceOfStatus',
                         config: {
                             type: 'AppearanceIcon',
-                            label: 'Appearance of off status',
+                            label: 'Appearance of status',
                             controllerProps: {
-                                name: 'offAppearanceIcon',
+                                name: 'appearanceIcon',
                             },
                             componentProps: {
                                 defaultValue: {
-                                    icon: 'WifiOffIcon',
-                                    color: '#9B9B9B',
-                                },
-                                legacyIconKey: 'offIcon',
-                                legacyColorKey: 'offIconColor',
-                            },
-                            mapStateToProps(oldConfig, formData) {
-                                const { componentProps, ...restConfig } = oldConfig || {};
-                                return {
-                                    ...restConfig,
-                                    componentProps: {
-                                        ...componentProps,
-                                        formData,
-                                    },
-                                } as BaseControlConfig<SwitchControlPanelConfig>;
-                            },
-                        },
-                    },
-                    {
-                        name: 'appearanceOfOnStatus',
-                        config: {
-                            type: 'AppearanceIcon',
-                            label: 'Appearance of on status',
-                            controllerProps: {
-                                name: 'onAppearanceIcon',
-                            },
-                            componentProps: {
-                                defaultValue: {
-                                    icon: 'WifiIcon',
+                                    icon: 'AdsClickIcon',
                                     color: '#8E66FF',
                                 },
-                                legacyIconKey: 'onIcon',
-                                legacyColorKey: 'onIconColor',
+                                legacyIconKey: 'icon',
+                                legacyColorKey: 'bgColor',
                             },
                             mapStateToProps(oldConfig, formData) {
                                 const { componentProps, ...restConfig } = oldConfig || {};
@@ -119,7 +89,7 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                                         ...componentProps,
                                         formData,
                                     },
-                                } as BaseControlConfig<SwitchControlPanelConfig>;
+                                } as BaseControlConfig<TriggerControlPanelConfig>;
                             },
                         },
                     },
@@ -129,4 +99,4 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
     };
 };
 
-export default switchControlPanelConfig;
+export default triggerControlPanelConfig;

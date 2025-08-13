@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo, useEffect } from 'react';
+import { get } from 'lodash-es';
 
 import { Modal, EntityForm, toast } from '@milesight/shared/src/components';
 import { useI18n } from '@milesight/shared/src/hooks';
@@ -188,15 +189,23 @@ const View = (props: Props) => {
      * Icon component
      */
     const IconComponent = useMemo(() => {
-        const IconShow = Reflect.get(Icons, icon);
+        const IconShow = Reflect.get(
+            Icons,
+            get(config, 'appearanceIcon.icon', icon || 'AdsClickIcon'),
+        );
         if (!IconShow) return null;
 
         return <IconShow sx={{ fontSize: 24 }} />;
-    }, [icon]);
+    }, [icon, config]);
 
     if (configJson.isPreview) {
         return (
-            <div className="trigger-view-preview" style={{ backgroundColor: bgColor }}>
+            <div
+                className="trigger-view-preview"
+                style={{
+                    backgroundColor: get(config, 'appearanceIcon.color', bgColor || '#8E66FF'),
+                }}
+            >
                 {IconComponent}
                 <div className="trigger-view__label">
                     <Tooltip className="trigger-view__text" autoEllipsis title={label} />
@@ -209,7 +218,9 @@ const View = (props: Props) => {
         <>
             <div
                 className="trigger-view"
-                style={{ backgroundColor: bgColor }}
+                style={{
+                    backgroundColor: get(config, 'appearanceIcon.color', bgColor || '#8E66FF'),
+                }}
                 onClick={handleClick}
             >
                 {IconComponent}
