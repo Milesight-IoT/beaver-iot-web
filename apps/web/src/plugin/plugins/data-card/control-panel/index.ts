@@ -41,7 +41,7 @@ const dataCardControlPanelConfig = (): ControlPanelConfig<DataCardControlPanelCo
                             componentProps: {
                                 required: true,
                                 entityType: ['PROPERTY'],
-                                entityValueType: ['STRING', 'LONG', 'DOUBLE', 'BOOLEAN'],
+                                entityValueTypes: ['STRING', 'LONG', 'DOUBLE', 'BOOLEAN'],
                                 entityAccessMod: ['R', 'RW'],
                             },
                         },

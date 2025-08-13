@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { ControllerProps } from 'react-hook-form';
 
 import { type TextFieldProps } from '@mui/material';
-import { type ToggleRadioProps, type EntitySelectProps, type UploadProps } from '@/components';
+import { type ToggleRadioProps, type UploadProps } from '@/components';
 import {
     type SelectProps as PluginSelectProps,
     type ChartEntityPositionProps,
@@ -10,6 +10,7 @@ import {
     type MultiAppearanceIconProps,
     type MultipleEntitySelectProps,
     type ChartMetricsSelectProps,
+    type SingleEntitySelectProps,
 } from './components';
 import { COMPONENTCLASS } from './constant';
 
@@ -30,7 +31,7 @@ export type ControlTypePropsMap = {
     chartEntityPosition: Partial<ChartEntityPositionProps>;
     ChartTimeSelect: Partial<PluginSelectProps>;
     ToggleRadio: Partial<ToggleRadioProps>;
-    entitySelect: Partial<EntitySelectProps>;
+    entitySelect: Partial<SingleEntitySelectProps>;
     Upload: Partial<UploadProps>;
     AppearanceIcon: AppearanceIconProps;
     MultiAppearanceIcon: MultiAppearanceIconProps;

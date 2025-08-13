@@ -39,7 +39,7 @@ const gaugeChartControlPanelConfig = (): ControlPanelConfig<GaugeChartControlPan
                             componentProps: {
                                 required: true,
                                 entityType: ['PROPERTY'],
-                                entityValueType: ['LONG', 'DOUBLE'],
+                                entityValueTypes: ['LONG', 'DOUBLE'],
                                 entityAccessMod: ['R', 'RW'],
                             },
                         },

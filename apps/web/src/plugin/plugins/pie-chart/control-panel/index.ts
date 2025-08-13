@@ -1,7 +1,7 @@
-import type { ControlPanelConfig, BaseControlConfig } from '@/plugin/types';
-import RemainingIcon from '../icon.svg';
+import type { ControlPanelConfig } from '@/plugin/types';
+import PieChartIcon from '../icon.svg';
 
-export interface IconRemainingControlPanelConfig {
+export interface PieChartControlPanelConfig {
     entity?: EntityOptionType;
     title?: string;
     time: number;
@@ -9,22 +9,21 @@ export interface IconRemainingControlPanelConfig {
 }
 
 /**
- * The icon remaining Control Panel Config
+ * The Pie Chart Control Panel Config
  */
-const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingControlPanelConfig> => {
+const pieChartControlPanelConfig = (): ControlPanelConfig<PieChartControlPanelConfig> => {
     return {
         class: 'data_chart',
-        type: 'iconRemaining',
-        name: 'Remaining',
-        icon: RemainingIcon,
-        defaultRow: 1,
-        defaultCol: 2,
-        minRow: 1,
+        type: 'pieChart',
+        name: 'Pie',
+        icon: PieChartIcon,
+        defaultRow: 4,
+        defaultCol: 4,
+        minRow: 2,
         minCol: 2,
-        maxRow: 1,
         configProps: [
             {
-                label: 'Remaining Config',
+                label: 'Pie Chart Config',
                 controlSetItems: [
                     {
                         name: 'entitySelect',
@@ -40,8 +39,9 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
                             componentProps: {
                                 required: true,
                                 entityType: ['PROPERTY'],
-                                entityValueTypes: ['LONG', 'DOUBLE'],
+                                entityValueTypes: ['BOOLEAN', 'STRING'],
                                 entityAccessMod: ['R', 'RW'],
+                                customFilterEntity: 'filterEntityStringHasEnum',
                             },
                         },
                     },
@@ -88,41 +88,13 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
                             label: 'metrics',
                             controllerProps: {
                                 name: 'metrics',
-                                defaultValue: 'LAST',
+                                defaultValue: 'COUNT',
                             },
                             componentProps: {
-                                filters: ['SUM', 'COUNT'],
+                                filters: ['LAST', 'MIN', 'MAX', 'AVG', 'SUM'],
                                 style: {
                                     width: '100%',
                                 },
-                            },
-                        },
-                    },
-                    {
-                        name: 'appearanceIcon',
-                        config: {
-                            type: 'AppearanceIcon',
-                            label: 'Appearance',
-                            controllerProps: {
-                                name: 'appearanceIcon',
-                            },
-                            componentProps: {
-                                defaultValue: {
-                                    icon: 'DeleteIcon',
-                                    color: '#7B4EFA',
-                                },
-                                legacyIconKey: 'icon',
-                                legacyColorKey: 'iconColor',
-                            },
-                            mapStateToProps(oldConfig, formData) {
-                                const { componentProps, ...restConfig } = oldConfig || {};
-                                return {
-                                    ...restConfig,
-                                    componentProps: {
-                                        ...componentProps,
-                                        formData,
-                                    },
-                                } as BaseControlConfig<IconRemainingControlPanelConfig>;
                             },
                         },
                     },
@@ -132,4 +104,4 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
     };
 };
 
-export default iconRemainingControlPanelConfig;
+export default pieChartControlPanelConfig;

@@ -7,7 +7,7 @@ export { default as switch } from './switch';
 export { default as iconSelect } from './icon-select';
 export { default as iconColorSelect } from './icon-color-select';
 export { default as ChartTimeSelect } from './chart-time-select';
-export { default as entitySelect } from './entity-select';
+export { default as entitySelect, type IProps as SingleEntitySelectProps } from './entity-select';
 export {
     default as chartMetricsSelect,
     type IProps as ChartMetricsSelectProps,

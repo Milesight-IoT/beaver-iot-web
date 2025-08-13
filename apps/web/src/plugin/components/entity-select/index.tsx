@@ -3,7 +3,7 @@ import { EntitySelect, type EntitySelectProps } from '@/components';
 import { filterEntityMap } from '@/plugin/utils';
 
 type SingleEntitySelectProps = EntitySelectProps<EntityOptionType, false, false>;
-interface IProps extends SingleEntitySelectProps {
+export interface IProps extends SingleEntitySelectProps {
     entityValueTypes: SingleEntitySelectProps['entityValueType'];
     entityAccessMods: SingleEntitySelectProps['entityAccessMod'];
     entityExcludeChildren: SingleEntitySelectProps['excludeChildren'];
