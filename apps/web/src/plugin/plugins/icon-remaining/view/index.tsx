@@ -1,4 +1,6 @@
 import { useMemo } from 'react';
+import { get } from 'lodash-es';
+
 import * as Icons from '@milesight/shared/src/components/icons';
 import { Tooltip } from '@/plugin/view-components';
 import RemainChart from './components/remain-chart';
@@ -35,9 +37,9 @@ const View = (props: Props) => {
     }, [entity, aggregateHistoryData]);
 
     const { Icon, iconColor } = useMemo(() => {
-        const iconType = config?.icon;
+        const iconType = get(config, 'appearanceIcon.icon', config?.icon);
         const Icon = iconType && Icons[iconType as keyof typeof Icons];
-        const iconColor = config?.iconColor;
+        const iconColor = get(config, 'appearanceIcon.color', config?.iconColor);
 
         return {
             Icon,

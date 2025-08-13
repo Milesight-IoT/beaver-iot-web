@@ -1,5 +1,6 @@
 import React from 'react';
 import { useControllableValue } from 'ahooks';
+import { get } from 'lodash-es';
 
 import { type SelectProps } from '../select';
 import IconSelect from '../icon-select';
@@ -15,6 +16,20 @@ export interface AppearanceIconValue {
 export interface AppearanceIconProps {
     value?: AppearanceIconValue;
     onChange?: (value: AppearanceIconValue) => void;
+    formData?: AnyDict;
+    /**
+     * Old data icon value compatibility
+     */
+    legacyIconKey?: string;
+
+    /**
+     * Old data icon color compatibility
+     */
+    legacyColorKey?: string;
+    /**
+     * Default component value
+     */
+    defaultValue?: AppearanceIconValue;
     title?: string;
     iconSelectProps?: SelectProps;
     iconSelectColorProps?: IconColorSelectProps;
@@ -24,7 +39,15 @@ export interface AppearanceIconProps {
  * Select icon and it's color
  */
 const AppearanceIcon: React.FC<AppearanceIconProps> = props => {
-    const { title, iconSelectProps, iconSelectColorProps } = props;
+    const {
+        title,
+        iconSelectProps,
+        iconSelectColorProps,
+        formData,
+        legacyIconKey,
+        legacyColorKey,
+        defaultValue,
+    } = props;
 
     const [value, setValue] = useControllableValue<AppearanceIconValue>(props);
 
@@ -33,14 +56,18 @@ const AppearanceIcon: React.FC<AppearanceIconProps> = props => {
             <div className="appearance-icon__label">{title}</div>
             <IconSelect
                 {...iconSelectProps}
-                value={value?.icon || ''}
+                value={
+                    value?.icon || get(formData, legacyIconKey || '') || defaultValue?.icon || ''
+                }
                 onChange={(icon: string) => {
                     setValue(oldValue => ({ ...oldValue, icon }));
                 }}
             />
             <IconColorSelect
                 {...iconSelectColorProps}
-                value={value?.color || ''}
+                value={
+                    value?.color || get(formData, legacyColorKey || '') || defaultValue?.color || ''
+                }
                 onChange={color => setValue(oldValue => ({ ...oldValue, color }))}
             />
         </div>
