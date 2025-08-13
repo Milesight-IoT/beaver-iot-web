@@ -40,20 +40,20 @@
             > .@{prefix}-tooltip {
                 max-width: calc(100% - 20px);
             }
-    
+
             &-label {
                 overflow: hidden;
                 font-weight: @font-weight-medium;
                 text-overflow: ellipsis;
                 white-space: nowrap;
             }
-    
+
             &-icon {
                 display: flex;
                 margin-left: @margin-xxs;
                 color: var(--gray-color-7);
                 cursor: pointer;
-    
+
                 &-active {
                     color: var(--primary-color-7);
                 }
@@ -83,7 +83,7 @@
 
                 .@{mui-prefix}FormControlLabel-root {
                     margin-left: -11px;
-                    
+
                     .@{mui-prefix}Typography-root {
                         margin-bottom: 2px;
                         line-height: @font-size-3;
@@ -120,12 +120,12 @@
                 display: none;
             }
         }
-    
+
         .@{prefix}-table-cell-fix-right,
         .@{prefix}-table-header-fix-right {
             z-index: 6;
             .sticky-class();
-    
+
             .@{mui-prefix}DataGrid-columnSeparator--sideRight {
                 display: none;
             }
@@ -144,7 +144,7 @@
             background-color: var(--component-background);
         }
 
-        // scrollbarY fixed style 
+        // scrollbarY fixed style
         .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--borderTop,
         .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--header {
             right: 0;
@@ -163,11 +163,11 @@
         // cover selected hover style
         .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected  .@{prefix}-table-cell-fix-right,
         .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected  .@{prefix}-table-cell-fix-left,
-        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected  
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected
             .@{mui-prefix}DataGrid-cellCheckbox.@{mui-prefix}DataGrid-cell,
-        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected  
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected
             .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--borderTop,
-        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected 
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected
             .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--header {
             background-color: var(--purple-1)!important;
         }
@@ -175,11 +175,11 @@
         .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected:hover,
         .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected:hover .@{prefix}-table-cell-fix-right,
         .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected:hover .@{prefix}-table-cell-fix-left,
-        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected:hover 
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected:hover
             .@{mui-prefix}DataGrid-cellCheckbox.@{mui-prefix}DataGrid-cell,
-        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected:hover 
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected:hover
             .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--borderTop,
-        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected:hover 
+        .@{mui-prefix}DataGrid-row.@{mui-prefix}-selected:hover
             .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--header {
             background-color: var(--purple-2) !important;
         }
@@ -187,9 +187,9 @@
         .@{mui-prefix}DataGrid-row:hover .@{prefix}-table-cell-fix-right,
         .@{mui-prefix}DataGrid-row:hover .@{prefix}-table-cell-fix-left,
         .@{mui-prefix}DataGrid-row:hover .@{mui-prefix}DataGrid-cellCheckbox.@{mui-prefix}DataGrid-cell,
-        .@{mui-prefix}DataGrid-row:hover 
+        .@{mui-prefix}DataGrid-row:hover
             .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--borderTop,
-        .@{mui-prefix}DataGrid-row:hover 
+        .@{mui-prefix}DataGrid-row:hover
             .@{mui-prefix}DataGrid-scrollbarFiller.@{mui-prefix}DataGrid-scrollbarFiller--header {
             background-color: var(--gray-color-1);
         }
@@ -243,9 +243,19 @@
             }
         }
 
-        // Overlay Mui style: Avoid horizontal scrolling beyond the width of the container
+        // Override Mui style: custom column separator
         .@{mui-prefix}DataGrid-columnHeader {
+            // Avoid horizontal scrolling beyond the width of the container
             overflow: hidden;
+
+            // Bold separator
+            .@{mui-prefix}DataGrid-columnSeparator--resizable {
+                .@{mui-prefix}DataGrid-iconSeparator rect {
+                    width: 2px;
+                    x: 11;
+                    rx: 1;
+                }
+            }
         }
 
         .@{prefix}-tooltip {
