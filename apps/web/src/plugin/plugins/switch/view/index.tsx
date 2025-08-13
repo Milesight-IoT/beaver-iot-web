@@ -1,6 +1,7 @@
 import { useMemo, useState, useCallback, useEffect } from 'react';
 import { useRequest } from 'ahooks';
 import { Switch } from '@mui/material';
+import { get } from 'lodash-es';
 
 import * as Icons from '@milesight/shared/src/components/icons';
 import { entityAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/services/http';
@@ -106,21 +107,25 @@ const View = (props: ViewProps) => {
      * The color of the big icon on the right
      */
     const iconColor = useMemo(() => {
-        return isSwitchOn ? onIconColor : offIconColor;
-    }, [isSwitchOn, onIconColor, offIconColor]);
+        return isSwitchOn
+            ? get(config, 'onAppearanceIcon.color', onIconColor || '#8E66FF')
+            : get(config, 'offAppearanceIcon.color', offIconColor || '#9B9B9B');
+    }, [isSwitchOn, onIconColor, offIconColor, config]);
 
     /**
      * Icon component
      */
     const IconComponent = useMemo(() => {
-        const iconName = isSwitchOn ? onIcon : offIcon;
+        const iconName = isSwitchOn
+            ? get(config, 'onAppearanceIcon.icon', onIcon || 'WifiIcon')
+            : get(config, 'offAppearanceIcon.icon', offIcon || 'WifiOffIcon');
         if (!iconName) return null;
 
         const Icon = Reflect.get(Icons, iconName);
         if (!Icon) return null;
 
         return <Icon sx={{ color: iconColor || '#9B9B9B', fontSize: 24 }} />;
-    }, [isSwitchOn, onIcon, offIcon, iconColor]);
+    }, [isSwitchOn, onIcon, offIcon, iconColor, config]);
 
     // ---------- Entity status management ----------
     const { addEntityListener } = useActivityEntity();
