@@ -17,7 +17,7 @@ interface ConfigPluginProps {
 }
 
 const Plugin = forwardRef<ControlPanelContainerExposeProps, ConfigPluginProps>((props, ref) => {
-    const { config, onOk, onChange } = props;
+    const { onOk } = props;
 
     // const { getLatestEntityDetail } = useActivityEntity();
     // const latestEntity = useMemo(() => {
@@ -47,10 +47,8 @@ const Plugin = forwardRef<ControlPanelContainerExposeProps, ConfigPluginProps>((
     return (
         <ControlPanelContainer
             ref={ref}
-            initialValues={config?.config}
             controlPanel={controlPanel as unknown as ControlPanelConfig}
             onOk={onOk as (data: AnyDict) => void}
-            onChange={onChange as (data: AnyDict) => void}
         />
     );
 });

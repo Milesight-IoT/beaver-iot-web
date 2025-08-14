@@ -7,24 +7,16 @@ import useControlPanelStore from '@/plugin/store';
 
 export interface UseFormControlProps {
     /**
-     * Form initial values
-     */
-    initialValues?: AnyDict;
-    /**
      * Form data submission
      */
     onOk?: (data: AnyDict) => void;
-    /**
-     * Form data change callback
-     */
-    onChange?: (data: AnyDict) => void;
 }
 
 /**
  * Form data control
  */
 export function useFormControl(props: UseFormControlProps) {
-    const { onOk, onChange, initialValues } = props || {};
+    const { onOk } = props || {};
 
     const { control, handleSubmit, reset, getValues, setValue, getFieldState } = useForm<AnyDict>();
     const newFormValues = useWatch({
@@ -33,11 +25,14 @@ export function useFormControl(props: UseFormControlProps) {
     const { formData, updateFormData, registerConfigUpdateEffect } = useControlPanelStore();
     const watchTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
+    /**
+     * Handle Form submit
+     */
     const onSubmit: SubmitHandler<AnyDict> = params => {
         onOk?.(params);
     };
 
-    const handleDataChange = useMemoizedFn((newData: AnyDict, wait: number = 100) => {
+    const handleDataChange = useMemoizedFn((newData: AnyDict) => {
         if (watchTimeoutRef.current) {
             clearTimeout(watchTimeoutRef.current);
         }
@@ -47,10 +42,33 @@ export function useFormControl(props: UseFormControlProps) {
                 return;
             }
 
-            onChange?.(newData);
             updateFormData(newData);
-        }, wait);
+        }, 100);
     });
+
+    /**
+     * To initial data
+     */
+    useEffect(() => {
+        const allValues = getValues();
+
+        /**
+         * If the current formData is empty
+         * then, get values and update formData
+         */
+        if (!formData && allValues) {
+            updateFormData(allValues);
+            return;
+        }
+
+        /**
+         * If the current formData has values
+         * reset it to the current form
+         */
+        if (formData && !isEqual(formData, allValues)) {
+            reset(formData);
+        }
+    }, [formData, getValues, updateFormData, reset]);
 
     /**
      * To Register the update config function
@@ -59,45 +77,12 @@ export function useFormControl(props: UseFormControlProps) {
         registerConfigUpdateEffect((newData?: AnyDict, formData?: AnyDict) => {
             if (!newData) return;
 
-            onChange?.({
-                ...formData,
-                ...newData,
-            });
             reset({
                 ...formData,
                 ...newData,
             });
         });
-    }, [registerConfigUpdateEffect, onChange, reset]);
-
-    /**
-     * Handle control panel initial value
-     */
-    useEffect(() => {
-        const allValues = getValues();
-        /**
-         * When there is no initial value
-         * use the form default value as the initial value
-         */
-        if (!initialValues) {
-            handleDataChange(allValues, 0);
-            return;
-        }
-
-        /**
-         * If there is an initial value and it is different from
-         * the current form value, then update it
-         */
-        if (
-            !isPlainObject(initialValues) ||
-            isEmpty(initialValues) ||
-            isEqual(allValues, initialValues)
-        ) {
-            return;
-        }
-
-        reset(initialValues);
-    }, [initialValues, getValues, reset, handleDataChange]);
+    }, [registerConfigUpdateEffect, reset]);
 
     /**
      * Handling changes to form values being watched

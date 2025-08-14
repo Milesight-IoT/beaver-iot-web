@@ -1,15 +1,18 @@
-import React, { useRef, useState, useEffect, Suspense, useMemo } from 'react';
-import { Tabs, Tab, DialogActions, Button, List } from '@mui/material';
-import { Modal, JsonView, LoadingButton, LoadingWrapper } from '@milesight/shared/src/components';
+import React, { useRef, Suspense, useEffect } from 'react';
+import { DialogActions, Button, List } from '@mui/material';
+import { isPlainObject, isEmpty } from 'lodash-es';
+
+import { Modal, LoadingButton, LoadingWrapper } from '@milesight/shared/src/components';
 import { useI18n } from '@milesight/shared/src/hooks';
-import { TabPanel } from '@/components';
-import { RenderConfig, RenderView } from '../render';
+// import { TabPanel } from '@/components';
+import { RenderView } from '../render';
 import plugins from '../plugins';
 import type { DashboardPluginProps } from '../types';
 import {
     ControlPanelContainer,
     type ControlPanelContainerExposeProps,
 } from '../render/control-panel';
+import useControlPanelStore from '../store';
 import './style.less';
 
 interface ConfigPluginProps {
@@ -21,54 +24,70 @@ interface ConfigPluginProps {
 }
 
 const ConfigPlugin = (props: ConfigPluginProps) => {
-    const { getIntlText } = useI18n();
     const { config, onClose, onOk, onChange, title } = props;
+
+    const { getIntlText } = useI18n();
+    const { formData, updateFormData } = useControlPanelStore();
+
     const ComponentConfig = (plugins as any)[`${config.type}Config`];
     const ComponentView = (plugins as any)[`${config.type}View`];
     const formRef = useRef<ControlPanelContainerExposeProps>(null);
-    const [formValues, setFormValues] = useState<any>({});
-    const [tabKey, setTabKey] = useState<string>('basic');
+    // const [formValues, setFormValues] = useState<any>({});
+    // const [tabKey, setTabKey] = useState<string>('basic');
 
     const handleClose = () => {
         onClose();
     };
 
-    const handleChange = (values: any) => {
-        const curFormValues = { ...formValues };
-        Object.keys(values).forEach((key: string) => {
-            if (values[key] !== undefined) {
-                curFormValues[key] = values[key];
-            }
-        });
-        if (curFormValues && Object.keys(curFormValues)?.length) {
-            setFormValues(curFormValues);
-            onChange && onChange(curFormValues);
-        }
-    };
+    // const handleChange = (values: any) => {
+    //     const curFormValues = { ...formValues };
+    //     Object.keys(values).forEach((key: string) => {
+    //         if (values[key] !== undefined) {
+    //             curFormValues[key] = values[key];
+    //         }
+    //     });
+    //     if (curFormValues && Object.keys(curFormValues)?.length) {
+    //         setFormValues(curFormValues);
+    //         onChange && onChange(curFormValues);
+    //     }
+    // };
 
     const handleOk = () => {
         formRef.current?.handleSubmit();
     };
 
     const handleSubmit = (_data: any) => {
-        onOk?.(formValues);
+        onOk?.(formData);
     };
 
     // Switch the tab page
-    const handleChangeTabs = (_event: React.SyntheticEvent, newValue: string) => {
-        setTabKey(newValue);
-    };
+    // const handleChangeTabs = (_event: React.SyntheticEvent, newValue: string) => {
+    //     setTabKey(newValue);
+    // };
 
-    useEffect(() => {
-        if (config?.config && Object.keys(config.config)?.length) {
-            setFormValues({ ...config?.config });
-        }
-    }, [config.config]);
+    // useEffect(() => {
+    //     if (config?.config && Object.keys(config.config)?.length) {
+    //         setFormValues({ ...config?.config });
+    //     }
+    // }, [config.config]);
 
     // resolve trigger two requests for entity historical data
-    const pluginConfig = useMemo(() => {
-        return { ...(config?.config || {}) };
-    }, [JSON.stringify(config.config)]);
+    // const pluginConfig = useMemo(() => {
+    //     return { ...(config?.config || {}) };
+    // }, [JSON.stringify(config.config)]);
+
+    /**
+     * Initial Form data by dashboard plugin config
+     */
+    useEffect(() => {
+        const data = config?.config;
+
+        if (!isPlainObject(data) || isEmpty(data)) {
+            return;
+        }
+
+        updateFormData(data);
+    }, [config?.config, updateFormData]);
 
     return (
         <Modal
@@ -94,14 +113,14 @@ const ConfigPlugin = (props: ConfigPluginProps) => {
                             {ComponentView ? (
                                 <Suspense>
                                     <ComponentView
-                                        config={pluginConfig}
+                                        config={formData}
                                         configJson={{ ...config, isPreview: true }}
                                     />
                                 </Suspense>
                             ) : (
                                 <RenderView
                                     configJson={{ ...config, isPreview: true }}
-                                    config={pluginConfig}
+                                    config={formData}
                                 />
                             )}
                         </Suspense>
@@ -157,21 +176,13 @@ const ConfigPlugin = (props: ConfigPluginProps) => {
                                 </LoadingWrapper>
                             }
                         >
-                            <ComponentConfig
-                                ref={formRef}
-                                config={config}
-                                onChange={handleChange}
-                                value={formValues}
-                                onOk={handleSubmit}
-                            />
+                            <ComponentConfig ref={formRef} config={config} onOk={handleSubmit} />
                         </Suspense>
                     ) : (
                         <ControlPanelContainer
                             ref={formRef}
-                            initialValues={config?.config}
                             controlPanel={config?.originalControlPanel}
                             onOk={handleSubmit}
-                            onChange={handleChange}
                         />
                     )}
                     {/* </div> */}

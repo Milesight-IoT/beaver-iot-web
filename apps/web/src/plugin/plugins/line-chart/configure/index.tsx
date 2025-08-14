@@ -15,7 +15,7 @@ interface ConfigPluginProps {
 }
 
 const Plugin = forwardRef<ControlPanelContainerExposeProps, ConfigPluginProps>((props, ref) => {
-    const { onOk, onChange, config } = props;
+    const { onOk } = props;
 
     // const { newConfig } = useLineChartConfig(config);
 
@@ -36,10 +36,8 @@ const Plugin = forwardRef<ControlPanelContainerExposeProps, ConfigPluginProps>((
     return (
         <ControlPanelContainer
             ref={ref}
-            initialValues={config?.config}
             controlPanel={controlPanel as unknown as ControlPanelConfig}
             onOk={onOk}
-            onChange={onChange}
         />
     );
 });

@@ -34,10 +34,6 @@ export interface ControlPanelContainerExposeProps {
 
 export interface ControlPanelContainerProps {
     /**
-     * Form initial values
-     */
-    initialValues?: AnyDict;
-    /**
      * Control panel config
      */
     controlPanel: ControlPanelConfig | (() => ControlPanelConfig);
@@ -45,10 +41,6 @@ export interface ControlPanelContainerProps {
      * Form data submission
      */
     onOk?: (data: AnyDict) => void;
-    /**
-     * Form data change callback
-     */
-    onChange?: (data: AnyDict) => void;
 }
 
 /**
@@ -58,14 +50,12 @@ const ControlPanelContainer = forwardRef<
     ControlPanelContainerExposeProps,
     ControlPanelContainerProps
 >((props, ref) => {
-    const { initialValues, controlPanel, onOk, onChange } = props;
+    const { controlPanel, onOk } = props;
 
     const [tabKey, setTabKey] = useState<ApiKey>(0);
 
     const { control, handleSubmit, reset, setValue, getValues, getFieldState } = useFormControl({
-        initialValues,
         onOk,
-        onChange,
     });
 
     const configProps = useMemo(() => {
