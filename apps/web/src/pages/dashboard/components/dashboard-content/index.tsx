@@ -17,7 +17,7 @@ import { useFullscreen } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { dashboardAPI, awaitWrap, isRequestSuccess } from '@/services/http';
 import { DashboardDetail, WidgetDetail } from '@/services/http/dashboard';
-import { useActivityEntity } from '@/plugin/hooks';
+import { useActivityEntity } from '@/pages/dashboard/plugin/hooks';
 import { useConfirm, PermissionControlHidden, PermissionControlDisabled } from '@/components';
 import { PERMISSIONS } from '@/constants';
 import { useGetPluginConfigs, useHomeDashboard } from '../../hooks';

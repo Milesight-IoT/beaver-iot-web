@@ -1,7 +1,7 @@
 import { Grid2 as Grid } from '@mui/material';
 import { WidgetDetail } from '@/services/http/dashboard';
 import pluginImg from '@/assets/plugin.png';
-import type { DashboardPluginProps } from '@/plugin/types';
+import type { DashboardPluginProps } from '@/pages/dashboard/plugin/types';
 import { useGetPluginConfigs } from '../../hooks';
 import './style.less';
 

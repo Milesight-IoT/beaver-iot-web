@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { omit } from 'lodash-es';
 import { TextField, Button } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
-import ConfigPlugin from '@/plugin/config-plugin';
-import components from '@/plugin/plugins/components';
+import ConfigPlugin from '@/pages/dashboard/plugin/config-plugin';
+import components from '@/pages/dashboard/plugin/plugins/components';
 
 const PLUGINDIR = '../../plugin';
 

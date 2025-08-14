@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import { Modal } from '@milesight/shared/src/components';
 import { useI18n } from '@milesight/shared/src/hooks';
-import ConfigPlugin from '@/plugin/config-plugin';
+import ConfigPlugin from '@/pages/dashboard/plugin/config-plugin';
 
 interface CustomWidgetProps {
     onCancel: () => void;

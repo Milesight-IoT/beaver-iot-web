@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useI18n } from '@milesight/shared/src/hooks';
-import ConfigPlugin from '@/plugin/config-plugin';
+import ConfigPlugin from '@/pages/dashboard/plugin/config-plugin';
 import { WidgetDetail } from '@/services/http/dashboard';
 
 interface WidgetProps {

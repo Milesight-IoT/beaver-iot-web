@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import components from '@/plugin/plugins/components';
-import type { DashboardPluginProps } from '@/plugin/types';
+import components from '@/pages/dashboard/plugin/plugins/components';
+import type { DashboardPluginProps } from '@/pages/dashboard/plugin/types';
 // Defines a collection of modules that can be imported
-const controlPanels = import.meta.glob('../../../plugin/plugins/*/control-panel/index.ts');
-const PLUGIN_DIR = '../../../plugin';
+const controlPanels = import.meta.glob('../plugin/plugins/*/control-panel/index.ts');
+const PLUGIN_DIR = '../plugin';
 
 export default () => {
     const [pluginsConfigs, setPluginsConfigs] = useState<DashboardPluginProps[]>([]);

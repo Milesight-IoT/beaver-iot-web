@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Grid2 as Grid } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
-import { COMPONENTCLASS } from '@/plugin/constant';
+import { COMPONENTCLASS } from '@/pages/dashboard/plugin/constant';
 import { WidgetDetail } from '@/services/http/dashboard';
 import { Tooltip } from '@/components';
 import pluginImg from '@/assets/plugin.png';
-import type { DashboardPluginProps } from '@/plugin/types';
+import type { DashboardPluginProps } from '@/pages/dashboard/plugin/types';
 import { useGetPluginConfigs } from '../../hooks';
 import './style.less';
 

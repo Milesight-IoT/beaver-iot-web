@@ -4,7 +4,7 @@ import { type ControllerProps } from 'react-hook-form';
 
 import { checkRequired } from '@milesight/shared/src/utils/validators';
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
-import IconColorSelect from '@/plugin/components/icon-color-select';
+import IconColorSelect from '@/pages/dashboard/plugin/components/icon-color-select';
 
 import { type OperateTagProps } from '../index';
 

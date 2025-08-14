@@ -5,8 +5,8 @@ import {
     EditOutlinedIcon as EditOutlined,
 } from '@milesight/shared/src/components';
 import { useTheme } from '@milesight/shared/src/hooks';
-import plugins from '@/plugin/plugins';
-import { RenderView } from '@/plugin/render';
+import plugins from '@/pages/dashboard/plugin/plugins';
+import { RenderView } from '@/pages/dashboard/plugin/render';
 import { WidgetDetail } from '@/services/http/dashboard';
 
 interface WidgetProps {
