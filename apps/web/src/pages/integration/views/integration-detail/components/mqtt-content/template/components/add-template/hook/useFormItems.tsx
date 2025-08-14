@@ -51,9 +51,9 @@ const useFormItems = ({ prefixTopic }: { prefixTopic: string }) => {
                         checkRequired: checkRequired(),
                         checkMaxLength: checkMaxLength({ max: 64 }),
                         checkValidChar: value => {
-                            if (!/^[a-zA-Z0-9_@#$/[\]-]+$/.test(value.toString())) {
+                            if (!/^[a-zA-Z0-9:_@#$/[\]-]+$/.test(value.toString())) {
                                 return getIntlText('common.valid.input_letter_num_special_char', {
-                                    1: '_@#$-/[]',
+                                    1: '_@#$-/[]:',
                                 });
                             }
                             return true;
