@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useControllableValue, useMemoizedFn } from 'ahooks';
 import { get } from 'lodash-es';
 
+import { useActivityEntity } from '@/plugin/hooks';
 import AppearanceIcon, { type AppearanceIconValue } from '../appearance-icon';
 import { type SelectProps } from '../select';
 import { type IconColorSelectProps } from '../icon-color-select';
@@ -10,18 +11,26 @@ export interface MultiAppearanceIconProps {
     value?: Record<string, AppearanceIconValue>;
     onChange?: (value: Record<string, AppearanceIconValue>) => void;
     formData?: AnyDict;
-    currentEntity?: Required<EntityOptionType>['rawData'];
     iconSelectProps?: SelectProps;
     iconSelectColorProps?: IconColorSelectProps;
 }
 
 /**
- * Multiple icon and it's color
+ * Multiple icon and it's color render by entity enum data
  */
 const MultiAppearanceIcon: React.FC<MultiAppearanceIconProps> = props => {
-    const { currentEntity, formData, iconSelectProps, iconSelectColorProps } = props;
+    const { formData, iconSelectProps, iconSelectColorProps } = props;
 
     const [value, setValue] = useControllableValue<Record<string, AppearanceIconValue>>(props);
+
+    const { getLatestEntityDetail } = useActivityEntity();
+
+    const latestEntityRawData = useMemo(() => {
+        const currentEntity: EntityOptionType | undefined = formData?.entity;
+        if (!currentEntity) return undefined;
+
+        return getLatestEntityDetail(currentEntity)?.rawData;
+    }, [formData, getLatestEntityDetail]) as EntityOptionType['rawData'];
 
     /**
      * Old data compatibility
@@ -35,11 +44,11 @@ const MultiAppearanceIcon: React.FC<MultiAppearanceIconProps> = props => {
         };
     });
 
-    if (!currentEntity) {
+    if (!latestEntityRawData) {
         return null;
     }
 
-    const { entityValueAttribute, entityId } = currentEntity || {};
+    const { entityValueAttribute, entityId } = latestEntityRawData || {};
     const { enum: enumStruct } = entityValueAttribute || {};
 
     // Non - enumeration

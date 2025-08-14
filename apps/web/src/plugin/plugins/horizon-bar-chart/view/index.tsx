@@ -143,7 +143,7 @@ const View = (props: ViewProps) => {
                                 const unit = getUnit();
 
                                 return (
-                                    <div>
+                                    <div key={item?.dataIndex}>
                                         {index === 0 && <div>{axisValueLabel}</div>}
                                         <div
                                             style={{

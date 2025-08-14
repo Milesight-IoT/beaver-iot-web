@@ -80,7 +80,6 @@ const dataCardControlPanelConfig = (): ControlPanelConfig<DataCardControlPanelCo
                                     componentProps: {
                                         ...componentProps,
                                         formData,
-                                        currentEntity: formData?.entity?.rawData,
                                     },
                                 } as BaseControlConfig<DataCardControlPanelConfigProps>;
                             },
