@@ -29,14 +29,8 @@ const imageControlPanelConfig = (): ControlPanelConfig<ImageConfigType> => {
                             controllerProps: {
                                 name: 'label',
                                 defaultValue: 'Title',
-                            },
-                            componentProps: {
-                                slotProps: {
-                                    input: {
-                                        inputProps: {
-                                            maxLength: 35,
-                                        },
-                                    },
+                                rules: {
+                                    maxLength: 35,
                                 },
                             },
                         },

@@ -1,4 +1,4 @@
-import { useState, useEffect, memo } from 'react';
+import { useState, useEffect, memo, useMemo } from 'react';
 import { useRequest } from 'ahooks';
 import { entityAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/services/http';
 import { useDashboardStore } from '@/stores';
@@ -86,12 +86,23 @@ const View = (props: ViewProps) => {
         };
     }, [entity?.value, widgetId, dashboardId, addEntityListener, requestEntityStatus]);
 
+    const formatFontSize = useMemo(() => {
+        if (!fontSize) return 14;
+
+        const numSize = Number(fontSize);
+        if (Number.isNaN(numSize)) {
+            return 14;
+        }
+
+        return numSize;
+    }, [fontSize]);
+
     return (
         <div className={`text-wrapper ${isPreview ? 'text-wrapper__preview' : ''}`}>
             {label && <div className="text-wrapper__label">{label}</div>}
             <div
                 className="text-wrapper__content bg-custom-scrollbar ms-perfect-scrollbar"
-                style={{ fontSize: `${fontSize}px`, lineHeight: `${Number(fontSize) + 8}px` }}
+                style={{ fontSize: `${formatFontSize}px`, lineHeight: `${formatFontSize + 8}px` }}
             >
                 {isEditing ? (textContent || '').toString().slice(0, 6000) : textContent}
             </div>

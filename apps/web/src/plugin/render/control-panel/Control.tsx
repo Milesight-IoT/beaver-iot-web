@@ -1,11 +1,9 @@
 import React, { ReactNode } from 'react';
 import { type Control, type ControllerProps, Controller } from 'react-hook-form';
 
-import { useI18n } from '@milesight/shared/src/hooks';
-
 import type { CustomControlItem } from '@/plugin/types';
 import * as controlMap from '@/plugin/components';
-import { useControl } from './hooks';
+import { useControl, useFormRules } from './hooks';
 
 export interface ControlProps {
     control: Control;
@@ -18,10 +16,10 @@ export interface ControlProps {
 const Control: React.FC<ControlProps> = props => {
     const { control, controlItem } = props;
 
-    const { getIntlText } = useI18n();
     const { newConfig, isVisibility } = useControl({
         config: controlItem?.config,
     });
+    const { processQuickRules } = useFormRules();
 
     const renderController = (children: ReactNode) => {
         return <div className="control-item">{children}</div>;
@@ -34,19 +32,7 @@ const Control: React.FC<ControlProps> = props => {
     const controllerProps = newConfig?.controllerProps;
     if (!controllerProps) return null;
 
-    const isRequired = controllerProps?.rules?.required;
-    const newControllerProps = {
-        ...controllerProps,
-        rules: {
-            ...controllerProps.rules,
-            required:
-                typeof isRequired === 'string'
-                    ? isRequired
-                    : isRequired
-                      ? getIntlText('valid.input.required')
-                      : false,
-        },
-    };
+    const newControllerProps = processQuickRules(controllerProps);
 
     /**
      * Custom render function by control panel

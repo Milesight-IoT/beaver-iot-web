@@ -54,14 +54,8 @@ const dataCardControlPanelConfig = (): ControlPanelConfig<DataCardControlPanelCo
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Label',
-                            },
-                            componentProps: {
-                                slotProps: {
-                                    input: {
-                                        inputProps: {
-                                            maxLength: 35,
-                                        },
-                                    },
+                                rules: {
+                                    maxLength: 35,
                                 },
                             },
                         },

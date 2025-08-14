@@ -52,14 +52,8 @@ const barChartControlPanelConfig = (): ControlPanelConfig<BarChartControlPanelCo
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Title',
-                            },
-                            componentProps: {
-                                slotProps: {
-                                    input: {
-                                        inputProps: {
-                                            maxLength: 35,
-                                        },
-                                    },
+                                rules: {
+                                    maxLength: 35,
                                 },
                             },
                         },

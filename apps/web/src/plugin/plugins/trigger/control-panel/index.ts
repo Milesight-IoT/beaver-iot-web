@@ -53,14 +53,8 @@ const triggerControlPanelConfig = (): ControlPanelConfig<TriggerControlPanelConf
                             controllerProps: {
                                 name: 'label',
                                 defaultValue: 'Label',
-                            },
-                            componentProps: {
-                                slotProps: {
-                                    input: {
-                                        inputProps: {
-                                            maxLength: 35,
-                                        },
-                                    },
+                                rules: {
+                                    maxLength: 35,
                                 },
                             },
                         },

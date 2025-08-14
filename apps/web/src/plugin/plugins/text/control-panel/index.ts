@@ -1,3 +1,5 @@
+import { t } from '@milesight/shared/src/utils/tools';
+
 import type { ControlPanelConfig } from '@/plugin/types';
 import TextIcon from '../icon.svg';
 
@@ -51,14 +53,8 @@ const textControlPanelConfig = (): ControlPanelConfig<TextControlPanelConfig> =>
                             controllerProps: {
                                 name: 'label',
                                 defaultValue: 'Text',
-                            },
-                            componentProps: {
-                                slotProps: {
-                                    input: {
-                                        inputProps: {
-                                            maxLength: 35,
-                                        },
-                                    },
+                                rules: {
+                                    maxLength: 35,
                                 },
                             },
                         },
@@ -76,7 +72,7 @@ const textControlPanelConfig = (): ControlPanelConfig<TextControlPanelConfig> =>
                                     max: 50,
                                     pattern: {
                                         value: /^[1-9][0-9]*$/,
-                                        message: 'Please enter a valid number',
+                                        message: t('valid.input.number'),
                                     },
                                 },
                             },
