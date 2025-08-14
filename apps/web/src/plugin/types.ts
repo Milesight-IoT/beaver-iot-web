@@ -167,5 +167,12 @@ export interface ControlPanelConfig<T extends AnyDict = AnyDict> {
     /**
      * The plugin icon
      */
-    icon?: ReactNode;
+    icon?: string;
+}
+
+/**
+ * Dashboard Plugin Props
+ */
+export interface DashboardPluginProps extends ControlPanelConfig {
+    originalControlPanel: ControlPanelConfig | (() => ControlPanelConfig);
 }

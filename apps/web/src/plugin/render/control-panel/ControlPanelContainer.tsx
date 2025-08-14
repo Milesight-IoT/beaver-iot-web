@@ -20,10 +20,15 @@ import { useFormControl } from './hooks';
 import './style.less';
 
 export interface ControlPanelContainerExposeProps {
+    /** Submit the form */
     handleSubmit: () => void;
+    /** Reset form data */
     reset: UseFormReset<AnyDict>;
+    /** Set form value */
     setValue: UseFormSetValue<AnyDict>;
+    /** Get form values */
     getValues: UseFormGetValues<AnyDict>;
+    /** Get the form field state */
     getFieldState: UseFormGetFieldState<AnyDict>;
 }
 

@@ -27,6 +27,7 @@ import PluginListClass from '../plugin-list-class';
 import AddCustomerWidget from '../custom-widget';
 import AddDashboard from '../add-dashboard';
 import Widgets from '../widgets';
+import { filterWidgets } from '../../utils';
 
 export interface DashboardContentProps {
     dashboardDetail: DashboardDetail;
@@ -185,7 +186,7 @@ export default (props: DashboardContentProps) => {
 
         const [_, res] = await awaitWrap(
             dashboardAPI.updateDashboard({
-                widgets,
+                widgets: filterWidgets(widgets),
                 entity_ids: currentEntityIds,
                 dashboard_id: dashboardId,
                 name: dashboardDetail.name,

@@ -1,30 +1,37 @@
 import { useEffect, useRef, useState } from 'react';
-import { omit } from 'lodash-es';
 import components from '@/plugin/plugins/components';
+import type { DashboardPluginProps } from '@/plugin/types';
 // Defines a collection of modules that can be imported
-const modules = import.meta.glob('../../../plugin/plugins/*/config.json');
-const iconModules = import.meta.glob('../../../plugin/plugins/*/icon.svg');
+const controlPanels = import.meta.glob('../../../plugin/plugins/*/control-panel/index.ts');
 const PLUGIN_DIR = '../../../plugin';
 
 export default () => {
-    const [pluginsConfigs, setPluginsConfigs] = useState<CustomComponentProps[]>([]);
-    const pluginRef = useRef<CustomComponentProps[]>([]);
+    const [pluginsConfigs, setPluginsConfigs] = useState<DashboardPluginProps[]>([]);
+    const pluginRef = useRef<DashboardPluginProps[]>([]);
 
     const loopComponents = async (comName: string, index: number) => {
-        const jsonPath = `${PLUGIN_DIR}/plugins/${comName}/config.json`;
-        const { $schema: _, ...jsonData }: any = (await modules[jsonPath]()) || {};
-        let icon = null;
-        if (jsonData?.icon) {
-            const iconSrc = `${PLUGIN_DIR}/plugins/${comName}/icon.svg`;
-            icon = await iconModules[iconSrc]();
+        const tsPath = `${PLUGIN_DIR}/plugins/${comName}/control-panel/index.ts`;
+
+        const panelModule = (await controlPanels[tsPath]()) as unknown as {
+            default: DashboardPluginProps['originalControlPanel'];
+        };
+        if (!panelModule?.default) {
+            return;
         }
-        const isExit = pluginRef.current.some(item => item.name === jsonData.name);
+
+        const panel =
+            typeof panelModule?.default === 'function'
+                ? panelModule?.default?.()
+                : panelModule?.default;
+
+        const isExit = pluginRef.current.some(item => item.name === panel.name);
         if (isExit) return;
 
         const result = {
-            ...(omit(jsonData?.default || {}, '$schema') as CustomComponentProps),
-            iconSrc: icon,
-        };
+            ...panel,
+            originalControlPanel: panelModule?.default,
+        } as DashboardPluginProps;
+
         // Ensure component sequence stability
         const plugins = pluginRef.current;
         pluginRef.current[index] = result;

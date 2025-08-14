@@ -5,10 +5,15 @@ import { useI18n } from '@milesight/shared/src/hooks';
 import { TabPanel } from '@/components';
 import { RenderConfig, RenderView } from '../render';
 import plugins from '../plugins';
+import type { DashboardPluginProps } from '../types';
+import {
+    ControlPanelContainer,
+    type ControlPanelContainerExposeProps,
+} from '../render/control-panel';
 import './style.less';
 
 interface ConfigPluginProps {
-    config: CustomComponentProps;
+    config: DashboardPluginProps;
     onClose: () => void;
     onOk?: (data: any) => void;
     onChange?: (data: any) => void;
@@ -20,7 +25,7 @@ const ConfigPlugin = (props: ConfigPluginProps) => {
     const { config, onClose, onOk, onChange, title } = props;
     const ComponentConfig = (plugins as any)[`${config.type}Config`];
     const ComponentView = (plugins as any)[`${config.type}View`];
-    const formRef = useRef<any>();
+    const formRef = useRef<ControlPanelContainerExposeProps>(null);
     const [formValues, setFormValues] = useState<any>({});
     const [tabKey, setTabKey] = useState<string>('basic');
 
@@ -153,20 +158,20 @@ const ConfigPlugin = (props: ConfigPluginProps) => {
                             }
                         >
                             <ComponentConfig
+                                ref={formRef}
                                 config={config}
                                 onChange={handleChange}
                                 value={formValues}
-                                ref={formRef}
                                 onOk={handleSubmit}
                             />
                         </Suspense>
                     ) : (
-                        <RenderConfig
-                            config={config}
-                            onOk={handleSubmit}
+                        <ControlPanelContainer
                             ref={formRef}
+                            initialValues={config?.config}
+                            controlPanel={config?.originalControlPanel}
+                            onOk={handleSubmit}
                             onChange={handleChange}
-                            value={formValues}
                         />
                     )}
                     {/* </div> */}

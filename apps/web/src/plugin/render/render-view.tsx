@@ -3,11 +3,12 @@ import * as Icons from '@milesight/shared/src/components/icons';
 import { useTheme } from '@milesight/shared/src/hooks';
 import * as PluginView from '../view-components';
 import { parseStyleToReactStyle, parseStyleString, convertCssToReactStyle } from './util';
+import type { DashboardPluginProps } from '../types';
 import './style.less';
 
 interface Props {
     config: any;
-    configJson: CustomComponentProps;
+    configJson: DashboardPluginProps;
     onClick?: () => void;
 }
 
