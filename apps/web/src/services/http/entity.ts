@@ -142,7 +142,19 @@ export interface EntityAPISchema extends APISchema {
         request: {
             id: ApiKey;
         };
-        response: unknown;
+        response: {
+            device_name?: string;
+            integration_name?: string;
+            entity_id: ApiKey;
+            entity_key: ApiKey;
+            entity_name: string;
+            entity_type: EntityType;
+            entity_value_type: EntityValueDataType;
+            entity_access_mod: EntityAccessMode;
+            entity_value_attribute?: EntityValueAttributeType;
+            entity_created_at: number;
+            entity_parent_name: string;
+        }[];
     };
 
     /** Delete entity */

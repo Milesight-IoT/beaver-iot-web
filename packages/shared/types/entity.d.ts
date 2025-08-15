@@ -75,7 +75,7 @@ declare interface EntitySchema {
     value_type: string;
 
     /** Creation Time (ms) */
-    create_at: number;
+    created_at: number;
 
     /** Update Time (ms) */
     update_at: number;
