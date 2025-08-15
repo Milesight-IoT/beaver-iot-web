@@ -1,5 +1,12 @@
 # @app/web
 
+## 1.2.4
+
+### Patch Changes
+
+-   fix entity enum value error
+-   fix typo error in global interfaces
+
 ## 1.2.3
 
 ### Minor Changes
