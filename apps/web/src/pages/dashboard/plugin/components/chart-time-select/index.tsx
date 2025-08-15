@@ -6,7 +6,7 @@ import Select, { type SelectProps } from '../select';
 /**
  *  Chart display time selection component
  */
-const ChartTimeSelect = (selectProps: SelectProps) => {
+const ChartTimeSelect = (selectProps: PartialOptional<SelectProps, 'options'>) => {
     const { getIntlText } = useI18n();
 
     const defaultOptions: OptionsProps[] = useMemo(() => {

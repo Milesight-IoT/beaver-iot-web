@@ -30,7 +30,6 @@ const textControlPanelConfig = (): ControlPanelConfig<TextControlPanelConfig> =>
                         name: 'entitySelect',
                         config: {
                             type: 'entitySelect',
-                            label: 'Entity',
                             controllerProps: {
                                 name: 'entity',
                                 rules: {
@@ -39,6 +38,7 @@ const textControlPanelConfig = (): ControlPanelConfig<TextControlPanelConfig> =>
                             },
                             componentProps: {
                                 required: true,
+                                title: 'Entity',
                                 entityType: ['PROPERTY'],
                                 entityValueTypes: ['STRING', 'LONG', 'DOUBLE', 'BOOLEAN'],
                                 entityAccessMod: ['R', 'RW'],
@@ -49,7 +49,6 @@ const textControlPanelConfig = (): ControlPanelConfig<TextControlPanelConfig> =>
                         name: 'input',
                         config: {
                             type: 'input',
-                            label: 'Label',
                             controllerProps: {
                                 name: 'label',
                                 defaultValue: 'Text',
@@ -57,13 +56,15 @@ const textControlPanelConfig = (): ControlPanelConfig<TextControlPanelConfig> =>
                                     maxLength: 35,
                                 },
                             },
+                            componentProps: {
+                                title: 'Label',
+                            },
                         },
                     },
                     {
                         name: 'fontSizeInput',
                         config: {
                             type: 'input',
-                            label: 'Font Size',
                             controllerProps: {
                                 name: 'fontSize',
                                 defaultValue: '14',
@@ -75,6 +76,9 @@ const textControlPanelConfig = (): ControlPanelConfig<TextControlPanelConfig> =>
                                         message: t('valid.input.number'),
                                     },
                                 },
+                            },
+                            componentProps: {
+                                title: 'Font Size',
                             },
                         },
                     },

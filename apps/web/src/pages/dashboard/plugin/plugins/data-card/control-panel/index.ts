@@ -31,7 +31,6 @@ const dataCardControlPanelConfig = (): ControlPanelConfig<DataCardControlPanelCo
                         name: 'entitySelect',
                         config: {
                             type: 'entitySelect',
-                            label: t('common.label.entity'),
                             controllerProps: {
                                 name: 'entity',
                                 rules: {
@@ -40,6 +39,7 @@ const dataCardControlPanelConfig = (): ControlPanelConfig<DataCardControlPanelCo
                             },
                             componentProps: {
                                 required: true,
+                                title: t('common.label.entity'),
                                 entityType: ['PROPERTY'],
                                 entityValueTypes: ['STRING', 'LONG', 'DOUBLE', 'BOOLEAN'],
                                 entityAccessMod: ['R', 'RW'],
@@ -50,13 +50,15 @@ const dataCardControlPanelConfig = (): ControlPanelConfig<DataCardControlPanelCo
                         name: 'input',
                         config: {
                             type: 'input',
-                            label: 'Label',
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Label',
                                 rules: {
                                     maxLength: 35,
                                 },
+                            },
+                            componentProps: {
+                                title: 'Label',
                             },
                         },
                     },

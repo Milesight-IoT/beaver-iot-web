@@ -3,7 +3,7 @@ import { useI18n } from '@milesight/shared/src/hooks';
 
 import Select, { type SelectProps } from '../select';
 
-export type IProps = SelectProps & { filters: DataAggregateType[] };
+export type IProps = PartialOptional<SelectProps, 'options'> & { filters?: DataAggregateType[] };
 /**
  *  Chart display time selection component
  */

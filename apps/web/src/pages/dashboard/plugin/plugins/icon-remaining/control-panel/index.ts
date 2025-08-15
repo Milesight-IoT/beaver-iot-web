@@ -30,7 +30,6 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
                         name: 'entitySelect',
                         config: {
                             type: 'entitySelect',
-                            label: 'Entity',
                             controllerProps: {
                                 name: 'entity',
                                 rules: {
@@ -39,6 +38,7 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
                             },
                             componentProps: {
                                 required: true,
+                                title: 'Entity',
                                 entityType: ['PROPERTY'],
                                 entityValueTypes: ['LONG', 'DOUBLE'],
                                 entityAccessMod: ['R', 'RW'],
@@ -49,7 +49,6 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
                         name: 'input',
                         config: {
                             type: 'input',
-                            label: 'Title',
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Title',
@@ -57,18 +56,21 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
                                     maxLength: 35,
                                 },
                             },
+                            componentProps: {
+                                title: 'Title',
+                            },
                         },
                     },
                     {
                         name: 'chartTimeSelect',
                         config: {
                             type: 'ChartTimeSelect',
-                            label: 'Time',
                             controllerProps: {
                                 name: 'time',
                                 defaultValue: 86400000,
                             },
                             componentProps: {
+                                title: 'Time',
                                 style: {
                                     width: '100%',
                                 },
@@ -79,12 +81,12 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
                         name: 'chartMetricsSelect',
                         config: {
                             type: 'chartMetricsSelect',
-                            label: 'metrics',
                             controllerProps: {
                                 name: 'metrics',
                                 defaultValue: 'LAST',
                             },
                             componentProps: {
+                                title: 'metrics',
                                 filters: ['SUM', 'COUNT'],
                                 style: {
                                     width: '100%',
@@ -96,11 +98,11 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
                         name: 'appearanceIcon',
                         config: {
                             type: 'AppearanceIcon',
-                            label: 'Appearance',
                             controllerProps: {
                                 name: 'appearanceIcon',
                             },
                             componentProps: {
+                                label: 'Appearance',
                                 defaultValue: {
                                     icon: 'DeleteIcon',
                                     color: '#7B4EFA',

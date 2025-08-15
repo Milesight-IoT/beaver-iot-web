@@ -7,11 +7,17 @@ export interface UseControlProps {
     config?: BaseControlConfig;
 }
 
+/**
+ * Handle Control config
+ */
 export function useControl(props: UseControlProps) {
     const { config } = props || {};
 
     const { formData, setValuesToFormConfig } = useControlPanelStore();
 
+    /**
+     * Get newest config by mapStateToProps
+     */
     const newConfig = useMemo(() => {
         if (!config?.mapStateToProps) {
             return config;
@@ -25,6 +31,9 @@ export function useControl(props: UseControlProps) {
         return newest;
     }, [config, formData]);
 
+    /**
+     * Whether control visibility
+     */
     const isVisibility = useMemo(() => {
         if (!newConfig?.visibility) {
             return true;
@@ -33,6 +42,9 @@ export function useControl(props: UseControlProps) {
         return Boolean(newConfig.visibility(formData));
     }, [newConfig, formData]);
 
+    /**
+     * Set values to form data
+     */
     useEffect(() => {
         if (!formData || !setValuesToFormConfig || !newConfig?.setValuesToFormConfig) return;
 

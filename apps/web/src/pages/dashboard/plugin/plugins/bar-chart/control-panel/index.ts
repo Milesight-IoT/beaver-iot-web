@@ -28,7 +28,6 @@ const barChartControlPanelConfig = (): ControlPanelConfig<BarChartControlPanelCo
                         name: 'multiEntitySelect',
                         config: {
                             type: 'multiEntitySelect',
-                            label: 'Entity',
                             controllerProps: {
                                 name: 'entity',
                                 defaultValue: [],
@@ -38,6 +37,7 @@ const barChartControlPanelConfig = (): ControlPanelConfig<BarChartControlPanelCo
                             },
                             componentProps: {
                                 required: true,
+                                title: 'Entity',
                                 entityType: ['PROPERTY'],
                                 entityValueTypes: ['LONG', 'DOUBLE'],
                                 entityAccessMod: ['R', 'RW'],
@@ -48,7 +48,6 @@ const barChartControlPanelConfig = (): ControlPanelConfig<BarChartControlPanelCo
                         name: 'input',
                         config: {
                             type: 'input',
-                            label: 'Title',
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Title',
@@ -56,18 +55,21 @@ const barChartControlPanelConfig = (): ControlPanelConfig<BarChartControlPanelCo
                                     maxLength: 35,
                                 },
                             },
+                            componentProps: {
+                                title: 'Title',
+                            },
                         },
                     },
                     {
                         name: 'chartTimeSelect',
                         config: {
                             type: 'ChartTimeSelect',
-                            label: 'Time',
                             controllerProps: {
                                 name: 'time',
                                 defaultValue: 86400000,
                             },
                             componentProps: {
+                                title: 'Time',
                                 style: {
                                     width: '100%',
                                 },

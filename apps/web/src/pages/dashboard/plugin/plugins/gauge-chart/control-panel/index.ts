@@ -29,7 +29,6 @@ const gaugeChartControlPanelConfig = (): ControlPanelConfig<GaugeChartControlPan
                         name: 'entitySelect',
                         config: {
                             type: 'entitySelect',
-                            label: 'Entity',
                             controllerProps: {
                                 name: 'entity',
                                 rules: {
@@ -38,6 +37,7 @@ const gaugeChartControlPanelConfig = (): ControlPanelConfig<GaugeChartControlPan
                             },
                             componentProps: {
                                 required: true,
+                                title: 'Entity',
                                 entityType: ['PROPERTY'],
                                 entityValueTypes: ['LONG', 'DOUBLE'],
                                 entityAccessMod: ['R', 'RW'],
@@ -48,7 +48,6 @@ const gaugeChartControlPanelConfig = (): ControlPanelConfig<GaugeChartControlPan
                         name: 'input',
                         config: {
                             type: 'input',
-                            label: 'Title',
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Title',
@@ -56,18 +55,21 @@ const gaugeChartControlPanelConfig = (): ControlPanelConfig<GaugeChartControlPan
                                     maxLength: 35,
                                 },
                             },
+                            componentProps: {
+                                title: 'Title',
+                            },
                         },
                     },
                     {
                         name: 'chartTimeSelect',
                         config: {
                             type: 'ChartTimeSelect',
-                            label: 'Time',
                             controllerProps: {
                                 name: 'time',
                                 defaultValue: 86400000,
                             },
                             componentProps: {
+                                title: 'Time',
                                 style: {
                                     width: '100%',
                                 },
@@ -78,12 +80,12 @@ const gaugeChartControlPanelConfig = (): ControlPanelConfig<GaugeChartControlPan
                         name: 'chartMetricsSelect',
                         config: {
                             type: 'chartMetricsSelect',
-                            label: 'metrics',
                             controllerProps: {
                                 name: 'metrics',
                                 defaultValue: 'LAST',
                             },
                             componentProps: {
+                                title: 'metrics',
                                 filters: ['SUM', 'COUNT'],
                                 style: {
                                     width: '100%',

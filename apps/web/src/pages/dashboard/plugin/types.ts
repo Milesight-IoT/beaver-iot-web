@@ -30,7 +30,7 @@ export type ControlTypePropsMap = {
     input: Partial<TextFieldProps>;
     chartEntityPosition: Partial<ChartEntityPositionProps>;
     ChartTimeSelect: Partial<PluginSelectProps>;
-    ToggleRadio: Partial<ToggleRadioProps>;
+    ToggleRadio: ToggleRadioProps;
     entitySelect: Partial<SingleEntitySelectProps>;
     Upload: Partial<UploadProps>;
     AppearanceIcon: AppearanceIconProps;
@@ -46,7 +46,6 @@ export type CheckedControlTypePropsMap = CheckMapCompleteness<ControlTypePropsMa
 export type ControlConfigMap<T extends AnyDict = AnyDict> = {
     [K in ControlType]: {
         type?: K;
-        label?: ReactNode;
         description?: ReactNode;
         controllerProps?: PartialOptional<ControllerProps, 'render'>;
         componentProps?: ControlTypePropsMap[K];
@@ -69,8 +68,7 @@ export type ControlConfigMap<T extends AnyDict = AnyDict> = {
     };
 };
 
-export type BaseControlConfig<T extends AnyDict = AnyDict> = ControlConfigMap<T>[ControlType] &
-    AnyDict;
+export type BaseControlConfig<T extends AnyDict = AnyDict> = ControlConfigMap<T>[ControlType];
 
 export type CustomControlItem<T extends AnyDict = AnyDict> = {
     name: string;

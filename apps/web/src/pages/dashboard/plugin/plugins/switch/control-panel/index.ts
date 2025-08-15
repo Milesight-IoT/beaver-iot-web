@@ -31,7 +31,6 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                         name: 'entitySelect',
                         config: {
                             type: 'entitySelect',
-                            label: 'Entity',
                             controllerProps: {
                                 name: 'entity',
                                 rules: {
@@ -40,6 +39,7 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                             },
                             componentProps: {
                                 required: true,
+                                title: 'Entity',
                                 entityType: ['PROPERTY'],
                                 entityValueTypes: ['BOOLEAN'],
                                 entityAccessMods: ['W', 'RW'],
@@ -51,7 +51,6 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                         name: 'input',
                         config: {
                             type: 'input',
-                            label: 'Title',
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Label',
@@ -59,17 +58,20 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                                     maxLength: 35,
                                 },
                             },
+                            componentProps: {
+                                title: 'Title',
+                            },
                         },
                     },
                     {
                         name: 'appearanceOfOffStatus',
                         config: {
                             type: 'AppearanceIcon',
-                            label: 'Appearance of off status',
                             controllerProps: {
                                 name: 'offAppearanceIcon',
                             },
                             componentProps: {
+                                label: 'Appearance of off status',
                                 defaultValue: {
                                     icon: 'WifiOffIcon',
                                     color: '#9B9B9B',
@@ -93,11 +95,11 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                         name: 'appearanceOfOnStatus',
                         config: {
                             type: 'AppearanceIcon',
-                            label: 'Appearance of on status',
                             controllerProps: {
                                 name: 'onAppearanceIcon',
                             },
                             componentProps: {
+                                label: 'Appearance of on status',
                                 defaultValue: {
                                     icon: 'WifiIcon',
                                     color: '#8E66FF',

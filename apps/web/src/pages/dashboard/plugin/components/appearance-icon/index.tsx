@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useControllableValue } from 'ahooks';
 import { get } from 'lodash-es';
 
@@ -30,7 +30,7 @@ export interface AppearanceIconProps {
      * Default component value
      */
     defaultValue?: AppearanceIconValue;
-    title?: string;
+    label?: ReactNode;
     iconSelectProps?: SelectProps;
     iconSelectColorProps?: IconColorSelectProps;
 }
@@ -40,7 +40,7 @@ export interface AppearanceIconProps {
  */
 const AppearanceIcon: React.FC<AppearanceIconProps> = props => {
     const {
-        title,
+        label,
         iconSelectProps,
         iconSelectColorProps,
         formData,
@@ -53,7 +53,7 @@ const AppearanceIcon: React.FC<AppearanceIconProps> = props => {
 
     return (
         <div className="appearance-icon">
-            <div className="appearance-icon__label">{title}</div>
+            <div className="appearance-icon__label">{label}</div>
             <IconSelect
                 {...iconSelectProps}
                 value={

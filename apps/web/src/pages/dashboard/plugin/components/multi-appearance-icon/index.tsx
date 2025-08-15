@@ -57,7 +57,7 @@ const MultiAppearanceIcon: React.FC<MultiAppearanceIconProps> = props => {
 
         return (
             <AppearanceIcon
-                title="Appearance"
+                label="Appearance"
                 value={get(value, id, getLegacyData(id))}
                 onChange={newIcon =>
                     setValue(oldValue => ({
@@ -79,7 +79,7 @@ const MultiAppearanceIcon: React.FC<MultiAppearanceIconProps> = props => {
         return (
             <AppearanceIcon
                 key={enumKey}
-                title={`Appearance of ${enumValue}`}
+                label={`Appearance of ${enumValue}`}
                 value={get(value, enumKey, getLegacyData(enumKey))}
                 onChange={newIcon =>
                     setValue(oldValue => ({

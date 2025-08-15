@@ -30,7 +30,6 @@ const triggerControlPanelConfig = (): ControlPanelConfig<TriggerControlPanelConf
                         name: 'entitySelect',
                         config: {
                             type: 'entitySelect',
-                            label: 'Entity',
                             controllerProps: {
                                 name: 'entity',
                                 rules: {
@@ -39,6 +38,7 @@ const triggerControlPanelConfig = (): ControlPanelConfig<TriggerControlPanelConf
                             },
                             componentProps: {
                                 required: true,
+                                title: 'Entity',
                                 entityType: ['SERVICE', 'PROPERTY'],
                                 entityAccessMods: ['W', 'RW'],
                                 entityExcludeChildren: true,
@@ -49,7 +49,6 @@ const triggerControlPanelConfig = (): ControlPanelConfig<TriggerControlPanelConf
                         name: 'input',
                         config: {
                             type: 'input',
-                            label: 'Label',
                             controllerProps: {
                                 name: 'label',
                                 defaultValue: 'Label',
@@ -57,17 +56,20 @@ const triggerControlPanelConfig = (): ControlPanelConfig<TriggerControlPanelConf
                                     maxLength: 35,
                                 },
                             },
+                            componentProps: {
+                                title: 'Label',
+                            },
                         },
                     },
                     {
                         name: 'appearanceOfStatus',
                         config: {
                             type: 'AppearanceIcon',
-                            label: 'Appearance of status',
                             controllerProps: {
                                 name: 'appearanceIcon',
                             },
                             componentProps: {
+                                label: 'Appearance of status',
                                 defaultValue: {
                                     icon: 'AdsClickIcon',
                                     color: '#8E66FF',

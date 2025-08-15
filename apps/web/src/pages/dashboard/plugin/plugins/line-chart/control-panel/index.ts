@@ -85,13 +85,15 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
                         name: 'input',
                         config: {
                             type: 'input',
-                            label: 'Title',
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Title',
                                 rules: {
                                     maxLength: 35,
                                 },
+                            },
+                            componentProps: {
+                                title: 'Title',
                             },
                         },
                     },
@@ -118,12 +120,12 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
                         name: 'chartTimeSelect',
                         config: {
                             type: 'ChartTimeSelect',
-                            label: 'Time',
                             controllerProps: {
                                 name: 'time',
                                 defaultValue: 86400000,
                             },
                             componentProps: {
+                                title: 'Time',
                                 style: {
                                     width: '100%',
                                 },
@@ -134,12 +136,12 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
                         name: 'input',
                         config: {
                             type: 'input',
-                            label: 'LeftY Label',
                             controllerProps: {
                                 name: 'leftYAxisUnit',
                                 defaultValue: '',
                             },
                             componentProps: {
+                                title: 'LeftY Label',
                                 size: 'small',
                                 slotProps: {
                                     input: {
@@ -161,12 +163,12 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
                         name: 'input',
                         config: {
                             type: 'input',
-                            label: 'RightY Label',
                             controllerProps: {
                                 name: 'rightYAxisUnit',
                                 defaultValue: '',
                             },
                             componentProps: {
+                                title: 'RightY Label',
                                 size: 'small',
                                 slotProps: {
                                     input: {
