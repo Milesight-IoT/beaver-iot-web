@@ -135,7 +135,7 @@ const BindModal: React.FC<Props> = ({
     onSuccess,
     ...props
 }) => {
-    const { getIntlText } = useI18n();
+    const { getIntlText, getIntlHtml } = useI18n();
     const readonly = !!device?.device_id;
     const modalTitle = useMemo(() => {
         if (!visible) return '';
@@ -536,7 +536,7 @@ const BindModal: React.FC<Props> = ({
                         <div className="modal-infer-mode-setting-body" ref={inferResultRef}>
                             {!selectedImageEntity?.value ? (
                                 <Empty
-                                    text={getIntlText(
+                                    text={getIntlHtml(
                                         'setting.integration.ai_model_bind_device_tip',
                                     )}
                                 />
