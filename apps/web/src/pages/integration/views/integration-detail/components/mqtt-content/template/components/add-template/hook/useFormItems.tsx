@@ -8,13 +8,13 @@ import {
     Tooltip,
     Link,
 } from '@mui/material';
-import { useI18n } from '@milesight/shared/src/hooks';
+import { useCopy, useI18n } from '@milesight/shared/src/hooks';
 import {
     checkMaxLength,
     checkRequired,
     checkStartWithSpecialChar,
 } from '@milesight/shared/src/utils/validators';
-import { OpenInNewIcon } from '@milesight/shared/src/components';
+import { ContentCopyIcon, OpenInNewIcon } from '@milesight/shared/src/components';
 import CodeEditor from '../../code-editor';
 
 export interface FormDataProps {
@@ -26,6 +26,7 @@ export interface FormDataProps {
 
 const useFormItems = ({ prefixTopic }: { prefixTopic: string }) => {
     const { lang, getIntlText } = useI18n();
+    const { handleCopy } = useCopy();
 
     const yamlGuideLink = useMemo(() => {
         if (lang === 'CN') {
@@ -113,6 +114,24 @@ const useFormItems = ({ prefixTopic }: { prefixTopic: string }) => {
                                             </Tooltip>
                                         </InputAdornment>
                                     ),
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="copy text"
+                                                onClick={e => {
+                                                    handleCopy(
+                                                        prefixTopic + (value ? String(value) : ''),
+                                                        e.currentTarget?.closest('div'),
+                                                    );
+                                                }}
+                                                onMouseDown={(e: any) => e.preventDefault()}
+                                                onMouseUp={(e: any) => e.preventDefault()}
+                                                edge="end"
+                                            >
+                                                <ContentCopyIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
                                 },
                             }}
                         />
@@ -192,7 +211,7 @@ const useFormItems = ({ prefixTopic }: { prefixTopic: string }) => {
             },
         ];
         return result;
-    }, [getIntlText, prefixTopic]);
+    }, [getIntlText, prefixTopic, handleCopy]);
 
     return formItems;
 };
