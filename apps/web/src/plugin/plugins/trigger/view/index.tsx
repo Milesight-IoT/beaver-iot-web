@@ -36,8 +36,8 @@ const View = (props: Props) => {
     const tempRef = useRef<any>({});
 
     const latestEntity = useMemo(() => {
-        if (!entity) return {};
-        return getLatestEntityDetail(entity);
+        if (!entity) return;
+        return getLatestEntityDetail(entity as EntityOptionType);
     }, [entity, getLatestEntityDetail]);
 
     // Call service
@@ -81,7 +81,16 @@ const View = (props: Props) => {
         if (!error) {
             let list = res || [];
             if (valueType !== ENTITY_DATA_VALUE_TYPE.OBJECT && !list.length) {
-                list = [objectToCamelToSnake(latestEntity?.rawData)];
+                const data = latestEntity?.rawData
+                    ? objectToCamelToSnake(latestEntity?.rawData)
+                    : ({} as any);
+
+                if (data?.entity_value_attribute?.enum) {
+                    data.entity_value_attribute.enum =
+                        latestEntity?.rawData?.entityValueAttribute?.enum;
+                }
+
+                list = [data];
             }
             const children =
                 list?.filter((childrenItem: EntityData) => {

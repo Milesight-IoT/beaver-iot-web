@@ -21,7 +21,7 @@ declare interface DeviceSchema {
     additional_data?: any;
 
     /** Creation Times (ms) */
-    create_at: number;
+    created_at: number;
 
     /** Update Time (ms) */
     update_at: number;

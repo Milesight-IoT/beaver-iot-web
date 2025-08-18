@@ -97,7 +97,7 @@ export const getProjectDetail = async (): Promise<{
         created_at: Date;
         updated_at: Date;
     };
-    create_at: string;
+    created_at: string;
     updated_at: string;
     [key: string]: any;
 }> => {

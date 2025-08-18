@@ -18,7 +18,7 @@ export interface SyncedDeviceType {
     ke?: string;
     eui: string;
     name: string;
-    create_at: string;
+    created_at: string;
 }
 
 /** syncAble device detail */
