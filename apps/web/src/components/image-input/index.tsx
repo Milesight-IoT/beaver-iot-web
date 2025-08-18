@@ -18,6 +18,11 @@ export interface Props {
     readOnly?: boolean;
 
     /**
+     * Whether to upload files automatically
+     */
+    autoUpload?: UploadProps['autoUpload'];
+
+    /**
      * Temporary resource live minutes
      */
     tempLiveMinutes?: UploadProps['tempLiveMinutes'];
@@ -39,30 +44,52 @@ const genFullUrl = (path?: string) => {
         : `${location.origin}${API_PREFIX}${path.startsWith('/') ? '' : '/'}${path}`;
 };
 
+function fileToBase64(file?: File | null): Promise<string | undefined> {
+    if (!file) return Promise.resolve(undefined);
+
+    return new Promise(resolve => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+            resolve(e.target?.result as string);
+        };
+    });
+}
+
 /**
  * Image input component
  * @param props
  * @example
  * <ImageInput value={value} onChange={setValue} />
  */
-const ImageInput: React.FC<Props> = ({ accept, readOnly, tempLiveMinutes, ...props }) => {
+const ImageInput: React.FC<Props> = ({
+    accept,
+    readOnly,
+    autoUpload,
+    tempLiveMinutes,
+    ...props
+}) => {
     const { getIntlText } = useI18n();
     const [value, setValue] = useControllableValue(props);
     const [file, setFile] = useState<FileValueType | null>();
     const [inputValue, setInputValue] = useState('');
     const [dataType, setDataType] = useState<DataType>('file');
 
-    const handleInputTypeChange = (type: DataType) => {
+    const handleInputTypeChange = async (type: DataType) => {
         setDataType(type);
         switch (type) {
-            case 'file':
-                setValue(!file?.url ? '' : genFullUrl(file.url));
+            case 'file': {
+                const base64 = await fileToBase64(file?.original);
+                setValue(base64);
                 break;
-            case 'url':
+            }
+            case 'url': {
                 setValue(inputValue || '');
                 break;
-            default:
+            }
+            default: {
                 break;
+            }
         }
     };
 
@@ -101,18 +128,19 @@ const ImageInput: React.FC<Props> = ({ accept, readOnly, tempLiveMinutes, ...pro
                     <Upload
                         accept={accept}
                         disabled={!!readOnly}
+                        autoUpload={autoUpload}
                         tempLiveMinutes={tempLiveMinutes}
                         value={file}
-                        onChange={data => {
+                        onChange={async data => {
                             if (!data) {
                                 setFile(null);
                                 setValue('');
                             }
-                            const result = !Array.isArray(data) ? data : data[0];
+                            const file = !Array.isArray(data) ? data : data[0];
+                            const base64 = await fileToBase64(file?.original);
 
-                            if (result?.url) setValue(genFullUrl(result.url));
-
-                            setFile(result);
+                            setFile(file);
+                            setValue(base64);
                         }}
                         onDropRejected={rejections => {
                             const content = rejections[0]?.errors[0]?.message;

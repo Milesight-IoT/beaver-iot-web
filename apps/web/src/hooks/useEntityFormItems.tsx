@@ -13,6 +13,7 @@ import {
     Autocomplete,
 } from '@mui/material';
 import { isNil, isEqual } from 'lodash-es';
+import { BASE64_IMAGE_REGEX } from '@milesight/shared/src/config';
 import { useI18n } from '@milesight/shared/src/hooks';
 import {
     checkRequired,
@@ -138,7 +139,12 @@ const getValidators = (entity: NonNullable<Props['entities']>[0], required = fal
             }
             case 'IMAGE':
             case 'IMAGE:URL': {
-                result.checkStartWithHttpOrHttps = checkStartWithHttpOrHttps();
+                const checkUrl = checkStartWithHttpOrHttps();
+                result.checkImageString = (value: string) => {
+                    if (BASE64_IMAGE_REGEX.test(value)) return true;
+                    return checkUrl(value);
+                };
+
                 break;
             }
             default: {

@@ -10,6 +10,7 @@ import {
     SaveAltIcon,
     ContentCopyIcon,
     AutoAwesomeIcon,
+    BrokenImageIcon,
     toast,
     type ModalProps,
 } from '@milesight/shared/src/components';
@@ -70,7 +71,7 @@ const TestModal: React.FC<Props> = ({ modelName, entities, visible, onCancel, ..
     const { control, formState, handleSubmit, reset } = useForm<EntityFormDataProps>();
     const { formItems, decodeFormParams } = useEntityFormItems({
         entities,
-        imageUploadProps: { accept: imageAccept, tempLiveMinutes: 360 },
+        imageUploadProps: { accept: imageAccept, autoUpload: false, tempLiveMinutes: 360 },
     });
     const isLoading = formState.isSubmitting;
     const formValues = useWatch({ control });
@@ -84,6 +85,7 @@ const TestModal: React.FC<Props> = ({ modelName, entities, visible, onCancel, ..
             return;
         }
 
+        setImageError(null);
         setOutput(null);
         setOriginalImageUrl(null);
         const [error, resp] = await awaitWrap(entityAPI.callService({ exchange: finalParams }));
@@ -106,6 +108,7 @@ const TestModal: React.FC<Props> = ({ modelName, entities, visible, onCancel, ..
 
         previousValues.current = formValues;
         setOutput(null);
+        setImageError(null);
     }, [formValues]);
 
     // ---------- Handle actions in header ----------
@@ -166,6 +169,7 @@ const TestModal: React.FC<Props> = ({ modelName, entities, visible, onCancel, ..
     const [originalImageUrl, setOriginalImageUrl] = useState<string | null>();
     const [output, setOutput] = useState<InferenceResponse['outputs']['data'] | null>();
     const [points, setPoints] = useState<PointType[]>([]);
+    const [imageError, setImageError] = useState<boolean | null>();
 
     // Generate points when output change
     useEffect(() => {
@@ -183,6 +187,7 @@ const TestModal: React.FC<Props> = ({ modelName, entities, visible, onCancel, ..
     useEffect(() => {
         if (visible) return;
         reset();
+        setImageError(null);
         setOutput(null);
         setOriginalImageUrl(null);
         setResultType(DEFAULT_RESULT_TYPE);
@@ -284,12 +289,25 @@ const TestModal: React.FC<Props> = ({ modelName, entities, visible, onCancel, ..
                             </div>
                             {resultType === 'image' && (
                                 <div className="result-main-content result-main-image">
+                                    {imageError && (
+                                        <div className="result-main-image-error">
+                                            <BrokenImageIcon />
+                                        </div>
+                                    )}
                                     <ImageAnnotation
                                         ref={stageRef}
                                         imgSrc={originalImageUrl}
                                         points={points}
                                         containerWidth={imageSize.width}
                                         containerHeight={imageSize.height}
+                                        onImageError={() => {
+                                            setImageError(true);
+                                            toast.error(
+                                                getIntlText(
+                                                    'setting.integration.ai_infer_load_image_error',
+                                                ),
+                                            );
+                                        }}
                                         // onPointsChange={setPoints}
                                     />
                                 </div>

@@ -139,5 +139,6 @@
     "setting.valid.regex": "{1} field value must conform to the regular expression {2}.",
     "setting.valid.string": "{1} field value must be of String type.",
     "setting.valid.url_image": "{1} field value should be a valid image URL.",
-    "setting.integration.ai_model_bind_device_tip": "Select the device and entity on the left,\nand the image preview will be displayed here"
+    "setting.integration.ai_model_bind_device_tip": "Select the device and entity on the left,\nand the image preview will be displayed here",
+    "setting.integration.ai_infer_load_image_error": "Load image error, please check and try again."
 }

@@ -304,7 +304,7 @@ const Upload: React.FC<Props> = ({
         result.push(
             <Fragment key={file.path}>
                 <Tooltip autoEllipsis className="name" title={file?.name || file?.url || ''} />
-                {`(${getSizeString(file.size)})`}
+                {file?.size ? `(${getSizeString(file.size)})` : ''}
             </Fragment>,
         );
 
