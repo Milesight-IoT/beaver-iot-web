@@ -128,7 +128,7 @@ const getValidators = (entity: NonNullable<Props['entities']>[0], required = fal
     // Check format
     if (attr.format) {
         if (attr.format.startsWith('REGEX:')) {
-            const [, pattern] = attr.format.split(':');
+            const pattern = attr.format.replace('REGEX:', '');
             result.checkRegexp = checkRegexp({ regexp: new RegExp(pattern || '') });
         }
 
