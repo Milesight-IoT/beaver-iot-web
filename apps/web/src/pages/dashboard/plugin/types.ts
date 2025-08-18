@@ -14,6 +14,9 @@ import {
 } from './components';
 import { COMPONENTCLASS } from './constant';
 
+/**
+ * The form item component type
+ */
 export type ControlType =
     | 'Input'
     | 'ChartEntityPosition'

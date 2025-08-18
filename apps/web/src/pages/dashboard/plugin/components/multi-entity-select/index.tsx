@@ -22,7 +22,6 @@ export default React.memo((props: IProps) => {
         entityExcludeChildren,
         maxCount = 5,
         customFilterEntity,
-        title,
         ...restProps
     } = props;
 
@@ -42,7 +41,6 @@ export default React.memo((props: IProps) => {
         <EntitySelect
             fieldName="entityId"
             multiple
-            label={title}
             maxCount={maxCount}
             entityType={entityType}
             entityValueType={entityValueTypes || entityValueType}

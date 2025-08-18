@@ -23,7 +23,7 @@ type Props = {
 export type SelectProps = Props & MuiSelectProps;
 
 const Select = (props: SelectProps) => {
-    const { options, renderOptions, style, title, ...rest } = props;
+    const { options, renderOptions, style, label, ...rest } = props;
 
     // Conversion of down pull option data
     const getMenuItems = useMemo(() => {
@@ -46,12 +46,12 @@ const Select = (props: SelectProps) => {
 
     return (
         <FormControl sx={{ ...style }}>
-            {!!title && (
+            {!!label && (
                 <InputLabel size={rest?.size as any} required={rest?.required} id="select-label">
-                    {title}
+                    {label}
                 </InputLabel>
             )}
-            <MuiSelect {...rest} label={title} labelId="select-label">
+            <MuiSelect {...rest} label={label} labelId="select-label">
                 {renderOptions
                     ? renderOptions(options)
                     : getMenuItems?.map((item: OptionsProps) => {

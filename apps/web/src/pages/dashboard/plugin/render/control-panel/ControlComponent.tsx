@@ -1,8 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { omit } from 'lodash-es';
 import { type ControllerProps } from 'react-hook-form';
 
-import { type ToggleRadioProps } from '@/components';
+import { InfoOutlinedIcon } from '@milesight/shared/src/components';
+
+import { type ToggleRadioProps, Tooltip } from '@/components';
 import type { CustomControlItem } from '@/pages/dashboard/plugin/types';
 import {
     Input,
@@ -34,45 +36,71 @@ const ControlComponent: React.FC<ControlComponentProps> = (props: ControlCompone
         fieldState: { error },
     } = renderParams || {};
 
-    const formLabel = useMemo(() => {
-        return config?.label || '';
+    const formLabel: ReactNode = useMemo(() => {
+        if (!config?.label && !config?.description) {
+            return null;
+        }
+
+        return (
+            <div className="form-label">
+                {config?.label && <div className="form-label__title">{config.label}</div>}
+                {config?.description && (
+                    <div className="form-label__tip">
+                        <Tooltip title={config.description}>
+                            <InfoOutlinedIcon sx={{ width: 20, height: 20 }} />
+                        </Tooltip>
+                    </div>
+                )}
+            </div>
+        );
     }, [config]);
 
     /**
-     * General common props
+     * Form item component common props
      */
-    const commonProps = useMemo(() => {
+    const commonProps: {
+        value: any;
+        onChange: (...event: any[]) => void;
+        label: ReactNode;
+        error: boolean;
+        helperText?: string | null;
+    } = useMemo(() => {
         return {
             value,
             onChange,
+            label: formLabel,
             error: !!error,
             helperText: error ? error.message : null,
         };
-    }, [value, onChange, error]);
+    }, [value, onChange, error, formLabel]);
 
     switch (config?.type) {
         case 'Input':
-            return (
-                <Input title={formLabel as string} {...commonProps} {...config?.componentProps} />
-            );
+            return <Input {...commonProps} {...config?.componentProps} />;
         case 'ChartEntityPosition':
-            return <ChartEntityPosition {...commonProps} {...config?.componentProps} />;
+            return (
+                <ChartEntityPosition
+                    {...omit(commonProps, ['label'])}
+                    {...config?.componentProps}
+                />
+            );
         case 'ChartTimeSelect':
             return (
                 <ChartTimeSelect
-                    title={formLabel as string}
                     {...omit(commonProps, ['helperText'])}
                     {...config?.componentProps}
                 />
             );
         case 'ToggleRadio':
             return (
-                <ToggleRadio {...commonProps} {...(config?.componentProps as ToggleRadioProps)} />
+                <ToggleRadio
+                    {...omit(commonProps, ['label'])}
+                    {...(config?.componentProps as ToggleRadioProps)}
+                />
             );
         case 'EntitySelect':
             return (
                 <EntitySelect
-                    title={formLabel as string}
                     {...commonProps}
                     {...(config?.componentProps as SingleEntitySelectProps)}
                 />
@@ -80,7 +108,6 @@ const ControlComponent: React.FC<ControlComponentProps> = (props: ControlCompone
         case 'MultiEntitySelect':
             return (
                 <MultiEntitySelect
-                    title={formLabel as string}
                     {...commonProps}
                     {...(config?.componentProps as MultipleEntitySelectProps)}
                 />
@@ -89,24 +116,22 @@ const ControlComponent: React.FC<ControlComponentProps> = (props: ControlCompone
             return (
                 <Upload
                     error={error}
-                    {...omit(commonProps, ['error'])}
+                    {...omit(commonProps, ['label', 'error'])}
                     {...config?.componentProps}
                 />
             );
         case 'AppearanceIcon':
+            return <AppearanceIcon {...commonProps} {...config?.componentProps} />;
+        case 'MultiAppearanceIcon':
             return (
-                <AppearanceIcon
-                    label={formLabel as string}
-                    {...commonProps}
+                <MultiAppearanceIcon
+                    {...omit(commonProps, ['label'])}
                     {...config?.componentProps}
                 />
             );
-        case 'MultiAppearanceIcon':
-            return <MultiAppearanceIcon {...commonProps} {...config?.componentProps} />;
         case 'ChartMetricsSelect':
             return (
                 <ChartMetricsSelect
-                    title={formLabel as string}
                     {...omit(commonProps, ['helperText'])}
                     {...config?.componentProps}
                 />

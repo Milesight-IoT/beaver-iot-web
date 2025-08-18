@@ -7,6 +7,20 @@
 
         .control-item {
             margin-top: @margin-md;
+
+            .form-label {
+                display: flex;
+                align-items: center;
+
+                &__tip {
+                    margin-left: @margin-xxs;
+                    color: var(--text-color-tertiary);
+
+                    .ms-tooltip {
+                        display: flex;
+                    }
+                }
+            }
         }
     }
 }

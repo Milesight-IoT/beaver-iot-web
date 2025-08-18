@@ -5,7 +5,7 @@ import { useMemoizedFn } from 'ahooks';
 type InputType = TextFieldProps;
 
 const Input = (props: InputType) => {
-    const { sx, title, value, onChange, ...rest } = props;
+    const { sx, value, onChange, ...rest } = props;
 
     const [inputVal, setInputVal] = useState(value);
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
@@ -31,7 +31,6 @@ const Input = (props: InputType) => {
             {...rest}
             value={inputVal}
             onChange={handleChange}
-            label={title}
             fullWidth={rest.fullWidth !== false}
             sx={{
                 input: {
