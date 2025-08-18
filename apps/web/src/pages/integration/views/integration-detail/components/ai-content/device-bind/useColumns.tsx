@@ -37,7 +37,7 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 ellipsis: true,
             },
             {
-                field: 'model_name',
+                field: 'current_model_name',
                 headerName: getIntlText('setting.integration.ai_bind_label_ai_model_name'),
                 minWidth: 160,
                 ellipsis: true,
@@ -61,6 +61,12 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                     if (!value) return '-';
                     return <ImagePreview id={id} src={value} />;
                 },
+            },
+            {
+                field: 'model_name',
+                headerName: getIntlText('setting.integration.ai_bind_label_inference_model_name'),
+                minWidth: 160,
+                ellipsis: true,
             },
             {
                 field: 'infer_outputs_data',
@@ -110,6 +116,7 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 width: 120,
                 display: 'flex',
                 align: 'left',
+                fixed: 'right',
                 headerAlign: 'left',
                 renderCell({ row }) {
                     return (

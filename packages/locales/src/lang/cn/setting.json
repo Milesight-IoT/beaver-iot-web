@@ -15,7 +15,7 @@
     "setting.integration.ai_bind_device": "绑定设备",
     "setting.integration.ai_bind_device_ai_settings": "AI 设置",
     "setting.integration.ai_bind_device_choose_device": "选择设备",
-    "setting.integration.ai_bind_label_ai_model_name": "AI 模型名称",
+    "setting.integration.ai_bind_label_ai_model_name": "绑定模型名称",
     "setting.integration.ai_bind_label_device_uplink_time": "设备上报时间",
     "setting.integration.ai_bind_label_infer_result": "推理结果",
     "setting.integration.ai_bind_label_infer_status": "推理服务状态",
@@ -140,5 +140,6 @@
     "setting.valid.string": "{1}的值必须为String类型。",
     "setting.valid.url_image": "{1}处得知值必须为有效的图片URL。",
     "setting.integration.ai_model_bind_device_tip": "在左侧选择设备和实体\n图像预览将在此处显示",
-    "setting.integration.ai_infer_load_image_error": "图片加载错误，请检查后重试。"
+    "setting.integration.ai_infer_load_image_error": "图片加载错误，请检查后重试。",
+    "setting.integration.ai_bind_label_inference_model_name": "推理模型名称"
 }

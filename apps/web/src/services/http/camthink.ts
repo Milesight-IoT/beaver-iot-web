@@ -112,7 +112,10 @@ export interface CamthinkAPISchema extends APISchema {
             content: {
                 device_id: ApiKey;
                 device_name: string;
-                model_name: string;
+                /** Inference Model Name */
+                model_name?: string;
+                /** Current Bind Model Name */
+                current_model_name: string;
                 origin_image: string;
                 result_image: string;
                 /** JSON string */

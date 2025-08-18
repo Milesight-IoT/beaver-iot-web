@@ -15,7 +15,7 @@
     "setting.integration.ai_bind_device": "Bind Device",
     "setting.integration.ai_bind_device_ai_settings": "AI Settings",
     "setting.integration.ai_bind_device_choose_device": "Select Device",
-    "setting.integration.ai_bind_label_ai_model_name": "AI Model Name",
+    "setting.integration.ai_bind_label_ai_model_name": "Binding Model Name",
     "setting.integration.ai_bind_label_device_uplink_time": "Device Report Time",
     "setting.integration.ai_bind_label_infer_result": "Inference Result",
     "setting.integration.ai_bind_label_infer_status": "Inference Service Status",
@@ -140,5 +140,6 @@
     "setting.valid.string": "{1} field value must be of String type.",
     "setting.valid.url_image": "{1} field value should be a valid image URL.",
     "setting.integration.ai_model_bind_device_tip": "Select the device and entity on the left,\nand the image preview will be displayed here",
-    "setting.integration.ai_infer_load_image_error": "Load image error, please check and try again."
+    "setting.integration.ai_infer_load_image_error": "Load image error, please check and try again.",
+    "setting.integration.ai_bind_label_inference_model_name": "Inference Model Name"
 }
