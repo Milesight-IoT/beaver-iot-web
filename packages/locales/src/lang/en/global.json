@@ -257,7 +257,7 @@
     "valid.input.replace_device_sn": "Please enter the SN number of the same device type.",
     "valid.input.required": "This field is required.",
     "valid.input.sn": "It should contain 12 or 16 characters consisting of digits and upper and lower case letters.",
-    "valid.input.start_with_http_https": "Please enter a valid URL. It must start with http:// or https://.",
+    "valid.input.start_with_http_https": "Please enter a URL starting with http:// or https:// and conforming to RFC standards.",
     "valid.input.start_with_normal_char": "Required Format: the input must start with lower case letters (a-z), upper case letters (A-Z), numbers (0-9), or underscores (_).",
     "valid.input.start_with_ws_wss": "Please enter a valid URL. It must start with ws:// or wss://.",
     "valid.input.step_value": "Please enter a multiple of {0}.",
@@ -269,6 +269,5 @@
     "valid.input.username": "Minimum username length is 5.",
     "valid.input.value": "Input value: {0} only.",
     "valid.input.version": "The version number does not comply with the specification.",
-    "valid.resp.at_least_one": "Please select at least one {1}.",
-    "valid.input.start_with_special_char": "Must start with {0}"
+    "valid.resp.at_least_one": "Please select at least one {1}."
 }

@@ -257,7 +257,7 @@
     "valid.input.replace_device_sn": "请输入相同设备类型的SN号。",
     "valid.input.required": "此字段为必填项。",
     "valid.input.sn": "应包含12或16个字符，由数字和大小写字母组成。",
-    "valid.input.start_with_http_https": "请输入有效的URL，必须以http://或https://开头。",
+    "valid.input.start_with_http_https": "请输入以http://或https://开头，且符合RFC标准要求的URL。",
     "valid.input.start_with_normal_char": "格式要求：输入必须以小写字母（a-z）、大写字母（A-Z）、数字（0-9）或下划线（_）开头。",
     "valid.input.start_with_ws_wss": "请输入有效的URL，必须以ws://或wss://开头。",
     "valid.input.step_value": "请输入{0}的倍数。",
@@ -269,6 +269,5 @@
     "valid.input.username": "用户名长度最小长度为5。",
     "valid.input.value": "输入值：仅{0}。",
     "valid.input.version": "版本号不符合规范。",
-    "valid.resp.at_least_one": "请至少选择一个{1}。",
-    "valid.input.start_with_special_char": "必须以{0}开头"
+    "valid.resp.at_least_one": "请至少选择一个{1}。"
 }
