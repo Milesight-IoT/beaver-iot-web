@@ -15,28 +15,28 @@ import {
 import { COMPONENTCLASS } from './constant';
 
 export type ControlType =
-    | 'input'
-    | 'chartEntityPosition'
+    | 'Input'
+    | 'ChartEntityPosition'
     | 'ChartTimeSelect'
     | 'ToggleRadio'
-    | 'entitySelect'
+    | 'EntitySelect'
     | 'Upload'
     | 'AppearanceIcon'
     | 'MultiAppearanceIcon'
-    | 'multiEntitySelect'
-    | 'chartMetricsSelect';
+    | 'MultiEntitySelect'
+    | 'ChartMetricsSelect';
 
 export type ControlTypePropsMap = {
-    input: Partial<TextFieldProps>;
-    chartEntityPosition: Partial<ChartEntityPositionProps>;
+    Input: Partial<TextFieldProps>;
+    ChartEntityPosition: Partial<ChartEntityPositionProps>;
     ChartTimeSelect: Partial<PluginSelectProps>;
     ToggleRadio: ToggleRadioProps;
-    entitySelect: Partial<SingleEntitySelectProps>;
+    EntitySelect: Partial<SingleEntitySelectProps>;
     Upload: Partial<UploadProps>;
     AppearanceIcon: AppearanceIconProps;
     MultiAppearanceIcon: MultiAppearanceIconProps;
-    multiEntitySelect: Partial<MultipleEntitySelectProps>;
-    chartMetricsSelect: Partial<ChartMetricsSelectProps>;
+    MultiEntitySelect: Partial<MultipleEntitySelectProps>;
+    ChartMetricsSelect: Partial<ChartMetricsSelectProps>;
 };
 
 // Check the completeness of ControlTypePropsMap
@@ -46,6 +46,7 @@ export type CheckedControlTypePropsMap = CheckMapCompleteness<ControlTypePropsMa
 export type ControlConfigMap<T extends AnyDict = AnyDict> = {
     [K in ControlType]: {
         type?: K;
+        label?: ReactNode;
         description?: ReactNode;
         controllerProps?: PartialOptional<ControllerProps, 'render'>;
         componentProps?: ControlTypePropsMap[K];

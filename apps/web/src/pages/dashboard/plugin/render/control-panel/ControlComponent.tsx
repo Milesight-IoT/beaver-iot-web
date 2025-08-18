@@ -5,18 +5,18 @@ import { type ControllerProps } from 'react-hook-form';
 import { type ToggleRadioProps } from '@/components';
 import type { CustomControlItem } from '@/pages/dashboard/plugin/types';
 import {
-    input as Input,
-    chartEntityPosition as ChartEntityPosition,
+    Input,
+    ChartEntityPosition,
     ChartTimeSelect,
     ToggleRadio,
-    entitySelect as EntitySelect,
+    EntitySelect,
     type SingleEntitySelectProps,
-    multiEntitySelect as MultiEntitySelect,
+    MultiEntitySelect,
     type MultipleEntitySelectProps,
     Upload,
     AppearanceIcon,
     MultiAppearanceIcon,
-    chartMetricsSelect as ChartMetricsSelect,
+    ChartMetricsSelect,
 } from '../../components';
 
 export interface ControlComponentProps {
@@ -34,6 +34,10 @@ const ControlComponent: React.FC<ControlComponentProps> = (props: ControlCompone
         fieldState: { error },
     } = renderParams || {};
 
+    const formLabel = useMemo(() => {
+        return config?.label || '';
+    }, [config]);
+
     /**
      * General common props
      */
@@ -47,13 +51,16 @@ const ControlComponent: React.FC<ControlComponentProps> = (props: ControlCompone
     }, [value, onChange, error]);
 
     switch (config?.type) {
-        case 'input':
-            return <Input {...commonProps} {...config?.componentProps} />;
-        case 'chartEntityPosition':
+        case 'Input':
+            return (
+                <Input title={formLabel as string} {...commonProps} {...config?.componentProps} />
+            );
+        case 'ChartEntityPosition':
             return <ChartEntityPosition {...commonProps} {...config?.componentProps} />;
         case 'ChartTimeSelect':
             return (
                 <ChartTimeSelect
+                    title={formLabel as string}
                     {...omit(commonProps, ['helperText'])}
                     {...config?.componentProps}
                 />
@@ -62,16 +69,18 @@ const ControlComponent: React.FC<ControlComponentProps> = (props: ControlCompone
             return (
                 <ToggleRadio {...commonProps} {...(config?.componentProps as ToggleRadioProps)} />
             );
-        case 'entitySelect':
+        case 'EntitySelect':
             return (
                 <EntitySelect
+                    title={formLabel as string}
                     {...commonProps}
                     {...(config?.componentProps as SingleEntitySelectProps)}
                 />
             );
-        case 'multiEntitySelect':
+        case 'MultiEntitySelect':
             return (
                 <MultiEntitySelect
+                    title={formLabel as string}
                     {...commonProps}
                     {...(config?.componentProps as MultipleEntitySelectProps)}
                 />
@@ -85,12 +94,19 @@ const ControlComponent: React.FC<ControlComponentProps> = (props: ControlCompone
                 />
             );
         case 'AppearanceIcon':
-            return <AppearanceIcon {...commonProps} {...config?.componentProps} />;
+            return (
+                <AppearanceIcon
+                    label={formLabel as string}
+                    {...commonProps}
+                    {...config?.componentProps}
+                />
+            );
         case 'MultiAppearanceIcon':
             return <MultiAppearanceIcon {...commonProps} {...config?.componentProps} />;
-        case 'chartMetricsSelect':
+        case 'ChartMetricsSelect':
             return (
                 <ChartMetricsSelect
+                    title={formLabel as string}
                     {...omit(commonProps, ['helperText'])}
                     {...config?.componentProps}
                 />

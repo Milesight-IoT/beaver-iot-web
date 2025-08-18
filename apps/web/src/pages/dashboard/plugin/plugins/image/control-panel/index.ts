@@ -24,16 +24,14 @@ const imageControlPanelConfig = (): ControlPanelConfig<ImageConfigType> => {
                     {
                         name: 'input',
                         config: {
-                            type: 'input',
+                            type: 'Input',
+                            label: 'Label',
                             controllerProps: {
                                 name: 'label',
                                 defaultValue: 'Title',
                                 rules: {
                                     maxLength: 35,
                                 },
-                            },
-                            componentProps: {
-                                title: 'Label',
                             },
                         },
                     },
@@ -69,7 +67,8 @@ const imageControlPanelConfig = (): ControlPanelConfig<ImageConfigType> => {
                     {
                         name: 'entitySelect',
                         config: {
-                            type: 'entitySelect',
+                            type: 'EntitySelect',
+                            label: t('common.label.entity'),
                             controllerProps: {
                                 name: 'entity',
                                 rules: {
@@ -78,7 +77,6 @@ const imageControlPanelConfig = (): ControlPanelConfig<ImageConfigType> => {
                             },
                             componentProps: {
                                 required: true,
-                                title: t('common.label.entity'),
                                 entityType: ['PROPERTY'],
                                 entityValueTypes: ['STRING', 'LONG', 'DOUBLE', 'BOOLEAN'],
                                 entityAccessMod: ['R', 'RW'],
@@ -114,7 +112,8 @@ const imageControlPanelConfig = (): ControlPanelConfig<ImageConfigType> => {
                     {
                         name: 'input',
                         config: {
-                            type: 'input',
+                            type: 'Input',
+                            label: t('common.label.url'),
                             controllerProps: {
                                 name: 'url',
                                 rules: {
@@ -127,7 +126,6 @@ const imageControlPanelConfig = (): ControlPanelConfig<ImageConfigType> => {
                             },
                             componentProps: {
                                 required: true,
-                                title: t('common.label.url'),
                                 placeholder: t('common.placeholder.input'),
                             },
                             visibility(formData) {

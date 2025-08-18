@@ -55,6 +55,7 @@ const MAX_VALUE_LENGTH = 5;
  * Note: use in line chart multiple y axis
  */
 const ChartEntityPosition: React.FC<ChartEntityPositionProps> = ({
+    required,
     multiple = true,
     error,
     helperText,
@@ -103,12 +104,15 @@ const ChartEntityPosition: React.FC<ChartEntityPositionProps> = ({
 
     return (
         <div className={styles['chart-entity-position']}>
-            <div className={styles.label}>{getIntlText('common.label.data_source')}</div>
+            <div className={styles.label}>
+                {required && <span className={styles.asterisk}>*</span>}
+                {getIntlText('common.label.data_source')}
+            </div>
             <div className={styles['list-content']}>
                 {list.map((item, index) => (
                     <div className={styles.item} key={getKey(index)}>
                         <EntitySelect
-                            required
+                            required={required}
                             fieldName="entityId"
                             label={getIntlText('common.label.entity')}
                             popupIcon={<KeyboardArrowDownIcon />}

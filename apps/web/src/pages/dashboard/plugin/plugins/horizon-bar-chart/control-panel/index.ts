@@ -27,7 +27,8 @@ const horizonBarControlPanelConfig = (): ControlPanelConfig<BarChartControlPanel
                     {
                         name: 'multiEntitySelect',
                         config: {
-                            type: 'multiEntitySelect',
+                            type: 'MultiEntitySelect',
+                            label: 'Entity',
                             controllerProps: {
                                 name: 'entity',
                                 defaultValue: [],
@@ -37,7 +38,6 @@ const horizonBarControlPanelConfig = (): ControlPanelConfig<BarChartControlPanel
                             },
                             componentProps: {
                                 required: true,
-                                title: 'Entity',
                                 entityType: ['PROPERTY'],
                                 entityValueTypes: ['LONG', 'DOUBLE'],
                                 entityAccessMod: ['R', 'RW'],
@@ -47,7 +47,8 @@ const horizonBarControlPanelConfig = (): ControlPanelConfig<BarChartControlPanel
                     {
                         name: 'input',
                         config: {
-                            type: 'input',
+                            type: 'Input',
+                            label: 'Title',
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Title',
@@ -55,21 +56,18 @@ const horizonBarControlPanelConfig = (): ControlPanelConfig<BarChartControlPanel
                                     maxLength: 35,
                                 },
                             },
-                            componentProps: {
-                                title: 'Title',
-                            },
                         },
                     },
                     {
                         name: 'chartTimeSelect',
                         config: {
                             type: 'ChartTimeSelect',
+                            label: 'Time',
                             controllerProps: {
                                 name: 'time',
                                 defaultValue: 86400000,
                             },
                             componentProps: {
-                                title: 'Time',
                                 style: {
                                     width: '100%',
                                 },

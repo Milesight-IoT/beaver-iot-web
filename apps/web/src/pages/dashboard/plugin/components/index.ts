@@ -1,23 +1,23 @@
 export { default as ToggleRadio } from '@/components/toggle-radio';
 export { default as Upload, type FileValueType, type UploadFile } from '@/components/upload';
 
-export { default as input } from './input';
-export { default as select, type SelectProps } from './select';
-export { default as switch } from './switch';
-export { default as iconSelect } from './icon-select';
-export { default as iconColorSelect } from './icon-color-select';
+export { default as Input } from './input';
+export { default as Select, type SelectProps } from './select';
+export { default as Switch } from './switch';
+export { default as IconSelect } from './icon-select';
+export { default as IconColorSelect } from './icon-color-select';
 export { default as ChartTimeSelect } from './chart-time-select';
-export { default as entitySelect, type IProps as SingleEntitySelectProps } from './entity-select';
+export { default as EntitySelect, type IProps as SingleEntitySelectProps } from './entity-select';
 export {
-    default as chartMetricsSelect,
+    default as ChartMetricsSelect,
     type IProps as ChartMetricsSelectProps,
 } from './chart-metrics-select';
 export {
-    default as multiEntitySelect,
+    default as MultiEntitySelect,
     type IProps as MultipleEntitySelectProps,
 } from './multi-entity-select';
 export {
-    default as chartEntityPosition,
+    default as ChartEntityPosition,
     type ChartEntityPositionProps,
 } from './chart-entity-position';
 export {

@@ -28,7 +28,8 @@ const pieChartControlPanelConfig = (): ControlPanelConfig<PieChartControlPanelCo
                     {
                         name: 'entitySelect',
                         config: {
-                            type: 'entitySelect',
+                            type: 'EntitySelect',
+                            label: 'Entity',
                             controllerProps: {
                                 name: 'entity',
                                 rules: {
@@ -37,7 +38,6 @@ const pieChartControlPanelConfig = (): ControlPanelConfig<PieChartControlPanelCo
                             },
                             componentProps: {
                                 required: true,
-                                title: 'Entity',
                                 entityType: ['PROPERTY'],
                                 entityValueTypes: ['BOOLEAN', 'STRING'],
                                 entityAccessMod: ['R', 'RW'],
@@ -48,7 +48,8 @@ const pieChartControlPanelConfig = (): ControlPanelConfig<PieChartControlPanelCo
                     {
                         name: 'input',
                         config: {
-                            type: 'input',
+                            type: 'Input',
+                            label: 'Title',
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Title',
@@ -56,21 +57,18 @@ const pieChartControlPanelConfig = (): ControlPanelConfig<PieChartControlPanelCo
                                     maxLength: 35,
                                 },
                             },
-                            componentProps: {
-                                title: 'Title',
-                            },
                         },
                     },
                     {
                         name: 'chartTimeSelect',
                         config: {
                             type: 'ChartTimeSelect',
+                            label: 'Time',
                             controllerProps: {
                                 name: 'time',
                                 defaultValue: 86400000,
                             },
                             componentProps: {
-                                title: 'Time',
                                 style: {
                                     width: '100%',
                                 },
@@ -80,13 +78,13 @@ const pieChartControlPanelConfig = (): ControlPanelConfig<PieChartControlPanelCo
                     {
                         name: 'chartMetricsSelect',
                         config: {
-                            type: 'chartMetricsSelect',
+                            type: 'ChartMetricsSelect',
+                            label: 'metrics',
                             controllerProps: {
                                 name: 'metrics',
                                 defaultValue: 'COUNT',
                             },
                             componentProps: {
-                                title: 'metrics',
                                 filters: ['LAST', 'MIN', 'MAX', 'AVG', 'SUM'],
                                 style: {
                                     width: '100%',
