@@ -259,6 +259,7 @@
     "valid.input.sn": "应包含12或16个字符，由数字和大小写字母组成。",
     "valid.input.start_with_http_https": "请输入以http://或https://开头，且符合RFC标准要求的URL。",
     "valid.input.start_with_normal_char": "格式要求：输入必须以小写字母（a-z）、大写字母（A-Z）、数字（0-9）或下划线（_）开头。",
+    "valid.input.start_with_special_char": "字段内容一定要以 {0} 起始。",
     "valid.input.start_with_ws_wss": "请输入有效的URL，必须以ws://或wss://开头。",
     "valid.input.step_value": "请输入{0}的倍数。",
     "valid.input.string_letter_num_special_char": "仅支持大写字母、小写字母、数字 、 \"_\" 和 \"-\"。",
