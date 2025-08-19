@@ -93,7 +93,6 @@ const CodeEditor: React.FC<IProps> = ({
                                         handleCopy(
                                             editorValue,
                                             e.currentTarget.closest('div') as HTMLElement,
-                                            'pre',
                                         );
                                     }}
                                 >
