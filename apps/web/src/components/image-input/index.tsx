@@ -80,7 +80,7 @@ const ImageInput: React.FC<Props> = ({
         switch (type) {
             case 'file': {
                 const base64 = await fileToBase64(file?.original);
-                setValue(base64);
+                setValue(base64 || genFullUrl(file?.url));
                 break;
             }
             case 'url': {
@@ -140,7 +140,7 @@ const ImageInput: React.FC<Props> = ({
                             const base64 = await fileToBase64(file?.original);
 
                             setFile(file);
-                            setValue(base64);
+                            setValue(base64 || genFullUrl(file?.url));
                         }}
                         onDropRejected={rejections => {
                             const content = rejections[0]?.errors[0]?.message;
