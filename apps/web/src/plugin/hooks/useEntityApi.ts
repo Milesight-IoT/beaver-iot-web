@@ -10,6 +10,10 @@ export type CallServiceType = {
     exchange: Record<string, any>;
 };
 
+/**
+ * Entity API Hook
+ * @deprecated Type missing, functional redundancy, DO NOT USE IT ANYMORE !
+ */
 export const useEntityApi = () => {
     // Get the sub -entity
     const getEntityChildren = useCallback(async (params: GetEntityChildrenType) => {
