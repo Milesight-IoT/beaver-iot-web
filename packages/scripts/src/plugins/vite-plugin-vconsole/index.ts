@@ -1,8 +1,20 @@
 import type { Plugin } from 'vite';
 
 export interface VConsolePluginOptions {
+    /**
+     * Enable vConsole plugin
+     * @default false
+     */
     enable?: boolean;
+    /**
+     * vConsole source, it must be a url
+     * @default https://unpkg.com/vconsole@latest/dist/vconsole.min.js
+     */
     src?: string;
+    /**
+     * vConsole theme
+     * @default light
+     */
     theme?: 'light' | 'dark';
 }
 
@@ -29,7 +41,10 @@ export default function vConsolePlugin(options: VConsolePluginOptions): Plugin {
                 },
                 {
                     tag: 'script',
-                    children: `var vConsole = new window.VConsole({ theme: "${options.theme ?? 'light'}" });`,
+                    children: `
+                        const isMobile = /Android|iPhone|webOS|BlackBerry|SymbianOS|Windows Phone|iPad|iPod/i.test(window.navigator.userAgent);
+                        const vConsole = isMobile ? new window.VConsole({ theme: "${options.theme ?? 'light'}" }) : null;
+                    `.trim(),
                     injectTo,
                 },
             ];
