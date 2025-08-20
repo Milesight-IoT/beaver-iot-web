@@ -13,6 +13,7 @@ import {
     getViteEsbuildConfig,
     customChunkSplit,
     chunkSplitPlugin,
+    vConsolePlugin,
 } from '@milesight/scripts';
 import { version } from './package.json';
 
@@ -28,6 +29,7 @@ const {
     WEB_SOCKET_PROXY,
     MOCK_API_PROXY,
     ENABLE_HTTPS,
+    ENABLE_VCONSOLE,
 } = parseEnvVariables([
     path.join(projectRoot, '.env'),
     path.join(projectRoot, '.env.local'),
@@ -78,6 +80,9 @@ const plugins: PluginOption[] = [
     }),
     chunkSplitPlugin({
         customChunk: customChunkSplit,
+    }),
+    vConsolePlugin({
+        enable: !isProd && ENABLE_VCONSOLE === 'true',
     }),
     react(),
 ];
