@@ -98,7 +98,13 @@ const useFormItems = () => {
                     validate: {
                         checkRequired: checkRequired(),
                         checkMaxLength: checkMaxLength({ max: 50 }),
-                        checkRegexp: checkRegexp({ regexp: /^[A-Za-z0-9_@#$\-/\\[\]:]+$/ }),
+                        checkSpecialChar: value => {
+                            return /^[A-Za-z0-9_@#$/:[\]-]+$/.test(value)
+                                ? true
+                                : getIntlText('valid.input.string_letter_num_special_char', {
+                                      1: '@#$_-/[]:',
+                                  });
+                        },
                     },
                 },
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {

@@ -50,6 +50,7 @@ const useFormItems = ({ type, tenantId }: IPros) => {
                                           ? true
                                           : getIntlText(
                                                 'valid.input.string_letter_num_special_char',
+                                                { 1: '_-' },
                                             );
                                   }
                                 : checkLettersAndNum(),

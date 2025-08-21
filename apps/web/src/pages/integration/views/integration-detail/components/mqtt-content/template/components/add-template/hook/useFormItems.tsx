@@ -53,7 +53,7 @@ const useFormItems = ({ prefixTopic }: { prefixTopic: string }) => {
                         checkMaxLength: checkMaxLength({ max: 64 }),
                         checkValidChar: value => {
                             if (!/^[a-zA-Z0-9:_@#$/[\]-]+$/.test(value.toString())) {
-                                return getIntlText('common.valid.input_letter_num_special_char', {
+                                return getIntlText('valid.input.string_letter_num_special_char', {
                                     1: '_@#$-/[]:',
                                 });
                             }
@@ -86,7 +86,7 @@ const useFormItems = ({ prefixTopic }: { prefixTopic: string }) => {
                         checkMaxLength: checkMaxLength({ max: 100 }),
                         checkValidChar: value => {
                             if (!/^[A-Za-z0-9${}_/@-]+$/.test(value.toString())) {
-                                return getIntlText('common.valid.input_letter_num_special_char', {
+                                return getIntlText('valid.input.string_letter_num_special_char', {
                                     1: '${}-_/@',
                                 });
                             }
