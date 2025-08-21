@@ -58,7 +58,7 @@ const LogModal: React.FC<Props> = ({ visible, device, ...props }) => {
             },
             {
                 field: 'model_name',
-                headerName: getIntlText('setting.integration.ai_bind_label_ai_model_name'),
+                headerName: getIntlText('setting.integration.ai_bind_label_inference_model_name'),
                 minWidth: 160,
                 ellipsis: true,
             },
