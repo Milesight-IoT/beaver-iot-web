@@ -1,0 +1,72 @@
+{
+    "$schema": "../../schema.json",
+    "type": "trigger",
+    "name": "Trigger",
+    "class": "operate",
+    "icon": "./icon.svg",
+    "defaultRow": 1,
+    "defaultCol": 2,
+    "minRow": 1,
+    "minCol": 1,
+    "maxRow": 1,
+    "configProps": [
+        {
+            "style": "width: 100%",
+            "components": [
+                {
+                    "type": "entitySelect",
+                    "title": "Entity",
+                    "key": "entity",
+                    "style": "width: 100%",
+                    "valueType": "object",
+                    "getDataUrl": "",
+                    "componentProps": {
+                        "entityType": ["SERVICE", "PROPERTY"],
+                        "entityAccessMods": ["W", "RW"],
+                        "entityExcludeChildren": true
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "type": "input",
+                    "title": "Label",
+                    "key": "label",
+                    "defaultValue": "Label",
+                    "componentProps": {
+                        "inputProps": {
+                            "maxLength": 35
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "title": "Appearance of status",
+            "style": "display: flex;",
+            "components": [
+                {
+                    "type": "iconSelect",
+                    "key": "icon",
+                    "style": "flex: 1;padding-right: 12px;",
+                    "defaultValue": "AdsClickIcon",
+                    "rules": {
+                        "required": true
+                    }
+                },
+                {
+                    "type": "iconColorSelect",
+                    "key": "bgColor",
+                    "style": "flex: 1;",
+                    "defaultValue": "#8E66FF"
+                }
+            ]
+        }
+    ],
+    "view": []
+}

@@ -1,0 +1,70 @@
+{
+    "$schema": "../../schema.json",
+    "type": "dataCard",
+    "name": "Card",
+    "class": "data_card",
+    "icon": "./icon.svg",
+    "defaultRow": 2,
+    "defaultCol": 3,
+    "minRow": 1,
+    "minCol": 2,
+    "configProps": [
+        {
+            "style": "width: 100%",
+            "components": [
+                {
+                    "type": "entitySelect",
+                    "title": "Entity",
+                    "key": "entity",
+                    "style": "width: 100%",
+                    "componentProps": {
+                        "entityType": ["PROPERTY"],
+                        "entityValueTypes": ["STRING", "LONG", "DOUBLE", "BOOLEAN"],
+                        "entityAccessMod": ["R", "RW"]
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                }
+            ]
+        },
+        {
+            "style": "width: 100%",
+            "components": [
+                {
+                    "type": "input",
+                    "title": "Label",
+                    "key": "title",
+                    "style": "width: 100%",
+                    "defaultValue": "Label",
+                    "componentProps": {
+                        "inputProps": {
+                            "maxLength": 35
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "view": [
+        {
+            "tag": "div",
+            "themes": {
+                "default": {
+                    "class": "data-view__container"
+                }
+            },
+            "children": [
+                {
+                    "tag": "span",
+                    "themes": {
+                        "default": {
+                            "class": "data-view__content"
+                        }
+                    },
+                    "params": ["entity"]
+                }
+            ]
+        }
+    ]
+}

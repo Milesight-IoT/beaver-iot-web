@@ -1,0 +1,26 @@
+.control-panel-container {
+    position: relative;
+    margin-bottom: @margin-xl;
+
+    .control-section {
+        padding: 0 @padding-xl;
+
+        .control-item {
+            margin-top: @margin-md;
+
+            .form-label {
+                display: flex;
+                align-items: center;
+
+                &__tip {
+                    margin-left: @margin-xxs;
+                    color: var(--text-color-tertiary);
+
+                    .ms-tooltip {
+                        display: flex;
+                    }
+                }
+            }
+        }
+    }
+}

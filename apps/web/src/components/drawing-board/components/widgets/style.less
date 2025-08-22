@@ -1,0 +1,45 @@
+.react-grid-item {
+    z-index: 9;
+    touch-action: auto !important;
+    transition: all 0.2s ease;
+
+    &.cssTransforms {
+        transition-property: transform;
+    }
+
+    &.react-draggable-dragging {
+        z-index: 500;
+        transition: none;
+        will-change: transform;
+    }
+
+    &.resizing {
+        z-index: 500;
+        transition: none;
+        will-change: width, height;
+
+        .dashboard-content-widget-icon-edit {
+            display: none !important;
+        }
+    }
+
+    &.react-grid-placeholder {
+        z-index: 2;
+        background: fade(#1d2129, 4%) !important;
+        border-radius: 16px !important;
+        opacity: 1 !important;
+        user-select: none;
+        transition-duration: 0.1s;
+    }
+}
+
+[data-theme='dark'] .react-grid-item {
+    &.react-grid-placeholder {
+        background: fade(#f7f8fa, 4%) !important;
+    }
+}
+
+.slow-transition-react-grid-layout {
+    margin: calc(1px - @margin-md) 0;
+    transition: all 0.1s ease !important;
+}

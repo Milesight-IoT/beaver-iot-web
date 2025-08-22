@@ -1,0 +1,521 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "title": "Dashboard Chart Configuration",
+    "$comment": "https://www.milesight.com/beaver-iot/docs/dev-guides/frontend/development/dashboard/",
+    "definitions": {
+        "ThemeProps": {
+            "type": "object",
+            "properties": {
+                "class": {
+                    "type": "string",
+                    "description": "Class name setting",
+                    "default": ""
+                },
+                "style": {
+                    "type": "string",
+                    "description": "Direct style setting",
+                    "default": ""
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "$schema": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string",
+            "description": "Plugin name, used to display the plugin name in the form",
+            "minLength": 1
+        },
+        "type": {
+            "type": "string",
+            "description": "Plugin type, used as the unique identifier for the plugin. It must not be duplicated. It is used to find the corresponding configuration file in actual use.",
+            "minLength": 1
+        },
+        "class": {
+            "type": "string",
+            "description": "Plugin category, used to categorize the plugin. When adding a plugin on the dashboard, it will be displayed based on the category. If not filled, it defaults to the 'other' category.",
+            "default": "",
+            "enum": ["data_chart", "operate", "data_card", "other"]
+        },
+        "icon": {
+            "type": "string",
+            "description": "Plugin icon, optional. The value can only be icon.png or left blank. It is used to display the plugin icon when adding a plugin on the dashboard. If not filled, the default icon is displayed.",
+            "default": ""
+        },
+        "defaultCol": {
+            "type": "integer",
+            "description": "Default number of columns occupied by the plugin on the dashboard",
+            "minimum": 1
+        },
+        "defaultRow": {
+            "type": "integer",
+            "description": "Default number of rows occupied by the plugin on the dashboard",
+            "minimum": 1
+        },
+        "minCol": {
+            "type": "integer",
+            "description": "Minimum number of columns occupied by the plugin on the dashboard",
+            "minimum": 1
+        },
+        "minRow": {
+            "type": "integer",
+            "description": "Minimum number of rows occupied by the plugin on the dashboard",
+            "minimum": 1
+        },
+        "maxRow": {
+            "type": "integer",
+            "description": "Maximum number of rows occupied by the plugin on the dashboard",
+            "minimum": 1
+        },
+        "configProps": {
+            "type": "array",
+            "description": "Configurable properties of the plugin",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Title of the form plugin",
+                        "default": ""
+                    },
+                    "style": {
+                        "type": "string",
+                        "description": "Direct style of the plugin, using CSS string configuration",
+                        "default": ""
+                    },
+                    "class": {
+                        "type": "string",
+                        "description": "Class name of the plugin",
+                        "default": ""
+                    },
+                    "theme": {
+                        "type": "object",
+                        "description": "Style of the plugin",
+                        "properties": {
+                            "default": {
+                                "$ref": "#/definitions/ThemeProps"
+                            },
+                            "dark": {
+                                "$ref": "#/definitions/ThemeProps"
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "components": {
+                        "type": "array",
+                        "description": "Collection of plugins",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Supports MUI form plugins. The value is consistent with the MUI form plugin name; supports plugins in the components directory. The value is consistent with the plugin name exposed in index.ts. If there is a conflict between an MUI plugin name and a plugin name defined in the components directory, the plugin in the components directory takes precedence.",
+                                    "minLength": 1,
+                                    "enum": [
+                                        "Autocomplete",
+                                        "Checkbox",
+                                        "Radio",
+                                        "RadioGroup",
+                                        "Select",
+                                        "Switch",
+                                        "TextField",
+                                        "input",
+                                        "select",
+                                        "switch",
+                                        "iconSelect",
+                                        "ChartTimeSelect",
+                                        "chartMetricsSelect",
+                                        "entitySelect",
+                                        "iconColorSelect",
+                                        "multiEntitySelect",
+                                        "chartEntityPosition"
+                                    ]
+                                },
+                                "key": {
+                                    "type": "string",
+                                    "description": "Bound field of the plugin",
+                                    "minLength": 1
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "description": "Title of the form plugin",
+                                    "default": ""
+                                },
+                                "defaultValue": {
+                                    "type": ["string", "number", "boolean", "array"],
+                                    "description": "Default value"
+                                },
+                                "style": {
+                                    "type": "string",
+                                    "description": "Style of the plugin",
+                                    "default": ""
+                                },
+                                "styleDepended": {
+                                    "type": "object",
+                                    "description": "Style dependent on other plugin values. Refer to the configuration example for details.",
+                                    "additionalProperties": {
+                                        "type": "string"
+                                    }
+                                },
+                                "rules": {
+                                    "type": "object",
+                                    "description": "Validation rules. Refer to the react-hook-form plugin validation rules configuration for details.",
+                                    "additionalProperties": true
+                                },
+                                "componentProps": {
+                                    "type": "object",
+                                    "description": "Built-in properties of the plugin. The specific configuration depends on the filled type.",
+                                    "additionalProperties": true,
+                                    "properties": {
+                                        "size": {
+                                            "type": "string",
+                                            "description": "The size of the component.",
+                                            "enum": ["small", "medium"]
+                                        }
+                                    }
+                                },
+                                "options": {
+                                    "type": "array",
+                                    "description": "Dropdown options configuration",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                },
+                                "getDataUrl": {
+                                    "type": "string",
+                                    "description": "Get data from remote service",
+                                    "default": ""
+                                },
+                                "valueType": {
+                                    "type": "string",
+                                    "description": "Value type. Optional types are: string | number | boolean | array | object",
+                                    "default": "string"
+                                },
+                                "filters": {
+                                    "type": "array",
+                                    "description": "Data Aggregate Type",
+                                    "items": {
+                                        "type": "string",
+                                        "default": ""
+                                    }
+                                }
+                            },
+                            "required": ["type", "key"],
+                            "additionalProperties": false,
+                            "allOf": [
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "type": {
+                                                "enum": ["chartMetricsSelect"]
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "filters": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "LAST",
+                                                        "MIN",
+                                                        "MAX",
+                                                        "AVG",
+                                                        "SUM",
+                                                        "COUNT"
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "type": {
+                                                "enum": [
+                                                    "multiEntitySelect",
+                                                    "entitySelect",
+                                                    "chartEntityPosition"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "valueType": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "string",
+                                                    "number",
+                                                    "boolean",
+                                                    "array",
+                                                    "object"
+                                                ],
+                                                "default": "string"
+                                            },
+                                            "getDataUrl": {
+                                                "type": "string",
+                                                "default": ""
+                                            },
+                                            "componentProps": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "entityType": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "description": "Entity Type",
+                                                            "enum": [
+                                                                "SERVICE",
+                                                                "PROPERTY",
+                                                                "EVENT"
+                                                            ],
+                                                            "default": ""
+                                                        }
+                                                    },
+                                                    "entityValueTypes": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "description": "Entity Value Data Type",
+                                                            "enum": [
+                                                                "STRING",
+                                                                "LONG",
+                                                                "DOUBLE",
+                                                                "BOOLEAN",
+                                                                "BINARY",
+                                                                "OBJECT",
+                                                                "ENUM"
+                                                            ],
+                                                            "default": ""
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "type": {
+                                                "enum": ["select"]
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "options": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "label": {
+                                                            "type": "string",
+                                                            "description": "Label of the option"
+                                                        },
+                                                        "value": {
+                                                            "type": ["string", "number"],
+                                                            "description": "Value of the option"
+                                                        },
+                                                        "options": {
+                                                            "type": "array",
+                                                            "description": "Nested options",
+                                                            "items": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "label": {
+                                                                        "type": "string",
+                                                                        "description": "Label of the nested option"
+                                                                    },
+                                                                    "value": {
+                                                                        "type": [
+                                                                            "string",
+                                                                            "number"
+                                                                        ],
+                                                                        "description": "Value of the nested option"
+                                                                    }
+                                                                },
+                                                                "required": ["label"]
+                                                            }
+                                                        }
+                                                    },
+                                                    "required": ["label"]
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "type": {
+                                                "not": {
+                                                    "enum": ["chartMetricsSelect"]
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "filters": {
+                                                "not": {}
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "type": {
+                                                "not": {
+                                                    "enum": [
+                                                        "multiEntitySelect",
+                                                        "entitySelect",
+                                                        "chartEntityPosition"
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "valueType": {
+                                                "not": {}
+                                            },
+                                            "getDataUrl": {
+                                                "not": {}
+                                            },
+                                            "componentProps": {
+                                                "properties": {
+                                                    "entityType": {
+                                                        "not": {}
+                                                    },
+                                                    "entityValueTypes": {
+                                                        "not": {}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "type": {
+                                                "not": {
+                                                    "enum": ["select"]
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "options": {
+                                                "not": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "view": {
+            "type": "array",
+            "description": "View configuration",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "tag": {
+                        "type": "string",
+                        "description": "HTML tag name",
+                        "minLength": 1
+                    },
+                    "props": {
+                        "type": "object",
+                        "description": "HTML tag attributes",
+                        "additionalProperties": true
+                    },
+                    "id": {
+                        "type": "string",
+                        "description": "HTML tag id",
+                        "default": ""
+                    },
+                    "content": {
+                        "type": "string",
+                        "description": "HTML tag content",
+                        "default": ""
+                    },
+                    "params": {
+                        "type": "array",
+                        "description": "Parameters bound to the HTML content",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "showDepended": {
+                        "type": "object",
+                        "description": "HTML tag display dependencies. Refer to the configuration example for details.",
+                        "additionalProperties": true
+                    },
+                    "children": {
+                        "type": "array",
+                        "description": "HTML child nodes",
+                        "items": {
+                            "$ref": "#/properties/view/items"
+                        }
+                    },
+                    "class": {
+                        "type": "string",
+                        "description": "General class name",
+                        "default": ""
+                    },
+                    "style": {
+                        "type": "string",
+                        "description": "General style",
+                        "default": ""
+                    },
+                    "styleDepended": {
+                        "type": "object",
+                        "description": "Style dependent on other plugin values",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "themes": {
+                        "type": "object",
+                        "description": "HTML tag styles",
+                        "properties": {
+                            "default": {
+                                "$ref": "#/definitions/ThemeProps"
+                            },
+                            "dark": {
+                                "$ref": "#/definitions/ThemeProps"
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "key": {
+                        "type": "string",
+                        "description": "The key of the HTML tag",
+                        "default": ""
+                    }
+                },
+                "required": ["tag"],
+                "additionalProperties": false
+            }
+        }
+    },
+    "required": ["name", "type", "defaultCol", "defaultRow", "minCol", "minRow", "configProps"],
+    "additionalProperties": false
+}

@@ -1,0 +1,25 @@
+.plugin-view {
+    width: 100%;
+    height: 100%;
+}
+
+.reset-chart-zoom {
+    position: absolute;
+    top: 11px;
+    right: 10px;
+    display: none;
+    background-color: var(--white);
+    border: @border-base;
+    border-radius: @border-radius-xxl;
+    cursor: pointer;
+}
+
+.dashboard-content-widget {
+    &:hover {
+        .reset-chart-zoom {
+            &--isEdit {
+                right: 89px;
+            }
+        }
+    }
+}

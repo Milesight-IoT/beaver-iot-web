@@ -1,0 +1,82 @@
+.icon-select {
+    &-list {
+        position: relative;
+        width: 412px;
+        height: 380px;
+        overflow-y: hidden;
+        background-color: var(--main-background);
+
+        &-search {
+            width: 100%;
+            padding: @padding-xxs @padding-md @padding-sm @padding-md;
+        }
+
+        &-container {
+            width: 100%;
+            height: calc(100% - 36px - 16px);
+        }
+
+        &-main {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            // justify-content: space-between;
+            width: 412px;
+            padding: 0 @padding-md;
+
+            &::after {
+                display: block;
+                clear: both;
+                content: '';
+            }
+        }
+
+        .@{mui-prefix}InputBase-root {
+            height: 36px;
+        }
+    }
+
+    &-menu:hover {
+        background: var(--main-background) !important;
+    }
+
+    &-menu.@{mui-prefix}MenuItem-root.@{mui-prefix}-focusVisible {
+        background-color: unset;
+    }
+
+    &-icon {
+        display: block;
+        padding: @padding-sm;
+        line-height: 0;
+        color: var(--icon-color-gray-secondary);
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.04);
+            border-radius: 50%;
+        }
+
+        &-active {
+            background: var(--primary-color-1);
+            border-radius: 50%;
+
+            &:hover {
+                background: var(--primary-color-1);
+            }
+        }
+
+        &-active &-img {
+            color: var(--primary-color-base);
+        }
+    }
+}
+
+.ms-icon-select-menu-paper {
+    &.@{mui-prefix}Paper-root {
+        background-color: var(--main-background);
+        background-image: unset;
+    }
+
+    .@{mui-prefix}MenuItem-root {
+        padding: 0;
+    }
+}

@@ -1,0 +1,94 @@
+.image-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    // padding: @padding-md;
+    background-color: var(--component-background);
+    border-radius: @border-radius-md;
+
+    &__preview {
+        width: 500px;
+        height: 320px;
+    }
+
+    &__header {
+        position: absolute;
+        top: 15px;
+        left: 12px;
+        z-index: 1;
+        font-weight: @font-weight-medium;
+        color: var(--white);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        .text-size(@font-size-lg);
+        .ellipsis();
+    }
+
+    &:hover {
+        .image-wrapper__header {
+            opacity: 1;
+            pointer-events: none;
+        }
+    }
+
+    &__content {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        height: 0;
+        overflow: hidden;
+        border-radius: @border-radius-base;
+
+        &:hover {
+            .image-wrapper__overlay {
+                opacity: 1;
+            }
+        }
+    }
+
+    & &__empty_icon {
+        font-size: @font-size-7;
+        color: var(--icon-color-gray-light);
+    }
+
+    &__img {
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-style: none;
+        border-radius: @border-radius-base;
+        pointer-events: none;
+    }
+
+    &__overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 240px;
+        background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.4) 8.83%,
+            rgba(0, 0, 0, 0.3965) 10.78%,
+            rgba(0, 0, 0, 0.3858) 12.72%,
+            rgba(0, 0, 0, 0.3673) 14.67%,
+            rgba(0, 0, 0, 0.341) 16.61%,
+            rgba(0, 0, 0, 0.3073) 18.56%,
+            rgba(0, 0, 0, 0.2672) 20.5%,
+            rgba(0, 0, 0, 0.2229) 22.44%,
+            rgba(0, 0, 0, 0.1771) 24.39%,
+            rgba(0, 0, 0, 0.1328) 26.33%,
+            rgba(0, 0, 0, 0.0927) 28.28%,
+            rgba(0, 0, 0, 0.059) 30.22%,
+            rgba(0, 0, 0, 0.0327) 32.17%,
+            rgba(0, 0, 0, 0.0142) 34.11%,
+            rgba(0, 0, 0, 0.0035) 36.06%,
+            rgba(0, 0, 0, 0) 38%
+        );
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+}
