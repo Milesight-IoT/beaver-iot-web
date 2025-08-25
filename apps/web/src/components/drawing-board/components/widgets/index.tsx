@@ -166,6 +166,7 @@ const Widgets = (props: WidgetProps) => {
                     x: data.data.pos?.x || 0,
                     y: data.data.pos?.y || 0,
                 };
+
                 return (
                     <div
                         key={id}

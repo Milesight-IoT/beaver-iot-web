@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo } from 'react';
 import { useMemoizedFn, useFullscreen } from 'ahooks';
-import { Stack, Button, Divider } from '@mui/material';
+import { Stack, Button, Divider, IconButton } from '@mui/material';
 
 import { useI18n } from '@milesight/shared/src/hooks';
 import { FullscreenIcon, EditIcon, CloseIcon, CheckIcon } from '@milesight/shared/src/components';
@@ -38,15 +38,22 @@ export function useDrawingBoard(props?: UseDrawingBoardProps) {
     });
 
     const renderNormalMode = (
-        <Stack direction="row" spacing={2}>
-            <div onClick={enterFullscreen} className="dashboard-button-icon">
+        <Stack className="md:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+            <IconButton
+                onClick={enterFullscreen}
+                sx={{
+                    borderRadius: '6px',
+                    border: '1px solid var(--gray-3)',
+                    '&:hover': {
+                        borderColor: 'var(--primary-color-base)',
+                    },
+                }}
+            >
                 <FullscreenIcon />
-            </div>
+            </IconButton>
             <PermissionControlHidden permissions={PERMISSIONS.DASHBOARD_EDIT}>
                 <Button
                     variant="contained"
-                    className="md:d-none"
-                    disabled={false}
                     startIcon={<EditIcon />}
                     onClick={() => setIsEdit(true)}
                 >
@@ -70,7 +77,7 @@ export function useDrawingBoard(props?: UseDrawingBoardProps) {
     });
 
     const renderEditMode = (
-        <Stack direction="row" spacing={2}>
+        <Stack className="md:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
             <PluginListPopover onSelect={updateOperatingPlugin} />
             <Divider orientation="vertical" variant="middle" flexItem />
             <Button variant="outlined" onClick={handleCancel} startIcon={<CloseIcon />}>

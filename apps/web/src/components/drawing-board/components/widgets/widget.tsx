@@ -8,6 +8,7 @@ import { useTheme } from '@milesight/shared/src/hooks';
 import { WidgetDetail } from '@/services/http/dashboard';
 import plugins from '../../plugin/plugins';
 import { RenderView } from '../../plugin/render';
+import type { BoardPluginProps } from '../../plugin/types';
 
 interface WidgetProps {
     data: WidgetDetail;
@@ -31,7 +32,6 @@ const Widget = (props: WidgetProps) => {
     const handleDelete = useCallback(() => {
         onDelete(data);
     }, [data]);
-    // console.log(plugins, data.data.type, (plugins as any)[`${data.data.type}`]);
 
     const widgetCls = useMemo(() => {
         return classnames('drawing-board__widget', {
@@ -72,17 +72,20 @@ const Widget = (props: WidgetProps) => {
                     {isEdit && (
                         <span
                             className="drawing-board__custom-resizable-handle drawing-board__custom-resizable-handle-se"
-                            onClick={(e: any) => e.stopPropagation()}
+                            onClick={(e: React.MouseEvent) => e.stopPropagation()}
                         />
                     )}
                 </div>
             ) : (
                 <div ref={widgetRef} className="drawing-board__widget-main">
-                    <RenderView configJson={data.data as any} config={data.data.config} />
+                    <RenderView
+                        configJson={data.data as BoardPluginProps}
+                        config={data.data.config}
+                    />
                     {isEdit && (
                         <span
                             className="drawing-board__custom-resizable-handle drawing-board__custom-resizable-handle-se"
-                            onClick={(e: any) => e.stopPropagation()}
+                            onClick={(e: React.MouseEvent) => e.stopPropagation()}
                         />
                     )}
                 </div>

@@ -36,7 +36,7 @@ export interface ControlPanelContainerProps {
     /**
      * Control panel config
      */
-    controlPanel: ControlPanelConfig | (() => ControlPanelConfig);
+    controlPanel?: ControlPanelConfig | (() => ControlPanelConfig);
     /**
      * Form data submission
      */

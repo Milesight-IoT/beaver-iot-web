@@ -10,9 +10,11 @@ import type { DrawingBoardProps } from '../interface';
 import type { DrawingBoardContextProps } from '../context';
 
 export default function useDrawingBoardData(props: DrawingBoardProps) {
-    const { drawingBoardDetail, operatingPlugin, updateOperatingPlugin } = props;
+    const { drawingBoardDetail, operatingPlugin, updateOperatingPlugin, changeIsEdit } = props;
 
-    const { isTooSmallScreen } = useWindowWidth();
+    const { isTooSmallScreen } = useWindowWidth(() => {
+        changeIsEdit(false);
+    });
     const { pluginsConfigs } = useGetPluginConfigs();
 
     const [loadingWidgets, setLoadingWidgets] = useState(true);

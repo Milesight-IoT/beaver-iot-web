@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export default function useWindowWidth() {
+export default function useWindowWidth(callback?: () => void) {
     // ---------- Check if the screen is too small  ----------
     const [isTooSmallScreen, setIsTooSmallScreen] = useState(false);
 
@@ -13,6 +13,10 @@ export default function useWindowWidth() {
 
             const isTooSmall = windowWidth <= 720;
             setIsTooSmallScreen(isTooSmall);
+
+            if (isTooSmall) {
+                callback?.();
+            }
         };
         getWindowWidth();
 
@@ -20,7 +24,7 @@ export default function useWindowWidth() {
         return () => {
             window.removeEventListener('resize', getWindowWidth);
         };
-    }, []);
+    }, [callback]);
 
     return {
         /** Check if the screen is too small than 720px */

@@ -77,7 +77,7 @@ export default (props: PluginListProps) => {
     return (
         <>
             <Button variant="contained" onClick={handleShowModal} startIcon={<AddIcon />}>
-                {getIntlText('board.add_widget')}
+                {getIntlText('dashboard.add_widget')}
             </Button>
             <Popover
                 open={isShowPopover}
@@ -85,7 +85,11 @@ export default (props: PluginListProps) => {
                 onClose={handleCloseModal}
                 anchorOrigin={{
                     vertical: 'bottom',
-                    horizontal: 'left',
+                    horizontal: 'right',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
                 }}
             >
                 <div className="board-plugin-class">

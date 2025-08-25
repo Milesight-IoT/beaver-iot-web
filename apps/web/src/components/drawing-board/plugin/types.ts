@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { ControllerProps } from 'react-hook-form';
 
 import { type TextFieldProps } from '@mui/material';
+import { type Layout } from 'react-grid-layout';
 import { type ToggleRadioProps, type UploadProps } from '@/components';
 import {
     type SelectProps as PluginSelectProps,
@@ -176,5 +177,6 @@ export interface ControlPanelConfig<T extends AnyDict = AnyDict> {
  * DrawingBoard Plugin Props
  */
 export interface BoardPluginProps extends ControlPanelConfig {
-    originalControlPanel: ControlPanelConfig | (() => ControlPanelConfig);
+    originalControlPanel?: ControlPanelConfig | (() => ControlPanelConfig);
+    pos?: Layout;
 }
