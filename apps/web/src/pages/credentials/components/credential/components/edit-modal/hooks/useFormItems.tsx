@@ -49,7 +49,7 @@ const useFormItems = ({ type, tenantId }: IPros) => {
                                       return userNameReg.test(value)
                                           ? true
                                           : getIntlText(
-                                                'valid.input.string_letter_num_special_char',
+                                                'common.valid.input_letter_num_special_char',
                                                 { 1: '_-' },
                                             );
                                   }

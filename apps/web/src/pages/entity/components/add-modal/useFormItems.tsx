@@ -101,7 +101,7 @@ const useFormItems = () => {
                         checkSpecialChar: value => {
                             return /^[A-Za-z0-9_@#$/:[\]-]+$/.test(value)
                                 ? true
-                                : getIntlText('valid.input.string_letter_num_special_char', {
+                                : getIntlText('common.valid.input_letter_num_special_char', {
                                       1: '@#$_-/[]:',
                                   });
                         },
