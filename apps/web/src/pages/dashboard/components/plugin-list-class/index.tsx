@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Grid2 as Grid } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
-import { COMPONENTCLASS } from '@/pages/dashboard/plugin/constant';
+import { COMPONENT_CLASS } from '@/components/drawing-board/plugin/constant';
 import { WidgetDetail } from '@/services/http/dashboard';
 import { Tooltip } from '@/components';
 import pluginImg from '@/assets/plugin.png';
-import type { DashboardPluginProps } from '@/pages/dashboard/plugin/types';
+import type { BoardPluginProps } from '@/components/drawing-board';
 import { useGetPluginConfigs } from '../../hooks';
 import './style.less';
 
@@ -21,14 +21,14 @@ export default (props: PluginListProps) => {
 
     useEffect(() => {
         if (pluginsConfigs) {
-            const pluginClass: Record<string, any> = COMPONENTCLASS;
+            const pluginClass: Record<string, any> = COMPONENT_CLASS;
             const plugins: Record<string, any> = {};
             Object.keys(pluginClass).forEach((plu: any) => {
                 plugins[plu] = {
                     ...pluginClass[plu],
                 };
             });
-            pluginsConfigs.forEach((plugin: DashboardPluginProps) => {
+            pluginsConfigs.forEach((plugin: BoardPluginProps) => {
                 if (plugin.class && plugins[plugin.class]) {
                     if (!plugins[plugin.class].list) {
                         plugins[plugin.class].list = [];
@@ -49,7 +49,7 @@ export default (props: PluginListProps) => {
         }
     }, [pluginsConfigs]);
 
-    const handleClick = (type: DashboardPluginProps) => {
+    const handleClick = (type: BoardPluginProps) => {
         onSelect({
             data: type,
         });
@@ -71,7 +71,7 @@ export default (props: PluginListProps) => {
                                       className="dashboard-plugin-class-grid-container"
                                   >
                                       {pluginList[pluginClass]?.list?.map(
-                                          (pluginConfig: DashboardPluginProps) => {
+                                          (pluginConfig: BoardPluginProps) => {
                                               return (
                                                   <Grid
                                                       key={pluginConfig.type}

@@ -4,7 +4,7 @@ import { isNil } from 'lodash-es';
 import { Divider, IconButton } from '@mui/material';
 import { useI18n, useStoreShallow } from '@milesight/shared/src/hooks';
 import { HelpIcon } from '@milesight/shared/src/components';
-import { useEntityApi } from '@/pages/dashboard/plugin/hooks';
+import { useEntityApi } from '@/components/drawing-board/plugin/hooks';
 import { Tooltip, Empty, useEntityStore } from '@/components';
 import ParamInputSelect from '../param-input-select';
 import EntitySelect, { type EntityFilterParams } from '../entity-select';

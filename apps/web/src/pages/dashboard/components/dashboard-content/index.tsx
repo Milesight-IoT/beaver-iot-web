@@ -17,9 +17,10 @@ import { useFullscreen } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { dashboardAPI, awaitWrap, isRequestSuccess } from '@/services/http';
 import { DashboardDetail, WidgetDetail } from '@/services/http/dashboard';
-import { useActivityEntity } from '@/pages/dashboard/plugin/hooks';
+import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
 import { useConfirm, PermissionControlHidden, PermissionControlDisabled } from '@/components';
 import { PERMISSIONS } from '@/constants';
+import { filterWidgets } from '@/components/drawing-board';
 import { useGetPluginConfigs, useHomeDashboard } from '../../hooks';
 import AddWidget from '../add-widget';
 import PluginList from '../plugin-list';
@@ -27,7 +28,6 @@ import PluginListClass from '../plugin-list-class';
 import AddCustomerWidget from '../custom-widget';
 import AddDashboard from '../add-dashboard';
 import Widgets from '../widgets';
-import { filterWidgets } from '../../utils';
 
 export interface DashboardContentProps {
     dashboardDetail: DashboardDetail;

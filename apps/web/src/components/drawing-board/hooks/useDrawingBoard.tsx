@@ -26,7 +26,7 @@ export interface UseDrawingBoardProps {
 /**
  * Drawing board operation
  */
-export function useDrawingBoard(props?: UseDrawingBoardProps) {
+export default function useDrawingBoard(props?: UseDrawingBoardProps) {
     const { onSave } = props || {};
 
     const { getIntlText } = useI18n();

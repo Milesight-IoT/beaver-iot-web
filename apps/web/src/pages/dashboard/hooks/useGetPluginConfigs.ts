@@ -1,19 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
-import components from '@/pages/dashboard/plugin/plugins/components';
-import type { DashboardPluginProps } from '@/pages/dashboard/plugin/types';
+import components from '@/components/drawing-board/plugin/plugins/components';
+import type { BoardPluginProps } from '@/components/drawing-board/plugin/types';
 // Defines a collection of modules that can be imported
-const controlPanels = import.meta.glob('../plugin/plugins/*/control-panel/index.ts');
-const PLUGIN_DIR = '../plugin';
+const controlPanels = import.meta.glob(
+    '../../../components/drawing-board/plugin/plugins/*/control-panel/index.ts',
+);
+const PLUGIN_DIR = '../../../components/drawing-board/plugin';
 
 export default () => {
-    const [pluginsConfigs, setPluginsConfigs] = useState<DashboardPluginProps[]>([]);
-    const pluginRef = useRef<DashboardPluginProps[]>([]);
+    const [pluginsConfigs, setPluginsConfigs] = useState<BoardPluginProps[]>([]);
+    const pluginRef = useRef<BoardPluginProps[]>([]);
 
     const loopComponents = async (comName: string, index: number) => {
         const tsPath = `${PLUGIN_DIR}/plugins/${comName}/control-panel/index.ts`;
 
         const panelModule = (await controlPanels[tsPath]()) as unknown as {
-            default: DashboardPluginProps['originalControlPanel'];
+            default: BoardPluginProps['originalControlPanel'];
         };
         if (!panelModule?.default) {
             return;
@@ -30,7 +32,7 @@ export default () => {
         const result = {
             ...panel,
             originalControlPanel: panelModule?.default,
-        } as DashboardPluginProps;
+        } as BoardPluginProps;
 
         // Ensure component sequence stability
         const plugins = pluginRef.current;

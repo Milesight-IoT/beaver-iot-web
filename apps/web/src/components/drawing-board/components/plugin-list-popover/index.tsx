@@ -10,7 +10,7 @@ import { Tooltip } from '@/components';
 import pluginImg from '@/assets/plugin.png';
 import { COMPONENT_CLASS } from '../../plugin/constant';
 import type { BoardPluginProps } from '../../plugin/types';
-import { useGetPluginConfigs } from '../../hooks';
+import useGetPluginConfigs from '../../hooks/useGetPluginConfigs';
 import './style.less';
 
 interface PluginListProps {

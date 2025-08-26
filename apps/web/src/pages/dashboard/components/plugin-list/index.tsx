@@ -1,7 +1,7 @@
 import { Grid2 as Grid } from '@mui/material';
 import { WidgetDetail } from '@/services/http/dashboard';
 import pluginImg from '@/assets/plugin.png';
-import type { DashboardPluginProps } from '@/pages/dashboard/plugin/types';
+import type { BoardPluginProps } from '@/components/drawing-board/plugin/types';
 import { useGetPluginConfigs } from '../../hooks';
 import './style.less';
 
@@ -13,7 +13,7 @@ export default (props: PluginListProps) => {
     const { onSelect } = props;
     const { pluginsConfigs } = useGetPluginConfigs();
 
-    const handleClick = (type: DashboardPluginProps) => {
+    const handleClick = (type: BoardPluginProps) => {
         onSelect({
             data: type,
         });
@@ -22,7 +22,7 @@ export default (props: PluginListProps) => {
     return (
         <div className="dashboard-plugin-list">
             <Grid container gap={2}>
-                {pluginsConfigs?.map((pluginConfig: DashboardPluginProps) => {
+                {pluginsConfigs?.map((pluginConfig: BoardPluginProps) => {
                     return (
                         <Grid
                             key={pluginConfig.type}
