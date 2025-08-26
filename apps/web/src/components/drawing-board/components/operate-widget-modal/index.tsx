@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useI18n } from '@milesight/shared/src/hooks';
+import { type Layout } from 'react-grid-layout';
+
 import ConfigPlugin from '@/components/drawing-board/plugin/config-plugin';
+
 import { type WidgetDetail } from '@/services/http/dashboard';
 import { type BoardPluginProps } from '../../plugin/types';
 
@@ -65,7 +68,7 @@ export default (props: WidgetProps) => {
                     y,
                     ...data?.pos,
                     i: plugin?.widget_id || tempId || now,
-                },
+                } as Layout,
             },
         };
 

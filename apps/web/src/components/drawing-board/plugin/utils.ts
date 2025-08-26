@@ -7,7 +7,10 @@ import { chartColorList } from './constant';
  */
 export const filterEntityMap: Record<
     string,
-    | ((entityOptions: EntityOptionType[], context: DrawingBoardContextProps) => EntityOptionType[])
+    | ((
+          entityOptions: EntityOptionType[],
+          context?: DrawingBoardContextProps,
+      ) => EntityOptionType[])
     | undefined
 > = {
     /**

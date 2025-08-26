@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import GRL, { WidthProvider, type Layout } from 'react-grid-layout';
 import { get } from 'lodash-es';
 
-import { WidgetDetail } from '@/services/http/dashboard';
+import { type WidgetDetail } from '@/services/http/dashboard';
 import {
     GRID_LAYOUT_COLS,
     GRID_LAYOUT_MARGIN,
@@ -36,7 +36,7 @@ const getSmallScreenH = (data: WidgetDetail['data']) => {
     return get(DEFAULT_GRID_HEIGHT, widgetClass, DEFAULT_HEIGHT);
 };
 interface WidgetProps {
-    onChangeWidgets: (widgets: any[]) => void;
+    onChangeWidgets: (widgets: WidgetDetail[]) => void;
     widgets: WidgetDetail[];
     isEdit: boolean;
     onEdit: (data: WidgetDetail) => void;
@@ -152,7 +152,7 @@ const Widgets = (props: WidgetProps) => {
             {widgets.map((data: WidgetDetail) => {
                 const id = (data.widget_id || data.tempId) as ApiKey;
 
-                const pos = {
+                const pos: Layout = {
                     ...data.data.pos,
                     w: isTooSmallScreen ? 12 : data.data?.pos?.w || data.data.minCol || 2,
                     h: isTooSmallScreen
