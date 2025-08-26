@@ -30,6 +30,8 @@ export {
     type EntityStoreType,
     type EntitySelectProps,
     type EntitySelectValueType,
+    type EntitySelectOption,
+    type EntityValueType,
 } from './entity-select';
 export {
     CodeEditor,

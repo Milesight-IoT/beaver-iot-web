@@ -3,12 +3,21 @@ import { useMemoizedFn, useFullscreen } from 'ahooks';
 import { Stack, Button, Divider, IconButton } from '@mui/material';
 
 import { useI18n } from '@milesight/shared/src/hooks';
-import { FullscreenIcon, EditIcon, CloseIcon, CheckIcon } from '@milesight/shared/src/components';
+import {
+    FullscreenIcon,
+    EditIcon,
+    CloseIcon,
+    CheckIcon,
+    toast,
+} from '@milesight/shared/src/components';
+
 import PermissionControlHidden from '@/components/permission-control-hidden';
 import { PERMISSIONS } from '@/constants';
-import { type WidgetDetail } from '@/services/http/dashboard';
+import { type WidgetDetail, dashboardAPI, awaitWrap, isRequestSuccess } from '@/services/http';
 import PluginListPopover from '../components/plugin-list-popover';
+import { useActivityEntity } from '../plugin/hooks';
 import { type DrawingBoardExpose } from '../interface';
+import { filterWidgets } from '../utils';
 
 export interface UseDrawingBoardProps {
     onSave?: (widgets?: WidgetDetail[]) => void;
@@ -28,6 +37,7 @@ export function useDrawingBoard(props?: UseDrawingBoardProps) {
 
     const drawingBoardRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, { enterFullscreen }] = useFullscreen(drawingBoardRef);
+    const { getCurrentEntityIds } = useActivityEntity();
 
     const changeIsEdit = useMemoizedFn((isEditing: boolean) => {
         setIsEdit(Boolean(isEditing));
@@ -68,12 +78,32 @@ export function useDrawingBoard(props?: UseDrawingBoardProps) {
         drawingBoardExposeRef?.current?.handleCancel();
     });
 
-    const handleSave = useMemoizedFn(() => {
+    const handleSave = useMemoizedFn(async () => {
         setIsEdit(false);
-        const newestWidgets = drawingBoardExposeRef?.current?.handleSave();
-        console.log('handleSave ? ', newestWidgets);
 
-        onSave?.(newestWidgets);
+        const data = drawingBoardExposeRef?.current?.handleSave();
+        const { dashboard_id: id, name, widgets } = data || {};
+        if (!id || !widgets) {
+            return;
+        }
+
+        /** Execute hook callback */
+        onSave?.(widgets);
+
+        const currentEntityIds = getCurrentEntityIds(id);
+        const [error, resp] = await awaitWrap(
+            dashboardAPI.updateDashboard({
+                widgets: filterWidgets(widgets),
+                entity_ids: currentEntityIds,
+                dashboard_id: id,
+                name,
+            }),
+        );
+        if (error || !isRequestSuccess(resp)) {
+            return;
+        }
+
+        toast.success(getIntlText('common.message.operation_success'));
     });
 
     const renderEditMode = (

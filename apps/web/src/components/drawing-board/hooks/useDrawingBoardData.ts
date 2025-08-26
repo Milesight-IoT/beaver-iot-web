@@ -6,7 +6,7 @@ import { WidgetDetail } from '@/services/http/dashboard';
 import useWindowWidth from './useWindowWidth';
 import useGetPluginConfigs from './useGetPluginConfigs';
 
-import type { DrawingBoardProps } from '../interface';
+import type { DrawingBoardProps, DrawingBoardExpose } from '../interface';
 import type { DrawingBoardContextProps } from '../context';
 
 export default function useDrawingBoardData(props: DrawingBoardProps) {
@@ -96,8 +96,11 @@ export default function useDrawingBoardData(props: DrawingBoardProps) {
         setWidgets(newWidgets);
     });
 
-    const handleSave = useMemoizedFn(() => {
-        return widgets;
+    const handleSave: DrawingBoardExpose['handleSave'] = useMemoizedFn(() => {
+        return {
+            ...drawingBoardDetail,
+            widgets,
+        };
     });
 
     return {

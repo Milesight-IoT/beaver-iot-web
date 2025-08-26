@@ -1,3 +1,4 @@
+import { type DrawingBoardContextProps } from '@/components/drawing-board/context';
 import { chartColorList } from './constant';
 
 /**
@@ -6,7 +7,8 @@ import { chartColorList } from './constant';
  */
 export const filterEntityMap: Record<
     string,
-    ((entityOptions: EntityOptionType[]) => EntityOptionType[]) | undefined
+    | ((entityOptions: EntityOptionType[], context: DrawingBoardContextProps) => EntityOptionType[])
+    | undefined
 > = {
     /**
      * If it is enumerated, the filter value type is string and has an ENUM field

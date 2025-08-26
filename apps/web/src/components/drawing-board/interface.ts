@@ -8,10 +8,12 @@ export interface DrawingBoardExpose {
     /**
      * Save current newest drawing board data
      */
-    handleSave: () => WidgetDetail[];
+    handleSave: () => DashboardDetail;
 }
 
 export interface DrawingBoardProps {
+    /** Current device detail */
+    deviceDetail?: DeviceDetail;
     drawingBoardDetail: DashboardDetail;
     isEdit: boolean;
     /**
@@ -23,8 +25,6 @@ export interface DrawingBoardProps {
     isFullscreen: boolean;
     /** Drawing board html div node */
     drawingBoardRef: React.RefObject<HTMLDivElement>;
-    /** Current device detail */
-    deviceDetail?: DeviceDetail;
     updateOperatingPlugin: (plugin?: WidgetDetail) => void;
     /** Change drawing board edit mode */
     changeIsEdit: (isEditing: boolean) => void;
