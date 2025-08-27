@@ -17,4 +17,4 @@ export const PRIVATE_PROPERTY_PREFIX = '$';
  * Base64 image regex
  */
 export const BASE64_IMAGE_REGEX =
-    /^\s*data:image\/([\w+-]+);base64,([a-z0-9!$&',()*+;=\-._~:@/?%\s]*?)\s*$/i;
+    /^data:image\/([\w+-]+);base64,([a-z0-9!$&',()*+;=\-._~:@/?%\s]*?)$/i;
