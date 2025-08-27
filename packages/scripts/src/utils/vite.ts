@@ -131,6 +131,10 @@ export const customChunkSplit: CustomChunk = ({ id }, { getModuleInfo }) => {
         return 'mui';
     }
 
+    if (id.includes('node_modules') && id.includes('react')) {
+        return 'react';
+    }
+
     if (/packages\/shared\//.test(id)) {
         if (staticImportedScan(id, getModuleInfo, new Map(), [])) {
             return 'shared';

@@ -26,8 +26,11 @@ export const errorIntlKey: Record<ErrorCodeType, string> = {
 export const getInvalidTypeRejectionErr = (
     accept = '',
 ): { code: ErrorCodeType; message: string } => {
-    const acceptArr = accept.split(',');
-    const msg = acceptArr.length > 1 ? `one of ${acceptArr.join(', ')}` : acceptArr[0];
+    let acceptArr = accept.split(',').map(item => {
+        return item.replace(/(\w+\/|\.)/, '').toLocaleUpperCase();
+    });
+    acceptArr = [...new Set(acceptArr)];
+    const msg = acceptArr.length > 1 ? acceptArr.join(' / ') : acceptArr[0];
 
     return {
         code: FILE_INVALID_TYPE,

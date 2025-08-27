@@ -1,15 +1,22 @@
-import { useState, useRef, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { get } from 'lodash-es';
 
-import { Modal, EntityForm, toast } from '@milesight/shared/src/components';
+import { Modal, toast } from '@milesight/shared/src/components';
 import { useI18n } from '@milesight/shared/src/hooks';
-import { flattenObject, objectToCamelToSnake } from '@milesight/shared/src/utils/tools';
+import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
 import * as Icons from '@milesight/shared/src/components/icons';
 
+import { ENTITY_DATA_VALUE_TYPE } from '@/constants';
+import { entityAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
 import { useConfirm } from '@/components';
-import { ENTITY_DATA_VALUE_TYPE, ENTITY_VALUE_TYPE } from '@/constants';
+import {
+    useEntityFormItems,
+    type EntityFormDataProps,
+    type UseEntityFormItemsProps,
+} from '@/hooks';
 import { Tooltip } from '../../../view-components';
-import { useEntityApi, useActivityEntity, type CallServiceType } from '../../../hooks';
+import { useActivityEntity } from '../../../hooks';
 import { ViewConfigProps } from './typings';
 import './style.less';
 
@@ -25,16 +32,10 @@ interface Props {
 const View = (props: Props) => {
     const { getIntlText } = useI18n();
     const confirm = useConfirm();
-    const { getEntityChildren, callService, updateProperty } = useEntityApi();
     const { getLatestEntityDetail } = useActivityEntity();
-    const { config, configJson, widgetId, dashboardId, isEdit, mainRef } = props;
+    const { config, configJson, widgetId, dashboardId, isEdit } = props;
     const { label, icon, bgColor, entity } = config || {};
     const [visible, setVisible] = useState(false);
-    const [entities, setEntities] = useState();
-    // OBJECT type entity
-    const [objectEntities, setObjectEntities] = useState<EntityData[]>([]);
-    const ref = useRef<any>();
-    const tempRef = useRef<any>({});
 
     const latestEntity = useMemo(() => {
         if (!entity) return;
@@ -43,137 +44,162 @@ const View = (props: Props) => {
 
     // Call service
     const handleCallService = async (data: Record<string, any>) => {
-        const { error } = await callService({
-            entity_id: (latestEntity as any)?.value as ApiKey,
-            exchange: data,
-        } as CallServiceType);
-        if (!error) {
-            setVisible(false);
-            toast.success({
-                key: 'callService',
-                content: getIntlText('common.message.operation_success'),
-            });
-        }
+        const entityId = latestEntity?.value;
+
+        if (!entityId) return;
+        const [error, resp] = await awaitWrap(
+            entityAPI.callService({
+                entity_id: entityId,
+                exchange: data,
+            }),
+        );
+
+        if (error || !isRequestSuccess(resp)) return;
+
+        reset();
+        setVisible(false);
+        toast.success({
+            key: 'callService',
+            content: getIntlText('common.message.operation_success'),
+        });
     };
 
+    // Update property
     const handleUpdateProperty = async (data: Record<string, any>) => {
-        const { error } = await updateProperty({
-            entity_id: (latestEntity as any)?.value as ApiKey,
-            exchange: data,
-        } as CallServiceType);
-        if (!error) {
-            setVisible(false);
-            toast.success({
-                key: 'updateProperty',
-                content: getIntlText('common.message.operation_success'),
-            });
-        }
+        const entityId = latestEntity?.value;
+
+        if (!entityId) return;
+        const [error, resp] = await awaitWrap(
+            entityAPI.updateProperty({
+                entity_id: entityId,
+                exchange: data,
+            }),
+        );
+
+        if (error || !isRequestSuccess(resp)) return;
+
+        reset();
+        setVisible(false);
+        toast.success({
+            key: 'updateProperty',
+            content: getIntlText('common.message.operation_success'),
+        });
     };
 
+    // ---------- Entity Form Items ----------
+    const { control, handleSubmit, getValues, reset } = useForm<EntityFormDataProps>({
+        shouldUnregister: true,
+    });
+    const [formEntities, setFormEntities] = useState<UseEntityFormItemsProps['entities']>();
+    const { formItems, decodeFormParams } = useEntityFormItems({
+        entities: formEntities,
+    });
+
+    // Handle trigger card click
     const handleClick = async () => {
-        if (configJson.isPreview || isEdit) {
+        const entityRawData = latestEntity?.rawData;
+        const { entityKey, entityType, entityValueType } = entityRawData || {};
+        if (configJson.isPreview || isEdit || !latestEntity || !entityKey) {
             return;
         }
-        const { error, res } = await getEntityChildren({
-            id: (latestEntity as any)?.value as ApiKey,
-        });
-        const entityType = latestEntity?.rawData?.entityType;
-        const valueType = latestEntity?.rawData?.entityValueType;
-        if (!error) {
-            let list = res || [];
-            if (valueType !== ENTITY_DATA_VALUE_TYPE.OBJECT && !list.length) {
-                const data = latestEntity?.rawData
-                    ? objectToCamelToSnake(latestEntity?.rawData)
-                    : ({} as any);
+        const [error, resp] = await awaitWrap(
+            entityAPI.getChildrenEntity({ id: latestEntity.value }),
+        );
 
-                if (data?.entity_value_attribute?.enum) {
-                    data.entity_value_attribute.enum =
-                        latestEntity?.rawData?.entityValueAttribute?.enum;
+        if (error || !isRequestSuccess(resp)) return;
+        const children = getResponseData(resp) || [];
+        const result: UseEntityFormItemsProps['entities'] = children
+            .filter(item => item.entity_access_mod?.indexOf('W') > -1)
+            .map(item => {
+                const valueAttribute = objectToCamelCase(item.entity_value_attribute!);
+
+                if (valueAttribute?.enum) {
+                    valueAttribute.enum = item.entity_value_attribute!.enum;
                 }
 
-                list = [data];
-            }
-            const children =
-                list?.filter((childrenItem: EntityData) => {
-                    return childrenItem?.entity_access_mod?.indexOf('W') > -1;
-                }) || [];
-            if (children?.length) {
-                const objectEntityList: EntityData[] = children.filter((v: EntityData) => {
-                    return (
-                        v.entity_value_type === ENTITY_DATA_VALUE_TYPE.OBJECT &&
-                        (!v.entity_value_attribute ||
-                            JSON.stringify(v.entity_value_attribute) === '{}')
-                    );
-                });
-                // If it is of the OBJECT type, it is not displayed and the value is{}
-                const entityList = children
-                    .filter(
-                        (childrenItem: EntityData) =>
-                            !objectEntityList.find(
-                                (v: EntityData) => v.entity_id === childrenItem.entity_id,
-                            ),
-                    )
-                    .map((item: EntityData, index: number) => {
-                        tempRef.current[`tempTemp-${index}`] = item.entity_key;
-                        return {
-                            ...item,
-                            id: item.entity_id,
-                            key: `tempTemp-${index}`,
-                            name: item.entity_name,
-                            value_attribute: item.entity_value_attribute,
-                        };
-                    });
-                setEntities(entityList);
-                setObjectEntities(objectEntityList);
-                setVisible(true);
-            } else {
-                confirm({
-                    title: '',
-                    description: getIntlText('dashboard.plugin.trigger_confirm_text'),
-                    confirmButtonText: getIntlText('common.button.confirm'),
-                    onConfirm: async () => {
-                        const entityKey = (latestEntity as any).rawData?.entityKey;
-                        // If the entity itself is the object default is {}, otherwise it is null
-                        const resultValue = valueType === ENTITY_DATA_VALUE_TYPE.OBJECT ? {} : null;
-                        if (entityType === 'SERVICE') {
-                            await handleCallService({
-                                [entityKey]: resultValue,
-                            });
-                        } else if (entityType === 'PROPERTY') {
-                            await handleUpdateProperty({
-                                [entityKey]: resultValue,
-                            });
-                        }
-                    },
-                    dialogProps: {
-                        container: mainRef.current,
-                        disableScrollLock: true,
-                    },
-                });
-            }
+                return {
+                    id: item.entity_id,
+                    key: item.entity_key,
+                    name: item.entity_name,
+                    type: item.entity_type,
+                    valueAttribute,
+                    valueType: item.entity_value_type,
+                    accessMod: item.entity_access_mod,
+                };
+            });
+
+        if (
+            entityRawData &&
+            !result.length &&
+            !(['BINARY', 'ENUM', 'OBJECT'] as EntityValueDataType[]).includes(entityValueType!)
+        ) {
+            result.push({
+                id: entityRawData.entityId,
+                key: entityRawData.entityKey,
+                name: entityRawData.entityName,
+                type: entityRawData.entityType,
+                valueAttribute: entityRawData.entityValueAttribute,
+                valueType: entityRawData.entityValueType,
+                accessMod: entityRawData.entityAccessMod,
+            });
         }
+
+        if (result.length) {
+            setVisible(true);
+            setFormEntities(result);
+            return;
+        }
+
+        confirm({
+            title: '',
+            description: getIntlText('dashboard.plugin.trigger_confirm_text'),
+            confirmButtonText: getIntlText('common.button.confirm'),
+            onConfirm: async () => {
+                // If the entity itself is the object default is {}, otherwise it is null
+                const resultValue = entityValueType === ENTITY_DATA_VALUE_TYPE.OBJECT ? {} : null;
+                if (entityType === 'SERVICE') {
+                    await handleCallService({
+                        [entityKey]: resultValue,
+                    });
+                } else if (entityType === 'PROPERTY') {
+                    await handleUpdateProperty({
+                        [entityKey]: resultValue,
+                    });
+                }
+            },
+            dialogProps: {
+                // container: mainRef.current,
+                disableScrollLock: true,
+            },
+        });
     };
 
-    const handleOk = async () => {
-        await ref.current?.handleSubmit();
-    };
-
-    const handleSubmit = async (data: Record<string, any>) => {
-        const newData: any = flattenObject(data);
-        const keys = Object.keys(newData);
-        const resultData: any = {};
-        keys.forEach((key: string) => {
-            resultData[tempRef.current[key]] = newData[key];
-        });
-        // If it is of the OBJECT type, it is not displayed and the value is{}
-        objectEntities.forEach(v => {
-            resultData[v.entity_key] = {};
-        });
+    // Handle form submit
+    const handleFormSubmit: SubmitHandler<EntityFormDataProps> = async () => {
+        if (!formEntities?.length) return;
+        const params = getValues();
+        const finalParams = decodeFormParams(params);
+        const entityId = latestEntity?.value;
         const entityType = latestEntity?.rawData?.entityType;
-        if (entityType === 'PROPERTY') {
-            await handleUpdateProperty(resultData);
-        } else if (entityType === 'SERVICE') {
-            await handleCallService(resultData);
+
+        if (!entityId) return;
+        if (!finalParams) {
+            console.warn(`params is empty, the origin params is ${JSON.stringify(params)}`);
+            return;
+        }
+
+        switch (entityType) {
+            case 'SERVICE': {
+                handleCallService(finalParams);
+                break;
+            }
+            case 'PROPERTY': {
+                handleUpdateProperty(finalParams);
+                break;
+            }
+            default: {
+                break;
+            }
         }
     };
 
@@ -181,7 +207,7 @@ const View = (props: Props) => {
     const { addEntityListener } = useActivityEntity();
 
     useEffect(() => {
-        const entityId = entity?.value;
+        const entityId = latestEntity?.value;
         if (!widgetId || !dashboardId || !entityId) return;
 
         const removeEventListener = addEntityListener(entityId, {
@@ -192,11 +218,9 @@ const View = (props: Props) => {
         return () => {
             removeEventListener();
         };
-    }, [entity?.value, widgetId, dashboardId, addEntityListener]);
+    }, [latestEntity?.value, widgetId, dashboardId, addEntityListener]);
 
-    /**
-     * Icon component
-     */
+    // ---------- Icon component ----------
     const IconComponent = useMemo(() => {
         const IconShow = Reflect.get(
             Icons,
@@ -237,18 +261,24 @@ const View = (props: Props) => {
                     <Tooltip className="trigger-view__text" autoEllipsis title={label} />
                 </div>
             </div>
-            {visible && !!mainRef.current && (
+            {visible && (
                 <Modal
-                    title={configJson.name}
-                    onOk={handleOk}
-                    onCancel={() => setVisible(false)}
-                    container={mainRef.current}
                     visible
-                    disableScrollLock
+                    title={configJson.name}
+                    onOk={handleSubmit(handleFormSubmit)}
+                    onCancel={() => {
+                        reset();
+                        setVisible(false);
+                    }}
                 >
                     <div className="trigger-view-form">
-                        {/* @ts-ignore: Mock data field is missing, temporarily ignore the TS verification error */}
-                        <EntityForm ref={ref} entities={entities} onOk={handleSubmit} />
+                        {formItems.map(props => (
+                            <Controller<EntityFormDataProps>
+                                {...props}
+                                key={props.name}
+                                control={control}
+                            />
+                        ))}
                     </div>
                 </Modal>
             )}

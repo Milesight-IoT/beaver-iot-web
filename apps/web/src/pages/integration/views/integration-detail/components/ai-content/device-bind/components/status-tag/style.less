@@ -1,0 +1,16 @@
+.@{prefix}-ai-infer-status-tag {
+    display: inline-block;
+    padding: 2px @padding-xs;
+    border-radius: @border-radius-xs;
+    .text-size(@font-size-sm);
+
+    &.ok {
+        color: var(--green-7);
+        background-color: var(--green-1);
+    }
+
+    &.failed {
+        color: var(--orange-7);
+        background-color: var(--orange-1);
+    }
+}

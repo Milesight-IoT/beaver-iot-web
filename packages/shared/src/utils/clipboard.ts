@@ -3,7 +3,7 @@
  */
 import { isIOS } from './userAgent';
 
-const cssText = 'position:fixed;z-index:-9999;opacity:0;';
+const cssText = 'position:fixed;z-index:-9999;opacity:0;white-space:pre;';
 const copyErrorMessage = 'Failed to copy value to clipboard. Unknown type.';
 
 /**
@@ -26,15 +26,15 @@ export const copyText = (
     // Whether fallback to use `document.execCommand` to copy
     const isFallback = !navigator.clipboard;
     const fallbackCopy = (txt: string, cb: (success: boolean) => void = () => {}) => {
-        let textarea: HTMLTextAreaElement | undefined;
-        let div: HTMLDivElement | undefined;
+        const textarea = document.createElement('textarea');
+
+        textarea.value = txt;
+        textarea.setAttribute('readonly', '');
+        textarea.style.cssText = cssText;
+
+        container.appendChild(textarea);
 
         if (isIOS()) {
-            textarea = document.createElement('textarea');
-            textarea.value = txt;
-            textarea.setAttribute('readonly', '');
-            textarea.style.cssText = cssText;
-            container.appendChild(textarea);
             const { readOnly, contentEditable: editable } = textarea;
             textarea.contentEditable = 'true';
             textarea.readOnly = false;
@@ -51,15 +51,7 @@ export const copyText = (
             textarea.contentEditable = editable;
             textarea.readOnly = readOnly;
         } else {
-            div = document.createElement('div');
-            div.innerText = txt;
-            div.style.cssText = cssText;
-            container.appendChild(div);
-            const selection = window.getSelection();
-            const range = document.createRange();
-            range.selectNodeContents(div);
-            selection?.removeAllRanges();
-            selection?.addRange(range);
+            textarea.select();
         }
 
         try {
@@ -71,14 +63,7 @@ export const copyText = (
             cb(false);
         }
 
-        /**
-         * remove document textarea or div
-         */
-        if (textarea) {
-            container.removeChild(textarea);
-        } else if (div) {
-            container.removeChild(div);
-        }
+        container.removeChild(textarea);
     };
 
     if (!isFallback) {

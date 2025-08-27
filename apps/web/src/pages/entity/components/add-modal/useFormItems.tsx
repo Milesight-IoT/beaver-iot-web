@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { type ControllerProps, type FieldValues } from 'react-hook-form';
-import { TextField, FormControl, FormHelperText, Box } from '@mui/material';
+import { TextField, FormControl, FormHelperText } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { Select } from '@milesight/shared/src/components';
 import {
@@ -9,6 +9,7 @@ import {
     checkMaxLength,
     isMaxLength,
     checkPositiveInt,
+    checkRegexp,
 } from '@milesight/shared/src/utils/validators';
 import { ENTITY_ACCESS_MODE, entityTypeOptions } from '@/constants';
 import { DataTypeRadio, type DataTypeRadioProps, EnumsInput, SingleEnumsInput } from './components';
@@ -97,6 +98,13 @@ const useFormItems = () => {
                     validate: {
                         checkRequired: checkRequired(),
                         checkMaxLength: checkMaxLength({ max: 50 }),
+                        checkSpecialChar: value => {
+                            return /^[A-Za-z0-9_@#$/:[\]-]+$/.test(value)
+                                ? true
+                                : getIntlText('common.valid.input_letter_num_special_char', {
+                                      1: '@#$_-/[]:',
+                                  });
+                        },
                     },
                 },
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {

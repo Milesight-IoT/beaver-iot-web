@@ -106,6 +106,7 @@ export interface EntityAPISchema extends APISchema {
     /** Update the attribute type entity */
     updateProperty: {
         request: {
+            entity_id?: ApiKey;
             /**
              * Entity key, value
              * */
@@ -117,12 +118,14 @@ export interface EntityAPISchema extends APISchema {
     /** Invoke a service type entity */
     callService: {
         request: {
+            entity_id?: ApiKey;
             /**
              * Entity key, value
              * */
             exchange: Record<string, any>;
         };
-        response: void;
+        // Different services have different responses
+        response: any;
     };
 
     /** Gets the entity's current data */
