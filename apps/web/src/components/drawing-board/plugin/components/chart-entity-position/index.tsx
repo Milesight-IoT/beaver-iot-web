@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useContext } from 'react';
 import { Button, IconButton, FormHelperText } from '@mui/material';
 import { isEqual } from 'lodash-es';
 import { useDynamicList, useControllableValue } from 'ahooks';
@@ -8,9 +8,9 @@ import {
     AddIcon,
     KeyboardArrowDownIcon,
 } from '@milesight/shared/src/components';
-import { EntitySelect, type EntitySelectProps } from '@/components';
-import type { EntitySelectOption } from '@/components/entity-select';
-import { filterEntityMap } from '@/components/drawing-board/plugin/utils';
+import { EntitySelect, type EntitySelectProps, type EntitySelectOption } from '@/components';
+import { filterEntityMap, filterEntityOption } from '@/components/drawing-board/plugin/utils';
+import { DrawingBoardContext } from '@/components/drawing-board/context';
 import Select from '../select';
 
 import styles from './style.module.less';
@@ -65,12 +65,14 @@ const ChartEntityPosition: React.FC<ChartEntityPositionProps> = ({
     entityAccessMod,
     entityAccessMods,
     entityExcludeChildren,
+    customFilterEntity,
     ...props
 }) => {
     const { getIntlText } = useI18n();
     const [data, setData] = useControllableValue<ChartEntityPositionValueType[]>(props);
     const { list, remove, getKey, insert, replace, resetList } =
         useDynamicList<ChartEntityPositionValueType>(data);
+    const context = useContext(DrawingBoardContext);
 
     const positionOptions: OptionsProps[] = useMemo(() => {
         return [
@@ -116,6 +118,7 @@ const ChartEntityPosition: React.FC<ChartEntityPositionProps> = ({
                             fieldName="entityId"
                             label={getIntlText('common.label.entity')}
                             popupIcon={<KeyboardArrowDownIcon />}
+                            filterOption={filterEntityOption(customFilterEntity, context)}
                             value={String(item?.id || '')}
                             onChange={option => {
                                 replace(index, {

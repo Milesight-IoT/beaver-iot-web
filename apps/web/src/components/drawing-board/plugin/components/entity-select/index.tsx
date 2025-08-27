@@ -1,15 +1,8 @@
-import React, { useCallback, useMemo, useContext } from 'react';
-import {
-    EntitySelect,
-    type EntitySelectProps,
-    type EntitySelectOption,
-    type EntityValueType,
-} from '@/components';
-import { filterEntityMap } from '@/components/drawing-board/plugin/utils';
-import {
-    DrawingBoardContext,
-    type DrawingBoardContextProps,
-} from '@/components/drawing-board/context';
+import React, { useCallback, useContext } from 'react';
+
+import { EntitySelect, type EntitySelectProps } from '@/components';
+import { filterEntityMap, filterEntityOption } from '@/components/drawing-board/plugin/utils';
+import { DrawingBoardContext } from '@/components/drawing-board/context';
 
 type SingleEntitySelectProps = EntitySelectProps<EntityOptionType, false, false>;
 export interface IProps extends SingleEntitySelectProps {
@@ -35,15 +28,6 @@ export default React.memo((props: IProps) => {
 
     const context = useContext(DrawingBoardContext);
 
-    const filterOption = useMemo(
-        () =>
-            Reflect.get(filterEntityMap, customFilterEntity) as (
-                options: EntitySelectOption<EntityValueType>[],
-                context: DrawingBoardContextProps | null,
-            ) => EntitySelectOption<EntityValueType>[],
-        [customFilterEntity],
-    );
-
     const getOptionValue = useCallback<Required<SingleEntitySelectProps>['getOptionValue']>(
         option => option?.value,
         [],
@@ -55,9 +39,7 @@ export default React.memo((props: IProps) => {
             entityValueType={entityValueTypes || entityValueType}
             entityAccessMod={entityAccessMods || entityAccessMod}
             excludeChildren={entityExcludeChildren}
-            filterOption={
-                filterOption ? oldOptions => filterOption(oldOptions, context) : undefined
-            }
+            filterOption={filterEntityOption(customFilterEntity, context)}
             getOptionValue={getOptionValue}
             {...restProps}
         />

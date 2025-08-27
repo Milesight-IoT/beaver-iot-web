@@ -1,4 +1,7 @@
+import { isEmpty, get } from 'lodash-es';
+
 import { type DrawingBoardContextProps } from '@/components/drawing-board/context';
+import { type EntitySelectOption, type EntityValueType } from '@/components';
 import { chartColorList } from './constant';
 
 /**
@@ -8,17 +11,17 @@ import { chartColorList } from './constant';
 export const filterEntityMap: Record<
     string,
     | ((
-          entityOptions: EntityOptionType[],
-          context?: DrawingBoardContextProps,
-      ) => EntityOptionType[])
+          entityOptions: EntitySelectOption[],
+          context?: DrawingBoardContextProps | null,
+      ) => EntitySelectOption[])
     | undefined
 > = {
     /**
      * If it is enumerated, the filter value type is string and has an ENUM field
      */
-    filterEntityStringHasEnum: (entityOptions: EntityOptionType[]): EntityOptionType[] => {
+    filterEntityStringHasEnum: (entityOptions: EntitySelectOption[]): EntitySelectOption[] => {
         // If it is enumerated, the filter value type is string and has an ENUM field
-        return entityOptions.filter((e: EntityOptionType) => {
+        return entityOptions.filter((e: EntitySelectOption) => {
             return e.valueType !== 'STRING' || e.rawData?.entityValueAttribute?.enum;
         });
     },
@@ -32,4 +35,44 @@ export const getChartColor = (data: any[]) => {
     }
     const resultColor = newChartColorList.map(item => item.light);
     return resultColor;
+};
+
+/**
+ * Filtering entity option data by device info
+ */
+export const filterOptionByDevice: (
+    options: EntitySelectOption<EntityValueType>[],
+    context?: DrawingBoardContextProps | null,
+) => EntitySelectOption<EntityValueType>[] = (options, context) => {
+    if (!Array.isArray(options) || isEmpty(options)) {
+        return options;
+    }
+
+    const deviceName = context?.deviceDetail?.name;
+    if (!deviceName) return options;
+
+    return options.filter(o => {
+        return o?.rawData?.deviceName === deviceName;
+    });
+};
+
+/**
+ * Get filter entity option function
+ */
+export const filterEntityOption = (
+    customFilterEntity?: string,
+    context?: DrawingBoardContextProps | null,
+) => {
+    const customFilter = get(filterEntityMap, customFilterEntity || '');
+
+    if (!customFilter) {
+        return (oldOptions: EntitySelectOption<EntityValueType>[]) => {
+            return filterOptionByDevice(oldOptions, context);
+        };
+    }
+
+    return (oldOptions: EntitySelectOption<EntityValueType>[]) => {
+        const newOptions = filterOptionByDevice(oldOptions, context);
+        return customFilter(newOptions, context);
+    };
 };
