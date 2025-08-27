@@ -1,8 +1,9 @@
 import { ReactNode, useMemo } from 'react';
+import { type TextFieldProps } from '@mui/material';
 import { type ControllerProps } from 'react-hook-form';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { MqttCredentialBrokerType } from '@/services/http/embedded-ns';
-import { CopyTextField, CopyTextFieldProps } from '@/components/copy-text';
+import { CopyTextField } from '@/components';
 
 /**
  * Form data type
@@ -18,7 +19,7 @@ const useFormItems = () => {
     const { getIntlText } = useI18n();
 
     const formItems = useMemo(() => {
-        const props: Partial<CopyTextFieldProps> = {
+        const props: Partial<TextFieldProps> = {
             disabled: true,
             type: 'text',
             size: 'small',

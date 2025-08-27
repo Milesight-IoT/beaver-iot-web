@@ -3,7 +3,7 @@ import * as path from 'path';
 import inquirer from 'inquirer';
 import { Command } from 'commander';
 import { isFileExists } from '@milesight/scripts/src/utils';
-import { pkgRoot, msgTemplate } from '../config';
+import { pkgRoot, msgTemplate, PHRASE_WX_WORK_MENTIONED_USERS } from '../config';
 import { logger, parseTemplate, awaitWrap } from '../utils/index';
 import {
     phraseClient,
@@ -21,6 +21,35 @@ import { sendMessage } from '../services/wx-work';
 const execJobCommand = async (name?: string, options?: ConfigType['phrase']) => {
     if (!phraseClient) return;
 
+    // ---------- Get Project & Locales Info ----------
+    const [projectErrors, [project, locales] = []] = await awaitWrap(
+        Promise.all([getProjectDetail(), getProjectLocales()]),
+    );
+
+    if (projectErrors) {
+        logger.error(`\n💥 Failed to get project locales, please check and try again.`);
+        return;
+    }
+
+    const defaultLocale = locales.find(
+        locale => locale.default || locale.code === options.defaultLocale,
+    );
+
+    if (!defaultLocale) {
+        logger.error(
+            `\n💥 The default locale ${options.defaultLocale} does not exist in the project, please check and try again.`,
+        );
+        return;
+    }
+
+    logger.info(`
+ℹ️ Phrase Project Info:
+- Name: ${project.name}
+- Locales: ${locales.map(locale => locale.name).join(', ')}
+- Default Locale: ${defaultLocale.code} (Update Time: ${new Date(defaultLocale.updated_at).toLocaleString()})
+    `);
+
+    // ---------- Prompt to get answers ----------
     const answers = await inquirer.prompt([
         {
             type: 'input',
@@ -29,10 +58,33 @@ const execJobCommand = async (name?: string, options?: ConfigType['phrase']) => 
             message: 'Please enter the version of current iteration:',
         },
         {
+            type: 'checkbox',
+            name: 'translators',
+            message: 'Please select translators:',
+            validate(value) {
+                if (!value.length) {
+                    return 'You must choose at least one translator';
+                }
+                return true;
+            },
+            choices() {
+                const translators = PHRASE_WX_WORK_MENTIONED_USERS?.split(',').map(id => id.trim());
+                const options = translators.map(translator => ({
+                    name: translator,
+                    value: translator,
+                }));
+
+                return options || [];
+            },
+        },
+        {
             type: 'input',
             name: 'name',
             default(ans) {
-                return name || `New i18n texts - ${ans.version}`;
+                const dateString = new Date().toLocaleDateString();
+                const names = ans.translators.map(item => item.split(':')[0]).join(',');
+                const defaultName = `${ans.version} - ${dateString} - ${names}`;
+                return name || defaultName;
             },
             message: 'Please enter the name of the new Phrase job:',
         },
@@ -60,27 +112,6 @@ const execJobCommand = async (name?: string, options?: ConfigType['phrase']) => 
 
     logger.info('\n✳️ Starting to create a new Phrase job...');
     const startTime = Date.now();
-
-    // ---------- Get Project Locales ----------
-    const [projectErrors, [project, locales] = []] = await awaitWrap(
-        Promise.all([getProjectDetail(), getProjectLocales()]),
-    );
-
-    if (projectErrors) {
-        logger.error(`\n💥 Failed to get project locales, please check and try again.`);
-        return;
-    }
-
-    const defaultLocale = locales.find(
-        locale => locale.default || locale.code === options.defaultLocale,
-    );
-
-    if (!defaultLocale) {
-        logger.error(
-            `\n💥 The default locale ${options.defaultLocale} does not exist in the project, please check and try again.`,
-        );
-        return;
-    }
 
     // ---------- Upload New Locale Texts ----------
     const contents = await fse.readFile(targetPath, 'utf-8');
@@ -141,6 +172,7 @@ const execJobCommand = async (name?: string, options?: ConfigType['phrase']) => 
             jobName: jobDetail.name,
             jobLink: `https://app.phrase.com/accounts/${project.account.slug}/projects/${project.slug}/jobs/${jobDetail.id}`,
         }),
+        mentionedMobiles: answers.translators.map(item => item.split(':')[1]),
     });
 
     logger.log(`⏱️ Execution time: ${((Date.now() - startTime) / 1000).toFixed(2)}s`);
@@ -205,7 +237,7 @@ const execImportCommand = async (target?: string, options?: ConfigType['phrase']
     // ---------- Write the newest texts to files ----------
     locales.forEach((locale, index) => {
         const texts = localesTexts[index];
-        const fileName = `${locale.code}.json`;
+        const fileName = `${locale.name}.json`;
 
         fse.outputJSONSync(path.join(targetDir, fileName), texts, {
             encoding: 'utf-8',

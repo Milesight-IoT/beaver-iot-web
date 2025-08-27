@@ -90,10 +90,10 @@ const handler: ErrorHandlerConfig['handler'] = (errCode, resp) => {
     } else {
         ignoreError.forEach(item => {
             if (typeof item === 'string') {
-                ignoreErrorMap.set(item, noop);
+                ignoreErrorMap.set(item.toLowerCase(), noop);
             } else {
                 item.codes.forEach(code => {
-                    ignoreErrorMap.set(code, item.handler);
+                    ignoreErrorMap.set(code.toLowerCase(), item.handler);
                 });
             }
         });

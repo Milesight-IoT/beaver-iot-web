@@ -279,10 +279,18 @@ label.@{mui-prefix}FormControlLabel-root {
     }
 
     .@{mui-prefix}FormControlLabel-label {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
         margin-bottom: @margin-xxs;
         color: var(--text-color-primary);
         .text-size(@font-size-md);
+
+        .@{prefix}-form-label-help {
+            display: flex;
+            align-items: center;
+            margin-left: @margin-xxs;
+            color: var(--icon-color-gray-tertiary);
+        }
     }
 
     .@{mui-prefix}FormControlLabel-asterisk {
@@ -320,20 +328,37 @@ label.@{mui-prefix}FormControlLabel-root {
             }
         }
 
-        .@{mui-prefix}InputBase-input {
+        .@{mui-prefix}InputBase-input,
+        .@{mui-prefix}Select-select.@{mui-prefix}InputBase-input {
             padding-left: 0;
         }
     }
 
     .@{mui-prefix}FormLabel-root {
-        position: unset;
+        position: relative;
         display: flex;
-        flex-direction: row-reverse;
-        justify-content: flex-end;
         margin-bottom: @margin-xxs;
         color: var(--text-color-primary);
         transform: unset;
         .text-size(@font-size-md);
+
+        .@{mui-prefix}FormLabel-asterisk {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+        }
+
+        .@{prefix}-form-label-help {
+            display: flex;
+            align-items: center;
+            margin-left: @margin-xxs;
+            color: var(--icon-color-gray-tertiary);
+        }
+
+        &:has(.@{mui-prefix}FormLabel-asterisk) {
+            padding-left: @padding-xs;
+        }
 
         &.@{mui-prefix}-focused {
             color: var(--text-color-primary);
@@ -341,10 +366,6 @@ label.@{mui-prefix}FormControlLabel-root {
 
         &.@{mui-prefix}-disabled {
             color: var(--text-color-primary);
-        }
-
-        .@{mui-prefix}FormLabel-asterisk {
-            margin-right: @margin-xxs;
         }
 
         &.@{mui-prefix}-error {

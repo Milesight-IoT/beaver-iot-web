@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { isArray, isObject, isUndefined } from 'lodash-es';
+import cls from 'classnames';
 import { useDebounceEffect } from 'ahooks';
 import { OutlinedInput, InputAdornment } from '@mui/material';
 import { DataGrid, type GridValidRowModel, useGridApiRef } from '@mui/x-data-grid';
@@ -138,8 +139,11 @@ const TablePro = <DataType extends GridValidRowModel>({
             if (col.filterDropdown || col.filters) {
                 col.renderHeader = col.renderHeader || (() => renderHeader(col));
             }
-            col.headerClassName = pinnedColumnPos[col.field]?.headerClassName || '';
-            col.cellClassName = pinnedColumnPos[col.field]?.cellClassName || '';
+            col.headerClassName = cls(
+                col.headerClassName,
+                pinnedColumnPos[col.field]?.headerClassName,
+            );
+            col.cellClassName = cls(col.cellClassName, pinnedColumnPos[col.field]?.cellClassName);
 
             if (col.ellipsis) {
                 const originalRenderCell = col.renderCell;

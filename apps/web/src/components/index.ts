@@ -48,11 +48,25 @@ export { default as PasswordInput } from './password-input';
 export { default as PermissionControlHidden } from './permission-control-hidden';
 export { default as PermissionControlDisabled } from './permission-control-disabled';
 export { default as PermissionControlResource } from './permission-control-resource';
-export { default as Upload, type FileValueType, type UploadFile } from './upload';
+export {
+    default as Upload,
+    type FileValueType,
+    type UploadFile,
+    type Props as UploadProps,
+} from './upload';
 export { default as ToggleRadio } from './toggle-radio';
 export { default as ActionInput } from './action-input';
 export { default as GradientBgContainer } from './gradient-bg-container';
-export { default as ImageAnnotation, type Vector2d } from './image-annotation';
+export {
+    default as ImageAnnotation,
+    type Vector2d,
+    type PointType,
+    type ImageAnnotationProps,
+    type ImageAnnotationInstance,
+} from './image-annotation';
+export { default as ImageInput } from './image-input';
+export { default as CopyTextField } from './copy-text';
+export { default as TypingEffectText } from './typing-effect-text';
 export { default as Tag } from './tag';
 export { default as ManageTagsModal } from './manage-tags-modal';
 export { DragContainer, DragCard } from './drag';
