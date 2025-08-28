@@ -53,10 +53,17 @@ export const filterOptionByDeviceCanvas: (
 
     const deviceKey = String(context?.deviceDetail?.key || '');
     return options.filter(o => {
-        return (
-            (Boolean(deviceKey) && o?.rawData?.entityKey?.includes(deviceKey)) ||
-            o?.rawData?.entityIsCustomized
-        );
+        /** 1. The entity key contains the device key */
+        if (deviceKey && o?.rawData?.entityKey?.includes(deviceKey)) {
+            return true;
+        }
+
+        /** 2. The entity is customized */
+        if (o?.rawData?.entityIsCustomized) {
+            return true;
+        }
+
+        return false;
     });
 };
 
