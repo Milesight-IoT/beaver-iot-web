@@ -51,7 +51,12 @@ export const filterOptionByDeviceCanvas: (
         return options;
     }
 
-    const deviceKey = String(context?.deviceDetail?.key || '');
+    const deviceDetail = context?.deviceDetail;
+    if (!deviceDetail) {
+        return options;
+    }
+
+    const deviceKey = String(deviceDetail?.key || '');
     return options.filter(o => {
         /** 1. The entity key contains the device key */
         if (deviceKey && o?.rawData?.entityKey?.includes(deviceKey)) {
