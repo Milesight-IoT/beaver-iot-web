@@ -38,9 +38,12 @@ export const getChartColor = (data: any[]) => {
 };
 
 /**
- * Filtering entity option data by device info
+ * Filtering entity option data by device canvas
+ *
+ * 1. The entity key contains the device key
+ * 2. The entity is customized
  */
-export const filterOptionByDevice: (
+export const filterOptionByDeviceCanvas: (
     options: EntitySelectOption<EntityValueType>[],
     context?: DrawingBoardContextProps | null,
 ) => EntitySelectOption<EntityValueType>[] = (options, context) => {
@@ -48,11 +51,12 @@ export const filterOptionByDevice: (
         return options;
     }
 
-    const deviceName = context?.deviceDetail?.name;
-    if (!deviceName) return options;
-
+    const deviceKey = String(context?.deviceDetail?.key || '');
     return options.filter(o => {
-        return o?.rawData?.deviceName === deviceName;
+        return (
+            (Boolean(deviceKey) && o?.rawData?.entityKey?.includes(deviceKey)) ||
+            o?.rawData?.entityIsCustomized
+        );
     });
 };
 
@@ -67,12 +71,12 @@ export const filterEntityOption = (
 
     if (!customFilter) {
         return (oldOptions: EntitySelectOption<EntityValueType>[]) => {
-            return filterOptionByDevice(oldOptions, context);
+            return filterOptionByDeviceCanvas(oldOptions, context);
         };
     }
 
     return (oldOptions: EntitySelectOption<EntityValueType>[]) => {
-        const newOptions = filterOptionByDevice(oldOptions, context);
+        const newOptions = filterOptionByDeviceCanvas(oldOptions, context);
         return customFilter(newOptions, context);
     };
 };
