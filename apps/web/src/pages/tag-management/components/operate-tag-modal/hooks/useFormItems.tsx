@@ -69,12 +69,12 @@ export function useFormItems() {
                             }}
                             error={!!error}
                         >
-                            <InputLabel required>{getIntlText('common.label.color')}</InputLabel>
                             <IconColorSelect
+                                required
+                                label={getIntlText('common.label.color')}
                                 value={value}
                                 onChange={onChange}
                                 error={!!error}
-                                label="Color"
                                 defaultColors={[
                                     '#4E5969',
                                     '#7B4EFA',
