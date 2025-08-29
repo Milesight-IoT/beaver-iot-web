@@ -77,10 +77,12 @@ export default () => {
 
         /**
          * MUI Theme breakpoints
-         * @param sm <576
-         * @param md <768
-         * @param lg <992
-         * @param xl <1200
+         *
+         * Constants:
+         * - sm: <576
+         * - md: <768
+         * - lg: <992
+         * - xl: <1200
          */
         breakpoints: muiTheme.breakpoints,
 
