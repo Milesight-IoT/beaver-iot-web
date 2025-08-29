@@ -17,9 +17,10 @@ import { useFullscreen } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { dashboardAPI, awaitWrap, isRequestSuccess } from '@/services/http';
 import { DashboardDetail, WidgetDetail } from '@/services/http/dashboard';
-import { useActivityEntity } from '@/plugin/hooks';
+import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
 import { useConfirm, PermissionControlHidden, PermissionControlDisabled } from '@/components';
 import { PERMISSIONS } from '@/constants';
+import { filterWidgets } from '@/components/drawing-board';
 import { useGetPluginConfigs, useHomeDashboard } from '../../hooks';
 import AddWidget from '../add-widget';
 import PluginList from '../plugin-list';
@@ -185,7 +186,7 @@ export default (props: DashboardContentProps) => {
 
         const [_, res] = await awaitWrap(
             dashboardAPI.updateDashboard({
-                widgets,
+                widgets: filterWidgets(widgets),
                 entity_ids: currentEntityIds,
                 dashboard_id: dashboardId,
                 name: dashboardDetail.name,

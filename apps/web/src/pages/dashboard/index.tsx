@@ -8,7 +8,7 @@ import { dashboardAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/se
 import { DashboardDetail } from '@/services/http/dashboard';
 import { useMqtt, MQTT_STATUS, MQTT_EVENT_TYPE, BATCH_PUSH_TIME } from '@/hooks';
 import { useConfirm, PermissionControlHidden, Empty, SidebarController } from '@/components';
-import { useActivityEntity } from '@/plugin/hooks';
+import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
 import { PERMISSIONS } from '@/constants';
 import { useDashboardStore } from '@/stores';
 import DashboardContent, { type DashboardContentProps } from './components/dashboard-content';

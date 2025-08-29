@@ -1,30 +1,39 @@
 import { useEffect, useRef, useState } from 'react';
-import { omit } from 'lodash-es';
-import components from '@/plugin/plugins/components';
+import components from '@/components/drawing-board/plugin/plugins/components';
+import type { BoardPluginProps } from '@/components/drawing-board/plugin/types';
 // Defines a collection of modules that can be imported
-const modules = import.meta.glob('../../../plugin/plugins/*/config.json');
-const iconModules = import.meta.glob('../../../plugin/plugins/*/icon.svg');
-const PLUGIN_DIR = '../../../plugin';
+const controlPanels = import.meta.glob(
+    '../../../components/drawing-board/plugin/plugins/*/control-panel/index.ts',
+);
+const PLUGIN_DIR = '../../../components/drawing-board/plugin';
 
 export default () => {
-    const [pluginsConfigs, setPluginsConfigs] = useState<CustomComponentProps[]>([]);
-    const pluginRef = useRef<CustomComponentProps[]>([]);
+    const [pluginsConfigs, setPluginsConfigs] = useState<BoardPluginProps[]>([]);
+    const pluginRef = useRef<BoardPluginProps[]>([]);
 
     const loopComponents = async (comName: string, index: number) => {
-        const jsonPath = `${PLUGIN_DIR}/plugins/${comName}/config.json`;
-        const { $schema: _, ...jsonData }: any = (await modules[jsonPath]()) || {};
-        let icon = null;
-        if (jsonData?.icon) {
-            const iconSrc = `${PLUGIN_DIR}/plugins/${comName}/icon.svg`;
-            icon = await iconModules[iconSrc]();
+        const tsPath = `${PLUGIN_DIR}/plugins/${comName}/control-panel/index.ts`;
+
+        const panelModule = (await controlPanels[tsPath]()) as unknown as {
+            default: BoardPluginProps['originalControlPanel'];
+        };
+        if (!panelModule?.default) {
+            return;
         }
-        const isExit = pluginRef.current.some(item => item.name === jsonData.name);
+
+        const panel =
+            typeof panelModule?.default === 'function'
+                ? panelModule?.default?.()
+                : panelModule?.default;
+
+        const isExit = pluginRef.current.some(item => item.name === panel.name);
         if (isExit) return;
 
         const result = {
-            ...(omit(jsonData?.default || {}, '$schema') as CustomComponentProps),
-            iconSrc: icon,
-        };
+            ...panel,
+            originalControlPanel: panelModule?.default,
+        } as BoardPluginProps;
+
         // Ensure component sequence stability
         const plugins = pluginRef.current;
         pluginRef.current[index] = result;

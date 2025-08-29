@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Grid2 as Grid } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
-import { COMPONENTCLASS } from '@/plugin/constant';
+import { COMPONENT_CLASS } from '@/components/drawing-board/plugin/constant';
 import { WidgetDetail } from '@/services/http/dashboard';
 import { Tooltip } from '@/components';
 import pluginImg from '@/assets/plugin.png';
+import type { BoardPluginProps } from '@/components/drawing-board';
 import { useGetPluginConfigs } from '../../hooks';
 import './style.less';
 
@@ -20,14 +21,14 @@ export default (props: PluginListProps) => {
 
     useEffect(() => {
         if (pluginsConfigs) {
-            const pluginClass: Record<string, any> = COMPONENTCLASS;
+            const pluginClass: Record<string, any> = COMPONENT_CLASS;
             const plugins: Record<string, any> = {};
             Object.keys(pluginClass).forEach((plu: any) => {
                 plugins[plu] = {
                     ...pluginClass[plu],
                 };
             });
-            pluginsConfigs.forEach((plugin: CustomComponentProps) => {
+            pluginsConfigs.forEach((plugin: BoardPluginProps) => {
                 if (plugin.class && plugins[plugin.class]) {
                     if (!plugins[plugin.class].list) {
                         plugins[plugin.class].list = [];
@@ -48,7 +49,7 @@ export default (props: PluginListProps) => {
         }
     }, [pluginsConfigs]);
 
-    const handleClick = (type: CustomComponentProps) => {
+    const handleClick = (type: BoardPluginProps) => {
         onSelect({
             data: type,
         });
@@ -60,10 +61,7 @@ export default (props: PluginListProps) => {
                 {pluginList
                     ? Object.keys(pluginList).map((pluginClass: string) => {
                           return (
-                              <div
-                                  className="dashboard-plugin-class-grid"
-                                  key={pluginList[pluginClass].type}
-                              >
+                              <div key={pluginClass} className="dashboard-plugin-class-grid">
                                   <div className="dashboard-plugin-class-grid-title">
                                       {getIntlText(pluginList[pluginClass].name)}
                                   </div>
@@ -72,36 +70,36 @@ export default (props: PluginListProps) => {
                                       spacing={1}
                                       className="dashboard-plugin-class-grid-container"
                                   >
-                                      {pluginList[pluginClass]?.list?.map((pluginConfig: any) => {
-                                          return (
-                                              <Grid
-                                                  size={3}
-                                                  className="dashboard-plugin-class-item"
-                                              >
-                                                  <div
-                                                      className="dashboard-plugin-class-item-content"
-                                                      onClick={() => handleClick(pluginConfig)}
+                                      {pluginList[pluginClass]?.list?.map(
+                                          (pluginConfig: BoardPluginProps) => {
+                                              return (
+                                                  <Grid
+                                                      key={pluginConfig.type}
+                                                      size={3}
+                                                      className="dashboard-plugin-class-item"
                                                   >
-                                                      <img
-                                                          className="dashboard-plugin-class-item-content-icon"
-                                                          src={
-                                                              pluginConfig.iconSrc?.default ||
-                                                              pluginImg
-                                                          }
-                                                          alt="plugin"
-                                                      />
-                                                      <Tooltip
-                                                          title={pluginConfig.name}
-                                                          autoEllipsis
+                                                      <div
+                                                          className="dashboard-plugin-class-item-content"
+                                                          onClick={() => handleClick(pluginConfig)}
                                                       >
-                                                          <div className="dashboard-plugin-class-item-content-name">
-                                                              {pluginConfig.name}
-                                                          </div>
-                                                      </Tooltip>
-                                                  </div>
-                                              </Grid>
-                                          );
-                                      })}
+                                                          <img
+                                                              className="dashboard-plugin-class-item-content-icon"
+                                                              src={pluginConfig?.icon || pluginImg}
+                                                              alt="plugin"
+                                                          />
+                                                          <Tooltip
+                                                              title={pluginConfig.name}
+                                                              autoEllipsis
+                                                          >
+                                                              <div className="dashboard-plugin-class-item-content-name">
+                                                                  {pluginConfig.name}
+                                                              </div>
+                                                          </Tooltip>
+                                                      </div>
+                                                  </Grid>
+                                              );
+                                          },
+                                      )}
                                   </Grid>
                               </div>
                           );

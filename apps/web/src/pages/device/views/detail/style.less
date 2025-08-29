@@ -4,6 +4,7 @@
     padding: 0;
 
     .topbar {
+        position: relative;
         display: flex;
         align-items: center;
 
@@ -19,6 +20,12 @@
             background-color: var(--component-background);
             border-bottom: 1px solid var(--border-color-base);
         }
+
+        &__right {
+            position: absolute;
+            top: 6px;
+            right: 16px;
+        }
     }
 
     .@{prefix}-tab-content {
@@ -32,6 +39,12 @@
         .@{prefix}-tabpanel {
             height: 100%;
         }
+    }
+
+    .drawing-board__tab {
+        padding: 0;
+        margin: 0;
+        background-color: transparent;
     }
 }
 

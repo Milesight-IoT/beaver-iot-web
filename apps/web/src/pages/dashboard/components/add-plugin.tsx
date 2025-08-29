@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { omit } from 'lodash-es';
 import { TextField, Button } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
-import ConfigPlugin from '@/plugin/config-plugin';
-import components from '@/plugin/plugins/components';
+import ConfigPlugin from '@/components/drawing-board/plugin/config-plugin';
+import components from '@/components/drawing-board/plugin/plugins/components';
 
 const PLUGINDIR = '../../plugin';
 
@@ -50,7 +50,7 @@ export default () => {
             <Button sx={{ marginTop: '20px' }} variant="outlined" onClick={handleCreatPlugin}>
                 {getIntlText('dashboard.generate_component')}
             </Button>
-            {!!config && <ConfigPlugin onClose={handleClose} config={config} />}
+            {!!config && <ConfigPlugin onClose={handleClose} operatingPlugin={config} />}
         </div>
     );
 };

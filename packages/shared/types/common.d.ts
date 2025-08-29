@@ -220,3 +220,8 @@ declare type AdvancedConditionsType<T> = Partial<{
         values: ApiKey[];
     };
 }>;
+
+/**
+ *  Any dictionary object
+ */
+declare type AnyDict = Record<string, any>;

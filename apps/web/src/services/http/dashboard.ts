@@ -14,7 +14,7 @@ export interface DashboardDetail {
 
 export interface WidgetDetail {
     widget_id?: ApiKey;
-    tempId?: number; // Temporary id for front-end use
+    tempId?: ApiKey; // Temporary id for front-end use
     data: Record<string, any>;
 }
 

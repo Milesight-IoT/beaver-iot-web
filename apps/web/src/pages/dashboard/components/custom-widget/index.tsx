@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import { Modal } from '@milesight/shared/src/components';
 import { useI18n } from '@milesight/shared/src/hooks';
-import ConfigPlugin from '@/plugin/config-plugin';
+import ConfigPlugin from '@/components/drawing-board/plugin/config-plugin';
 
 interface CustomWidgetProps {
     onCancel: () => void;
@@ -53,7 +53,11 @@ export default ({ onCancel }: CustomWidgetProps) => {
                 </Button>
 
                 {!!config && (
-                    <ConfigPlugin onClose={handleCloseConfig} config={config} onOk={() => {}} />
+                    <ConfigPlugin
+                        onClose={handleCloseConfig}
+                        operatingPlugin={config}
+                        onOk={() => {}}
+                    />
                 )}
             </div>
         </Modal>

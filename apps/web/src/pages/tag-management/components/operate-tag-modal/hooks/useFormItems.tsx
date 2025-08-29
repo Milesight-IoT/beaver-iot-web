@@ -4,7 +4,7 @@ import { type ControllerProps } from 'react-hook-form';
 
 import { checkRequired } from '@milesight/shared/src/utils/validators';
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
-import IconColorSelect from '@/plugin/components/icon-color-select';
+import IconColorSelect from '@/components/drawing-board/plugin/components/icon-color-select';
 
 import { type OperateTagProps } from '../index';
 
@@ -69,12 +69,12 @@ export function useFormItems() {
                             }}
                             error={!!error}
                         >
-                            <InputLabel required>{getIntlText('common.label.color')}</InputLabel>
                             <IconColorSelect
+                                required
+                                label={getIntlText('common.label.color')}
                                 value={value}
                                 onChange={onChange}
                                 error={!!error}
-                                label="Color"
                                 defaultColors={[
                                     '#4E5969',
                                     '#7B4EFA',

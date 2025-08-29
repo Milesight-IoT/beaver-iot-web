@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useI18n } from '@milesight/shared/src/hooks';
-import ConfigPlugin from '@/plugin/config-plugin';
+import ConfigPlugin from '@/components/drawing-board/plugin/config-plugin';
 import { WidgetDetail } from '@/services/http/dashboard';
 
 interface WidgetProps {
@@ -143,7 +143,7 @@ export default (props: WidgetProps) => {
         <ConfigPlugin
             onClose={handleClose}
             onOk={handleOk}
-            config={config?.data}
+            operatingPlugin={config?.data}
             onChange={handleChange}
             title={
                 config.widget_id || config.tempId

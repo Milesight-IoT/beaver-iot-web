@@ -30,6 +30,8 @@ export {
     type EntityStoreType,
     type EntitySelectProps,
     type EntitySelectValueType,
+    type EntitySelectOption,
+    type EntityValueType,
 } from './entity-select';
 export {
     CodeEditor,
@@ -54,7 +56,7 @@ export {
     type UploadFile,
     type Props as UploadProps,
 } from './upload';
-export { default as ToggleRadio } from './toggle-radio';
+export { default as ToggleRadio, type Props as ToggleRadioProps } from './toggle-radio';
 export { default as ActionInput } from './action-input';
 export { default as GradientBgContainer } from './gradient-bg-container';
 export {

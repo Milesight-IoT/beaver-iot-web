@@ -154,6 +154,8 @@ declare interface EntityData {
         id: ApiKey;
         name: string;
     };
+    /** Is customized entity */
+    entity_is_customized?: boolean;
 }
 
 /**
