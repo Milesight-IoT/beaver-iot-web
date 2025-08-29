@@ -2,7 +2,7 @@ import React from 'react';
 import './index.less';
 
 interface IProps {
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }
 export default React.memo(({ children }: IProps) => {
     return (

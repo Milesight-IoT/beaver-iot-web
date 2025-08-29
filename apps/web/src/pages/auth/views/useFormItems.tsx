@@ -154,9 +154,9 @@ const useFormItems = ({ mode = 'login' }: UseFormItemsProps) => {
                                                 edge="end"
                                             >
                                                 {showPassword ? (
-                                                    <VisibilityOffIcon />
-                                                ) : (
                                                     <VisibilityIcon />
+                                                ) : (
+                                                    <VisibilityOffIcon />
                                                 )}
                                             </IconButton>
                                         </InputAdornment>
@@ -208,9 +208,9 @@ const useFormItems = ({ mode = 'login' }: UseFormItemsProps) => {
                                                 edge="end"
                                             >
                                                 {showPassword ? (
-                                                    <VisibilityOffIcon />
-                                                ) : (
                                                     <VisibilityIcon />
+                                                ) : (
+                                                    <VisibilityOffIcon />
                                                 )}
                                             </IconButton>
                                         </InputAdornment>
