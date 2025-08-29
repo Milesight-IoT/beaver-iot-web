@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useRequest } from 'ahooks';
+import { get } from 'lodash-es';
 
 import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
+
+import { type EntitySelectOption } from '@/components';
 import { awaitWrap, entityAPI, getResponseData, isRequestSuccess } from '@/services/http';
 import { filterEntityMap } from '../utils';
 
@@ -34,7 +37,7 @@ export function useEntitySelectOptions(
         customFilterEntity,
     } = props;
 
-    const [options, setOptions] = useState<EntityOptionType[]>([]);
+    const [options, setOptions] = useState<EntitySelectOption[]>([]);
     const [loading, setLoading] = useState(false);
 
     const { run: getEntityOptions, data: entityOptions } = useRequest(
@@ -85,7 +88,7 @@ export function useEntitySelectOptions(
      * Convert to option data according to the physical data
      */
     useEffect(() => {
-        let newOptions: EntityOptionType[] = (entityOptions || []).map(e => {
+        let newOptions: EntitySelectOption[] = (entityOptions || []).map(e => {
             const entityValueAttribute = safeJsonParse(
                 (e as any).entity_value_attribute,
             ) as EntityValueAttributeType;
@@ -107,7 +110,7 @@ export function useEntitySelectOptions(
          * If you need to be customized, add the filtering function to expand it down through the FilterEntityMap object
          * CustomFilterEntity is the function name
          */
-        const filterEntityFunction = Reflect.get(filterEntityMap, customFilterEntity || '');
+        const filterEntityFunction = get(filterEntityMap, customFilterEntity || '');
         if (filterEntityFunction) {
             newOptions = filterEntityFunction(newOptions);
         }

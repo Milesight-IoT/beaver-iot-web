@@ -109,7 +109,7 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
                             componentProps: {
                                 required: true,
                                 entityType: ['PROPERTY'],
-                                entityValueTypes: ['LONG', 'DOUBLE'],
+                                entityValueType: ['LONG', 'DOUBLE'],
                                 entityAccessMod: ['R', 'RW'],
                             },
                         },

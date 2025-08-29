@@ -6,25 +6,14 @@ import { DrawingBoardContext } from '@/components/drawing-board/context';
 
 type SingleEntitySelectProps = EntitySelectProps<EntityOptionType, false, false>;
 export interface IProps extends SingleEntitySelectProps {
-    entityValueTypes: SingleEntitySelectProps['entityValueType'];
-    entityAccessMods: SingleEntitySelectProps['entityAccessMod'];
-    entityExcludeChildren: SingleEntitySelectProps['excludeChildren'];
-    customFilterEntity: keyof typeof filterEntityMap;
+    customFilterEntity?: keyof typeof filterEntityMap;
 }
+
 /**
  * Entity Select drop-down component (single option)
  */
 export default React.memo((props: IProps) => {
-    const {
-        entityType,
-        entityValueType,
-        entityValueTypes,
-        entityAccessMod,
-        entityAccessMods,
-        entityExcludeChildren,
-        customFilterEntity,
-        ...restProps
-    } = props;
+    const { entityType, customFilterEntity, ...restProps } = props;
 
     const context = useContext(DrawingBoardContext);
 
@@ -36,9 +25,6 @@ export default React.memo((props: IProps) => {
         <EntitySelect
             fieldName="entityId"
             entityType={entityType}
-            entityValueType={entityValueTypes || entityValueType}
-            entityAccessMod={entityAccessMods || entityAccessMod}
-            excludeChildren={entityExcludeChildren}
             filterOption={filterEntityOption(customFilterEntity, context)}
             getOptionValue={getOptionValue}
             {...restProps}

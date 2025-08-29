@@ -40,7 +40,7 @@ const radarChartControlPanelConfig = (): ControlPanelConfig<RadarChartControlPan
                             componentProps: {
                                 required: true,
                                 entityType: ['PROPERTY'],
-                                entityValueTypes: ['LONG', 'DOUBLE'],
+                                entityValueType: ['LONG', 'DOUBLE'],
                                 entityAccessMod: ['R', 'RW'],
                             },
                         },

@@ -40,7 +40,7 @@ const textControlPanelConfig = (): ControlPanelConfig<TextControlPanelConfig> =>
                             componentProps: {
                                 required: true,
                                 entityType: ['PROPERTY'],
-                                entityValueTypes: ['STRING', 'LONG', 'DOUBLE', 'BOOLEAN'],
+                                entityValueType: ['STRING', 'LONG', 'DOUBLE', 'BOOLEAN'],
                                 entityAccessMod: ['R', 'RW'],
                             },
                         },

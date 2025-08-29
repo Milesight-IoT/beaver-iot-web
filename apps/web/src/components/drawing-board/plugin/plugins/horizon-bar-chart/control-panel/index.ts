@@ -39,7 +39,7 @@ const horizonBarControlPanelConfig = (): ControlPanelConfig<BarChartControlPanel
                             componentProps: {
                                 required: true,
                                 entityType: ['PROPERTY'],
-                                entityValueTypes: ['LONG', 'DOUBLE'],
+                                entityValueType: ['LONG', 'DOUBLE'],
                                 entityAccessMod: ['R', 'RW'],
                             },
                         },

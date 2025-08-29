@@ -44,9 +44,9 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                             componentProps: {
                                 required: true,
                                 entityType: ['PROPERTY'],
-                                entityValueTypes: ['BOOLEAN'],
-                                entityAccessMods: ['W', 'RW'],
-                                entityExcludeChildren: true,
+                                entityValueType: ['BOOLEAN'],
+                                entityAccessMod: ['W', 'RW'],
+                                excludeChildren: true,
                             },
                         },
                     },

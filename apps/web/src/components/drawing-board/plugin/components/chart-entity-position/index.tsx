@@ -40,10 +40,6 @@ export interface ChartEntityPositionProps
     value?: ChartEntityPositionValueType[];
     defaultValue?: ChartEntityPositionValueType[];
     onChange?: (value: ChartEntityPositionValueType[]) => void;
-    entityType?: SingleEntitySelectProps['entityType'];
-    entityValueTypes?: SingleEntitySelectProps['entityValueType'];
-    entityAccessMods?: SingleEntitySelectProps['entityAccessMod'];
-    entityExcludeChildren?: SingleEntitySelectProps['excludeChildren'];
     customFilterEntity?: keyof typeof filterEntityMap;
 }
 
@@ -61,10 +57,8 @@ const ChartEntityPosition: React.FC<ChartEntityPositionProps> = ({
     helperText,
     entityType,
     entityValueType,
-    entityValueTypes,
     entityAccessMod,
-    entityAccessMods,
-    entityExcludeChildren,
+    excludeChildren,
     customFilterEntity,
     ...props
 }) => {
@@ -129,9 +123,9 @@ const ChartEntityPosition: React.FC<ChartEntityPositionProps> = ({
                             }}
                             dropdownMatchSelectWidth={365}
                             entityType={entityType}
-                            entityValueType={entityValueTypes || entityValueType}
-                            entityAccessMod={entityAccessMods || entityAccessMod}
-                            excludeChildren={entityExcludeChildren}
+                            entityValueType={entityValueType}
+                            entityAccessMod={entityAccessMod}
+                            excludeChildren={excludeChildren}
                         />
                         <Select
                             label={getIntlText('dashboard.label.y_axis')}

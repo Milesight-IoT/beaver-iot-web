@@ -43,8 +43,8 @@ const triggerControlPanelConfig = (): ControlPanelConfig<TriggerControlPanelConf
                             componentProps: {
                                 required: true,
                                 entityType: ['SERVICE', 'PROPERTY'],
-                                entityAccessMods: ['W', 'RW'],
-                                entityExcludeChildren: true,
+                                entityAccessMod: ['W', 'RW'],
+                                excludeChildren: true,
                             },
                         },
                     },

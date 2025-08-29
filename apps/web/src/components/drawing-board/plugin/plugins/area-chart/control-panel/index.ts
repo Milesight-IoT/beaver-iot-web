@@ -39,7 +39,7 @@ const areaChartControlPanelConfig = (): ControlPanelConfig<AreaChartControlPanel
                             componentProps: {
                                 required: true,
                                 entityType: ['PROPERTY'],
-                                entityValueTypes: ['LONG', 'DOUBLE'],
+                                entityValueType: ['LONG', 'DOUBLE'],
                                 entityAccessMod: ['R', 'RW'],
                             },
                         },

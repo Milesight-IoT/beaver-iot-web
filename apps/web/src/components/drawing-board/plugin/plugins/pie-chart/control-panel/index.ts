@@ -39,7 +39,7 @@ const pieChartControlPanelConfig = (): ControlPanelConfig<PieChartControlPanelCo
                             componentProps: {
                                 required: true,
                                 entityType: ['PROPERTY'],
-                                entityValueTypes: ['BOOLEAN', 'STRING'],
+                                entityValueType: ['BOOLEAN', 'STRING'],
                                 entityAccessMod: ['R', 'RW'],
                                 customFilterEntity: 'filterEntityStringHasEnum',
                             },

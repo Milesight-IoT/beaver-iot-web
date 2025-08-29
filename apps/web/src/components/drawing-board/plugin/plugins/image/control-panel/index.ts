@@ -78,7 +78,7 @@ const imageControlPanelConfig = (): ControlPanelConfig<ImageConfigType> => {
                             componentProps: {
                                 required: true,
                                 entityType: ['PROPERTY'],
-                                entityValueTypes: ['STRING', 'LONG', 'DOUBLE', 'BOOLEAN'],
+                                entityValueType: ['STRING', 'LONG', 'DOUBLE', 'BOOLEAN'],
                                 entityAccessMod: ['R', 'RW'],
                             },
                             visibility(formData) {
