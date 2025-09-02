@@ -1,9 +1,9 @@
 import react from '@vitejs/plugin-react';
 import * as path from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig, type PluginOption } from 'vite';
 import vitePluginImport from 'vite-plugin-imp';
 import stylelint from 'vite-plugin-stylelint';
-// import progress from 'vite-plugin-progress';
+import basicSsl from '@vitejs/plugin-basic-ssl'
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import {
     parseEnvVariables,
@@ -13,6 +13,7 @@ import {
     getViteEsbuildConfig,
     customChunkSplit,
     chunkSplitPlugin,
+    vConsolePlugin,
 } from '@milesight/scripts';
 import { version } from './package.json';
 
@@ -27,6 +28,8 @@ const {
     OAUTH_CLIENT_SECRET,
     WEB_SOCKET_PROXY,
     MOCK_API_PROXY,
+    ENABLE_HTTPS,
+    ENABLE_VCONSOLE,
 } = parseEnvVariables([
     path.join(projectRoot, '.env'),
     path.join(projectRoot, '.env.local'),
@@ -34,7 +37,6 @@ const {
     path.join(__dirname, '.env.local'),
 ]);
 const runtimeVariables = getViteEnvVarsConfig({
-    // APP_TYPE: 'web',
     APP_VERSION: version,
     APP_API_ORIGIN: WEB_API_ORIGIN,
     APP_OAUTH_CLIENT_ID: OAUTH_CLIENT_ID,
@@ -46,44 +48,55 @@ const DEFAULT_LESS_INJECT_MODULES = [
     '@import "@milesight/shared/src/styles/mixins.less";',
 ];
 
+const plugins: PluginOption[] = [
+    nodePolyfills({
+        include: ['buffer', 'process'],
+        globals: {
+            Buffer: true,
+            process: true,
+        },
+    }),
+    stylelint({
+        fix: true,
+        cacheLocation: path.join(__dirname, 'node_modules/.cache/.stylelintcache'),
+        emitWarning: !isProd,
+    }),
+    /**
+     * Optimize build speed and reduce Tree-Shaking checks and resource processing at compile time
+     */
+    vitePluginImport({
+        libList: [
+            {
+                libName: '@mui/material',
+                libDirectory: '',
+                camel2DashComponentName: false,
+            },
+            {
+                libName: '@mui/icons-material',
+                libDirectory: '',
+                camel2DashComponentName: false,
+            },
+        ],
+    }),
+    chunkSplitPlugin({
+        customChunk: customChunkSplit,
+    }),
+    vConsolePlugin({
+        enable: !isProd && ENABLE_VCONSOLE === 'true',
+    }),
+    react(),
+];
+
+const enableHttps = ENABLE_HTTPS === 'true';
+
+// Enable HTTPS for development
+if (!isProd && enableHttps) {
+    plugins.push(basicSsl({ name: 'beaver-web-dev' }));
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [
-        nodePolyfills({
-            include: ['buffer', 'process'],
-            globals: {
-                Buffer: true,
-                process: true,
-            },
-        }),
-        stylelint({
-            fix: true,
-            cacheLocation: path.join(__dirname, 'node_modules/.cache/.stylelintcache'),
-            emitWarning: !isProd,
-        }),
-        /**
-         * Optimize build speed and reduce Tree-Shaking checks and resource processing at compile time
-         */
-        vitePluginImport({
-            libList: [
-                {
-                    libName: '@mui/material',
-                    libDirectory: '',
-                    camel2DashComponentName: false,
-                },
-                {
-                    libName: '@mui/icons-material',
-                    libDirectory: '',
-                    camel2DashComponentName: false,
-                },
-            ],
-        }),
-        chunkSplitPlugin({
-            customChunk: customChunkSplit,
-        }),
-        react(),
-        // progress(),
-    ],
+    plugins,
     resolve: {
         alias: {
             '@': path.resolve(__dirname, 'src'), // src path alias
