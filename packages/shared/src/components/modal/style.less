@@ -9,10 +9,19 @@
 
         .@{prefix}-modal-close-icon {
             position: absolute;
-            top: 19px;
-            right: 24px;
+            top: 20px;
+            right: 20px;
+            padding: @padding-xxs;
             font-size: @font-size-lg;
             color: var(--icon-color-gray-secondary);
+
+            // Mobile Responsive
+            .bp-down(@grid-breakpoints[md], {
+                font-size: @font-size-xxl;
+                padding: @padding-xxs;
+                right: 16px;
+                top: 18px;
+            });
         }
 
         .@{prefix}-modal-title {

@@ -66,6 +66,7 @@ const UserInfoMobile: React.FC<UserInfoMobileProps> = ({ userInfo }) => {
                     setOpenUserPanel(false);
                 })}
                 footer={null}
+                showCloseIcon={false}
                 visible={openUserPanel}
                 onCancel={() => setOpenUserPanel(false)}
             >
@@ -118,6 +119,7 @@ const UserInfoMobile: React.FC<UserInfoMobileProps> = ({ userInfo }) => {
                     setOpenLanguagePanel(false);
                 })}
                 footer={null}
+                showCloseIcon={false}
                 visible={openLanguagePanel}
                 onCancel={() => setOpenLanguagePanel(false)}
             >
