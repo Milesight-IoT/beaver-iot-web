@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { StarOutlinedIcon, StarIcon, ErrorIcon, toast } from '@milesight/shared/src/components';
 
-import { DashboardDetail } from '@/services/http/dashboard';
+import { type DashboardListProps } from '@/services/http';
 import { dashboardAPI, awaitWrap, isRequestSuccess } from '@/services/http';
 import { useConfirm } from '@/components';
 
@@ -17,10 +17,10 @@ export function useHomeDashboard(props: {
      * Existence of homeDashboard
      */
     existedHomeDashboard?: boolean;
-    dashboardDetail?: DashboardDetail;
+    dashboardItem?: DashboardListProps;
     refreshDashboards?: () => void;
 }) {
-    const { existedHomeDashboard, dashboardDetail, refreshDashboards } = props || {};
+    const { existedHomeDashboard, dashboardItem, refreshDashboards } = props || {};
 
     const { getIntlText } = useI18n();
     const confirm = useConfirm();
@@ -35,11 +35,11 @@ export function useHomeDashboard(props: {
      * set current dashboard whether home dashboard
      */
     useEffect(() => {
-        const newIsHome = Boolean(dashboardDetail?.home);
+        const newIsHome = Boolean(dashboardItem?.home);
         if (isHome === newIsHome) return;
 
         setIsHome(newIsHome);
-    }, [dashboardDetail, isHome]);
+    }, [dashboardItem, isHome]);
 
     const toggleHomeDashboard = useMemoizedFn(() => {
         /**
@@ -49,15 +49,15 @@ export function useHomeDashboard(props: {
             try {
                 setHomeLoading(true);
 
-                if (!dashboardDetail?.dashboard_id) return;
+                if (!dashboardItem?.dashboard_id) return;
 
                 const [error, resp] = await awaitWrap(
                     isHome
                         ? dashboardAPI.cancelAsHomeDashboard({
-                              dashboardId: dashboardDetail.dashboard_id,
+                              dashboardId: dashboardItem.dashboard_id,
                           })
                         : dashboardAPI.setAsHomeDashboard({
-                              dashboardId: dashboardDetail.dashboard_id,
+                              dashboardId: dashboardItem.dashboard_id,
                           }),
                 );
                 if (error || !isRequestSuccess(resp)) {

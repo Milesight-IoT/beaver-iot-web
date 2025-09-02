@@ -12,6 +12,16 @@ export interface DashboardDetail {
     created_at: string;
 }
 
+/** Dashboard list props */
+export interface DashboardListProps {
+    dashboard_id: ApiKey;
+    name: string;
+    /** is home dashboard */
+    home: boolean;
+    created_at: string;
+    user_id: ApiKey;
+}
+
 export interface WidgetDetail {
     widget_id?: ApiKey;
     tempId?: ApiKey; // Temporary id for front-end use

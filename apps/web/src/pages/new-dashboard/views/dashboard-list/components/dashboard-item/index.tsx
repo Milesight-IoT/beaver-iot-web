@@ -7,30 +7,41 @@ import { useMemoizedFn } from 'ahooks';
 import { LoadingWrapper, CheckBoxIcon } from '@milesight/shared/src/components';
 
 import { Tooltip } from '@/components';
-import { type DashboardDetail } from '@/services/http';
+import { type DashboardListProps } from '@/services/http';
 import { useHomeDashboard, useDashboardDelete } from '../../hooks';
 import MoreDropdown, { MORE_OPERATION } from '../more-dropdown';
 
 import './style.less';
 
-export interface DashboardItemsProps {
-    item?: DashboardDetail;
+export interface DashboardItemProps {
+    item?: DashboardListProps;
     /**
      * Whether existed homeDashboard
      */
     existedHomeDashboard?: boolean;
-    selectedDashboard: DashboardDetail[];
+    selectedDashboard: DashboardListProps[];
     /**
      * Handle select dashboard
      */
-    handleSelectDashboard: (e: React.ChangeEvent<HTMLInputElement>, item?: DashboardDetail) => void;
+    handleSelectDashboard: (
+        e: React.ChangeEvent<HTMLInputElement>,
+        item?: DashboardListProps,
+    ) => void;
     /** Refresh newest dashboards */
     getDashboards?: () => void;
+    /** Open the modal of edit dashboard */
+    openEditDashboard?: (item: DashboardListProps) => void;
 }
 
-const DashboardItem: React.FC<DashboardItemsProps> = props => {
-    const { item, existedHomeDashboard, selectedDashboard, handleSelectDashboard, getDashboards } =
-        props;
+const DashboardItem: React.FC<DashboardItemProps> = props => {
+    const {
+        item,
+        existedHomeDashboard,
+        selectedDashboard,
+        handleSelectDashboard,
+        getDashboards,
+        openEditDashboard,
+    } = props;
 
     const {
         toggleHomeDashboard,
@@ -40,7 +51,7 @@ const DashboardItem: React.FC<DashboardItemsProps> = props => {
         homeLoading,
     } = useHomeDashboard({
         existedHomeDashboard,
-        dashboardDetail: item,
+        dashboardItem: item,
         refreshDashboards: getDashboards,
     });
     const { handleDashboardDelete } = useDashboardDelete(getDashboards);
@@ -51,7 +62,7 @@ const DashboardItem: React.FC<DashboardItemsProps> = props => {
                 item && handleDashboardDelete([item]);
                 break;
             case MORE_OPERATION.EDIT:
-                console.log('edit');
+                item && openEditDashboard?.(item);
                 break;
             default:
                 break;

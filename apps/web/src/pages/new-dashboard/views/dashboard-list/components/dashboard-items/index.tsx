@@ -1,31 +1,42 @@
 import React from 'react';
 
-import { type DashboardDetail } from '@/services/http';
+import { type DashboardListProps } from '@/services/http';
 import DashboardItem from '../dashboard-item';
 
 import './style.less';
 
 export interface DashboardItemsProps {
-    items?: DashboardDetail[];
+    items?: DashboardListProps[];
     /**
      * Whether existed homeDashboard
      */
     existedHomeDashboard?: boolean;
-    selectedDashboard: DashboardDetail[];
+    selectedDashboard: DashboardListProps[];
     /**
      * Handle select dashboard
      */
-    handleSelectDashboard: (e: React.ChangeEvent<HTMLInputElement>, item?: DashboardDetail) => void;
+    handleSelectDashboard: (
+        e: React.ChangeEvent<HTMLInputElement>,
+        item?: DashboardListProps,
+    ) => void;
     /** Refresh newest dashboards */
     getDashboards?: () => void;
+    /** Open the modal of edit dashboard */
+    openEditDashboard?: (item: DashboardListProps) => void;
 }
 
 /**
  * Dashboard items
  */
 const DashboardItems: React.FC<DashboardItemsProps> = props => {
-    const { items, existedHomeDashboard, selectedDashboard, handleSelectDashboard, getDashboards } =
-        props;
+    const {
+        items,
+        existedHomeDashboard,
+        selectedDashboard,
+        handleSelectDashboard,
+        getDashboards,
+        openEditDashboard,
+    } = props;
 
     return (
         <div className="dashboard-items">
@@ -37,6 +48,7 @@ const DashboardItems: React.FC<DashboardItemsProps> = props => {
                     selectedDashboard={selectedDashboard}
                     handleSelectDashboard={handleSelectDashboard}
                     getDashboards={getDashboards}
+                    openEditDashboard={openEditDashboard}
                 />
             ))}
         </div>

@@ -5,13 +5,18 @@ import { useI18n } from '@milesight/shared/src/hooks';
 import { InfoIcon, toast } from '@milesight/shared/src/components';
 
 import { useConfirm } from '@/components';
-import { type DashboardDetail, dashboardAPI, awaitWrap, isRequestSuccess } from '@/services/http';
+import {
+    type DashboardListProps,
+    dashboardAPI,
+    awaitWrap,
+    isRequestSuccess,
+} from '@/services/http';
 
 export function useDashboardDelete(refreshDashboards?: () => void) {
     const { getIntlText } = useI18n();
     const confirm = useConfirm();
 
-    const handleDashboardDelete = useMemoizedFn((dashboards: DashboardDetail[]) => {
+    const handleDashboardDelete = useMemoizedFn((dashboards: DashboardListProps[]) => {
         confirm({
             title: getIntlText('common.label.delete'),
             icon: <InfoIcon sx={{ color: 'var(--orange-base)' }} />,

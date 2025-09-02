@@ -13,7 +13,8 @@ import { useI18n } from '@milesight/shared/src/hooks';
 
 import { Breadcrumbs, Empty } from '@/components';
 import { useDashboardList } from './hooks';
-import { DashboardItems } from './components';
+import { DashboardItems, OperateModal } from './components';
+import { useOperateModal } from './components/operate-modal/hooks';
 
 import './style.less';
 
@@ -30,12 +31,23 @@ const DashboardList: React.FC = () => {
         getDashboards,
         handleBatchDelDashboard,
     } = useDashboardList();
+    const {
+        operateModalVisible,
+        modalTitle,
+        operateType,
+        currentDashboard,
+        hideModal,
+        openAddDashboard,
+        openEditDashboard,
+        onFormSubmit,
+    } = useOperateModal(getDashboards);
 
     const renderAddDashboard = (
         <Button
             variant="contained"
             sx={{ height: 36, textTransform: 'none' }}
             startIcon={<AddIcon />}
+            onClick={openAddDashboard}
         >
             {getIntlText('common.label.add')}
         </Button>
@@ -94,6 +106,7 @@ const DashboardList: React.FC = () => {
                 selectedDashboard={selectedDashboard}
                 handleSelectDashboard={handleSelectDashboard}
                 getDashboards={getDashboards}
+                openEditDashboard={openEditDashboard}
             />
         );
     };
@@ -131,6 +144,17 @@ const DashboardList: React.FC = () => {
             <Breadcrumbs />
             <div className="ms-view dashboard-list">
                 <div className="ms-view__inner">{renderContent()}</div>
+
+                {operateModalVisible && (
+                    <OperateModal
+                        visible={operateModalVisible}
+                        operateType={operateType}
+                        title={modalTitle}
+                        onCancel={hideModal}
+                        onFormSubmit={onFormSubmit}
+                        data={currentDashboard}
+                    />
+                )}
             </div>
         </div>
     );

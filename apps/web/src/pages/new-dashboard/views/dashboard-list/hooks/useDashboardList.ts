@@ -3,7 +3,7 @@ import { useRequest, useMemoizedFn } from 'ahooks';
 import { isNil } from 'lodash-es';
 
 import {
-    type DashboardDetail,
+    type DashboardListProps,
     dashboardAPI,
     awaitWrap,
     getResponseData,
@@ -17,7 +17,7 @@ import { useDashboardDelete } from './useDashboardDelete';
 export function useDashboardList() {
     const [keyword, setKeyword] = useState('');
     const [loading, setLoading] = useState<boolean | undefined>();
-    const [selectedDashboard, setSelectedDashboard] = useState<DashboardDetail[]>([]);
+    const [selectedDashboard, setSelectedDashboard] = useState<DashboardListProps[]>([]);
 
     const { data, run: getDashboards } = useRequest(
         async () => {
@@ -30,14 +30,16 @@ export function useDashboardList() {
                     return;
                 }
 
-                const newData = getResponseData(resp);
+                const newData = getResponseData(resp) as unknown as
+                    | DashboardListProps[]
+                    | undefined;
 
                 /**
                  * Update the selected dashboard data
                  * Remove delete data
                  */
                 setSelectedDashboard(items => {
-                    const newItems: DashboardDetail[] = [];
+                    const newItems: DashboardListProps[] = [];
                     (items || [])?.forEach(item => {
                         const existedItem = (newData || [])?.find(
                             d => d.dashboard_id === item.dashboard_id,
@@ -72,7 +74,7 @@ export function useDashboardList() {
     }, [data]);
 
     const handleSelectDashboard = useMemoizedFn(
-        (e: React.ChangeEvent<HTMLInputElement>, item?: DashboardDetail) => {
+        (e: React.ChangeEvent<HTMLInputElement>, item?: DashboardListProps) => {
             if (!item) return;
 
             const checked = Boolean(e?.target?.checked);

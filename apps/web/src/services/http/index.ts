@@ -16,6 +16,7 @@ export {
     type DashboardAPISchema,
     type DashboardDetail,
     type WidgetDetail,
+    type DashboardListProps,
 } from './dashboard';
 export {
     default as workflowAPI,
