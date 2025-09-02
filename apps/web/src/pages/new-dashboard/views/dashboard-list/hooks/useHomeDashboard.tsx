@@ -12,12 +12,12 @@ import { useConfirm } from '@/components';
 /**
  * Set or unset the home dashboard
  */
-function useHomeDashboard(props: {
+export function useHomeDashboard(props: {
     /**
      * Existence of homeDashboard
      */
     existedHomeDashboard?: boolean;
-    dashboardDetail: DashboardDetail;
+    dashboardDetail?: DashboardDetail;
     refreshDashboards?: () => void;
 }) {
     const { existedHomeDashboard, dashboardDetail, refreshDashboards } = props || {};
@@ -99,11 +99,15 @@ function useHomeDashboard(props: {
     }, [isHome, getIntlText]);
 
     const homeDashboardIcon = useMemo(() => {
-        return isHome ? <StarIcon /> : <StarOutlinedIcon />;
+        return isHome ? (
+            <StarIcon sx={{ width: '16px', height: '16px' }} />
+        ) : (
+            <StarOutlinedIcon sx={{ width: '16px', height: '16px' }} />
+        );
     }, [isHome]);
 
     const homeDashboardClassName = useMemo(() => {
-        return classNames('dashboard-button-icon', {
+        return classNames('dashboard-item__icon', {
             active: isHome,
         });
     }, [isHome]);
@@ -117,5 +121,3 @@ function useHomeDashboard(props: {
         homeLoading,
     };
 }
-
-export default useHomeDashboard;

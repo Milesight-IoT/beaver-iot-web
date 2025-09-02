@@ -1,0 +1,44 @@
+import { useMemoizedFn } from 'ahooks';
+import { isEmpty } from 'lodash-es';
+
+import { useI18n } from '@milesight/shared/src/hooks';
+import { InfoIcon, toast } from '@milesight/shared/src/components';
+
+import { useConfirm } from '@/components';
+import { type DashboardDetail, dashboardAPI, awaitWrap, isRequestSuccess } from '@/services/http';
+
+export function useDashboardDelete(refreshDashboards?: () => void) {
+    const { getIntlText } = useI18n();
+    const confirm = useConfirm();
+
+    const handleDashboardDelete = useMemoizedFn((dashboards: DashboardDetail[]) => {
+        confirm({
+            title: getIntlText('common.label.delete'),
+            icon: <InfoIcon sx={{ color: 'var(--orange-base)' }} />,
+            description: getIntlText('dashboard.plugin.trigger_confirm_text'),
+            confirmButtonText: getIntlText('common.button.confirm'),
+            onConfirm: async () => {
+                if (!Array.isArray(dashboards) || isEmpty(dashboards)) {
+                    return;
+                }
+
+                console.log('handleDashboardDelete ? ', dashboards);
+
+                const [_, res] = await awaitWrap(
+                    dashboardAPI.deleteDashboard({
+                        id: dashboards[0].dashboard_id,
+                    }),
+                );
+                if (isRequestSuccess(res)) {
+                    refreshDashboards?.();
+                    toast.success(getIntlText('common.message.delete_success'));
+                }
+            },
+        });
+    });
+
+    return {
+        /** Handle delete dashboard */
+        handleDashboardDelete,
+    };
+}
