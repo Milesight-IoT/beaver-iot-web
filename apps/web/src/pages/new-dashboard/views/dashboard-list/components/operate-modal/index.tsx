@@ -14,6 +14,7 @@ export type OperateModalType = 'add' | 'edit';
 
 export interface OperateDashboardProps {
     name: string;
+    cover?: string;
     description?: string;
 }
 
@@ -72,7 +73,7 @@ const OperateModal: React.FC<Props> = props => {
             onCancel={handleCancel}
             {...restProps}
         >
-            <Grid container spacing={1}>
+            <Grid container spacing={2}>
                 {formItems.map(({ wrapCol, ...restItem }) => (
                     <Grid key={restItem.name} size={wrapCol}>
                         <Controller<OperateDashboardProps> {...restItem} control={control} />

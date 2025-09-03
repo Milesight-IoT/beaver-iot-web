@@ -5,10 +5,13 @@ import { type ControllerProps } from 'react-hook-form';
 import { checkRequired } from '@milesight/shared/src/utils/validators';
 import { useI18n } from '@milesight/shared/src/hooks';
 
+import CoverSelection from '../../cover-selection';
+import { useCoverImages } from '../../cover-selection/hooks';
 import { type OperateDashboardProps } from '../index';
 
 export function useFormItems() {
     const { getIntlText } = useI18n();
+    const { MOCK_IMAGE } = useCoverImages();
 
     const formItems = useMemo((): (ControllerProps<OperateDashboardProps> & {
         wrapCol: number;
@@ -46,6 +49,21 @@ export function useFormItems() {
                                 onChange(typeof newValue === 'string' ? newValue.trim() : newValue);
                             }}
                         />
+                    );
+                },
+            },
+            {
+                name: 'cover',
+                rules: {
+                    validate: {
+                        checkRequired: checkRequired(),
+                    },
+                },
+                wrapCol: 12,
+                defaultValue: MOCK_IMAGE[0],
+                render({ field: { onChange, value }, fieldState: { error } }) {
+                    return (
+                        <CoverSelection required value={value} onChange={onChange} error={error} />
                     );
                 },
             },

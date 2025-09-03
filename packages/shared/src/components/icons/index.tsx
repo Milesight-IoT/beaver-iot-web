@@ -157,6 +157,8 @@ export {
     CheckBox as CheckBoxIcon,
     DragIndicator as DragIndicatorIcon,
     FilterListOutlined as FilterListOutlinedIcon,
+    Upload as UploadIcon,
+    Remove as RemoveIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';
