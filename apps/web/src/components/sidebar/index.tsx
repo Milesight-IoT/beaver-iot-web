@@ -8,7 +8,7 @@ import { iotLocalStorage, SIDEBAR_COLLAPSE_KEY } from '@milesight/shared/src/uti
 import { Logo, FormatIndentDecreaseIcon } from '@milesight/shared/src/components';
 import { useUserStore } from '@/stores';
 import Tooltip from '../tooltip';
-import { UserInfo, UserInfoMobile } from './components';
+import { UserInfo, MobileUserInfo } from './components';
 import useSidebarStore from './store';
 import './style.less';
 
@@ -114,7 +114,7 @@ const Sidebar: React.FC<Props> = memo(({ menus, logoLinkTo = '/' }) => {
                 {!!userInfo && (
                     <div className="ms-sidebar-user">
                         {matchTablet ? (
-                            <UserInfoMobile userInfo={userInfo} />
+                            <MobileUserInfo userInfo={userInfo} />
                         ) : (
                             <UserInfo userInfo={userInfo} />
                         )}

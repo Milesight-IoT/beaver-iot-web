@@ -18,11 +18,11 @@ import { genAvatarProps } from '../../helper';
 import useSidebarStore from '../../store';
 import './style.less';
 
-interface UserInfoMobileProps {
+interface MobileUserInfoProps {
     userInfo: GlobalAPISchema['getUserInfo']['response'];
 }
 
-const UserInfoMobile: React.FC<UserInfoMobileProps> = ({ userInfo }) => {
+const MobileUserInfo: React.FC<MobileUserInfoProps> = ({ userInfo }) => {
     const navigate = useNavigate();
     const { lang, langs, changeLang, getIntlText } = useI18n();
 
@@ -32,19 +32,16 @@ const UserInfoMobile: React.FC<UserInfoMobileProps> = ({ userInfo }) => {
     const [openUserPanel, setOpenUserPanel] = useState(false);
     const [openLanguagePanel, setOpenLanguagePanel] = useState(false);
 
-    const renderDialogTitle = useCallback(
-        (title?: string, actionCallback?: () => void) => {
-            return (
-                <DialogTitle className="ms-sidebar-modal-header">
-                    <IconButton className="action-back" onClick={() => actionCallback?.()}>
-                        <ArrowBackIcon />
-                    </IconButton>
-                    <div className="title">{title}</div>
-                </DialogTitle>
-            );
-        },
-        [setOpen],
-    );
+    const renderDialogTitle = useCallback((title?: string, actionCallback?: () => void) => {
+        return (
+            <DialogTitle className="ms-sidebar-modal-header">
+                <IconButton className="action-back" onClick={() => actionCallback?.()}>
+                    <ArrowBackIcon />
+                </IconButton>
+                <div className="title">{title}</div>
+            </DialogTitle>
+        );
+    }, []);
 
     return (
         <>
@@ -127,7 +124,7 @@ const UserInfoMobile: React.FC<UserInfoMobileProps> = ({ userInfo }) => {
                     {Object.values(langs).map(item => {
                         const selected = item.key === lang;
                         return (
-                            <ListItem>
+                            <ListItem key={item.key}>
                                 <ListItemButton
                                     onClick={() => {
                                         if (selected) return;
@@ -152,4 +149,4 @@ const UserInfoMobile: React.FC<UserInfoMobileProps> = ({ userInfo }) => {
     );
 };
 
-export default UserInfoMobile;
+export default MobileUserInfo;
