@@ -3,6 +3,7 @@ import { useMemoizedFn } from 'ahooks';
 
 import { type CoverCroppingProps } from '../index';
 import { CROPPING_AREA_WIDTH, CROPPING_AREA_HEIGHT } from '../../../constants';
+import type { SizeProps, TranslateProps } from '../interface';
 
 /**
  * Handle Cropping data
@@ -10,24 +11,15 @@ import { CROPPING_AREA_WIDTH, CROPPING_AREA_HEIGHT } from '../../../constants';
 export function useCroppingData(props: CoverCroppingProps) {
     const { image } = props || {};
 
-    const [imageSize, setImageSize] = useState<{
-        width: number;
-        height: number;
-    }>({
+    const [imageSize, setImageSize] = useState<SizeProps>({
         width: 0,
         height: 0,
     });
-    const [canvasSize, setCanvasSize] = useState<{
-        width: number;
-        height: number;
-    }>({
+    const [canvasSize, setCanvasSize] = useState<SizeProps>({
         width: 0,
         height: CROPPING_AREA_HEIGHT,
     });
-    const [canvasTranslate, setCanvasTranslate] = useState<{
-        x: number;
-        y: number;
-    }>({
+    const [canvasTranslate, setCanvasTranslate] = useState<TranslateProps>({
         x: 0,
         y: 0,
     });
@@ -54,7 +46,17 @@ export function useCroppingData(props: CoverCroppingProps) {
 
         drawImageTimeoutRef?.current && clearTimeout(drawImageTimeoutRef.current);
         drawImageTimeoutRef.current = setTimeout(() => {
-            const ctx = canvasRef?.current?.getContext('2d');
+            const canvas = canvasRef?.current;
+            if (!canvas) {
+                return;
+            }
+
+            const ctx = canvas?.getContext('2d');
+            if (!ctx) {
+                return;
+            }
+
+            ctx?.clearRect(0, 0, canvas.width, canvas.height);
             ctx?.drawImage(image, 0, 0);
         }, 150);
     });
@@ -83,14 +85,12 @@ export function useCroppingData(props: CoverCroppingProps) {
             return;
         }
 
-        setCanvasSize(size => {
-            return {
-                ...size,
-                width: convertWidth(initialWidth),
-            };
+        setCanvasSize({
+            width: convertWidth(initialWidth),
+            height: CROPPING_AREA_HEIGHT,
         });
         setCanvasTranslate({
-            x: initialWidth > CROPPING_AREA_WIDTH ? CROPPING_AREA_WIDTH - initialWidth : 0,
+            x: initialWidth > CROPPING_AREA_WIDTH ? initialWidth - CROPPING_AREA_WIDTH : 0,
             y: 0,
         });
     }, [image, convertWidth]);
@@ -114,5 +114,7 @@ export function useCroppingData(props: CoverCroppingProps) {
         canvasSize,
         canvasTranslate,
         canvasRef,
+        setCanvasSize,
+        setCanvasTranslate,
     };
 }

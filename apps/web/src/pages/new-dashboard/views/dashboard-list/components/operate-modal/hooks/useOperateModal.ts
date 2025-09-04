@@ -5,6 +5,8 @@ import { useI18n } from '@milesight/shared/src/hooks';
 import { toast } from '@milesight/shared/src/components';
 
 import { type DashboardListProps } from '@/services/http';
+import useCoverCroppingStore from '../../cover-selection/components/cover-cropping/store';
+import { MANUAL_UPLOAD } from '../../cover-selection/constants';
 import type { OperateModalType, OperateDashboardProps } from '../index';
 
 /**
@@ -12,6 +14,7 @@ import type { OperateModalType, OperateDashboardProps } from '../index';
  */
 export function useOperateModal(getDashboards?: () => void) {
     const { getIntlText } = useI18n();
+    const { getCanvasCroppingImage } = useCoverCroppingStore();
 
     const [operateModalVisible, setOperateModalVisible] = useState(false);
     const [operateType, setOperateType] = useState<OperateModalType>('add');
@@ -41,11 +44,15 @@ export function useOperateModal(getDashboards?: () => void) {
             if (!data) return;
 
             console.log('handleAddDashboard ? ', data);
+            if (data?.cover === MANUAL_UPLOAD) {
+                const url = await getCanvasCroppingImage?.();
+                console.log('url ? ', url);
+            }
 
-            getDashboards?.();
-            setOperateModalVisible(false);
+            // getDashboards?.();
+            // setOperateModalVisible(false);
             toast.success(getIntlText('common.message.add_success'));
-            callback?.();
+            // callback?.();
         },
     );
 
