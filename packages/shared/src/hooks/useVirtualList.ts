@@ -6,9 +6,24 @@ import { getTargetElement, type BasicTarget } from 'ahooks/es/utils/domTarget';
 type ItemHeight<T> = (index: number, data: T) => number;
 
 export interface Options<T> {
+    /**
+     * Outer Container，support DOM element or ref
+     */
     containerTarget: BasicTarget;
+
+    /**
+     * Inner Container，DOM element or ref
+     */
     wrapperTarget: BasicTarget;
+
+    /**
+     * Item height, accept a pixel value or a function that returns the height
+     */
     itemHeight: number | ItemHeight<T>;
+
+    /**
+     * The extra buffer items outside of the view area
+     */
     overscan?: number;
 }
 
@@ -110,7 +125,7 @@ const useVirtualList = <T = any>(list: T[], options: Options<T>) => {
 
             setWrapperStyle({
                 height: `${totalHeight - offsetTop}px`,
-                paddingTop: `${offsetTop}px`,
+                marginTop: `${offsetTop}px`,
             });
 
             setTargetList(
