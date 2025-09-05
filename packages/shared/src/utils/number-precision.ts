@@ -85,7 +85,7 @@ const times = createOperation((num1, num2) => {
     const baseNum = digitLength(num1) + digitLength(num2);
     const leftValue = num1Changed * num2Changed;
 
-    checkBoundary(leftValue);
+    // checkBoundary(leftValue);
 
     return leftValue / 10 ** baseNum;
 });
@@ -121,8 +121,8 @@ const divide = createOperation((num1, num2) => {
     const num1Changed = float2Fixed(num1);
     const num2Changed = float2Fixed(num2);
 
-    checkBoundary(num1Changed);
-    checkBoundary(num2Changed);
+    // checkBoundary(num1Changed);
+    // checkBoundary(num2Changed);
 
     // fix: 类似 10 ** -4 为 0.00009999999999999999，strip 修正
     return times(num1Changed / num2Changed, strip(10 ** (digitLength(num2) - digitLength(num1))));

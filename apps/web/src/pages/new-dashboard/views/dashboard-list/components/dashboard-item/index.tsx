@@ -4,7 +4,11 @@ import { isEmpty } from 'lodash-es';
 import cls from 'classnames';
 import { useMemoizedFn } from 'ahooks';
 
-import { LoadingWrapper, CheckBoxIcon } from '@milesight/shared/src/components';
+import {
+    LoadingWrapper,
+    UncheckedCheckboxIcon,
+    CheckedCheckboxIcon,
+} from '@milesight/shared/src/components';
 
 import { Tooltip } from '@/components';
 import { type DashboardListProps } from '@/services/http';
@@ -107,8 +111,8 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
             </div>
             <div className="dashboard-item__select">
                 <Checkbox
-                    icon={<div className="dashboard-item__select-icon" />}
-                    checkedIcon={<CheckBoxIcon sx={{ width: '24px', height: '24px' }} />}
+                    icon={<UncheckedCheckboxIcon sx={{ width: '24px', height: '24px' }} />}
+                    checkedIcon={<CheckedCheckboxIcon sx={{ width: '24px', height: '24px' }} />}
                     checked={isCheckedDashboard}
                     sx={{
                         padding: 0,
