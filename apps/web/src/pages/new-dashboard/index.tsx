@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-import { DashboardList } from './views';
+import { DashboardList, DrawingBoardDetail } from './views';
 
 const DashboardContainer: React.FC = () => {
-    return <DashboardList />;
+    const [searchParams] = useSearchParams();
+
+    const id = useMemo(() => {
+        return searchParams?.get('id');
+    }, [searchParams]);
+
+    return id ? <DrawingBoardDetail id={id} /> : <DashboardList />;
 };
 
 export default DashboardContainer;

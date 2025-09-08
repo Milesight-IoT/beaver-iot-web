@@ -3,6 +3,7 @@ import { Checkbox } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import cls from 'classnames';
 import { useMemoizedFn } from 'ahooks';
+import { useNavigate } from 'react-router-dom';
 
 import {
     LoadingWrapper,
@@ -59,6 +60,13 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
         refreshDashboards: getDashboards,
     });
     const { handleDashboardDelete } = useDashboardDelete(getDashboards);
+    const navigate = useNavigate();
+
+    const handleItemClick = useMemoizedFn(() => {
+        if (!item?.dashboard_id) return;
+
+        navigate(`/new-dashboard?id=${item.dashboard_id}`);
+    });
 
     const handleDashboardOperation = useMemoizedFn((type: MORE_OPERATION) => {
         switch (type) {
@@ -86,6 +94,7 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
             className={cls('dashboard-item', {
                 active: isCheckedDashboard,
             })}
+            onClick={handleItemClick}
         >
             <div className="dashboard-item__body">
                 <img
@@ -109,7 +118,7 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
                 </div>
                 <MoreDropdown onOperation={handleDashboardOperation} />
             </div>
-            <div className="dashboard-item__select md:d-none">
+            <div className="dashboard-item__select md:d-none" onClick={e => e?.stopPropagation()}>
                 <Checkbox
                     icon={<UncheckedCheckboxIcon sx={{ width: '24px', height: '24px' }} />}
                     checkedIcon={<CheckedCheckboxIcon sx={{ width: '24px', height: '24px' }} />}
@@ -121,7 +130,7 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
                     onChange={e => handleSelectDashboard(e, item)}
                 />
             </div>
-            <div className="dashboard-item__home md:d-none">
+            <div className="dashboard-item__home md:d-none" onClick={e => e?.stopPropagation()}>
                 <LoadingWrapper loading={homeLoading} size={24}>
                     <Tooltip title={homeDashboardTip}>
                         <div className={homeDashboardClassName} onClick={toggleHomeDashboard}>

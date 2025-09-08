@@ -89,6 +89,7 @@ const MoreDropdown: React.FC<MoreDropdownProps> = props => {
             ref={triggerWrapperRef}
             className="dashboard-item__more md:d-none"
             style={popupState.isOpen ? { display: 'block' } : undefined}
+            onClick={e => e?.stopPropagation()}
         >
             <IconButton
                 id="more-button"

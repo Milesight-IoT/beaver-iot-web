@@ -112,6 +112,13 @@
         }
 
         .border-color-before();
+
+        // Mobile Responsive
+        .bp-down(@grid-breakpoints[md],  {
+            &::before {
+                display: none;
+            }
+        });
     }
 
     &.active {
