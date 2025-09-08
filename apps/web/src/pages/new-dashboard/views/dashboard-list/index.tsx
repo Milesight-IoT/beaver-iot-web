@@ -54,7 +54,7 @@ const DashboardList: React.FC = () => {
     );
 
     const renderHeader = (
-        <div className="dashboard-list__header">
+        <div className="dashboard-list__header md:d-none">
             <Stack className="ms-operations-btns" direction="row" spacing="12px">
                 {renderAddDashboard}
                 <Button
@@ -142,7 +142,7 @@ const DashboardList: React.FC = () => {
     return (
         <div className="ms-main">
             <Breadcrumbs />
-            <div className="ms-view dashboard-list">
+            <div className="ms-view dashboard-list md:p-0">
                 <div className="ms-view__inner">{renderContent()}</div>
 
                 {operateModalVisible && (

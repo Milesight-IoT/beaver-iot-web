@@ -38,8 +38,8 @@ function Layout() {
                 styles={{
                     body: {
                         backgroundColor: 'var(--body-background)',
-                        fontSize: '14px',
-                        lineHeight: '22px',
+                        fontSize: '0.875rem',
+                        lineHeight: '1.375rem',
                     },
                 }}
             />

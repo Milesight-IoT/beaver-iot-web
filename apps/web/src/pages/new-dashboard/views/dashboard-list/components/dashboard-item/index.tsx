@@ -109,7 +109,7 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
                 </div>
                 <MoreDropdown onOperation={handleDashboardOperation} />
             </div>
-            <div className="dashboard-item__select">
+            <div className="dashboard-item__select md:d-none">
                 <Checkbox
                     icon={<UncheckedCheckboxIcon sx={{ width: '24px', height: '24px' }} />}
                     checkedIcon={<CheckedCheckboxIcon sx={{ width: '24px', height: '24px' }} />}
@@ -121,7 +121,7 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
                     onChange={e => handleSelectDashboard(e, item)}
                 />
             </div>
-            <div className="dashboard-item__home">
+            <div className="dashboard-item__home md:d-none">
                 <LoadingWrapper loading={homeLoading} size={24}>
                     <Tooltip title={homeDashboardTip}>
                         <div className={homeDashboardClassName} onClick={toggleHomeDashboard}>

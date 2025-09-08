@@ -87,7 +87,7 @@ const MoreDropdown: React.FC<MoreDropdownProps> = props => {
     return (
         <div
             ref={triggerWrapperRef}
-            className="dashboard-item__more"
+            className="dashboard-item__more md:d-none"
             style={popupState.isOpen ? { display: 'block' } : undefined}
         >
             <IconButton
