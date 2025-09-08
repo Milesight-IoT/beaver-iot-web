@@ -1,0 +1,35 @@
+.@{prefix}-mobile-group-select {
+    .trigger {
+        display: flex;
+        gap: @margin-xxs;
+        align-items: center;
+        justify-content: center;
+        .text-size(@font-size-xl);
+
+        .@{prefix}-tooltip {
+            max-width: calc(100% - 64px);
+        }
+    }
+
+    &-modal {
+        .group-list {
+            .group-item {
+                padding: @padding-md;
+                margin-bottom: @margin-sm;
+                font-weight: @font-weight-medium;
+                border: @border-base;
+                border-radius: @border-radius-base;
+                .text-size(@font-size-base);
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+
+                &.active {
+                    border-color: var(--border-color-main);
+                    .opacity-background(var(--primary-color-8), .08);
+                }
+            }
+        }
+    }
+}

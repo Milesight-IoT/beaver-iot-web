@@ -1,3 +1,4 @@
+// Default Entry
 .@{prefix}-view-device {
     position: relative;
     padding: @padding-lg;
@@ -56,10 +57,27 @@
     }
 }
 
-.@{prefix}-device-entity-data {
-    .@{prefix}-descriptions-root {
-        table {
-            table-layout: fixed;
+// Mobile Entry
+.@{prefix}-view-device-mobile {
+    display: flex;
+    flex-direction: column;
+
+    &__header {
+        .@{prefix}-mobile-topbar__right {
+            .@{mui-prefix}ButtonBase-root {
+                min-width: auto;
+                padding: 0;
+
+                .@{mui-prefix}Button-icon {
+                    margin-right: @margin-xxs;
+                }
+            }
         }
+    }
+
+    &__body {
+        flex: 1;
+        min-height: 0;
+        padding: @padding-md 0;
     }
 }
