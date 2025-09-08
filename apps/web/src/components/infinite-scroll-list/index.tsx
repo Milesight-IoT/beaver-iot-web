@@ -1,8 +1,8 @@
-import React, { useRef, useMemo, useEffect } from 'react';
+import React, { useRef, useMemo, useEffect, useImperativeHandle, forwardRef } from 'react';
 import cls from 'classnames';
 import { isUndefined } from 'lodash-es';
 import { useMemoizedFn, useInViewport } from 'ahooks';
-// import { CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import { useI18n, useVirtualList, type UseVirtualListOptions } from '@milesight/shared/src/hooks';
 import Empty from '../empty';
 import './style.less';
@@ -13,7 +13,12 @@ interface Props<TData extends Data> {
     data?: TData[];
 
     /**
-     * Whether is loading more data
+     * Whether is initial loading
+     */
+    loading?: boolean;
+
+    /**
+     * Whether is loading more
      */
     loadingMore?: boolean;
 
@@ -73,24 +78,35 @@ interface Props<TData extends Data> {
     onLoadMore?: () => void | Promise<void>;
 }
 
+export interface InfiniteScrollListRef {
+    /**
+     * Scroll to the item with the given index
+     */
+    scrollTo: (index: number) => void;
+}
+
 /**
  * Infinite Scroll Virtual List
  */
-const InfiniteScrollList = <TData extends Data>({
-    data,
-    loadingMore,
-    isNoMore,
-    overscan = 10,
-    scrollThreshold = 150,
-    height = '100%',
-    itemHeight,
-    className,
-    loadingIndicator,
-    noMoreIndicator,
-    itemRenderer,
-    emptyRenderer,
-    onLoadMore,
-}: Props<TData>) => {
+const InfiniteScrollList = <TData extends Data>(
+    {
+        data,
+        loading,
+        loadingMore,
+        isNoMore,
+        overscan = 10,
+        scrollThreshold = 150,
+        height = '100%',
+        itemHeight,
+        className,
+        loadingIndicator,
+        noMoreIndicator,
+        itemRenderer,
+        emptyRenderer,
+        onLoadMore,
+    }: Props<TData>,
+    ref?: React.ForwardedRef<InfiniteScrollListRef>,
+) => {
     const { getIntlText } = useI18n();
     const containerRef = useRef<HTMLDivElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -106,16 +122,19 @@ const InfiniteScrollList = <TData extends Data>({
     });
 
     // ---------- Load More ----------
-    const handleLoadMore = useMemoizedFn(() => onLoadMore?.());
+    const handleLoadMore = useMemoizedFn(() => {
+        if (loadingMore || isNoMore || !onLoadMore) return;
+        onLoadMore();
+    });
     const [inViewport] = useInViewport(indicatorRef, {
         rootMargin: `0px 0px ${scrollThreshold}px 0px`,
         root: containerRef.current,
     });
 
     useEffect(() => {
-        if (!inViewport || loadingMore || isNoMore) return;
+        if (!inViewport) return;
         handleLoadMore();
-    }, [loadingMore, isNoMore, inViewport, handleLoadMore]);
+    }, [inViewport, handleLoadMore]);
 
     // ---------- Render Empty ----------
     const emptyPlaceholder = useMemo(() => {
@@ -130,17 +149,22 @@ const InfiniteScrollList = <TData extends Data>({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getIntlText]);
 
+    // ---------- Expose functions ----------
+    useImperativeHandle(ref, () => ({
+        scrollTo,
+    }));
+
     return (
         <div
             className={cls('ms-mobile-infinite-scroll-root', className)}
             ref={containerRef}
             style={{ height }}
         >
-            {!list.length && emptyPlaceholder}
+            {loading ? <CircularProgress size={24} /> : !list.length && emptyPlaceholder}
             <div className="ms-mobile-infinite-scroll-wrapper" ref={wrapperRef}>
                 {list.map(item => itemRenderer(item.data, item.index))}
             </div>
-            {!!memoData.length && (
+            {!!list.length && (
                 <div className="ms-mobile-infinite-scroll-indicator" ref={indicatorRef}>
                     {loadingMore && (
                         <div className="loading">
@@ -159,4 +183,10 @@ const InfiniteScrollList = <TData extends Data>({
     );
 };
 
-export default InfiniteScrollList;
+const ForwardInfiniteScrollList = forwardRef(InfiniteScrollList) as unknown as <TData extends Data>(
+    props: React.PropsWithChildren<Props<TData>> & {
+        ref?: React.ForwardedRef<InfiniteScrollListRef>;
+    },
+) => React.ReactElement;
+
+export default ForwardInfiniteScrollList;

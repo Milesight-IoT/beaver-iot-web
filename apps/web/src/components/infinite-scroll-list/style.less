@@ -4,7 +4,7 @@
     overflow: auto;
     overflow-x: hidden;
 
-    .@{prefix}-empty {
+    > .@{prefix}-empty {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -15,6 +15,14 @@
             height: 104px;
         }
     }
+
+    > .@{mui-prefix}CircularProgress-root {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
     .@{prefix}-mobile-infinite-scroll-indicator {
         display: flex;
         align-items: center;
