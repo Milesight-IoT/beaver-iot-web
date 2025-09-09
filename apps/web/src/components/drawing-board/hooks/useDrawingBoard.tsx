@@ -87,9 +87,6 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
             return;
         }
 
-        /** Execute hook callback */
-        onSave?.(widgets);
-
         const currentEntityIds = getCurrentEntityIds(id);
         const [error, resp] = await awaitWrap(
             dashboardAPI.updateDashboard({
@@ -103,6 +100,8 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
             return;
         }
 
+        /** Execute hook callback */
+        onSave?.(widgets);
         toast.success(getIntlText('common.message.operation_success'));
     });
 

@@ -5,7 +5,6 @@ import { isNil } from 'lodash-es';
 import { LoadingWrapper } from '@milesight/shared/src/components';
 
 import { DrawingBoard, useDrawingBoard } from '@/components/drawing-board';
-import { type DashboardDetail } from '@/services/http';
 import { Toolbar } from './components';
 import { useDashboardDetail } from './hooks';
 
@@ -13,6 +12,7 @@ import './style.less';
 
 export interface DashboardDetailProps {
     id: ApiKey;
+    deviceId?: ApiKey | null;
 }
 
 /**
@@ -37,12 +37,7 @@ const DrawingBoardDetail: React.FC<DashboardDetailProps> = props => {
             );
         }
 
-        return (
-            <DrawingBoard
-                {...drawingBoardProps}
-                drawingBoardDetail={dashboardDetail as DashboardDetail}
-            />
-        );
+        return <DrawingBoard {...drawingBoardProps} drawingBoardDetail={dashboardDetail} />;
     };
 
     return (

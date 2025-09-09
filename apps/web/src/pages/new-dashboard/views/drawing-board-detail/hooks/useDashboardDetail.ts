@@ -4,6 +4,7 @@ import { useRequest } from 'ahooks';
 import { useMqtt, MQTT_STATUS, MQTT_EVENT_TYPE, BATCH_PUSH_TIME } from '@/hooks';
 import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
 import { dashboardAPI, getResponseData, isRequestSuccess, awaitWrap } from '@/services/http';
+import useDashboardStore from '@/pages/new-dashboard/store';
 
 /**
  * Get dashboard detail
@@ -11,6 +12,7 @@ import { dashboardAPI, getResponseData, isRequestSuccess, awaitWrap } from '@/se
 export function useDashboardDetail(currentDashboardId: ApiKey) {
     const [loading, setLoading] = useState(false);
     const { setLatestEntities, triggerEntityListener } = useActivityEntity();
+    const { setPath } = useDashboardStore();
 
     const { data: dashboardDetail, run: getDashboardDetail } = useRequest(
         async () => {
@@ -26,6 +28,7 @@ export function useDashboardDetail(currentDashboardId: ApiKey) {
                 const data = getResponseData(resp);
 
                 setLatestEntities(data?.entities || []);
+                setPath(data);
                 return data;
             } finally {
                 setLoading(false);

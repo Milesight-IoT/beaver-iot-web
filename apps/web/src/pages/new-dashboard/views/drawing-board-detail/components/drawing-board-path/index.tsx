@@ -1,5 +1,9 @@
 import React from 'react';
-import { Breadcrumbs, Link as MUILink, Typography } from '@mui/material';
+import { Breadcrumbs } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
+import { Tooltip } from '@/components';
+import useDashboardStore from '@/pages/new-dashboard/store';
 
 export interface DrawingBoardPathProps {
     className?: string;
@@ -11,10 +15,29 @@ export interface DrawingBoardPathProps {
 const DrawingBoardPath: React.FC<DrawingBoardPathProps> = props => {
     const { className } = props;
 
+    const { paths } = useDashboardStore();
+    const navigate = useNavigate();
+
     return (
         <Breadcrumbs className={className}>
-            <MUILink underline="hover">Smart Agriculture</MUILink>
-            <Typography>Device Canvas</Typography>
+            {paths.map((path, index) => {
+                if (index === paths.length - 1) {
+                    return (
+                        <div className="dashboard-detail__path-text">
+                            <Tooltip title={path.name} autoEllipsis />
+                        </div>
+                    );
+                }
+
+                return (
+                    <div
+                        className="dashboard-detail__path"
+                        onClick={() => navigate(`/new-dashboard?id=${path.dashboard_id}`)}
+                    >
+                        <Tooltip title={path.name} autoEllipsis />
+                    </div>
+                );
+            })}
         </Breadcrumbs>
     );
 };

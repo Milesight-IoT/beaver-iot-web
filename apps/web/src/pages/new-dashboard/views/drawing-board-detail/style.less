@@ -12,5 +12,46 @@
             display: flex;
             align-items: center;
         }
+
+        &-middle {
+            flex: 1;
+            width: 0;
+            padding: 0 @padding-md;
+            font-weight: @font-weight-medium;
+            text-align: center;
+            .text-size(@font-size-4);
+        }
+    }
+
+    &__path {
+        display: inline-block;
+        max-width: 200px;
+        padding: 0 @padding-xxs;
+        color: var(--text-color-secondary);
+        border-radius: @border-radius-base;
+        cursor: pointer;
+        transition: color 0.2s;
+        .text-size(@font-size-4);
+
+        .ms-tooltip {
+            display: flex;
+        }
+
+        &:hover {
+            color: var(--text-color-primary);
+            background-color: var(--hover-background-1);
+        }
+    }
+
+    &__path-text {
+        display: inline-block;
+        max-width: 200px;
+        font-weight: @font-weight-medium;
+        color: var(--text-color-primary);
+        .text-size(@font-size-4);
+
+        .ms-tooltip {
+            display: flex;
+        }
     }
 }

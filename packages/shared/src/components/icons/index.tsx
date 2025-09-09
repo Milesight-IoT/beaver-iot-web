@@ -159,6 +159,7 @@ export {
     FilterListOutlined as FilterListOutlinedIcon,
     Upload as UploadIcon,
     Remove as RemoveIcon,
+    GridView as GridViewIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';
