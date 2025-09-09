@@ -79,3 +79,4 @@ export { default as MobileTopbar } from './mobile-topbar';
 export { default as InfiniteScrollList, type InfiniteScrollListRef } from './infinite-scroll-list';
 export { default as MobileQRCodeScanner } from './mobile-qrcode-scanner';
 export { default as MobileSearchPanel } from './mobile-search-panel';
+export { default as EuiInput } from './eui-input';
