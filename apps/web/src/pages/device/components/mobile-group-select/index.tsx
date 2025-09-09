@@ -89,11 +89,13 @@ const MobileGroupSelect: React.FC<Props> = memo(props => {
     useLayoutEffect(() => {
         if (!value) {
             setSelectedGroup(defaultGroupItem);
+            updateActiveGroup(defaultGroupItem);
             return;
         }
 
         setSelectedGroup(value);
-    }, [open, value, defaultGroupItem, getIntlText]);
+        updateActiveGroup({ id: value.id, name: value.name || '' });
+    }, [open, value, defaultGroupItem, getIntlText, updateActiveGroup]);
 
     return (
         <div className="ms-mobile-group-select">
@@ -111,6 +113,11 @@ const MobileGroupSelect: React.FC<Props> = memo(props => {
                 onOk={() => {
                     setOpen(false);
                     setValue(selectedGroup);
+                    updateActiveGroup(
+                        !selectedGroup
+                            ? undefined
+                            : { id: selectedGroup.id, name: selectedGroup.name || '' },
+                    );
                 }}
             >
                 <div className="group-list">
