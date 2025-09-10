@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMemoizedFn } from 'ahooks';
-import { cloneDeep } from 'lodash-es';
+import { cloneDeep, omit } from 'lodash-es';
 
 import { WidgetDetail } from '@/services/http/dashboard';
 import useWindowWidth from './useWindowWidth';
@@ -41,6 +41,8 @@ export default function useDrawingBoardData(props: DrawingBoardProps) {
             }
             return item;
         });
+
+        console.log('newWidgets ? ', newWidgets);
         setWidgets([...(newWidgets || [])]);
         setLoadingWidgets(false);
         widgetsRef.current = cloneDeep(newWidgets || []);
