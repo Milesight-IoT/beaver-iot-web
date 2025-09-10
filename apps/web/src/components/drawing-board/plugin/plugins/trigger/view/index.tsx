@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { get } from 'lodash-es';
+import cls from 'classnames';
 
 import { Modal, toast } from '@milesight/shared/src/components';
 import { useI18n } from '@milesight/shared/src/hooks';
@@ -16,25 +17,30 @@ import {
     type UseEntityFormItemsProps,
 } from '@/hooks';
 import { Tooltip } from '../../../view-components';
-import { useActivityEntity } from '../../../hooks';
+import { useActivityEntity, useGridLayout } from '../../../hooks';
 import { ViewConfigProps } from './typings';
+import type { BoardPluginProps } from '../../../types';
 import './style.less';
 
 interface Props {
     widgetId: ApiKey;
     dashboardId: ApiKey;
     config: ViewConfigProps;
-    configJson: CustomComponentProps;
+    configJson: BoardPluginProps;
     isEdit?: boolean;
     mainRef: any;
 }
 
 const View = (props: Props) => {
+    const { config, configJson, widgetId, dashboardId, isEdit } = props;
+    const { label, icon, bgColor, entity } = config || {};
+    const { isPreview, name: pluginName, pos } = configJson || {};
+
     const { getIntlText } = useI18n();
     const confirm = useConfirm();
     const { getLatestEntityDetail } = useActivityEntity();
-    const { config, configJson, widgetId, dashboardId, isEdit } = props;
-    const { label, icon, bgColor, entity } = config || {};
+    const { twoByTwo } = useGridLayout(pos);
+
     const [visible, setVisible] = useState(false);
 
     const latestEntity = useMemo(() => {
@@ -99,7 +105,7 @@ const View = (props: Props) => {
     const handleClick = async () => {
         const entityRawData = latestEntity?.rawData;
         const { entityKey, entityType, entityValueType } = entityRawData || {};
-        if (configJson.isPreview || isEdit || !latestEntity || !entityKey) {
+        if (isPreview || isEdit || !latestEntity || !entityKey) {
             return;
         }
         const [error, resp] = await awaitWrap(
@@ -228,43 +234,41 @@ const View = (props: Props) => {
         );
         if (!IconShow) return null;
 
-        return <IconShow sx={{ fontSize: 24 }} />;
-    }, [icon, config]);
+        return <IconShow sx={{ fontSize: twoByTwo ? 32 : 24 }} />;
+    }, [icon, config, twoByTwo]);
 
-    if (configJson.isPreview) {
-        return (
-            <div
-                className="trigger-view-preview"
-                style={{
-                    backgroundColor: get(config, 'appearanceIcon.color', bgColor || '#8E66FF'),
-                }}
-            >
-                {IconComponent}
-                <div className="trigger-view__label">
-                    <Tooltip className="trigger-view__text" autoEllipsis title={label} />
-                </div>
+    const renderTriggerView = (
+        <div
+            className={isPreview ? 'trigger-view-preview' : 'trigger-view'}
+            style={{
+                backgroundColor: get(config, 'appearanceIcon.color', bgColor || '#8E66FF'),
+            }}
+            onClick={handleClick}
+        >
+            {IconComponent}
+            <div className="trigger-view__label">
+                <Tooltip
+                    className={cls('trigger-view__text', {
+                        'text-lg': twoByTwo,
+                    })}
+                    autoEllipsis
+                    title={label}
+                />
             </div>
-        );
+        </div>
+    );
+
+    if (isPreview) {
+        return renderTriggerView;
     }
 
     return (
         <>
-            <div
-                className="trigger-view"
-                style={{
-                    backgroundColor: get(config, 'appearanceIcon.color', bgColor || '#8E66FF'),
-                }}
-                onClick={handleClick}
-            >
-                {IconComponent}
-                <div className="trigger-view__label">
-                    <Tooltip className="trigger-view__text" autoEllipsis title={label} />
-                </div>
-            </div>
+            {renderTriggerView}
             {visible && (
                 <Modal
                     visible
-                    title={configJson.name}
+                    title={label || pluginName}
                     onOk={handleSubmit(handleFormSubmit)}
                     onCancel={() => {
                         reset();

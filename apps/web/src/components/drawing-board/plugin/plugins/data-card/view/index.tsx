@@ -107,7 +107,7 @@ const View = (props: Props) => {
                         )}
                         <div
                             className={cls('data-view-card__data', {
-                                'data-view-card__data--large': twoByTwo,
+                                'text-lg': twoByTwo,
                             })}
                         >
                             {(twoByOne || oneByOne) && (
