@@ -22,10 +22,11 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
         name: 'Switch',
         icon: SwitchIcon,
         defaultRow: 1,
-        defaultCol: 2,
+        defaultCol: 1,
         minRow: 1,
         minCol: 1,
         maxRow: 1,
+        maxCol: 2,
         configProps: [
             {
                 label: 'Switch Config',
