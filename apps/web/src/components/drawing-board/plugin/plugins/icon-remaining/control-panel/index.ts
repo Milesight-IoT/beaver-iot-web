@@ -23,8 +23,9 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
         defaultRow: 1,
         defaultCol: 2,
         minRow: 1,
-        minCol: 2,
+        minCol: 1,
         maxRow: 1,
+        maxCol: 4,
         configProps: [
             {
                 label: 'Remaining Config',

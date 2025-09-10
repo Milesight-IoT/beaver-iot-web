@@ -5,20 +5,24 @@ import * as Icons from '@milesight/shared/src/components/icons';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import RemainChart from './components/remain-chart';
 import { useSource } from './hooks';
+import { useGridLayout } from '../../../hooks';
 import type { ViewConfigProps } from '../typings';
+import type { BoardPluginProps } from '../../../types';
 import './style.less';
 
 interface Props {
     widgetId: ApiKey;
     dashboardId: ApiKey;
     config: ViewConfigProps;
-    configJson: CustomComponentProps;
+    configJson: BoardPluginProps;
 }
 const View = (props: Props) => {
     const { config, configJson, widgetId, dashboardId } = props;
     const { title, entity, metrics, time } = config || {};
     const { aggregateHistoryData } = useSource({ widgetId, dashboardId, entity, metrics, time });
-    const { isPreview } = configJson || {};
+    const { isPreview, pos } = configJson || {};
+
+    const { oneByOne } = useGridLayout(pos);
 
     // Get the percentage value
     const percent = useMemo(() => {
@@ -53,7 +57,7 @@ const View = (props: Props) => {
                 <Tooltip autoEllipsis title={title} />
             </div>
             <div className="ms-icon-remaining__content">
-                <RemainChart Icon={Icon} color={iconColor} percent={percent} />
+                <RemainChart Icon={Icon} color={iconColor} percent={percent} showIcon={!oneByOne} />
             </div>
         </div>
     );
