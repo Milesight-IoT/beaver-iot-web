@@ -1,27 +1,33 @@
 import { useMemo } from 'react';
-import { useTheme } from '@milesight/shared/src/hooks';
 import { get } from 'lodash-es';
+import cls from 'classnames';
 
+import { useTheme, useTime } from '@milesight/shared/src/hooks';
 import * as Icons from '@milesight/shared/src/components/icons';
-import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
-import { Tooltip } from '@/components/drawing-board/plugin/view-components';
+
+import { useActivityEntity, useGridLayout } from '@/components/drawing-board/plugin/hooks';
+import { Tooltip } from '@/components';
 import { useSource } from './hooks';
 import type { ViewConfigProps } from '../typings';
+import type { BoardPluginProps } from '../../../types';
 import './style.less';
 
 interface Props {
     widgetId: ApiKey;
     dashboardId: ApiKey;
     config: ViewConfigProps;
-    configJson: CustomComponentProps;
+    configJson: BoardPluginProps;
 }
 const View = (props: Props) => {
     const { config, configJson, widgetId, dashboardId } = props;
     const { title, entity } = config || {};
     const { isPreview } = configJson || {};
 
+    const { getTimeFormat } = useTime();
     const { getCSSVariableValue } = useTheme();
     const { getLatestEntityDetail } = useActivityEntity();
+    const { twoByTwo, oneByTwo, twoByOne, oneByOne } = useGridLayout(configJson?.pos);
+
     const latestEntity = useMemo(() => {
         if (!entity) return {};
 
@@ -80,19 +86,51 @@ const View = (props: Props) => {
     return (
         <div className={`data-view ${isPreview ? 'data-view-preview' : ''}`}>
             <div className="data-view-card">
-                <div className="data-view-card__content">
-                    <div className="data-view-card__header">
+                <div
+                    className={cls('data-view-card__content', {
+                        'justify-center': twoByOne || oneByOne,
+                    })}
+                >
+                    {(twoByTwo || oneByTwo) && (
+                        <div className="data-view-card__header">
+                            <Tooltip className="data-view-card__title" autoEllipsis title={title} />
+                        </div>
+                    )}
+                    <div className="data-view-card__body">
                         {Icon && (
                             <Icon
                                 sx={{
                                     color: iconColor || getCSSVariableValue('--gray-5'),
-                                    // fontSize: 20,
+                                    fontSize: 32,
                                 }}
                             />
                         )}
-                        <Tooltip className="data-view-card__title" autoEllipsis title={title} />
+                        <div
+                            className={cls('data-view-card__data', {
+                                'data-view-card__data--large': twoByTwo,
+                            })}
+                        >
+                            {(twoByOne || oneByOne) && (
+                                <Tooltip
+                                    className="data-view-card__title"
+                                    autoEllipsis
+                                    title={title}
+                                />
+                            )}
+                            <Tooltip autoEllipsis title={currentEntityData?.label || '-'} />
+                        </div>
                     </div>
-                    <Tooltip autoEllipsis title={currentEntityData?.label || '-'} />
+                    {(twoByTwo || oneByTwo) && (
+                        <div className="data-view-card__footer">
+                            <Tooltip
+                                autoEllipsis
+                                title={
+                                    entity?.rawData?.entityUpdatedAt &&
+                                    getTimeFormat(entity.rawData.entityUpdatedAt)
+                                }
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

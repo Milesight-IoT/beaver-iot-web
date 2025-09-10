@@ -3,7 +3,6 @@ import { create } from 'zustand';
 import { isUndefined, isNull, cloneDeep } from 'lodash-es';
 import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
 import { EventEmitter } from '@milesight/shared/src/utils/event-emitter';
-import type { DashboardEntityData } from '@/services/http';
 
 type ListenerOptions = {
     widgetId?: ApiKey;
@@ -19,14 +18,14 @@ interface ActivityEntityStore {
      * Entity details
      * @description The latest details of the entity that is currently being displayed in dashboard
      */
-    entities?: Record<ApiKey, DashboardEntityData> | null;
+    entities?: Record<ApiKey, EntityData> | null;
 
     /**
      * Set latest entity details
      * @description Set the latest details of the entity that is currently being
      * displayed in dashboard
      */
-    setLatestEntities: (entities: DashboardEntityData[]) => void;
+    setLatestEntities: (entities: EntityData[]) => void;
 }
 
 const eventEmitter = new EventEmitter();

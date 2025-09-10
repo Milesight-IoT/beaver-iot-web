@@ -23,7 +23,7 @@ const DrawingBoardPath: React.FC<DrawingBoardPathProps> = props => {
             {paths.map((path, index) => {
                 if (index === paths.length - 1) {
                     return (
-                        <div className="dashboard-detail__path-text">
+                        <div key={path.dashboard_id} className="dashboard-detail__path-text">
                             <Tooltip title={path.name} autoEllipsis />
                         </div>
                     );
@@ -31,6 +31,7 @@ const DrawingBoardPath: React.FC<DrawingBoardPathProps> = props => {
 
                 return (
                     <div
+                        key={path.dashboard_id}
                         className="dashboard-detail__path"
                         onClick={() => navigate(`/new-dashboard?id=${path.dashboard_id}`)}
                     >

@@ -97,7 +97,7 @@ export default () => {
                 component: (
                     <DrawingBoard
                         {...drawingBoardProps}
-                        drawingBoardDetail={DrawingBoardMock as DashboardDetail}
+                        drawingBoardDetail={DrawingBoardMock as unknown as DashboardDetail}
                     />
                 ),
             },

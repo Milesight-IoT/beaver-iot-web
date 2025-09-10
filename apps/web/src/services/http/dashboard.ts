@@ -1,22 +1,5 @@
 import { client, attachAPI, API_PREFIX } from './client';
 
-export interface DashboardEntityData {
-    entity_id: string;
-    entity_key: string;
-    entity_name: string;
-    entity_parent_name?: string;
-    entity_description?: string;
-    entity_type: EntityType;
-    entity_is_customized: boolean;
-    entity_access_mod: EntityAccessMode;
-    entity_value_type: string;
-    entity_value_attribute?: Partial<EntityValueAttributeType>;
-    entity_created_at: number;
-    entity_updated_at: number;
-    integration_name?: string;
-    device_name?: string;
-}
-
 /**
  * Device detail definition
  */
@@ -27,7 +10,7 @@ export interface DashboardDetail {
     /** is home dashboard */
     home: boolean;
     created_at: string;
-    entities?: DashboardEntityData[];
+    entities?: EntityData[];
     entity_ids?: ApiKey[];
     user_id: ApiKey;
 }
