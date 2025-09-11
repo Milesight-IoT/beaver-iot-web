@@ -347,6 +347,7 @@ const filterMobileRoutes = (routes: RouteObjectType[]) => {
     return result;
 };
 
-const finalRoutes = filterMobileRoutes(routes);
+const mobileRoutes = filterMobileRoutes(routes);
 
-export default finalRoutes;
+export { mobileRoutes };
+export default routes;
