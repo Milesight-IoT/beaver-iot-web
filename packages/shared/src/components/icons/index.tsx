@@ -158,6 +158,8 @@ export {
     DragIndicator as DragIndicatorIcon,
     FilterListOutlined as FilterListOutlinedIcon,
     QrCodeScanner as QrCodeScannerIcon,
+    FlashlightOn as FlashlightOnIcon,
+    FlashlightOff as FlashlightOffIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';
