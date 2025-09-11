@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMemoizedFn } from 'ahooks';
-import { cloneDeep, omit } from 'lodash-es';
+import { cloneDeep } from 'lodash-es';
 
 import { WidgetDetail } from '@/services/http/dashboard';
 import useWindowWidth from './useWindowWidth';
-import useGetPluginConfigs from './useGetPluginConfigs';
+import useLoadPlugins from './useLoadPlugins';
+import useDrawingBoardStore from '../store';
 
 import type { DrawingBoardProps, DrawingBoardExpose } from '../interface';
 import type { DrawingBoardContextProps } from '../context';
@@ -15,7 +16,8 @@ export default function useDrawingBoardData(props: DrawingBoardProps) {
     const { isTooSmallScreen } = useWindowWidth(() => {
         changeIsEdit(false);
     });
-    const { pluginsConfigs } = useGetPluginConfigs();
+    useLoadPlugins();
+    const { pluginsControlPanel } = useDrawingBoardStore();
 
     const [loadingWidgets, setLoadingWidgets] = useState(true);
     const [widgets, setWidgets] = useState<WidgetDetail[]>([]);
@@ -29,7 +31,7 @@ export default function useDrawingBoardData(props: DrawingBoardProps) {
          * that the component configuration is locally up to date
          */
         const newWidgets = drawingBoardDetail.widgets?.map((item: WidgetDetail) => {
-            const sourceJson = pluginsConfigs.find(plugin => item.data.type === plugin.type);
+            const sourceJson = pluginsControlPanel.find(plugin => item.data.type === plugin.type);
             if (sourceJson) {
                 return {
                     ...item,
@@ -42,7 +44,6 @@ export default function useDrawingBoardData(props: DrawingBoardProps) {
             return item;
         });
 
-        console.log('newWidgets ? ', newWidgets);
         setWidgets([...(newWidgets || [])]);
         setLoadingWidgets(false);
         widgetsRef.current = cloneDeep(newWidgets || []);
@@ -50,7 +51,7 @@ export default function useDrawingBoardData(props: DrawingBoardProps) {
         if (!isTooSmallScreen) {
             normalScreenWidgetRef.current = cloneDeep(newWidgets || []);
         }
-    }, [drawingBoardDetail.widgets, pluginsConfigs, isTooSmallScreen]);
+    }, [drawingBoardDetail.widgets, pluginsControlPanel, isTooSmallScreen]);
 
     useEffect(() => {
         if (!isTooSmallScreen) {

@@ -9,8 +9,10 @@ import { WidgetDetail } from '@/services/http/dashboard';
 import { Tooltip } from '@/components';
 import pluginImg from '@/assets/plugin.png';
 import { COMPONENT_CLASS } from '../../plugin/constant';
+import useLoadPlugins from '../../hooks/useLoadPlugins';
+import useDrawingBoardStore from '../../store';
+
 import type { BoardPluginProps } from '../../plugin/types';
-import useGetPluginConfigs from '../../hooks/useGetPluginConfigs';
 import './style.less';
 
 interface PluginListProps {
@@ -18,16 +20,18 @@ interface PluginListProps {
 }
 
 export default (props: PluginListProps) => {
-    const { getIntlText } = useI18n();
     const { onSelect } = props;
-    const { pluginsConfigs } = useGetPluginConfigs();
+
+    useLoadPlugins();
+    const { pluginsControlPanel } = useDrawingBoardStore();
+    const { getIntlText } = useI18n();
 
     const [pluginList, setPluginList] = useState<Record<string, any>>();
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
     const [isShowPopover, setIsShowPopover] = useState(false);
 
     useEffect(() => {
-        if (pluginsConfigs) {
+        if (pluginsControlPanel) {
             const pluginClass: Record<string, any> = COMPONENT_CLASS;
             const plugins: Record<string, any> = {};
             Object.keys(pluginClass).forEach((plu: any) => {
@@ -35,7 +39,7 @@ export default (props: PluginListProps) => {
                     ...pluginClass[plu],
                 };
             });
-            pluginsConfigs.forEach((plugin: BoardPluginProps) => {
+            pluginsControlPanel.forEach((plugin: BoardPluginProps) => {
                 if (plugin.class && plugins[plugin.class]) {
                     if (!plugins[plugin.class].list) {
                         plugins[plugin.class].list = [];
@@ -54,7 +58,7 @@ export default (props: PluginListProps) => {
             }
             setPluginList(plugins);
         }
-    }, [pluginsConfigs]);
+    }, [pluginsControlPanel]);
 
     const handleCloseModal = useMemoizedFn(() => {
         setIsShowPopover(false);
