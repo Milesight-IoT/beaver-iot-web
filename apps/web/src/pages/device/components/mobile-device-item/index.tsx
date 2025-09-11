@@ -1,7 +1,8 @@
 import React, { memo, useMemo } from 'react';
 import { Chip } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
-import { Tooltip, MoreMenu } from '@/components';
+import { PERMISSIONS } from '@/constants';
+import { Tooltip, MoreMenu, PermissionControlHidden } from '@/components';
 import { type DeviceDetail } from '@/services/http';
 import './style.less';
 
@@ -53,10 +54,12 @@ const MobileDeviceItem: React.FC<Props> = memo(({ data, onAction }) => {
                 <div className="ms-mobile-device-item__status">
                     <Chip className="status-online" label="Online" />
                     {/* <Chip className="status-offline" label="Offline" /> */}
-                    <MoreMenu
-                        options={moreMenuOptions}
-                        onClick={menu => onAction?.(menu.value, data)}
-                    />
+                    <PermissionControlHidden permissions={[PERMISSIONS.DEVICE_DELETE]}>
+                        <MoreMenu
+                            options={moreMenuOptions}
+                            onClick={menu => onAction?.(menu.value, data)}
+                        />
+                    </PermissionControlHidden>
                 </div>
             </div>
             <div className="ms-mobile-device-item__body">

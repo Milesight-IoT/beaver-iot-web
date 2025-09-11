@@ -6,9 +6,11 @@ import { AddIcon, toast } from '@milesight/shared/src/components';
 import {
     MobileTopbar,
     InfiniteScrollList,
+    PermissionControlHidden,
     useConfirm,
     type InfiniteScrollListRef,
 } from '@/components';
+import { PERMISSIONS } from '@/constants';
 import {
     deviceAPI,
     awaitWrap,
@@ -146,13 +148,15 @@ export default () => {
                     <MobileTopbar
                         title={<MobileGroupSelect value={group} onChange={setGroup} />}
                         slotRight={
-                            <Button
-                                variant="text"
-                                startIcon={<AddIcon />}
-                                onClick={() => setAddModalOpen(true)}
-                            >
-                                {getIntlText('common.label.add')}
-                            </Button>
+                            <PermissionControlHidden permissions={PERMISSIONS.DEVICE_ADD}>
+                                <Button
+                                    variant="text"
+                                    startIcon={<AddIcon />}
+                                    onClick={() => setAddModalOpen(true)}
+                                >
+                                    {getIntlText('common.label.add')}
+                                </Button>
+                            </PermissionControlHidden>
                         }
                     />
                     <MobileSearchInput
