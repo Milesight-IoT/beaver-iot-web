@@ -3,7 +3,11 @@ import { renderToString } from 'react-dom/server';
 import cls from 'classnames';
 import * as echarts from 'echarts/core';
 import { useTheme } from '@milesight/shared/src/hooks';
-import { useBasicChartEntity, useActivityEntity } from '@/components/drawing-board/plugin/hooks';
+import {
+    useBasicChartEntity,
+    useActivityEntity,
+    useStableEntity,
+} from '@/components/drawing-board/plugin/hooks';
 import { getChartColor } from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { type ChartEntityPositionValueType } from '@/components/drawing-board/plugin/components/chart-entity-position';
@@ -34,26 +38,26 @@ const View = (props: ViewProps) => {
     const chartWrapperRef = useRef<HTMLDivElement>(null);
     const { grey } = useTheme();
 
+    const { stableEntity } = useStableEntity(entityPosition);
     const { getLatestEntityDetail } = useActivityEntity();
     const entity = useMemo(() => {
-        if (!Array.isArray(entityPosition)) return [];
+        if (!Array.isArray(stableEntity)) return [];
 
-        return entityPosition
+        return stableEntity
             .map(item => {
                 if (!item.entity) return;
                 return getLatestEntityDetail(item.entity);
             })
             .filter(Boolean) as EntityOptionType[];
-    }, [entityPosition, getLatestEntityDetail]);
+    }, [stableEntity, getLatestEntityDetail]);
 
-    const { chartShowData, chartLabels, chartRef, chartZoomRef, xAxisConfig, xAxisRange } =
-        useBasicChartEntity({
-            widgetId,
-            dashboardId,
-            entity,
-            time,
-            isPreview,
-        });
+    const { chartShowData, chartRef, chartZoomRef, xAxisConfig, xAxisRange } = useBasicChartEntity({
+        widgetId,
+        dashboardId,
+        entity,
+        time,
+        isPreview,
+    });
 
     const { resizeChart } = useResizeChart({ chartWrapperRef });
     const { zoomChart, hoverZoomBtn } = useZoomChart({
@@ -63,7 +67,7 @@ const View = (props: ViewProps) => {
         chartWrapperRef,
     });
     const { newChartShowData } = useLineChart({
-        entityPosition,
+        entityPosition: stableEntity || [],
         chartShowData,
     });
     const { getYAxisRange } = useYAxisRange({ newChartShowData, entity });
@@ -250,7 +254,6 @@ const View = (props: ViewProps) => {
     }, [
         entity,
         grey,
-        chartLabels,
         chartRef,
         chartShowData,
         newChartShowData,

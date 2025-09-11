@@ -3,7 +3,11 @@ import { renderToString } from 'react-dom/server';
 import cls from 'classnames';
 import * as echarts from 'echarts/core';
 import { useTheme } from '@milesight/shared/src/hooks';
-import { useBasicChartEntity, useActivityEntity } from '@/components/drawing-board/plugin/hooks';
+import {
+    useBasicChartEntity,
+    useActivityEntity,
+    useStableEntity,
+} from '@/components/drawing-board/plugin/hooks';
 import { getChartColor } from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { useResizeChart, useYAxisRange, useZoomChart } from './hooks';
@@ -27,27 +31,28 @@ const View = (props: ViewProps) => {
     const { config, configJson, widgetId, dashboardId, isEdit } = props;
     const { entity, title, time } = config || {};
     const { isPreview } = configJson || {};
+
+    const { stableEntity } = useStableEntity(entity);
     const { getLatestEntityDetail } = useActivityEntity();
     const latestEntities = useMemo(() => {
-        if (!entity?.length) return [];
+        if (!stableEntity?.length) return [];
 
-        return entity
+        return stableEntity
             .map(item => {
                 return getLatestEntityDetail(item);
             })
             .filter(Boolean) as EntityOptionType[];
-    }, [entity, getLatestEntityDetail]);
+    }, [stableEntity, getLatestEntityDetail]);
 
     const chartWrapperRef = useRef<HTMLDivElement>(null);
     const { grey } = useTheme();
-    const { chartShowData, chartLabels, chartRef, xAxisRange, chartZoomRef, xAxisConfig } =
-        useBasicChartEntity({
-            widgetId,
-            dashboardId,
-            entity: latestEntities,
-            time,
-            isPreview,
-        });
+    const { chartShowData, chartRef, xAxisRange, chartZoomRef, xAxisConfig } = useBasicChartEntity({
+        widgetId,
+        dashboardId,
+        entity: latestEntities,
+        time,
+        isPreview,
+    });
 
     const { getYAxisRange } = useYAxisRange({ chartShowData, entity: latestEntities });
     const { resizeChart } = useResizeChart({ chartWrapperRef });
@@ -181,7 +186,6 @@ const View = (props: ViewProps) => {
     }, [
         grey,
         latestEntities,
-        chartLabels,
         chartRef,
         chartShowData,
         xAxisRange,
