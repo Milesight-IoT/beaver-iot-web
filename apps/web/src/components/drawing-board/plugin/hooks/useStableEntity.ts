@@ -11,14 +11,11 @@ export function useStableEntity<T>(entity?: T[]) {
     const stableEntityRef = useRef<T[] | undefined>([]);
 
     useEffect(() => {
-        stableEntityRef.current = stableEntity;
-    }, [stableEntity]);
-
-    useEffect(() => {
         if (isEqual(stableEntityRef.current, entity)) {
             return;
         }
 
+        stableEntityRef.current = entity;
         setStableEntity(entity);
     }, [entity]);
 
