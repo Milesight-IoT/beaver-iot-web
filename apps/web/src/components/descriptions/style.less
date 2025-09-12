@@ -1,7 +1,7 @@
 .@{prefix}-descriptions {
     &-root {
         position: relative;
-        overflow: hidden;
+        overflow: auto;
         border: 1px solid var(--border-color-base);
         border-radius: @border-radius-base;
 
@@ -11,9 +11,14 @@
             }
         }
 
+        .@{mui-prefix}Table-root {
+            table-layout: fixed;
+        }
+
         .@{mui-prefix}TableBody-root {
             > tr {
                 > td {
+                    white-space: nowrap;
                     border: 0;
                     border-right: 1px solid var(--border-color-base);
                     border-bottom: 1px solid var(--border-color-base);
@@ -30,6 +35,13 @@
                 }
             }
         }
+
+        // Mobile Responsive
+        &.mobile {
+            .@{mui-prefix}Table-root {
+                table-layout: auto;
+            }
+        }
     }
 
     &-loading {
@@ -43,7 +55,9 @@
         width: 15%;
         max-width: 220px;
         padding: @padding-sm;
+        overflow: hidden;
         font-weight: @font-weight-medium;
+        text-overflow: ellipsis;
         background-color: var(--component-background-gray);
         border: 1px solid var(--border-color-base);
         .text-size(@font-size-base);
@@ -51,7 +65,10 @@
 
     & &-content {
         width: 35%;
+        max-width: 350px;
         padding: @padding-sm;
+        overflow: hidden;
+        text-overflow: ellipsis;
         .text-size(@font-size-base);
     }
 }
