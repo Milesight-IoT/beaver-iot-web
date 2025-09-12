@@ -2,36 +2,45 @@ import { useEffect, useMemo, useRef } from 'react';
 import { renderToString } from 'react-dom/server';
 import * as echarts from 'echarts/core';
 import { useTheme } from '@milesight/shared/src/hooks';
-import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
+import {
+    useActivityEntity,
+    useGridLayout,
+    useStableEntity,
+} from '@/components/drawing-board/plugin/hooks';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { useResizeChart, useSource } from './hooks';
 import type { AggregateHistoryList, ViewConfigProps } from '../typings';
+import type { BoardPluginProps } from '../../../types';
 import './style.less';
 
 interface IProps {
     widgetId: ApiKey;
     dashboardId: ApiKey;
     config: ViewConfigProps;
+    configJson: BoardPluginProps;
 }
 const View = (props: IProps) => {
-    const { config, widgetId, dashboardId } = props;
+    const { config, configJson, widgetId, dashboardId } = props;
     const { entityList, title, metrics, time } = config || {};
+    const { pos } = configJson || {};
     const chartRef = useRef<HTMLDivElement>(null);
     const chartWrapperRef = useRef<HTMLDivElement>(null);
 
+    const { wGrid = 3, hGrid = 3 } = useGridLayout(pos);
     const { purple, white, grey } = useTheme();
     const { resizeChart } = useResizeChart({ chartWrapperRef });
 
+    const { stableEntity } = useStableEntity(entityList);
     const { getLatestEntityDetail } = useActivityEntity();
     const latestEntities = useMemo(() => {
-        if (!entityList?.length) return [];
+        if (!stableEntity?.length) return [];
 
-        return entityList
+        return stableEntity
             .map(item => {
                 return getLatestEntityDetail(item);
             })
             .filter(Boolean) as EntityOptionType[];
-    }, [entityList, getLatestEntityDetail]);
+    }, [stableEntity, getLatestEntityDetail]);
     const { aggregateHistoryList } = useSource({
         widgetId,
         dashboardId,
@@ -128,6 +137,8 @@ const View = (props: IProps) => {
                     axisName: {
                         color: grey[600],
                         overflow: 'break',
+                        padding: -8,
+                        show: wGrid > 2 && hGrid > 2,
                     },
                     splitArea: {
                         areaStyle: {
@@ -188,7 +199,7 @@ const View = (props: IProps) => {
             ],
         };
         return renderRadarChart(data, historyList);
-    }, [aggregateHistoryList]);
+    }, [aggregateHistoryList, wGrid, hGrid]);
 
     return (
         <div className="ms-radar-chart" ref={chartWrapperRef}>

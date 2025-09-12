@@ -97,14 +97,14 @@ const View = (props: IProps) => {
     };
     useEffect(() => {
         return renderChart();
-    }, [countData, hGrid]);
+    }, [countData]);
 
     return (
         <div
             className={cls('ms-pie-chart', { 'ms-pie-chart--preview': isPreview })}
             ref={chartWrapperRef}
         >
-            {hGrid > 2 && <Tooltip className="ms-pie-chart__header" autoEllipsis title={title} />}
+            <Tooltip className="ms-pie-chart__header" autoEllipsis title={title} />
             <div className="ms-pie-chart__content">
                 <div ref={chartRef} className="ms-chart-content__chart" />
             </div>
