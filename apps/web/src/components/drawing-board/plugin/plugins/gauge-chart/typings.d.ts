@@ -1,6 +1,6 @@
 export interface ViewConfigProps {
     title: string;
-    entity: EntityOptionType;
+    entity?: EntityOptionType;
     time: number;
     metrics: DataAggregateType;
 }

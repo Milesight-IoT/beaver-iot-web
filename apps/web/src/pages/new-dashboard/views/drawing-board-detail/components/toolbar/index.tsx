@@ -35,7 +35,7 @@ const Toolbar: React.FC<ToolbarProps> = props => {
                     enterDelay={1000}
                     enterNextDelay={1000}
                 >
-                    <IconButton onClick={() => navigate('/new-dashboard')}>
+                    <IconButton onClick={() => navigate('/dashboard')}>
                         <GridViewIcon />
                     </IconButton>
                 </Tooltip>
@@ -60,7 +60,7 @@ const Toolbar: React.FC<ToolbarProps> = props => {
             )}
             <div className="dashboard-detail__toolbar-right">
                 {smallScreenSize && (
-                    <IconButton onClick={() => navigate('/new-dashboard')}>
+                    <IconButton onClick={() => navigate('/dashboard')}>
                         <GridViewIcon />
                     </IconButton>
                 )}

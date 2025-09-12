@@ -65,7 +65,7 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
     const handleItemClick = useMemoizedFn(() => {
         if (!item?.dashboard_id) return;
 
-        navigate(`/new-dashboard?id=${item.dashboard_id}`);
+        navigate(`/dashboard?id=${item.dashboard_id}`);
     });
 
     const handleDashboardOperation = useMemoizedFn((type: MORE_OPERATION) => {

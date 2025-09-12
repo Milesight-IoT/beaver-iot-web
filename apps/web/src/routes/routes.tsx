@@ -64,21 +64,6 @@ const routes: RouteObjectType[] = [
             permissions: PERMISSIONS.DASHBOARD_MODULE,
         },
         async lazy() {
-            const { default: Component } = await import('@/pages/dashboard');
-            return { Component };
-        },
-        ErrorBoundary,
-    },
-    {
-        path: '/new-dashboard',
-        handle: {
-            get title() {
-                return intl.get('common.label.dashboard');
-            },
-            icon: <AntFallAttentionIcon fontSize="small" />,
-            permissions: PERMISSIONS.DASHBOARD_MODULE,
-        },
-        async lazy() {
             const { default: Component } = await import('@/pages/new-dashboard');
             return { Component };
         },
