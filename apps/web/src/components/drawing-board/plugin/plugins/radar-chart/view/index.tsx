@@ -66,6 +66,7 @@ const View = (props: IProps) => {
 
         myChart.setOption({
             tooltip: {
+                confine: true,
                 trigger: 'item',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 borderColor: 'rgba(0, 0, 0, 0.9)',

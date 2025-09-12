@@ -190,6 +190,7 @@ const View = (props: Props) => {
                     },
                 ],
                 tooltip: {
+                    confine: true,
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     borderColor: 'rgba(0, 0, 0, 0.9)',
                     textStyle: {

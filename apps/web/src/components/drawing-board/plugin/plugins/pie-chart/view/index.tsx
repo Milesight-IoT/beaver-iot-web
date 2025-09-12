@@ -79,6 +79,7 @@ const View = (props: IProps) => {
                 },
             ],
             tooltip: {
+                confine: true,
                 trigger: 'item',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 borderColor: 'rgba(0, 0, 0, 0.9)',

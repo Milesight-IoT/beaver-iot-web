@@ -125,10 +125,11 @@ const View = (props: ViewProps) => {
                 containLabel: true,
                 top: 30, // Adjust the top blank space of the chart area
                 left: hGrid >= 4 ? '-3%' : hGrid <= 2 ? '-5%' : 0,
-                right: '5%',
+                right: 24,
                 bottom: 0,
             },
             tooltip: {
+                confine: true,
                 trigger: 'axis',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 borderColor: 'rgba(0, 0, 0, 0.9)',
