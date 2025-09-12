@@ -1,0 +1,117 @@
+.@{prefix}-test-modal {
+    .@{prefix}-modal-title {
+        border-bottom: 1px solid var(--border-color-base);
+    }
+
+    .@{prefix}-modal-footer {
+        display: none;
+    }
+
+    .@{prefix}-modal-content {
+        padding: 0;
+    }
+
+    &-content {
+        display: flex;
+
+        .@{prefix}-test-modal-form {
+            display: flex;
+            flex-direction: column;
+            width: 400px;
+            padding: @padding-lg;
+            border-right: 1px solid var(--border-color-base);
+
+            > .@{mui-prefix}ButtonBase-root {
+                .@{mui-prefix}SvgIcon-root,
+                .@{mui-prefix}CircularProgress-root {
+                    color: var(--white);
+                }
+            }
+
+            &-items {
+                flex: 1;
+                margin-bottom: @margin-sm;
+                overflow: auto;
+            }
+        }
+
+        .@{prefix}-test-modal-result {
+            position: relative;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            width: 0;
+            height: 688px;
+            background-color: var(--component-background-gray);
+
+            .@{prefix}-empty {
+                position: absolute;
+                top: 50%;
+                right: 0;
+                left: 0;
+                transform: translateY(-60%);
+
+                .@{prefix}-empty-text {
+                    text-align: center;
+                }
+            }
+
+            .result-main {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 100%;
+
+                &-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: @padding-xs @padding-lg;
+                    border-bottom: 1px solid var(--border-color-base);
+                    .text-size(@font-size-base);
+
+                    .@{prefix}-toggle-button-group {
+                        width: 124px;
+                        margin: 0;
+                        background-color: var(--gray-color-3);
+                        border-color: var(--gray-color-3);
+                    }
+
+                    &-title {
+                        flex: 1;
+                    }
+
+                    &-action {
+                        display: flex;
+                        flex: 1;
+                        gap: @margin-md;
+                        justify-content: flex-end;
+
+                        .@{mui-prefix}ButtonBase-root {
+                            padding: 0;
+                        }
+                    }
+                }
+
+                &-content {
+                    display: flex;
+                    flex: 1;
+                    align-items: center;
+                    justify-content: center;
+                    height: 0;
+
+                    .@{prefix}-code-editor {
+                        border: none;
+                    }
+                }
+
+                &-image-error {
+                    .@{mui-prefix}SvgIcon-root {
+                        font-size: 30px;
+                        color: var(--icon-color-gray-light);
+                    }
+                }
+            }
+        }
+    }
+}

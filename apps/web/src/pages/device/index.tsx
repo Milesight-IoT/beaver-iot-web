@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Stack } from '@mui/material';
 import { useRequest } from 'ahooks';
 import classNames from 'classnames';
@@ -39,9 +39,13 @@ import './style.less';
 
 export default () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { getIntlText } = useI18n();
     const { hasPermission } = useUserPermissions();
     const { activeGroup } = useDeviceStore();
+
+    const queryParams = new URLSearchParams(location.search);
+    const templateKey = queryParams.get('template_key');
 
     // ---------- list data related to ----------
     const [keyword, setKeyword] = useState<string>();
@@ -81,6 +85,7 @@ export default () => {
                     name: keyword,
                     page_size: pageSize,
                     page_number: page + 1,
+                    template: templateKey as string,
                     identifier: Reflect.get(filteredInfo, 'identifier')?.[0] as string | undefined,
                     ...filterGroupParams,
                 }),
@@ -93,7 +98,7 @@ export default () => {
         },
         {
             debounceWait: 300,
-            refreshDeps: [keyword, paginationModel, filterGroupParams, filteredInfo],
+            refreshDeps: [keyword, paginationModel, templateKey, filterGroupParams, filteredInfo],
         },
     );
 

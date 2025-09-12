@@ -12,3 +12,9 @@ export const REFRESH_TOKEN_TOPIC = 'iot:token:refresh';
  * Private property prefix
  */
 export const PRIVATE_PROPERTY_PREFIX = '$';
+
+/**
+ * Base64 image regex
+ */
+export const BASE64_IMAGE_REGEX =
+    /^data:image\/([\w+-]+);base64,([a-z0-9!$&',()*+;=\-._~:@/?%\s]*?)$/i;

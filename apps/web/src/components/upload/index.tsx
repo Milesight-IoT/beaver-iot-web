@@ -63,7 +63,7 @@ export type FileValueType = Pick<
     'name' | 'size' | 'path' | 'key' | 'url' | 'preview' | 'original'
 >;
 
-type Props = UseDropzoneProps & {
+export type Props = UseDropzoneProps & {
     // type?: string;
 
     /**
@@ -107,6 +107,11 @@ type Props = UseDropzoneProps & {
     className?: string;
 
     /**
+     * Temporary resource live minutes
+     */
+    tempLiveMinutes?: number;
+
+    /**
      * Whether to upload files automatically
      */
     autoUpload?: boolean;
@@ -148,6 +153,7 @@ const Upload: React.FC<Props> = ({
     multiple,
     style,
     className,
+    tempLiveMinutes,
     autoUpload = true,
     children,
     onChange,
@@ -182,7 +188,10 @@ const Upload: React.FC<Props> = ({
             const uploadTasks = files.map(file =>
                 limit(async () => {
                     const [err, resp] = await awaitWrap(
-                        globalAPI.getUploadConfig({ file_name: file.name }),
+                        globalAPI.getUploadConfig({
+                            file_name: file.name,
+                            temp_resource_live_minutes: tempLiveMinutes,
+                        }),
                     );
                     const uploadConfig = getResponseData(resp);
 
@@ -267,6 +276,7 @@ const Upload: React.FC<Props> = ({
     // ---------- Handle uploading status ----------
     const [isUploading, setIsUploading] = useState(false);
     const [isAllDone, setIsAllDone] = useState(false);
+    const handleChange = useMemoizedFn(onChange || (() => {}));
     const handleCancel = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
         setFiles(files => {
@@ -294,7 +304,7 @@ const Upload: React.FC<Props> = ({
         result.push(
             <Fragment key={file.path}>
                 <Tooltip autoEllipsis className="name" title={file?.name || file?.url || ''} />
-                {`(${getSizeString(file.size)})`}
+                {file?.size ? `(${getSizeString(file.size)})` : ''}
             </Fragment>,
         );
 
@@ -387,8 +397,8 @@ const Upload: React.FC<Props> = ({
             }
         }
 
-        onChange?.(resultValues, resultFiles);
-    }, [files, multiple, autoUpload, onChange]);
+        handleChange?.(resultValues, resultFiles);
+    }, [files, multiple, autoUpload, handleChange]);
 
     useEffect(() => {
         if (!value) {
@@ -429,7 +439,10 @@ const Upload: React.FC<Props> = ({
                 <input {...getInputProps()} />
                 {children ||
                     (isAllDone ? (
-                        <div className="ms-upload-cont-uploaded" onClick={e => e.stopPropagation()}>
+                        <div
+                            className="ms-upload-cont ms-upload-cont-uploaded"
+                            onClick={e => e.stopPropagation()}
+                        >
                             <ImageIcon className="icon" />
                             <div className="hint">{renderDoneFiles()}</div>
                             <IconButton onClick={handleDelete}>
@@ -438,7 +451,7 @@ const Upload: React.FC<Props> = ({
                         </div>
                     ) : isUploading ? (
                         <div
-                            className="ms-upload-cont-uploading"
+                            className="ms-upload-cont ms-upload-cont-uploading"
                             onClick={e => e.stopPropagation()}
                         >
                             <CircularProgress className="icon" size={24} />
@@ -453,7 +466,7 @@ const Upload: React.FC<Props> = ({
                             </Button>
                         </div>
                     ) : (
-                        <div className="ms-upload-cont-default">
+                        <div className="ms-upload-cont ms-upload-cont-default">
                             <UploadFileIcon className="icon" />
                             <div className="hint">
                                 {getIntlText('common.message.click_to_upload_file')}

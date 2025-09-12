@@ -1,19 +1,20 @@
 import React from 'react';
 import { ToggleButton, ToggleButtonGroup, ToggleButtonGroupProps } from '@mui/material';
 import { useControllableValue } from 'ahooks';
-import classNames from 'classnames';
-
+import cls from 'classnames';
 import './style.less';
 
 type ValueType = string | number;
 
 export interface Props {
+    size?: 'default' | 'small';
+
     value?: ValueType;
 
     defaultValue?: ValueType;
 
     options: {
-        label: string;
+        label: React.ReactNode;
         value: ValueType;
     }[];
 
@@ -27,7 +28,7 @@ export interface Props {
 /**
  * ToggleRadio Component
  */
-const ToggleRadio: React.FC<Props> = ({ options, disabled, sx, ...props }) => {
+const ToggleRadio: React.FC<Props> = ({ size = 'default', options, disabled, sx, ...props }) => {
     const [value, setValue] = useControllableValue<ValueType>(props);
 
     return (
@@ -35,7 +36,9 @@ const ToggleRadio: React.FC<Props> = ({ options, disabled, sx, ...props }) => {
             exclusive
             fullWidth
             size="small"
-            className="ms-toggle-button-group ms-workflow-mode-buttons"
+            className={cls('ms-toggle-button-group', {
+                [`ms-toggle-button-group-${size}`]: size === 'small',
+            })}
             disabled={disabled}
             value={value || props.defaultValue}
             defaultValue={props.defaultValue}
@@ -49,8 +52,7 @@ const ToggleRadio: React.FC<Props> = ({ options, disabled, sx, ...props }) => {
                 <ToggleButton
                     key={option.value}
                     value={option.value}
-                    aria-label={option.label}
-                    className={classNames('ms-toggle-button-group-item', {
+                    className={cls('ms-toggle-button-group-item', {
                         'ms-toggle-button-group-item__active': value === option.value,
                     })}
                 >

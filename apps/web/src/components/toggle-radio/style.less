@@ -1,10 +1,20 @@
 .@{prefix}-toggle-button-group {
+    &-small {
+        &.@{mui-prefix}ToggleButtonGroup-root {
+            .@{mui-prefix}ToggleButtonGroup-grouped {
+                padding-top: 2px;
+                padding-bottom: 2px;
+                .text-size(@font-size-sm) !important;
+            }
+        }
+    }
+
     &-item{
-        font-weight: @font-weight-regular!important;
-        line-height: @font-size-2!important;
+        font-weight: @font-weight-regular !important;
+        line-height: @font-size-2 !important;
 
         &__active {
-            font-weight: @font-weight-medium!important;
+            font-weight: @font-weight-medium !important;
             box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
         }
     }

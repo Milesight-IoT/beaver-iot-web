@@ -1,3 +1,4 @@
+import validator from 'validator';
 import {
     isDecimals,
     // isEmail,
@@ -490,21 +491,18 @@ export const checkEmail: TValidator = rule => {
  *
  * I18N key: EErrorMessages.decimals
  */
-export const checkDecimals: TValidator<{ len: number }> = rule => {
-    const message = rule?.message || getErrorMessage(EErrorMessages.decimals);
+export const checkDecimals: TValidator<validator.IsDecimalOptions> = rule => {
+    const { message = getErrorMessage(EErrorMessages.decimals), ...options } = rule || {};
 
     return value => {
         try {
             if (
                 value &&
-                !isDecimals(
-                    value,
-                    rule.len
-                        ? {
-                              decimal_digits: `0,${rule.len}`,
-                          }
-                        : {},
-                )
+                !isDecimals(value, {
+                    decimal_digits: '1,',
+                    force_decimal: false,
+                    ...options,
+                })
             ) {
                 return message;
             }
@@ -674,6 +672,29 @@ export const checkStartWithNormalChar: TValidator = rule => {
     return value => {
         try {
             if (value && !isMatches(value, /^[a-z-A-Z0-9_]/)) {
+                return message;
+            }
+        } catch (e) {
+            return message;
+        }
+
+        return Promise.resolve(true);
+    };
+};
+
+/**
+ * Check start with specify characters
+ */
+export const checkStartWithSpecialChar: TValidator<{ char: string }> = rule => {
+    const message =
+        rule?.message ||
+        getErrorMessage(EErrorMessages.startWithSpecialChar, {
+            0: rule.char,
+        });
+
+    return value => {
+        try {
+            if (value && !value.startsWith(rule.char)) {
                 return message;
             }
         } catch (e) {

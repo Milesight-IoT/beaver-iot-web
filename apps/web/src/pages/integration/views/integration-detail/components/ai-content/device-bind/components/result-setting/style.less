@@ -1,0 +1,62 @@
+.@{prefix}-com-ai-result-setting-root {
+    position: relative;
+
+    .result-setting-item {
+        padding: @padding-md;
+        margin-bottom: @margin-sm;
+        background-color: var(--component-background);
+        border: 1px solid var(--border-color-base);
+        border-radius: @border-radius-md;
+
+        &-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: @margin-xs;
+
+            .title {
+                font-weight: @font-weight-medium;
+                .text-size(@font-size-base);
+            }
+
+            .@{mui-prefix}ButtonBase-root {
+                padding: 0;
+            }
+        }
+
+        &-body {
+            .params-item {
+                display: flex;
+                gap: @margin-xs;
+
+                &:not(&:first-child) {
+                    .@{mui-prefix}FormLabel-root {
+                        display: none;
+                    }
+                }
+
+                &:last-child {
+                    .@{mui-prefix}FormControl-root {
+                        margin-bottom: 0;
+                    }
+                }
+
+                .@{mui-prefix}FormControl-root {
+                    flex: 2.5;
+                    margin-bottom: @margin-sm;
+
+                    &:nth-child(1) {
+                        flex: 2;
+                    }
+
+                    &:nth-child(4) {
+                        flex: 1;
+                    }
+
+                    .@{mui-prefix}FormLabel-root {
+                        color: var(--text-color-secondary);
+                    }
+                }
+            }
+        }
+    }
+}
