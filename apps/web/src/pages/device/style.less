@@ -61,8 +61,15 @@
 .@{prefix}-view-device-mobile {
     display: flex;
     flex-direction: column;
+    padding-top: 108px;
 
     &__header {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1;
+
         .@{prefix}-mobile-topbar__right {
             .@{mui-prefix}ButtonBase-root {
                 min-width: auto;
