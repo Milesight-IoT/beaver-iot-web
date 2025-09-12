@@ -7,7 +7,8 @@ import {
     getResponseData,
     isRequestSuccess,
 } from '@/services/http';
-import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
+import { useActivityEntity, useStableEntity } from '@/components/drawing-board/plugin/hooks';
+import type { BoardPluginProps } from '@/components/drawing-board/plugin/types';
 import type { ViewConfigProps } from '../../typings';
 
 interface AggregateHistoryList {
@@ -18,15 +19,17 @@ interface IProps {
     widgetId: ApiKey;
     dashboardId: ApiKey;
     config: ViewConfigProps;
-    configJson: CustomComponentProps;
+    configJson: BoardPluginProps;
 }
 export const useSourceData = (props: IProps) => {
     const { config, widgetId, dashboardId } = props;
     const { entity, metrics, time } = config || {};
 
+    const { stableEntity } = useStableEntity(entity);
+
     const { data: countData, runAsync: getData } = useRequest(
         async () => {
-            if (!entity?.value) return;
+            if (!stableEntity?.value) return;
 
             const run = async (selectEntity: EntityOptionType) => {
                 const { value: entityId } = selectEntity || {};
@@ -45,20 +48,21 @@ export const useSourceData = (props: IProps) => {
 
                 const data = getResponseData(resp);
                 return {
-                    entity,
+                    entity: selectEntity,
                     data,
                 } as AggregateHistoryList;
             };
-            return Promise.resolve(run(entity));
+
+            return Promise.resolve(run(stableEntity));
         },
-        { refreshDeps: [entity, time, metrics] },
+        { refreshDeps: [stableEntity, time, metrics] },
     );
 
     // ---------- Entity status management ----------
     const { addEntityListener } = useActivityEntity();
 
     useEffect(() => {
-        const entityId = entity?.value;
+        const entityId = stableEntity?.value;
         if (!widgetId || !dashboardId || !entityId) return;
 
         const removeEventListener = addEntityListener(entityId, {
@@ -70,7 +74,7 @@ export const useSourceData = (props: IProps) => {
         return () => {
             removeEventListener();
         };
-    }, [entity?.value, widgetId, dashboardId, addEntityListener, getData]);
+    }, [stableEntity?.value, widgetId, dashboardId, addEntityListener, getData]);
 
     return {
         countData,

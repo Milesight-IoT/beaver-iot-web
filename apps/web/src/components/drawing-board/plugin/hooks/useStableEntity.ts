@@ -6,10 +6,10 @@ import { isEqual } from 'lodash-es';
  * Update if changes occur, otherwise do not update,
  * Compare by isEqual
  */
-export function useStableEntity<T>(entity?: T[]) {
-    const [stableEntity, setStableEntity] = useState<T[] | undefined>([]);
+export function useStableEntity<T>(entity?: T) {
+    const [stableEntity, setStableEntity] = useState<T | undefined>();
 
-    const stableEntityRef = useRef<T[] | undefined>([]);
+    const stableEntityRef = useRef<T | undefined>();
 
     useEffect(() => {
         if (isEqual(stableEntityRef.current, entity)) {

@@ -5,20 +5,24 @@ import * as echarts from 'echarts/core';
 import { useTheme } from '@milesight/shared/src/hooks';
 import { getChartColor } from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
+import { useGridLayout } from '@/components/drawing-board/plugin/hooks';
 import { useResizeChart, useSourceData } from './hooks';
 import type { ViewConfigProps } from '../typings';
+import type { BoardPluginProps } from '../../../types';
 import './style.less';
 
 interface IProps {
     widgetId: ApiKey;
     dashboardId: ApiKey;
     config: ViewConfigProps;
-    configJson: CustomComponentProps;
+    configJson: BoardPluginProps;
 }
 const View = (props: IProps) => {
     const { config, configJson, widgetId, dashboardId } = props;
-    const { isPreview } = configJson || {};
+    const { isPreview, pos } = configJson || {};
     const { title } = config || {};
+
+    const { hGrid = 3 } = useGridLayout(pos);
 
     const chartRef = useRef<HTMLDivElement>(null);
     const chartWrapperRef = useRef<HTMLDivElement>(null);
@@ -39,6 +43,7 @@ const View = (props: IProps) => {
         const myChart = echarts.init(chartDom);
         myChart.setOption({
             legend: {
+                show: hGrid > 2,
                 itemWidth: 10,
                 itemHeight: 10,
                 icon: 'roundRect', // Set the legend item as a square
@@ -92,14 +97,14 @@ const View = (props: IProps) => {
     };
     useEffect(() => {
         return renderChart();
-    }, [countData]);
+    }, [countData, hGrid]);
 
     return (
         <div
             className={cls('ms-pie-chart', { 'ms-pie-chart--preview': isPreview })}
             ref={chartWrapperRef}
         >
-            <Tooltip className="ms-pie-chart__header" autoEllipsis title={title} />
+            {hGrid > 2 && <Tooltip className="ms-pie-chart__header" autoEllipsis title={title} />}
             <div className="ms-pie-chart__content">
                 <div ref={chartRef} className="ms-chart-content__chart" />
             </div>
