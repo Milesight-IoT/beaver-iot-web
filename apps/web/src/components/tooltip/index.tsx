@@ -45,12 +45,12 @@ const Tooltip: React.FC<MSToolTipProps> = ({
     useDebounceEffect(
         () => {
             if (!autoEllipsis || !contWidth || !wrapSize?.width) {
-                setInnerTitle(title);
+                setInnerTitle(<div className="ms-tooltip-title">{title}</div>);
                 return;
             }
 
             if (contWidth > wrapSize.width) {
-                setInnerTitle(title);
+                setInnerTitle(<div className="ms-tooltip-title">{title}</div>);
             } else {
                 setInnerTitle(null);
             }
@@ -65,6 +65,7 @@ const Tooltip: React.FC<MSToolTipProps> = ({
         <div className={cls('ms-tooltip', className)} ref={wrapRef}>
             <MTooltip
                 placement="top"
+                classes={{ popper: 'ms-tooltip-popper' }}
                 title={innerTitle}
                 enterDelay={300}
                 enterNextDelay={300}
