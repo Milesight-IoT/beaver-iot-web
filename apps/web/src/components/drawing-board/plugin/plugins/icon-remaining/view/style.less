@@ -29,9 +29,23 @@
         overflow: hidden;
     }
 
+    &__icon {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &-fake {
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            background-color: var(--main-background);
+        }
+    }
+
     &__percent {
-        color: var(--gray-color-5);
         text-align: center;
-        .text-size(@font-size-5);
+        .text-size(@font-size-base);
     }
 }
