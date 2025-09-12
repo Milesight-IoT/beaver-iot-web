@@ -7,11 +7,13 @@ import {
     useBasicChartEntity,
     useActivityEntity,
     useStableEntity,
+    useGridLayout,
 } from '@/components/drawing-board/plugin/hooks';
 import { getChartColor } from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { type ChartEntityPositionValueType } from '@/components/drawing-board/plugin/components/chart-entity-position';
 import { useLineChart, useResizeChart, useYAxisRange, useZoomChart } from './hooks';
+import type { BoardPluginProps } from '../../../types';
 
 import styles from './style.module.less';
 
@@ -25,18 +27,18 @@ export interface ViewProps {
         leftYAxisUnit: string;
         rightYAxisUnit: string;
     };
-    configJson: {
-        isPreview?: boolean;
-    };
+    configJson: BoardPluginProps;
     isEdit?: boolean;
 }
 
 const View = (props: ViewProps) => {
     const { config, configJson, isEdit, widgetId, dashboardId } = props;
     const { entityPosition, title, time, leftYAxisUnit, rightYAxisUnit } = config || {};
-    const { isPreview } = configJson || {};
+    const { isPreview, pos } = configJson || {};
     const chartWrapperRef = useRef<HTMLDivElement>(null);
     const { grey } = useTheme();
+
+    const { wGrid = 4, hGrid = 4 } = useGridLayout(pos);
 
     const { stableEntity } = useStableEntity(entityPosition);
     const { getLatestEntityDetail } = useActivityEntity();
@@ -89,6 +91,7 @@ const View = (props: ViewProps) => {
 
         myChart.setOption({
             graphic: new Array(Math.min(newChartShowData.length, 2)).fill(0).map((_, index) => ({
+                invisible: hGrid <= 2,
                 type: 'text',
                 left: index === 0 ? 0 : void 0,
                 right: index === 0 ? void 0 : 0,
@@ -101,6 +104,7 @@ const View = (props: ViewProps) => {
                 },
             })),
             xAxis: {
+                show: wGrid > 2,
                 type: 'time',
                 min: xAxisMin,
                 max: xAxisMax,
@@ -119,6 +123,7 @@ const View = (props: ViewProps) => {
             yAxis: new Array(newChartShowData.length || 1)
                 .fill({ type: 'value' })
                 .map((_, index) => ({
+                    show: hGrid > 2,
                     type: 'value',
                     nameLocation: 'middle',
                     nameGap: 40,
@@ -150,6 +155,7 @@ const View = (props: ViewProps) => {
                 },
             })),
             legend: {
+                show: wGrid > 2,
                 data: chartShowData.map(chartData => chartData.entityLabel),
                 itemWidth: 10,
                 itemHeight: 10,
@@ -163,10 +169,9 @@ const View = (props: ViewProps) => {
             },
             grid: {
                 containLabel: true,
-                top: 35, // Adjust the top blank space of the chart area
-                left: 14,
-                right: 24,
-                bottom: 0,
+                top: hGrid >= 4 ? '42px' : 30, // Adjust the top blank space of the chart area
+                left: hGrid >= 3 ? 15 : hGrid <= 2 ? '-5%' : 0,
+                ...(hGrid >= 4 ? {} : { right: 18, bottom: 0 }),
             },
             tooltip: {
                 trigger: 'axis',
@@ -240,6 +245,52 @@ const View = (props: ViewProps) => {
                     filterMode: 'none',
                     zoomOnMouseWheel: 'ctrl', // Hold down the ctrl key to zoom
                 },
+                {
+                    type: 'slider',
+                    show: hGrid >= 4,
+                    start: 0,
+                    end: 100,
+                    fillerColor: 'rgba(123, 78, 250, 0.15)',
+                    showDetail: false,
+                    moveHandleStyle: {
+                        color: '#7b4efa',
+                        opacity: 0.16,
+                    },
+                    emphasis: {
+                        handleLabel: {
+                            show: true,
+                        },
+                        moveHandleStyle: {
+                            color: '#7b4efa',
+                            opacity: 1,
+                        },
+                    },
+                    borderColor: '#E5E6EB',
+                    dataBackground: {
+                        lineStyle: {
+                            color: '#7b4efa',
+                            opacity: 0.36,
+                        },
+                        areaStyle: {
+                            color: '#7b4efa',
+                            opacity: 0.08,
+                        },
+                    },
+                    selectedDataBackground: {
+                        lineStyle: {
+                            color: '#7b4efa',
+                            opacity: 0.8,
+                        },
+                        areaStyle: {
+                            color: '#7b4efa',
+                            opacity: 0.2,
+                        },
+                    },
+                    brushStyle: {
+                        color: '#7b4efa',
+                        opacity: 0.16,
+                    },
+                },
             ],
         });
 
@@ -252,6 +303,8 @@ const View = (props: ViewProps) => {
             myChart?.dispose();
         };
     }, [
+        wGrid,
+        hGrid,
         entity,
         grey,
         chartRef,
@@ -273,7 +326,7 @@ const View = (props: ViewProps) => {
             })}
             ref={chartWrapperRef}
         >
-            <Tooltip className={styles.name} autoEllipsis title={title} />
+            {hGrid > 1 && <Tooltip className={styles.name} autoEllipsis title={title} />}
             <div className={styles['line-chart-content']}>
                 <div ref={chartRef} className={styles['line-chart-content__chart']} />
             </div>

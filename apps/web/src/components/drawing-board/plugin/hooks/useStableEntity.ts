@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from 'react';
 import { isEqual } from 'lodash-es';
 
 /**
- * Use stable entity
- * Update if changes occur, otherwise do not update.
+ * Use stable entity,
+ * Update if changes occur, otherwise do not update,
+ * Compare by isEqual
  */
 export function useStableEntity<T>(entity?: T[]) {
     const [stableEntity, setStableEntity] = useState<T[] | undefined>([]);

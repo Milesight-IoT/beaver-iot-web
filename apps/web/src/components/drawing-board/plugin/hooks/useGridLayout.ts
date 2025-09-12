@@ -6,6 +6,16 @@ import { type Layout } from 'react-grid-layout';
  * eg: w*h
  */
 export function useGridLayout(position?: Layout) {
+    /** Width grid */
+    const wGrid = useMemo(() => {
+        return position?.w;
+    }, [position]);
+
+    /** Height grid */
+    const hGrid = useMemo(() => {
+        return position?.h;
+    }, [position]);
+
     /**
      * 3X3
      */
@@ -42,6 +52,10 @@ export function useGridLayout(position?: Layout) {
     }, [position]);
 
     return {
+        /** Width grid */
+        wGrid,
+        /** Height grid */
+        hGrid,
         /**
          * w*h
          * 3X3 Grid Layout

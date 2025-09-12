@@ -7,10 +7,12 @@ import {
     useBasicChartEntity,
     useActivityEntity,
     useStableEntity,
+    useGridLayout,
 } from '@/components/drawing-board/plugin/hooks';
 import { getChartColor } from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { useResizeChart, useYAxisRange, useZoomChart } from './hooks';
+import type { BoardPluginProps } from '../../../types';
 import styles from './style.module.less';
 
 export interface ViewProps {
@@ -21,16 +23,16 @@ export interface ViewProps {
         title?: string;
         time: number;
     };
-    configJson: {
-        isPreview?: boolean;
-    };
+    configJson: BoardPluginProps;
     isEdit?: boolean;
 }
 
 const View = (props: ViewProps) => {
     const { config, configJson, widgetId, dashboardId, isEdit } = props;
     const { entity, title, time } = config || {};
-    const { isPreview } = configJson || {};
+    const { isPreview, pos } = configJson || {};
+
+    const { wGrid = 4, hGrid = 4 } = useGridLayout(pos);
 
     const { stableEntity } = useStableEntity(entity);
     const { getLatestEntityDetail } = useActivityEntity();
@@ -75,6 +77,7 @@ const View = (props: ViewProps) => {
 
         myChart.setOption({
             xAxis: {
+                show: wGrid > 2,
                 type: 'time',
                 min: xAxisMin,
                 max: xAxisMax,
@@ -86,6 +89,7 @@ const View = (props: ViewProps) => {
                 },
             },
             yAxis: {
+                show: hGrid > 2,
                 type: 'value',
                 min,
                 max,
@@ -99,6 +103,7 @@ const View = (props: ViewProps) => {
                 },
             })),
             legend: {
+                show: wGrid > 2,
                 data: chartShowData.map(chart => chart.entityLabel),
                 itemWidth: 10,
                 itemHeight: 10,
@@ -112,10 +117,9 @@ const View = (props: ViewProps) => {
             },
             grid: {
                 containLabel: true,
-                top: 30, // Adjust the top blank space of the chart area
-                left: 0,
-                right: 0,
-                bottom: 0,
+                top: hGrid >= 4 ? '42px' : 30, // Adjust the top blank space of the chart area
+                left: hGrid >= 4 ? '1%' : hGrid <= 2 ? '-5%' : 0,
+                ...(hGrid >= 4 ? {} : { right: 10, bottom: 0 }),
             },
             tooltip: {
                 trigger: 'axis',
@@ -172,6 +176,52 @@ const View = (props: ViewProps) => {
                     filterMode: 'empty',
                     zoomOnMouseWheel: 'ctrl', // Hold down the ctrl key to zoom
                 },
+                {
+                    type: 'slider',
+                    show: hGrid >= 4,
+                    start: 0,
+                    end: 100,
+                    fillerColor: 'rgba(123, 78, 250, 0.15)',
+                    showDetail: false,
+                    moveHandleStyle: {
+                        color: '#7b4efa',
+                        opacity: 0.16,
+                    },
+                    emphasis: {
+                        handleLabel: {
+                            show: true,
+                        },
+                        moveHandleStyle: {
+                            color: '#7b4efa',
+                            opacity: 1,
+                        },
+                    },
+                    borderColor: '#E5E6EB',
+                    dataBackground: {
+                        lineStyle: {
+                            color: '#7b4efa',
+                            opacity: 0.36,
+                        },
+                        areaStyle: {
+                            color: '#7b4efa',
+                            opacity: 0.08,
+                        },
+                    },
+                    selectedDataBackground: {
+                        lineStyle: {
+                            color: '#7b4efa',
+                            opacity: 0.8,
+                        },
+                        areaStyle: {
+                            color: '#7b4efa',
+                            opacity: 0.2,
+                        },
+                    },
+                    brushStyle: {
+                        color: '#7b4efa',
+                        opacity: 0.16,
+                    },
+                },
             ],
         });
 
@@ -184,6 +234,8 @@ const View = (props: ViewProps) => {
             myChart?.dispose();
         };
     }, [
+        wGrid,
+        hGrid,
         grey,
         latestEntities,
         chartRef,
@@ -202,7 +254,7 @@ const View = (props: ViewProps) => {
             })}
             ref={chartWrapperRef}
         >
-            <Tooltip className={styles.name} autoEllipsis title={title} />
+            {hGrid > 1 && <Tooltip className={styles.name} autoEllipsis title={title} />}
             <div className={styles['bar-chart-content']}>
                 <div ref={chartRef} className={styles['bar-chart-content__chart']} />
             </div>
