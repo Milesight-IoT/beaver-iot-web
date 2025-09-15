@@ -68,7 +68,7 @@ export default () => {
     } = useRequest(
         async () => {
             setLoading(true);
-            const [error, resp] = await awaitWrap(dashboardAPI.getDashboards());
+            const [error, resp] = await awaitWrap(dashboardAPI.getDashboards({ name: '' }));
             setLoading(false);
 
             if (error || !isRequestSuccess(resp)) return;

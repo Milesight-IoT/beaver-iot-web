@@ -13,7 +13,7 @@ import {
     getResponseData,
     isRequestSuccess,
     type DeviceAPISchema,
-    type DashboardDetail,
+    type DrawingBoardDetail,
 } from '@/services/http';
 import { Breadcrumbs, TabPanel } from '@/components';
 
@@ -97,7 +97,7 @@ export default () => {
                 component: (
                     <DrawingBoard
                         {...drawingBoardProps}
-                        drawingBoardDetail={DrawingBoardMock as unknown as DashboardDetail}
+                        drawingBoardDetail={DrawingBoardMock as unknown as DrawingBoardDetail}
                     />
                 ),
             },

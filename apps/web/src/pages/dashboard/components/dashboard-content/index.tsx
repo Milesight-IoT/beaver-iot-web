@@ -186,8 +186,8 @@ export default (props: DashboardContentProps) => {
 
         const [_, res] = await awaitWrap(
             dashboardAPI.updateDashboard({
-                widgets: filterWidgets(widgets),
-                entity_ids: currentEntityIds,
+                // widgets: filterWidgets(widgets),
+                // entity_ids: currentEntityIds,
                 dashboard_id: dashboardId,
                 name: dashboardDetail.name,
             }),
@@ -210,7 +210,7 @@ export default (props: DashboardContentProps) => {
             onConfirm: async () => {
                 const [_, res] = await awaitWrap(
                     dashboardAPI.deleteDashboard({
-                        id: dashboardId,
+                        dashboard_ids: [dashboardId],
                     }),
                 );
                 if (isRequestSuccess(res)) {
@@ -238,7 +238,7 @@ export default (props: DashboardContentProps) => {
             dashboardAPI.updateDashboard({
                 dashboard_id: dashboardId,
                 name: data.name,
-                widgets: dashboardDetail.widgets,
+                // widgets: dashboardDetail.widgets,
             }),
         );
         if (isRequestSuccess(res)) {
