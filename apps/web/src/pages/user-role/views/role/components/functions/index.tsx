@@ -92,7 +92,13 @@ const FunctionsTable = () => {
         }
 
         return (
-            <Button onClick={handleEdit} variant="contained" startIcon={<EditIcon />} {...btnSx}>
+            <Button
+                onClick={handleEdit}
+                variant="contained"
+                className="md:d-none"
+                startIcon={<EditIcon />}
+                {...btnSx}
+            >
                 {getIntlText('common.button.edit')}
             </Button>
         );

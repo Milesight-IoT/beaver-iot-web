@@ -118,7 +118,7 @@ const Topbar: React.FC<TopbarProps> = ({
                         {getIntlText('common.label.back')}
                     </Button>
                     {(flowData?.name || loading === false) && (
-                        <div className="title">
+                        <div className="title md:d-none">
                             <Tooltip autoEllipsis title={flowData?.name} />
                             <IconButton
                                 disabled={disabled || loading}
@@ -129,7 +129,7 @@ const Topbar: React.FC<TopbarProps> = ({
                         </div>
                     )}
                 </Grid2>
-                <Grid2 className="ms-workflow-topbar-center" size={4}>
+                <Grid2 className="ms-workflow-topbar-center md:d-none" size={4}>
                     <ToggleButtonGroup
                         exclusive
                         size="small"
@@ -155,7 +155,7 @@ const Topbar: React.FC<TopbarProps> = ({
                         </ToggleButton>
                     </ToggleButtonGroup>
                 </Grid2>
-                <Grid2 className="ms-workflow-topbar-right" size={4}>
+                <Grid2 className="ms-workflow-topbar-right md:d-none" size={4}>
                     <Switch
                         disabled={disabled || loading}
                         checked={!!flowData?.enabled}

@@ -47,6 +47,10 @@
             color: var(--text-color-base);
             text-decoration: none;
 
+            .bp-down(@grid-breakpoints[sm], {
+                padding: @padding-xs @padding-sm;
+            });
+
             .@{mui-prefix}SvgIcon-root {
                 margin: 2px;
                 color: var(--icon-color-gray-secondary);
@@ -73,6 +77,10 @@
                 .@{mui-prefix}SvgIcon-root {
                     color: var(--text-color-dark);
                 }
+
+                .@{prefix}-name {
+                    font-weight: @font-weight-medium;
+                }
             }
         }
     }
@@ -87,6 +95,10 @@
         width: 100%;
         height: @ms-sidebar-footer-height;
         padding: 0 14px;
+
+        .@{prefix}-sidebar-user {
+            flex: 1;
+        }
 
         .@{prefix}-sidebar-user-trigger {
             cursor: pointer;

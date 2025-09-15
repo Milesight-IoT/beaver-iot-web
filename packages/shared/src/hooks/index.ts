@@ -7,6 +7,6 @@ export { default as useCopy } from './useCopy';
 export { default as useTime } from './useTime';
 export { default as useEntity } from './useEntity';
 export { default as usePreventLeave } from './usePreventLeave';
-export { default as useVirtualList } from './useVirtualList';
+export { default as useVirtualList, type Options as UseVirtualListOptions } from './useVirtualList';
 export { default as useSignalState } from './useSignalState';
 export { default as usePopoverCloseDelay } from './usePopoverCloseDelay';

@@ -148,7 +148,7 @@ const Controls: React.FC<ControlsProps> = ({
                     </ButtonGroup>
                 </Paper>
                 <Paper elevation={0}>
-                    <ButtonGroup variant="text">
+                    <ButtonGroup variant="text" className="md:d-none">
                         <Button
                             className="btn-add"
                             disabled={!addable}

@@ -33,6 +33,7 @@ import {
 import { InfoOutlinedIcon } from '@milesight/shared/src/components';
 import ImageInput, { type Props as ImageInputProps } from '@/components/image-input';
 import Tooltip from '@/components/tooltip';
+import EuiInput from '@/components/eui-input';
 import { type IntegrationAPISchema } from '@/services/http';
 
 export interface Props {
@@ -233,44 +234,57 @@ const useEntityFormItems = ({ entities, isAllReadOnly, imageUploadProps }: Props
         if (!entities?.length) return result;
 
         entities?.forEach(entity => {
-            const attr = entity.valueAttribute || {};
-            const validate = getValidators(entity, !attr.optional);
+            const {
+                name,
+                description,
+                valueType,
+                key: entityKey,
+                valueAttribute: attr = {},
+            } = entity;
 
-            // OBJECT is of Group type and no action is required
-            switch (entity.valueType) {
+            /**
+             * OBJECT is a grouping type and will not be processed temporarily
+             */
+            if (valueType === 'OBJECT') return;
+
+            const shortEntityKey = `${entityKey}`.split('.').pop();
+            const validate = getValidators(entity, !attr.optional);
+            const formItem: ControllerProps<EntityFormDataProps> = {
+                name: encodedEntityKeys[entityKey],
+                rules: { validate },
+                defaultValue: attr.defaultValue || '',
+                render({ field: { onChange, value, disabled }, fieldState: { error } }) {
+                    return (
+                        <TextField
+                            fullWidth
+                            type="text"
+                            sx={{ my: 1.5 }}
+                            slotProps={{
+                                input: {
+                                    readOnly: !!isAllReadOnly,
+                                },
+                            }}
+                            required={!attr.optional}
+                            disabled={disabled}
+                            label={renderLabel(name, description)}
+                            error={!!error}
+                            helperText={error ? error.message : null}
+                            value={value}
+                            onChange={onChange}
+                        />
+                    );
+                },
+            };
+
+            /**
+             * Render form item based on value type
+             */
+            switch (valueType) {
                 case 'LONG':
                 case 'DOUBLE':
                 case 'STRING': {
-                    const formItem: ControllerProps<EntityFormDataProps> = {
-                        name: encodedEntityKeys[entity.key],
-                        rules: { validate },
-                        defaultValue: attr.defaultValue || '',
-                        render({ field: { onChange, value, disabled }, fieldState: { error } }) {
-                            return (
-                                <TextField
-                                    fullWidth
-                                    type="text"
-                                    sx={{ my: 1.5 }}
-                                    slotProps={{
-                                        input: {
-                                            readOnly: !!isAllReadOnly,
-                                        },
-                                    }}
-                                    required={!attr.optional}
-                                    disabled={disabled}
-                                    label={renderLabel(entity.name, entity.description)}
-                                    error={!!error}
-                                    helperText={error ? error.message : null}
-                                    value={value}
-                                    onChange={onChange}
-                                />
-                            );
-                        },
-                    };
-
                     // If it is an enumeration type, rendered as drop-down box
                     if (attr.enum) {
-                        // formItem.defaultValue = '';
                         formItem.render = ({
                             field: { onChange, value, disabled },
                             fieldState: { error },
@@ -296,7 +310,7 @@ const useEntityFormItems = ({ entities, isAllReadOnly, imageUploadProps }: Props
                                         renderInput={params => (
                                             <TextField
                                                 {...params}
-                                                label={renderLabel(entity.name, entity.description)}
+                                                label={renderLabel(name, description)}
                                                 error={!!error}
                                                 required={!attr.optional}
                                                 placeholder={getIntlText(
@@ -332,9 +346,7 @@ const useEntityFormItems = ({ entities, isAllReadOnly, imageUploadProps }: Props
                                 fullWidth
                                 className={error ? 'Mui-error' : ''}
                             >
-                                <InputLabel>
-                                    {renderLabel(entity.name, entity.description)}
-                                </InputLabel>
+                                <InputLabel>{renderLabel(name, description)}</InputLabel>
                                 <ImageInput
                                     readOnly={disabled || !!isAllReadOnly}
                                     {...imageUploadProps}
@@ -350,74 +362,101 @@ const useEntityFormItems = ({ entities, isAllReadOnly, imageUploadProps }: Props
                         );
                     }
 
-                    result.push(formItem);
                     break;
                 }
                 case 'BOOLEAN': {
-                    result.push({
-                        name: encodedEntityKeys[entity.key],
-                        rules: { validate },
-                        defaultValue: attr.defaultValue === 'true',
-                        render({ field: { onChange, value, disabled }, fieldState: { error } }) {
-                            return (
-                                <FormControl
-                                    fullWidth
-                                    error={!!error}
-                                    disabled={disabled}
-                                    size="small"
-                                    sx={{ my: 1.5 }}
-                                >
-                                    <FormControlLabel
-                                        label={renderLabel(entity.name, entity.description)}
-                                        required={!attr.optional}
-                                        checked={!!value}
-                                        onChange={onChange}
-                                        control={<Switch size="small" readOnly={!!isAllReadOnly} />}
-                                        sx={{ fontSize: '12px' }}
-                                    />
-                                    {!!error && (
-                                        <FormHelperText error>{error.message}</FormHelperText>
-                                    )}
-                                </FormControl>
-                            );
-                        },
-                    });
+                    formItem.defaultValue = attr.defaultValue === 'true';
+                    formItem.render = ({
+                        field: { onChange, value, disabled },
+                        fieldState: { error },
+                    }) => {
+                        return (
+                            <FormControl
+                                fullWidth
+                                error={!!error}
+                                disabled={disabled}
+                                size="small"
+                                sx={{ my: 1.5 }}
+                            >
+                                <FormControlLabel
+                                    label={renderLabel(name, description)}
+                                    required={!attr.optional}
+                                    checked={!!value}
+                                    onChange={onChange}
+                                    control={<Switch size="small" readOnly={!!isAllReadOnly} />}
+                                    sx={{ fontSize: '12px' }}
+                                />
+                                {!!error && <FormHelperText error>{error.message}</FormHelperText>}
+                            </FormControl>
+                        );
+                    };
                     break;
                 }
                 case 'BINARY': {
-                    result.push({
-                        name: encodedEntityKeys[entity.key],
-                        rules: { validate },
-                        defaultValue: attr.defaultValue || '',
-                        render({ field: { onChange, value, disabled }, fieldState: { error } }) {
-                            return (
-                                <TextField
-                                    fullWidth
-                                    multiline
-                                    type="text"
-                                    rows={4}
-                                    slotProps={{
-                                        input: {
-                                            readOnly: !!isAllReadOnly,
-                                        },
-                                    }}
-                                    required={!attr.optional}
-                                    disabled={disabled}
-                                    label={renderLabel(entity.name, entity.description)}
-                                    error={!!error}
-                                    helperText={error ? error.message : null}
-                                    value={value}
-                                    onChange={onChange}
-                                />
-                            );
-                        },
-                    });
+                    formItem.render = ({
+                        field: { onChange, value, disabled },
+                        fieldState: { error },
+                    }) => {
+                        return (
+                            <TextField
+                                fullWidth
+                                multiline
+                                type="text"
+                                rows={4}
+                                slotProps={{
+                                    input: {
+                                        readOnly: !!isAllReadOnly,
+                                    },
+                                }}
+                                required={!attr.optional}
+                                disabled={disabled}
+                                label={renderLabel(name, description)}
+                                error={!!error}
+                                helperText={error ? error.message : null}
+                                value={value}
+                                onChange={onChange}
+                            />
+                        );
+                    };
                     break;
                 }
                 default: {
                     break;
                 }
             }
+
+            /**
+             * Customize the form item based on Entity Key
+             */
+            switch (shortEntityKey) {
+                case 'eui': {
+                    formItem.render = ({
+                        field: { onChange, value, disabled },
+                        fieldState: { error },
+                    }) => {
+                        return (
+                            <EuiInput
+                                fullWidth
+                                sx={{ my: 1.5 }}
+                                required={!attr.optional}
+                                disabled={disabled}
+                                readOnly={!!isAllReadOnly}
+                                label={renderLabel(name, description)}
+                                error={!!error}
+                                helperText={error ? error.message : null}
+                                value={value}
+                                onChange={onChange}
+                            />
+                        );
+                    };
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+
+            result.push(formItem);
         });
 
         return result;

@@ -160,6 +160,9 @@ export {
     Upload as UploadIcon,
     Remove as RemoveIcon,
     GridView as GridViewIcon,
+    QrCodeScanner as QrCodeScannerIcon,
+    FlashlightOn as FlashlightOnIcon,
+    FlashlightOff as FlashlightOffIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';

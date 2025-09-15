@@ -22,9 +22,15 @@
 
         // Mobile Responsive
         .bp-down(@grid-breakpoints[sm], {
-            width: calc(100% - 48px);
-            min-width: 350px;
-            padding: 48px 24px;
+            width: calc(100% - 80px);
+            min-width: 280px;
+            padding: 0;
+            background-color: transparent;
+            transform: translate(-50%, -70%);
+
+            .@{mui-prefix}InputBase-root.@{mui-prefix}OutlinedInput-root.@{mui-prefix}-focused .@{mui-prefix}OutlinedInput-notchedOutline {
+                box-shadow: none;
+            }
         });
 
         &.@{mui-prefix}Paper-root {
@@ -47,6 +53,11 @@
 
     .@{prefix}-auth-form {
         margin: 40px 0 @margin-md;
+
+        // Mobile Responsive
+        .bp-down(@grid-breakpoints[sm], {
+            margin: @margin-xxl 0 0;
+        });
 
         div.@{mui-prefix}FormControl-root {
             margin-bottom: @margin-xl;

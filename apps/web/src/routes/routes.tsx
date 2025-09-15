@@ -11,6 +11,7 @@ import {
     SellIcon,
     AntFallAttentionIcon,
 } from '@milesight/shared/src/components';
+import { isMobile } from '@milesight/shared/src/utils/userAgent';
 import { PERMISSIONS } from '@/constants';
 import ErrorBoundaryComponent from './error-boundary';
 
@@ -31,6 +32,11 @@ type RouteObjectType = RouteObject & {
 
         /** Whether to access without login, default 'false' (login required) */
         authFree?: boolean;
+
+        /**
+         * Whether to access on mobile, default 'false' (not accessible on mobile)
+         */
+        mobileAccessible?: boolean;
 
         /**
          * The page should be accessible based on satisfying one of the functions of the current route
@@ -60,6 +66,7 @@ const routes: RouteObjectType[] = [
             get title() {
                 return intl.get('common.label.dashboard');
             },
+            mobileAccessible: true,
             icon: <DashboardCustomizeIcon fontSize="small" />,
             permissions: PERMISSIONS.DASHBOARD_MODULE,
         },
@@ -77,12 +84,16 @@ const routes: RouteObjectType[] = [
             get title() {
                 return intl.get('common.label.device');
             },
+            mobileAccessible: true,
             icon: <DevicesFilledIcon fontSize="small" />,
             permissions: PERMISSIONS.DEVICE_MODULE,
         },
         children: [
             {
                 index: true,
+                handle: {
+                    mobileAccessible: true,
+                },
                 async lazy() {
                     const { default: Component } = await import('@/pages/device');
                     return { Component };
@@ -90,7 +101,6 @@ const routes: RouteObjectType[] = [
                 ErrorBoundary,
             },
             {
-                index: true,
                 path: 'detail/:deviceId',
                 handle: {
                     get title() {
@@ -250,6 +260,7 @@ const routes: RouteObjectType[] = [
         handle: {
             title: '403',
             hideInMenuBar: true,
+            mobileAccessible: true,
         },
         async lazy() {
             const { default: Component } = await import('@/pages/403');
@@ -261,6 +272,7 @@ const routes: RouteObjectType[] = [
         path: '/auth',
         handle: {
             layout: 'blank',
+            mobileAccessible: true,
         },
         // element: <Outlet />,
         async lazy() {
@@ -277,6 +289,7 @@ const routes: RouteObjectType[] = [
                         return intl.get('common.label.login');
                     },
                     layout: 'blank',
+                    mobileAccessible: true,
                 },
                 async lazy() {
                     const { default: Component } = await import('@/pages/auth/views/login');
@@ -291,6 +304,7 @@ const routes: RouteObjectType[] = [
                         return intl.get('common.label.register');
                     },
                     layout: 'blank',
+                    mobileAccessible: true,
                 },
                 async lazy() {
                     const { default: Component } = await import('@/pages/auth/views/register');
@@ -306,6 +320,7 @@ const routes: RouteObjectType[] = [
             title: '404',
             layout: 'blank',
             authFree: true,
+            mobileAccessible: true,
         },
         async lazy() {
             const { default: Component } = await import('@/pages/404');
@@ -315,4 +330,25 @@ const routes: RouteObjectType[] = [
     },
 ];
 
+/**
+ * Filter mobile routes
+ */
+const filterMobileRoutes = (routes: RouteObjectType[]) => {
+    if (!isMobile()) return routes;
+    const result: RouteObjectType[] = [];
+
+    routes = routes.filter(item => item.handle?.mobileAccessible);
+    routes.forEach(item => {
+        const route = { ...item };
+        if (route.children) {
+            route.children = filterMobileRoutes(route.children);
+        }
+        result.push(route);
+    });
+    return result;
+};
+
+const mobileRoutes = filterMobileRoutes(routes);
+
+export { mobileRoutes };
 export default routes;

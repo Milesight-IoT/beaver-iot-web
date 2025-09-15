@@ -22,5 +22,8 @@
     "device.tip.move_device_to_group": "You have selected {1} device(s). Please choose a group to place them in.",
     "device.tip.move_device_to_ungrouped": "{1} device(s) selected. If marked as ungrouped, the original group information of these {1} device(s) will be cleared.",
     "device.title.mark_device_to_ungrouped": "Marked as Ungrouped",
-    "device.title.move_device_to_group": "Move to the Group"
+    "device.title.move_device_to_group": "Move to the Group",
+    "device.search.placeholder": "Input the device name or ID for search",
+    "device.search.placeholder_empty": "No device found in the search",
+    "device.label.select_group": "Select Device Group"
 }

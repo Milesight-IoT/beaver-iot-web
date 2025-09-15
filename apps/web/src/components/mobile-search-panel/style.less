@@ -1,0 +1,89 @@
+.@{prefix}-mobile-search-panel {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--body-background);
+
+    &.active {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+
+        .@{prefix}-mobile-search-panel-body {
+            display: block;
+        }
+    }
+
+    &-trigger {
+        display: flex;
+        gap: @margin-sm;
+        padding: @padding-sm @padding-md;
+        background-color: var(--component-background);
+
+        .@{prefix}-mobile-search-input {
+            position: relative;
+            margin-bottom: 0 !important;
+
+            .@{mui-prefix}InputBase-root {
+                background-color: var(--body-background);
+            }
+
+            .@{mui-prefix}SvgIcon-root {
+                margin-right: @margin-xs;
+                color: var(--icon-color-gray-tertiary);
+            }
+
+            input.@{mui-prefix}InputBase-input:focus {
+                box-shadow: none;
+            }
+        }
+
+        .@{mui-prefix}ButtonBase-root {
+            min-width: auto;
+            padding: 0;
+        }
+    }
+
+    &-body {
+        position: relative;
+        display: none;
+        flex: 1;
+        min-height: 0;
+        padding: @padding-md 0;
+
+        .placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            display: flex;
+            flex-direction: column;
+            gap: @margin-xs;
+            align-items: center;
+            max-width: 70vw;
+            color: var(--icon-color-gray-tertiary);
+            transform: translate(-50%, -50%);
+
+            .@{mui-prefix}SvgIcon-root {
+                font-size: 64px;
+            }
+
+            .desc {
+                color: var(--text-color-tertiary);
+                text-align: center;
+                white-space: nowrap;
+                .text-size(@font-size-base);
+            }
+        }
+
+        .@{prefix}-empty {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            &-img {
+                width: 104px;
+                height: 104px;
+            }
+        }
+    }
+}

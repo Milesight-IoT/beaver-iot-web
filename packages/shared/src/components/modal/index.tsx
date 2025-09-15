@@ -6,11 +6,11 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
-    Button,
     IconButton,
     type DialogProps,
     type ButtonProps,
 } from '@mui/material';
+import { isUndefined } from 'lodash-es';
 import useI18n from '../../hooks/useI18n';
 import useTheme from '../../hooks/useTheme';
 import LoadingButton, { type LoadingButtonProps } from '../loading-button';
@@ -125,7 +125,7 @@ const Modal: React.FC<ModalProps> = ({
     children,
     disableEscapeKeyDown = false,
     disabledBackdropClose = true,
-    showCloseIcon = false,
+    showCloseIcon = true,
     disableScrollLock = false,
     okButtonProps,
     cancelButtonProps,
@@ -146,7 +146,8 @@ const Modal: React.FC<ModalProps> = ({
     }, [fullScreen, matchTablet]);
 
     // ---------- Render Modal ----------
-    const ModalWidth = useMemo(() => {
+    const closable = !isUndefined(showCloseIcon) ? showCloseIcon : matchTablet;
+    const modalWidth = useMemo(() => {
         if (isFullScreen) return '100%';
         if (width) return width;
 
@@ -188,7 +189,7 @@ const Modal: React.FC<ModalProps> = ({
             fullScreen={isFullScreen}
             onClose={handleClose}
             container={container}
-            sx={{ '& .MuiDialog-paper': { width: ModalWidth, maxWidth: 'none' }, ...(sx || {}) }}
+            sx={{ '& .MuiDialog-paper': { width: modalWidth, maxWidth: 'none' }, ...(sx || {}) }}
             disableScrollLock={disableScrollLock}
             disableEscapeKeyDown={disableEscapeKeyDown}
         >
@@ -204,7 +205,7 @@ const Modal: React.FC<ModalProps> = ({
                 ) : (
                     title
                 ))}
-            {showCloseIcon && (
+            {closable && (
                 <IconButton
                     aria-label="close"
                     className="ms-modal-close-icon"

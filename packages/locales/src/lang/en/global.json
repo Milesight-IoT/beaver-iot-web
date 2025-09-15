@@ -272,5 +272,14 @@
     "valid.input.version": "The version number does not comply with the specification.",
     "valid.resp.at_least_one": "Please select at least one {1}.",
     "common.label.grow": "放大",
-    "common.label.shrink": "缩小"
+    "common.label.shrink": "缩小",
+    "common.label.back_to_home": "Back to Home",
+    "common.label.no_more_data": "No more data",
+    "common.message.unable_to_access_video_stream": "Unable to access video stream (please make sure you have a webcam enabled)",
+    "common.label.scan_qr_code": "Scan QR Code",
+    "common.label.album": "Album",
+    "common.message.scan_success": "Scan success",
+    "common.message.scan_failed": "Scan failed, please check and retry",
+    "common.label.turn_on_flash": "Turn on flash",
+    "common.label.turn_off_flash": "Turn off flash"
 }

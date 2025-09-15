@@ -8,6 +8,8 @@ import {
     TableCellProps,
 } from '@mui/material';
 import cls from 'classnames';
+import { useTheme } from '@milesight/shared/src/hooks';
+import Tooltip from '../tooltip';
 import './style.less';
 
 export interface Props {
@@ -15,10 +17,23 @@ export interface Props {
      * Descriptive list data
      */
     data?: {
+        /** Data key */
         key: ApiKey;
+        /** Data label */
         label: React.ReactNode;
+        /** Data content */
         content: React.ReactNode;
+        /**
+         * Whether to enable ellipsis for label & content
+         */
+        autoEllipsis?: boolean;
+        /**
+         * TableCell props of label
+         */
         labelCellProps?: Partial<TableCellProps>;
+        /**
+         * TableCell props of content
+         */
         contentCellProps?: Partial<TableCellProps>;
     }[];
 
@@ -39,6 +54,7 @@ export interface Props {
  * Description list component
  */
 const Descriptions: React.FC<Props> = ({ data, loading, columns = 2 }) => {
+    const { matchTablet } = useTheme();
     const list = useMemo(() => {
         return data?.reduce(
             (acc, item) => {
@@ -55,7 +71,7 @@ const Descriptions: React.FC<Props> = ({ data, loading, columns = 2 }) => {
     }, [data, columns]);
 
     return (
-        <div className={cls('ms-descriptions-root', { loading })}>
+        <div className={cls('ms-descriptions-root', { loading, mobile: matchTablet })}>
             <Table className="ms-descriptions">
                 <TableBody>
                     {list?.map((items, index) => (
@@ -67,13 +83,23 @@ const Descriptions: React.FC<Props> = ({ data, loading, columns = 2 }) => {
                                         {...item.labelCellProps}
                                         className="ms-descriptions-label"
                                     >
-                                        {item.label}
+                                        {/* {item.label} */}
+                                        {item.autoEllipsis ? (
+                                            <Tooltip autoEllipsis title={item.label} />
+                                        ) : (
+                                            item.label
+                                        )}
                                     </TableCell>
                                     <TableCell
                                         {...item.contentCellProps}
                                         className="ms-descriptions-content"
                                     >
-                                        {item.content}
+                                        {/* {item.content} */}
+                                        {item.autoEllipsis ? (
+                                            <Tooltip autoEllipsis title={item.content} />
+                                        ) : (
+                                            item.content
+                                        )}
                                     </TableCell>
                                 </Fragment>
                             ))}
