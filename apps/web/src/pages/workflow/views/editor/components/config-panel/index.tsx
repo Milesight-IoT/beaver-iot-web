@@ -166,7 +166,7 @@ const ConfigPanel: React.FC<Props> = ({ readonly }) => {
     return (
         <Panel
             position="top-right"
-            className={cls('ms-workflow-panel-config-root', {
+            className={cls('ms-workflow-panel-config-root md:d-none', {
                 hidden: !finalSelectedNode,
                 readonly,
             })}

@@ -3,12 +3,11 @@
         display: flex;
         align-items: center;
         padding: @padding-md @padding-xl 0;
+        margin-bottom: @margin-xs;
 
         .@{prefix}-confirm-title {
             display: flex;
             align-items: center;
-            // height: 28px;
-            margin-bottom: @margin-xs;
             line-height: 28px;
 
             .@{prefix}-confirm-icon {
@@ -22,6 +21,10 @@
                     font-size: @font-size-6;
                 }
             }
+        }
+
+        .@{mui-prefix}DialogContent-root {
+            color: var(--text-color-secondary);
         }
     }
 
@@ -72,9 +75,34 @@
             width: calc(100% - @margin-lg * 2);
         }
 
+        .@{mui-prefix}DialogTitle-root {
+            padding: @padding-lg @padding-xl 0;
+            justify-content: center;
+
+            .@{prefix}-confirm-title {
+                .text-size(@font-size-xxl);
+
+                .@{prefix}-confirm-icon {
+                    display: none;
+                }
+            }
+        }
+
         .@{mui-prefix}DialogContent-root {
             width: auto !important;
             min-width: auto !important;
+            padding-left: @padding-xl !important;
+            padding-bottom: @padding-xl;
+        }
+
+        .@{mui-prefix}DialogActions-root {
+            justify-content: space-between;
+            gap: @margin-sm;
+
+            .@{mui-prefix}ButtonBase-root {
+                flex: 1;
+                margin: 0;
+            }
         }
     });
 }

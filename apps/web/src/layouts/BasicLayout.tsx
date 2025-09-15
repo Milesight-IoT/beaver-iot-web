@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useRequest } from 'ahooks';
-import { useI18n } from '@milesight/shared/src/hooks';
+import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 import {
     iotLocalStorage,
     TOKEN_CACHE_KEY,
     REGISTERED_KEY,
 } from '@milesight/shared/src/utils/storage';
-import routes from '@/routes/routes';
+import routes, { mobileRoutes } from '@/routes/routes';
 import { useUserStore } from '@/stores';
 import { globalAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
 import { Sidebar, RouteLoadingIndicator } from '@/components';
@@ -18,7 +18,7 @@ import { LayoutSkeleton } from './components';
 function BasicLayout() {
     const { lang } = useI18n();
 
-    // ---------- User information & Authentication & Jump related logic ----------
+    // ---------- Get user info and redirect ----------
     const navigate = useNavigate();
     const [loading, setLoading] = useState<null | boolean>(null);
     const userInfo = useUserStore(state => state.userInfo);
@@ -59,24 +59,21 @@ function BasicLayout() {
         },
     );
 
-    /**
-     * @description hooks
-     * Determine whether the user has permission to access the current page.
-     * No permission to jump directly to 403
-     */
-    const { hasPathPermission } = useRoutePermission(loading);
-
+    // ---------- Render sidebar menus ----------
     /**
      * @description hooks
      * confirmation of permission
      */
     const { hasPermission } = useUserPermissions();
+    const { matchTablet } = useTheme();
 
     /**
      * menus bar
      */
     const menus = useMemo(() => {
-        return routes
+        const finalRoutes = matchTablet ? mobileRoutes : routes;
+
+        return finalRoutes
             .filter(
                 route =>
                     route.path &&
@@ -89,9 +86,16 @@ function BasicLayout() {
                 path: route.path || '',
                 icon: route.handle?.icon,
             }));
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [lang, hasPermission, loading]);
+    }, [lang, loading, matchTablet, hasPermission]);
+
+    // ---------- Render main content ----------
+    /**
+     * @description hooks
+     * Determine whether the user has permission to access the current page.
+     * No permission to jump directly to 403
+     */
+    const { hasPathPermission } = useRoutePermission(loading);
 
     return (
         <section className="ms-layout">

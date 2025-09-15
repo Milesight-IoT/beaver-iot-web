@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import cls from 'classnames';
 import { useMemoizedFn } from 'ahooks';
 import { Stack, Skeleton, SkeletonOwnProps } from '@mui/material';
+import { useTheme } from '@milesight/shared/src/hooks';
+import { isMobile } from '@milesight/shared/src/utils/userAgent';
 import { iotLocalStorage, SIDEBAR_COLLAPSE_KEY } from '@milesight/shared/src/utils/storage';
 import { Logo } from '@milesight/shared/src/components';
 import './style.less';
@@ -19,6 +21,8 @@ function CusSkeleton(props: CusSkeletonType) {
 
 /** layout Skeleton */
 function LayoutSkeleton() {
+    const { matchMobile } = useTheme();
+
     // init storage status
     const [collapsed, setCollapsed] = useState(
         iotLocalStorage.getItem(SIDEBAR_COLLAPSE_KEY) !== undefined
@@ -86,13 +90,15 @@ function LayoutSkeleton() {
 
     return (
         <Stack direction="row" sx={{ flex: 1 }}>
-            <div
-                className={cls('ms-skeleton-left', {
-                    'ms-skeleton-left-unCollapsed': !collapsed,
-                })}
-            >
-                {leftSkeleton}
-            </div>
+            {!isMobile() && !matchMobile && (
+                <div
+                    className={cls('ms-skeleton-left', {
+                        'ms-skeleton-left-unCollapsed': !collapsed,
+                    })}
+                >
+                    {leftSkeleton}
+                </div>
+            )}
             <Stack
                 sx={{
                     flex: 1,

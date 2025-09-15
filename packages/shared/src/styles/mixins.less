@@ -92,13 +92,13 @@
 }
 
 .bp-down (@points, @content) {
-    @media (max-width: @points) {
+    @media (max-width: (@points - 0.05px)) {
         @content();
     }
 }
 
 .bp-between (@lower, @upper, @content) {
-    @media (min-width: @min) and (max-width: @max) {
+    @media (min-width: @min) and (max-width: (@max - 0.05px)) {
         @content();
     }
 }

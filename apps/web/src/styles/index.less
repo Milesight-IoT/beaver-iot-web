@@ -190,26 +190,29 @@ html {
     }
 }
 
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
+// Beautiful scrollbar just for PC
+.bp-up(@grid-breakpoints[md], {
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
 
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb-color);
-    border-radius: 8px;
-}
-
-.ms-perfect-scrollbar {
-    &::-webkit-scrollbar-thumb {
+    ::-webkit-scrollbar-track {
         background: transparent;
     }
 
-    &:hover::-webkit-scrollbar-thumb {
+    ::-webkit-scrollbar-thumb {
         background: var(--scrollbar-thumb-color);
+        border-radius: 8px;
     }
-}
+
+    .ms-perfect-scrollbar {
+        &::-webkit-scrollbar-thumb {
+            background: transparent;
+        }
+
+        &:hover::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb-color);
+        }
+    }
+});

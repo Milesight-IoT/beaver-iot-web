@@ -20,6 +20,7 @@ import {
     DeviceAPISchema,
 } from '@/services/http';
 import { type HistoryRowDataType, useColumns } from './hooks';
+import './style.less';
 
 interface IProps {
     detail: ObjectToCamelCase<DeviceAPISchema['getDetail']['response']['entities'][0]>;

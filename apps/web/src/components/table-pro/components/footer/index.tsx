@@ -22,7 +22,7 @@ import {
     useGridRootProps,
     useGridSelector,
 } from '@mui/x-data-grid';
-import { useI18n } from '@milesight/shared/src/hooks';
+import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 import { RefreshIcon } from '@milesight/shared/src/components';
 
 import './style.less';
@@ -38,12 +38,16 @@ const CustomPagination: React.FC<PaginationProps> = ({
     renderItem,
     ...rest
 }) => {
+    const { matchTablet } = useTheme();
+
     const apiRef = useGridApiContext();
     const rootProps = useGridRootProps();
     const { pageSizeOptions } = rootProps;
     const page = useGridSelector(apiRef, gridPageSelector);
     const pageSize = useGridSelector(apiRef, gridPageSizeSelector);
     const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+    const siblingCount = matchTablet ? 0 : undefined;
+    const boundaryCount = matchTablet ? 0 : undefined;
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -53,6 +57,8 @@ const CustomPagination: React.FC<PaginationProps> = ({
                 shape={shape}
                 page={page + 1}
                 count={pageCount}
+                siblingCount={siblingCount}
+                boundaryCount={boundaryCount}
                 renderItem={props => {
                     return renderItem ? (
                         renderItem(props)
@@ -65,52 +71,54 @@ const CustomPagination: React.FC<PaginationProps> = ({
                 }}
                 {...rest}
             />
-            <Select
-                id="pagination-size"
-                label=""
-                MenuProps={{
-                    anchorOrigin: {
-                        vertical: 'top',
-                        horizontal: 'left',
-                    },
-                    transformOrigin: {
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                    },
-                    sx: { mt: -1 },
-                }}
-                sx={{
-                    ml: 1,
-                    height: 29,
-                }}
-                value={pageSize}
-                onChange={event => {
-                    apiRef.current.setPageSize(Number(event.target.value));
-                }}
-                renderValue={(value: any) => {
-                    const size:
-                        | number
-                        | {
-                              value: number;
-                              label: string;
-                          }
-                        | undefined = pageSizeOptions.find(
-                        size => (isObject(size) ? size.value : size) === value,
-                    );
-                    return <span>{isObject(size) ? size.label : size}</span>;
-                }}
-            >
-                {pageSizeOptions.map(size => {
-                    return (
-                        <MenuItem
-                            key={isObject(size) ? size.value : size}
-                            value={isObject(size) ? size.value : size}
-                        >
-                            {isObject(size) ? size.label : size}
-                        </MenuItem>
-                    );
-                })}
-            </Select>
+            {!matchTablet && (
+                <Select
+                    id="pagination-size"
+                    label=""
+                    MenuProps={{
+                        anchorOrigin: {
+                            vertical: 'top',
+                            horizontal: 'left',
+                        },
+                        transformOrigin: {
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        },
+                        sx: { mt: -1 },
+                    }}
+                    sx={{
+                        ml: 1,
+                        height: 29,
+                    }}
+                    value={pageSize}
+                    onChange={event => {
+                        apiRef.current.setPageSize(Number(event.target.value));
+                    }}
+                    renderValue={(value: any) => {
+                        const size:
+                            | number
+                            | {
+                                  value: number;
+                                  label: string;
+                              }
+                            | undefined = pageSizeOptions.find(
+                            size => (isObject(size) ? size.value : size) === value,
+                        );
+                        return <span>{isObject(size) ? size.label : size}</span>;
+                    }}
+                >
+                    {pageSizeOptions.map(size => {
+                        return (
+                            <MenuItem
+                                key={isObject(size) ? size.value : size}
+                                value={isObject(size) ? size.value : size}
+                            >
+                                {isObject(size) ? size.label : size}
+                            </MenuItem>
+                        );
+                    })}
+                </Select>
+            )}
         </Box>
     );
 };

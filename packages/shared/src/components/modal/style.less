@@ -9,22 +9,59 @@
 
         .@{prefix}-modal-close-icon {
             position: absolute;
-            top: 19px;
-            right: 24px;
+            top: 20px;
+            right: 20px;
+            padding: @padding-xxs;
             font-size: @font-size-lg;
             color: var(--icon-color-gray-secondary);
+
+            // Mobile Responsive
+            .bp-down(@grid-breakpoints[md], {
+                font-size: @font-size-xxl;
+                padding: @padding-xxs;
+                right: 16px;
+                top: 18px;
+            });
         }
 
-        .@{prefix}-modal-content {
+        .@{prefix}-modal-title {
+            // Mobile Responsive
+            .bp-down(@grid-breakpoints[md], {
+                border-bottom: @border-base;
+                padding: @padding-md @padding-lg;
+                .text-size(@font-size-xl);
+            });
+        }
+
+        .@{prefix}-modal-content.@{mui-prefix}DialogContent-root {
             padding: @padding-xl;
 
             .@{mui-prefix}FormControl-root:last-child {
                 margin-bottom: 0;
             }
+
+            // Mobile Responsive
+            .bp-down(@grid-breakpoints[md], {
+                padding: @padding-md;
+            });
         }
 
         .@{prefix}-modal-footer {
             padding: 0 @padding-xl @padding-xl;
+
+            // Mobile Responsive
+            .bp-down(@grid-breakpoints[md], {
+                display: flex;
+                justify-content: space-between;
+                gap: @margin-sm;
+                padding: @padding-md;
+                border-top: @border-base;
+
+                .@{mui-prefix}ButtonBase-root {
+                    flex: 1;
+                    margin: 0;
+                }
+            });
         }
     }
 }

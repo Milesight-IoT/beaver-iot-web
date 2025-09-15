@@ -117,7 +117,7 @@ const Members: React.FC = () => {
     // ---------- Table render bar ----------
     const toolbarRender = useMemo(() => {
         return (
-            <Stack className="ms-operations-btns" direction="row" spacing="12px">
+            <Stack className="ms-operations-btns md:d-none" direction="row" spacing="12px">
                 <Button
                     variant="contained"
                     sx={{ height: 36, textTransform: 'none' }}
