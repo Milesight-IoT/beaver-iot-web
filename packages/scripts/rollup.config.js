@@ -4,17 +4,23 @@ const commonjs = require('@rollup/plugin-commonjs');
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const typescript = require('@rollup/plugin-typescript');
 const peerDepsExternal = require('rollup-plugin-peer-deps-external');
-const { dependencies } = require('./package.json');
+const { dependencies, main: mainEntry } = require('./package.json');
 
 module.exports = {
     input: 'src/index.ts',
     output: [
         {
-            dir: 'dist',
+            file: mainEntry,
             format: 'cjs',
-            preserveModules: true,
-            // preserveModulesRoot: 'src',
             sourcemap: true,
+        },
+        {
+            dir: 'dist',
+            format: 'esm',
+            exports: 'named',
+            sourcemap: true,
+            preserveModules: true,
+            preserveModulesRoot: 'src',
         },
     ],
     plugins: [

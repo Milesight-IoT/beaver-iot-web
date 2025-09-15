@@ -4,7 +4,8 @@
     "private": true,
     "license": "MIT",
     "description": "Beaver IoT Assistant scripts",
-    "main": "dist/index.js",
+    "main": "dist/index.cjs",
+    "module": "dist/index.js",
     "typings": "dist/index.d.ts",
     "scripts": {
         "watch": "rollup -cw",
