@@ -3,12 +3,13 @@ import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { useMemoizedFn } from 'ahooks';
 import classNames from 'classnames';
 import { Grid2 as Grid } from '@mui/material';
-import { pick } from 'lodash-es';
 
 import { useI18n } from '@milesight/shared/src/hooks';
-import { Modal, type ModalProps } from '@milesight/shared/src/components';
+import { Modal, type ModalProps, LoadingWrapper } from '@milesight/shared/src/components';
 
+import { type DashboardListProps } from '@/services/http';
 import { useFormItems } from './hooks';
+import { useCoverImages } from '../cover-selection/hooks';
 
 export type OperateModalType = 'add' | 'edit';
 
@@ -22,7 +23,7 @@ interface Props extends Omit<ModalProps, 'onOk'> {
     operateType: OperateModalType;
     /** on form submit */
     onFormSubmit: (data: OperateDashboardProps, callback: () => void) => Promise<void>;
-    data?: OperateDashboardProps;
+    data?: DashboardListProps;
     onSuccess?: (operateType: OperateModalType) => void;
 }
 
@@ -35,6 +36,7 @@ const OperateModal: React.FC<Props> = props => {
     const { getIntlText } = useI18n();
 
     const { control, formState, handleSubmit, reset, setValue } = useForm<OperateDashboardProps>();
+    const { imagesLoading } = useCoverImages(data);
     const { formItems } = useFormItems();
 
     const onSubmit: SubmitHandler<OperateDashboardProps> = async params => {
@@ -53,11 +55,16 @@ const OperateModal: React.FC<Props> = props => {
      * initial form value
      */
     useEffect(() => {
-        if (operateType !== 'edit') {
+        if (operateType !== 'edit' || !data) {
             return;
         }
 
-        const newData = pick(data, ['name', 'description']);
+        const { name, cover_data: cover, description } = data || {};
+        const newData = {
+            name,
+            cover,
+            description,
+        };
         Object.entries(newData || {}).forEach(([k, v]) => {
             setValue(k as keyof OperateDashboardProps, v);
         });
@@ -73,13 +80,15 @@ const OperateModal: React.FC<Props> = props => {
             onCancel={handleCancel}
             {...restProps}
         >
-            <Grid container spacing={2}>
-                {formItems.map(({ wrapCol, ...restItem }) => (
-                    <Grid key={restItem.name} size={wrapCol}>
-                        <Controller<OperateDashboardProps> {...restItem} control={control} />
-                    </Grid>
-                ))}
-            </Grid>
+            <LoadingWrapper loading={imagesLoading}>
+                <Grid container spacing={2}>
+                    {formItems.map(({ wrapCol, ...restItem }) => (
+                        <Grid key={restItem.name} size={wrapCol}>
+                            <Controller<OperateDashboardProps> {...restItem} control={control} />
+                        </Grid>
+                    ))}
+                </Grid>
+            </LoadingWrapper>
         </Modal>
     );
 };

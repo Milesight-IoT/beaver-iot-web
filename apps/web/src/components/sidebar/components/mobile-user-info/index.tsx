@@ -10,7 +10,11 @@ import {
     ArrowForwardIosIcon,
     CheckIcon,
 } from '@milesight/shared/src/components';
-import { iotLocalStorage, TOKEN_CACHE_KEY } from '@milesight/shared/src/utils/storage';
+import {
+    iotLocalStorage,
+    TOKEN_CACHE_KEY,
+    MAIN_CANVAS_KEY,
+} from '@milesight/shared/src/utils/storage';
 import { useUserStore } from '@/stores';
 import { type GlobalAPISchema } from '@/services/http';
 import Tooltip from '../../../tooltip';
@@ -99,6 +103,7 @@ const MobileUserInfo: React.FC<MobileUserInfoProps> = ({ userInfo }) => {
 
                                 setUserInfo(null);
                                 iotLocalStorage.removeItem(TOKEN_CACHE_KEY);
+                                iotLocalStorage.removeItem(MAIN_CANVAS_KEY);
                                 navigate('/auth/login');
                             }}
                         >

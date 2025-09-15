@@ -8,8 +8,10 @@ import { useI18n } from '@milesight/shared/src/hooks';
 import { UploadIcon } from '@milesight/shared/src/components';
 
 import { Upload } from '@/components';
-import { useCoverImages, useUploadImage } from './hooks';
+import { genImageUrl } from '@/utils';
+import { useUploadImage } from './hooks';
 import { CoverCropping } from './components';
+import useDashboardListStore from '../../store';
 
 import styles from './style.module.less';
 
@@ -31,17 +33,18 @@ const CoverSelection: React.FC<CoverSelectionProps> = props => {
     const { label, required, error } = props;
 
     const [selectedImage, setSelectedImage] = useControllableValue(props);
-    const { MOCK_IMAGE } = useCoverImages();
-    const { handleUploadImage, resetManualImage, manualImage } = useUploadImage(setSelectedImage);
+    const { handleUploadImage, resetManualImage, manualImage, originalImage } =
+        useUploadImage(setSelectedImage);
+    const { coverImages } = useDashboardListStore();
 
     const renderPreviewImage = () => {
         if (manualImage) {
-            return <CoverCropping image={manualImage} />;
+            return <CoverCropping image={manualImage} originalImage={originalImage} />;
         }
 
         return (
             <div className={styles.image}>
-                <img src={selectedImage} alt="failed" />
+                <img src={genImageUrl(selectedImage)} alt="failed" />
                 <div className={styles.mask} />
             </div>
         );
@@ -65,18 +68,18 @@ const CoverSelection: React.FC<CoverSelectionProps> = props => {
                         </div>
                     </div>
                     <div className={styles['cover-selection__images']}>
-                        {MOCK_IMAGE.map(m => (
+                        {coverImages.map(({ data }) => (
                             <div
-                                key={m}
+                                key={data}
                                 className={cls(styles.image, {
-                                    [styles.active]: selectedImage === m,
+                                    [styles.active]: selectedImage === data,
                                 })}
                                 onClick={() => {
                                     resetManualImage();
-                                    setSelectedImage(m);
+                                    setSelectedImage(data);
                                 }}
                             >
-                                <img src={m} alt="failed" />
+                                <img src={genImageUrl(data)} alt="failed" />
                             </div>
                         ))}
                     </div>

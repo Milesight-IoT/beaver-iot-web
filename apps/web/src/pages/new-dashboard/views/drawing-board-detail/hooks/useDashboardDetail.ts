@@ -9,7 +9,7 @@ import useDashboardStore from '@/pages/new-dashboard/store';
 /**
  * Get dashboard detail
  */
-export function useDashboardDetail(currentDashboardId: ApiKey) {
+export function useDashboardDetail(drawingBoardId: ApiKey) {
     const [loading, setLoading] = useState(false);
     const { setLatestEntities, triggerEntityListener } = useActivityEntity();
     const { setPath } = useDashboardStore();
@@ -19,9 +19,9 @@ export function useDashboardDetail(currentDashboardId: ApiKey) {
             try {
                 setLoading(true);
 
-                if (!currentDashboardId) return;
+                if (!drawingBoardId) return;
                 const [error, resp] = await awaitWrap(
-                    dashboardAPI.getDashboardDetail({ id: currentDashboardId }),
+                    dashboardAPI.getDrawingBoardDetail({ canvas_id: drawingBoardId }),
                 );
 
                 if (error || !isRequestSuccess(resp)) return;
@@ -36,7 +36,7 @@ export function useDashboardDetail(currentDashboardId: ApiKey) {
         },
         {
             debounceWait: 300,
-            refreshDeps: [currentDashboardId],
+            refreshDeps: [drawingBoardId],
         },
     );
 
@@ -45,18 +45,18 @@ export function useDashboardDetail(currentDashboardId: ApiKey) {
 
     // Subscribe the entity exchange topic
     useEffect(() => {
-        if (!currentDashboardId || !mqttClient || mqttStatus !== MQTT_STATUS.CONNECTED) return;
+        if (!drawingBoardId || !mqttClient || mqttStatus !== MQTT_STATUS.CONNECTED) return;
 
         const removeTriggerListener = mqttClient.subscribe(MQTT_EVENT_TYPE.EXCHANGE, payload => {
             triggerEntityListener(payload.payload?.entity_ids || [], {
-                dashboardId: currentDashboardId,
+                dashboardId: drawingBoardId,
                 payload,
                 periodTime: BATCH_PUSH_TIME,
             });
         });
 
         return removeTriggerListener;
-    }, [mqttStatus, mqttClient, currentDashboardId, triggerEntityListener]);
+    }, [mqttStatus, mqttClient, drawingBoardId, triggerEntityListener]);
 
     // Unsubscribe the topic when the dashboard page is unmounted
     useEffect(() => {

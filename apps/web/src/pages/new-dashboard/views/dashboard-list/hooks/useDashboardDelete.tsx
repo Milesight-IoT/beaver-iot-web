@@ -27,13 +27,12 @@ export function useDashboardDelete(refreshDashboards?: () => void) {
                     return;
                 }
 
-                console.log('handleDashboardDelete ? ', dashboards);
-
                 const [_, res] = await awaitWrap(
                     dashboardAPI.deleteDashboard({
-                        id: dashboards[0].dashboard_id,
+                        dashboard_ids: dashboards.map(d => d.dashboard_id),
                     }),
                 );
+
                 if (isRequestSuccess(res)) {
                     refreshDashboards?.();
                     toast.success(getIntlText('common.message.delete_success'));

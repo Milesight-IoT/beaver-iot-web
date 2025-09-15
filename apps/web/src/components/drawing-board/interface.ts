@@ -1,4 +1,4 @@
-import { type DashboardDetail, type WidgetDetail, type DeviceDetail } from '@/services/http';
+import { type DrawingBoardDetail, type WidgetDetail, type DeviceDetail } from '@/services/http';
 
 export interface DrawingBoardExpose {
     /**
@@ -8,13 +8,13 @@ export interface DrawingBoardExpose {
     /**
      * Save current newest drawing board data
      */
-    handleSave: () => DashboardDetail;
+    handleSave: () => DrawingBoardDetail;
 }
 
 export interface DrawingBoardProps {
     /** Current device detail */
     deviceDetail?: DeviceDetail;
-    drawingBoardDetail: DashboardDetail;
+    drawingBoardDetail: DrawingBoardDetail;
     isEdit: boolean;
     /**
      * Does the home dashboard exist in all dashboards ?

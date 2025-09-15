@@ -10,6 +10,7 @@ import { useCroppingData, useCroppingZoom, useCroppingMove, useCoverCropping } f
 import styles from './style.module.less';
 
 export interface CoverCroppingProps {
+    originalImage?: File;
     image?: HTMLImageElement;
 }
 
@@ -17,6 +18,8 @@ export interface CoverCroppingProps {
  * Crop the cover to size
  */
 const CoverCropping: React.FC<CoverCroppingProps> = props => {
+    const { originalImage } = props || {};
+
     const { getIntlText } = useI18n();
     const { imageSize, canvasSize, canvasTranslate, canvasRef, setCanvasSize, setCanvasTranslate } =
         useCroppingData(props);
@@ -37,6 +40,7 @@ const CoverCropping: React.FC<CoverCroppingProps> = props => {
         imageSize,
         canvasSize,
         canvasTranslate,
+        originalImage,
     });
 
     const iconButtonSx = useMemo((): SxProps => {

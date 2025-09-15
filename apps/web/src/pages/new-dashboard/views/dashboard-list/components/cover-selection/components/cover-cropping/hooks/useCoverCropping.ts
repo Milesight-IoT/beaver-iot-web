@@ -12,13 +12,14 @@ export interface UseCoverCroppingProps {
     imageSize: SizeProps;
     canvasSize: SizeProps;
     canvasTranslate: TranslateProps;
+    originalImage?: File;
 }
 
 /**
  * Get newest cover cropping image
  */
 export function useCoverCropping(props: UseCoverCroppingProps) {
-    const { canvasRef, imageSize, canvasSize, canvasTranslate } = props || {};
+    const { canvasRef, imageSize, canvasSize, canvasTranslate, originalImage } = props || {};
 
     const { updateGetCanvasCroppingImage } = useCoverCroppingStore();
 
@@ -107,7 +108,7 @@ export function useCoverCropping(props: UseCoverCroppingProps) {
                     try {
                         const [err, resp] = await awaitWrap(
                             globalAPI.getUploadConfig({
-                                file_name: 'dashboard_cover__cropping.png',
+                                file_name: originalImage?.name || 'dashboard_cover__cropping.png',
                             }),
                         );
                         const uploadConfig = getResponseData(resp);
@@ -117,14 +118,18 @@ export function useCoverCropping(props: UseCoverCroppingProps) {
                             return;
                         }
 
-                        const file = new File([blob], 'dashboard_cover__cropping.png', {
-                            type: 'image/png',
-                        });
+                        const file = new File(
+                            [blob],
+                            originalImage?.name || 'dashboard_cover__cropping.png',
+                            {
+                                type: originalImage?.type || 'image/png',
+                            },
+                        );
                         const [uploadErr] = await awaitWrap(
                             globalAPI.fileUpload(
                                 {
                                     url: uploadConfig.upload_url,
-                                    mimeType: 'image/*',
+                                    mimeType: originalImage?.type || 'image/png',
                                     file,
                                 },
                                 {
@@ -145,5 +150,5 @@ export function useCoverCropping(props: UseCoverCroppingProps) {
                 });
             });
         });
-    }, [updateGetCanvasCroppingImage, canvasRef]);
+    }, [updateGetCanvasCroppingImage, canvasRef, originalImage]);
 }

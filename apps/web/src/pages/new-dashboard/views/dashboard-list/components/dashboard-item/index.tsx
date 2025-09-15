@@ -13,8 +13,10 @@ import {
 
 import { Tooltip } from '@/components';
 import { type DashboardListProps } from '@/services/http';
+import { genImageUrl } from '@/utils';
 import { useHomeDashboard, useDashboardDelete } from '../../hooks';
 import MoreDropdown, { MORE_OPERATION } from '../more-dropdown';
+import useDashboardListStore from '../../store';
 
 import './style.less';
 
@@ -61,11 +63,12 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
     });
     const { handleDashboardDelete } = useDashboardDelete(getDashboards);
     const navigate = useNavigate();
+    const { coverImages } = useDashboardListStore();
 
     const handleItemClick = useMemoizedFn(() => {
-        if (!item?.dashboard_id) return;
+        if (!item?.main_canvas_id) return;
 
-        navigate(`/dashboard?id=${item.dashboard_id}`);
+        navigate(`/dashboard?id=${item.main_canvas_id}`);
     });
 
     const handleDashboardOperation = useMemoizedFn((type: MORE_OPERATION) => {
@@ -100,7 +103,11 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
                 <img
                     className="dashboard-item__img"
                     alt="failed"
-                    src="https://bing.ee123.net/img/cn/fhd/2025/08/11.jpg"
+                    src={genImageUrl(
+                        item?.cover_data ||
+                            coverImages?.find(c => c.name === 'Purple')?.data ||
+                            'https://bing.ee123.net/img/cn/fhd/2025/08/11.jpg',
+                    )}
                 />
             </div>
             <div className="dashboard-item__footer">
@@ -113,7 +120,7 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
                     <Tooltip
                         autoEllipsis
                         className="dashboard-item__info-desc"
-                        title={item?.created_at}
+                        title={item?.description}
                     />
                 </div>
                 <MoreDropdown onOperation={handleDashboardOperation} />

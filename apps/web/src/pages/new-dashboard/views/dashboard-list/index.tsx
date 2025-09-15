@@ -15,6 +15,7 @@ import { Breadcrumbs, Empty } from '@/components';
 import { useDashboardList } from './hooks';
 import { DashboardItems, OperateModal } from './components';
 import { useOperateModal } from './components/operate-modal/hooks';
+import { useCoverImages } from './components/cover-selection/hooks';
 
 import './style.less';
 
@@ -41,6 +42,7 @@ const DashboardList: React.FC = () => {
         openEditDashboard,
         onFormSubmit,
     } = useOperateModal(getDashboards);
+    useCoverImages(currentDashboard);
 
     const renderAddDashboard = (
         <Button

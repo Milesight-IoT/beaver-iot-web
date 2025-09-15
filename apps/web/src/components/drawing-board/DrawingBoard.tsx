@@ -88,7 +88,7 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
                 onEdit={updateOperatingPlugin}
                 mainRef={drawingBoardRef}
                 isTooSmallScreen={isTooSmallScreen}
-                dashboardId={drawingBoardDetail.dashboard_id}
+                dashboardId={drawingBoardDetail.id}
             />
         );
     };

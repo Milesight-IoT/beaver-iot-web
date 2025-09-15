@@ -9,6 +9,7 @@ import { MANUAL_UPLOAD } from '../constants';
  */
 export function useUploadImage(setSelectedImage?: (val: string) => void) {
     const [manualImage, setManualImage] = useState<HTMLImageElement>();
+    const [originalImage, setOriginalImage] = useState<File>();
 
     const resetManualImage = useMemoizedFn(() => {
         setManualImage(undefined);
@@ -37,6 +38,7 @@ export function useUploadImage(setSelectedImage?: (val: string) => void) {
                 if (!image) return;
 
                 setManualImage(image);
+                setOriginalImage(file as File);
                 setSelectedImage?.(MANUAL_UPLOAD);
             });
         });
@@ -45,6 +47,7 @@ export function useUploadImage(setSelectedImage?: (val: string) => void) {
     return {
         /** Manual image HTMLImageElement */
         manualImage,
+        originalImage,
         resetManualImage,
         /**
          * Cover manual upload

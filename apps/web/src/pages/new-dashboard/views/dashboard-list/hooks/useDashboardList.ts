@@ -22,10 +22,13 @@ export function useDashboardList() {
     const { data, run: getDashboards } = useRequest(
         async () => {
             try {
-                console.log('keyword ? ', keyword);
                 setLoading(true);
 
-                const [error, resp] = await awaitWrap(dashboardAPI.getDashboards());
+                const [error, resp] = await awaitWrap(
+                    dashboardAPI.getDashboards({
+                        name: keyword,
+                    }),
+                );
                 if (error || !isRequestSuccess(resp)) {
                     return;
                 }

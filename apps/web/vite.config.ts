@@ -3,7 +3,7 @@ import * as path from 'path';
 import { defineConfig, type PluginOption } from 'vite';
 import vitePluginImport from 'vite-plugin-imp';
 import stylelint from 'vite-plugin-stylelint';
-import basicSsl from '@vitejs/plugin-basic-ssl'
+import basicSsl from '@vitejs/plugin-basic-ssl';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import {
     parseEnvVariables,

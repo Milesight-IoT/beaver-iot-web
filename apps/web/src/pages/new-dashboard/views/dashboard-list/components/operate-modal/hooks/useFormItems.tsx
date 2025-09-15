@@ -6,12 +6,12 @@ import { checkRequired } from '@milesight/shared/src/utils/validators';
 import { useI18n } from '@milesight/shared/src/hooks';
 
 import CoverSelection from '../../cover-selection';
-import { useCoverImages } from '../../cover-selection/hooks';
 import { type OperateDashboardProps } from '../index';
+import useDashboardListStore from '../../../store';
 
 export function useFormItems() {
     const { getIntlText } = useI18n();
-    const { MOCK_IMAGE } = useCoverImages();
+    const { coverImages } = useDashboardListStore();
 
     const formItems = useMemo((): (ControllerProps<OperateDashboardProps> & {
         wrapCol: number;
@@ -60,7 +60,7 @@ export function useFormItems() {
                     },
                 },
                 wrapCol: 12,
-                defaultValue: MOCK_IMAGE[0],
+                defaultValue: coverImages?.find(c => c.name === 'Purple')?.data || '',
                 render({ field: { onChange, value }, fieldState: { error } }) {
                     return (
                         <CoverSelection required value={value} onChange={onChange} error={error} />
@@ -99,7 +99,7 @@ export function useFormItems() {
                 },
             },
         ];
-    }, [getIntlText]);
+    }, [getIntlText, coverImages]);
 
     return {
         formItems,

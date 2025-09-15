@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
-import { type DashboardDetail } from '@/services/http';
+import { type DrawingBoardDetail } from '@/services/http';
 
 interface DashboardStore {
     /** Drawing board paths */
-    paths: DashboardDetail[];
+    paths: DrawingBoardDetail[];
     /** To set drawing board paths */
-    setPath: (path?: DashboardDetail) => void;
+    setPath: (path?: DrawingBoardDetail) => void;
     /** Clear all drawing board paths */
     clearPaths: () => void;
 }
@@ -24,7 +24,7 @@ const useDashboardStore = create(
             }
 
             const { paths = [] } = get();
-            const existedIndex = paths.findIndex(p => p.dashboard_id === path.dashboard_id);
+            const existedIndex = paths.findIndex(p => p.id === path.id);
             /**
              * If path does not exist, store it.
              */

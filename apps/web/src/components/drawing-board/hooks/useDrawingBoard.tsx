@@ -82,17 +82,17 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
         setIsEdit(false);
 
         const data = drawingBoardExposeRef?.current?.handleSave();
-        const { dashboard_id: id, name, widgets } = data || {};
+        const { id, name, widgets } = data || {};
         if (!id || !widgets) {
             return;
         }
 
         const currentEntityIds = getCurrentEntityIds(id);
         const [error, resp] = await awaitWrap(
-            dashboardAPI.updateDashboard({
+            dashboardAPI.updateDrawingBoard({
+                canvas_id: id,
                 widgets: filterWidgets(widgets),
                 entity_ids: currentEntityIds,
-                dashboard_id: id,
                 name,
             }),
         );
