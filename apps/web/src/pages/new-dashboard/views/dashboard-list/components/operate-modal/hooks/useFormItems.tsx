@@ -8,6 +8,7 @@ import { useI18n } from '@milesight/shared/src/hooks';
 import CoverSelection from '../../cover-selection';
 import { type OperateDashboardProps } from '../index';
 import useDashboardListStore from '../../../store';
+import { getDefaultImg } from '../../../utils';
 
 export function useFormItems() {
     const { getIntlText } = useI18n();
@@ -60,7 +61,7 @@ export function useFormItems() {
                     },
                 },
                 wrapCol: 12,
-                defaultValue: coverImages?.find(c => c.name === 'Purple')?.data || '',
+                defaultValue: getDefaultImg(coverImages) || '',
                 render({ field: { onChange, value }, fieldState: { error } }) {
                     return (
                         <CoverSelection required value={value} onChange={onChange} error={error} />

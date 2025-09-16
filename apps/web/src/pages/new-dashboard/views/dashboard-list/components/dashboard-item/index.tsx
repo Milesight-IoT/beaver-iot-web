@@ -17,6 +17,7 @@ import { genImageUrl } from '@/utils';
 import { useHomeDashboard, useDashboardDelete } from '../../hooks';
 import MoreDropdown, { MORE_OPERATION } from '../more-dropdown';
 import useDashboardListStore from '../../store';
+import { getDefaultImg } from '../../utils';
 
 import './style.less';
 
@@ -105,7 +106,7 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
                     alt="failed"
                     src={genImageUrl(
                         item?.cover_data ||
-                            coverImages?.find(c => c.name === 'Purple')?.data ||
+                            getDefaultImg(coverImages) ||
                             'https://bing.ee123.net/img/cn/fhd/2025/08/11.jpg',
                     )}
                 />

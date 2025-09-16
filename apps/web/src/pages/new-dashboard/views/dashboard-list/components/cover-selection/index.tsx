@@ -32,7 +32,7 @@ const CoverSelection: React.FC<CoverSelectionProps> = props => {
 
     const { label, required, error } = props;
 
-    const [selectedImage, setSelectedImage] = useControllableValue(props);
+    const [selectedImage, setSelectedImage] = useControllableValue<string>(props);
     const { handleUploadImage, resetManualImage, manualImage, originalImage } =
         useUploadImage(setSelectedImage);
     const { coverImages } = useDashboardListStore();
