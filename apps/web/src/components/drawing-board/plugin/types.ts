@@ -94,6 +94,22 @@ export interface ControlPanelSectionConfig<T extends AnyDict = AnyDict> {
     controlSetItems: ControlSetItem<T>[];
 }
 
+export type PluginType =
+    | 'areaChart'
+    | 'barChart'
+    | 'dataCard'
+    | 'gaugeChart'
+    | 'horizonBarChart'
+    | 'iconRemaining'
+    | 'image'
+    | 'lineChart'
+    | 'pieChart'
+    | 'progress'
+    | 'radarChart'
+    | 'switch'
+    | 'text'
+    | 'trigger';
+
 /**
  * The plugin control panel config
  */
@@ -107,7 +123,7 @@ export interface ControlPanelConfig<T extends AnyDict = AnyDict> {
      * Component type
      * @description It is used to distinguish the unique identification of the user's use of the component, which is consistent with the folder name of the folder under Plugins
      */
-    type: string;
+    type: PluginType;
     /**
      * Component configuration attributes, can be configured multiple
      */

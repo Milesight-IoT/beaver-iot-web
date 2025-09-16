@@ -13,10 +13,12 @@ const imageControlPanelConfig = (): ControlPanelConfig<ImageConfigType> => {
         type: 'image',
         name: 'image',
         icon: ImageIcon,
-        defaultRow: 2,
-        defaultCol: 3,
+        defaultRow: 4,
+        defaultCol: 4,
         minRow: 1,
         minCol: 2,
+        maxRow: 12,
+        maxCol: 12,
         configProps: [
             {
                 label: 'image config',

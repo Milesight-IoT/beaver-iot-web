@@ -48,7 +48,7 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
     });
 
     const renderNormalMode = (
-        <Stack className="md:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+        <Stack className="xl:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
             <IconButton
                 onClick={enterFullscreen}
                 sx={{
@@ -106,7 +106,7 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
     });
 
     const renderEditMode = (
-        <Stack className="md:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+        <Stack className="xl:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
             <PluginListPopover onSelect={updateOperatingPlugin} />
             <Divider orientation="vertical" variant="middle" flexItem />
             <Button variant="outlined" onClick={handleCancel} startIcon={<CloseIcon />}>

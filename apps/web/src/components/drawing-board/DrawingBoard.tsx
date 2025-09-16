@@ -31,7 +31,6 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
     const { getIntlText } = useI18n();
 
     const {
-        isTooSmallScreen,
         widgets,
         loadingWidgets,
         drawingBoardContext,
@@ -87,7 +86,6 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
                 isEdit={isEdit}
                 onEdit={updateOperatingPlugin}
                 mainRef={drawingBoardRef}
-                isTooSmallScreen={isTooSmallScreen}
                 dashboardId={drawingBoardDetail.id}
             />
         );
