@@ -13,6 +13,10 @@ interface formProps<T extends FieldValues> {
     defaultValues?: any;
 }
 
+/**
+ * @deprecated Please use `react-hook-form` library directly for clearer and
+ * more flexible control
+ */
 const Forms = <T extends FieldValues>(
     props: formProps<T>,
     ref: React.ForwardedRef<FormInstance<T>>,
@@ -165,6 +169,10 @@ const Forms = <T extends FieldValues>(
     );
 };
 
+/**
+ * @deprecated Please use `react-hook-form` library directly for clearer and
+ * more flexible control
+ */
 export const ForwardForms = forwardRef(Forms) as unknown as <T extends FieldValues>(
     props: React.PropsWithChildren<formProps<T>> & {
         ref?: React.ForwardedRef<formProps<T>>;

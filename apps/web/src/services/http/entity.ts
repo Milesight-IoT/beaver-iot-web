@@ -192,16 +192,18 @@ export interface EntityAPISchema extends APISchema {
         response: unknown;
     };
 
-    /** Example Export historical entity data */
+    /** Export historical entity data */
     exportEntityHistory: {
         request: {
             ids: ApiKey[];
             /** Start time stamp, in ms */
-            start_timestamp?: number;
+            startTime?: number;
             /** End time stamp, in ms */
-            end_timestamp?: number;
+            endTime?: number;
+            /** Timezone */
+            timezone: string;
         };
-        response: unknown;
+        response: Blob;
     };
 }
 
@@ -223,6 +225,19 @@ export default attachAPI<EntityAPISchema>(client, {
         deleteEntities: `POST ${API_PREFIX}/entity/delete`,
         editEntity: `PUT ${API_PREFIX}/entity/:id`,
         createCustomEntity: `POST ${API_PREFIX}/entity`,
-        exportEntityHistory: `GET ${API_PREFIX}/entity/export`,
+        // exportEntityHistory: `GET ${API_PREFIX}/entity/export`,
+        async exportEntityHistory({ ids, startTime, endTime, timezone }) {
+            const resp = await client.get(`${API_PREFIX}/entity/export`, {
+                responseType: 'blob',
+                params: {
+                    ids,
+                    timezone,
+                    start_timestamp: startTime,
+                    end_timestamp: endTime,
+                },
+            });
+
+            return resp;
+        },
     },
 });

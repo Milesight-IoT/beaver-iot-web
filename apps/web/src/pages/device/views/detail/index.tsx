@@ -18,7 +18,7 @@ import { Breadcrumbs, TabPanel } from '@/components';
 
 import { DrawingBoard, DrawingBoardMock, useDrawingBoard } from '@/components/drawing-board';
 
-import { BasicTable, EntityTable } from './components';
+import { BasicTable, EntityData } from './components';
 import './style.less';
 
 type DeviceDetailType = ObjectToCamelCase<DeviceAPISchema['getDetail']['response']>;
@@ -88,7 +88,7 @@ export default () => {
             {
                 key: 'entity',
                 label: getIntlText('device.detail.entity_data'),
-                component: <EntityTable data={deviceDetail} onRefresh={getDeviceDetail} />,
+                component: <EntityData data={deviceDetail} onRefresh={getDeviceDetail} />,
             },
             {
                 key: 'drawingBoard',

@@ -2,22 +2,23 @@ import { useMemo } from 'react';
 import { isBoolean } from 'lodash-es';
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
 import { type ColumnType } from '@/components';
-import { DeviceAPISchema, type EntityAPISchema } from '@/services/http';
+import { type EntityAPISchema } from '@/services/http';
+import { TableRowDataType } from '../../hooks/useColumns';
 
 export type HistoryRowDataType = ObjectToCamelCase<
     EntityAPISchema['getHistory']['response']['content'][0]
 >;
 
-export interface UseColumnsProps<T> {
+export interface UseColumnsProps {
     /**
      * filtered info
      */
     filteredInfo: Record<string, any>;
     /** entity data info */
-    detail: ObjectToCamelCase<DeviceAPISchema['getDetail']['response']['entities'][0]>;
+    detail?: TableRowDataType | null;
 }
 
-const useColumns = <T extends HistoryRowDataType>({ filteredInfo, detail }: UseColumnsProps<T>) => {
+const useColumns = <T extends HistoryRowDataType>({ filteredInfo, detail }: UseColumnsProps) => {
     const { getIntlText } = useI18n();
     const { getTimeFormat } = useTime();
 
@@ -30,7 +31,7 @@ const useColumns = <T extends HistoryRowDataType>({ filteredInfo, detail }: UseC
                 minWidth: 150,
                 ellipsis: true,
                 renderCell({ value }) {
-                    let result: string = detail?.valueAttribute?.enum?.[value] || value;
+                    let result: string = detail?.entityValueAttribute?.enum?.[value] || value;
                     if (['true', 'false'].includes(result) || isBoolean(result)) {
                         result = String(result).toUpperCase();
                     }
