@@ -6,7 +6,7 @@ import { useTheme } from '@milesight/shared/src/hooks';
 import {
     useBasicChartEntity,
     useActivityEntity,
-    useStableEntity,
+    useStableValue,
     useGridLayout,
 } from '@/components/drawing-board/plugin/hooks';
 import { getChartColor } from '@/components/drawing-board/plugin/utils';
@@ -33,25 +33,31 @@ export interface ViewProps {
 
 const View = (props: ViewProps) => {
     const { config, configJson, isEdit, widgetId, dashboardId } = props;
-    const { entityPosition, title, time, leftYAxisUnit, rightYAxisUnit } = config || {};
+    const {
+        entityPosition: unStableValue,
+        title,
+        time,
+        leftYAxisUnit,
+        rightYAxisUnit,
+    } = config || {};
     const { isPreview, pos } = configJson || {};
     const chartWrapperRef = useRef<HTMLDivElement>(null);
     const { grey } = useTheme();
 
     const { wGrid = 4, hGrid = 4 } = useGridLayout(pos);
 
-    const { stableEntity } = useStableEntity(entityPosition);
+    const { stableValue: entityPosition = [] } = useStableValue(unStableValue);
     const { getLatestEntityDetail } = useActivityEntity();
     const entity = useMemo(() => {
-        if (!Array.isArray(stableEntity)) return [];
+        if (!Array.isArray(entityPosition)) return [];
 
-        return stableEntity
+        return entityPosition
             .map(item => {
                 if (!item.entity) return;
                 return getLatestEntityDetail(item.entity);
             })
             .filter(Boolean) as EntityOptionType[];
-    }, [stableEntity, getLatestEntityDetail]);
+    }, [entityPosition, getLatestEntityDetail]);
 
     const { chartShowData, chartRef, chartZoomRef, xAxisConfig, xAxisRange } = useBasicChartEntity({
         widgetId,
@@ -69,7 +75,7 @@ const View = (props: ViewProps) => {
         chartWrapperRef,
     });
     const { newChartShowData } = useLineChart({
-        entityPosition: stableEntity || [],
+        entityPosition,
         chartShowData,
     });
     const { getYAxisRange } = useYAxisRange({ newChartShowData, entity });

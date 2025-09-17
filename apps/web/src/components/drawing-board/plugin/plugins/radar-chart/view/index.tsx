@@ -5,7 +5,7 @@ import { useTheme } from '@milesight/shared/src/hooks';
 import {
     useActivityEntity,
     useGridLayout,
-    useStableEntity,
+    useStableValue,
 } from '@/components/drawing-board/plugin/hooks';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { useResizeChart, useSource } from './hooks';
@@ -21,7 +21,7 @@ interface IProps {
 }
 const View = (props: IProps) => {
     const { config, configJson, widgetId, dashboardId } = props;
-    const { entityList, title, metrics, time } = config || {};
+    const { entityList: unStableEntityList, title, metrics, time } = config || {};
     const { pos } = configJson || {};
     const chartRef = useRef<HTMLDivElement>(null);
     const chartWrapperRef = useRef<HTMLDivElement>(null);
@@ -30,17 +30,17 @@ const View = (props: IProps) => {
     const { purple, white, grey } = useTheme();
     const { resizeChart } = useResizeChart({ chartWrapperRef });
 
-    const { stableEntity } = useStableEntity(entityList);
+    const { stableValue: entityList } = useStableValue(unStableEntityList);
     const { getLatestEntityDetail } = useActivityEntity();
     const latestEntities = useMemo(() => {
-        if (!stableEntity?.length) return [];
+        if (!entityList?.length) return [];
 
-        return stableEntity
+        return entityList
             .map(item => {
                 return getLatestEntityDetail(item);
             })
             .filter(Boolean) as EntityOptionType[];
-    }, [stableEntity, getLatestEntityDetail]);
+    }, [entityList, getLatestEntityDetail]);
     const { aggregateHistoryList } = useSource({
         widgetId,
         dashboardId,

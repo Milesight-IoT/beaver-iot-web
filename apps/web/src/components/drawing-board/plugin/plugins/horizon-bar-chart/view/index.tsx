@@ -6,7 +6,7 @@ import { useTheme } from '@milesight/shared/src/hooks';
 import {
     useBasicChartEntity,
     useActivityEntity,
-    useStableEntity,
+    useStableValue,
     useGridLayout,
 } from '@/components/drawing-board/plugin/hooks';
 import { getChartColor } from '@/components/drawing-board/plugin/utils';
@@ -29,24 +29,24 @@ export interface ViewProps {
 
 const View = (props: ViewProps) => {
     const { config, configJson, isEdit, widgetId, dashboardId } = props;
-    const { entity, title, time } = config || {};
+    const { entity: unStableEntity, title, time } = config || {};
     const { isPreview, pos } = configJson || {};
     const chartWrapperRef = useRef<HTMLDivElement>(null);
     const { grey } = useTheme();
 
     const { wGrid = 4, hGrid = 4 } = useGridLayout(pos);
 
-    const { stableEntity } = useStableEntity(entity);
+    const { stableValue: entity } = useStableValue(unStableEntity);
     const { getLatestEntityDetail } = useActivityEntity();
     const latestEntities = useMemo(() => {
-        if (!stableEntity?.length) return [];
+        if (!entity?.length) return [];
 
-        return stableEntity
+        return entity
             .map(item => {
                 return getLatestEntityDetail(item);
             })
             .filter(Boolean) as EntityOptionType[];
-    }, [stableEntity, getLatestEntityDetail]);
+    }, [entity, getLatestEntityDetail]);
 
     const { chartShowData, chartRef, chartZoomRef, xAxisConfig, xAxisRange } = useBasicChartEntity({
         widgetId,

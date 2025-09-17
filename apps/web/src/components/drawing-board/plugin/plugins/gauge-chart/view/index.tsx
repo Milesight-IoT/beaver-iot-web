@@ -4,7 +4,7 @@ import { useMemoizedFn } from 'ahooks';
 import * as echarts from 'echarts/core';
 import { useTheme } from '@milesight/shared/src/hooks';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
-import { useStableEntity } from '../../../hooks';
+import { useStableValue } from '../../../hooks';
 import { useSource, useResizeChart } from './hooks';
 import type { ViewConfigProps } from '../typings';
 import './style.less';
@@ -22,7 +22,7 @@ const View = (props: Props) => {
     const chartRef = useRef<HTMLDivElement>(null);
     const chartWrapperRef = useRef<HTMLDivElement>(null);
 
-    const { stableEntity: entity } = useStableEntity(unstableEntity);
+    const { stableValue: entity } = useStableValue(unstableEntity);
     const { purple, grey } = useTheme();
     const { resizeChart } = useResizeChart({ chartWrapperRef });
     const { aggregateHistoryData } = useSource({ widgetId, dashboardId, entity, metrics, time });

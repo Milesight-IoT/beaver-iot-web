@@ -7,7 +7,7 @@ import {
     getResponseData,
     isRequestSuccess,
 } from '@/services/http';
-import { useActivityEntity, useStableEntity } from '@/components/drawing-board/plugin/hooks';
+import { useActivityEntity, useStableValue } from '@/components/drawing-board/plugin/hooks';
 import type { BoardPluginProps } from '@/components/drawing-board/plugin/types';
 import type { ViewConfigProps } from '../../typings';
 
@@ -23,13 +23,13 @@ interface IProps {
 }
 export const useSourceData = (props: IProps) => {
     const { config, widgetId, dashboardId } = props;
-    const { entity, metrics, time } = config || {};
+    const { entity: unStableEntity, metrics, time } = config || {};
 
-    const { stableEntity } = useStableEntity(entity);
+    const { stableValue: entity } = useStableValue(unStableEntity);
 
     const { data: countData, runAsync: getData } = useRequest(
         async () => {
-            if (!stableEntity?.value) return;
+            if (!entity?.value) return;
 
             const run = async (selectEntity: EntityOptionType) => {
                 const { value: entityId } = selectEntity || {};
@@ -53,16 +53,16 @@ export const useSourceData = (props: IProps) => {
                 } as AggregateHistoryList;
             };
 
-            return Promise.resolve(run(stableEntity));
+            return Promise.resolve(run(entity));
         },
-        { refreshDeps: [stableEntity, time, metrics] },
+        { refreshDeps: [entity, time, metrics] },
     );
 
     // ---------- Entity status management ----------
     const { addEntityListener } = useActivityEntity();
 
     useEffect(() => {
-        const entityId = stableEntity?.value;
+        const entityId = entity?.value;
         if (!widgetId || !dashboardId || !entityId) return;
 
         const removeEventListener = addEntityListener(entityId, {
@@ -74,7 +74,7 @@ export const useSourceData = (props: IProps) => {
         return () => {
             removeEventListener();
         };
-    }, [stableEntity?.value, widgetId, dashboardId, addEntityListener, getData]);
+    }, [entity?.value, widgetId, dashboardId, addEntityListener, getData]);
 
     return {
         countData,
