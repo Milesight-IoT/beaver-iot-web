@@ -9,6 +9,7 @@ import {
     WorkflowIcon,
     SettingsIcon,
     SellIcon,
+    AntFallAttentionIcon,
 } from '@milesight/shared/src/components';
 import { isMobile } from '@milesight/shared/src/utils/userAgent';
 import { PERMISSIONS } from '@/constants';

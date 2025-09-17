@@ -4,6 +4,7 @@ import { useMemoizedFn } from 'ahooks';
 import * as echarts from 'echarts/core';
 import { useTheme } from '@milesight/shared/src/hooks';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
+import { useStableValue } from '../../../hooks';
 import { useSource, useResizeChart } from './hooks';
 import type { ViewConfigProps } from '../typings';
 import './style.less';
@@ -17,9 +18,11 @@ const DEFAULT_RANGE = 10;
 
 const View = (props: Props) => {
     const { config, widgetId, dashboardId } = props;
-    const { entity, title, time, metrics } = config || {};
+    const { entity: unstableEntity, title, time, metrics } = config || {};
     const chartRef = useRef<HTMLDivElement>(null);
     const chartWrapperRef = useRef<HTMLDivElement>(null);
+
+    const { stableValue: entity } = useStableValue(unstableEntity);
     const { purple, grey } = useTheme();
     const { resizeChart } = useResizeChart({ chartWrapperRef });
     const { aggregateHistoryData } = useSource({ widgetId, dashboardId, entity, metrics, time });
@@ -187,6 +190,7 @@ const View = (props: Props) => {
                     },
                 ],
                 tooltip: {
+                    confine: true,
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     borderColor: 'rgba(0, 0, 0, 0.9)',
                     textStyle: {

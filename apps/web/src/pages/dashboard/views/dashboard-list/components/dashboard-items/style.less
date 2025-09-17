@@ -1,0 +1,35 @@
+.dashboard-items {
+    display: grid;
+    gap: 32px 32px;
+    justify-content: space-around;
+}
+
+.bp-up(@grid-breakpoints[xl], {
+    .dashboard-items {
+        grid-template-columns: repeat(5, minMax(0, 1fr));
+    }
+});
+
+.bp-between(@grid-breakpoints[lg], @grid-breakpoints[xl], {
+     .dashboard-items {
+        grid-template-columns: repeat(4, minMax(0, 1fr));
+    }
+});
+
+.bp-between(@grid-breakpoints[md], @grid-breakpoints[lg], {
+     .dashboard-items {
+        grid-template-columns: repeat(3, minMax(0, 1fr));
+    }
+});
+
+.bp-between(@grid-breakpoints[sm], @grid-breakpoints[md], {
+     .dashboard-items {
+        grid-template-columns: repeat(2, minMax(0, 1fr));
+    }
+});
+
+.bp-down(@grid-breakpoints[sm], {
+    .dashboard-items {
+        grid-template-columns: repeat(1, minMax(0, 1fr));
+    }
+});

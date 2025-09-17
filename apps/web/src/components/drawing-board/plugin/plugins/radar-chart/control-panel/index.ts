@@ -17,10 +17,12 @@ const radarChartControlPanelConfig = (): ControlPanelConfig<RadarChartControlPan
         type: 'radarChart',
         name: 'Radar',
         icon: RadarChartIcon,
-        defaultRow: 4,
-        defaultCol: 4,
+        defaultRow: 3,
+        defaultCol: 3,
         minRow: 2,
         minCol: 2,
+        maxRow: 6,
+        maxCol: 6,
         configProps: [
             {
                 label: 'Radar Chart Config',

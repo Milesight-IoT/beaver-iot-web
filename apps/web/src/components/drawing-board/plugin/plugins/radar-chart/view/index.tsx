@@ -2,26 +2,35 @@ import { useEffect, useMemo, useRef } from 'react';
 import { renderToString } from 'react-dom/server';
 import * as echarts from 'echarts/core';
 import { useTheme } from '@milesight/shared/src/hooks';
-import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
+import {
+    useActivityEntity,
+    useGridLayout,
+    useStableValue,
+} from '@/components/drawing-board/plugin/hooks';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { useResizeChart, useSource } from './hooks';
 import type { AggregateHistoryList, ViewConfigProps } from '../typings';
+import type { BoardPluginProps } from '../../../types';
 import './style.less';
 
 interface IProps {
     widgetId: ApiKey;
     dashboardId: ApiKey;
     config: ViewConfigProps;
+    configJson: BoardPluginProps;
 }
 const View = (props: IProps) => {
-    const { config, widgetId, dashboardId } = props;
-    const { entityList, title, metrics, time } = config || {};
+    const { config, configJson, widgetId, dashboardId } = props;
+    const { entityList: unStableEntityList, title, metrics, time } = config || {};
+    const { pos } = configJson || {};
     const chartRef = useRef<HTMLDivElement>(null);
     const chartWrapperRef = useRef<HTMLDivElement>(null);
 
+    const { wGrid = 3, hGrid = 3 } = useGridLayout(pos);
     const { purple, white, grey } = useTheme();
     const { resizeChart } = useResizeChart({ chartWrapperRef });
 
+    const { stableValue: entityList } = useStableValue(unStableEntityList);
     const { getLatestEntityDetail } = useActivityEntity();
     const latestEntities = useMemo(() => {
         if (!entityList?.length) return [];
@@ -57,6 +66,7 @@ const View = (props: IProps) => {
 
         myChart.setOption({
             tooltip: {
+                confine: true,
                 trigger: 'item',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 borderColor: 'rgba(0, 0, 0, 0.9)',
@@ -128,6 +138,8 @@ const View = (props: IProps) => {
                     axisName: {
                         color: grey[600],
                         overflow: 'break',
+                        padding: -8,
+                        show: wGrid > 2 && hGrid > 2,
                     },
                     splitArea: {
                         areaStyle: {
@@ -188,7 +200,7 @@ const View = (props: IProps) => {
             ],
         };
         return renderRadarChart(data, historyList);
-    }, [aggregateHistoryList]);
+    }, [aggregateHistoryList, wGrid, hGrid]);
 
     return (
         <div className="ms-radar-chart" ref={chartWrapperRef}>

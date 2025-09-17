@@ -48,7 +48,7 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
     });
 
     const renderNormalMode = (
-        <Stack className="md:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+        <Stack className="xl:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
             <IconButton
                 onClick={enterFullscreen}
                 sx={{
@@ -82,20 +82,17 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
         setIsEdit(false);
 
         const data = drawingBoardExposeRef?.current?.handleSave();
-        const { dashboard_id: id, name, widgets } = data || {};
+        const { id, name, widgets } = data || {};
         if (!id || !widgets) {
             return;
         }
 
-        /** Execute hook callback */
-        onSave?.(widgets);
-
         const currentEntityIds = getCurrentEntityIds(id);
         const [error, resp] = await awaitWrap(
-            dashboardAPI.updateDashboard({
+            dashboardAPI.updateDrawingBoard({
+                canvas_id: id,
                 widgets: filterWidgets(widgets),
                 entity_ids: currentEntityIds,
-                dashboard_id: id,
                 name,
             }),
         );
@@ -103,11 +100,13 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
             return;
         }
 
+        /** Execute hook callback */
+        onSave?.(widgets);
         toast.success(getIntlText('common.message.operation_success'));
     });
 
     const renderEditMode = (
-        <Stack className="md:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+        <Stack className="xl:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
             <PluginListPopover onSelect={updateOperatingPlugin} />
             <Divider orientation="vertical" variant="middle" flexItem />
             <Button variant="outlined" onClick={handleCancel} startIcon={<CloseIcon />}>

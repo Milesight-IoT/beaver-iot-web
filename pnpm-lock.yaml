@@ -93,8 +93,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/locales
       '@milesight/responsive-style':
-        specifier: ^1.1.3
-        version: 1.1.3
+        specifier: ^1.1.4
+        version: 1.1.4
       '@milesight/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -1362,8 +1362,8 @@ packages:
   '@marijn/find-cluster-break@1.0.2':
     resolution: {integrity: sha512-l0h88YhZFyKdXIFNfSWpyjStDjGHwZ/U7iobcK1cQQD8sejsONdQtTVU+1wVN1PBw40PiiHB1vA5S7VTfQiP9g==}
 
-  '@milesight/responsive-style@1.1.3':
-    resolution: {integrity: sha512-nXiwrKPF0xLDQ+sbzGrp2xiCMDZZbarlbOULJM1r7zT2CGZ9/Tl2IGUlUKamRlSSjkGX2f/5BllLgaADhlgLrg==}
+  '@milesight/responsive-style@1.1.4':
+    resolution: {integrity: sha512-edAtBFQ1DKBYK6zyRG1epv4JFWKCRqh5LjQ8BPpFiLC7SSYCW9zcY5Y/x8F3E07bHGj3MPPjVIPju6r1B+Fhow==}
 
   '@mui/core-downloads-tracker@6.1.0':
     resolution: {integrity: sha512-covEnIn/2er5YdtuukDRA52kmARhKrHjOvPsyTFMQApZdrTBI4h8jbEy2mxZqwMwcAFS9coonQXnEZKL1rUNdQ==}
@@ -6624,7 +6624,7 @@ snapshots:
 
   '@marijn/find-cluster-break@1.0.2': {}
 
-  '@milesight/responsive-style@1.1.3': {}
+  '@milesight/responsive-style@1.1.4': {}
 
   '@mui/core-downloads-tracker@6.1.0': {}
 

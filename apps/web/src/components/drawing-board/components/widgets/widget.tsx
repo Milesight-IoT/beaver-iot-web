@@ -27,11 +27,11 @@ const Widget = (props: WidgetProps) => {
 
     const handleEdit = useCallback(() => {
         onEdit(data);
-    }, [data]);
+    }, [data, onEdit]);
 
     const handleDelete = useCallback(() => {
         onDelete(data);
-    }, [data]);
+    }, [data, onDelete]);
 
     const widgetCls = useMemo(() => {
         return classnames('drawing-board__widget', {

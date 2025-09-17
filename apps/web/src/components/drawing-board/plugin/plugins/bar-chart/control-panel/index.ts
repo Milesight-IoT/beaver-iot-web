@@ -16,10 +16,12 @@ const barChartControlPanelConfig = (): ControlPanelConfig<BarChartControlPanelCo
         type: 'barChart',
         name: 'Bar',
         icon: BarChartIcon,
-        defaultRow: 4,
-        defaultCol: 4,
-        minRow: 2,
+        defaultRow: 2,
+        defaultCol: 2,
+        minRow: 1,
         minCol: 2,
+        maxRow: 4,
+        maxCol: 12,
         configProps: [
             {
                 label: 'Bar Chart Config',

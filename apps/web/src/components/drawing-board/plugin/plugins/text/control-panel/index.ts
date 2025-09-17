@@ -18,10 +18,12 @@ const textControlPanelConfig = (): ControlPanelConfig<TextControlPanelConfig> =>
         type: 'text',
         name: 'Text',
         icon: TextIcon,
-        defaultRow: 2,
-        defaultCol: 3,
+        defaultRow: 4,
+        defaultCol: 4,
         minRow: 1,
         minCol: 2,
+        maxRow: 12,
+        maxCol: 12,
         configProps: [
             {
                 label: 'Text Config',

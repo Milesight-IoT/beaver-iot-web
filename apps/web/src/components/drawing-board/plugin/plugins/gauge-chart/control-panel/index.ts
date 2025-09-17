@@ -17,10 +17,12 @@ const gaugeChartControlPanelConfig = (): ControlPanelConfig<GaugeChartControlPan
         type: 'gaugeChart',
         name: 'Gauge',
         icon: GaugeChartIcon,
-        defaultRow: 4,
-        defaultCol: 4,
-        minRow: 2,
-        minCol: 2,
+        defaultRow: 3,
+        defaultCol: 3,
+        minRow: 3,
+        minCol: 3,
+        maxRow: 6,
+        maxCol: 6,
         configProps: [
             {
                 label: 'Gauge Chart Config',

@@ -16,10 +16,12 @@ const areaChartControlPanelConfig = (): ControlPanelConfig<AreaChartControlPanel
         type: 'areaChart',
         name: 'Area',
         icon: AreaChartIcon,
-        defaultRow: 4,
-        defaultCol: 4,
-        minRow: 2,
+        defaultRow: 2,
+        defaultCol: 2,
+        minRow: 1,
         minCol: 2,
+        maxRow: 4,
+        maxCol: 12,
         configProps: [
             {
                 label: 'Area Chart Config',
