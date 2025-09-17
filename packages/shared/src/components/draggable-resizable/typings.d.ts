@@ -1,4 +1,4 @@
-declare type draggerType = {
+export type DraggerType = {
     id: ApiKey;
     width?: number;
     height?: number;
