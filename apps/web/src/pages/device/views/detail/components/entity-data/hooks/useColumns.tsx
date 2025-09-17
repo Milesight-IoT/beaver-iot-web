@@ -9,6 +9,7 @@ import {
     getOperatorsByExclude,
     MultiTag,
     Tag,
+    TitleIcon,
     type ColumnType,
 } from '@/components';
 import { type EntityAPISchema } from '@/services/http';
@@ -53,13 +54,26 @@ const useColumns = <T extends TableRowDataType>({
                 headerName: getIntlText('device.label.param_entity_name'),
                 flex: 1,
                 minWidth: 150,
-                ellipsis: true,
+                // ellipsis: true,
                 operators: getOperatorsByExclude([
                     FILTER_OPERATORS.IS_EMPTY,
                     FILTER_OPERATORS.IS_NOT_EMPTY,
                     FILTER_OPERATORS.ANY_EQUALS,
                 ]),
                 operatorValueCompType: 'input',
+                renderCell({ row }) {
+                    // TODO: Render with blueprint tooltip
+                    // return (
+                    //     <TitleIcon
+                    //         title={row.entityName}
+                    //         tooltip={getIntlText('device.tip.blueprint_entity_come_from', {
+                    //             1: row.deviceName,
+                    //             2: row.deviceExternalID,
+                    //         })}
+                    //     />
+                    // );
+                    return <TitleIcon title={row.entityName} />;
+                },
             },
             {
                 field: 'entityKey',
