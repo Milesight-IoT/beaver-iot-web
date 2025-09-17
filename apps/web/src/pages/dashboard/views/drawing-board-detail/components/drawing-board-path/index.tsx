@@ -3,7 +3,7 @@ import { Breadcrumbs } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import { Tooltip } from '@/components';
-import useDashboardStore from '@/pages/new-dashboard/store';
+import useDashboardStore from '@/pages/dashboard/store';
 
 export interface DrawingBoardPathProps {
     className?: string;

@@ -1,7 +1,6 @@
 import { Grid2 as Grid } from '@mui/material';
 import { WidgetDetail } from '@/services/http/dashboard';
 import pluginImg from '@/assets/plugin.png';
-import { useLoadPlugins } from '../../hooks';
 import useDrawingBoardStore from '../../store';
 
 import type { BoardPluginProps } from '../../plugin/types';
@@ -10,18 +9,22 @@ import './style.less';
 
 interface PluginListProps {
     onSelect: (plugin: WidgetDetail) => void;
+    /**
+     * Change current drawing board is edit mode
+     */
+    changeIsEditMode?: (isEditing: boolean) => void;
 }
 
 export default (props: PluginListProps) => {
-    const { onSelect } = props;
+    const { onSelect, changeIsEditMode } = props;
 
-    useLoadPlugins();
     const { pluginsControlPanel } = useDrawingBoardStore();
 
-    const handleClick = (type: BoardPluginProps) => {
+    const handleClick = (newPlugin: BoardPluginProps) => {
         onSelect({
-            data: type,
+            data: newPlugin,
         });
+        changeIsEditMode?.(true);
     };
 
     return (

@@ -71,7 +71,7 @@ const routes: RouteObjectType[] = [
             permissions: PERMISSIONS.DASHBOARD_MODULE,
         },
         async lazy() {
-            const { default: Component } = await import('@/pages/new-dashboard');
+            const { default: Component } = await import('@/pages/dashboard');
             return { Component };
         },
         ErrorBoundary,

@@ -4,7 +4,7 @@ import { useRequest } from 'ahooks';
 import { useMqtt, MQTT_STATUS, MQTT_EVENT_TYPE, BATCH_PUSH_TIME } from '@/hooks';
 import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
 import { dashboardAPI, getResponseData, isRequestSuccess, awaitWrap } from '@/services/http';
-import useDashboardStore from '@/pages/new-dashboard/store';
+import useDashboardStore from '@/pages/dashboard/store';
 
 /**
  * Get dashboard detail

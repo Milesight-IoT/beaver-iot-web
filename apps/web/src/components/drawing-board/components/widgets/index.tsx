@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import GRL, { WidthProvider, type Layout } from 'react-grid-layout';
-// import { get } from 'lodash-es';
+import { isEqual, omitBy, isNil } from 'lodash-es';
 
 import { type WidgetDetail } from '@/services/http/dashboard';
 import { GRID_LAYOUT_MARGIN } from '@/components/drawing-board/constants';
@@ -90,21 +90,31 @@ const Widgets = (props: WidgetProps) => {
         requestRef.current = requestAnimationFrame(() => {
             const newData = widgets.map((widget: WidgetDetail) => {
                 const findWidget = data.find(
-                    (item: any) =>
+                    (item: Layout) =>
                         (item.i && item.i === widget.widget_id) ||
                         (item.i && item.i === widget.tempId),
                 );
+
                 if (findWidget) {
                     return {
                         ...widget,
                         data: {
                             ...widget.data,
-                            pos: findWidget,
+                            pos: omitBy(findWidget, v => isNil(v)),
                         },
                     };
                 }
+
                 return widget;
             });
+
+            /**
+             * If the data is identical, no data update operation
+             * shall be performed.
+             */
+            if (isEqual(newData, widgets)) {
+                return;
+            }
 
             onChangeWidgets(newData);
         });
@@ -136,6 +146,7 @@ const Widgets = (props: WidgetProps) => {
             if (index > -1) {
                 const newWidgets = [...(widgetRef.current || [])];
                 newWidgets.splice(index, 1);
+
                 onChangeWidgets(newWidgets);
             }
         },

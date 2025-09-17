@@ -108,7 +108,8 @@ export type PluginType =
     | 'radarChart'
     | 'switch'
     | 'text'
-    | 'trigger';
+    | 'trigger'
+    | 'deviceList';
 
 /**
  * The plugin control panel config

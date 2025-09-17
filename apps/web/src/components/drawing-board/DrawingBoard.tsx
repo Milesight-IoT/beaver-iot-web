@@ -25,6 +25,7 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
         drawingBoardRef,
         isFullscreen,
         operatingPlugin,
+        changeIsEdit,
         updateOperatingPlugin,
     } = props;
 
@@ -61,7 +62,7 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
                 <div className="drawing-board__empty-description">
                     {getIntlText('dashboard.empty_description')}
                 </div>
-                <PluginList onSelect={updateOperatingPlugin} />
+                <PluginList onSelect={updateOperatingPlugin} changeIsEditMode={changeIsEdit} />
             </div>
         </PermissionControlDisabled>
     );

@@ -6,7 +6,7 @@ import { GridViewIcon } from '@milesight/shared/src/components';
 import { useTheme, useMediaQuery, useI18n } from '@milesight/shared/src/hooks';
 
 import { SidebarController, Tooltip } from '@/components';
-import useDashboardStore from '@/pages/new-dashboard/store';
+import useDashboardStore from '@/pages/dashboard/store';
 import DrawingBoardPath from '../drawing-board-path';
 
 export interface ToolbarProps {
