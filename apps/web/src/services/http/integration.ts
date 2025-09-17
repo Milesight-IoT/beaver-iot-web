@@ -63,9 +63,11 @@ export interface IntegrationAPISchema extends APISchema {
                 /** Entity attribute */
                 value_attribute: Partial<EntityValueAttributeType>;
                 /** Entity value */
-                value: string;
+                value?: string;
                 /** Entity value type */
                 value_type: EntityValueDataType;
+                /** Entity description */
+                description?: string;
             }[];
         };
     };

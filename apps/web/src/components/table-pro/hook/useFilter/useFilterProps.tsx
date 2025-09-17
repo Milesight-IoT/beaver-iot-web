@@ -2,7 +2,7 @@ import { useCallback, useRef } from 'react';
 import { OutlinedInput } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import DateRangePicker, { type DateRangePickerValueType } from '@/components/date-range-picker';
-import { ColumnType, FilterDropdownProps } from '../../interface';
+import { ColumnType, FilterDropdownProps } from '../../types';
 import { FilterDropdownFooter } from '../../components/filter-down/filterDown';
 
 /**

@@ -81,6 +81,7 @@ export default (props: IProps) => {
                     height: 'auto',
                     display: 'flex',
                     flexDirection: 'column',
+                    paddingTop: '8px',
                 },
             }}
         >

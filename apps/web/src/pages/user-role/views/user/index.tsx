@@ -105,7 +105,6 @@ const Users: React.FC = () => {
                 }
 
                 getAllUsers();
-                setSelectedIds([]);
                 toast.success(getIntlText('common.message.delete_success'));
             },
         });
@@ -178,6 +177,7 @@ const Users: React.FC = () => {
     return (
         <div className={styles['users-container']}>
             <TablePro<TableRowDataType>
+                filterCondition={[keyword]}
                 checkboxSelection
                 loading={loading}
                 columns={columns}
@@ -197,6 +197,9 @@ const Users: React.FC = () => {
                 title={modalTitle}
                 visible={userModalVisible}
                 onCancel={handleModalCancel}
+                onSuccess={operateType => {
+                    operateType !== 'add' && setSelectedIds([]);
+                }}
                 onFormSubmit={handleUserFormSubmit}
                 data={editModalData}
             />

@@ -10,7 +10,12 @@ import {
     isMatches,
     isEmail,
     isRangeLength,
+    isRangeValue,
+    isMinValue,
+    isMaxValue,
+    isMinLength,
 } from '@milesight/shared/src/utils/validators';
+import { ENTITY_VALUE_TYPE } from '@/constants';
 import {
     EDGE_TYPE_ADDABLE,
     HTTP_URL_PATH_PATTERN,
@@ -21,6 +26,8 @@ import { isRefParamKey, getNodeParamName } from '../helper';
 import type { NodeDataValidator } from '../typings';
 import useWorkflow from './useWorkflow';
 
+const isValidNumber = (num: any): num is number => !isNil(num) && !isNaN(+num);
+
 type CheckOptions = {
     /**
      * When a rule fails validation, should the validation of the remaining rules be stopped
@@ -30,6 +37,8 @@ type CheckOptions = {
      * The nodes to be validated. If not set, the all nodes in the current flow will be validated.
      */
     validateNodes?: WorkflowNode[];
+
+    entityList?: ObjectToCamelCase<EntityData[]>;
 };
 
 export type NodesDataValidResult = Record<
@@ -52,6 +61,9 @@ enum ErrorIntlKey {
     email = 'workflow.valid.invalid_email',
     urlPath = 'workflow.valid.invalid_url_path',
     refParam = 'workflow.valid.invalid_reference_param',
+    rangeNum = 'workflow.valid.range_num',
+    minValue = 'workflow.valid.min_value',
+    maxValue = 'workflow.valid.max_value',
 }
 
 export const NODE_VALIDATE_TOAST_KEY = 'node-validate';
@@ -120,7 +132,8 @@ const useValidate = () => {
                 const hasValueOverLength =
                     !isNil(valueMaxLength) &&
                     Object.values(value).some(val => {
-                        if (val && !isMaxLength(val, valueMaxLength)) return true;
+                        if (val && !isRefParamKey(val) && !isMaxLength(val, valueMaxLength))
+                            return true;
                         return false;
                     });
 
@@ -130,6 +143,25 @@ const useValidate = () => {
                     : { 1: fieldName, 2: valueMaxLength };
 
                 return getIntlText(ErrorIntlKey.maxLength, options);
+            };
+        };
+
+        const genObjectKeyValueRequiredValidator = (): NodeDataValidator => {
+            return (
+                value: NonNullable<CodeNodeDataType['parameters']>['inputArguments'],
+                fieldName,
+            ) => {
+                if (!value || !Object.keys(value).length) return true;
+
+                if (
+                    value &&
+                    Object.keys(value).length &&
+                    Object.keys(value).every(val => !!val) &&
+                    Object.values(value).every(val => !!val)
+                ) {
+                    return true;
+                }
+                return getIntlText(ErrorIntlKey.required, { 1: fieldName });
             };
         };
 
@@ -228,7 +260,7 @@ const useValidate = () => {
             },
             nodeRemark: {
                 checkRangeLength(value) {
-                    if (value && !isRangeLength(value || '', 1, 500)) {
+                    if (value && !isRangeLength(value || '', 1, 1000)) {
                         const message = getIntlText(ErrorIntlKey.rangeLength, {
                             1: getIntlText('common.label.remark'),
                             2: 1,
@@ -360,6 +392,9 @@ const useValidate = () => {
             'mqtt.subscriptionTopic': {
                 checkRequired,
                 checkMaxLength: genMaxLengthValidator(100),
+            },
+            'mqtt.encoding': {
+                checkRequired,
             },
             'httpin.method': { checkRequired },
             'httpin.url': {
@@ -512,20 +547,7 @@ const useValidate = () => {
                 },
             },
             'code.inputArguments': {
-                checkRequired(
-                    value: NonNullable<CodeNodeDataType['parameters']>['inputArguments'],
-                    fieldName,
-                ) {
-                    if (
-                        value &&
-                        Object.keys(value).length &&
-                        Object.values(value).every(val => !!val)
-                    ) {
-                        return true;
-                    }
-                    const message = getIntlText(ErrorIntlKey.required, { 1: fieldName });
-                    return message;
-                },
+                checkKeyValueRequired: genObjectKeyValueRequiredValidator(),
                 ...inputArgumentsChecker,
             },
             'code.expression': {
@@ -557,6 +579,20 @@ const useValidate = () => {
                 },
             },
             'code.payload': {
+                checkKeyValueRequired(
+                    value?: NonNullable<CodeNodeDataType['parameters']>['payload'],
+                    fieldName?: string,
+                ) {
+                    if (value?.length) {
+                        const hasRequired = value?.some(({ name, type }) => {
+                            if (!name || !type) return true;
+                            return false;
+                        });
+                        if (!hasRequired) return true;
+                        return getIntlText(ErrorIntlKey.required, { 1: fieldName });
+                    }
+                    return true;
+                },
                 checkMaxLength(
                     value?: NonNullable<CodeNodeDataType['parameters']>['payload'],
                     fieldName?: string,
@@ -626,6 +662,41 @@ const useValidate = () => {
                     return checkReferenceParam(value?.serviceParams, fieldName, options);
                 },
             },
+            'service.payload': {
+                checkRequired(
+                    value: NonNullable<ServiceNodeDataType['parameters']>['payload'],
+                    fieldName,
+                ) {
+                    if (value?.length) {
+                        const hasRequired = value?.some(({ name, type }) => {
+                            if (!name || !type) return true;
+                            return false;
+                        });
+                        if (!hasRequired) return true;
+                        return getIntlText(ErrorIntlKey.required, { 1: fieldName });
+                    }
+                    return true;
+                },
+                checkMaxLength(
+                    value?: NonNullable<ServiceNodeDataType['parameters']>['payload'],
+                    fieldName?: string,
+                ) {
+                    if (value?.length) {
+                        const maxLength = 50;
+                        const hasOverLength = value?.some(item => {
+                            if (item.name && !isMaxLength(`${item.name}`, maxLength)) return true;
+                            return false;
+                        });
+
+                        if (!hasOverLength) return true;
+                        return getIntlText(ErrorIntlKey.maxLength, {
+                            1: fieldName,
+                            2: maxLength,
+                        });
+                    }
+                    return true;
+                },
+            },
             'assigner.exchangePayload': {
                 checkRequired(
                     value: NonNullable<AssignerNodeDataType['parameters']>['exchangePayload'],
@@ -669,14 +740,102 @@ const useValidate = () => {
                     return true;
                 },
                 checkReferenceParam,
+                checkValueByEntityRule(data, fieldName, options) {
+                    if (!options?.entityList?.length) return true;
+                    for (const [key, value] of Object.entries(data).filter(
+                        ([key, value]) => !!key && !!value && !isRefParamKey(value as string),
+                    )) {
+                        const entity = options?.entityList?.find(
+                            item =>
+                                item.entityKey === key &&
+                                (ENTITY_VALUE_TYPE.STRING === item.entityValueType ||
+                                    [ENTITY_VALUE_TYPE.LONG, ENTITY_VALUE_TYPE.DOUBLE].includes(
+                                        item.entityValueType as ENTITY_VALUE_TYPE,
+                                    )),
+                        );
+                        if (entity?.entityValueAttribute) {
+                            const { entityValueAttribute: attr } = entity;
+                            if (ENTITY_VALUE_TYPE.STRING === entity.entityValueType) {
+                                if (
+                                    isValidNumber(attr.minLength) &&
+                                    isValidNumber(attr.maxLength) &&
+                                    !isRangeLength(
+                                        value as string,
+                                        +attr.minLength,
+                                        +attr.maxLength,
+                                    )
+                                ) {
+                                    return getIntlText(ErrorIntlKey.rangeLength, {
+                                        1: entity.entityName,
+                                        2: attr.minLength,
+                                        3: attr.maxLength,
+                                    });
+                                }
+                                if (
+                                    isValidNumber(attr.minLength) &&
+                                    !isMinLength(value as string, +attr.minLength)
+                                ) {
+                                    return getIntlText(ErrorIntlKey.minLength, {
+                                        1: entity.entityName,
+                                        2: attr.minLength,
+                                    });
+                                }
+                                if (
+                                    isValidNumber(attr.maxLength) &&
+                                    !isMaxLength(value as string, +attr.maxLength)
+                                ) {
+                                    return getIntlText(ErrorIntlKey.maxLength, {
+                                        1: entity.entityName,
+                                        2: attr.maxLength,
+                                    });
+                                }
+                            } else {
+                                if (
+                                    isValidNumber(attr.min) &&
+                                    isValidNumber(attr.max) &&
+                                    !isRangeValue(value as number, +attr.min, +attr.max)
+                                ) {
+                                    return getIntlText(ErrorIntlKey.rangeNum, {
+                                        1: entity.entityName,
+                                        2: attr.min,
+                                        3: attr.max,
+                                    });
+                                }
+                                if (
+                                    isValidNumber(attr.min) &&
+                                    !isMinValue(value as number, +attr.min)
+                                ) {
+                                    return getIntlText(ErrorIntlKey.minValue, {
+                                        1: entity.entityName,
+                                        2: attr.min,
+                                    });
+                                }
+                                if (
+                                    isValidNumber(attr.max) &&
+                                    !isMaxValue(value as number, +attr.max)
+                                ) {
+                                    return getIntlText(ErrorIntlKey.maxValue, {
+                                        1: entity.entityName,
+                                        2: attr.max,
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    return true;
+                },
             },
             'email.emailConfig': {
                 checkRequired(
                     value: NonNullable<EmailNodeDataType['parameters']>['emailConfig'],
                     fieldName,
                 ) {
-                    const { provider, smtpConfig } = value || {};
-                    if (!provider || !smtpConfig || Object.values(smtpConfig).some(item => !item)) {
+                    const { provider, useSystemSettings, smtpConfig } = value || {};
+
+                    if (
+                        !useSystemSettings &&
+                        (!provider || !smtpConfig || Object.values(smtpConfig).some(item => !item))
+                    ) {
                         return getIntlText(ErrorIntlKey.required, { 1: fieldName });
                     }
                     return true;
@@ -749,7 +908,11 @@ const useValidate = () => {
                     return true;
                 },
             },
-            'webhook.inputArguments': inputArgumentsChecker,
+            'webhook.inputArguments': {
+                checkKeyValueRequired: genObjectKeyValueRequiredValidator(),
+                ...inputArgumentsChecker,
+                checkMaxLength: genObjectMaxLengthValidator(25, 25),
+            },
             'http.method': { checkRequired },
             'http.url': {
                 checkRequired,
@@ -797,10 +960,18 @@ const useValidate = () => {
                 ) {
                     if (!data?.type || !data.value) return true;
                     const maxLength = 1000;
-
+                    const rawOrJsonBodyMaxLength = 2000;
                     switch (data.type) {
                         case 'application/x-www-form-urlencoded': {
                             const validator = genObjectMaxLengthValidator(maxLength, maxLength);
+                            return validator(data.value, fieldName);
+                        }
+                        case 'application/json': {
+                            const validator = genMaxLengthValidator(rawOrJsonBodyMaxLength);
+                            return validator(data.value, fieldName);
+                        }
+                        case 'text/plain': {
+                            const validator = genMaxLengthValidator(rawOrJsonBodyMaxLength);
                             return validator(data.value, fieldName);
                         }
                         default: {
@@ -1082,6 +1253,7 @@ const useValidate = () => {
             edges = edges || getEdges();
             const result: NodesDataValidResult = {};
             const validateNodes = options?.validateNodes || nodes;
+            const entityList = options?.entityList;
 
             for (let i = 0; i < validateNodes.length; i++) {
                 const node = validateNodes[i];
@@ -1137,6 +1309,7 @@ const useValidate = () => {
                             node,
                             nodeConfig: config,
                             upstreamParams,
+                            entityList,
                         });
                         if (result && result !== true) {
                             tempResult.errMsgs.push(result);

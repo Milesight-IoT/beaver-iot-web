@@ -75,7 +75,7 @@ declare interface EntitySchema {
     value_type: string;
 
     /** Creation Time (ms) */
-    create_at: number;
+    created_at: number;
 
     /** Update Time (ms) */
     update_at: number;
@@ -106,8 +106,11 @@ declare interface EntityValueAttributeType {
      *
      * @template HEX Hexadecimal
      * @template REGEX Regular Expression, format `REGEX:${string}`, e.g. `REGEX:^[0-9a-fA-F]{6}$`
+     * @template IMAGE Image, format `IMAGE`
+     * @template `IMAGE:URL` Image URL, format `IMAGE:URL`
+     * @template `IMAGE:BASE64` Image Base64, format `IMAGE:BASE64`
      */
-    format: 'HEX' | `REGEX:${string}`;
+    format: 'HEX' | `REGEX:${string}` | 'IMAGE' | 'IMAGE:URL' | 'IMAGE:BASE64';
     /** Fraction Digits */
     fraction_digits: number;
     /** Optional */
@@ -120,8 +123,6 @@ declare interface EntityValueAttributeType {
 declare interface EntityData {
     /** Entity ID */
     entity_id: ApiKey;
-    /** Device Name */
-    device_name: string;
     /** Integration Name */
     integration_name: string;
     /** Entity Key */
@@ -140,6 +141,25 @@ declare interface EntityData {
     identifier: string;
     /** Entity Parent Name */
     entity_parent_name?: string;
+    /** Entity tag data */
+    entity_tags?: TagProps[];
+    /** Name of the affiliated device */
+    device_name?: string;
+    /** Latest value */
+    entity_latest_value?: ApiKey;
+    /** Device group */
+    device_group?: {
+        id: ApiKey;
+        name: string;
+    };
+    /** Is customized entity */
+    entity_is_customized?: boolean;
+    /** Entity description info */
+    entity_description?: string;
+    /** Entity create time */
+    entity_created_at: number;
+    /** Entity update time */
+    entity_updated_at: number;
 }
 
 /**

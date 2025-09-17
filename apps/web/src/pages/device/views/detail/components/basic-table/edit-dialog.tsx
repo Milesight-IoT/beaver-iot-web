@@ -4,7 +4,7 @@ import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import cls from 'classnames';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { Modal, toast, type ModalProps } from '@milesight/shared/src/components';
-import { checkRequired } from '@milesight/shared/src/utils/validators';
+import { checkMaxLength, checkRequired } from '@milesight/shared/src/utils/validators';
 import { awaitWrap, deviceAPI, isRequestSuccess, type DeviceAPISchema } from '@/services/http';
 
 interface Props extends Omit<ModalProps, 'onOk'> {
@@ -56,6 +56,7 @@ const EditDialog: React.FC<Props> = ({ data, visible, onCancel, onError, onSucce
 
     return (
         <Modal
+            size="lg"
             visible={visible}
             title={getIntlText('common.label.edit_title', { 1: data?.name })}
             className={cls({ loading: formState.isSubmitting })}
@@ -66,7 +67,10 @@ const EditDialog: React.FC<Props> = ({ data, visible, onCancel, onError, onSucce
                 name="name"
                 control={control}
                 rules={{
-                    validate: { checkRequired: checkRequired() },
+                    validate: {
+                        checkRequired: checkRequired(),
+                        checkMaxLength: checkMaxLength({ max: 64 }),
+                    },
                 }}
                 render={({ field: { onChange, value, disabled }, fieldState: { error } }) => {
                     return (

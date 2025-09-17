@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { useMemoizedFn, useRequest } from 'ahooks';
-import { isEqual } from 'lodash-es';
+import { isEqual, get } from 'lodash-es';
 
 import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
 import { toast } from '@milesight/shared/src/components';
@@ -14,9 +14,10 @@ import {
     type UserMenuType,
 } from '@/services/http';
 import useUserRoleStore from '@/pages/user-role/store';
+import { permissionMapIntlTextKey, PERMISSION_INTL_SIGN } from '../../../constants';
 
 /**
- * whether page view permission sign
+ * Whether page view permission sign
  */
 const VIEW_PERMISSION_SIGN = '.view';
 
@@ -260,6 +261,42 @@ const useFunctions = () => {
         toast.success(getIntlText('common.message.operation_success'));
     });
 
+    /**
+     * Get Permission intl label text
+     */
+    const getPermissionLabel = useMemoizedFn((code: string) => {
+        if (!code || typeof code !== 'string') return '';
+
+        /**
+         * Get code intl text key
+         * eg: dashboard
+         */
+        const codeIntlKey = get(permissionMapIntlTextKey, code);
+        if (codeIntlKey) {
+            return getIntlText(codeIntlKey);
+        }
+
+        const codeLastStr = code.split('.').pop();
+        if (!codeLastStr) {
+            return '';
+        }
+
+        /**
+         * Get code intl text key
+         * eg: dashboard.view => view
+         */
+        const codeLastStrIntlKey = get(permissionMapIntlTextKey, codeLastStr);
+        if (codeLastStrIntlKey) {
+            return getIntlText(codeLastStrIntlKey);
+        }
+
+        /**
+         * Get code intl text key
+         * eg: device.group_manage => user.role.permission_group_manage
+         */
+        return getIntlText(`${PERMISSION_INTL_SIGN}${codeLastStr}`);
+    });
+
     return {
         isEditing,
         handleEdit,
@@ -274,6 +311,7 @@ const useFunctions = () => {
         isPageIndeterminate,
         isPageChecked,
         handleSave,
+        getPermissionLabel,
     };
 };
 

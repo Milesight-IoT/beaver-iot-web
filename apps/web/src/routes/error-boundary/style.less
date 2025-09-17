@@ -17,6 +17,12 @@
         max-width: calc(100% - 300px);
         transform: translate(-50%, -50%);
 
+        // Mobile Responsive
+        .bp-down(@grid-breakpoints[sm], {
+            max-width: calc(100% - (2*@margin-xl));
+            min-width: 350px;
+        });
+
         &-title {
             margin: 0 0 @margin-lg;
             .text-size(@font-size-6);

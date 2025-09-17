@@ -110,6 +110,7 @@ function reducer(state: DropzoneState, action: DropzoneState & { type: string })
 const useDropzone = (props?: UseDropzoneProps) => {
     const {
         accept,
+        matchExt,
         disabled,
         getFilesFromEvent,
         maxSize,
@@ -362,7 +363,7 @@ const useDropzone = (props?: UseDropzoneProps) => {
             const fileRejections: FileRejection[] = [];
 
             files.forEach(file => {
-                const [accepted, acceptError] = fileAccepted(file, acceptAttr);
+                const [accepted, acceptError] = fileAccepted(file, acceptAttr, matchExt);
                 const [sizeMatch, sizeError] = fileMatchSize(file, minSize, maxSize);
                 const customErrors = validator ? validator(file) : null;
 

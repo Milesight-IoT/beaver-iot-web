@@ -1,0 +1,58 @@
+.chart-entity-position {
+    position: relative;
+
+    .list-content {
+        padding: @padding-md;
+        background: var(--component-background-gray);
+        border-radius: @border-radius-base;
+
+        :global {
+            .@{mui-prefix}InputBase-formControl {
+                background: var(--component-background);
+            }
+
+            .@{mui-prefix}TextField-root:first-child {
+                margin: 0 !important;
+            }
+        }
+    }
+
+    .item {
+        display: flex;
+        gap: @margin-xs;
+        align-items: center;
+        margin-bottom: @margin-md;
+
+        &:not(:first-child) label {
+            display: none;
+        }
+
+        :global {
+            .@{mui-prefix}FormControl-root {
+                margin: 0;
+            }
+
+            .@{prefix}-param-input-select,
+            .@{mui-prefix}Autocomplete-root {
+                flex: 1;
+            }
+        }
+
+        .icon {
+            display: flex;
+            align-items: center;
+            align-self: flex-end;
+            justify-content: center;
+            min-height: 36px;
+        }
+    }
+
+    .label {
+        margin-bottom: @margin-xxs;
+
+        .asterisk {
+            margin-right: @margin-xxs;
+            color: var(--text-color-red);
+        }
+    }
+}

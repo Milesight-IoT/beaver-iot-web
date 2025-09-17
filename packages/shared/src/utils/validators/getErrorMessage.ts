@@ -184,6 +184,10 @@ export enum EErrorMessages {
      */
     integerPositiveZero = 'valid.input.integer_positive_zero',
     /**
+     * Positive integer validation (positive integer)
+     */
+    integerPositive = 'valid.input.integer_positive',
+    /**
      * Must start with http/https
      */
     startWithHttpOrHttps = 'valid.input.start_with_http_https',
@@ -199,6 +203,10 @@ export enum EErrorMessages {
      * Match regular expression
      */
     regexp = 'valid.input.match_regexp',
+    /**
+     * Must start with specify characters
+     */
+    startWithSpecialChar = 'valid.input.start_with_special_char',
 }
 
 // let intlInstance: typeof intl;

@@ -156,6 +156,16 @@ export default () => {
         [lang],
     );
 
+    const mergeIntlText = useCallback(
+        (keys: string[]) => {
+            const texts = keys.map(key => getIntlText(key));
+            const separator = lang === 'CN' ? '' : ' ';
+
+            return texts.join(separator);
+        },
+        [lang, getIntlText],
+    );
+
     return {
         /** Current language */
         lang,
@@ -178,16 +188,19 @@ export default () => {
         /** Change language */
         changeLang,
 
-        /** Get copy according to key */
+        /** Get i18n text according to key */
         getIntlText,
 
-        /** Get the copy with the ReactNode based on the key */
+        /** Get the i18n text with the ReactNode based on the key */
         getIntlNode,
 
-        /** Get the copy with HTML based on the key */
+        /** Get the i18n text with HTML based on the key */
         getIntlHtml,
 
-        /** Obtain the interface error code copy Key */
+        /** Merge multiple i18n keys */
+        mergeIntlText,
+
+        /** Obtain the interface error code i18n Key */
         getHttpErrorKey,
 
         /** Gets the moment of the current language */

@@ -26,8 +26,11 @@ export const errorIntlKey: Record<ErrorCodeType, string> = {
 export const getInvalidTypeRejectionErr = (
     accept = '',
 ): { code: ErrorCodeType; message: string } => {
-    const acceptArr = accept.split(',');
-    const msg = acceptArr.length > 1 ? `one of ${acceptArr.join(', ')}` : acceptArr[0];
+    let acceptArr = accept.split(',').map(item => {
+        return item.replace(/(\w+\/|\.)/, '').toLocaleUpperCase();
+    });
+    acceptArr = [...new Set(acceptArr)];
+    const msg = acceptArr.length > 1 ? acceptArr.join(' / ') : acceptArr[0];
 
     return {
         code: FILE_INVALID_TYPE,
@@ -83,9 +86,14 @@ export const TOO_MANY_FILES_REJECTION: FileError = {
  *
  * @param file {File} https://developer.mozilla.org/en-US/docs/Web/API/File
  * @param acceptedFiles {string|string[]}
+ * @param matchExt  {true|false}
  * @returns {boolean}
  */
-export const checkAccept = (file?: File, acceptedFiles?: string | string[]): boolean => {
+export const checkAccept = (
+    file?: File,
+    acceptedFiles?: string | string[],
+    matchExt?: boolean,
+): boolean => {
     if (file && acceptedFiles) {
         const acceptedFilesArray = Array.isArray(acceptedFiles)
             ? acceptedFiles
@@ -106,7 +114,7 @@ export const checkAccept = (file?: File, acceptedFiles?: string | string[]): boo
                 return fileName.toLowerCase().endsWith(validType);
             }
 
-            if (validType.endsWith('/*')) {
+            if (!matchExt && validType.endsWith('/*')) {
                 // This is something like a image/* mime type
                 return baseMimeType === validType.replace(/\/.*$/, '');
             }
@@ -127,8 +135,9 @@ export const checkAccept = (file?: File, acceptedFiles?: string | string[]): boo
  * @param {string} accept
  * @returns
  */
-export function fileAccepted(file: File, accept?: string): CheckFileResult {
-    const isAcceptable = file.type === 'application/x-moz-file' || checkAccept(file, accept);
+export function fileAccepted(file: File, accept?: string, matchExt?: boolean): CheckFileResult {
+    const isAcceptable =
+        file.type === 'application/x-moz-file' || checkAccept(file, accept, matchExt);
     return [isAcceptable, isAcceptable ? null : getInvalidTypeRejectionErr(accept)];
 }
 

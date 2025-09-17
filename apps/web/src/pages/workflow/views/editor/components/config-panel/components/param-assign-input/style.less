@@ -30,6 +30,20 @@
         > .@{prefix}-param-input-select,
         > .@{mui-prefix}FormControl-root {
             flex: 1;
+            max-width: calc(100% / 2 - 30px);
+
+            .@{mui-prefix}InputBase-root,
+            .@{mui-prefix}InputBase-root .@{mui-prefix}InputBase-input {
+                padding-right: @padding-xxs;
+                padding-left: @padding-xxs;
+            }
+        }
+
+        > .@{prefix}-param-select {
+            .@{mui-prefix}InputBase-root, 
+            .@{mui-prefix}InputBase-root .@{mui-prefix}InputBase-input {
+                padding-right: @padding-sm;
+            }
         }
 
         .btn-delete {

@@ -74,6 +74,7 @@ const useFormItems = () => {
                 rules: {
                     validate: {
                         checkRequired: checkRequired(),
+                        checkMaxLength: checkMaxLength({ max: 50 }),
                         checkUrl: checkUrl(),
                     },
                 },
@@ -153,7 +154,7 @@ const useFormItems = () => {
                 rules: {
                     validate: {
                         checkRequired: checkRequired(),
-                        checkMaxLength: checkMaxLength({ max: 25 }),
+                        checkMaxLength: checkMaxLength({ max: 35 }),
                     },
                 },
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {
@@ -179,8 +180,7 @@ const useFormItems = () => {
                 rules: {
                     validate: {
                         checkRequired: checkRequired(),
-                        checkLettersAndNum: checkLettersAndNum(),
-                        checkRangeLength: checkRangeLength({ min: 8, max: 32 }),
+                        checkMaxLength: checkMaxLength({ max: 35 }),
                     },
                 },
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {

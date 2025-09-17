@@ -1,0 +1,66 @@
+{
+    "$schema": "../../schema.json",
+    "type": "lineChart",
+    "name": "Line",
+    "class": "data_chart",
+    "icon": "./icon.svg",
+    "defaultRow": 4,
+    "defaultCol": 4,
+    "minRow": 2,
+    "minCol": 2,
+    "configProps": [
+        {
+            "components": [
+                {
+                    "type": "input",
+                    "title": "Title",
+                    "key": "title",
+                    "defaultValue": "Title",
+                    "componentProps": {
+                        "inputProps": {
+                            "maxLength": 35
+                        }
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                }
+            ]
+        },
+        {
+            "style": "width: 100%",
+            "components": [
+                {
+                    "type": "chartEntityPosition",
+                    "title": "entityPosition",
+                    "key": "entityPosition",
+                    "defaultValue": "",
+                    "style": "width: 100%",
+                    "getDataUrl": "",
+                    "valueType": "array",
+                    "componentProps": {
+                        "entityType": ["PROPERTY"],
+                        "entityValueTypes": ["LONG", "DOUBLE"],
+                        "entityAccessMod": ["R", "RW"]
+                    },
+                    "rules": {
+                        "required": true
+                    }
+                }
+            ]
+        },
+        {
+            "style": "width: 100%;",
+            "components": [
+                {
+                    "type": "ChartTimeSelect",
+                    "title": "Time",
+                    "key": "time",
+                    "defaultValue": 86400000,
+                    "style": "width: 100%;"
+                }
+            ]
+        }
+    ],
+    "view": []
+}

@@ -1,0 +1,22 @@
+.@{prefix}-more-menu {
+    &-root {
+        .@{mui-prefix}ButtonBase-root {
+            padding: 0;
+            color: var(--icon-color-gray-secondary);
+
+            &.@{mui-prefix}-disabled {
+                color: var(--icon-color-disable);
+            }
+
+            .@{mui-prefix}SvgIcon-root {
+                font-size: @font-size-lg;
+            }
+        }
+    }
+
+    .@{mui-prefix}MenuItem-root {
+        min-height: auto;
+        padding: @padding-xxs @padding-md;
+        .text-size(@font-size-base);
+    }
+}

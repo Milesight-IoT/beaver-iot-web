@@ -6,7 +6,7 @@ import {
     checkRequired,
     checkEmail,
     passwordChecker,
-    checkMaxLength,
+    checkRangeLength,
 } from '@milesight/shared/src/utils/validators';
 import {
     EmailIcon,
@@ -48,7 +48,7 @@ const useFormItems = ({ mode = 'login' }: UseFormItemsProps) => {
                 rules: {
                     validate: {
                         checkRequired: checkRequired(),
-                        checkMaxLength: checkMaxLength({ max: 255 }),
+                        checkRangeLength: checkRangeLength({ min: 5, max: 255 }),
                         checkEmail: checkEmail(),
                     },
                 },
@@ -154,9 +154,9 @@ const useFormItems = ({ mode = 'login' }: UseFormItemsProps) => {
                                                 edge="end"
                                             >
                                                 {showPassword ? (
-                                                    <VisibilityOffIcon />
-                                                ) : (
                                                     <VisibilityIcon />
+                                                ) : (
+                                                    <VisibilityOffIcon />
                                                 )}
                                             </IconButton>
                                         </InputAdornment>
@@ -208,9 +208,9 @@ const useFormItems = ({ mode = 'login' }: UseFormItemsProps) => {
                                                 edge="end"
                                             >
                                                 {showPassword ? (
-                                                    <VisibilityOffIcon />
-                                                ) : (
                                                     <VisibilityIcon />
+                                                ) : (
+                                                    <VisibilityOffIcon />
                                                 )}
                                             </IconButton>
                                         </InputAdornment>

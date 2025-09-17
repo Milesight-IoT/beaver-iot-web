@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { type GridValidRowModel } from '@mui/x-data-grid';
 import { useI18n } from '@milesight/shared/src/hooks';
 
-import TablePro, { type Props as TableProProps } from '../../../table-pro';
+import TablePro, { type TableProProps } from '../../../table-pro';
 import TableSort from '../table-sort';
 
 export interface TableRightProps<T extends GridValidRowModel> {
@@ -97,6 +97,7 @@ export const TableRight = <T extends GridValidRowModel>(props: TableRightProps<T
     return (
         <TablePro<T>
             checkboxSelection
+            showSelectedAndTotal={false}
             toolbarRender={renderTopBar()}
             toolbarSort={showTimeSort ? <TableSort onOperation={setSort} /> : undefined}
             columns={columns}

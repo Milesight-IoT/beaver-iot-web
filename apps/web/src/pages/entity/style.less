@@ -80,6 +80,12 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+
+            .@{prefix}-descriptions-root {
+                table {
+                    table-layout: fixed;
+                }
+            }
         }
 
         &-table {
@@ -87,7 +93,7 @@
             height: 0;
 
             & .@{prefix}-table-pro {
-                height: calc(100vh - 300px);
+                height: calc(100vh - 350px);
             }
         }
 
@@ -101,6 +107,12 @@
                 font-size: @font-size-lg;
                 font-weight: @font-weight-medium;
             }
+        }
+    }
+
+    &-edit-modal {
+        .form-contain {
+            margin-top: 0;
         }
     }
 }

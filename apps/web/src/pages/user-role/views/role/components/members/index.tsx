@@ -106,7 +106,6 @@ const Members: React.FC = () => {
                 }
 
                 getUserMembers();
-                setSelectedIds([]);
                 toast.success(getIntlText('common.message.remove_success'));
             },
         });
@@ -118,7 +117,7 @@ const Members: React.FC = () => {
     // ---------- Table render bar ----------
     const toolbarRender = useMemo(() => {
         return (
-            <Stack className="ms-operations-btns" direction="row" spacing="12px">
+            <Stack className="ms-operations-btns md:d-none" direction="row" spacing="12px">
                 <Button
                     variant="contained"
                     sx={{ height: 36, textTransform: 'none' }}
@@ -163,6 +162,7 @@ const Members: React.FC = () => {
     return (
         <>
             <TablePro<TableRowDataType>
+                filterCondition={[keyword]}
                 checkboxSelection
                 loading={loading}
                 columns={columns}

@@ -1,21 +1,9 @@
-import TablePro, { type Props } from './table_pro';
-import type {
-    FilterValue,
-    FilterKey,
-    FilterDropdownProps,
-    ColumnFilterItem,
-    ColumnType,
-    FiltersRecordType,
-} from './interface';
+import TablePro from './table_pro';
 
-export type {
-    Props,
-    ColumnType,
-    FilterValue,
-    FilterKey,
-    FilterDropdownProps,
-    ColumnFilterItem,
-    FiltersRecordType,
-};
+export type * from './types';
+
+export * from './constants';
+
+export { AdvancedFilter, type AdvancedFilterHandler } from './components';
 
 export default TablePro;

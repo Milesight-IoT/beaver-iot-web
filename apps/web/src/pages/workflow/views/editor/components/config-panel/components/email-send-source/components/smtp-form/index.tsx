@@ -40,7 +40,7 @@ export interface ItemProps {
 
 export const defaultSmtpValue: SmtpProps = {
     host: '',
-    port: '587',
+    port: '',
     username: '',
     password: '',
     encryption: undefined,

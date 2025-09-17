@@ -1,0 +1,50 @@
+.ms-icon-remaining {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 100%;
+    height: 100%;
+    padding: @padding-md;
+    background: var(--main-background);
+    border-radius: @border-radius-md;
+
+    &-preview {
+        width: 292px;
+        min-width: auto;
+        height: 192px;
+    }
+
+    &__header {
+        font-weight: @font-weight-medium;
+        .text-size(@font-size-lg);
+    }
+
+    &__content {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    &__icon {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &-fake {
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            background-color: var(--main-background);
+        }
+    }
+
+    &__percent {
+        text-align: center;
+        .text-size(@font-size-base);
+    }
+}

@@ -74,6 +74,7 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 width: 120,
                 align: 'left',
                 headerAlign: 'left',
+                fixed: 'right',
                 renderCell({ row }) {
                     return (
                         <Stack

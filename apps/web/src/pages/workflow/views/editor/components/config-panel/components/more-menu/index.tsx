@@ -45,7 +45,7 @@ const MoreMenu = () => {
                                     onClick={e => {
                                         handleCopy(
                                             selectedNode?.id || '',
-                                            (e.target as HTMLElement).parentElement || undefined,
+                                            (e.target as HTMLElement).closest('div'),
                                         );
                                     }}
                                 >

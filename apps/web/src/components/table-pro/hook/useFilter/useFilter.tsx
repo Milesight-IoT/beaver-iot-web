@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useMemoizedFn } from 'ahooks';
-import { FilterValue, ColumnType, FilterState, FilterKey, SafeKey } from '../../interface';
+import { FilterValue, ColumnType, FilterState, FilterKey, SafeKey } from '../../types';
 import FilterDropdown from '../../components/filter-down/filterDown';
 
 export interface FilterConfigProps {

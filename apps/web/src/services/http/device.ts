@@ -28,6 +28,27 @@ export interface DeviceDetail {
     user_nickname: string;
     /** Additional data (usually used by the back end, the front end is not open for now) */
     // additional_data?: Record<string, any>;
+    /** device group name */
+    group_name?: string;
+}
+
+/**
+ * Device group Item
+ */
+export interface DeviceGroupItemProps {
+    id: ApiKey;
+    name: string;
+}
+
+export interface AddDeviceProps {
+    /** Integration ID */
+    integration: ApiKey;
+    /** name */
+    name?: string;
+    /** device group name */
+    group_name?: string;
+    /** Integrate additional information needed for new devices */
+    param_entities: Record<string, any>;
 }
 
 /**
@@ -39,8 +60,16 @@ export interface DeviceAPISchema extends APISchema {
         request: SearchRequestType & {
             /** Name (Fuzzy search) */
             name?: string;
+            /** Device template key */
+            template?: string;
+            /** Search device by the group */
+            group_id?: ApiKey;
+            /** Get not grouped */
+            filter_not_grouped?: boolean;
+            /** External id of the device */
+            identifier?: string;
         };
-        response: SearchResponseType<Omit<DeviceDetail, 'identifier'>[]>;
+        response: SearchResponseType<DeviceDetail[]>;
     };
 
     /** Get Device Details */
@@ -56,20 +85,20 @@ export interface DeviceAPISchema extends APISchema {
                 type: EntityType;
                 value_attribute: Partial<EntityValueAttributeType>;
                 value_type: EntityValueDataType;
+                /** Entity tags */
+                entity_tags?: {
+                    id: ApiKey;
+                    name: string;
+                    description?: string;
+                    color: string;
+                }[];
             }[];
         };
     };
 
     /** Add device */
     addDevice: {
-        request: {
-            /** name */
-            name?: string;
-            /** Integration ID */
-            integration: ApiKey;
-            /** Integrate additional information needed for new devices */
-            param_entities: Record<string, any>;
-        };
+        request: AddDeviceProps;
         response: unknown;
     };
 
@@ -90,6 +119,79 @@ export interface DeviceAPISchema extends APISchema {
         };
         response: unknown;
     };
+
+    /** Get device group search list */
+    getDeviceGroupList: {
+        request: SearchRequestType & {
+            /** Name (Fuzzy search) */
+            name?: string;
+        };
+        response: SearchResponseType<DeviceGroupItemProps[]>;
+    };
+    /** Add device group */
+    addDeviceGroup: {
+        request: {
+            name: string;
+        };
+        response: void;
+    };
+    /** Update device group */
+    updateDeviceGroup: {
+        request: {
+            id: ApiKey;
+            name: string;
+        };
+        response: void;
+    };
+    /** Delete device group */
+    deleteDeviceGroup: {
+        request: {
+            id: ApiKey;
+        };
+        response: void;
+    };
+    /** Get device-group count */
+    getDeviceGroupCount: {
+        request: void;
+        response: {
+            number: number;
+        };
+    };
+    /** Device move to group */
+    moveDeviceToGroup: {
+        request: {
+            group_id?: ApiKey;
+            device_id_list: ApiKey[];
+        };
+        response: void;
+    };
+    /** Get device batch add template file */
+    getDeviceBatchTemplate: {
+        request: {
+            integration: string;
+        };
+        response: Blob;
+    };
+    /** Parse device batch template file */
+    parseDeviceBatchTemplate: {
+        request: {
+            integration: ApiKey;
+            file: File;
+        };
+        response: {
+            create_device_requests: AddDeviceProps[];
+            row_id: ApiKey[];
+        };
+    };
+    /** Generate error file */
+    generateDeviceAddErrorFile: {
+        request: {
+            integration: string;
+            file: File;
+            errors: string;
+        };
+        response: Blob;
+    };
 }
 
 /**
@@ -102,5 +204,26 @@ export default attachAPI<DeviceAPISchema>(client, {
         addDevice: `POST ${API_PREFIX}/device`,
         deleteDevices: `POST ${API_PREFIX}/device/batch-delete`,
         updateDevice: `PUT ${API_PREFIX}/device/:id`,
+        getDeviceGroupList: `POST ${API_PREFIX}/device-group/search`,
+        addDeviceGroup: `POST ${API_PREFIX}/device-group`,
+        updateDeviceGroup: `PUT ${API_PREFIX}/device-group/:id`,
+        deleteDeviceGroup: `DELETE ${API_PREFIX}/device-group/:id`,
+        getDeviceGroupCount: `GET ${API_PREFIX}/device-group/number`,
+        moveDeviceToGroup: `POST ${API_PREFIX}/device/move-to-group`,
+        getDeviceBatchTemplate: `POST ${API_PREFIX}/device-batch/template`,
+        parseDeviceBatchTemplate: {
+            method: 'POST',
+            path: `${API_PREFIX}/device-batch/parse`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        },
+        generateDeviceAddErrorFile: {
+            method: 'POST',
+            path: `${API_PREFIX}/device-batch/fill-error`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        },
     },
 });

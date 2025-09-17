@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Panel, useNodes, useReactFlow, useViewport } from '@xyflow/react';
 import { Stack, Paper, ButtonGroup, Button, Tooltip } from '@mui/material';
 import cls from 'classnames';
-import { useI18n } from '@milesight/shared/src/hooks';
+import { useKeyPress } from 'ahooks';
+import { useI18n, useStoreShallow } from '@milesight/shared/src/hooks';
 import {
     ZoomInIcon,
     ZoomOutIcon,
@@ -14,7 +15,8 @@ import {
 } from '@milesight/shared/src/components';
 import NodeMenu from '../node-menu';
 import { MAX_PRETTY_ZOOM } from '../../constants';
-import type { MoveMode } from '../../typings';
+import useFlowStore from '../../store';
+import type { MoveMode, DesignMode } from '../../typings';
 import './style.less';
 
 export interface ControlsProps {
@@ -39,6 +41,11 @@ export interface ControlsProps {
     moveMode: MoveMode;
 
     /**
+     * Current design mode
+     */
+    designMode: DesignMode;
+
+    /**
      * Move mode change callback
      */
     onMoveModeChange: (mode: MoveMode) => void;
@@ -52,6 +59,7 @@ const Controls: React.FC<ControlsProps> = ({
     maxZoom,
     addable = true,
     moveMode,
+    designMode,
     onMoveModeChange,
 }) => {
     const nodes = useNodes();
@@ -70,7 +78,12 @@ const Controls: React.FC<ControlsProps> = ({
     }, []);
 
     // ---------- Move Mode Change ----------
+    const { selectedNode, isLogMode } = useFlowStore(
+        useStoreShallow(['selectedNode', 'isLogMode']),
+    );
     const isPanMode = moveMode === 'hand';
+    const shortcutDisable = !!selectedNode || designMode === 'advanced' || isLogMode();
+
     const handleMoveModeChange = useCallback(
         (mode: MoveMode) => {
             onMoveModeChange(mode);
@@ -93,29 +106,25 @@ const Controls: React.FC<ControlsProps> = ({
         [getNodes, setNodes, getEdges, setEdges, onMoveModeChange],
     );
 
-    useEffect(() => {
-        const handleKeypress = (e: KeyboardEvent) => {
-            if (!e.ctrlKey) return;
-            switch (e.key) {
-                case 'v': {
-                    handleMoveModeChange('pointer');
-                    break;
-                }
-                case 'h': {
-                    handleMoveModeChange('hand');
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-        };
+    useKeyPress(
+        'ctrl.v',
+        e => {
+            if (shortcutDisable) return;
+            e.preventDefault();
+            handleMoveModeChange('pointer');
+        },
+        { exactMatch: true },
+    );
 
-        window.addEventListener('keypress', handleKeypress);
-        return () => {
-            window.removeEventListener('keypress', handleKeypress);
-        };
-    }, [handleMoveModeChange]);
+    useKeyPress(
+        'ctrl.h',
+        e => {
+            if (shortcutDisable) return;
+            e.preventDefault();
+            handleMoveModeChange('hand');
+        },
+        { exactMatch: true },
+    );
 
     return (
         <Panel
@@ -139,7 +148,7 @@ const Controls: React.FC<ControlsProps> = ({
                     </ButtonGroup>
                 </Paper>
                 <Paper elevation={0}>
-                    <ButtonGroup variant="text">
+                    <ButtonGroup variant="text" className="md:d-none">
                         <Button
                             className="btn-add"
                             disabled={!addable}

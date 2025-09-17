@@ -3,7 +3,7 @@ import { get as getObjectValue } from 'lodash-es';
 import { useReactFlow } from '@xyflow/react';
 import { genRandomString, getObjectType } from '@milesight/shared/src/utils/tools';
 import useFlowStore from '../store';
-import { isRefParamKey } from '../helper';
+import { isRefParamKey, getUrlParams } from '../helper';
 import { PARAM_REFERENCE_PATTERN_STRING } from '../constants';
 import useWorkflow from './useWorkflow';
 
@@ -223,9 +223,43 @@ const useTest = () => {
             // case 'mqtt': {
             //     break;
             // }
-            // case 'httpin': {
-            //     break;
-            // }
+            case 'httpin': {
+                const url = parameters?.url || '';
+                const pathParams = getUrlParams(url);
+
+                outputs.forEach(({ key, valueType, testable }) => {
+                    if (!testable === false) return;
+
+                    switch (key) {
+                        case 'header': {
+                            result[key] = JSON.stringify({
+                                'Header-Key': 'Header Value',
+                            });
+                            break;
+                        }
+                        case 'params': {
+                            result[key] = JSON.stringify({
+                                exampleKey: 'Example Value',
+                            });
+                            break;
+                        }
+                        case 'pathParam': {
+                            result.url = url;
+                            if (pathParams.length) {
+                                pathParams.forEach(item => {
+                                    result[`${key}.${item}`] = mockValueByType();
+                                });
+                            }
+                            break;
+                        }
+                        default: {
+                            result[key] = mockValueByType(valueType);
+                            break;
+                        }
+                    }
+                });
+                break;
+            }
             default: {
                 outputs.forEach(({ key, path, valueType, testable }) => {
                     if (!testable === false) return;

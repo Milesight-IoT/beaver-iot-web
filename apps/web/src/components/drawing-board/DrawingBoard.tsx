@@ -1,0 +1,120 @@
+import { forwardRef, useImperativeHandle } from 'react';
+import cls from 'classnames';
+import { isEmpty } from 'lodash-es';
+import { List } from '@mui/material';
+
+import { useI18n } from '@milesight/shared/src/hooks';
+import { LoadingWrapper } from '@milesight/shared/src/components';
+
+import { PERMISSIONS } from '@/constants';
+import PermissionControlDisabled from '../permission-control-disabled';
+import { Widgets, PluginList, OperateWidgetModal } from './components';
+import { useDrawingBoardData } from './hooks';
+import { DrawingBoardContext } from './context';
+import type { DrawingBoardExpose, DrawingBoardProps } from './interface';
+
+import './style.less';
+
+/**
+ *  Drawing board for data visualization and exploration
+ */
+const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, ref) => {
+    const {
+        drawingBoardDetail,
+        isEdit,
+        drawingBoardRef,
+        isFullscreen,
+        operatingPlugin,
+        changeIsEdit,
+        updateOperatingPlugin,
+    } = props;
+
+    const { getIntlText } = useI18n();
+
+    const {
+        widgets,
+        loadingWidgets,
+        drawingBoardContext,
+        updateWidgets,
+        handleWidgetChange,
+        handleCancel,
+        handleSave,
+        handleCloseModel,
+    } = useDrawingBoardData(props);
+
+    /** Expose methods to parent component */
+    useImperativeHandle(ref, () => {
+        return {
+            handleCancel,
+            handleSave,
+        };
+    });
+
+    /**
+     * Empty data displays plugin list selection
+     */
+    const renderEmptyDrawingBoard = (
+        <PermissionControlDisabled permissions={PERMISSIONS.DASHBOARD_EDIT}>
+            <div className="drawing-board__empty">
+                <div className="drawing-board__empty-title">
+                    {getIntlText('dashboard.empty_text')}
+                </div>
+                <div className="drawing-board__empty-description">
+                    {getIntlText('dashboard.empty_description')}
+                </div>
+                <PluginList onSelect={updateOperatingPlugin} changeIsEditMode={changeIsEdit} />
+            </div>
+        </PermissionControlDisabled>
+    );
+
+    const renderDrawingBoard = () => {
+        if (loadingWidgets) {
+            return (
+                <LoadingWrapper loading>
+                    <List />
+                </LoadingWrapper>
+            );
+        }
+
+        if (!Array.isArray(widgets) || isEmpty(widgets)) {
+            return renderEmptyDrawingBoard;
+        }
+
+        return (
+            <Widgets
+                widgets={widgets}
+                onChangeWidgets={updateWidgets}
+                isEdit={isEdit}
+                onEdit={updateOperatingPlugin}
+                mainRef={drawingBoardRef}
+                dashboardId={drawingBoardDetail.id}
+            />
+        );
+    };
+
+    return (
+        <DrawingBoardContext.Provider value={drawingBoardContext}>
+            <div className="drawing-board">
+                <div
+                    className={cls('drawing-board__wrapper ms-perfect-scrollbar', {
+                        'drawing-board__fullscreen': isFullscreen,
+                    })}
+                    ref={drawingBoardRef}
+                >
+                    <div className="drawing-board__container">{renderDrawingBoard()}</div>
+                </div>
+
+                {!!operatingPlugin && (
+                    <OperateWidgetModal
+                        widgets={widgets}
+                        plugin={operatingPlugin}
+                        handleWidgetChange={handleWidgetChange}
+                        onCancel={handleCloseModel}
+                    />
+                )}
+            </div>
+        </DrawingBoardContext.Provider>
+    );
+});
+
+export default DrawingBoard;

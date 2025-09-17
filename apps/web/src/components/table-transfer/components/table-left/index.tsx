@@ -5,7 +5,7 @@ import { useMemoizedFn } from 'ahooks';
 import { type GridValidRowModel } from '@mui/x-data-grid';
 import { useI18n } from '@milesight/shared/src/hooks';
 
-import TablePro, { type Props as TableProProps } from '../../../table-pro';
+import TablePro, { type TableProProps } from '../../../table-pro';
 import TableSort from '../table-sort';
 
 export interface TableLeftProps<T extends GridValidRowModel> {
@@ -98,6 +98,7 @@ const TableLeft = <T extends GridValidRowModel>(props: TableLeftProps<T>) => {
         <TablePro<T>
             {...tableProps}
             checkboxSelection
+            showSelectedAndTotal={false}
             toolbarRender={renderTopBar()}
             toolbarSort={showTimeSort ? <TableSort onOperation={onTimeSort} /> : undefined}
             rows={leftRows}

@@ -1,28 +1,34 @@
 import React from 'react';
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { ToggleButton, ToggleButtonGroup, ToggleButtonGroupProps } from '@mui/material';
 import { useControllableValue } from 'ahooks';
+import cls from 'classnames';
+import './style.less';
 
 type ValueType = string | number;
 
 export interface Props {
+    size?: 'default' | 'small';
+
     value?: ValueType;
 
     defaultValue?: ValueType;
 
     options: {
-        label: string;
+        label: React.ReactNode;
         value: ValueType;
     }[];
 
     disabled?: boolean;
 
     onChange?: (value: ValueType) => void;
+
+    sx?: ToggleButtonGroupProps['sx'];
 }
 
 /**
  * ToggleRadio Component
  */
-const ToggleRadio: React.FC<Props> = ({ options, disabled, ...props }) => {
+const ToggleRadio: React.FC<Props> = ({ size = 'default', options, disabled, sx, ...props }) => {
     const [value, setValue] = useControllableValue<ValueType>(props);
 
     return (
@@ -30,7 +36,9 @@ const ToggleRadio: React.FC<Props> = ({ options, disabled, ...props }) => {
             exclusive
             fullWidth
             size="small"
-            className="ms-toggle-button-group ms-workflow-mode-buttons"
+            className={cls('ms-toggle-button-group', {
+                [`ms-toggle-button-group-${size}`]: size === 'small',
+            })}
             disabled={disabled}
             value={value || props.defaultValue}
             defaultValue={props.defaultValue}
@@ -38,11 +46,17 @@ const ToggleRadio: React.FC<Props> = ({ options, disabled, ...props }) => {
                 if (!val) return;
                 setValue(val);
             }}
-            sx={{ my: 1.5 }}
+            sx={{ my: 1.5, ...sx }}
         >
-            {options?.map(({ label, value }) => (
-                <ToggleButton value={value} aria-label={label}>
-                    {label}
+            {options?.map(option => (
+                <ToggleButton
+                    key={option.value}
+                    value={option.value}
+                    className={cls('ms-toggle-button-group-item', {
+                        'ms-toggle-button-group-item__active': value === option.value,
+                    })}
+                >
+                    {option.label}
                 </ToggleButton>
             ))}
         </ToggleButtonGroup>

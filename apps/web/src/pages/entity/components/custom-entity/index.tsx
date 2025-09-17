@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { Button, Stack, Menu, MenuItem } from '@mui/material';
-import { useMemoizedFn, useRequest } from 'ahooks';
+import { useRequest } from 'ahooks';
 import { pickBy } from 'lodash-es';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
@@ -98,7 +98,6 @@ export default () => {
                     if (error || !isRequestSuccess(resp)) return;
 
                     getList();
-                    setSelectedIds([]);
                     toast.success(getIntlText('common.message.delete_success'));
                 },
             });
@@ -197,6 +196,7 @@ export default () => {
     return (
         <div className="ms-main">
             <TablePro<TableRowDataType>
+                filterCondition={[keyword, filteredInfo]}
                 checkboxSelection={hasPermission(PERMISSIONS.ENTITY_CUSTOM_DELETE)}
                 loading={loading}
                 columns={columns}
@@ -222,6 +222,9 @@ export default () => {
                     onSuccess={() => {
                         getList();
                         setModalOpen(false);
+                        if (detail) {
+                            setSelectedIds([]);
+                        }
                     }}
                 />
             )}

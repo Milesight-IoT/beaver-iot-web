@@ -49,7 +49,8 @@ const useFormItems = ({ type, tenantId }: IPros) => {
                                       return userNameReg.test(value)
                                           ? true
                                           : getIntlText(
-                                                'valid.input.string_letter_num_special_char',
+                                                'common.valid.input_letter_num_special_char',
+                                                { 1: '_-' },
                                             );
                                   }
                                 : checkLettersAndNum(),
@@ -88,7 +89,7 @@ const useFormItems = ({ type, tenantId }: IPros) => {
                     validate: {
                         checkRequired: checkRequired(),
                         checkRangeLength: checkRangeLength({ min: 8, max: 32 }),
-                        checkLettersAndNum: checkLettersAndNum(),
+                        checkLettersAndNum: type === 'http' ? checkLettersAndNum() : () => true,
                     },
                 },
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {

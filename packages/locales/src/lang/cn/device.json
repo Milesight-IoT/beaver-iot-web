@@ -1,6 +1,12 @@
 {
     "device.detail.basic_info": "基本信息",
     "device.detail.entity_data": "实体数据",
+    "device.label.add_device_group": "新建设备组",
+    "device.label.all_devices": "全部设备",
+    "device.label.batch_add_device": "批量添加设备",
+    "device.label.change_device_group": "变更设备组",
+    "device.label.device_group": "设备组",
+    "device.label.edit_device_group": "编辑设备组",
     "device.label.param_device_id": "设备ID",
     "device.label.param_device_name": "设备名称",
     "device.label.param_entity_id": "实体 ID",
@@ -8,5 +14,13 @@
     "device.label.param_external_id": "外部设备 ID",
     "device.label.param_founder": "创建者",
     "device.label.param_source": "来源",
-    "device.message.delete_tip": "确定要删除吗？"
+    "device.label.ungrouped_devices": "未分组设备",
+    "device.message.delete_tip": "确定要删除吗？",
+    "device.tip.delete_device_group": "删除后，其中的设备将不再归属于任何设备组，确认要删除设备分组: {1}吗？",
+    "device.tip.device_add_failed": "{1} 台设备添加失败，请下载文件查看详情。",
+    "device.tip.device_add_successful": "{1} 台设备添加成功。",
+    "device.tip.move_device_to_group": "已选 {1} 个设备，请选择要放置的分组。",
+    "device.tip.move_device_to_ungrouped": "已选 {1} 个设备，标记为未分组后，这 {1} 个设备的原分组信息将会被清空。",
+    "device.title.mark_device_to_ungrouped": "标记为未分组",
+    "device.title.move_device_to_group": "移动到分组"
 }

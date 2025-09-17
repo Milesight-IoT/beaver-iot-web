@@ -23,7 +23,7 @@ module.exports = {
         'footer-leading-blank': [1, 'always'],
         'footer-max-line-length': [2, 'always', 120],
         'header-max-length': [2, 'always', 120],
-        'subject-case': [0],
+        'subject-case': [2, 'always', 'sentence-case'],
         'subject-empty': [2, 'never'],
         'subject-full-stop': [2, 'never', '.'],
         'scope-case': [0],

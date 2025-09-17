@@ -1,0 +1,28 @@
+.@{prefix}-view-ai {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: 0;
+
+    .@{mui-prefix}Tabs-flexContainer {
+        height: 100%;
+
+        .@{mui-prefix}Tab-root:not(:first-child) {
+            &::before {
+                display: none;
+            }
+        }
+    }
+
+    .@{prefix}-tabs-content {
+        .@{prefix}-tabpanel {
+            height: 100%;
+        }
+
+        .@{prefix}-int-feat-card {
+            .desc {
+                height: 22px;
+            }
+        }
+    }
+}

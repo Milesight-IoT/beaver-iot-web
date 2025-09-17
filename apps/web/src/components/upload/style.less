@@ -16,7 +16,7 @@
         background-color: var(--component-background-gray);
         border-radius: @border-radius-base;
 
-        > [class*=~"@{prefix}-upload-cont"] {
+        > [class*=~'@{prefix}-upload-cont'] {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -93,12 +93,12 @@
     }
 
     &.error {
-        .label {
-            color: var(--text-color-error);
-        }
+        // .label {
+        //     color: var(--text-color-error);
+        // }
 
         .@{prefix}-upload-dropzone {
-            > [class*=~"@{prefix}-upload-cont"] {
+            > [class*=~'@{prefix}-upload-cont'] {
                 border-color: var(--border-color-red);
             }
         }

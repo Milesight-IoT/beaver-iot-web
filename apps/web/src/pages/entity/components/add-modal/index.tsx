@@ -4,9 +4,10 @@ import { v4 } from 'uuid';
 import cls from 'classnames';
 import { useMemoizedFn } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
+import { objectToCamelToSnake } from '@milesight/shared/src/utils/tools';
 import { Modal, toast, type ModalProps } from '@milesight/shared/src/components';
 import { entityAPI, awaitWrap, isRequestSuccess, EntityAPISchema } from '@/services/http';
-import { ENTITY_TYPE, ENTITY_VALUE_TYPE } from '@/constants';
+import { ENTITY_ACCESS_MODE, ENTITY_TYPE, ENTITY_VALUE_TYPE } from '@/constants';
 import { TableRowDataType } from '../../hooks/useColumns';
 import useFormItems, { ENUM_TYPE_VALUE, type FormDataProps } from './useFormItems';
 
@@ -77,12 +78,13 @@ const AddModal: React.FC<Props> = ({
                 } else {
                     setValue('dataType', 'value');
 
+                    // isNumeric prop is number will valid fail
                     if (entityValueType === 'LONG' || entityValueType === 'DOUBLE') {
-                        setValue('min', min);
-                        setValue('max', max);
+                        setValue('min', String(min));
+                        setValue('max', String(max));
                     } else {
-                        setValue('minLength', minLength);
-                        setValue('maxLength', maxLength);
+                        setValue('minLength', minLength ? String(minLength) : '');
+                        setValue('maxLength', String(maxLength));
                     }
                 }
 
@@ -108,6 +110,7 @@ const AddModal: React.FC<Props> = ({
             } else {
                 setValue('dataType', 'value');
                 setValue('identifier', v4().replace(/-/g, ''));
+                setValue('accessMod', ENTITY_ACCESS_MODE.R);
             }
         });
     }, [data, setValue]);
@@ -154,7 +157,7 @@ const AddModal: React.FC<Props> = ({
                 id: entityId,
                 name,
                 value_attribute: {
-                    ...data.entityValueAttribute,
+                    ...objectToCamelToSnake(data.entityValueAttribute),
                     enum: getEditAttributeEnum(formData),
                     unit,
                 },
@@ -215,7 +218,7 @@ const AddModal: React.FC<Props> = ({
                 valueAttribute.unit = unit;
                 break;
             case 'STRING':
-                valueAttribute.min_length = minLength;
+                minLength && (valueAttribute.min_length = minLength);
                 valueAttribute.max_length = maxLength;
                 valueAttribute.unit = unit;
                 break;
@@ -223,7 +226,7 @@ const AddModal: React.FC<Props> = ({
             case ENUM_TYPE_VALUE as EntityValueDataType:
                 valueAttribute.enum = enums;
                 // Distinguish the enumerations of the time-new string data types
-                valueAttribute.isEnum = true;
+                valueAttribute.is_enum = true;
                 break;
             default:
                 break;

@@ -18,7 +18,7 @@ export interface SyncedDeviceType {
     ke?: string;
     eui: string;
     name: string;
-    create_at: string;
+    created_at: string;
 }
 
 /** syncAble device detail */
@@ -181,8 +181,22 @@ export default attachAPI<GatewayAPISchema>(client, {
         getList: `GET ${API_PREFIX}/milesight-gateway/gateways`,
         deleteGateWay: `POST ${API_PREFIX}/milesight-gateway/batch-delete-gateways`,
         addGateway: `POST ${API_PREFIX}/milesight-gateway/gateways`,
-        getSyncedDevices: `GET ${API_PREFIX}/milesight-gateway/gateways/:eui/devices`,
-        getSyncAbleDevices: `GET ${API_PREFIX}/milesight-gateway/gateways/:eui/sync-devices`,
+        async getSyncedDevices(params, options) {
+            return client.request({
+                method: 'GET',
+                url: `${API_PREFIX}/milesight-gateway/gateways/${params.eui}/devices`,
+                data: params,
+                ...options,
+            });
+        },
+        async getSyncAbleDevices(params, options) {
+            return client.request({
+                method: 'GET',
+                url: `${API_PREFIX}/milesight-gateway/gateways/${params.eui}/sync-devices`,
+                ...params,
+                ...options,
+            });
+        },
         syncDevices: `POST ${API_PREFIX}/milesight-gateway/gateways/:eui/sync-devices`,
         getCredential: `POST ${API_PREFIX}/milesight-gateway/gateway-credential`,
         getMqttBrokerInfo: `GET ${API_PREFIX}/mqtt/broker-info`,

@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
+import { omit } from 'lodash-es';
 import { Autocomplete, TextField, AutocompleteProps, Chip, Tooltip } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { EntityList, EntityPaper, EntityPopper } from './components';
@@ -213,7 +214,14 @@ const EntitySelect = <
 
     return (
         <Autocomplete<Value, Multiple, DisableClearable, false>
-            {...rest}
+            {...omit(rest, [
+                'fieldName',
+                'entityType',
+                'entityValueType',
+                'entityAccessMod',
+                'excludeChildren',
+                'filterOption',
+            ])}
             size={size}
             open={open}
             value={value}

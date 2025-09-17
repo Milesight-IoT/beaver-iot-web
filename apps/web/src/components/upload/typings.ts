@@ -30,6 +30,20 @@ export type DropEvent =
 export interface UseDropzoneProps {
     /**
      * Set accepted file types
+     *
+     * @see
+     * - https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/MIME_types/Common_types
+     * - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers
+     * @example
+     * {
+     *  'image/*': ['.jpg', '.jpeg', './png'],
+     *  'text/*': ['text/plain'],
+     * }
+     * or:
+     * {
+     *  'image/jpg': ['.jpg', '.jpeg'],
+     *  'image/png': ['.png'],
+     * }
      */
     accept?: Record<string, string[]>;
 
@@ -57,7 +71,10 @@ export interface UseDropzoneProps {
      * Enable or disable the dropzone
      */
     disabled?: boolean;
-
+    /**
+     * Exact Match file extension
+     */
+    matchExt?: boolean;
     /**
      * Prevent dropped items to take over the current browser window
      */

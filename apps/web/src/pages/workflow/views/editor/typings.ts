@@ -118,5 +118,7 @@ export type NodeDataValidator<T = any> = (
         node?: WorkflowNode;
         nodeConfig?: NodeConfigItem;
         upstreamParams?: FlattenNodeParamType[];
+        /** entity assignment use entity list */
+        entityList?: ObjectToCamelCase<EntityData[]> | undefined;
     },
 ) => string | boolean | undefined;

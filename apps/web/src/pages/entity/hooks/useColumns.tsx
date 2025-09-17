@@ -59,8 +59,8 @@ const useColumns = <T extends TableRowDataType>({
             {
                 field: 'entityName',
                 headerName: getIntlText('device.label.param_entity_name'),
-                flex: 1,
-                minWidth: 250,
+                width: 200,
+                minWidth: 160,
                 ellipsis: true,
             },
             {
@@ -72,7 +72,7 @@ const useColumns = <T extends TableRowDataType>({
             },
             {
                 field: 'entityType',
-                headerName: getIntlText('common.label.type'),
+                headerName: getIntlText('common.label.entity_type'),
                 flex: 1,
                 minWidth: 150,
                 renderCell({ value }) {
@@ -151,6 +151,7 @@ const useColumns = <T extends TableRowDataType>({
                 display: 'flex',
                 align: 'left',
                 headerAlign: 'left',
+                fixed: 'right',
                 renderCell({ row }) {
                     return (
                         <Stack

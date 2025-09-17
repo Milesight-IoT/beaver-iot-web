@@ -64,7 +64,10 @@ const Config: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
         }
 
         const [error, resp] = await awaitWrap(entityAPI.updateProperty({ exchange: finalParams }));
-        if (error || !isRequestSuccess(resp)) return;
+        if (error || !isRequestSuccess(resp)) {
+            onUpdateSuccess?.();
+            return;
+        }
 
         onUpdateSuccess?.();
         toast.success({ content: getIntlText('common.message.operation_success') });

@@ -40,7 +40,7 @@ export const CODE_EXPRESSION_DEFAULT_VALUE: Partial<Record<EditorSupportLang, st
  */
 export const DEFAULT_VALUES: Partial<Record<WorkflowNodeType, Record<string, any>>> = {
     httpin: {
-        method: '',
+        method: 'POST',
         url: '',
     },
     service: {
@@ -66,7 +66,7 @@ export const DEFAULT_VALUES: Partial<Record<WorkflowNodeType, Record<string, any
         ],
     },
     http: {
-        method: '',
+        method: 'POST',
         url: '',
     },
     email: {
@@ -76,5 +76,8 @@ export const DEFAULT_VALUES: Partial<Record<WorkflowNodeType, Record<string, any
     },
     webhook: {
         inputArguments: {},
+    },
+    mqtt: {
+        encoding: 'UTF-8',
     },
 };

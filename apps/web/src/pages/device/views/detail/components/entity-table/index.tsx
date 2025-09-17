@@ -93,6 +93,7 @@ const EntityTable: React.FC<Props> = ({ data, onRefresh }) => {
                 loading={false}
                 columns={columns}
                 rows={data?.entities}
+                rowCount={data?.entities?.length}
                 onRefreshButtonClick={onRefresh}
                 onFilterInfoChange={handleFilterChange}
             />

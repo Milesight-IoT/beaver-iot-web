@@ -182,7 +182,7 @@ const Services: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
                         <div className="service-prop">
                             <span className="service-prop-label">
                                 {getIntlText('setting.integration.webhook_status')}
-                                {getIntlText('common.symbol.colon')}
+                                <span>{getIntlText('common.symbol.colon')}</span>
                             </span>
                             <span className="service-prop-value">
                                 <Chip
@@ -206,7 +206,7 @@ const Services: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
                         <div className="service-prop">
                             <span className="service-prop-label">
                                 {getIntlText('setting.integration.webhook_url')}
-                                {getIntlText('common.symbol.colon')}
+                                <span>{getIntlText('common.symbol.colon')}</span>
                             </span>
                             <span className="service-prop-value">
                                 <span>{webhookUrl}</span>
@@ -262,10 +262,10 @@ const Services: React.FC<Props> = ({ entities, onUpdateSuccess }) => {
                         <div className="service-prop">
                             <span className="service-prop-label">
                                 {getIntlText('setting.integration.openapi_frequency_of_request')}
-                                {getIntlText('common.symbol.colon')}
+                                <span>{getIntlText('common.symbol.colon')}</span>
                             </span>
                             <span className="service-prop-value">
-                                {openapiData?.[OPENAPI_SCHEDULED_KEYS.PERIOD_KEY]}s
+                                <span>{openapiData?.[OPENAPI_SCHEDULED_KEYS.PERIOD_KEY]}</span>s
                             </span>
                         </div>
                     </div>

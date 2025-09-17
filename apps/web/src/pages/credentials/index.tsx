@@ -21,7 +21,7 @@ export default () => {
                 key: 'white-label',
                 label: getIntlText('setting.credentials.white_label'),
                 component: <WhiteLabel />,
-                permission: PERMISSIONS.CREDENTIAL_MODULE,
+                permission: PERMISSIONS.SETTING_MODULE,
             },
             {
                 key: 'credential',

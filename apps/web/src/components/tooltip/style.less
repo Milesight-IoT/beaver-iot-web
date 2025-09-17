@@ -1,6 +1,21 @@
 .@{prefix}-tooltip {
     position: relative;
 
+    &-popper {
+        white-space: pre-line;
+
+        .@{mui-prefix}Tooltip-tooltip {
+            padding: 0;
+        }
+
+        .@{prefix}-tooltip-title {
+            display: block;
+            max-height: calc(50vh - 36px);
+            padding: @padding-xxs @padding-xs;
+            overflow: auto;
+        }
+    }
+
     &-cont {
         display: block;
         .ellipsis();

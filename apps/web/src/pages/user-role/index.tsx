@@ -1,7 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Tabs, Tab } from '@mui/material';
+
 import { useI18n } from '@milesight/shared/src/hooks';
 import { Breadcrumbs, TabPanel } from '@/components';
+import { useRouteTab } from '@/hooks';
 
 import { UserView, RoleView } from './views';
 
@@ -35,7 +37,7 @@ function UserRole() {
         ];
     }, [getIntlText]);
 
-    const [tab, setTab] = useState<string>(tabsData?.[0]?.key || 'users');
+    const [tab, setTab] = useRouteTab<string>(tabsData?.[0]?.key || 'users');
 
     const renderTabs = () => {
         return (

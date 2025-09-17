@@ -1,0 +1,59 @@
+.@{prefix}-mobile-infinite-scroll-root {
+    position: relative;
+    height: 100%;
+    overflow: auto;
+    // transform: translate3d(0, 0, 0);
+    will-change: transform;
+
+    .@{prefix}-mobile-infinite-scroll-wrapper {
+        overflow: hidden;
+    }
+
+    > .@{prefix}-empty {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        &-img {
+            width: 104px;
+            height: 104px;
+        }
+    }
+
+    > .@{mui-prefix}CircularProgress-root {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .@{prefix}-mobile-infinite-scroll-indicator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 22px;
+        overflow: hidden;
+        color: var(--text-color-secondary);
+        .text-size(@font-size-base);
+    }
+
+    .@{prefix}-mobile-infinite-scroll-loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 22px;
+        overflow: hidden;
+        color: var(--text-color-secondary);
+        .text-size(@font-size-base);
+    }
+
+    .@{prefix}-mobile-infinite-scroll-no-more {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 22px;
+        color: var(--text-color-tertiary);
+        .text-size(@font-size-base);
+    }
+}

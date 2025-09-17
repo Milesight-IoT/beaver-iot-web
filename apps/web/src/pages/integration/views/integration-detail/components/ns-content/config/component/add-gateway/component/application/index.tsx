@@ -47,7 +47,7 @@ const Application: React.FC<ApplicationPropsType> = props => {
         const [error, resp] = await awaitWrap(
             embeddedNSApi.addGateway({
                 eui,
-                name,
+                name: name?.trim(),
                 credential_id,
                 client_id,
                 application_id,

@@ -344,8 +344,9 @@ const useNodeFormItems = ({ nodeId, nodeType, readonly }: Props) => {
                                                     onClick={e => {
                                                         handleCopy(
                                                             `${topicPrefix}${value || ''}`,
-                                                            (e.target as HTMLElement)
-                                                                ?.parentElement,
+                                                            (e.target as HTMLElement)?.closest(
+                                                                'div',
+                                                            ),
                                                         );
                                                     }}
                                                 >

@@ -1,0 +1,72 @@
+.body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: 0;
+    padding-right: @padding-lg;
+    overflow: auto;
+
+    .item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: @padding-xxs @padding-xs;
+        margin-bottom: @margin-xxs;
+        border-radius: @border-radius-base;
+        cursor: pointer;
+        transition: background-color 0.1s ease;
+
+        :global {
+            .more-dropdown__wrapper {
+                visibility: hidden;
+
+                &:hover {
+                    background-color: var(--hover-background-1);
+                    border-radius: @border-radius-xxl;
+                }
+            }
+        }
+
+        &:hover {
+            background-color: var(--component-background-gray);
+
+            :global(.more-dropdown__wrapper) {
+                visibility: visible;
+            }
+        }
+
+        &.active {
+            font-weight: @font-weight-medium;
+            color: var(--text-color-main);
+            background-color: var(--primary-color-1);
+
+            .name-wrapper .icon {
+                :global(.MuiSvgIcon-root) {
+                    color: var(--text-color-main);
+                }
+            }
+        }
+
+        .name-wrapper {
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            font-size: @font-size-base;
+            line-height: 28px;
+
+            .icon {
+                display: flex;
+                align-items: center;
+                margin-right: @margin-xs;
+            }
+        }
+    }
+
+    :global(.ms-loading-wrapper) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
+}

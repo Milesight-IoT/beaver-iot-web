@@ -50,6 +50,7 @@ const CodecRepo: React.FC<IProps> = props => {
             }),
         );
         if (error || !isRequestSuccess(resp)) {
+            onUpdateSuccess?.();
             return;
         }
         toast.success({ content: getIntlText('common.message.operation_success') });

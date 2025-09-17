@@ -41,9 +41,17 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 headerName: getIntlText('setting.integration.label.status'),
                 flex: 1,
                 minWidth: 200,
-                ellipsis: true,
+                ellipsis: false,
                 renderCell({ row }) {
-                    return <GatewayStatus status={row.status} />;
+                    return (
+                        <Stack
+                            direction="row"
+                            spacing="4px"
+                            sx={{ height: '100%', alignItems: 'center' }}
+                        >
+                            <GatewayStatus status={row.status} />
+                        </Stack>
+                    );
                 },
             },
             {
@@ -77,6 +85,7 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 display: 'flex',
                 align: 'left',
                 headerAlign: 'left',
+                fixed: 'right',
                 renderCell({ row }) {
                     return (
                         <Stack

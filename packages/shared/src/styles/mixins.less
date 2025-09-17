@@ -33,6 +33,7 @@
     -webkit-line-clamp: @line;
 }
 
+// ---------- UI ----------
 // Required mark *
 .required-mark(@color: var(--text-color-red), @font-size: @font-size-base) {
     display: inline-block;
@@ -65,6 +66,23 @@
     /* stylelint-enable */
 }
 
+/**
+ * Opacity background
+ * @bg: Background color
+ * @opacity: Opacity
+ */
+.opacity-background(@bg, @opacity) {
+    position: relative;
+
+    &::before {
+        position: absolute;
+        inset: 0;
+        background-color: @bg;
+        opacity: @opacity;
+        content: '';
+    }
+}
+
 // ---------- Breakpoints ----------
 /* stylelint-disable media-query-no-invalid */
 .bp-up (@points, @content) {
@@ -74,13 +92,13 @@
 }
 
 .bp-down (@points, @content) {
-    @media (max-width: @points) {
+    @media (max-width: (@points - 0.05px)) {
         @content();
     }
 }
 
-.bp-between (@lower, @upper, @content) {
-    @media (min-width: @min) and (max-width: @max) {
+.bp-between (@min, @max, @content) {
+    @media (min-width: @min) and (max-width: (@max - 0.05px)) {
         @content();
     }
 }

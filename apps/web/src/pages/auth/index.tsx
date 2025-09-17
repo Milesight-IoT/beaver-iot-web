@@ -6,6 +6,7 @@ import { CircularProgress } from '@mui/material';
 import { iotLocalStorage, REGISTERED_KEY } from '@milesight/shared/src/utils/storage';
 import { GradientBgContainer } from '@/components';
 import { globalAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/services/http';
+import './style.less';
 
 export default () => {
     const navigate = useNavigate();
@@ -41,7 +42,7 @@ export default () => {
     }, [registered, navigate]);
 
     return (
-        <GradientBgContainer>
+        <div className="ms-view ms-view-auth">
             {loading ? (
                 <CircularProgress
                     sx={{
@@ -55,6 +56,7 @@ export default () => {
             ) : (
                 <Outlet />
             )}
-        </GradientBgContainer>
+            <GradientBgContainer />
+        </div>
     );
 };

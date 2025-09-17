@@ -14,6 +14,7 @@ import {
     type EdgeChange,
 } from '@xyflow/react';
 import { useI18n, useStoreShallow, usePreventLeave } from '@milesight/shared/src/hooks';
+import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
 import { LoadingButton, toast } from '@milesight/shared/src/components';
 import { CodeEditor, useConfirm, useEntityStore } from '@/components';
 import {
@@ -22,6 +23,7 @@ import {
     getResponseData,
     isRequestSuccess,
     type FlowNodeTraceInfo,
+    entityAPI,
 } from '@/services/http';
 import {
     MIN_ZOOM,
@@ -428,6 +430,35 @@ const WorkflowEditor = () => {
         let { nodes, edges } = flowData;
 
         if (!checkWorkflowValid(nodes, edges)) return;
+        // Collect the real entities obtained under entity assignment
+        let entityList: ObjectToCamelCase<EntityData[]> = [];
+        const entityAssignerNodes = nodes.filter(node => node.componentName === 'entityAssigner');
+        if (entityAssignerNodes.length) {
+            const [err, res] = await awaitWrap(
+                entityAPI.getList({
+                    page_size: 9999,
+                    page_number: 1,
+                    entity_keys: Object.keys(
+                        entityAssignerNodes.reduce(
+                            (acc, node, index) => {
+                                if (node?.data?.parameters?.exchangePayload) {
+                                    acc = Object.assign(
+                                        acc,
+                                        node?.data?.parameters?.exchangePayload,
+                                    );
+                                }
+                                return acc;
+                            },
+                            {} as Record<string, string>,
+                        ),
+                    ).filter(v => !!v),
+                }),
+            );
+            const respData = getResponseData(res);
+            if (!err && isRequestSuccess(res) && !!respData) {
+                entityList = objectToCamelCase(respData)?.content || [];
+            }
+        }
 
         // Check edges and nodes
         const edgesCheckResult = merge(
@@ -439,7 +470,7 @@ const WorkflowEditor = () => {
         const nodesCheckResult = merge(
             checkNodesId(nodes, { validateFirst: isAdvanceMode }),
             checkNodesType(nodes, { validateFirst: isAdvanceMode }),
-            checkNodesData(nodes, edges, { validateFirst: isAdvanceMode }),
+            checkNodesData(nodes, edges, { validateFirst: isAdvanceMode, entityList }),
         );
         if (!isEmpty(nodesCheckResult)) {
             if (isAdvanceMode) return;
@@ -586,6 +617,7 @@ const WorkflowEditor = () => {
                             maxZoom={MAX_ZOOM}
                             addable={!isLogMode}
                             moveMode={moveMode}
+                            designMode={designMode}
                             onMoveModeChange={setMoveMode}
                         />
                         <HelperLines

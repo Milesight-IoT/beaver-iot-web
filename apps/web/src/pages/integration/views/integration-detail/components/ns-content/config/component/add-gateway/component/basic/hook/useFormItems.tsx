@@ -45,7 +45,7 @@ const useFormItems = () => {
                 rules: {
                     validate: {
                         checkRequired: checkRequired(),
-                        checkMaxLength: checkMaxLength({ max: 25 }),
+                        checkMaxLength: checkMaxLength({ max: 127 }),
                     },
                 },
                 render({ field: { onChange, value }, fieldState: { error } }) {
@@ -58,6 +58,10 @@ const useFormItems = () => {
                             helperText={error ? error.message : null}
                             value={value}
                             onChange={onChange}
+                            onBlur={event => {
+                                const newValue = event?.target?.value;
+                                onChange(typeof newValue === 'string' ? newValue.trim() : newValue);
+                            }}
                         />
                     );
                 },

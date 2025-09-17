@@ -1,0 +1,84 @@
+.cover-selection {
+    position: relative;
+
+    img {
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-style: none;
+    }
+
+    &__container {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        padding: @padding-sm 11px;
+        border: @border-base;
+        border-radius: @border-radius-base;
+    }
+
+    &__preview {
+        display: flex;
+        flex-direction: column;
+        width: 180px;
+        min-width: 180px;
+        margin-right: @margin-md;
+
+        .image {
+            position: relative;
+            width: 180px;
+            height: 120px;
+            overflow: hidden;
+            border-radius: @border-radius-base;
+
+            .mask {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: @border-radius-base;
+                user-select: none;
+            }
+        }
+
+        .upload {
+            margin-top: @margin-sm;
+        }
+    }
+
+    &__images {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+
+        .image {
+            position: relative;
+            display: inline-block;
+            width: 77px;
+            height: 56px;
+            margin-bottom: @margin-xs;
+            overflow: hidden;
+            border: @border-base;
+            border-radius: @border-radius-base;
+            cursor: pointer;
+
+            &.active {
+                box-shadow: 0 0 0 2px var(--primary-color-base);
+            }
+
+            &:not(:nth-child(4n)) {
+                margin-right: @margin-xs;
+            }
+
+            &:not(&.active):hover {
+                padding: 1px;
+                border: none;
+                box-shadow: 0 0 0 1px var(--primary-color-base);
+                transition: all 0.3s ease-out 0s;
+                transform: scale(1.04) translateY(-1px);
+            }
+        }
+    }
+}

@@ -2,7 +2,9 @@
 
 .@{prefix}-table-pro {
     & &__footer {
-        min-height: @ms-table-pro-footer-button-height + @padding-xxs;
+        height: @ms-table-pro-footer-button-height + @padding-sm;
+        min-height: @ms-table-pro-footer-button-height + @padding-sm;
+        max-height: @ms-table-pro-footer-button-height + @padding-sm;
         padding-top: @padding-xxs;
         border-top: none;
     }
@@ -15,48 +17,29 @@
         border-radius: @border-radius-base;
     }
 
-    & &__pagination {
-        .@{mui-prefix}Toolbar-root {
-            min-height: @ms-table-pro-footer-button-height;
+    .@{mui-prefix}Pagination-root {
+        .@{mui-prefix}PaginationItem-root {
+            min-width: 28px;
+            height: 28px;
         }
-
-        .@{mui-prefix}InputBase-root {
-            height: @ms-table-pro-footer-button-height;
-            border: 1px solid var(--border-color-base);
-            border-radius: @border-radius-base;
-
-            .@{mui-prefix}TablePagination-select {
-                min-width: 30px;
-                min-height: auto;
-                padding-top: @padding-xxs - 1;
-                padding-bottom: @padding-xxs - 1;
-                line-height: (@ms-table-pro-footer-button-height - 2 * @padding-xxs);
-                text-align: left;
-                text-align-last: left;
-            }
+        .@{mui-prefix}PaginationItem-root:hover {
+            color: var(--primary-color-7);
+            background-color: var(--component-background);
+            border-color: var(--primary-color-7);
         }
-
-        .@{mui-prefix}ButtonBase-root {
-            width: @ms-table-pro-footer-button-height;
-            height: @ms-table-pro-footer-button-height;
-            border: 1px solid var(--border-color-base);
-            border-radius: @border-radius-base;
-
-            &:last-child {
-                margin-left: @margin-sm;
-            }
+        .@{mui-prefix}PaginationItem-root.@{mui-prefix}-selected {
+            color: var(--primary-color-7);
+            background-color: var(--component-background);
+            border-color: var(--primary-color-7);
         }
-
-        .@{mui-prefix}TablePagination-selectLabel,
-        .@{mui-prefix}TablePagination-displayedRows {
-            margin: 0;
-            // color: var(--text-color-secondary);
+        .@{mui-prefix}PaginationItem-root.@{mui-prefix}-selected:hover {
+            color: var(--primary-color-8);
+            border-color: var(--primary-color-8);
         }
+        .@{mui-prefix}PaginationItem-root.@{mui-prefix}-disabled {
+            background-color: var(--gray-3);
+        } 
     }
 }
 
-.@{prefix}-table-pro__pagination-select {
-    .@{mui-prefix}MenuItem-root {
-        font-size: @font-size-base;
-    }
-}
+

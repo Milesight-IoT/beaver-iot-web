@@ -1,0 +1,108 @@
+.@{prefix}-advanced-filter {
+    display: flex;
+    flex-direction: column;
+
+    > .@{mui-prefix}Button-root:first-child {
+        .@{mui-prefix}Button-endIcon > .@{mui-prefix}Box-root  {
+            display: flex;
+            font-size: @font-size-1;
+
+            .@{mui-prefix}Badge-badge {
+                top: 10px;
+                right: 10px;
+                min-width: 16.67px;
+                height: 16.67px;
+                padding: 0;
+            }
+        }
+    }
+
+    &-hover {
+        color: var(--primary-color-7)!important;
+        border: 1px solid var(--primary-color-7)!important;
+    }
+    
+    &-content {
+        width: 600px;
+        padding: @padding-md 0 @padding-xl 0;
+        font-size: @font-size-base;
+
+        > div:first-child {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 @padding-lg 0 @padding-xl;
+            margin-bottom: @margin-sm;
+
+            span {
+                font-size: @font-size-4;
+                font-weight: @font-weight-medium;
+            }
+        }
+
+        &-wrap {
+            width: 100%;
+            max-height: 300px;
+            padding: 0 @padding-md;
+            overflow: hidden scroll;
+
+            &-item {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                margin: 0 @margin-xs;
+    
+                &-delete {
+                    padding-top: @margin-xxs;
+                    .@{mui-prefix}IconButton-root {
+                        padding-left: 0;
+                        color: var(--gray-color-5);
+                    }
+                }
+    
+                .@{mui-prefix}FormControl-root {
+                    width: auto;
+                }
+            }
+        }
+
+        &-footer {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 45px;
+            padding: 0 @padding-xl;
+    
+            > div:first-of-type {
+                display: flex;
+                align-items: center;
+                width: fit-content;
+                color: var(--primary-color-7);
+                cursor: pointer;
+    
+                &:hover {
+                    color: var(--primary-color-8);
+                }
+    
+                .@{mui-prefix}SvgIcon-root {
+                    margin-right: @margin-xxs;
+                    font-size: @font-size-6;
+                }
+            }
+    
+            > div:last-of-type {
+                display: flex;
+                flex: 1;
+                justify-content: flex-end;
+    
+                div {
+                    width: fit-content;
+                    cursor: pointer;
+    
+                    &:last-of-type {
+                        margin-left: @margin-md;
+                    }
+                }
+            }
+        }
+    }
+}

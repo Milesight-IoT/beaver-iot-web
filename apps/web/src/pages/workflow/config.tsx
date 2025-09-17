@@ -12,7 +12,6 @@ import {
     FactCheckIcon,
     CheckCircleIcon,
     ErrorIcon,
-    ConnectWithoutContactIcon,
     OutputIcon,
     HttpIcon,
     MqttIcon,
@@ -395,19 +394,22 @@ export const basicNodeConfigs: Record<WorkflowNodeType, NodeConfigItemType> = {
         category: 'external',
         outputs: [
             {
-                key: 'header',
+                key: 'responseHeaders',
+                label: 'Header',
                 type: 'static',
                 valueType: 'STRING',
                 descIntlKey: 'workflow.editor.output_desc_response_header',
             },
             {
-                key: 'body',
+                key: 'responseBody',
+                label: 'Body',
                 type: 'static',
                 valueType: 'STRING',
                 descIntlKey: 'workflow.editor.output_desc_response_body',
             },
             {
-                key: 'status_code',
+                key: 'statusCode',
+                label: 'Status Code',
                 type: 'static',
                 valueType: 'LONG',
                 descIntlKey: 'workflow.editor.output_desc_response_code',

@@ -1,4 +1,4 @@
-import { FilterState, ChangeEventInfo, FiltersRecordType } from '../../interface';
+import { FilterState, ChangeEventInfo, FiltersRecordType } from '../../types';
 import useFilter, { type FilterConfigProps } from './useFilter';
 
 /**

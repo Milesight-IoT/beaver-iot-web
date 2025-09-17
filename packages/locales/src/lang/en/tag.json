@@ -1,0 +1,20 @@
+{
+    "tag.label.append_tag": "Add Selected Tags",
+    "tag.label.overwrite_tag": "Cover Selected Tags",
+    "tag.label.remove_tag": "Remove Selected Tags",
+    "tag.label.replace_tag": "Replace Selected Tags",
+    "tag.label.tags": "Tags",
+    "tag.tip.bulk_delete_tag": "Once deleted, these {1} tags will be removed from all associated entities. Are you sure you want to delete these {1} tags?",
+    "tag.tip.edit_tag_info": "If you modify the information in this tag, all entities that use this tag will synchronize the modification.",
+    "tag.tip.not_any_tags": "No tags",
+    "tag.tip.selected_entities_contain_follow_tags": "Selected {1} entities with the following tags:",
+    "tag.tip.single_delete_tag": "Once deleted, this tag will be removed from all associated items and no longer displayed. Are you sure you want to delete the tag: {1}?",
+    "tag.title.add_tag": "Add Tag",
+    "tag.title.edit_tag": "Edit Tag",
+    "tag.title.manage_tags": "Manage Tags",
+    "tag.title.original_tag": "Original Tag",
+    "tag.title.replace_with": "Replace with",
+    "tag.title.tag_management": "Tag Management",
+    "tag.title.tag_name": "Tag Name",
+    "tag.title.tagged_entities": "Tagged Entities"
+}

@@ -3,7 +3,7 @@
  */
 import { isIOS } from './userAgent';
 
-const cssText = 'position:fixed;z-index:-9999;opacity:0;';
+const cssText = 'position:fixed;z-index:-9999;opacity:0;white-space:pre;';
 const copyErrorMessage = 'Failed to copy value to clipboard. Unknown type.';
 
 /**

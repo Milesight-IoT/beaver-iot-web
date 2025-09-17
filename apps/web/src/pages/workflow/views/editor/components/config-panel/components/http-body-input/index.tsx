@@ -115,6 +115,7 @@ const HttpBodyInput: React.FC<HttpBodyInputProps> = ({ label, required, ...props
                         onChange={value => {
                             setData({ type: data?.type, value });
                         }}
+                        minCount={1}
                     />
                 );
             }
@@ -158,6 +159,11 @@ const HttpBodyInput: React.FC<HttpBodyInputProps> = ({ label, required, ...props
                 }}
                 onChange={handleTypeChange}
             />
+            {data?.type === 'text/plain' && (
+                <span className="helper-text">
+                    {getIntlText('workflow.editor.helper_text_set_content_type_in_header')}
+                </span>
+            )}
             {renderBodyComponent()}
         </div>
     );

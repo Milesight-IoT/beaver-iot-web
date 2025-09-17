@@ -1,0 +1,120 @@
+.@{prefix}-code-editor-wrap {
+    flex-direction: column;
+    margin-bottom: @margin-md;
+
+    &-error .@{prefix}-code-editor {
+        border-color: var(--mui-palette-error-main);
+    }
+
+    &-full {
+        .@{prefix}-code-editor-wrap-content,
+        .@{prefix}-code-editor-wrap-content .@{prefix}-code-editor {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 6;
+            width: 100%;
+        }
+    }
+
+    &-full  .@{prefix}-code-editor-wrap-footer {
+        position: absolute;
+        bottom: 15px;
+        left: 0;
+        z-index: 6;
+        width: 100%;
+        height: 80px;
+
+        .@{mui-prefix}FormHelperText-root {
+            max-height: 100%;
+            overflow: auto;
+        }
+    }
+
+    &-loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 300px;
+        background-color: var(--gray-2);
+        border-radius: @border-radius-sm;
+
+        > div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: @font-size-base;
+            color: var(--gray-5);
+        }
+    }
+
+    .@{mui-prefix}InputLabel-root {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        font-size: @font-size-base;
+        color: var(--text-color-primary);
+    }
+
+    .@{prefix}-code-editor-wrap-content {
+        .@{prefix}-code-editor {
+            height: 100%;
+            margin-top: @margin-xxs;
+    
+            &-content .cm-content {
+                padding-left: 0;
+            }
+    
+            &-header,
+            &-content .cm-editor,
+            &-content .cm-editor .cm-gutters {
+                background-color: var(--component-background-gray);
+            }
+    
+            &-header {
+                display: flex;
+                justify-content: space-between;
+                padding: @padding-xs @padding-sm;
+                background-color: var(--component-background-gray);
+                border-bottom: 1px solid var(--border-color-base);
+                .text-size(@font-size-base);
+        
+                &-title {
+                    display: flex;
+                    align-items: center;
+                    font-weight: @font-weight-medium;
+                    color: var(--text-color-secondary);
+                    user-select: none;
+        
+                    .@{mui-prefix}FormControl-root.@{mui-prefix}FormControl-fullWidth {
+                        margin: 0 !important;
+        
+                        .@{mui-prefix}InputBase-root {
+                            padding: 0;
+                        }
+        
+                        .@{mui-prefix}OutlinedInput-notchedOutline {
+                            border: none !important;
+                            box-shadow: none !important;
+                        }
+                    }
+                }
+        
+                &-action {
+                    display: flex;
+                    gap: @margin-xs;
+        
+                    .@{mui-prefix}ButtonBase-root {
+                        padding: @padding-xxs;
+        
+                        .@{mui-prefix}SvgIcon-root {
+                            width: 18px;
+                            height: 18px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

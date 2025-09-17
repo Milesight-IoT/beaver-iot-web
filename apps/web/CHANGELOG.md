@@ -1,5 +1,32 @@
 # @app/web
 
+## 1.2.3
+
+### Minor Changes
+
+-   Add Tag Management function and support batch processing
+-   Add device grouping function
+-   Entity list classification and search enhancement
+-   Table component functionality enhancement
+
+## 1.2.2
+
+### Patch Changes
+
+-   Fix the global bugs
+-   Refactor the execution logic of dashboard
+-   Use mqtt service to replace websocket
+-   Use Echarts instead of Chart.js for dashboard
+
+## 1.2.1
+
+### Patch Changes
+
+-   33139c3: Fix some bugs of NS integration
+-   8e75412: Fix some bugs of workflow editor
+-   daa20cd: Fix some bugs of role validation
+-   9cdcc4d: Fix some bugs of permission management
+
 ## 1.2.0
 
 ### Minor Changes

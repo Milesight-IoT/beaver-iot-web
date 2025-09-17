@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo, Fragment } from 'react';
 import cls from 'classnames';
-import { useRequest, useUpdateEffect } from 'ahooks';
+import { useRequest, useUpdateEffect, useMemoizedFn } from 'ahooks';
 import { FieldError } from 'react-hook-form';
 import { Button, IconButton, CircularProgress } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
@@ -52,11 +52,18 @@ export type UploadFile = FileWithPath & {
      * Uploaded file url
      */
     url?: string;
+    /**
+     * original file data
+     */
+    original?: File;
 };
 
-export type FileValueType = Pick<UploadFile, 'name' | 'size' | 'path' | 'key' | 'url' | 'preview'>;
+export type FileValueType = Pick<
+    UploadFile,
+    'name' | 'size' | 'path' | 'key' | 'url' | 'preview' | 'original'
+>;
 
-type Props = UseDropzoneProps & {
+export type Props = UseDropzoneProps & {
     // type?: string;
 
     /**
@@ -100,6 +107,16 @@ type Props = UseDropzoneProps & {
     className?: string;
 
     /**
+     * Temporary resource live minutes
+     */
+    tempLiveMinutes?: number;
+
+    /**
+     * Whether to upload files automatically
+     */
+    autoUpload?: boolean;
+
+    /**
      * Customize the contents in upload area
      */
     children?: React.ReactNode;
@@ -109,6 +126,14 @@ type Props = UseDropzoneProps & {
      * @param files Uploaded file(s)
      */
     onChange?: (data: Props['value'], files?: null | UploadFile | UploadFile[]) => void;
+
+    /**
+     * Customize the inner error
+     *
+     * Note: The error interceptor can only intercept and modify the error prompt,
+     * and cannot prevent the error.
+     */
+    errorInterceptor?: (error: FileError) => FileError | null;
 };
 
 const Upload: React.FC<Props> = ({
@@ -121,20 +146,25 @@ const Upload: React.FC<Props> = ({
     accept = {
         'image/*': ['.jpg', '.jpeg', '.png', '.gif', '.svg'],
     },
+    matchExt = false,
     parallel = DEFAULT_PARALLEL_UPLOADING_FILES,
     minSize = DEFAULT_MIN_SIZE,
     maxSize = DEFAULT_MAX_SIZE,
     multiple,
     style,
     className,
+    tempLiveMinutes,
+    autoUpload = true,
     children,
     onChange,
+    errorInterceptor = error => error,
     ...props
 }) => {
     const { getIntlText } = useI18n();
     const { acceptedFiles, fileRejections, getRootProps, getInputProps } = useDropzone({
         ...props,
         accept,
+        matchExt,
         minSize,
         maxSize,
         multiple,
@@ -151,13 +181,17 @@ const Upload: React.FC<Props> = ({
     // ---------- Upload files to server ----------
     const [files, setFiles] = useState<UploadFile[]>();
     const [fileError, setFileError] = useState<FileError | null>();
+    const memoErrorInterceptor = useMemoizedFn(errorInterceptor);
     const { run: uploadFiles } = useRequest(
         async (files: UploadFile[]) => {
             const limit = pLimit<{ key: string; resource: string } | undefined>(parallel);
             const uploadTasks = files.map(file =>
                 limit(async () => {
                     const [err, resp] = await awaitWrap(
-                        globalAPI.getUploadConfig({ file_name: file.name }),
+                        globalAPI.getUploadConfig({
+                            file_name: file.name,
+                            temp_resource_live_minutes: tempLiveMinutes,
+                        }),
                     );
                     const uploadConfig = getResponseData(resp);
 
@@ -214,7 +248,7 @@ const Upload: React.FC<Props> = ({
         if (fileRejections?.length) {
             const firstError = fileRejections[0].errors[0];
 
-            setFileError(firstError);
+            setFileError(memoErrorInterceptor(firstError));
             return;
         }
 
@@ -223,7 +257,7 @@ const Upload: React.FC<Props> = ({
 
         const result = acceptedFiles.map(file => {
             const newFile: UploadFile = Object.assign(file, {
-                status: UploadStatus.Uploading,
+                status: autoUpload ? UploadStatus.Uploading : UploadStatus.Done,
                 progress: 0,
                 preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
                 abortController: new AbortController(),
@@ -233,12 +267,16 @@ const Upload: React.FC<Props> = ({
         });
 
         setFiles(result);
-        uploadFiles(result);
-    }, [acceptedFiles, fileRejections, uploadFiles]);
+
+        if (autoUpload) {
+            uploadFiles(result);
+        }
+    }, [autoUpload, acceptedFiles, fileRejections, uploadFiles, memoErrorInterceptor]);
 
     // ---------- Handle uploading status ----------
     const [isUploading, setIsUploading] = useState(false);
     const [isAllDone, setIsAllDone] = useState(false);
+    const handleChange = useMemoizedFn(onChange || (() => {}));
     const handleCancel = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
         setFiles(files => {
@@ -262,10 +300,11 @@ const Upload: React.FC<Props> = ({
         const [file, ...rest] = files?.filter(file => file.status === UploadStatus.Done) || [];
 
         if (!file) return result;
+
         result.push(
             <Fragment key={file.path}>
-                <Tooltip autoEllipsis className="name" title={file.url} />
-                {`(${getSizeString(file.size)})`}
+                <Tooltip autoEllipsis className="name" title={file?.name || file?.url || ''} />
+                {file?.size ? `(${getSizeString(file.size)})` : ''}
             </Fragment>,
         );
 
@@ -273,7 +312,7 @@ const Upload: React.FC<Props> = ({
             const names = rest
                 .map(file => (
                     <Fragment key={file.path}>
-                        {`${file.url} (${getSizeString(file.size)})`}
+                        {`${file?.url || file?.name || ''} (${getSizeString(file.size)})`}
                     </Fragment>
                 ))
                 .join('\n');
@@ -299,10 +338,13 @@ const Upload: React.FC<Props> = ({
         const hasError = error || files?.some(file => file.status === UploadStatus.Error);
 
         if (hasError) {
-            setFileError({
-                code: SERVER_ERROR,
-                message: helperText || error?.message || getIntlText(errorIntlKey[SERVER_ERROR]),
-            });
+            setFileError(
+                memoErrorInterceptor({
+                    code: SERVER_ERROR,
+                    message:
+                        helperText || error?.message || getIntlText(errorIntlKey[SERVER_ERROR]),
+                }),
+            );
             setIsUploading(false);
             setIsAllDone(false);
             return;
@@ -316,7 +358,7 @@ const Upload: React.FC<Props> = ({
         setFileError(null);
         setIsUploading(uploading);
         setIsAllDone(isAllDone);
-    }, [files, error, helperText, getIntlText]);
+    }, [files, error, helperText, getIntlText, memoErrorInterceptor]);
 
     // Trigger callback when files change
     useUpdateEffect(() => {
@@ -324,23 +366,39 @@ const Upload: React.FC<Props> = ({
         let resultValues: Props['value'] = null;
 
         if (files?.length) {
-            resultValues = files?.map(file => {
-                const { name, size, path, key, url, preview } = file;
-                const result: FileValueType = { name, size, path, key, url };
+            resultValues = files
+                .filter(file => {
+                    return file.status !== UploadStatus.Canceled;
+                })
+                ?.map(file => {
+                    const { name, size, path, key, url, preview, original } = file;
+                    const result: FileValueType = {
+                        name,
+                        size,
+                        path,
+                        key,
+                        url,
+                        original: autoUpload ? undefined : original || file,
+                    };
 
-                if (!url) {
-                    result.preview = preview;
+                    if (!url) {
+                        result.preview = preview;
+                    }
+                    return result;
+                });
+
+            if (resultValues.length) {
+                if (!multiple) {
+                    // if canceled and file is empty then need to verification
+                    resultValues = resultValues?.[0];
                 }
-                return result;
-            });
-
-            if (!multiple) {
-                resultValues = resultValues[0];
+            } else {
+                resultValues = undefined;
             }
         }
 
-        onChange?.(resultValues, resultFiles);
-    }, [files, multiple, onChange]);
+        handleChange?.(resultValues, resultFiles);
+    }, [files, multiple, autoUpload, handleChange]);
 
     useEffect(() => {
         if (!value) {
@@ -381,7 +439,10 @@ const Upload: React.FC<Props> = ({
                 <input {...getInputProps()} />
                 {children ||
                     (isAllDone ? (
-                        <div className="ms-upload-cont-uploaded" onClick={e => e.stopPropagation()}>
+                        <div
+                            className="ms-upload-cont ms-upload-cont-uploaded"
+                            onClick={e => e.stopPropagation()}
+                        >
                             <ImageIcon className="icon" />
                             <div className="hint">{renderDoneFiles()}</div>
                             <IconButton onClick={handleDelete}>
@@ -390,7 +451,7 @@ const Upload: React.FC<Props> = ({
                         </div>
                     ) : isUploading ? (
                         <div
-                            className="ms-upload-cont-uploading"
+                            className="ms-upload-cont ms-upload-cont-uploading"
                             onClick={e => e.stopPropagation()}
                         >
                             <CircularProgress className="icon" size={24} />
@@ -405,7 +466,7 @@ const Upload: React.FC<Props> = ({
                             </Button>
                         </div>
                     ) : (
-                        <div className="ms-upload-cont-default">
+                        <div className="ms-upload-cont ms-upload-cont-default">
                             <UploadFileIcon className="icon" />
                             <div className="hint">
                                 {getIntlText('common.message.click_to_upload_file')}

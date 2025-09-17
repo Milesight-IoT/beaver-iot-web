@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { type ControllerProps, type FieldValues } from 'react-hook-form';
-import { TextField, FormControl, FormHelperText, Box } from '@mui/material';
+import { TextField, FormControl, FormHelperText } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { Select } from '@milesight/shared/src/components';
 import {
@@ -8,6 +8,8 @@ import {
     checkNumber,
     checkMaxLength,
     isMaxLength,
+    checkPositiveInt,
+    checkRegexp,
 } from '@milesight/shared/src/utils/validators';
 import { ENTITY_ACCESS_MODE, entityTypeOptions } from '@/constants';
 import { DataTypeRadio, type DataTypeRadioProps, EnumsInput, SingleEnumsInput } from './components';
@@ -28,10 +30,10 @@ export type FormDataProps = {
     accessMod: EntityAccessMode;
     valueType: EntityValueDataType;
     dataType?: DataTypeRadioProps['value'];
-    min?: number;
-    max?: number;
-    minLength?: number;
-    maxLength?: number;
+    min?: string;
+    max?: string;
+    minLength?: string;
+    maxLength?: string;
     boolEnums?: Record<string, string>;
     enums?: Record<string, string>;
     /** bool true value */
@@ -96,6 +98,13 @@ const useFormItems = () => {
                     validate: {
                         checkRequired: checkRequired(),
                         checkMaxLength: checkMaxLength({ max: 50 }),
+                        checkSpecialChar: value => {
+                            return /^[A-Za-z0-9_@#$/:[\]-]+$/.test(value)
+                                ? true
+                                : getIntlText('common.valid.input_letter_num_special_char', {
+                                      1: '@#$_-/[]:',
+                                  });
+                        },
                     },
                 },
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {
@@ -207,7 +216,11 @@ const useFormItems = () => {
             {
                 name: 'min',
                 rules: {
-                    validate: { checkRequired: checkRequired(), checkNumber: checkNumber() },
+                    validate: {
+                        checkRequired: checkRequired(),
+                        checkNumber: checkNumber(),
+                        checkMaxLength: checkMaxLength({ max: 25 }),
+                    },
                 },
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {
                     return (
@@ -235,7 +248,11 @@ const useFormItems = () => {
             {
                 name: 'max',
                 rules: {
-                    validate: { checkRequired: checkRequired(), checkNumber: checkNumber() },
+                    validate: {
+                        checkRequired: checkRequired(),
+                        checkNumber: checkNumber(),
+                        checkMaxLength: checkMaxLength({ max: 25 }),
+                    },
                 },
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {
                     return (
@@ -264,14 +281,14 @@ const useFormItems = () => {
                 name: 'minLength',
                 rules: {
                     validate: {
-                        checkRequired: checkRequired(),
-                        checkNumber: checkNumber(),
+                        checkMaxLength: checkMaxLength({ max: 25 }),
+                        checkPositiveInt: checkPositiveInt(),
                     },
                 },
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {
                     return (
                         <TextField
-                            required
+                            // required
                             fullWidth
                             type="text"
                             autoComplete="off"
@@ -291,7 +308,11 @@ const useFormItems = () => {
             {
                 name: 'maxLength',
                 rules: {
-                    validate: { checkRequired: checkRequired(), checkNumber: checkNumber() },
+                    validate: {
+                        checkRequired: checkRequired(),
+                        checkMaxLength: checkMaxLength({ max: 25 }),
+                        checkPositiveInt: checkPositiveInt(),
+                    },
                 },
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {
                     return (
@@ -473,6 +494,11 @@ const useFormItems = () => {
             },
             {
                 name: 'unit',
+                rules: {
+                    validate: {
+                        checkMaxLength: checkMaxLength({ max: 15 }),
+                    },
+                },
                 render({ field: { onChange, value, disabled }, fieldState: { error } }) {
                     return (
                         <TextField

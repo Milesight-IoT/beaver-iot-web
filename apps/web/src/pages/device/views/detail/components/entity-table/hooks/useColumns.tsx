@@ -59,7 +59,7 @@ const useColumns = <T extends TableRowDataType>({
             },
             {
                 field: 'type',
-                headerName: getIntlText('common.label.type'),
+                headerName: getIntlText('common.label.entity_type'),
                 flex: 1,
                 minWidth: 150,
                 filterable: true,
@@ -97,6 +97,7 @@ const useColumns = <T extends TableRowDataType>({
                 display: 'flex',
                 align: 'left',
                 headerAlign: 'left',
+                fixed: 'right',
                 renderCell({ row }) {
                     return (
                         <Stack

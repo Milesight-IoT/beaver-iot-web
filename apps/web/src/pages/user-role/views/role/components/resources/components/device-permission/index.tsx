@@ -117,7 +117,6 @@ const Devices: React.FC = () => {
                 }
 
                 getRoleDevices();
-                setSelectedIds([]);
                 toast.success(getIntlText('common.message.remove_success'));
             },
         });
@@ -129,7 +128,7 @@ const Devices: React.FC = () => {
     // ---------- Table render bar ----------
     const toolbarRender = useMemo(() => {
         return (
-            <Stack className="ms-operations-btns" direction="row" spacing="12px">
+            <Stack className="ms-operations-btns md:d-none" direction="row" spacing="12px">
                 <Button
                     variant="contained"
                     sx={{ height: 36, textTransform: 'none' }}
@@ -170,6 +169,7 @@ const Devices: React.FC = () => {
     return (
         <>
             <TablePro<TableRowDataType>
+                filterCondition={[keyword]}
                 checkboxSelection
                 loading={loading}
                 columns={columns}

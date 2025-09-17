@@ -75,6 +75,17 @@ export default () => {
         /** MUI Theme instance */
         muiTheme,
 
+        /**
+         * MUI Theme breakpoints
+         *
+         * Constants:
+         * - sm: <576
+         * - md: <768
+         * - lg: <992
+         * - xl: <1200
+         */
+        breakpoints: muiTheme.breakpoints,
+
         /** Whether the current device is a mobile device based on breakpoints (width < 576px) */
         matchMobile,
 

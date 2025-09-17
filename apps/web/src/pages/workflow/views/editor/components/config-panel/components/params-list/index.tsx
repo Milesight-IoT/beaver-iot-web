@@ -95,8 +95,9 @@ const ParamsList: React.FC<Props> = ({ title, options, emptyPlaceholder = '-' })
                                                     onClick={e => {
                                                         handleCopy(
                                                             `${option.value}`,
-                                                            (e.target as HTMLElement)
-                                                                ?.parentElement,
+                                                            (e.target as HTMLElement)?.closest(
+                                                                'div',
+                                                            ),
                                                         );
                                                     }}
                                                 >

@@ -45,7 +45,7 @@ const useWorkflowFormItems = () => {
                 name: 'remark',
                 defaultValue: '',
                 rules: {
-                    validate: { checkMaxLength: checkMaxLength({ max: 1000 }) },
+                    validate: { checkMaxLength: checkMaxLength({ max: 500 }) },
                 },
                 render({ field: { onChange, value }, fieldState: { error } }) {
                     return (

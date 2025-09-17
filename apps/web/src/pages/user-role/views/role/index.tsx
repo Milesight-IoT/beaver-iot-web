@@ -118,7 +118,7 @@ const Role: React.FC = () => {
 
         return (
             <>
-                <div className={styles.aside}>
+                <div className={classNames(styles.aside, 'md:d-none')}>
                     <OutlinedInput
                         placeholder="Search"
                         sx={{ width: 200, height: 40 }}

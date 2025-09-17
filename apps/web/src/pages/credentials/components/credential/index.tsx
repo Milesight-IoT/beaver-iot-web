@@ -132,13 +132,13 @@ const Credential = () => {
     return (
         <div className="ms-credentials-credential">
             <ConfigTable
-                title={getIntlText('workflow.label.mqtt_node_name')}
+                title={getIntlText('setting.credentials.mqtt')}
                 configData={mqttConfig}
                 permissions={PERMISSIONS.CREDENTIAL_MODULE_EDIT}
                 onEdit={() => setMqttOpen(true)}
             />
             <ConfigTable
-                title={getIntlText('workflow.label.http_node_name')}
+                title={getIntlText('setting.credentials.http')}
                 configData={httpConfig}
                 permissions={PERMISSIONS.CREDENTIAL_MODULE_EDIT}
                 onEdit={() => setHttpOpen(true)}
