@@ -4,7 +4,7 @@ import { CssBaseline, GlobalStyles } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { useI18n, useTheme } from '@milesight/shared/src/hooks';
+import { useI18n, useTheme, useViewHeightPolyfill } from '@milesight/shared/src/hooks';
 import { useMqtt } from '@/hooks';
 import { ConfirmProvider } from '@/components';
 import BasicLayout from './BasicLayout';
@@ -23,6 +23,7 @@ function Layout() {
 
     useMqtt();
     useTitle(getIntlText('common.document.title'));
+    useViewHeightPolyfill();
 
     const route = routeMatches[routeMatches.length - 1];
     let { layout = '' } = (route?.handle || {}) as Record<string, any>;
