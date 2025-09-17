@@ -1,5 +1,7 @@
 .dashboard-item {
     position: relative;
+    display: flex;
+    flex-direction: column;
     border: @border-base;
     border-radius: @border-base;
     border-radius: @border-radius-base;
@@ -30,6 +32,7 @@
 
     &__footer {
         display: flex;
+        flex: 1;
         align-items: center;
         justify-content: space-between;
         min-height: 45px;
