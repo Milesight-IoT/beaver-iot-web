@@ -7,7 +7,7 @@ import {
     TOKEN_CACHE_KEY,
     REGISTERED_KEY,
 } from '@milesight/shared/src/utils/storage';
-import routes, { mobileRoutes } from '@/routes/routes';
+import routes, { filterMobileRoutes } from '@/routes/routes';
 import { useUserStore } from '@/stores';
 import { globalAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
 import { Sidebar, RouteLoadingIndicator } from '@/components';
@@ -71,7 +71,7 @@ function BasicLayout() {
      * menus bar
      */
     const menus = useMemo(() => {
-        const finalRoutes = matchTablet ? mobileRoutes : routes;
+        const finalRoutes = !matchTablet ? routes : filterMobileRoutes(routes);
 
         return finalRoutes
             .filter(

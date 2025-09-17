@@ -10,7 +10,6 @@ import {
     SettingsIcon,
     SellIcon,
 } from '@milesight/shared/src/components';
-import { isMobile } from '@milesight/shared/src/utils/userAgent';
 import { PERMISSIONS } from '@/constants';
 import ErrorBoundaryComponent from './error-boundary';
 
@@ -332,8 +331,7 @@ const routes: RouteObjectType[] = [
 /**
  * Filter mobile routes
  */
-const filterMobileRoutes = (routes: RouteObjectType[]) => {
-    if (!isMobile()) return routes;
+export const filterMobileRoutes = (routes: RouteObjectType[]) => {
     const result: RouteObjectType[] = [];
 
     routes = routes.filter(item => item.handle?.mobileAccessible);
@@ -347,7 +345,4 @@ const filterMobileRoutes = (routes: RouteObjectType[]) => {
     return result;
 };
 
-const mobileRoutes = filterMobileRoutes(routes);
-
-export { mobileRoutes };
 export default routes;
