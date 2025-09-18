@@ -1,6 +1,7 @@
 import react from '@vitejs/plugin-react';
 import * as path from 'path';
 import { defineConfig, type PluginOption } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 import vitePluginImport from 'vite-plugin-imp';
 import stylelint from 'vite-plugin-stylelint';
 import basicSsl from '@vitejs/plugin-basic-ssl';
@@ -30,6 +31,8 @@ const {
     MOCK_API_PROXY,
     ENABLE_HTTPS,
     ENABLE_VCONSOLE,
+    ENABLE_SW,
+    ENABLE_SW_DEV,
 } = parseEnvVariables([
     path.join(projectRoot, '.env'),
     path.join(projectRoot, '.env.local'),
@@ -85,6 +88,37 @@ const plugins: PluginOption[] = [
         enable: !isProd && ENABLE_VCONSOLE === 'true',
     }),
     react(),
+    // @ts-ignore
+    VitePWA({
+        manifest: false,
+        injectRegister: 'inline',
+        strategies: 'generateSW',
+        selfDestroying: ENABLE_SW === 'false',
+        workbox: {
+            cacheId: 'beaver',
+            cleanupOutdatedCaches: true,
+            maximumFileSizeToCacheInBytes: 5000000,
+            runtimeCaching: [
+                {
+                    urlPattern: /.+\.(?:js|css|svg|png|jpg|jpeg|gif|webp|ttf|woff|woff2|eot|otf|ico)$/,
+                    handler: 'CacheFirst',
+                    options: {
+                        cacheName: 'beaver-static',
+                        expiration: {
+                            // Restrict cache size to 100 entries
+                            maxEntries: 100,
+                            // Cache for 100 days
+                            maxAgeSeconds: 60 * 60 * 24 * 100,
+                        },
+                        cacheableResponse: {
+                            statuses: [0, 200],
+                        },
+                    },
+                },
+            ],
+        },
+        devOptions: { enabled: ENABLE_SW_DEV === 'true' },
+    }),
 ];
 
 const enableHttps = ENABLE_HTTPS === 'true';
