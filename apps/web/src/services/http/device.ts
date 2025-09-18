@@ -38,6 +38,7 @@ export interface DeviceDetail {
 export interface DeviceGroupItemProps {
     id: ApiKey;
     name: string;
+    device_count?: number;
 }
 
 export interface AddDeviceProps {
@@ -125,6 +126,8 @@ export interface DeviceAPISchema extends APISchema {
         request: SearchRequestType & {
             /** Name (Fuzzy search) */
             name?: string;
+            /** is the count of devices required ? */
+            with_device_count?: boolean;
         };
         response: SearchResponseType<DeviceGroupItemProps[]>;
     };

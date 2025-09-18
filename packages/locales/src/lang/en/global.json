@@ -281,5 +281,7 @@
     "common.message.scan_success": "Scan success",
     "common.message.scan_failed": "Scan failed, please check and retry",
     "common.label.turn_on_flash": "Turn on flash",
-    "common.label.turn_off_flash": "Turn off flash"
+    "common.label.turn_off_flash": "Turn off flash",
+    "common.tip.selected_and_max_count": "已选 {1}, 最多选择 {2}",
+    "common.tip.cannot_selected": "不可操作，将超过最多可选"
 }

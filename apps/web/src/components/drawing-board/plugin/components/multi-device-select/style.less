@@ -1,0 +1,29 @@
+.multi-device-select {
+    position: relative;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__container {
+        padding: @padding-md;
+        border: @border-base;
+        border-radius: @border-radius-base;
+
+        &.error {
+            border-color: var(--red-base);
+        }
+    }
+
+    &__search {
+        margin-bottom: @margin-md;
+    }
+
+    &__count {
+        margin-top: @margin-xxs;
+        color: var(--text-color-secondary);
+        .text-size(@font-size-sm);
+    }
+}

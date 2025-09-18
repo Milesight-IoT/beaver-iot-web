@@ -12,6 +12,7 @@ import {
     type MultipleEntitySelectProps,
     type ChartMetricsSelectProps,
     type SingleEntitySelectProps,
+    type MultiDeviceSelectProps,
 } from './components';
 import { COMPONENT_CLASS } from './constant';
 
@@ -28,7 +29,8 @@ export type ControlType =
     | 'AppearanceIcon'
     | 'MultiAppearanceIcon'
     | 'MultiEntitySelect'
-    | 'ChartMetricsSelect';
+    | 'ChartMetricsSelect'
+    | 'MultiDeviceSelect';
 
 export type ControlTypePropsMap = {
     Input: Partial<TextFieldProps>;
@@ -41,6 +43,7 @@ export type ControlTypePropsMap = {
     MultiAppearanceIcon: MultiAppearanceIconProps;
     MultiEntitySelect: Partial<MultipleEntitySelectProps>;
     ChartMetricsSelect: Partial<ChartMetricsSelectProps>;
+    MultiDeviceSelect: MultiDeviceSelectProps;
 };
 
 // Check the completeness of ControlTypePropsMap
