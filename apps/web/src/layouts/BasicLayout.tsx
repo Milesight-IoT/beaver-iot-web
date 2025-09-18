@@ -1,7 +1,6 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useRequest } from 'ahooks';
-import { useRegisterSW } from 'virtual:pwa-register/react';
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 import {
     iotLocalStorage,
@@ -11,13 +10,13 @@ import {
 import routes, { mobileRoutes } from '@/routes/routes';
 import { useUserStore } from '@/stores';
 import { globalAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
-import { Sidebar, RouteLoadingIndicator, useConfirm } from '@/components';
+import { Sidebar, RouteLoadingIndicator } from '@/components';
 import { useUserPermissions } from '@/hooks';
-import { useRoutePermission } from './hooks';
+import { useRoutePermission, useSWUpdate } from './hooks';
 import { LayoutSkeleton } from './components';
 
 function BasicLayout() {
-    const { lang, getIntlText } = useI18n();
+    const { lang } = useI18n();
 
     // ---------- Get user info and redirect ----------
     const navigate = useNavigate();
@@ -98,26 +97,8 @@ function BasicLayout() {
      */
     const { hasPathPermission } = useRoutePermission(loading);
 
-    // ---------- PWA update confirm ----------
-    const confirm = useConfirm();
-    const {
-        updateServiceWorker,
-        needRefresh: [needRefresh, setNeedRefresh],
-    } = useRegisterSW();
-
-    useEffect(() => {
-        if (!needRefresh) return;
-
-        confirm({
-            title: getIntlText('common.modal.title_system_upgrade'),
-            description: getIntlText('common.modal.title_system_upgrade_description'),
-            onConfirm() {
-                setNeedRefresh(false);
-                updateServiceWorker();
-            },
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [needRefresh, getIntlText]);
+    // ---------- SW update confirm ----------
+    useSWUpdate();
 
     return (
         <section className="ms-layout">
