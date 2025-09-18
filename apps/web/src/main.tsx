@@ -1,7 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-// import { registerSW } from 'virtual:pwa-register';
 import { i18n, theme } from '@milesight/shared/src/services';
 import '@milesight/shared/src/utils/lang-polyfill';
 import routes from '@/routes';
@@ -15,9 +14,6 @@ i18n.initI18n('web', 'EN');
 
 // System topic initialization
 theme.initTheme();
-
-// Service Worker autoUpdate
-// registerSW({ immediate: true });
 
 /**
  * Note: Strict mode, and in development environments, React applications are intentionally rendered twice during initialization to highlight potential problems.
