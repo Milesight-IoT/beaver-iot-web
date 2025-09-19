@@ -277,7 +277,5 @@
     "common.label.scan_qr_code": "Scan QR Code",
     "common.label.album": "Album",
     "common.message.scan_success": "Scan success",
-    "common.message.scan_failed": "Scan failed, please check and retry",
-    "common.label.turn_on_flash": "Turn on flash",
-    "common.label.turn_off_flash": "Turn off flash"
+    "common.message.scan_failed": "Scan failed, please check and retry"
 }

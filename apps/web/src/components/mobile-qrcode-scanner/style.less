@@ -132,6 +132,30 @@
         gap: @margin-xxs;
         align-items: center;
         justify-content: center;
+        width: 68px;
+        height: 68px;
         color: var(--white);
+        background-color: rgba(255, 255, 255, 0.32);
+        border-radius: 50%;
+        backdrop-filter: blur(50px);
+
+        > .@{mui-prefix}SvgIcon-root {
+            font-size: 36px;
+        }
+
+        &.active {
+            color: var(--black);
+            background-color: var(--white);
+        }
+    }
+
+    .loading-wrapper {
+        position: absolute;
+        inset: 0;
+        z-index: 200;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.5);
     }
 }
