@@ -1,7 +1,7 @@
 import { unstable_batchedUpdates as unstableBatchedUpdates } from 'react-dom';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { onLangChange, LangType } from '../services/i18n';
+import { onLangChange } from '../services/i18n';
 import { getCurrentTheme, type ThemeType } from '../services/theme';
 import { getTimezone, changeTimezone } from '../services/time';
 

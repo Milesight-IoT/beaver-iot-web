@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import {
     Menu,
@@ -12,7 +12,8 @@ import {
     Stack,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { LogoutIcon } from '@milesight/shared/src/components';
+import { appVersion, HELP_CENTER_ADDRESS } from '@milesight/shared/src/config';
+import { LogoutIcon, HelpOutlineIcon, InfoOutlinedIcon } from '@milesight/shared/src/components';
 import { iotLocalStorage, TOKEN_CACHE_KEY } from '@milesight/shared/src/utils/storage';
 import { useI18n } from '@milesight/shared/src/hooks';
 
@@ -31,8 +32,9 @@ interface MoreUserInfoProps {
  */
 const MoreUserInfo: React.FC<MoreUserInfoProps> = ({ userInfo }) => {
     const navigate = useNavigate();
-    const { getIntlText } = useI18n();
+    const { lang, getIntlText } = useI18n();
     const { setUserInfo } = useUserStore();
+    const helpCenterUrl = useMemo(() => HELP_CENTER_ADDRESS[lang!], [lang]);
 
     return (
         <PopupState variant="popover" popupId="user-info-menu">
@@ -60,7 +62,11 @@ const MoreUserInfo: React.FC<MoreUserInfoProps> = ({ userInfo }) => {
                             horizontal: 'left',
                         }}
                     >
-                        <ListItem sx={{ width: 255 }} alignItems="center">
+                        <ListItem
+                            alignItems="center"
+                            className="ms-sidebar-menu__user-info"
+                            sx={{ width: 255 }}
+                        >
                             <ListItemAvatar className="ms-sidebar-menu__avatar">
                                 <Avatar
                                     {...genAvatarProps(userInfo?.nickname || '', {
@@ -79,6 +85,24 @@ const MoreUserInfo: React.FC<MoreUserInfoProps> = ({ userInfo }) => {
                             className="ms-sidebar-menu__divider"
                         />
                         <LangItem onChange={() => state.close()} />
+                        <MenuItem className="ms-sidebar-menu__link" onClick={() => state.close()}>
+                            <a href={helpCenterUrl || '/'} target="_blank" rel="noreferrer">
+                                <ListItemIcon>
+                                    <HelpOutlineIcon />
+                                </ListItemIcon>
+                                {getIntlText('common.label.help_center')}
+                            </a>
+                        </MenuItem>
+                        <ListItem className="ms-sidebar-menu__version">
+                            <ListItemIcon>
+                                <InfoOutlinedIcon />
+                            </ListItemIcon>
+                            <div className="version">
+                                <span className="label">{getIntlText('common.label.version')}</span>
+                                <span className="value">{`v${appVersion}`}</span>
+                            </div>
+                        </ListItem>
+                        <Divider className="ms-sidebar-menu__divider" sx={{ marginY: 0.5 }} />
                         <MenuItem
                             onClick={() => {
                                 state.close();
