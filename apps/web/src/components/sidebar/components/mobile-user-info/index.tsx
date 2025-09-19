@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, DialogTitle, IconButton, List, ListItem, ListItemButton } from '@mui/material';
+import { appVersion } from '@milesight/shared/src/config';
 import { useI18n, useStoreShallow } from '@milesight/shared/src/hooks';
 import {
     Modal,
@@ -9,6 +10,7 @@ import {
     ArrowBackIcon,
     ArrowForwardIosIcon,
     CheckIcon,
+    InfoOutlinedIcon,
 } from '@milesight/shared/src/components';
 import { iotLocalStorage, TOKEN_CACHE_KEY } from '@milesight/shared/src/utils/storage';
 import { useUserStore } from '@/stores';
@@ -89,6 +91,18 @@ const MobileUserInfo: React.FC<MobileUserInfoProps> = ({ userInfo }) => {
                                 {getIntlText('common.label.language')}
                             </div>
                             <ArrowForwardIosIcon className="icon-end" />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemButton>
+                            <InfoOutlinedIcon className="icon-start" />
+                            {/* <div className="action-item__text">
+                                {getIntlText('common.label.sign_out')}
+                            </div> */}
+                            <div className="action-item__text version">
+                                <span className="label">{getIntlText('common.label.version')}</span>
+                                <span className="value">{`v${appVersion}`}</span>
+                            </div>
                         </ListItemButton>
                     </ListItem>
                     <ListItem>
