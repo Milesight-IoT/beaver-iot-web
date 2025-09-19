@@ -46,9 +46,6 @@ const imageControlPanelConfig = (): ControlPanelConfig<ImageConfigType> => {
                                 defaultValue: 'entity',
                             },
                             componentProps: {
-                                sx: {
-                                    marginBottom: 0,
-                                },
                                 options: [
                                     {
                                         label: t('common.label.select_entity'),

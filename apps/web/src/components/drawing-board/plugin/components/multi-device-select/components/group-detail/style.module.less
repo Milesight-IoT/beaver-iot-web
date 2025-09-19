@@ -1,0 +1,39 @@
+.group-detail {
+    flex: 1;
+    overflow: auto;
+
+    &__container {
+        height: 257px;
+        padding: 0 @padding-md;
+    }
+
+    .check-all {
+        display: flex;
+        align-items: center;
+        margin-bottom: @margin-md;
+
+        .title {
+            margin-left: @margin-xs;
+        }
+    }
+
+    .device-item {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        padding: @padding-xxs 0;
+        margin-bottom: @margin-xs;
+
+        .info {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            width: 0;
+
+            .description {
+                color: var(--text-color-tertiary);
+                .text-size(@font-size-1);
+            }
+        }
+    }
+}

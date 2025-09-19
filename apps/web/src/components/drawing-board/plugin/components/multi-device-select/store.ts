@@ -7,7 +7,11 @@ interface MultiDeviceSelectStore {
     /** Device group */
     deviceGroups: DeviceGroupItemProps[];
     /** update device group */
-    updateDeviceGroups: (panels: DeviceGroupItemProps[]) => void;
+    updateDeviceGroups: (groups: DeviceGroupItemProps[]) => void;
+    /** Selected Group */
+    selectedGroup?: DeviceGroupItemProps;
+    /** update Selected Group */
+    updateSelectedGroup: (group?: DeviceGroupItemProps) => void;
 }
 
 /**
@@ -16,8 +20,11 @@ interface MultiDeviceSelectStore {
 const useMultiDeviceSelectStore = create(
     immer<MultiDeviceSelectStore>(set => ({
         deviceGroups: [],
-        updateDeviceGroups(panels) {
-            set(() => ({ deviceGroups: panels }));
+        updateDeviceGroups(groups) {
+            set(() => ({ deviceGroups: groups }));
+        },
+        updateSelectedGroup(group) {
+            set(() => ({ selectedGroup: group }));
         },
     })),
 );

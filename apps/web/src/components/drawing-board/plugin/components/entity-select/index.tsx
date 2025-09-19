@@ -23,6 +23,9 @@ export default React.memo((props: IProps) => {
     );
     return (
         <EntitySelect
+            sx={{
+                marginBottom: 2,
+            }}
             fieldName="entityId"
             entityType={entityType}
             filterOption={filterEntityOption(customFilterEntity, context)}

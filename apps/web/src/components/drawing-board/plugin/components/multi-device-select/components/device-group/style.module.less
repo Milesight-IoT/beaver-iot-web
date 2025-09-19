@@ -1,7 +1,14 @@
 .device-group {
-    position: relative;
-    display: flex;
-    flex-direction: column;
+    flex: 1;
+    overflow: auto;
+
+    &__container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 300px;
+        padding: 0 @padding-md;
+    }
 
     .item {
         display: flex;

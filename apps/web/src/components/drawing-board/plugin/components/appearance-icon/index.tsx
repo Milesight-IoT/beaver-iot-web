@@ -53,23 +53,31 @@ const AppearanceIcon: React.FC<AppearanceIconProps> = props => {
 
     return (
         <div className="appearance-icon">
-            <div className="appearance-icon__label">{label}</div>
-            <IconSelect
-                {...iconSelectProps}
-                value={
-                    value?.icon || get(formData, legacyIconKey || '') || defaultValue?.icon || ''
-                }
-                onChange={(icon: string) => {
-                    setValue(oldValue => ({ ...oldValue, icon }));
-                }}
-            />
-            <IconColorSelect
-                {...iconSelectColorProps}
-                value={
-                    value?.color || get(formData, legacyColorKey || '') || defaultValue?.color || ''
-                }
-                onChange={color => setValue(oldValue => ({ ...oldValue, color }))}
-            />
+            <div className="appearance-icon__container">
+                <div className="appearance-icon__label">{label}</div>
+                <IconSelect
+                    {...iconSelectProps}
+                    value={
+                        value?.icon ||
+                        get(formData, legacyIconKey || '') ||
+                        defaultValue?.icon ||
+                        ''
+                    }
+                    onChange={(icon: string) => {
+                        setValue(oldValue => ({ ...oldValue, icon }));
+                    }}
+                />
+                <IconColorSelect
+                    {...iconSelectColorProps}
+                    value={
+                        value?.color ||
+                        get(formData, legacyColorKey || '') ||
+                        defaultValue?.color ||
+                        ''
+                    }
+                    onChange={color => setValue(oldValue => ({ ...oldValue, color }))}
+                />
+            </div>
         </div>
     );
 };

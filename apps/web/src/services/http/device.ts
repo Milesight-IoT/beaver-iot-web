@@ -30,6 +30,8 @@ export interface DeviceDetail {
     // additional_data?: Record<string, any>;
     /** device group name */
     group_name?: string;
+    /** device group id */
+    group_id?: ApiKey;
 }
 
 /**

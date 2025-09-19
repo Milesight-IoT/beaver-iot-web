@@ -22,7 +22,7 @@ const Control: React.FC<ControlProps> = props => {
     const { processQuickRules } = useFormRules();
 
     const renderController = (children: ReactNode) => {
-        return <div className="control-item">{children}</div>;
+        return children;
     };
 
     if (!isVisibility) {

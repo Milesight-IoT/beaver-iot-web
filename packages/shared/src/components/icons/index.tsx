@@ -163,6 +163,7 @@ export {
     QrCodeScanner as QrCodeScannerIcon,
     FlashlightOn as FlashlightOnIcon,
     FlashlightOff as FlashlightOffIcon,
+    Dns as DnsIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';
