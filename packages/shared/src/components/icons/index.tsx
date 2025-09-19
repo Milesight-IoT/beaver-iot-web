@@ -159,7 +159,6 @@ export {
     FilterListOutlined as FilterListOutlinedIcon,
     QrCodeScanner as QrCodeScannerIcon,
     FlashlightOn as FlashlightOnIcon,
-    FlashlightOff as FlashlightOffIcon,
     SpaceDashboard as SpaceDashboardIcon,
 } from '@mui/icons-material';
 

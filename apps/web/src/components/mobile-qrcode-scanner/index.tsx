@@ -4,12 +4,7 @@ import jsQR from 'jsqr';
 import cls from 'classnames';
 import { useSize, useMemoizedFn, useDocumentVisibility } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
-import {
-    ArrowBackIcon,
-    FlashlightOnIcon,
-    FlashlightOffIcon,
-    toast,
-} from '@milesight/shared/src/components';
+import { ArrowBackIcon, FlashlightOnIcon, toast } from '@milesight/shared/src/components';
 import { imageCompress } from '@milesight/shared/src/utils/tools';
 import {
     DEFAULT_SCAN_CONFIG,
@@ -262,12 +257,14 @@ const MobileQRCodeScanner: React.FC<Props> = ({
                 </div>
                 <div className="topbar-right">
                     <span>{getIntlText('common.label.album')}</span>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        className="btn-img-input"
-                        onChange={handleImgSelect}
-                    />
+                    {open && (
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="btn-img-input"
+                            onChange={handleImgSelect}
+                        />
+                    )}
                 </div>
             </div>
             <div className="scan-region-box" style={scanRegionStyle}>
