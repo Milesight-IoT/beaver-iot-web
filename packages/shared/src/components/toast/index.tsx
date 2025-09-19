@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { Snackbar } from '@mui/material';
+import { Snackbar, type SxProps } from '@mui/material';
+import { isMobile } from '../../utils/userAgent';
 import { InfoIcon, CheckCircleIcon, ErrorIcon, WarningIcon } from '../icons';
 import './style.less';
 
@@ -48,6 +49,8 @@ class ToastManager {
             this.root?.unmount();
             this.root = createRoot(container);
         }
+        const style: SxProps | undefined = isMobile() ? { top: '38px' } : undefined;
+
         this.root?.render(
             <>
                 {this.toasts.map(toast => (
@@ -65,6 +68,7 @@ class ToastManager {
                             this.removeToast(toast.key);
                             toast.onClose?.(e);
                         }}
+                        sx={style}
                     >
                         <div className={`ms-toast ${toast.severity}`}>
                             <div className="ms-toast-icon">{iconMap[toast.severity]}</div>
