@@ -19,6 +19,7 @@ import {
     awaitWrap,
     getResponseData,
     isRequestSuccess,
+    type EntityAPISchema,
     type DeviceAPISchema,
 } from '@/services/http';
 import useColumns, { type TableRowDataType, type UseColumnsProps } from './hooks/useColumns';
@@ -34,15 +35,16 @@ interface Props {
 /**
  * Entity Data Module
  */
-const EntityData: React.FC<Props> = memo(({ data, onRefresh }) => {
+const EntityData: React.FC<Props> = memo(({ data: deviceDetail, onRefresh }) => {
     const { getIntlText } = useI18n();
     const { hasPermission } = useUserPermissions();
+    const deviceId = deviceDetail?.id || '';
 
     // ---------- Toolbar Model ----------
     const [entityType, setEntityType] = useState<ENTITY_TYPE>(ENTITY_TYPE.PROPERTY);
     const advancedFilterRef = useRef<AdvancedFilterHandler>(null);
     const [advancedConditions, setAdvancedConditions] = useState<
-        AdvancedConditionsType<TableRowDataType>
+        EntityAPISchema['advancedSearch']['request']['entity_filter']
     >({});
 
     // ---------- Table Model ----------
@@ -62,13 +64,14 @@ const EntityData: React.FC<Props> = memo(({ data, onRefresh }) => {
         run: getEntityList,
     } = useRequest(
         async () => {
+            if (!deviceId) return;
+
             const { page, pageSize } = paginationModel;
             const advancedFilter = { ...advancedConditions };
-            // TODO: Add device_id filter
-            advancedFilter['ENTITY_TYPE' as keyof AdvancedConditionsType<TableRowDataType>] = {
-                operator: 'ANY_EQUALS',
-                values: [entityType],
-            };
+
+            advancedFilter.DEVICE_ID = { operator: 'EQ', values: [deviceId] };
+            advancedFilter.ENTITY_TYPE = { operator: 'ANY_EQUALS', values: [entityType] };
+
             const [error, resp] = await awaitWrap(
                 entityAPI.advancedSearch({
                     page_size: pageSize,
@@ -91,7 +94,7 @@ const EntityData: React.FC<Props> = memo(({ data, onRefresh }) => {
         },
         {
             debounceWait: 300,
-            refreshDeps: [paginationModel, entityType, advancedConditions],
+            refreshDeps: [deviceId, paginationModel, entityType, advancedConditions],
         },
     );
 

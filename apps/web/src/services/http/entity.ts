@@ -33,7 +33,11 @@ export interface EntityAPISchema extends APISchema {
     advancedSearch: {
         request: SearchRequestType & {
             /** Advanced filter */
-            entity_filter?: AdvancedConditionsType<EntityData>;
+            entity_filter?: AdvancedConditionsType<
+                EntityData & {
+                    device_id?: ApiKey;
+                }
+            >;
             sorts?: [
                 {
                     direction: 'ASC' | 'DESC';
