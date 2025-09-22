@@ -13,7 +13,6 @@
     "device.label.param_entity_name": "Entity Name",
     "device.label.param_external_id": "External Device ID",
     "device.label.param_founder": "Founder",
-    "device.label.param_source": "Source",
     "device.label.ungrouped_devices": "Ungrouped Devices",
     "device.message.delete_tip": "Are you sure to delete?",
     "device.tip.delete_device_group": "Once deleted, the devices will no longer belong to any device group. Are you sure you want to delete the device group: {1}?",

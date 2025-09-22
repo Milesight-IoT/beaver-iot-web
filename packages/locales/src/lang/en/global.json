@@ -278,5 +278,7 @@
     "common.label.album": "Album",
     "common.message.scan_success": "Scan success",
     "common.message.scan_failed": "Scan failed, please check and retry",
-    "common.label.help_center": "Help Center"
+    "common.label.help_center": "Help Center",
+    "common.label.file_name": "File Name",
+    "common.label.source": "Source"
 }
