@@ -65,7 +65,7 @@ const MoreUserInfo: React.FC<MoreUserInfoProps> = ({ userInfo }) => {
                         <ListItem
                             alignItems="center"
                             className="ms-sidebar-menu__user-info"
-                            sx={{ width: 255 }}
+                            sx={{ width: 220 }}
                         >
                             <ListItemAvatar className="ms-sidebar-menu__avatar">
                                 <Avatar
