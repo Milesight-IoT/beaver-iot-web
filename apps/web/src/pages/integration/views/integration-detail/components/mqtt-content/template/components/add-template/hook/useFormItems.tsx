@@ -169,7 +169,6 @@ const useFormItems = ({ prefixTopic }: { prefixTopic: string }) => {
                             }}
                             error={!!error}
                             helperText={error ? error.message : null}
-                            defaultValue={DEFAULT_DEVICE_OFFLINE_TIMEOUT}
                             value={value}
                             onChange={onChange}
                             onBlur={event => {
