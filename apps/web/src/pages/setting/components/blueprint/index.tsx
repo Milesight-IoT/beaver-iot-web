@@ -3,7 +3,13 @@ import { useRequest } from 'ahooks';
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
 import { Tooltip, type DescriptionsProps } from '@/components';
 import { PERMISSIONS } from '@/constants';
-import { blueprintAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/services/http';
+import {
+    blueprintAPI,
+    awaitWrap,
+    isRequestSuccess,
+    getResponseData,
+    type BlueprintSourceType,
+} from '@/services/http';
 import ConfigTable from '../config-table';
 import EditModal from './edit-modal';
 import './style.less';
@@ -47,11 +53,16 @@ const Blueprint = () => {
     // ---------- Generate Blueprint Setting List ----------
     const listData = useMemo(() => {
         const sourceType = bpSetting?.current_source_type;
+        const intlMap: Record<BlueprintSourceType, string> = {
+            Default: getIntlText('setting.blueprint.title_official_store'),
+            Upload: getIntlText('setting.blueprint.title_local_upload'),
+        };
         const result: DescriptionsProps['data'] = [
             {
                 key: 'current_source_type',
                 label: getIntlText('common.label.source'),
-                content: sourceType,
+                autoEllipsis: true,
+                content: sourceType ? intlMap[sourceType] : '-',
             },
         ];
 
