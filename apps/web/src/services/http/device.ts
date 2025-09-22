@@ -71,6 +71,8 @@ export interface DeviceAPISchema extends APISchema {
             filter_not_grouped?: boolean;
             /** External id of the device */
             identifier?: string;
+            /** Device id List */
+            id_list?: ApiKey[];
         };
         response: SearchResponseType<DeviceDetail[]>;
     };

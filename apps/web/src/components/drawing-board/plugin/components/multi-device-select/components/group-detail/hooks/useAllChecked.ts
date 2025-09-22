@@ -58,6 +58,10 @@ export function useAllChecked(data?: DeviceDetail[]) {
     }, [context?.selectedDevices, data]);
 
     const allIsDisabled = useMemo(() => {
+        if (allIsIndeterminate) {
+            return false;
+        }
+
         const selected = context?.selectedDevices;
         if (
             !Array.isArray(selected) ||
@@ -75,8 +79,8 @@ export function useAllChecked(data?: DeviceDetail[]) {
                 return !isCurrentData;
             })?.length || 0;
 
-        return selectedCount + data.length >= MAX_COUNT;
-    }, [context?.selectedDevices, data]);
+        return selectedCount + data.length > MAX_COUNT;
+    }, [context?.selectedDevices, data, allIsIndeterminate]);
 
     const handleAllCheckedChange = useMemoizedFn((checked: boolean) => {
         if (!Array.isArray(data) || isEmpty(data)) {

@@ -5,15 +5,23 @@ import { LoadingWrapper, ArrowForwardIosIcon } from '@milesight/shared/src/compo
 
 import { Tooltip } from '@/components';
 import { type DeviceGroupItemProps } from '@/services/http';
-import { useDeviceGroup } from './useDeviceGroup';
+import useMultiDeviceSelectStore from '../../store';
+import { useCheckbox } from './useCheckbox';
 
 import styles from './style.module.less';
+
+export interface DeviceGroupProps {
+    loading?: boolean;
+}
 
 /**
  * Device Group component
  */
-const DeviceGroup: React.FC = () => {
-    const { deviceGroups, devicesLoading, renderCheckbox, handleSelectGroup } = useDeviceGroup();
+const DeviceGroup: React.FC<DeviceGroupProps> = props => {
+    const { loading } = props;
+
+    const { deviceGroups, updateSelectedGroup } = useMultiDeviceSelectStore();
+    const { devicesLoading, renderCheckbox } = useCheckbox();
 
     const renderItem = (item: DeviceGroupItemProps) => {
         return (
@@ -23,7 +31,7 @@ const DeviceGroup: React.FC = () => {
                     <Tooltip autoEllipsis title={item.name} />
                 </div>
                 <div className={styles.count}>{item.device_count}</div>
-                <div className={styles.icon} onClick={() => handleSelectGroup(item)}>
+                <div className={styles.icon} onClick={() => updateSelectedGroup(item)}>
                     <IconButton>
                         <ArrowForwardIosIcon sx={{ width: '10px', height: '10px' }} />
                     </IconButton>
@@ -34,7 +42,7 @@ const DeviceGroup: React.FC = () => {
 
     return (
         <div className={styles['device-group']}>
-            <LoadingWrapper loading={devicesLoading}>
+            <LoadingWrapper loading={loading || devicesLoading}>
                 <div className={styles['device-group__container']}>
                     {deviceGroups.map(g => renderItem(g))}
                 </div>

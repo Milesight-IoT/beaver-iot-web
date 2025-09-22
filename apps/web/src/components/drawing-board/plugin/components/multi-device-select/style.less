@@ -9,6 +9,12 @@
         label {
             .text-size(@font-size-base);
         }
+
+        &-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
     }
 
     &__container {
@@ -31,7 +37,6 @@
     }
 
     &__count {
-        margin-top: @margin-xxs;
         color: var(--text-color-secondary);
         .text-size(@font-size-sm);
     }
@@ -59,5 +64,14 @@
         justify-content: flex-end;
         padding: @padding-md @padding-md 0;
         border-top: @border-base;
+    }
+
+    &__refresh {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        color: var(--primary-color-base);
+        cursor: pointer;
+        .text-size(@font-size-1);
     }
 }

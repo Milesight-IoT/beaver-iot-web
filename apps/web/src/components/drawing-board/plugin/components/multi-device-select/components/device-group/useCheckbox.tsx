@@ -15,9 +15,9 @@ import {
     type DeviceGroupItemProps,
 } from '@/services/http';
 import { FixedGroupEnum } from '@/pages/device/constants';
-import { MultiDeviceSelectContext } from '../context';
-import { MAX_COUNT } from '../constants';
-import useMultiDeviceSelectStore from '../store';
+import { MultiDeviceSelectContext } from '../../context';
+import { MAX_COUNT } from '../../constants';
+import useMultiDeviceSelectStore from '../../store';
 
 export function useCheckbox() {
     const [devicesLoading, setDevicesLoading] = useState(false);
@@ -63,6 +63,10 @@ export function useCheckbox() {
     });
 
     const isDisabledChecked = useMemoizedFn((groupItem: DeviceGroupItemProps) => {
+        if (isIndeterminate(groupItem)) {
+            return false;
+        }
+
         let selectedCount = 0;
         if (groupItem?.id === FixedGroupEnum.UNGROUPED) {
             selectedCount = context?.selectedDevices?.filter(d => !!d?.group_id)?.length || 0;
@@ -73,7 +77,7 @@ export function useCheckbox() {
 
         const deviceCount = groupItem?.device_count || 0;
 
-        return selectedCount + deviceCount >= MAX_COUNT;
+        return selectedCount + deviceCount > MAX_COUNT;
     });
 
     const getGroupDevices = useMemoizedFn(async (groupItem: DeviceGroupItemProps) => {
