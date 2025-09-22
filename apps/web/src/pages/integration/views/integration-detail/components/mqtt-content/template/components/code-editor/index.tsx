@@ -167,13 +167,13 @@ const CodeEditor: React.FC<IProps> = ({
                 </div>
             )}
 
-            <div className={classNames('ms-code-editor-wrap-footer')}>
-                {!!error && (
+            {!!error && (
+                <div className={classNames('ms-code-editor-wrap-footer')}>
                     <FormHelperText error sx={{ whiteSpace: 'pre-wrap' }}>
                         {error?.message}
                     </FormHelperText>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     );
 };
