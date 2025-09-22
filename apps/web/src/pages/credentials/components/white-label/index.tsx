@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { pick } from 'lodash-es';
+import { useDebounceEffect } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
 import { DescriptionsProps, Tooltip } from '@/components';
@@ -42,9 +43,16 @@ const WhiteLabel = () => {
     const [editSmtp, setEditSmtp] = useState<boolean>(false);
     const [smtpDetail, setSmtpDetail] = useState<ObjectToCamelCase<CredentialType> | undefined>();
 
-    useEffect(() => {
-        getSmtpConfig();
-    }, [updateFlag]);
+    // useEffect(() => {
+    //     getSmtpConfig();
+    // }, [updateFlag]);
+    useDebounceEffect(
+        () => {
+            getSmtpConfig();
+        },
+        [updateFlag],
+        { wait: 300 },
+    );
 
     // init smtp config
     const getSmtpConfig = async () => {

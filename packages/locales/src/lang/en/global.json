@@ -280,5 +280,6 @@
     "common.message.scan_failed": "Scan failed, please check and retry",
     "common.label.help_center": "Help Center",
     "common.label.file_name": "File Name",
-    "common.label.source": "Source"
+    "common.label.source": "Source",
+    "common.message.supported_format": "Supported format: {1}"
 }

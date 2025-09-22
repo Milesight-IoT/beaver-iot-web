@@ -4,7 +4,7 @@ import { useI18n } from '@milesight/shared/src/hooks';
 import { useRouteTab, useUserPermissions } from '@/hooks';
 import { Breadcrumbs, TabPanel } from '@/components';
 import { PERMISSIONS } from '@/constants';
-import { Credential, WhiteLabel } from './components';
+import { Credential, WhiteLabel, Blueprint } from './components';
 
 import './style.less';
 
@@ -27,6 +27,12 @@ export default () => {
                 key: 'credential',
                 label: getIntlText('setting.integration.label.credential'),
                 component: <Credential />,
+                permission: PERMISSIONS.CREDENTIAL_MODULE,
+            },
+            {
+                key: 'blueprint',
+                label: getIntlText('setting.blueprint.management_title'),
+                component: <Blueprint />,
                 permission: PERMISSIONS.CREDENTIAL_MODULE,
             },
         ].filter(t => hasPermission(t.permission));

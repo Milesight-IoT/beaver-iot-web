@@ -9,7 +9,7 @@ import './style.less';
 
 interface IProps {
     /** modal title */
-    title: string;
+    title: React.ReactNode;
     /** config detail */
     configData: DescriptionsProps['data'];
     /** permissions module */
@@ -28,7 +28,7 @@ const ConfigTable: React.FC<IProps> = props => {
     return (
         <div className="ms-config-table">
             <div className="ms-config-table-container">
-                <span className="ms-config-table-container-title">{title}</span>
+                <div className="ms-config-table-container-title">{title}</div>
                 <PermissionControlDisabled permissions={permissions}>
                     <Button
                         variant="outlined"

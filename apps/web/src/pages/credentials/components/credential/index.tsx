@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useMemoizedFn } from 'ahooks';
+import { useEffect, useMemo, useState } from 'react';
+import { useMemoizedFn, useDebounceEffect } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
 import { toast } from '@milesight/shared/src/components';
@@ -38,9 +38,16 @@ const Credential = () => {
     const [mqttOpen, setMqttOpen] = useState<boolean>(false);
     const [httpOpen, setHttpOpen] = useState<boolean>(false);
 
-    useEffect(() => {
-        getMqttAndHttpConfig();
-    }, [updateFlag]);
+    // useEffect(() => {
+    //     getMqttAndHttpConfig();
+    // }, [updateFlag]);
+    useDebounceEffect(
+        () => {
+            getMqttAndHttpConfig();
+        },
+        [updateFlag],
+        { wait: 300 },
+    );
 
     // init mqtt http config
     const getMqttAndHttpConfig = async () => {
