@@ -49,6 +49,7 @@ export {
 export { default as camthinkApi, type CamthinkAPISchema, type InferStatus } from './camthink';
 export {
     default as mqttApi,
+    DEFAULT_DEVICE_OFFLINE_TIMEOUT,
     type TemplateType,
     type TemplateDetailType,
     type TemplateProperty,

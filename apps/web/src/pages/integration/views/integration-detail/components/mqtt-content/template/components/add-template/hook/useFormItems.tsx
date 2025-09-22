@@ -7,14 +7,17 @@ import {
     InputAdornment,
     Tooltip,
     Link,
+    Typography,
 } from '@mui/material';
 import { useCopy, useI18n } from '@milesight/shared/src/hooks';
 import {
     checkMaxLength,
     checkRequired,
+    checkRangeValue,
     checkStartWithSpecialChar,
 } from '@milesight/shared/src/utils/validators';
 import { ContentCopyIcon, OpenInNewIcon } from '@milesight/shared/src/components';
+import { DEFAULT_DEVICE_OFFLINE_TIMEOUT } from '@/services/http';
 import CodeEditor from '../../code-editor';
 
 export interface FormDataProps {
@@ -22,6 +25,7 @@ export interface FormDataProps {
     topic: string;
     description: string;
     yaml: string;
+    timeout: number;
 }
 
 const useFormItems = ({ prefixTopic }: { prefixTopic: string }) => {
@@ -139,6 +143,43 @@ const useFormItems = ({ prefixTopic }: { prefixTopic: string }) => {
                 },
             },
             {
+                name: 'timeout',
+                rules: {
+                    validate: {
+                        checkRequired: checkRequired(),
+                        checkRangeValue: checkRangeValue({ min: 1, max: 2880 }),
+                    },
+                },
+                render({ field: { onChange, value }, fieldState: { error } }) {
+                    return (
+                        <TextField
+                            {...commTextProps}
+                            label={getIntlText('setting.integration.label_device_offline_timeout')}
+                            placeholder={getIntlText('common.placeholder.input')}
+                            slotProps={{
+                                input: {
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <Typography sx={{ fontSize: 14 }}>
+                                                {`${getIntlText('common.label.minutes', { 1: '' })}`.trim()}
+                                            </Typography>
+                                        </InputAdornment>
+                                    ),
+                                },
+                            }}
+                            error={!!error}
+                            helperText={error ? error.message : null}
+                            defaultValue={DEFAULT_DEVICE_OFFLINE_TIMEOUT}
+                            value={value}
+                            onChange={onChange}
+                            onBlur={event => {
+                                onChange(event?.target?.value?.trim());
+                            }}
+                        />
+                    );
+                },
+            },
+            {
                 name: 'yaml',
                 rules: {
                     validate: {
@@ -149,7 +190,7 @@ const useFormItems = ({ prefixTopic }: { prefixTopic: string }) => {
                     return (
                         <CodeEditor
                             title={getIntlText('setting.integration.device_entity_design')}
-                            value={value}
+                            value={value as string}
                             error={error}
                             onChange={onChange}
                             rightSlot={
