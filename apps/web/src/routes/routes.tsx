@@ -239,7 +239,7 @@ const routes: RouteObjectType[] = [
         ErrorBoundary,
     },
     {
-        path: '/credentials',
+        path: '/setting',
         handle: {
             get title() {
                 return intl.get('common.label.setting');
@@ -248,7 +248,7 @@ const routes: RouteObjectType[] = [
             permissions: PERMISSIONS.SETTING_MODULE,
         },
         async lazy() {
-            const { default: Component } = await import('@/pages/credentials');
+            const { default: Component } = await import('@/pages/setting');
             return { Component };
         },
         ErrorBoundary,
