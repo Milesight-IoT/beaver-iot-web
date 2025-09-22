@@ -77,6 +77,11 @@ export type Props = UseDropzoneProps & {
     label?: string;
 
     /**
+     * Custom icon for upload area
+     */
+    icon?: React.ReactNode;
+
+    /**
      * Whether the form item is required
      */
     required?: boolean;
@@ -140,6 +145,7 @@ const Upload: React.FC<Props> = ({
     // type,
     value,
     label,
+    icon = <ImageIcon className="icon" />,
     error,
     required,
     helperText,
@@ -175,8 +181,11 @@ const Upload: React.FC<Props> = ({
             result.push(...exts.map(ext => ext.replace(/^\./, '').toUpperCase()));
         });
 
-        return result.join(', ');
-    }, [accept]);
+        // return [...new Set(result)].join(', ');
+        return getIntlText('common.message.supported_format', {
+            1: [...new Set(result)].join(', '),
+        });
+    }, [accept, getIntlText]);
 
     // ---------- Upload files to server ----------
     const [files, setFiles] = useState<UploadFile[]>();
@@ -443,7 +452,7 @@ const Upload: React.FC<Props> = ({
                             className="ms-upload-cont ms-upload-cont-uploaded"
                             onClick={e => e.stopPropagation()}
                         >
-                            <ImageIcon className="icon" />
+                            {icon}
                             <div className="hint">{renderDoneFiles()}</div>
                             <IconButton onClick={handleDelete}>
                                 <DeleteIcon />
