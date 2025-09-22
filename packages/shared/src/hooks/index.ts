@@ -10,3 +10,4 @@ export { default as usePreventLeave } from './usePreventLeave';
 export { default as useVirtualList, type Options as UseVirtualListOptions } from './useVirtualList';
 export { default as useSignalState } from './useSignalState';
 export { default as usePopoverCloseDelay } from './usePopoverCloseDelay';
+export { default as useViewHeightPolyfill } from './useViewHeightPolyfill';

@@ -271,6 +271,8 @@
     "valid.input.value": "Input value: {0} only.",
     "valid.input.version": "The version number does not comply with the specification.",
     "valid.resp.at_least_one": "Please select at least one {1}.",
+    "common.modal.title_system_upgrade": "System Upgrade",
+    "common.modal.title_system_upgrade_description": "The system has been upgraded, do you want to refresh the page now?",
     "common.label.grow": "放大",
     "common.label.shrink": "缩小",
     "common.label.back_to_home": "Back to Home",
