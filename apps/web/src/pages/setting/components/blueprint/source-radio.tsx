@@ -56,6 +56,7 @@ const SourceRadio: React.FC<Props> = ({ label, required, error, helperText, ...p
             <div className="radio-container">
                 {options.map(item => (
                     <div
+                        key={item.key}
                         className={cls('radio-item', { active: source === item.key })}
                         onClick={() => setSource(item.key)}
                     >
