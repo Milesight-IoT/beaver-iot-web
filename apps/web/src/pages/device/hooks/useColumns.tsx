@@ -61,7 +61,7 @@ const useColumns = <T extends TableRowDataType>({
                 minWidth: 120,
                 renderCell({ value }) {
                     // TODO: Replace with real value
-                    return <DeviceStatus type="online" />;
+                    return <DeviceStatus type="ONLINE" />;
                 },
             },
             {
