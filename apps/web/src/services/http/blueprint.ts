@@ -16,6 +16,7 @@ export interface BlueprintAPISchema extends APISchema {
             version: string;
             file_name?: string;
             update_time?: number;
+            synced_success?: boolean;
         };
     };
 

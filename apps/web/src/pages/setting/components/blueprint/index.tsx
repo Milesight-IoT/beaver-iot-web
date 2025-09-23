@@ -81,6 +81,22 @@ const Blueprint = () => {
                             ? '-'
                             : getTimeFormat(bpSetting?.update_time, 'fullDateTimeSecondFormat'),
                     },
+                    {
+                        key: 'sync_result',
+                        label: getIntlText('setting.blueprint.label_sync_result'),
+                        content: bpSetting?.synced_success ? (
+                            <Tooltip
+                                autoEllipsis
+                                title={getIntlText('setting.blueprint.message_sync_success')}
+                            />
+                        ) : (
+                            <Tooltip
+                                autoEllipsis
+                                sx={{ color: 'error.main' }}
+                                title={getIntlText('setting.blueprint.message_sync_failed')}
+                            />
+                        ),
+                    },
                 );
                 break;
             }

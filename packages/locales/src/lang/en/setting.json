@@ -147,7 +147,10 @@
     "setting.blueprint.official_store_helper_text": "默认来源为从 BeaverIoT 的官方蓝图仓库去定时拉取最新的设备蓝图，定时拉取的时间是每24小时一次。如果需要本地上传可点击右侧编辑按钮进行切换。",
     "setting.blueprint.title_official_store": "BeaverIoT Official Blueprint Repository",
     "setting.blueprint.title_local_upload": "Local Upload",
-    "setting.blueprint.desc_official_store": "Automatically pull files every 24 hours, each pull takes about three minutes. The \"last update time\" will be automatically updated after successful pulling.",
-    "setting.blueprint.desc_local_upload": "Please make sure that the uploaded file version is larger than the current version and that the file directory format meets the directory format that BeaverIoT can parsed",
-    "setting.integration.label_device_offline_timeout": "Device Offline Timeout"
+    "setting.blueprint.desc_official_store": "每 3 小时自动拉取文件，每次拉取不超过 3 分钟",
+    "setting.blueprint.desc_local_upload": "请确保上传的文件版本大于当前使用版本，且文件目录格式符合BeaverIoT可解写的目录格式",
+    "setting.integration.label_device_offline_timeout": "Device Offline Timeout",
+    "setting.blueprint.label_sync_result": "Sync Result",
+    "setting.blueprint.message_sync_success": "Sync Success",
+    "setting.blueprint.message_sync_failed": "Sync Failed, please check the network"
 }

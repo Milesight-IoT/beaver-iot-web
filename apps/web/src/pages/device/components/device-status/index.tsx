@@ -1,5 +1,4 @@
 import React, { memo, useMemo } from 'react';
-import cls from 'classnames';
 import { Chip } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { DeviceStatus as DeviceStatusType } from '@/services/http';
@@ -24,7 +23,7 @@ export const DeviceStatus: React.FC<Props> = memo(({ type }) => {
                 return getIntlHtml('common.label.offline');
             }
             default: {
-                return '-';
+                return '';
             }
         }
     }, [type, getIntlHtml]);
