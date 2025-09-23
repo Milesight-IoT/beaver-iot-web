@@ -3,7 +3,7 @@ import { useRequest, useMemoizedFn } from 'ahooks';
 import { isEmpty } from 'lodash-es';
 import { Controller } from 'react-hook-form';
 
-import { useI18n } from '@milesight/shared/src/hooks';
+import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 import { Modal } from '@milesight/shared/src/components';
 
 import { type EntityFormDataProps } from '@/hooks';
@@ -13,6 +13,8 @@ import { type DeviceListControlPanelConfig } from '../control-panel';
 import { type BoardPluginProps } from '../../../types';
 import { useStableValue } from '../../../hooks';
 import { type TableRowDataType, useColumns, useDeviceEntities } from './hooks';
+import { MobileList } from './components';
+import { DeviceListContext, type DeviceListContextProps } from './context';
 
 import './style.less';
 
@@ -29,6 +31,7 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
     const [keyword, setKeyword] = useState('');
 
     const { getIntlText } = useI18n();
+    const { matchTablet } = useTheme();
     const { stableValue: devices } = useStableValue(unStableDevices);
 
     const { loading, data } = useRequest(
@@ -111,27 +114,56 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
         handleFormSubmit,
         handleSubmit,
         handleModalCancel,
+        handleDeviceDrawingBoard,
+        handleServiceClick,
     } = useColumns({
         isPreviewMode: isPreview,
         entitiesStatus,
     });
 
+    const contextVal = useMemo((): DeviceListContextProps => {
+        return {
+            keyword,
+            setKeyword,
+            data: newData,
+            entitiesStatus,
+            handleDeviceDrawingBoard,
+            handleServiceClick,
+        };
+    }, [keyword, newData, entitiesStatus, handleDeviceDrawingBoard, handleServiceClick]);
+
+    const renderContent = () => {
+        if (matchTablet) {
+            return (
+                <DeviceListContext.Provider value={contextVal}>
+                    <MobileList />
+                </DeviceListContext.Provider>
+            );
+        }
+
+        return (
+            <div className="device-list-view__table">
+                <TablePro<TableRowDataType>
+                    loading={loading}
+                    columns={columns}
+                    pageSizeOptions={[100]}
+                    paginationModel={{
+                        page: 0,
+                        pageSize: 100,
+                    }}
+                    paginationMode="client"
+                    getRowId={row => row.id}
+                    rows={newData}
+                    toolbarRender={toolbarRender}
+                    onSearch={handleSearch}
+                />
+            </div>
+        );
+    };
+
     return (
         <div className="device-list-view">
-            <TablePro<TableRowDataType>
-                loading={loading}
-                columns={columns}
-                pageSizeOptions={[100]}
-                paginationModel={{
-                    page: 0,
-                    pageSize: 100,
-                }}
-                paginationMode="client"
-                getRowId={row => row.id}
-                rows={newData}
-                toolbarRender={toolbarRender}
-                onSearch={handleSearch}
-            />
+            {renderContent()}
             {visible && (
                 <Modal
                     visible

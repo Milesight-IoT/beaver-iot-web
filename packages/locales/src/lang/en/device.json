@@ -27,5 +27,5 @@
     "device.search.placeholder_empty": "No device found in the search",
     "device.label.select_group": "Select Device Group",
     "device.title.device_list": "设备列表",
-    "device.tip.jump_device_canvas": "跳转到设备画布"
+    "device.title.device_status": "设备状态"
 }

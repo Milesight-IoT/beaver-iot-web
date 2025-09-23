@@ -1,0 +1,33 @@
+.mobile-fullscreen {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-color: var(--body-background);
+
+    .header {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-color: var(--main-background);
+
+        .title {
+            padding: @padding-sm @padding-md 0;
+            font-weight: @font-weight-medium;
+            text-align: center;
+            .text-size(@font-size-xl);
+        }
+
+        .icon {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+        }
+    }
+
+    .body {
+        padding: @padding-md;
+        overflow: hidden auto;
+    }
+}

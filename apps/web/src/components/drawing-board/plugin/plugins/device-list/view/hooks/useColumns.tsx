@@ -16,6 +16,7 @@ export type TableRowDataType = {
     id: ApiKey;
     name: string;
     identifier: ApiKey;
+    deviceStatus?: ImportEntityProps;
     propertyEntityFirst?: ImportEntityProps;
     propertyEntitySecond?: ImportEntityProps;
     serviceEntities?: ImportEntityProps[];
@@ -71,7 +72,7 @@ const useColumns = <T extends TableRowDataType>({
             return '-';
         }
 
-        const status = get(entitiesStatus, entity?.id);
+        const status = get(entitiesStatus, entity?.id || '');
         if (!status || isNil(status?.value)) {
             return entity.name;
         }
@@ -91,6 +92,13 @@ const useColumns = <T extends TableRowDataType>({
             {
                 field: 'identifier',
                 headerName: getIntlText('device.label.param_external_id'),
+                ellipsis: true,
+                flex: 1,
+                minWidth: 100,
+            },
+            {
+                field: 'deviceStatus',
+                headerName: getIntlText('device.title.device_status'),
                 ellipsis: true,
                 flex: 1,
                 minWidth: 100,
@@ -130,7 +138,12 @@ const useColumns = <T extends TableRowDataType>({
                             spacing="4px"
                             sx={{ height: '100%', alignItems: 'center', justifyContent: 'end' }}
                         >
-                            <Tooltip title={getIntlText('entity.label.call_service_entity_first')}>
+                            <Tooltip
+                                title={
+                                    row?.serviceEntities?.[0]?.name ||
+                                    getIntlText('workflow.label.service_node_name')
+                                }
+                            >
                                 <IconButton
                                     sx={{ width: 30, height: 30 }}
                                     onClick={() => {
@@ -140,7 +153,12 @@ const useColumns = <T extends TableRowDataType>({
                                     <SettingsIcon sx={{ width: 20, height: 20 }} />
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip title={getIntlText('entity.label.call_service_entity_second')}>
+                            <Tooltip
+                                title={
+                                    row?.serviceEntities?.[1]?.name ||
+                                    getIntlText('workflow.label.service_node_name')
+                                }
+                            >
                                 <IconButton
                                     sx={{
                                         width: 30,
@@ -158,7 +176,7 @@ const useColumns = <T extends TableRowDataType>({
                                 size={24}
                                 loading={get(loading, String(row?.id), false)}
                             >
-                                <Tooltip title={getIntlText('device.tip.jump_device_canvas')}>
+                                <Tooltip title={getIntlText('common.label.detail')}>
                                     <IconButton
                                         sx={{
                                             width: 30,
@@ -187,6 +205,8 @@ const useColumns = <T extends TableRowDataType>({
         handleSubmit,
         handleFormSubmit,
         handleModalCancel,
+        handleDeviceDrawingBoard,
+        handleServiceClick,
     };
 };
 
