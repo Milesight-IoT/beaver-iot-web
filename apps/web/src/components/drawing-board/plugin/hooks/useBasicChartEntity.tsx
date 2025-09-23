@@ -145,20 +145,15 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
      */
     const { run: requestChartData } = useRequest(
         async () => {
-            /**
-             * Initialization data
-             */
-            setChartShowData([]);
-            setChartLabels([]);
-
             if (!Array.isArray(entity)) return;
+
             const promises = (entity || []).map(e =>
                 entityAPI.getHistory({
                     entity_id: e.value,
                     start_timestamp: Date.now() - time,
                     end_timestamp: Date.now(), // Current time
                     page_number: 1,
-                    page_size: 999,
+                    page_size: 999999,
                 }),
             );
             const [error, resp] = await awaitWrap(Promise.all(promises));

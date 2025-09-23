@@ -1,16 +1,13 @@
 import { useCallback, useEffect, useRef } from 'react';
 import GRL, { WidthProvider, type Layout } from 'react-grid-layout';
-import { get } from 'lodash-es';
+import { isEqual, omitBy, isNil } from 'lodash-es';
 
 import { type WidgetDetail } from '@/services/http/dashboard';
-import {
-    GRID_LAYOUT_COLS,
-    GRID_LAYOUT_MARGIN,
-    GRID_ROW_HEIGHT,
-} from '@/components/drawing-board/constants';
+import { GRID_LAYOUT_MARGIN } from '@/components/drawing-board/constants';
 import { DrawingBoardContext } from '../../context';
-import { useBackgroundHelper, useWidgetResize, useWidget } from './hooks';
+import { useBackgroundHelper, useWidgetResize, useWidget, useResponsiveLayout } from './hooks';
 import Widget from './widget';
+import { BoardPluginProps } from '../../plugin/types';
 
 import './style.less';
 
@@ -19,36 +16,47 @@ const ReactGridLayout = WidthProvider(GRL);
 /**
  * The widget type corresponds to the default height of the too small screen
  */
-const DEFAULT_GRID_HEIGHT = {
-    data_chart: 3,
-    operate: 1,
-    data_card: 2,
-};
+// const DEFAULT_GRID_HEIGHT = {
+//     data_chart: 3,
+//     operate: 1,
+//     data_card: 2,
+// };
 /**
  * Gets the default height of the widget for a screen that is too small
  */
-const getSmallScreenH = (data: WidgetDetail['data']) => {
-    const DEFAULT_HEIGHT = 3;
-    const { class: widgetClass, type: widgetType } = data || {};
-    if (!widgetClass || !widgetType) return DEFAULT_HEIGHT;
+// const getSmallScreenH = (data: WidgetDetail['data']) => {
+//     const DEFAULT_HEIGHT = 3;
+//     const { class: widgetClass, type: widgetType } = data || {};
+//     if (!widgetClass || !widgetType) return DEFAULT_HEIGHT;
 
-    if (widgetType === 'iconRemaining') return 1;
-    return get(DEFAULT_GRID_HEIGHT, widgetClass, DEFAULT_HEIGHT);
-};
+//     if (widgetType === 'iconRemaining') return 1;
+//     return get(DEFAULT_GRID_HEIGHT, widgetClass, DEFAULT_HEIGHT);
+// };
+
 interface WidgetProps {
     onChangeWidgets: (widgets: WidgetDetail[]) => void;
     widgets: WidgetDetail[];
     isEdit: boolean;
     onEdit: (data: WidgetDetail) => void;
     mainRef: any;
-    isTooSmallScreen: boolean;
     dashboardId: ApiKey;
 }
 
 const Widgets = (props: WidgetProps) => {
-    const { widgets, onChangeWidgets, isEdit, onEdit, mainRef, isTooSmallScreen, dashboardId } =
-        props;
+    const { widgets, onChangeWidgets, isEdit, onEdit, mainRef, dashboardId } = props;
 
+    const {
+        smallScreenSize,
+        mediumScreenSize,
+        gridLayoutCols,
+        gridRowHeight,
+        currentWidth,
+        currentHeight,
+        minWidth,
+        minHeight,
+        maxWidth,
+        maxHeight,
+    } = useResponsiveLayout();
     const { helperBg, showHelperBg, setShowHelperBg } = useBackgroundHelper();
     const { handleGridLayoutResize } = useWidgetResize(mainRef);
     const { newDrawingBoardContext } = useWidget();
@@ -69,27 +77,44 @@ const Widgets = (props: WidgetProps) => {
     }, []);
 
     const handleChangeWidgets = (data: Layout[]) => {
+        /**
+         * Responsive layouts on small/medium screen are not stored.
+         */
+        if (smallScreenSize || mediumScreenSize) {
+            return;
+        }
+
         if (requestRef.current) {
             cancelAnimationFrame(requestRef.current);
         }
         requestRef.current = requestAnimationFrame(() => {
             const newData = widgets.map((widget: WidgetDetail) => {
                 const findWidget = data.find(
-                    (item: any) =>
+                    (item: Layout) =>
                         (item.i && item.i === widget.widget_id) ||
                         (item.i && item.i === widget.tempId),
                 );
+
                 if (findWidget) {
                     return {
                         ...widget,
                         data: {
                             ...widget.data,
-                            pos: findWidget,
+                            pos: omitBy(findWidget, v => isNil(v)),
                         },
                     };
                 }
+
                 return widget;
             });
+
+            /**
+             * If the data is identical, no data update operation
+             * shall be performed.
+             */
+            if (isEqual(newData, widgets)) {
+                return;
+            }
 
             onChangeWidgets(newData);
         });
@@ -121,6 +146,7 @@ const Widgets = (props: WidgetProps) => {
             if (index > -1) {
                 const newWidgets = [...(widgetRef.current || [])];
                 newWidgets.splice(index, 1);
+
                 onChangeWidgets(newWidgets);
             }
         },
@@ -131,8 +157,8 @@ const Widgets = (props: WidgetProps) => {
         <ReactGridLayout
             isDraggable={isEdit}
             isResizable={isEdit}
-            rowHeight={GRID_ROW_HEIGHT}
-            cols={GRID_LAYOUT_COLS}
+            rowHeight={gridRowHeight}
+            cols={gridLayoutCols}
             margin={[GRID_LAYOUT_MARGIN, GRID_LAYOUT_MARGIN]}
             onLayoutChange={handleChangeWidgets}
             draggableCancel=".drawing-board__widget-icon-img,.drawing-board__custom-resizable-handle"
@@ -151,20 +177,19 @@ const Widgets = (props: WidgetProps) => {
         >
             {widgets.map((data: WidgetDetail) => {
                 const id = (data.widget_id || data.tempId) as ApiKey;
+                const plugin = data.data as BoardPluginProps;
 
                 const pos: Layout = {
-                    ...data.data.pos,
-                    w: isTooSmallScreen ? 12 : data.data?.pos?.w || data.data.minCol || 2,
-                    h: isTooSmallScreen
-                        ? getSmallScreenH(data?.data)
-                        : data.data?.pos?.h || data.data.minRow || 2,
-                    minW: data.data.minCol || 2,
-                    minH: data.data.minRow || 2,
-                    maxW: GRID_LAYOUT_COLS - (data?.data?.pos?.x || 0),
-                    maxH: data.data.maxRow,
-                    i: data?.widget_id || data.data.tempId,
-                    x: data.data.pos?.x || 0,
-                    y: data.data.pos?.y || 0,
+                    ...plugin.pos,
+                    w: currentWidth(plugin),
+                    h: currentHeight(plugin),
+                    minW: minWidth(plugin),
+                    minH: minHeight(plugin),
+                    maxW: maxWidth(plugin),
+                    maxH: maxHeight(plugin),
+                    i: String(id),
+                    x: plugin.pos?.x || 0,
+                    y: plugin.pos?.y || 0,
                 };
 
                 return (

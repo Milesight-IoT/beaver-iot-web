@@ -2,9 +2,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMemoizedFn } from 'ahooks';
 import { cloneDeep } from 'lodash-es';
 
+import { useTheme, useMediaQuery } from '@milesight/shared/src/hooks';
+
 import { WidgetDetail } from '@/services/http/dashboard';
-import useWindowWidth from './useWindowWidth';
-import useGetPluginConfigs from './useGetPluginConfigs';
+import useLoadPlugins from './useLoadPlugins';
+import useDrawingBoardStore from '../store';
 
 import type { DrawingBoardProps, DrawingBoardExpose } from '../interface';
 import type { DrawingBoardContextProps } from '../context';
@@ -12,16 +14,14 @@ import type { DrawingBoardContextProps } from '../context';
 export default function useDrawingBoardData(props: DrawingBoardProps) {
     const { drawingBoardDetail, operatingPlugin, updateOperatingPlugin, changeIsEdit } = props;
 
-    const { isTooSmallScreen } = useWindowWidth(() => {
-        changeIsEdit(false);
-    });
-    const { pluginsConfigs } = useGetPluginConfigs();
+    useLoadPlugins();
+    const { pluginsControlPanel } = useDrawingBoardStore();
+    const { breakpoints } = useTheme();
+    const isTooSmallScreen = useMediaQuery(breakpoints.down('xl'));
 
     const [loadingWidgets, setLoadingWidgets] = useState(true);
     const [widgets, setWidgets] = useState<WidgetDetail[]>([]);
     const widgetsRef = useRef<WidgetDetail[]>([]);
-    /** normal screen widget position info storage */
-    const normalScreenWidgetRef = useRef<WidgetDetail[]>([]);
 
     useEffect(() => {
         /**
@@ -29,7 +29,7 @@ export default function useDrawingBoardData(props: DrawingBoardProps) {
          * that the component configuration is locally up to date
          */
         const newWidgets = drawingBoardDetail.widgets?.map((item: WidgetDetail) => {
-            const sourceJson = pluginsConfigs.find(plugin => item.data.type === plugin.type);
+            const sourceJson = pluginsControlPanel.find(plugin => item.data.type === plugin.type);
             if (sourceJson) {
                 return {
                     ...item,
@@ -41,20 +41,17 @@ export default function useDrawingBoardData(props: DrawingBoardProps) {
             }
             return item;
         });
+
         setWidgets([...(newWidgets || [])]);
         setLoadingWidgets(false);
         widgetsRef.current = cloneDeep(newWidgets || []);
-
-        if (!isTooSmallScreen) {
-            normalScreenWidgetRef.current = cloneDeep(newWidgets || []);
-        }
-    }, [drawingBoardDetail.widgets, pluginsConfigs, isTooSmallScreen]);
+    }, [drawingBoardDetail.widgets, pluginsControlPanel]);
 
     useEffect(() => {
-        if (!isTooSmallScreen) {
-            setWidgets(cloneDeep(normalScreenWidgetRef.current));
+        if (isTooSmallScreen) {
+            changeIsEdit?.(false);
         }
-    }, [isTooSmallScreen]);
+    }, [isTooSmallScreen, changeIsEdit]);
 
     const handleSelectPlugin = useMemoizedFn((plugin: WidgetDetail) => {
         updateOperatingPlugin(plugin);
@@ -104,7 +101,7 @@ export default function useDrawingBoardData(props: DrawingBoardProps) {
     });
 
     return {
-        /** Check if the screen is too small than 720px */
+        /** Check if the screen is too small than 1200px */
         isTooSmallScreen,
         widgets,
         loadingWidgets,

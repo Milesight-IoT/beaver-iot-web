@@ -3,11 +3,17 @@ import { renderToString } from 'react-dom/server';
 import cls from 'classnames';
 import * as echarts from 'echarts/core';
 import { useTheme } from '@milesight/shared/src/hooks';
-import { useBasicChartEntity, useActivityEntity } from '@/components/drawing-board/plugin/hooks';
+import {
+    useBasicChartEntity,
+    useActivityEntity,
+    useStableValue,
+    useGridLayout,
+} from '@/components/drawing-board/plugin/hooks';
 import { getChartColor } from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import styles from './style.module.less';
 import { useResizeChart, useYAxisRange, useZoomChart } from './hooks';
+import type { BoardPluginProps } from '../../../types';
 
 export interface ViewProps {
     widgetId: ApiKey;
@@ -17,18 +23,20 @@ export interface ViewProps {
         title?: string;
         time: number;
     };
-    configJson: {
-        isPreview?: boolean;
-    };
+    configJson: BoardPluginProps;
     isEdit?: boolean;
 }
 
 const View = (props: ViewProps) => {
     const { config, configJson, isEdit, widgetId, dashboardId } = props;
-    const { entity, title, time } = config || {};
-    const { isPreview } = configJson || {};
+    const { entity: unStableEntity, title, time } = config || {};
+    const { isPreview, pos } = configJson || {};
     const chartWrapperRef = useRef<HTMLDivElement>(null);
     const { grey } = useTheme();
+
+    const { wGrid = 4, hGrid = 4 } = useGridLayout(pos);
+
+    const { stableValue: entity } = useStableValue(unStableEntity);
     const { getLatestEntityDetail } = useActivityEntity();
     const latestEntities = useMemo(() => {
         if (!entity?.length) return [];
@@ -40,14 +48,13 @@ const View = (props: ViewProps) => {
             .filter(Boolean) as EntityOptionType[];
     }, [entity, getLatestEntityDetail]);
 
-    const { chartShowData, chartLabels, chartRef, chartZoomRef, xAxisConfig, xAxisRange } =
-        useBasicChartEntity({
-            widgetId,
-            dashboardId,
-            entity: latestEntities,
-            time,
-            isPreview,
-        });
+    const { chartShowData, chartRef, chartZoomRef, xAxisConfig, xAxisRange } = useBasicChartEntity({
+        widgetId,
+        dashboardId,
+        entity: latestEntities,
+        time,
+        isPreview,
+    });
 
     const { getYAxisRange } = useYAxisRange({ chartShowData, entity: latestEntities });
     const { resizeChart } = useResizeChart({ chartWrapperRef });
@@ -70,6 +77,7 @@ const View = (props: ViewProps) => {
 
         myChart.setOption({
             xAxis: {
+                show: wGrid > 2 && hGrid > 1,
                 type: 'value',
                 min,
                 max,
@@ -81,6 +89,7 @@ const View = (props: ViewProps) => {
                 },
             },
             yAxis: {
+                show: hGrid > 2,
                 type: 'time',
                 min: xAxisMin,
                 max: xAxisMax,
@@ -100,6 +109,7 @@ const View = (props: ViewProps) => {
                 },
             })),
             legend: {
+                show: wGrid > 2 && hGrid > 1,
                 data: chartShowData.map(chart => chart.entityLabel),
                 itemWidth: 10,
                 itemHeight: 10,
@@ -114,11 +124,12 @@ const View = (props: ViewProps) => {
             grid: {
                 containLabel: true,
                 top: 30, // Adjust the top blank space of the chart area
-                left: -40,
-                right: 0,
+                left: hGrid >= 4 ? '-3%' : hGrid <= 2 ? '-5%' : 0,
+                right: 24,
                 bottom: 0,
             },
             tooltip: {
+                confine: true,
                 trigger: 'axis',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 borderColor: 'rgba(0, 0, 0, 0.9)',
@@ -186,9 +197,10 @@ const View = (props: ViewProps) => {
             myChart?.dispose();
         };
     }, [
+        wGrid,
+        hGrid,
         grey,
         latestEntities,
-        chartLabels,
         chartRef,
         chartShowData,
         xAxisRange,
@@ -205,7 +217,7 @@ const View = (props: ViewProps) => {
             })}
             ref={chartWrapperRef}
         >
-            <Tooltip className={styles.name} autoEllipsis title={title} />
+            {hGrid > 1 && <Tooltip className={styles.name} autoEllipsis title={title} />}
             <div className={styles['horizon-chart-content']}>
                 <div ref={chartRef} className={styles['horizon-chart-content__chart']} />
             </div>

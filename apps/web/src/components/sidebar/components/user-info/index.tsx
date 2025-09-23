@@ -14,7 +14,11 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { appVersion, HELP_CENTER_ADDRESS } from '@milesight/shared/src/config';
 import { LogoutIcon, HelpOutlineIcon, InfoOutlinedIcon } from '@milesight/shared/src/components';
-import { iotLocalStorage, TOKEN_CACHE_KEY } from '@milesight/shared/src/utils/storage';
+import {
+    iotLocalStorage,
+    TOKEN_CACHE_KEY,
+    MAIN_CANVAS_KEY,
+} from '@milesight/shared/src/utils/storage';
 import { useI18n } from '@milesight/shared/src/hooks';
 
 import Tooltip from '@/components/tooltip';
@@ -110,6 +114,7 @@ const MoreUserInfo: React.FC<MoreUserInfoProps> = ({ userInfo }) => {
                                 /** Sign out logic */
                                 setUserInfo(null);
                                 iotLocalStorage.removeItem(TOKEN_CACHE_KEY);
+                                iotLocalStorage.removeItem(MAIN_CANVAS_KEY);
                                 navigate('/auth/login');
                             }}
                         >

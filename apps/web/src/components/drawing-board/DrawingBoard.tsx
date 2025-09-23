@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle } from 'react';
+import { forwardRef, useImperativeHandle } from 'react';
 import cls from 'classnames';
 import { isEmpty } from 'lodash-es';
 import { List } from '@mui/material';
@@ -25,13 +25,13 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
         drawingBoardRef,
         isFullscreen,
         operatingPlugin,
+        changeIsEdit,
         updateOperatingPlugin,
     } = props;
 
     const { getIntlText } = useI18n();
 
     const {
-        isTooSmallScreen,
         widgets,
         loadingWidgets,
         drawingBoardContext,
@@ -62,7 +62,7 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
                 <div className="drawing-board__empty-description">
                     {getIntlText('dashboard.empty_description')}
                 </div>
-                <PluginList onSelect={updateOperatingPlugin} />
+                <PluginList onSelect={updateOperatingPlugin} changeIsEditMode={changeIsEdit} />
             </div>
         </PermissionControlDisabled>
     );
@@ -87,8 +87,7 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
                 isEdit={isEdit}
                 onEdit={updateOperatingPlugin}
                 mainRef={drawingBoardRef}
-                isTooSmallScreen={isTooSmallScreen}
-                dashboardId={drawingBoardDetail.dashboard_id}
+                dashboardId={drawingBoardDetail.id}
             />
         );
     };

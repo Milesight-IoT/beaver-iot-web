@@ -123,8 +123,6 @@ declare interface EntityValueAttributeType {
 declare interface EntityData {
     /** Entity ID */
     entity_id: ApiKey;
-    /** Device Name */
-    device_name: string;
     /** Integration Name */
     integration_name: string;
     /** Entity Key */
@@ -156,6 +154,12 @@ declare interface EntityData {
     };
     /** Is customized entity */
     entity_is_customized?: boolean;
+    /** Entity description info */
+    entity_description?: string;
+    /** Entity create time */
+    entity_created_at: number;
+    /** Entity update time */
+    entity_updated_at: number;
 }
 
 /**

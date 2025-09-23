@@ -2,11 +2,13 @@ import { useMemo, useState, useCallback, useEffect } from 'react';
 import { useRequest } from 'ahooks';
 import { Switch } from '@mui/material';
 import { get } from 'lodash-es';
+import cls from 'classnames';
 
 import * as Icons from '@milesight/shared/src/components/icons';
 import { entityAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/services/http';
 import { useActivityEntity } from '../../../hooks';
 import { Tooltip } from '../../../view-components';
+import { BoardPluginProps } from '../../../types';
 
 import styles from './style.module.less';
 
@@ -21,15 +23,13 @@ export interface ViewProps {
         onIcon?: string;
         onIconColor?: string;
     };
-    configJson: {
-        isPreview?: boolean;
-    };
+    configJson: BoardPluginProps;
 }
 
 const View = (props: ViewProps) => {
     const { config, configJson, widgetId, dashboardId } = props;
     const { entity, title, onIconColor, offIconColor, offIcon, onIcon } = config || {};
-    const { isPreview } = configJson || {};
+    const { isPreview, pos } = configJson || {};
 
     const [isSwitchOn, setIsSwitchOn] = useState(false);
 
@@ -147,15 +147,17 @@ const View = (props: ViewProps) => {
 
     return (
         <div
-            className={`${styles['switch-wrapper']} ${isPreview ? styles['switch-wrapper-preview'] : ''}`}
+            className={cls(styles['switch-wrapper'], {
+                [styles.preview]: isPreview,
+            })}
         >
+            <Tooltip className={styles.text} autoEllipsis title={title} />
             <div className={styles.icon}>
                 {IconComponent}
                 <div className={styles.body}>
                     <Switch checked={isSwitchOn} onChange={handleSwitchChange} />
                 </div>
             </div>
-            <Tooltip className={styles.text} autoEllipsis title={title} />
         </div>
     );
 };

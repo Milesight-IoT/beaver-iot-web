@@ -7,7 +7,8 @@ import {
     getResponseData,
     isRequestSuccess,
 } from '@/services/http';
-import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
+import { useActivityEntity, useStableValue } from '@/components/drawing-board/plugin/hooks';
+import type { BoardPluginProps } from '@/components/drawing-board/plugin/types';
 import type { ViewConfigProps } from '../../typings';
 
 interface AggregateHistoryList {
@@ -18,11 +19,13 @@ interface IProps {
     widgetId: ApiKey;
     dashboardId: ApiKey;
     config: ViewConfigProps;
-    configJson: CustomComponentProps;
+    configJson: BoardPluginProps;
 }
 export const useSourceData = (props: IProps) => {
     const { config, widgetId, dashboardId } = props;
-    const { entity, metrics, time } = config || {};
+    const { entity: unStableEntity, metrics, time } = config || {};
+
+    const { stableValue: entity } = useStableValue(unStableEntity);
 
     const { data: countData, runAsync: getData } = useRequest(
         async () => {
@@ -45,10 +48,11 @@ export const useSourceData = (props: IProps) => {
 
                 const data = getResponseData(resp);
                 return {
-                    entity,
+                    entity: selectEntity,
                     data,
                 } as AggregateHistoryList;
             };
+
             return Promise.resolve(run(entity));
         },
         { refreshDeps: [entity, time, metrics] },

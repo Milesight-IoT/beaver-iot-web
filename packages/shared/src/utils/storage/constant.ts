@@ -12,3 +12,9 @@ export const REGISTERED_KEY = 'registered';
 
 /** sidebar collapse key */
 export const SIDEBAR_COLLAPSE_KEY = 'sidebar-collapsed';
+
+/**
+ * First login on mobile devices will
+ * take you directly to the main canvas
+ */
+export const MAIN_CANVAS_KEY = 'dashboard-main-canvas';

@@ -97,7 +97,7 @@
     }
 }
 
-.bp-between (@lower, @upper, @content) {
+.bp-between (@min, @max, @content) {
     @media (min-width: @min) and (max-width: (@max - 0.05px)) {
         @content();
     }

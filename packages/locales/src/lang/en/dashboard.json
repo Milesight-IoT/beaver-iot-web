@@ -33,5 +33,7 @@
     "dashboard.set_as_home_dashboard_tip": "Top-mounted dashboard",
     "dashboard.switch_title_off": "Off",
     "dashboard.switch_title_on": "On",
-    "dashboard.unset_as_home_dashboard_tip": "Cancel Top"
+    "dashboard.unset_as_home_dashboard_tip": "Cancel Top",
+    "dashboard.label.cover": "封面",
+    "dashboard.tip.return_dashboard_list": "返回仪表盘列表"
 }

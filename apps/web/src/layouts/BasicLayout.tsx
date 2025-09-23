@@ -12,7 +12,7 @@ import { useUserStore } from '@/stores';
 import { globalAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
 import { Sidebar, RouteLoadingIndicator } from '@/components';
 import { useUserPermissions } from '@/hooks';
-import { useRoutePermission } from './hooks';
+import { useRoutePermission, useSWUpdate } from './hooks';
 import { LayoutSkeleton } from './components';
 
 function BasicLayout() {
@@ -96,6 +96,9 @@ function BasicLayout() {
      * No permission to jump directly to 403
      */
     const { hasPathPermission } = useRoutePermission(loading);
+
+    // ---------- SW update confirm ----------
+    useSWUpdate();
 
     return (
         <section className="ms-layout">

@@ -21,13 +21,13 @@
 
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        // justify-content: center;
         width: 100%;
         min-width: 100%;
         height: 100%;
         padding: @padding-md;
         overflow: hidden;
-        line-height: 1.5;
+        // line-height: 1.5;
 
         &__icon {
             padding: @padding-sm;
@@ -58,23 +58,57 @@
         }
 
         &__title {
-            max-width: calc(100% - 28px);
-            font-size: var(--title-font-size);
-            font-weight: @font-weight-regular;
+            // max-width: calc(100% - 28px);
+            // font-size: var(--title-font-size);
+            // font-weight: @font-weight-regular;
             color: var(--text-color-secondary);
         }
 
         &__content {
             display: flex;
+            flex: 1;
             flex-direction: column;
-            padding-left: 2cqw;
+            justify-content: space-between;
+            // padding-left: 2cqw;
 
-            div:nth-of-type(2) {
-                display: inline-block;
-                max-width: 100%;
-                font-size: clamp(16px, min(10cqw, 25cqh), 120px);
-                font-weight: @font-weight-medium;
+            // div:nth-of-type(2) {
+            //     display: inline-block;
+            //     max-width: 100%;
+            //     font-size: clamp(16px, min(10cqw, 25cqh), 120px);
+            //     font-weight: @font-weight-medium;
+            // }
+
+            &.justify-center {
+                justify-content: center;
             }
+        }
+
+        &__body {
+            display: flex;
+            align-items: center;
+        }
+
+        &__data {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            justify-content: center;
+            width: 0;
+            margin-left: @margin-md;
+            font-weight: @font-weight-medium;
+
+            &.text-lg {
+                .text-size(@font-size-6);
+            }
+
+            .ms-tooltip {
+                width: 100%;
+            }
+        }
+
+        &__footer {
+            color: var(--text-color-tertiary);
+            .text-size(@font-size-1);
         }
     }
 }

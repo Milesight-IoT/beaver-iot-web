@@ -9,13 +9,14 @@
     border-radius: @border-radius-md;
 
     &-preview {
-        width: 312px;
+        width: 292px;
         min-width: auto;
-        height: 96px;
+        height: 192px;
     }
 
     &__header {
         font-weight: @font-weight-medium;
+        .text-size(@font-size-lg);
     }
 
     &__content {
@@ -24,13 +25,26 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        max-height: 40vh;
         overflow: hidden;
     }
 
+    &__icon {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &-fake {
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            background-color: var(--main-background);
+        }
+    }
+
     &__percent {
-        color: var(--gray-color-5);
         text-align: center;
-        .text-size(@font-size-5);
+        .text-size(@font-size-base);
     }
 }

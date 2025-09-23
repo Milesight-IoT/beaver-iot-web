@@ -1,18 +1,15 @@
 .switch-wrapper {
     display: flex;
-    flex: 1;
     flex-direction: column;
+    justify-content: center;
     width: 100%;
-    min-width: 100%;
     height: 100%;
     padding: @padding-xs @padding-md;
     overflow: hidden;
     background: var(--main-background);
 
-    &-preview {
-        flex: none;
+    &.preview {
         width: 312px;
-        min-width: auto;
         height: 96px;
         border-radius: @border-radius-md;
     }
@@ -27,6 +24,7 @@
 
     .text {
         font-weight: @font-weight-medium;
+        color: var(--text-color-secondary);
         .text-size(@font-size-base);
     }
 
@@ -34,6 +32,9 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: @margin-xxs;
+    }
+
+    .body {
+        text-align: right;
     }
 }

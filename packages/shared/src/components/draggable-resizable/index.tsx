@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
+import type { DraggerType } from './typings';
 import './style.less';
 
 interface DraggableResizableBoxProps {
@@ -18,7 +19,7 @@ interface DraggableResizableBoxProps {
     limitMaxHeight?: number;
     isEdit: boolean;
     children: React.ReactNode;
-    onResize: (data: draggerType) => void;
+    onResize: (data: DraggerType) => void;
     onMove: ({ id, left, top }: { id: ApiKey; left: number; top: number }) => void;
     /**
      * Drag and drop opposite elements
@@ -26,7 +27,7 @@ interface DraggableResizableBoxProps {
     parentRef: any;
     onStartMove: (id: ApiKey) => void;
     onEndMove: ({ id, left, top }: { id: ApiKey; left: number; top: number }) => void;
-    isOverLimit: (data: draggerType) => boolean;
+    isOverLimit: (data: DraggerType) => boolean;
 }
 
 const DraggableResizableBox = ({

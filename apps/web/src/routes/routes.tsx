@@ -9,6 +9,7 @@ import {
     WorkflowIcon,
     SettingsIcon,
     SellIcon,
+    AntFallAttentionIcon,
 } from '@milesight/shared/src/components';
 import { PERMISSIONS } from '@/constants';
 import ErrorBoundaryComponent from './error-boundary';
