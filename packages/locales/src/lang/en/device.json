@@ -25,5 +25,7 @@
     "device.title.move_device_to_group": "Move to the Group",
     "device.search.placeholder": "Input the device name or ID for search",
     "device.search.placeholder_empty": "No device found in the search",
-    "device.label.select_group": "Select Device Group"
+    "device.label.select_group": "Select Device Group",
+    "device.title.device_list": "设备列表",
+    "device.tip.jump_device_canvas": "跳转到设备画布"
 }

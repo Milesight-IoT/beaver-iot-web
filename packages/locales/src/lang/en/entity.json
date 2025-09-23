@@ -29,5 +29,9 @@
     "entity.label.parent_entity": "Parent Entity",
     "entity.label.set_enumeration_items": "Set Enumeration Items",
     "entity.label.set_value": "Set Value",
-    "entity.label.value_source": "Value Source"
+    "entity.label.value_source": "Value Source",
+    "entity.label.property_entity_first": "设备列表组件属性实体 1",
+    "entity.label.property_entity_second": "设备列表组件属性实体 2",
+    "entity.label.call_service_entity_first": "设备列表组件调用服务实体 1",
+    "entity.label.call_service_entity_second": "设备列表组件调用服务实体 2"
 }

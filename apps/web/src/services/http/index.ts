@@ -6,6 +6,7 @@ export {
     type DeviceAPISchema,
     type DeviceGroupItemProps,
     type AddDeviceProps,
+    type ImportEntityProps,
 } from './device';
 
 export { default as entityAPI, type EntityAPISchema } from './entity';

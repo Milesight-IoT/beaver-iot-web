@@ -2,7 +2,7 @@ import type { ControlPanelConfig } from '@/components/drawing-board/plugin/types
 import DeviceListIcon from '../Table.svg';
 
 export interface DeviceListControlPanelConfig {
-    devices: ApiKey[];
+    devices?: { id: ApiKey; group_id: ApiKey }[];
 }
 
 /**
@@ -16,9 +16,13 @@ const deviceListControlPanelConfig = (): ControlPanelConfig<DeviceListControlPan
         icon: DeviceListIcon,
         defaultCol: 4,
         defaultRow: 3,
+        minCol: 3,
+        minRow: 3,
+        maxCol: 12,
+        maxRow: 12,
         configProps: [
             {
-                label: 'Hello',
+                label: 'Device List',
                 controlSetItems: [
                     {
                         name: 'multiDeviceSelect',

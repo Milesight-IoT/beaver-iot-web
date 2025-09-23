@@ -1,0 +1,193 @@
+import { useMemo } from 'react';
+import { Stack, IconButton } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useMemoizedFn } from 'ahooks';
+import { get, isNil } from 'lodash-es';
+
+import { useI18n } from '@milesight/shared/src/hooks';
+import { SettingsIcon, SpaceDashboardIcon, LoadingWrapper } from '@milesight/shared/src/components';
+
+import { Tooltip, type ColumnType } from '@/components';
+import { type ImportEntityProps, type EntityAPISchema } from '@/services/http';
+import { useDeviceDrawingBoard } from './useDeviceDrawingBoard';
+import { useCallService } from './useCallService';
+
+export type TableRowDataType = {
+    id: ApiKey;
+    name: string;
+    identifier: ApiKey;
+    propertyEntityFirst?: ImportEntityProps;
+    propertyEntitySecond?: ImportEntityProps;
+    serviceEntities?: ImportEntityProps[];
+};
+
+export interface UseColumnsProps {
+    /**
+     * Is preview mode
+     */
+    isPreviewMode?: boolean;
+    /**
+     * Current devices all entities status
+     */
+    entitiesStatus?: EntityAPISchema['getEntitiesStatus']['response'];
+}
+
+const useColumns = <T extends TableRowDataType>({
+    isPreviewMode,
+    entitiesStatus,
+}: UseColumnsProps) => {
+    const { getIntlText } = useI18n();
+    const navigate = useNavigate();
+    const { loading, getDeviceDrawingBoard } = useDeviceDrawingBoard();
+    const {
+        visible,
+        control,
+        formItems,
+        modalTitle,
+        handleServiceClick,
+        handleSubmit,
+        handleFormSubmit,
+        handleModalCancel,
+    } = useCallService(isPreviewMode);
+
+    const handleDeviceDrawingBoard = useMemoizedFn(async (deviceId?: ApiKey) => {
+        if (isPreviewMode) {
+            return;
+        }
+
+        const canvasId = await getDeviceDrawingBoard(deviceId);
+        if (!canvasId) {
+            return;
+        }
+
+        navigate(`/dashboard?id=${canvasId}`);
+    });
+
+    /**
+     * Get entity display name: status
+     */
+    const entityNameAndStatus = useMemoizedFn((entity?: ImportEntityProps) => {
+        if (!entity) {
+            return '-';
+        }
+
+        const status = get(entitiesStatus, entity?.id);
+        if (!status || isNil(status?.value)) {
+            return entity.name;
+        }
+
+        return `${entity.name}: ${status.value}`;
+    });
+
+    const columns: ColumnType<T>[] = useMemo(() => {
+        return [
+            {
+                field: 'name',
+                headerName: getIntlText('device.label.param_device_name'),
+                flex: 1,
+                minWidth: 150,
+                ellipsis: true,
+            },
+            {
+                field: 'identifier',
+                headerName: getIntlText('device.label.param_external_id'),
+                ellipsis: true,
+                flex: 1,
+                minWidth: 100,
+            },
+            {
+                field: 'propertyEntityFirst',
+                headerName: getIntlText('entity.label.property_entity_first'),
+                flex: 1,
+                minWidth: 120,
+                ellipsis: true,
+                renderCell({ row }) {
+                    return entityNameAndStatus(row?.propertyEntityFirst);
+                },
+            },
+            {
+                field: 'propertyEntitySecond',
+                headerName: getIntlText('entity.label.property_entity_second'),
+                flex: 1,
+                minWidth: 120,
+                ellipsis: true,
+                renderCell({ row }) {
+                    return entityNameAndStatus(row?.propertyEntitySecond);
+                },
+            },
+            {
+                field: '$operation',
+                headerName: getIntlText('common.label.operation'),
+                display: 'flex',
+                width: 120,
+                align: 'left',
+                headerAlign: 'left',
+                fixed: 'right',
+                renderCell({ row }) {
+                    return (
+                        <Stack
+                            direction="row"
+                            spacing="4px"
+                            sx={{ height: '100%', alignItems: 'center', justifyContent: 'end' }}
+                        >
+                            <Tooltip title={getIntlText('entity.label.call_service_entity_first')}>
+                                <IconButton
+                                    sx={{ width: 30, height: 30 }}
+                                    onClick={() => {
+                                        handleServiceClick(row?.serviceEntities?.[0]);
+                                    }}
+                                >
+                                    <SettingsIcon sx={{ width: 20, height: 20 }} />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title={getIntlText('entity.label.call_service_entity_second')}>
+                                <IconButton
+                                    sx={{
+                                        width: 30,
+                                        height: 30,
+                                        color: 'text.secondary',
+                                    }}
+                                    onClick={() => {
+                                        handleServiceClick(row?.serviceEntities?.[1]);
+                                    }}
+                                >
+                                    <SettingsIcon sx={{ width: 20, height: 20 }} />
+                                </IconButton>
+                            </Tooltip>
+                            <LoadingWrapper
+                                size={24}
+                                loading={get(loading, String(row?.id), false)}
+                            >
+                                <Tooltip title={getIntlText('device.tip.jump_device_canvas')}>
+                                    <IconButton
+                                        sx={{
+                                            width: 30,
+                                            height: 30,
+                                            color: 'text.secondary',
+                                        }}
+                                        onClick={() => handleDeviceDrawingBoard(row?.id)}
+                                    >
+                                        <SpaceDashboardIcon sx={{ width: 20, height: 20 }} />
+                                    </IconButton>
+                                </Tooltip>
+                            </LoadingWrapper>
+                        </Stack>
+                    );
+                },
+            },
+        ];
+    }, [getIntlText, handleDeviceDrawingBoard, handleServiceClick, entityNameAndStatus, loading]);
+
+    return {
+        columns,
+        visible,
+        control,
+        formItems,
+        modalTitle,
+        handleSubmit,
+        handleFormSubmit,
+        handleModalCancel,
+    };
+};
+
+export default useColumns;

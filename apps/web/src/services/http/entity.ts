@@ -203,6 +203,21 @@ export interface EntityAPISchema extends APISchema {
         };
         response: unknown;
     };
+
+    /** Batch get entities status data */
+    getEntitiesStatus: {
+        request: {
+            entity_ids: ApiKey[];
+        };
+        response: Record<
+            ApiKey,
+            {
+                value: any;
+                timestamp: string;
+                value_type: EntityValueDataType;
+            }
+        >;
+    };
 }
 
 /**
@@ -224,5 +239,6 @@ export default attachAPI<EntityAPISchema>(client, {
         editEntity: `PUT ${API_PREFIX}/entity/:id`,
         createCustomEntity: `POST ${API_PREFIX}/entity`,
         exportEntityHistory: `GET ${API_PREFIX}/entity/export`,
+        getEntitiesStatus: `POST ${API_PREFIX}/entity/batch-get-status`,
     },
 });

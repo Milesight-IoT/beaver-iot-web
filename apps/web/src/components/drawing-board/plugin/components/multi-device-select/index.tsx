@@ -10,7 +10,7 @@ import {
 import cls from 'classnames';
 
 import { useI18n } from '@milesight/shared/src/hooks';
-import { SearchIcon, RefreshIcon, LoadingWrapper } from '@milesight/shared/src/components';
+import { SearchIcon, RefreshIcon } from '@milesight/shared/src/components';
 
 import { Tooltip } from '@/components';
 import { DeviceGroup, GroupDetail } from './components';
@@ -36,7 +36,7 @@ const MultiDeviceSelect: React.FC<MultiDeviceSelectProps> = props => {
         keyword,
         loadingDevices,
         pageCount,
-        refreshing,
+        selectedUpdating,
         loadingGroups,
         refreshDeviceList,
         setPageNum,
@@ -46,10 +46,10 @@ const MultiDeviceSelect: React.FC<MultiDeviceSelectProps> = props => {
 
     const renderContent = () => {
         if (selectedGroup?.id || keyword) {
-            return <GroupDetail loading={loadingDevices} data={deviceList} />;
+            return <GroupDetail loading={loadingDevices || selectedUpdating} data={deviceList} />;
         }
 
-        return <DeviceGroup loading={loadingGroups} />;
+        return <DeviceGroup loading={loadingGroups || selectedUpdating} />;
     };
 
     return (
@@ -79,63 +79,64 @@ const MultiDeviceSelect: React.FC<MultiDeviceSelectProps> = props => {
                         error,
                     })}
                 >
-                    <LoadingWrapper loading={refreshing}>
-                        <div className="multi-device-select__search">
-                            <OutlinedInput
-                                fullWidth
-                                placeholder={getIntlText('common.label.search')}
-                                onChange={handleSearch}
-                                startAdornment={
-                                    <InputAdornment position="start">
-                                        <SearchIcon />
-                                    </InputAdornment>
-                                }
-                            />
+                    <div className="multi-device-select__search">
+                        <OutlinedInput
+                            fullWidth
+                            placeholder={getIntlText('common.label.search')}
+                            onChange={handleSearch}
+                            startAdornment={
+                                <InputAdornment position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            }
+                        />
+                    </div>
+
+                    <div className="multi-device-select__path">
+                        <div
+                            className="multi-device-select__path-all"
+                            onClick={() => {
+                                updateSelectedGroup(undefined);
+                                setPageNum(1);
+                            }}
+                        >
+                            {getIntlText('common.label.all_groups')}
                         </div>
-
-                        <div className="multi-device-select__path">
-                            <div
-                                className="multi-device-select__path-all"
-                                onClick={() => updateSelectedGroup(undefined)}
-                            >
-                                {getIntlText('common.label.all_groups')}
-                            </div>
-                            {selectedGroup?.name && (
-                                <div className="multi-device-select__path-group">
-                                    <Tooltip autoEllipsis title={`/ ${selectedGroup.name}`} />
-                                </div>
-                            )}
-                        </div>
-
-                        {renderContent()}
-
-                        {Boolean(selectedGroup?.id || keyword) && (
-                            <div className="multi-device-select__pagination">
-                                <Pagination
-                                    size="small"
-                                    defaultPage={1}
-                                    count={pageCount}
-                                    variant="outlined"
-                                    shape="rounded"
-                                    onChange={(_, page) => setPageNum(page)}
-                                    sx={{
-                                        'li button:hover': {
-                                            backgroundColor: 'transparent',
-                                            borderColor: 'var(--primary-color-base)',
-                                        },
-                                        'li button.Mui-selected': {
-                                            backgroundColor: 'transparent',
-                                            borderColor: 'var(--primary-color-base)',
-                                            color: 'var(--primary-color-base)',
-                                            '&:hover': {
-                                                backgroundColor: 'transparent',
-                                            },
-                                        },
-                                    }}
-                                />
+                        {selectedGroup?.name && (
+                            <div className="multi-device-select__path-group">
+                                <Tooltip autoEllipsis title={`/ ${selectedGroup.name}`} />
                             </div>
                         )}
-                    </LoadingWrapper>
+                    </div>
+
+                    {renderContent()}
+
+                    {Boolean(selectedGroup?.id || keyword) && (
+                        <div className="multi-device-select__pagination">
+                            <Pagination
+                                size="small"
+                                defaultPage={1}
+                                count={pageCount}
+                                variant="outlined"
+                                shape="rounded"
+                                onChange={(_, page) => setPageNum(page)}
+                                sx={{
+                                    'li button:hover': {
+                                        backgroundColor: 'transparent',
+                                        borderColor: 'var(--primary-color-base)',
+                                    },
+                                    'li button.Mui-selected': {
+                                        backgroundColor: 'transparent',
+                                        borderColor: 'var(--primary-color-base)',
+                                        color: 'var(--primary-color-base)',
+                                        '&:hover': {
+                                            backgroundColor: 'transparent',
+                                        },
+                                    },
+                                }}
+                            />
+                        </div>
+                    )}
                 </div>
 
                 {!!error && (

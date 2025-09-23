@@ -1,5 +1,16 @@
 import { client, attachAPI, API_PREFIX } from './client';
 
+export interface ImportEntityProps {
+    id: ApiKey;
+    key: string;
+    name: string;
+    type: EntityType;
+    value_attribute: Record<string, any>;
+    value_type: EntityValueDataType;
+    access_mod: EntityAccessMode;
+    description?: string;
+}
+
 /**
  * Device detail definition
  */
@@ -32,6 +43,8 @@ export interface DeviceDetail {
     group_name?: string;
     /** device group id */
     group_id?: ApiKey;
+    /** Import entities object */
+    important_entities?: ImportEntityProps[];
 }
 
 /**

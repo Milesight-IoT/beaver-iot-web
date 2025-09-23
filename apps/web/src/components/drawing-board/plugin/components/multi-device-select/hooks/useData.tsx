@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { useMemoizedFn, useControllableValue } from 'ahooks';
 import { isEmpty, pick } from 'lodash-es';
 
@@ -18,6 +18,10 @@ import { useDeviceGroup } from './useDeviceGroup';
 export function useData(props: MultiDeviceSelectProps) {
     const [keyword, setKeyword] = useState('');
     const [selectedUpdating, setSelectedUpdating] = useState(false);
+    /**
+     * Initial update selected devices data
+     */
+    const isInitRef = useRef(false);
 
     const [selectedDevices, setSelectedDevices] =
         useControllableValue<Partial<DeviceDetail>[]>(props);
@@ -25,14 +29,6 @@ export function useData(props: MultiDeviceSelectProps) {
     const { loadingGroups, getDeviceGroups } = useDeviceGroup();
     const { loadingDevices, deviceList, pageCount, getDeviceList, setPageNum } =
         useDeviceData(keyword);
-
-    useEffect(() => {
-        console.log('selectedDevices ? ', selectedDevices);
-    }, [selectedDevices]);
-
-    useEffect(() => {
-        console.log('selectedGroup ? ', selectedGroup);
-    }, [selectedGroup]);
 
     const handleSearch = useMemoizedFn((e: React.ChangeEvent<HTMLInputElement>) => {
         setKeyword(e?.target?.value || '');
@@ -45,19 +41,17 @@ export function useData(props: MultiDeviceSelectProps) {
         };
     }, [selectedDevices, setSelectedDevices]);
 
-    const refreshDeviceList = useMemoizedFn(async () => {
-        if (selectedGroup || keyword) {
-            getDeviceList?.();
-        } else {
-            getDeviceGroups?.();
-        }
-
+    /**
+     * Update current selected devices data
+     */
+    const getNewestSelected = useMemoizedFn(async () => {
         try {
             setSelectedUpdating(true);
 
             const idList = selectedDevices?.map(item => item.id)?.filter(Boolean) as
                 | ApiKey[]
                 | undefined;
+
             if (!Array.isArray(idList) || isEmpty(idList)) {
                 return;
             }
@@ -76,19 +70,24 @@ export function useData(props: MultiDeviceSelectProps) {
             const result = getResponseData(resp);
             const data = (result?.content || []).map(d => pick(d, ['id', 'group_id']));
 
+            if (!isInitRef.current) {
+                isInitRef.current = true;
+            }
             setSelectedDevices(data);
         } finally {
             setSelectedUpdating(false);
         }
     });
 
-    const refreshing = useMemo(() => {
-        if (loadingGroups || loadingDevices) {
-            return false;
+    const refreshDeviceList = useMemoizedFn(async () => {
+        if (selectedGroup || keyword) {
+            getDeviceList?.();
+        } else {
+            getDeviceGroups?.();
         }
 
-        return selectedUpdating;
-    }, [loadingGroups, loadingDevices, selectedUpdating]);
+        getNewestSelected?.();
+    });
 
     /**
      * Initial data
@@ -96,6 +95,14 @@ export function useData(props: MultiDeviceSelectProps) {
     useEffect(() => {
         refreshDeviceList?.();
     }, [refreshDeviceList]);
+
+    useEffect(() => {
+        if (isInitRef.current) {
+            return;
+        }
+
+        getNewestSelected?.();
+    }, [selectedDevices, getNewestSelected]);
 
     /**
      * Component destruction
@@ -114,7 +121,7 @@ export function useData(props: MultiDeviceSelectProps) {
         keyword,
         loadingDevices,
         pageCount,
-        refreshing,
+        selectedUpdating,
         loadingGroups,
         refreshDeviceList,
         setPageNum,
