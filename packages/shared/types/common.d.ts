@@ -94,6 +94,11 @@ declare type SearchResponseType<T = any[]> = {
 };
 
 /**
+ * Language type
+ */
+declare type LangType = keyof typeof import('@milesight/locales').LANGUAGE;
+
+/**
  * Map some fields in type T to optional fields, while keeping the other fields as they are
  */
 declare type PartialOptional<T, K extends keyof T> = Omit<T, K> & {

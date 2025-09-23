@@ -1,0 +1,52 @@
+.@{prefix}-blueprint {
+    &-source-radio-root {
+        .radio-item {
+            display: flex;
+            gap: @margin-xs;
+            padding: @padding-sm @padding-md;
+            margin-top: @margin-xs;
+            border: @border-base;
+            border-radius: @border-radius-base;
+            cursor: pointer;
+
+            &:first-child {
+                margin-bottom: 0;
+            }
+
+            &.active {
+                border-color: var(--border-color-main);
+                .opacity-background(var(--primary-color-8), .08);
+            }
+
+            &-detail {
+                flex: 1;
+                min-width: 0;
+            }
+
+            &-icon {
+                font-size: 20px;
+                color: var(--primary-color-8);
+
+                .@{prefix}-logo-mini {
+                    width: 20px;
+                    height: 20px;
+                    margin: 0;
+                }
+            }
+
+            &-title {
+                font-weight: @font-weight-medium;
+            }
+
+            &-desc {
+                margin-top: @margin-xxs;
+                color: var(--text-color-secondary);
+                .text-size(@font-size-sm);
+            }
+        }
+
+        .@{mui-prefix}FormHelperText-root {
+            margin-top: @margin-xxs;
+        }
+    }
+}

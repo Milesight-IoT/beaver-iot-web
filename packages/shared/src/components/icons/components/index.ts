@@ -7,6 +7,7 @@ export { default as BrokenImageIcon } from './broken-image';
 export { default as PointerIcon } from './pointer';
 export { default as MqttIcon } from './mqtt';
 export { default as ColumnSettingIcon } from './column-setting';
+export { default as ZipIcon } from './zip';
 export { default as NoDashboardIcon } from './no-dashboard';
 export { default as UncheckedCheckboxIcon } from './unchecked-checkbox';
 export { default as CheckedCheckboxIcon } from './checked-checkbox';

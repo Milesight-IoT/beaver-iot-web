@@ -38,11 +38,11 @@ const NSContent: React.FC<IProps> = ({ entities, onUpdateSuccess }) => {
                 label: getIntlText('setting.integration.configuration'),
                 component: <Config entities={entities} onUpdateSuccess={onUpdateSuccess} />,
             },
-            {
-                key: 'service',
-                label: getIntlText('setting.integration.service'),
-                component: <Service entities={entities} onUpdateSuccess={onUpdateSuccess} />,
-            },
+            // {
+            //     key: 'service',
+            //     label: getIntlText('setting.integration.service'),
+            //     component: <Service entities={entities} onUpdateSuccess={onUpdateSuccess} />,
+            // },
         ];
     }, [getIntlText, entities]);
     const [tabKey, setTabKey] = useRouteTab<NSTabKey>(tabs[0].key);

@@ -9,7 +9,10 @@ export interface TemplateType {
     content: string;
     description: string;
     topic: string;
-    created_at: string;
+    device_count?: number;
+    created_at: number;
+    updated_at: number;
+    device_offline_timeout: number;
 }
 
 /** Input | Output property */
@@ -103,6 +106,7 @@ export interface MqttDeviceAPISchema extends APISchema {
             topic: string;
             content: string;
             description: string;
+            device_offline_timeout: number;
         };
         response: void;
     };
@@ -120,6 +124,7 @@ export interface MqttDeviceAPISchema extends APISchema {
             topic: string;
             content: string;
             description: string;
+            device_offline_timeout: number;
         };
         response: void;
     };
@@ -139,6 +144,11 @@ export interface MqttDeviceAPISchema extends APISchema {
         response: void;
     };
 }
+
+/**
+ * Default device offline timeout in minutes
+ */
+export const DEFAULT_DEVICE_OFFLINE_TIMEOUT = 1500;
 
 /**
  *  Mqtt device integration related API services

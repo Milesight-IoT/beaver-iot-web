@@ -25,6 +25,9 @@ interface DateRangePickerProps
 const DateRangePickerStyled = styled('div')(() => ({
     display: 'flex',
     alignItems: 'center',
+    '& .MuiFormControl-root': {
+        flex: 1,
+    },
 }));
 
 const DateRangePicker: React.FC<DateRangePickerProps> = ({ label, value, onChange, ...props }) => {
@@ -34,6 +37,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ label, value, onChang
     return (
         <DateRangePickerStyled>
             <DateTimePicker
+                ampm={false}
                 label={label?.start}
                 value={value?.start || startDate}
                 closeOnSelect={false}
@@ -52,6 +56,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ label, value, onChang
             />
             <Box sx={{ mx: 2 }}> — </Box>
             <DateTimePicker
+                ampm={false}
                 label={label?.end}
                 value={value?.end || endDate}
                 closeOnSelect={false}

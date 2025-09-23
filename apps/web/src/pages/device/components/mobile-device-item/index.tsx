@@ -1,9 +1,9 @@
 import React, { memo, useMemo } from 'react';
-import { Chip } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { PERMISSIONS } from '@/constants';
 import { Tooltip, MoreMenu, PermissionControlHidden } from '@/components';
 import { type DeviceDetail } from '@/services/http';
+import { DeviceStatus } from '../device-status';
 import './style.less';
 
 /**
@@ -52,8 +52,7 @@ const MobileDeviceItem: React.FC<Props> = memo(({ data, onAction }) => {
                     <Tooltip autoEllipsis title={data.name} />
                 </div>
                 <div className="ms-mobile-device-item__status">
-                    <Chip className="status-online" label="Online" />
-                    {/* <Chip className="status-offline" label="Offline" /> */}
+                    <DeviceStatus type="ONLINE" />
                     <PermissionControlHidden permissions={[PERMISSIONS.DEVICE_DELETE]}>
                         <MoreMenu
                             options={moreMenuOptions}
@@ -68,8 +67,7 @@ const MobileDeviceItem: React.FC<Props> = memo(({ data, onAction }) => {
                         {getIntlText('device.label.param_external_id')}
                     </div>
                     <div className="ms-mobile-device-item__info-value">
-                        {/* TODO: Use External ID */}
-                        <Tooltip autoEllipsis title={data.key} />
+                        <Tooltip autoEllipsis title={data.identifier} />
                     </div>
                     <div className="ms-mobile-device-item__info-label">
                         {getIntlText('device.label.device_group')}

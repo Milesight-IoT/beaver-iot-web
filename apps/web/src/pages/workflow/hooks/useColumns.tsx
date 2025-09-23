@@ -9,10 +9,11 @@ import {
     EventNoteIcon,
 } from '@milesight/shared/src/components';
 import {
-    Tooltip,
-    type ColumnType,
     PermissionControlDisabled,
     PermissionControlHidden,
+    Tooltip,
+    TitleIcon,
+    type ColumnType,
 } from '@/components';
 import { PERMISSIONS } from '@/constants';
 import { type WorkflowAPISchema } from '@/services/http';
@@ -54,8 +55,21 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 headerName: getIntlText('common.label.name'),
                 flex: 1,
                 minWidth: 150,
-                ellipsis: true,
+                // ellipsis: true,
                 // disableColumnMenu: false,
+                renderCell({ row }) {
+                    // TODO: Render with blueprint tooltip
+                    // return (
+                    //     <TitleIcon
+                    //         title={row.name}
+                    //         tooltip={getIntlText('workflow.tip.blueprint_entity_come_from', {
+                    //             1: 'xxxDeviceName',
+                    //             2: 'xxxExternalID',
+                    //         })}
+                    //     />
+                    // );
+                    return <TitleIcon title={row.name} />;
+                },
             },
             {
                 field: 'remark',

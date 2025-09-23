@@ -6,9 +6,10 @@ import {
     DeleteOutlineIcon,
     DriveFileMoveOutlinedIcon,
 } from '@milesight/shared/src/components';
-import { Tooltip, type ColumnType, PermissionControlHidden } from '@/components';
+import { Tooltip, PermissionControlHidden, type ColumnType } from '@/components';
 import { type DeviceAPISchema } from '@/services/http';
 import { PERMISSIONS } from '@/constants';
+import { DeviceStatus } from '../components/device-status';
 
 type OperationType = 'detail' | 'delete' | 'changeGroup';
 
@@ -54,6 +55,16 @@ const useColumns = <T extends TableRowDataType>({
                 filterSearchType: 'search',
             },
             {
+                field: 'device_status',
+                headerName: getIntlText('device.label.device_status'),
+                flex: 1,
+                minWidth: 120,
+                renderCell({ value }) {
+                    // TODO: Replace with real value
+                    return <DeviceStatus type="ONLINE" />;
+                },
+            },
+            {
                 field: 'createdAt',
                 headerName: getIntlText('common.label.create_time'),
                 flex: 1,
@@ -72,7 +83,7 @@ const useColumns = <T extends TableRowDataType>({
             },
             {
                 field: 'integrationName',
-                headerName: getIntlText('device.label.param_source'),
+                headerName: getIntlText('common.label.source'),
                 ellipsis: true,
                 flex: 1,
                 minWidth: 250,

@@ -9,8 +9,8 @@ interface IProps {
 }
 
 const STATUS_INTL_KEY = {
-    ONLINE: 'setting.integration.label.gateway_online',
-    OFFLINE: 'setting.integration.label.gateway_offline',
+    ONLINE: 'common.label.online',
+    OFFLINE: 'common.label.offline',
 };
 
 // gateway status

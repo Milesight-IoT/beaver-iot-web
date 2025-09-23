@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Stack, IconButton, Chip, type ChipProps } from '@mui/material';
+import { Stack, IconButton } from '@mui/material';
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
 import { ListAltIcon, EditIcon } from '@milesight/shared/src/components';
 import {
@@ -10,6 +10,7 @@ import {
     getOperatorsByExclude,
     MultiTag,
     Tag,
+    TitleIcon,
 } from '@/components';
 import { PERMISSIONS } from '@/constants';
 import { type EntityAPISchema } from '@/services/http';
@@ -20,13 +21,6 @@ type OperationType = 'detail' | 'edit' | 'filter';
 export type TableRowDataType = ObjectToCamelCase<
     EntityAPISchema['getList']['response']['content'][0]
 >;
-
-// Entity type Tag Color mapping
-const entityTypeColorMap: Record<string, ChipProps['color']> = {
-    event: 'success',
-    service: 'warning',
-    property: 'primary',
-};
 
 export interface UseColumnsProps<T> {
     /**
@@ -59,13 +53,25 @@ const useEntityColumns = <T extends TableRowDataType>({
                 headerName: getIntlText('device.label.param_entity_name'),
                 flex: 1,
                 minWidth: 200,
-                ellipsis: true,
                 operators: getOperatorsByExclude([
                     FILTER_OPERATORS.IS_EMPTY,
                     FILTER_OPERATORS.IS_NOT_EMPTY,
                     FILTER_OPERATORS.ANY_EQUALS,
                 ]),
                 operatorValueCompType: 'input',
+                renderCell({ row }) {
+                    // TODO: Render with blueprint tooltip
+                    // return (
+                    //     <TitleIcon
+                    //         title={row.entityName}
+                    //         tooltip={getIntlText('device.tip.blueprint_entity_come_from', {
+                    //             1: row.deviceName,
+                    //             2: row.deviceExternalID,
+                    //         })}
+                    //     />
+                    // );
+                    return <TitleIcon title={row.entityName} />;
+                },
             },
             {
                 field: 'deviceName',

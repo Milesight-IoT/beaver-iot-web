@@ -1,0 +1,31 @@
+.@{prefix}-title-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-right: 24px;
+
+    &.no-icon {
+        padding-right: 0;
+    }
+
+    &__title {
+        flex: 1;
+        min-width: 0;
+        .text-size(@font-size-base);
+    }
+
+    &__icon {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        display: flex;
+        align-items: center;
+        color: var(--icon-color-gray-secondary);
+        transform: translateY(-50%);
+
+        > .@{mui-prefix}SvgIcon-root {
+            font-size: 16px;
+        }
+    }
+}

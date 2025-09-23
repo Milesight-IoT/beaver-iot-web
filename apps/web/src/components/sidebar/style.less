@@ -165,7 +165,8 @@
         .@{mui-prefix}List-root {
             padding: 0 0 @padding-xxs 0;
         }
-        .@{mui-prefix}ListItem-root {
+
+        .@{prefix}-sidebar-menu__user-info.@{mui-prefix}ListItem-root {
             padding: @padding-lg;
         }
     }
@@ -184,6 +185,40 @@
 
         .@{mui-prefix}ListItemText-secondary {
             .text-size(@font-size-sm);
+        }
+    }
+
+    & &__link {
+        &.@{mui-prefix}MenuItem-root {
+            padding: 0;
+        }
+
+        > a {
+            display: flex;
+            align-items: center;
+            padding: @padding-xs @padding-lg;
+            color: var(--text-color-base);
+            text-decoration: none;
+        }
+    }
+
+    & &__version {
+        gap: @margin-sm;
+        padding: @padding-xs @padding-lg;
+
+        .@{mui-prefix}ListItemIcon-root {
+            min-width: auto;
+        }
+
+        .version {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            justify-content: space-between;
+
+            .value {
+                color: var(--text-color-secondary);
+            }
         }
     }
 

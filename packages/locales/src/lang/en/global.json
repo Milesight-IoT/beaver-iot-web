@@ -289,5 +289,11 @@
     "common.label.all_groups": "全部分组",
     "common.label.select_page_all": "全选本页",
     "common.button.refresh": "Refresh",
-    "common.label.sort_by_chosen_time": "按选定时间排序"
+    "common.label.sort_by_chosen_time": "按选定时间排序",
+    "common.label.help_center": "Help Center",
+    "common.label.file_name": "File Name",
+    "common.label.source": "Source",
+    "common.message.supported_format": "Supported format: {1}",
+    "common.label.online": "Online",
+    "common.label.offline": "Offline"
 }

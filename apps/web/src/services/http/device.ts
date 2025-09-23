@@ -68,6 +68,11 @@ export interface AddDeviceProps {
 }
 
 /**
+ * Device status
+ */
+export type DeviceStatus = 'ONLINE' | 'OFFLINE';
+
+/**
  * Device related interface definition
  */
 export interface DeviceAPISchema extends APISchema {

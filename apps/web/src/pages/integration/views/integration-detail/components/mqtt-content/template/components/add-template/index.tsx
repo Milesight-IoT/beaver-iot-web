@@ -11,6 +11,7 @@ import {
     mqttApi,
     MqttBrokerInfoType,
     TemplateType,
+    DEFAULT_DEVICE_OFFLINE_TIMEOUT,
 } from '@/services/http';
 import { InteEntityType } from '../../../../../hooks';
 import { useFormItems, type FormDataProps } from './hook';
@@ -39,11 +40,15 @@ const AddTemplate: React.FC<IProps> = props => {
 
     useEffect(() => {
         if (template) {
+            // Edit
             setValue('name', template.name);
             setValue('topic', template.topic);
             setValue('yaml', template.content);
             setValue('description', template.description);
+            setValue('timeout', template.deviceOfflineTimeout);
         } else {
+            // Add
+            setValue('timeout', DEFAULT_DEVICE_OFFLINE_TIMEOUT);
             getDefaultTemplateYaml();
         }
     }, []);
@@ -58,7 +63,7 @@ const AddTemplate: React.FC<IProps> = props => {
     };
 
     const onSubmit: SubmitHandler<FormDataProps> = useMemoizedFn(async formData => {
-        const { name, topic, description, yaml } = formData;
+        const { name, topic, description, yaml, timeout } = formData;
 
         const [error, resp] = await awaitWrap(
             mqttApi.checkTemplate({
@@ -75,6 +80,7 @@ const AddTemplate: React.FC<IProps> = props => {
             topic,
             description,
             content: yaml,
+            device_offline_timeout: timeout,
         };
         if (!template) {
             delete params.id;

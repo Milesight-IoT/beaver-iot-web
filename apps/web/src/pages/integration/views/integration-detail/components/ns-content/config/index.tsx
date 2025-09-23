@@ -132,14 +132,14 @@ const Config: React.FC<IProps> = ({ entities, onUpdateSuccess }) => {
                 >
                     {getIntlText('common.label.add')}
                 </Button>
-                <Button
+                {/* <Button
                     variant="outlined"
                     sx={{ textTransform: 'none' }}
                     startIcon={<CodeIcon fontSize="small" />}
                     onClick={handleCusCodec}
                 >
                     {getIntlText('setting.integration.label.codec_repo_title')}
-                </Button>
+                </Button> */}
                 <Button
                     variant="outlined"
                     disabled={!selectedIds.length}

@@ -22,7 +22,7 @@ import 'dayjs/locale/zh-cn';
  */
 type WeekStartWithType = 'SUNDAY' | 'MONDAY' | 'SATURDAY';
 
-export type LangType = keyof typeof LANGUAGE;
+// export type LangType = keyof typeof LANGUAGE;
 
 type LangListType = Partial<
     Record<

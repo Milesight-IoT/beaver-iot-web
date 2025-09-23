@@ -26,7 +26,6 @@ const EditDialog: React.FC<Props> = ({ data, visible, onCancel, onError, onSucce
     const { getIntlText } = useI18n();
     const { control, formState, handleSubmit, reset, setValue } = useForm<FormDataProps>();
     const onSubmit: SubmitHandler<FormDataProps> = async formData => {
-        console.log(formData);
         if (!data?.id) return;
 
         const [error, resp] = await awaitWrap(
