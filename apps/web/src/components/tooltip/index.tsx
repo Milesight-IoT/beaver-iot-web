@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import cls from 'classnames';
 import { useSize, useDebounceEffect } from 'ahooks';
-import { Tooltip as MTooltip, type TooltipProps } from '@mui/material';
+import { Box, Tooltip as MTooltip, type TooltipProps } from '@mui/material';
 import './style.less';
 
 export interface MSToolTipProps extends Omit<TooltipProps, 'children'> {
@@ -59,7 +59,11 @@ const Tooltip: React.FC<MSToolTipProps> = ({
         { wait: 300 },
     );
 
-    children = children || <span className="ms-tooltip-cont">{title}</span>;
+    children = children || (
+        <Box component="span" className="ms-tooltip-cont">
+            {title}
+        </Box>
+    );
 
     return (
         <div className={cls('ms-tooltip', className)} ref={wrapRef}>
