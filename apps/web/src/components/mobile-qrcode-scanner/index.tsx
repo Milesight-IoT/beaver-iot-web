@@ -1,14 +1,11 @@
 import React, { useRef, useEffect, useMemo, useState } from 'react';
-import { Dialog, IconButton } from '@mui/material';
+import { Dialog, IconButton, CircularProgress } from '@mui/material';
 import jsQR from 'jsqr';
+import cls from 'classnames';
 import { useSize, useMemoizedFn, useDocumentVisibility } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
-import {
-    ArrowBackIcon,
-    FlashlightOnIcon,
-    FlashlightOffIcon,
-    toast,
-} from '@milesight/shared/src/components';
+import { ArrowBackIcon, FlashlightOnIcon, toast } from '@milesight/shared/src/components';
+import { imageCompress } from '@milesight/shared/src/utils/tools';
 import {
     DEFAULT_SCAN_CONFIG,
     DEFAULT_CAMERA_CONFIG,
@@ -66,6 +63,8 @@ const MobileQRCodeScanner: React.FC<Props> = ({
     const { getIntlText } = useI18n();
 
     // ---------- Topbar Interaction ----------
+    const [loading, setLoading] = useState<boolean>(false);
+
     // Back
     const handleBack = useMemoizedFn(() => {
         onClose?.();
@@ -77,9 +76,21 @@ const MobileQRCodeScanner: React.FC<Props> = ({
         const file = e.target.files?.[0];
 
         if (!file) return;
-        const img = new Image();
+        setLoading(true);
 
-        img.src = URL.createObjectURL(file);
+        const img = new Image();
+        const blob = await imageCompress(file, {
+            quality: 0.8,
+            maxWidth: 500,
+            maxHeight: 500,
+        });
+
+        if (!blob) {
+            setLoading(false);
+            return;
+        }
+
+        img.src = blob instanceof Blob ? URL.createObjectURL(blob) : blob;
         await new Promise(resolve => {
             img.addEventListener('load', resolve);
         });
@@ -88,7 +99,11 @@ const MobileQRCodeScanner: React.FC<Props> = ({
         const canvas = new OffscreenCanvas(naturalWidth, naturalHeight);
         const ctx = canvas.getContext('2d');
 
-        if (!ctx) return;
+        if (!ctx) {
+            setLoading(false);
+            return;
+        }
+
         ctx.drawImage(img, 0, 0, naturalWidth, naturalHeight);
         const imageData = ctx.getImageData(0, 0, naturalWidth, naturalHeight);
         const result = jsQR(imageData.data, naturalWidth, naturalHeight, scanConfig);
@@ -98,10 +113,12 @@ const MobileQRCodeScanner: React.FC<Props> = ({
                 key: 'scan-no-data',
                 content: getIntlText('common.label.empty'),
             });
+            setLoading(false);
             return;
         }
 
         handleBack();
+        setLoading(false);
         onSuccess?.(result);
         toast.success({
             key: 'scan-success',
@@ -133,7 +150,9 @@ const MobileQRCodeScanner: React.FC<Props> = ({
 
     useEffect(() => {
         const wrapper = wrapperRef.current;
-        if (!open || !wrapper || !size || !scanRegion || docVisible !== 'visible') return;
+        if (loading || !open || !wrapper || !size || !scanRegion || docVisible !== 'visible') {
+            return;
+        }
 
         try {
             scannerRef.current = new Scanner(wrapper, {
@@ -151,6 +170,8 @@ const MobileQRCodeScanner: React.FC<Props> = ({
                     });
                 },
                 onSuccess(result) {
+                    if (loading) return;
+
                     handleBack();
                     onSuccess?.(result);
                     toast.success({
@@ -181,7 +202,7 @@ const MobileQRCodeScanner: React.FC<Props> = ({
             scannerRef.current?.destroy();
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [size, scanRegion, docVisible, open, scanConfig, cameraConfig, getIntlText]);
+    }, [loading, size, scanRegion, docVisible, open, scanConfig, cameraConfig, getIntlText]);
 
     // ---------- Render scan region box ----------
     const scanRegionStyle = useMemo<React.CSSProperties>(() => {
@@ -203,7 +224,7 @@ const MobileQRCodeScanner: React.FC<Props> = ({
         };
 
         if (scanRegion) {
-            result.top = scanRegion.y + scanRegion.height + 24;
+            result.top = scanRegion.y + scanRegion.height + 60;
         } else {
             result.bottom = 100;
         }
@@ -236,12 +257,14 @@ const MobileQRCodeScanner: React.FC<Props> = ({
                 </div>
                 <div className="topbar-right">
                     <span>{getIntlText('common.label.album')}</span>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        className="btn-img-input"
-                        onChange={handleImgSelect}
-                    />
+                    {open && (
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="btn-img-input"
+                            onChange={handleImgSelect}
+                        />
+                    )}
                 </div>
             </div>
             <div className="scan-region-box" style={scanRegionStyle}>
@@ -249,13 +272,17 @@ const MobileQRCodeScanner: React.FC<Props> = ({
                 <div className="angle" />
             </div>
             {flashAvailable && (
-                <div className="flash-button" style={flashButtonStyle} onClick={toggleFlash}>
-                    {openFlash ? <FlashlightOffIcon /> : <FlashlightOnIcon />}
-                    <span>
-                        {openFlash
-                            ? getIntlText('common.label.turn_off_flash')
-                            : getIntlText('common.label.turn_on_flash')}
-                    </span>
+                <div
+                    className={cls('flash-button', { active: openFlash })}
+                    style={flashButtonStyle}
+                    onClick={toggleFlash}
+                >
+                    <FlashlightOnIcon />
+                </div>
+            )}
+            {loading && (
+                <div className="loading-wrapper">
+                    <CircularProgress />
                 </div>
             )}
         </Dialog>

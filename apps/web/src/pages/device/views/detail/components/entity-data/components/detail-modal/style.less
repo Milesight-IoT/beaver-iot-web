@@ -1,0 +1,32 @@
+.@{prefix}-device-entity-detail {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .@{prefix}-descriptions-root {
+        table {
+            table-layout: fixed;
+        }
+    }
+
+    &-table {
+        flex: 1;
+        height: 0;
+
+        & .@{prefix}-table-pro {
+            height: calc(100vh - 350px);
+        }
+    }
+
+    &-table-header {
+        display: flex;
+        align-items: center;
+        margin: @margin-xl 0 @margin-md;
+
+        &-title {
+            flex: 1;
+            font-size: @font-size-lg;
+            font-weight: @font-weight-medium;
+        }
+    }
+}

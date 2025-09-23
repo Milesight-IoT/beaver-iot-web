@@ -8,6 +8,7 @@ import {
     type OutlinedInputProps,
 } from '@mui/material';
 import { useControllableValue } from 'ahooks';
+import { useTheme } from '@milesight/shared/src/hooks';
 import { isMobile } from '@milesight/shared/src/utils/userAgent';
 import { QrCodeScannerIcon } from '@milesight/shared/src/components';
 import MobileQRCodeScanner from '../mobile-qrcode-scanner';
@@ -25,16 +26,18 @@ interface Props extends OutlinedInputProps {
  * Support qrcode scan in mobile device
  */
 const EuiInput: React.FC<Props> = ({ label, fullWidth, error, helperText, sx, ...props }) => {
+    const { matchTablet } = useTheme();
     const [value, setValue] = useControllableValue(props);
     const [openScanner, setOpenScanner] = useState(false);
     const scannerAvailable = useMemo(() => {
         const { hostname, protocol } = window.location;
         return (
             isMobile() &&
+            matchTablet &&
             (protocol === 'https:' || hostname === 'localhost') &&
             !!navigator.mediaDevices?.getUserMedia
         );
-    }, []);
+    }, [matchTablet]);
 
     return (
         <FormControl

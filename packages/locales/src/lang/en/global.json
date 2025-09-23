@@ -282,6 +282,10 @@
     "common.label.album": "Album",
     "common.message.scan_success": "Scan success",
     "common.message.scan_failed": "Scan failed, please check and retry",
-    "common.label.turn_on_flash": "Turn on flash",
-    "common.label.turn_off_flash": "Turn off flash"
+    "common.label.help_center": "Help Center",
+    "common.label.file_name": "File Name",
+    "common.label.source": "Source",
+    "common.message.supported_format": "Supported format: {1}",
+    "common.label.online": "Online",
+    "common.label.offline": "Offline"
 }

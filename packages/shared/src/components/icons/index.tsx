@@ -162,7 +162,7 @@ export {
     GridView as GridViewIcon,
     QrCodeScanner as QrCodeScannerIcon,
     FlashlightOn as FlashlightOnIcon,
-    FlashlightOff as FlashlightOffIcon,
+    SpaceDashboard as SpaceDashboardIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';

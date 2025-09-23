@@ -35,7 +35,7 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
             },
             {
                 field: 'integrationName',
-                headerName: getIntlText('device.label.param_source'),
+                headerName: getIntlText('common.label.source'),
                 flex: 1,
                 minWidth: 300,
                 ellipsis: true,

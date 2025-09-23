@@ -64,7 +64,7 @@ const BasicTable = (
             },
             {
                 key: 'source',
-                label: getIntlText('device.label.param_source'),
+                label: getIntlText('common.label.source'),
                 content: <Tooltip autoEllipsis title={data?.integrationName} />,
             },
             {

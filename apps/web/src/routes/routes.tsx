@@ -11,7 +11,6 @@ import {
     SellIcon,
     AntFallAttentionIcon,
 } from '@milesight/shared/src/components';
-import { isMobile } from '@milesight/shared/src/utils/userAgent';
 import { PERMISSIONS } from '@/constants';
 import ErrorBoundaryComponent from './error-boundary';
 
@@ -241,7 +240,7 @@ const routes: RouteObjectType[] = [
         ErrorBoundary,
     },
     {
-        path: '/credentials',
+        path: '/setting',
         handle: {
             get title() {
                 return intl.get('common.label.setting');
@@ -250,7 +249,7 @@ const routes: RouteObjectType[] = [
             permissions: PERMISSIONS.SETTING_MODULE,
         },
         async lazy() {
-            const { default: Component } = await import('@/pages/credentials');
+            const { default: Component } = await import('@/pages/setting');
             return { Component };
         },
         ErrorBoundary,
@@ -333,8 +332,7 @@ const routes: RouteObjectType[] = [
 /**
  * Filter mobile routes
  */
-const filterMobileRoutes = (routes: RouteObjectType[]) => {
-    if (!isMobile()) return routes;
+export const filterMobileRoutes = (routes: RouteObjectType[]) => {
     const result: RouteObjectType[] = [];
 
     routes = routes.filter(item => item.handle?.mobileAccessible);
@@ -348,7 +346,4 @@ const filterMobileRoutes = (routes: RouteObjectType[]) => {
     return result;
 };
 
-const mobileRoutes = filterMobileRoutes(routes);
-
-export { mobileRoutes };
 export default routes;

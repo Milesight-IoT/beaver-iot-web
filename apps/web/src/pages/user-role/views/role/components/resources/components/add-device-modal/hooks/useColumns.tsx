@@ -21,7 +21,7 @@ const useColumns = <T extends TableRowDataType>() => {
             },
             {
                 field: 'integrationName',
-                headerName: getIntlText('device.label.param_source'),
+                headerName: getIntlText('common.label.source'),
                 flex: 1,
                 minWidth: 150,
                 ellipsis: true,
