@@ -81,3 +81,4 @@ export { default as MobileQRCodeScanner } from './mobile-qrcode-scanner';
 export { default as MobileSearchPanel } from './mobile-search-panel';
 export { default as EuiInput } from './eui-input';
 export { default as TitleIcon } from './title-icon';
+export { default as TooltipWrapper } from './tooltip-wrapper';

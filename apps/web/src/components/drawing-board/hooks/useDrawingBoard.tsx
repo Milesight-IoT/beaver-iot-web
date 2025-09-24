@@ -11,7 +11,7 @@ import {
     toast,
 } from '@milesight/shared/src/components';
 
-import PermissionControlHidden from '@/components/permission-control-hidden';
+import { PermissionControlHidden, TooltipWrapper } from '@/components';
 import { PERMISSIONS } from '@/constants';
 import { type WidgetDetail, dashboardAPI, awaitWrap, isRequestSuccess } from '@/services/http';
 import PluginListPopover from '../components/plugin-list-popover';
@@ -20,6 +20,8 @@ import { type DrawingBoardExpose } from '../interface';
 import { filterWidgets } from '../utils';
 
 export interface UseDrawingBoardProps {
+    disabledEditTip?: string;
+    disabledEdit?: boolean;
     onSave?: (widgets?: WidgetDetail[]) => void;
 }
 
@@ -27,7 +29,7 @@ export interface UseDrawingBoardProps {
  * Drawing board operation
  */
 export default function useDrawingBoard(props?: UseDrawingBoardProps) {
-    const { onSave } = props || {};
+    const { disabledEdit, disabledEditTip, onSave } = props || {};
 
     const { getIntlText } = useI18n();
 
@@ -62,13 +64,16 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
                 <FullscreenIcon />
             </IconButton>
             <PermissionControlHidden permissions={PERMISSIONS.DASHBOARD_EDIT}>
-                <Button
-                    variant="contained"
-                    startIcon={<EditIcon />}
-                    onClick={() => setIsEdit(true)}
-                >
-                    {getIntlText('common.button.edit')}
-                </Button>
+                <TooltipWrapper placement="left" title={disabledEdit ? disabledEditTip : null}>
+                    <Button
+                        disabled={disabledEdit}
+                        variant="contained"
+                        startIcon={<EditIcon />}
+                        onClick={() => setIsEdit(true)}
+                    >
+                        {getIntlText('common.button.edit')}
+                    </Button>
+                </TooltipWrapper>
             </PermissionControlHidden>
         </Stack>
     );

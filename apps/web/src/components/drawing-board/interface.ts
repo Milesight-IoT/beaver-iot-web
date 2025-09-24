@@ -25,6 +25,7 @@ export interface DrawingBoardProps {
     isFullscreen: boolean;
     /** Drawing board html div node */
     drawingBoardRef: React.RefObject<HTMLDivElement>;
+    disabledEdit?: boolean;
     updateOperatingPlugin: (plugin?: WidgetDetail) => void;
     /** Change drawing board edit mode */
     changeIsEdit: (isEditing: boolean) => void;

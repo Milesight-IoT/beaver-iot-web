@@ -51,6 +51,13 @@
             margin: @margin-md 0 @margin-md;
             color: var(--gray-color-5);
         }
+
+        &.disabled {
+            clear: both;
+            opacity: 0.5;
+            pointer-events: none;
+            user-select: none;
+        }
     }
 
     &__widget {

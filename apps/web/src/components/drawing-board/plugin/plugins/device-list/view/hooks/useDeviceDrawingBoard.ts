@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useMemoizedFn } from 'ahooks';
+import { useNavigate } from 'react-router-dom';
 
 import { toast } from '@milesight/shared/src/components';
 import { useI18n } from '@milesight/shared/src/hooks';
@@ -16,9 +17,10 @@ import {
 /**
  * Get Device drawing board data
  */
-export function useDeviceDrawingBoard() {
+export function useDeviceDrawingBoard(isPreview?: boolean) {
     const { userInfo } = useUserStore();
     const { getIntlText } = useI18n();
+    const navigate = useNavigate();
 
     const [loading, setLoading] = useState<Record<string, boolean>>({});
 
@@ -66,8 +68,22 @@ export function useDeviceDrawingBoard() {
         }
     });
 
+    const handleDeviceDrawingBoard = useMemoizedFn(async (deviceId?: ApiKey) => {
+        if (!deviceId || isPreview) {
+            return;
+        }
+
+        const canvasId = await getDeviceDrawingBoard(deviceId);
+        if (!canvasId) {
+            return;
+        }
+
+        navigate(`/dashboard?id=${canvasId}&deviceId=${deviceId}`);
+    });
+
     return {
         loading,
         getDeviceDrawingBoard,
+        handleDeviceDrawingBoard,
     };
 }

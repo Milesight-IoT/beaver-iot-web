@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { Stack, IconButton } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import { useMemoizedFn } from 'ahooks';
 import { get, isNil } from 'lodash-es';
 
@@ -38,8 +37,7 @@ const useColumns = <T extends TableRowDataType>({
     entitiesStatus,
 }: UseColumnsProps) => {
     const { getIntlText } = useI18n();
-    const navigate = useNavigate();
-    const { loading, getDeviceDrawingBoard } = useDeviceDrawingBoard();
+    const { loading, handleDeviceDrawingBoard } = useDeviceDrawingBoard(isPreviewMode);
     const {
         visible,
         control,
@@ -50,19 +48,6 @@ const useColumns = <T extends TableRowDataType>({
         handleFormSubmit,
         handleModalCancel,
     } = useCallService(isPreviewMode);
-
-    const handleDeviceDrawingBoard = useMemoizedFn(async (deviceId?: ApiKey) => {
-        if (isPreviewMode) {
-            return;
-        }
-
-        const canvasId = await getDeviceDrawingBoard(deviceId);
-        if (!canvasId) {
-            return;
-        }
-
-        navigate(`/dashboard?id=${canvasId}`);
-    });
 
     /**
      * Get entity display name: status

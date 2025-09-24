@@ -2,6 +2,7 @@ import React from 'react';
 import { List } from '@mui/material';
 import { isNil } from 'lodash-es';
 
+import { useI18n } from '@milesight/shared/src/hooks';
 import { LoadingWrapper } from '@milesight/shared/src/components';
 
 import { DrawingBoard, useDrawingBoard } from '@/components/drawing-board';
@@ -19,10 +20,13 @@ export interface DashboardDetailProps {
  * DrawingBoard Detail component
  */
 const DrawingBoardDetail: React.FC<DashboardDetailProps> = props => {
-    const { id } = props;
+    const { id, deviceId } = props;
 
+    const { getIntlText } = useI18n();
     const { dashboardDetail, loading, getDashboardDetail } = useDashboardDetail(id);
     const { drawingBoardProps, renderDrawingBoardOperation } = useDrawingBoard({
+        disabledEdit: !isNil(deviceId),
+        disabledEditTip: getIntlText('dashboard.tip.disabled_edit_device_drawing_board'),
         onSave: () => {
             getDashboardDetail?.();
         },
@@ -37,7 +41,13 @@ const DrawingBoardDetail: React.FC<DashboardDetailProps> = props => {
             );
         }
 
-        return <DrawingBoard {...drawingBoardProps} drawingBoardDetail={dashboardDetail} />;
+        return (
+            <DrawingBoard
+                {...drawingBoardProps}
+                drawingBoardDetail={dashboardDetail}
+                disabledEdit={!isNil(deviceId)}
+            />
+        );
     };
 
     return (

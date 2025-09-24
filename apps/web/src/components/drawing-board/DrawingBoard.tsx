@@ -27,6 +27,7 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
         operatingPlugin,
         changeIsEdit,
         updateOperatingPlugin,
+        disabledEdit,
     } = props;
 
     const { getIntlText } = useI18n();
@@ -55,7 +56,11 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
      */
     const renderEmptyDrawingBoard = (
         <PermissionControlDisabled permissions={PERMISSIONS.DASHBOARD_EDIT}>
-            <div className="drawing-board__empty">
+            <div
+                className={cls('drawing-board__empty', {
+                    disabled: disabledEdit,
+                })}
+            >
                 <div className="drawing-board__empty-title">
                     {getIntlText('dashboard.empty_text')}
                 </div>
