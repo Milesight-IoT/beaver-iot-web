@@ -4,6 +4,7 @@
 import { useMemo, useCallback, useEffect } from 'react';
 import { createTheme, useColorScheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { isMobile } from '../utils/userAgent';
 import { theme as themeService } from '../services';
 import { useSharedGlobalStore } from '../stores';
 import useI18n from './useI18n';
@@ -50,9 +51,6 @@ export default () => {
         );
     }, [theme, muiLocale]);
 
-    const matchMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
-    const matchTablet = useMediaQuery(muiTheme.breakpoints.down('md'));
-
     const changeTheme = useCallback(
         (type: typeof theme, isPersist?: boolean) => {
             setMode(type);
@@ -67,6 +65,11 @@ export default () => {
     useEffect(() => {
         changeTheme(theme, false);
     }, [theme, changeTheme]);
+
+    // ---------- Responsive ----------
+    const matchSmBp = useMediaQuery(muiTheme.breakpoints.down('sm'));
+    const matchMdBp = useMediaQuery(muiTheme.breakpoints.down('md'));
+    const matchLandscape = useMediaQuery('(orientation: landscape)');
 
     return {
         /** Current Theme */
@@ -87,10 +90,13 @@ export default () => {
         breakpoints: muiTheme.breakpoints,
 
         /** Whether the current device is a mobile device based on breakpoints (width < 576px) */
-        matchMobile,
+        matchMobile: matchSmBp || matchLandscape,
 
         /** Whether the current device is a tablet device based on breakpoints (width < 768px) */
-        matchTablet,
+        matchTablet: matchMdBp || (matchLandscape && isMobile()),
+
+        /** Whether the current device is in landscape orientation */
+        matchLandscape,
 
         /** Change Theme */
         changeTheme,

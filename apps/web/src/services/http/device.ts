@@ -13,6 +13,11 @@ export interface ImportEntityProps {
 }
 
 /**
+ * Device status
+ */
+export type DeviceStatus = 'ONLINE' | 'OFFLINE';
+
+/**
  * Device detail definition
  */
 export interface DeviceDetail {
@@ -48,6 +53,7 @@ export interface DeviceDetail {
     important_entities?: ImportEntityProps[];
     /** Common entities object */
     common_entities?: ImportEntityProps[];
+    status?: DeviceStatus;
 }
 
 /**
@@ -69,11 +75,6 @@ export interface AddDeviceProps {
     /** Integrate additional information needed for new devices */
     param_entities: Record<string, any>;
 }
-
-/**
- * Device status
- */
-export type DeviceStatus = 'ONLINE' | 'OFFLINE';
 
 /**
  * Device related interface definition

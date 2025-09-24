@@ -55,13 +55,12 @@ const useColumns = <T extends TableRowDataType>({
                 filterSearchType: 'search',
             },
             {
-                field: 'device_status',
+                field: 'status',
                 headerName: getIntlText('device.label.device_status'),
                 flex: 1,
                 minWidth: 120,
                 renderCell({ value }) {
-                    // TODO: Replace with real value
-                    return <DeviceStatus type="ONLINE" />;
+                    return <DeviceStatus type={value} />;
                 },
             },
             {
