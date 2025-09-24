@@ -8,6 +8,7 @@ import { SettingsIcon, SpaceDashboardIcon, LoadingWrapper } from '@milesight/sha
 
 import { Tooltip, type ColumnType } from '@/components';
 import { type ImportEntityProps, type EntityAPISchema } from '@/services/http';
+import { DeviceStatus } from '@/pages/device/components/device-status';
 import { useDeviceDrawingBoard } from './useDeviceDrawingBoard';
 import { useCallService } from './useCallService';
 
@@ -89,7 +90,7 @@ const useColumns = <T extends TableRowDataType>({
                 minWidth: 100,
                 renderCell({ row }) {
                     const status = get(entitiesStatus, row?.deviceStatus?.id || '');
-                    return isNil(status?.value) ? '-' : status.value;
+                    return <DeviceStatus type={status?.value} />;
                 },
             },
             {
