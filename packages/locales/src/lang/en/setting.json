@@ -144,7 +144,7 @@
     "setting.valid.url_image": "{1} field value should be a valid image URL.",
     "setting.blueprint.management_title": "Device Blueprint Source Management",
     "setting.blueprint.edit_modal_title": "Edit Blueprint Source",
-    "setting.blueprint.official_store_helper_text": "默认来源为从 BeaverIoT 的官方蓝图仓库去定时拉取最新的设备蓝图，定时拉取的时间是每24小时一次。如果需要本地上传可点击右侧编辑按钮进行切换。",
+    "setting.blueprint.official_store_helper_text": "默认来源为每三个小时从 BeaverIoT 官方仓库检查是否有最新的可用版本，若存在则自动更新。点击右侧【编辑】按钮可切换至手动上传。",
     "setting.blueprint.title_official_store": "BeaverIoT Official Blueprint Repository",
     "setting.blueprint.title_local_upload": "Local Upload",
     "setting.blueprint.desc_official_store": "每 3 小时自动拉取文件，每次拉取不超过 3 分钟",

@@ -1,8 +1,9 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
-import { Paper, Typography, Button, Box } from '@mui/material';
+import { Paper, Typography, Box } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
-import { Logo, toast } from '@milesight/shared/src/components';
+import { Logo, LoadingButton, toast } from '@milesight/shared/src/components';
 import {
     iotLocalStorage,
     TOKEN_CACHE_KEY,
@@ -47,8 +48,10 @@ export default () => {
     const { getIntlText } = useI18n();
     const { handleSubmit, control } = useForm<FormDataProps>();
     const formItems = useFormItems({ mode: 'register' });
+    const [loading, setLoading] = useState<boolean>(false);
 
     const onSubmit: SubmitHandler<FormDataProps> = async data => {
+        setLoading(true);
         const { email, username, password } = data;
         const [error, resp] = await awaitWrap(
             globalAPI.oauthRegister({
@@ -58,7 +61,7 @@ export default () => {
             }),
         );
 
-        // console.log({ error, resp });
+        setLoading(false);
         if (error || !isRequestSuccess(resp)) return;
 
         navigate('/auth/login');
@@ -86,15 +89,16 @@ export default () => {
                         <Controller<FormDataProps> key={props.name} {...props} control={control} />
                     ))}
                 </div>
-                <Button
+                <LoadingButton
                     fullWidth
                     type="submit"
+                    loading={loading}
                     sx={{ mt: 2.5, textTransform: 'none' }}
                     variant="contained"
                     className="ms-auth-submit"
                 >
                     {getIntlText('common.button.confirm')}
-                </Button>
+                </LoadingButton>
             </Paper>
         </Box>
     );
