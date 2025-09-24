@@ -9,6 +9,7 @@ export interface ImportEntityProps {
     value_type: EntityValueDataType;
     access_mod: EntityAccessMode;
     description?: string;
+    parent?: string;
 }
 
 /**
@@ -45,6 +46,8 @@ export interface DeviceDetail {
     group_id?: ApiKey;
     /** Import entities object */
     important_entities?: ImportEntityProps[];
+    /** Common entities object */
+    common_entities?: ImportEntityProps[];
 }
 
 /**

@@ -102,6 +102,10 @@ const useColumns = <T extends TableRowDataType>({
                 ellipsis: true,
                 flex: 1,
                 minWidth: 100,
+                renderCell({ row }) {
+                    const status = get(entitiesStatus, row?.deviceStatus?.id || '');
+                    return isNil(status?.value) ? '-' : status.value;
+                },
             },
             {
                 field: 'propertyEntityFirst',
@@ -194,7 +198,14 @@ const useColumns = <T extends TableRowDataType>({
                 },
             },
         ];
-    }, [getIntlText, handleDeviceDrawingBoard, handleServiceClick, entityNameAndStatus, loading]);
+    }, [
+        getIntlText,
+        handleDeviceDrawingBoard,
+        handleServiceClick,
+        entityNameAndStatus,
+        loading,
+        entitiesStatus,
+    ]);
 
     return {
         columns,

@@ -11,6 +11,7 @@ import { type EntityFormDataProps } from '@/hooks';
 import { TablePro } from '@/components';
 import { deviceAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
+import { DEVICE_STATUS_ENTITY_UNIQUE_ID } from '@/constants';
 import { type DeviceListControlPanelConfig } from '../control-panel';
 import { type BoardPluginProps } from '../../../types';
 import { useStableValue } from '../../../hooks';
@@ -74,16 +75,22 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
 
         return data
             .map(d => {
-                const propertiesEntity = d?.important_entities?.filter(e => e.type === 'PROPERTY');
+                const propertiesEntities = d?.important_entities?.filter(
+                    e => e.type === 'PROPERTY',
+                );
+                const deviceStatusEntity = d?.common_entities?.find(c =>
+                    c.key?.includes(DEVICE_STATUS_ENTITY_UNIQUE_ID),
+                );
 
                 return {
                     id: d.id,
                     name: d.name,
                     identifier: d.identifier,
-                    propertyEntityFirst: propertiesEntity?.[0],
-                    propertyEntitySecond: propertiesEntity?.[1],
+                    deviceStatus: deviceStatusEntity,
+                    propertyEntityFirst: propertiesEntities?.[0],
+                    propertyEntitySecond: propertiesEntities?.[1],
                     serviceEntities: d?.important_entities?.filter(e => e.type === 'SERVICE'),
-                };
+                } as TableRowDataType;
             })
             .filter(
                 d =>

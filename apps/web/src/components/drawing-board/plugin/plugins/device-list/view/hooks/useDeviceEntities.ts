@@ -13,6 +13,7 @@ import {
 } from '@/services/http';
 import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
+import { DEVICE_STATUS_ENTITY_UNIQUE_ID } from '@/constants';
 
 export interface useDeviceEntitiesProps {
     isPreview?: boolean;
@@ -36,7 +37,15 @@ export function useDeviceEntities(props: useDeviceEntitiesProps) {
 
         return data
             .reduce((a: ImportEntityProps[], c) => {
-                return [...a, ...(c?.important_entities || [])];
+                const deviceStatusEntity = c?.common_entities?.find(c =>
+                    c.key?.includes(DEVICE_STATUS_ENTITY_UNIQUE_ID),
+                );
+
+                return [
+                    ...a,
+                    ...(deviceStatusEntity ? [deviceStatusEntity] : []),
+                    ...(c?.important_entities || []),
+                ];
             }, [])
             .map(d => d.id)
             .filter(Boolean);
