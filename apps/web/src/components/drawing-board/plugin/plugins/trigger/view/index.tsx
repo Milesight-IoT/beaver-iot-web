@@ -196,11 +196,11 @@ const View = (props: Props) => {
 
         switch (entityType) {
             case 'SERVICE': {
-                handleCallService(finalParams);
+                await handleCallService(finalParams);
                 break;
             }
             case 'PROPERTY': {
-                handleUpdateProperty(finalParams);
+                await handleUpdateProperty(finalParams);
                 break;
             }
             default: {
