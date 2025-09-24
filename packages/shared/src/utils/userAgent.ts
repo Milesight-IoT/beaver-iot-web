@@ -3,10 +3,43 @@ const UA = window.navigator.userAgent;
 /**
  * @description Check if the client is the mobile terminal
  */
-export function isMobile() {
-    // eslint-disable-next-line
-    return /Android|iPhone|webOS|BlackBerry|SymbianOS|Windows Phone|iPad|iPod/i.test(UA);
-}
+// export function isMobile() {
+//     // eslint-disable-next-line
+//     return /Android|iPhone|webOS|BlackBerry|SymbianOS|Windows Phone|iPad|iPod/i.test(UA);
+// }
+export const isMobile = (): boolean => {
+    if (typeof window === 'undefined') return false;
+
+    const isPhoneScreen = window.matchMedia('(max-width: 767px)').matches;
+
+    // Mobile feature detection (excluding iPad)
+    const mobileDeviceRegex = /(iPhone|iPod|Android.*Mobile|Windows Phone)/i;
+    const isMobileUA = mobileDeviceRegex.test(UA) && !/iPad/i.test(UA);
+
+    // Tablet feature detection (for secondary exclusion)
+    const tabletRegex = /(iPad|Android|Tablet)/i;
+    const isTablet = tabletRegex.test(UA) && !/Mobile/i.test(UA);
+
+    return (isMobileUA || isPhoneScreen) && !isTablet;
+};
+
+/**
+ * @description Check if the client is the tablet terminal
+ */
+export const isTablet = (): boolean => {
+    if (typeof window === 'undefined') return false;
+
+    const isTabletScreen = window.matchMedia('(min-width: 768px) and (max-width: 1024px)').matches;
+
+    // Tablet feature detection
+    const tabletRegex = /(iPad|Android|Tablet)/i;
+    const isTabletUA = tabletRegex.test(UA) && !/Mobile/i.test(UA);
+
+    // Exclude desktop Chrome browser simulation for iPad
+    const isDesktopChrome = /Chrome/i.test(UA) && !/Mobile/i.test(UA);
+
+    return (isTabletUA || isTabletScreen) && !isDesktopChrome;
+};
 
 /**
  * @description Check whether the client is iOS
