@@ -79,6 +79,7 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
         minCol: 2,
         maxRow: 4,
         maxCol: 12,
+        fullscreenable: true,
         configProps: [
             {
                 label: 'Line Chart Config',

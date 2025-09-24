@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useContext } from 'react';
 import { useRequest, useMemoizedFn } from 'ahooks';
 import { isEmpty } from 'lodash-es';
 import { Controller } from 'react-hook-form';
+import cls from 'classnames';
 
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 import { Modal } from '@milesight/shared/src/components';
@@ -9,6 +10,7 @@ import { Modal } from '@milesight/shared/src/components';
 import { type EntityFormDataProps } from '@/hooks';
 import { TablePro } from '@/components';
 import { deviceAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
+import { DrawingBoardContext } from '@/components/drawing-board/context';
 import { type DeviceListControlPanelConfig } from '../control-panel';
 import { type BoardPluginProps } from '../../../types';
 import { useStableValue } from '../../../hooks';
@@ -27,6 +29,7 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
     const { config, pluginProps } = props;
     const { devices: unStableDevices } = config || {};
     const { isPreview } = pluginProps || {};
+    const context = useContext(DrawingBoardContext);
 
     const [keyword, setKeyword] = useState('');
 
@@ -142,7 +145,11 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
         }
 
         return (
-            <div className="device-list-view__table">
+            <div
+                className={cls('device-list-view__table', {
+                    fullscreenable: !(isPreview || context?.isEdit),
+                })}
+            >
                 <TablePro<TableRowDataType>
                     loading={loading}
                     columns={columns}

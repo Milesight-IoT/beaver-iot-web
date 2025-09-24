@@ -22,6 +22,7 @@ const horizonBarControlPanelConfig = (): ControlPanelConfig<BarChartControlPanel
         minCol: 2,
         maxRow: 4,
         maxCol: 12,
+        fullscreenable: true,
         configProps: [
             {
                 label: 'Horizon Bar Config',

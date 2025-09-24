@@ -22,6 +22,7 @@ const barChartControlPanelConfig = (): ControlPanelConfig<BarChartControlPanelCo
         minCol: 2,
         maxRow: 4,
         maxCol: 12,
+        fullscreenable: true,
         configProps: [
             {
                 label: 'Bar Chart Config',

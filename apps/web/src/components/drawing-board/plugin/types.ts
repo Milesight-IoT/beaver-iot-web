@@ -191,6 +191,8 @@ export interface ControlPanelConfig<T extends AnyDict = AnyDict> {
      * The plugin icon
      */
     icon?: string;
+    /** Can it be displayed in fullscreen */
+    fullscreenable?: boolean;
 }
 
 /**

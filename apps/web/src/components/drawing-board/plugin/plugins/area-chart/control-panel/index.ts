@@ -22,6 +22,7 @@ const areaChartControlPanelConfig = (): ControlPanelConfig<AreaChartControlPanel
         minCol: 2,
         maxRow: 4,
         maxCol: 12,
+        fullscreenable: true,
         configProps: [
             {
                 label: 'Area Chart Config',

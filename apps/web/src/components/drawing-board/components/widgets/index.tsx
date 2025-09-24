@@ -8,6 +8,7 @@ import { DrawingBoardContext } from '../../context';
 import { useBackgroundHelper, useWidgetResize, useWidget, useResponsiveLayout } from './hooks';
 import Widget from './widget';
 import { BoardPluginProps } from '../../plugin/types';
+import FullscreenModal from '../fullscreen-modal';
 
 import './style.less';
 
@@ -199,15 +200,17 @@ const Widgets = (props: WidgetProps) => {
                         className={!isEdit ? 'drawing-board__widget-grid-edit' : ''}
                     >
                         <DrawingBoardContext.Provider value={newDrawingBoardContext(data)}>
-                            <Widget
-                                onEdit={handleEdit}
-                                onDelete={handleDelete}
-                                data={data}
-                                isEdit={isEdit}
-                                key={id}
-                                mainRef={mainRef}
-                                dashboardId={dashboardId}
-                            />
+                            <FullscreenModal disabled={!plugin?.fullscreenable || isEdit}>
+                                <Widget
+                                    onEdit={handleEdit}
+                                    onDelete={handleDelete}
+                                    data={data}
+                                    isEdit={isEdit}
+                                    key={id}
+                                    mainRef={mainRef}
+                                    dashboardId={dashboardId}
+                                />
+                            </FullscreenModal>
                         </DrawingBoardContext.Provider>
                     </div>
                 );

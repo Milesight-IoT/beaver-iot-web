@@ -150,3 +150,4 @@ const MultiDeviceSelect: React.FC<MultiDeviceSelectProps> = props => {
 };
 
 export default MultiDeviceSelect;
+export type { MultiDeviceSelectProps } from './interface';
