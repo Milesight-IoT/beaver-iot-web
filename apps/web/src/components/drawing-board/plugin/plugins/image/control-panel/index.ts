@@ -27,7 +27,7 @@ const imageControlPanelConfig = (): ControlPanelConfig<ImageConfigType> => {
                         name: 'input',
                         config: {
                             type: 'Input',
-                            label: 'Label',
+                            label: t('common.label.title'),
                             controllerProps: {
                                 name: 'label',
                                 defaultValue: 'Title',

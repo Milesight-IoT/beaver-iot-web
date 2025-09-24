@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useControllableValue, useMemoizedFn } from 'ahooks';
 import { get } from 'lodash-es';
 
+import { useI18n } from '@milesight/shared/src/hooks';
 import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
 import AppearanceIcon, { type AppearanceIconValue } from '../appearance-icon';
 import { type SelectProps } from '../select';
@@ -24,6 +25,7 @@ const MultiAppearanceIcon: React.FC<MultiAppearanceIconProps> = props => {
     const [value, setValue] = useControllableValue<Record<string, AppearanceIconValue>>(props);
 
     const { getLatestEntityDetail } = useActivityEntity();
+    const { getIntlText } = useI18n();
 
     const latestEntityRawData = useMemo(() => {
         const currentEntity: EntityOptionType | undefined = formData?.entity;
@@ -57,7 +59,7 @@ const MultiAppearanceIcon: React.FC<MultiAppearanceIconProps> = props => {
 
         return (
             <AppearanceIcon
-                label="Appearance"
+                label={getIntlText('common.label.appearance')}
                 value={get(value, id, getLegacyData(id))}
                 onChange={newIcon =>
                     setValue(oldValue => ({
@@ -79,7 +81,9 @@ const MultiAppearanceIcon: React.FC<MultiAppearanceIconProps> = props => {
         return (
             <AppearanceIcon
                 key={enumKey}
-                label={`Appearance of ${enumValue}`}
+                label={getIntlText('common.label.appearance_of_status', {
+                    1: enumValue,
+                })}
                 value={get(value, enumKey, getLegacyData(enumKey))}
                 onChange={newIcon =>
                     setValue(oldValue => ({

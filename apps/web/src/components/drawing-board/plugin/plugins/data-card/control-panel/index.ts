@@ -55,7 +55,7 @@ const dataCardControlPanelConfig = (): ControlPanelConfig<DataCardControlPanelCo
                         name: 'input',
                         config: {
                             type: 'Input',
-                            label: 'Label',
+                            label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Label',

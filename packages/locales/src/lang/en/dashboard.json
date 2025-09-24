@@ -36,5 +36,7 @@
     "dashboard.unset_as_home_dashboard_tip": "Cancel Top",
     "dashboard.label.cover": "封面",
     "dashboard.tip.return_dashboard_list": "返回仪表盘列表",
-    "dashboard.tip.disabled_edit_device_drawing_board": "当前画布为设备画布，请前往设备详情页编辑"
+    "dashboard.tip.disabled_edit_device_drawing_board": "当前画布为设备画布，请前往设备详情页编辑",
+    "dashboard.label.left_y_axis_title": "折线图插件 Left Y axis label",
+    "dashboard.label.right_y_axis_title": "折线图插件 Right Y axis label"
 }

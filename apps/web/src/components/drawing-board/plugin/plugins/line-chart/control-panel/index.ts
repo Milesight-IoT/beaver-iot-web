@@ -1,5 +1,7 @@
 import { isEmpty, isNil } from 'lodash-es';
 
+import { t } from '@milesight/shared/src/utils/tools';
+
 import type { ControlPanelConfig } from '@/components/drawing-board/plugin/types';
 import {
     POSITION_AXIS,
@@ -88,7 +90,7 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
                         name: 'input',
                         config: {
                             type: 'Input',
-                            label: 'Title',
+                            label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Title',
@@ -121,7 +123,7 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
                         name: 'chartTimeSelect',
                         config: {
                             type: 'ChartTimeSelect',
-                            label: 'Time',
+                            label: t('common.label.time'),
                             controllerProps: {
                                 name: 'time',
                                 defaultValue: 86400000,
@@ -137,7 +139,7 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
                         name: 'input',
                         config: {
                             type: 'Input',
-                            label: 'LeftY Label',
+                            label: t('dashboard.label.left_y_axis_title'),
                             controllerProps: {
                                 name: 'leftYAxisUnit',
                                 defaultValue: '',
@@ -164,7 +166,7 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
                         name: 'input',
                         config: {
                             type: 'Input',
-                            label: 'RightY Label',
+                            label: t('dashboard.label.right_y_axis_title'),
                             controllerProps: {
                                 name: 'rightYAxisUnit',
                                 defaultValue: '',

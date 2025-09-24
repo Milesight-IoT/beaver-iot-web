@@ -1,3 +1,5 @@
+import { t } from '@milesight/shared/src/utils/tools';
+
 import type { ControlPanelConfig } from '@/components/drawing-board/plugin/types';
 import BarChartIcon from '../icon.svg';
 
@@ -31,7 +33,7 @@ const barChartControlPanelConfig = (): ControlPanelConfig<BarChartControlPanelCo
                         name: 'multiEntitySelect',
                         config: {
                             type: 'MultiEntitySelect',
-                            label: 'Entity',
+                            label: t('common.label.entity'),
                             controllerProps: {
                                 name: 'entity',
                                 defaultValue: [],
@@ -51,7 +53,7 @@ const barChartControlPanelConfig = (): ControlPanelConfig<BarChartControlPanelCo
                         name: 'input',
                         config: {
                             type: 'Input',
-                            label: 'Title',
+                            label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Title',
@@ -65,7 +67,7 @@ const barChartControlPanelConfig = (): ControlPanelConfig<BarChartControlPanelCo
                         name: 'chartTimeSelect',
                         config: {
                             type: 'ChartTimeSelect',
-                            label: 'Time',
+                            label: t('common.label.time'),
                             controllerProps: {
                                 name: 'time',
                                 defaultValue: 86400000,

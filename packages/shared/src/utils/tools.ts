@@ -766,7 +766,9 @@ export const hexToRgba = (hex: string, alpha: number) => {
 /**
  * Text internationalization translation
  */
-export const t = (key: string) => intl.get(key).d(key);
+export const t = (key: string, options?: Record<number | string, any>) => {
+    return intl.get(key, options).d(key);
+};
 
 interface ImageCompressOptions {
     /** Compress image quality, range 0-1 */

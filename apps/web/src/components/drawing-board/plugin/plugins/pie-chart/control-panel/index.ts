@@ -1,3 +1,5 @@
+import { t } from '@milesight/shared/src/utils/tools';
+
 import type { ControlPanelConfig } from '@/components/drawing-board/plugin/types';
 import PieChartIcon from '../icon.svg';
 
@@ -31,7 +33,7 @@ const pieChartControlPanelConfig = (): ControlPanelConfig<PieChartControlPanelCo
                         name: 'entitySelect',
                         config: {
                             type: 'EntitySelect',
-                            label: 'Entity',
+                            label: t('common.label.entity'),
                             controllerProps: {
                                 name: 'entity',
                                 rules: {
@@ -51,7 +53,7 @@ const pieChartControlPanelConfig = (): ControlPanelConfig<PieChartControlPanelCo
                         name: 'input',
                         config: {
                             type: 'Input',
-                            label: 'Title',
+                            label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Title',
@@ -65,7 +67,7 @@ const pieChartControlPanelConfig = (): ControlPanelConfig<PieChartControlPanelCo
                         name: 'chartTimeSelect',
                         config: {
                             type: 'ChartTimeSelect',
-                            label: 'Time',
+                            label: t('common.label.time'),
                             controllerProps: {
                                 name: 'time',
                                 defaultValue: 86400000,
@@ -81,7 +83,7 @@ const pieChartControlPanelConfig = (): ControlPanelConfig<PieChartControlPanelCo
                         name: 'chartMetricsSelect',
                         config: {
                             type: 'ChartMetricsSelect',
-                            label: 'metrics',
+                            label: t('common.label.metrics'),
                             controllerProps: {
                                 name: 'metrics',
                                 defaultValue: 'COUNT',

@@ -295,5 +295,9 @@
     "common.label.source": "Source",
     "common.message.supported_format": "Supported format: {1}",
     "common.label.online": "Online",
-    "common.label.offline": "Offline"
+    "common.label.offline": "Offline",
+    "common.label.appearance": "Appearance",
+    "common.label.appearance_of_status": "Appearance of {1} status",
+    "common.label.metrics": "指标",
+    "common.label.font_size": "文本插件字体大小表单项标题"
 }
