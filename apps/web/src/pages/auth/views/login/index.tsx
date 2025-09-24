@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
-import { Paper, Button, Box } from '@mui/material';
+import { Paper, Box } from '@mui/material';
 import cls from 'classnames';
 import { useRequest } from 'ahooks';
 import { oauthClientID, oauthClientSecret } from '@milesight/shared/src/config';
 import { useI18n } from '@milesight/shared/src/hooks';
-import { Logo } from '@milesight/shared/src/components';
+import { Logo, LoadingButton } from '@milesight/shared/src/components';
 import { iotLocalStorage, TOKEN_CACHE_KEY } from '@milesight/shared/src/utils/storage';
 import { useUserStore } from '@/stores';
 import { globalAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/services/http';
@@ -20,8 +20,10 @@ export default () => {
     // ---------- form related processing logic ----------
     const { handleSubmit, control } = useForm<FormDataProps>();
     const formItems = useFormItems({ mode: 'login' });
+    const [loginLoading, setLoginLoading] = useState<boolean>();
 
     const onSubmit: SubmitHandler<FormDataProps> = async data => {
+        setLoginLoading(true);
         const { email, password } = data;
         const [error, resp] = await awaitWrap(
             globalAPI.oauthLogin({
@@ -34,7 +36,7 @@ export default () => {
         );
         const respData = getResponseData(resp);
 
-        // console.log({ error, resp });
+        setLoginLoading(false);
         if (error || !respData || !isRequestSuccess(resp)) return;
         // The token is refreshed every 60 minutes
         const result = { ...respData, expires_in: Date.now() + 60 * 60 * 1000 };
@@ -43,7 +45,7 @@ export default () => {
         iotLocalStorage.setItem(TOKEN_CACHE_KEY, result);
     };
 
-    // ---------- Check whether you are logged in to ----------
+    // ---------- Check whether you are logged in ----------
     const setUserInfo = useUserStore(state => state.setUserInfo);
     const [loading, setLoading] = useState<boolean>();
     const token = iotLocalStorage.getItem(TOKEN_CACHE_KEY);
@@ -79,15 +81,16 @@ export default () => {
                         <Controller<FormDataProps> key={props.name} {...props} control={control} />
                     ))}
                 </div>
-                <Button
+                <LoadingButton
                     fullWidth
                     type="submit"
+                    loading={loginLoading}
                     sx={{ textTransform: 'none' }}
                     variant="contained"
                     className="ms-auth-submit"
                 >
                     {getIntlText('common.label.login')}
-                </Button>
+                </LoadingButton>
             </Paper>
         </Box>
     );
