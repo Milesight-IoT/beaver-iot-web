@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useMemoizedFn } from 'ahooks';
 
@@ -20,6 +20,7 @@ import {
     getResponseData,
 } from '@/services/http';
 import { ENTITY_DATA_VALUE_TYPE } from '@/constants';
+import { DrawingBoardContext } from '@/components/drawing-board/context';
 
 export function useCallService(isPreview?: boolean) {
     const [visible, setVisible] = useState(false);
@@ -34,6 +35,7 @@ export function useCallService(isPreview?: boolean) {
     const { formItems, decodeFormParams } = useEntityFormItems({
         entities: formEntities,
     });
+    const context = useContext(DrawingBoardContext);
     const entityRef = useRef<ImportEntityProps>();
 
     // Call service
@@ -82,7 +84,7 @@ export function useCallService(isPreview?: boolean) {
 
     // Handle call service operation click
     const handleServiceClick = async (entity?: ImportEntityProps) => {
-        if (isPreview || !entity) {
+        if (context?.isEdit || isPreview || !entity) {
             return;
         }
 

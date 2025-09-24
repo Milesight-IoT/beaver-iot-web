@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useMemoizedFn } from 'ahooks';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ import {
     getResponseData,
     isRequestSuccess,
 } from '@/services/http';
+import { DrawingBoardContext } from '@/components/drawing-board/context';
 
 /**
  * Get Device drawing board data
@@ -21,6 +22,7 @@ export function useDeviceDrawingBoard(isPreview?: boolean) {
     const { userInfo } = useUserStore();
     const { getIntlText } = useI18n();
     const navigate = useNavigate();
+    const context = useContext(DrawingBoardContext);
 
     const [loading, setLoading] = useState<Record<string, boolean>>({});
 
@@ -69,7 +71,7 @@ export function useDeviceDrawingBoard(isPreview?: boolean) {
     });
 
     const handleDeviceDrawingBoard = useMemoizedFn(async (deviceId?: ApiKey) => {
-        if (!deviceId || isPreview) {
+        if (context?.isEdit || !deviceId || isPreview) {
             return;
         }
 

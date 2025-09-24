@@ -23,13 +23,13 @@ import './style.less';
 
 export interface DeviceListViewProps {
     config: DeviceListControlPanelConfig;
-    pluginProps: BoardPluginProps;
+    configJson: BoardPluginProps;
 }
 
 const DeviceListView: React.FC<DeviceListViewProps> = props => {
-    const { config, pluginProps } = props;
+    const { config, configJson } = props;
     const { devices: unStableDevices } = config || {};
-    const { isPreview } = pluginProps || {};
+    const { isPreview } = configJson || {};
     const context = useContext(DrawingBoardContext);
 
     const [keyword, setKeyword] = useState('');
