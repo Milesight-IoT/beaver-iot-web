@@ -1,6 +1,11 @@
 import { client, attachAPI, API_PREFIX } from './client';
 
 /**
+ * Device status
+ */
+export type DeviceStatus = 'ONLINE' | 'OFFLINE';
+
+/**
  * Device detail definition
  */
 export interface DeviceDetail {
@@ -30,6 +35,7 @@ export interface DeviceDetail {
     // additional_data?: Record<string, any>;
     /** device group name */
     group_name?: string;
+    status?: DeviceStatus;
 }
 
 /**
@@ -50,11 +56,6 @@ export interface AddDeviceProps {
     /** Integrate additional information needed for new devices */
     param_entities: Record<string, any>;
 }
-
-/**
- * Device status
- */
-export type DeviceStatus = 'ONLINE' | 'OFFLINE';
 
 /**
  * Device related interface definition
