@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useContext } from 'react';
 import { renderToString } from 'react-dom/server';
 import cls from 'classnames';
 import * as echarts from 'echarts/core';
@@ -11,6 +11,7 @@ import {
 } from '@/components/drawing-board/plugin/hooks';
 import { getChartColor } from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
+import { PluginFullscreenContext } from '@/components/drawing-board/components';
 import styles from './style.module.less';
 import { useResizeChart, useYAxisRange, useZoomChart } from './hooks';
 import type { BoardPluginProps } from '../../../types';
@@ -31,10 +32,14 @@ const View = (props: ViewProps) => {
     const { config, configJson, isEdit, widgetId, dashboardId } = props;
     const { entity: unStableEntity, title, time } = config || {};
     const { isPreview, pos } = configJson || {};
-    const chartWrapperRef = useRef<HTMLDivElement>(null);
-    const { grey } = useTheme();
 
-    const { wGrid = 3, hGrid = 3 } = useGridLayout(isPreview ? { w: 3, h: 3 } : pos);
+    const chartWrapperRef = useRef<HTMLDivElement>(null);
+
+    const { grey } = useTheme();
+    const pluginFullscreenCxt = useContext(PluginFullscreenContext);
+    const { wGrid = 3, hGrid = 3 } = useGridLayout(
+        pluginFullscreenCxt?.pluginFullScreen || isPreview ? { w: 3, h: 3 } : pos,
+    );
 
     const { stableValue: entity } = useStableValue(unStableEntity);
     const { getLatestEntityDetail } = useActivityEntity();
