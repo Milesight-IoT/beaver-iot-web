@@ -3,14 +3,13 @@ import { type ControllerProps } from 'react-hook-form';
 import {
     TextField,
     FormControl,
-    // FormLabel,
     FormControlLabel,
     InputLabel,
-    // Select,
-    // MenuItem,
     FormHelperText,
     Switch,
     Autocomplete,
+    InputAdornment,
+    Typography,
 } from '@mui/material';
 import { isNil, isEqual } from 'lodash-es';
 import { BASE64_IMAGE_REGEX } from '@milesight/shared/src/config';
@@ -249,6 +248,11 @@ const useEntityFormItems = ({ entities, isAllReadOnly, imageUploadProps }: Props
 
             const shortEntityKey = `${entityKey}`.split('.').pop();
             const validate = getValidators(entity, !attr.optional);
+            const endAdornment = !attr.unit ? null : (
+                <InputAdornment position="end">
+                    <Typography sx={{ fontSize: 14 }}>{attr.unit}</Typography>
+                </InputAdornment>
+            );
             const formItem: ControllerProps<EntityFormDataProps> = {
                 name: encodedEntityKeys[entityKey],
                 rules: { validate },
@@ -262,6 +266,7 @@ const useEntityFormItems = ({ entities, isAllReadOnly, imageUploadProps }: Props
                             slotProps={{
                                 input: {
                                     readOnly: !!isAllReadOnly,
+                                    endAdornment,
                                 },
                             }}
                             required={!attr.optional}
