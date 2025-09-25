@@ -12,7 +12,7 @@ import {
     LoadingButton,
 } from '@milesight/shared/src/components';
 
-import { PermissionControlHidden, TooltipWrapper } from '@/components';
+import { PermissionControlHidden, Tooltip } from '@/components';
 import { PERMISSIONS } from '@/constants';
 import {
     type DeviceAPISchema,
@@ -85,7 +85,11 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
                 <FullscreenIcon />
             </IconButton>
             <PermissionControlHidden permissions={PERMISSIONS.DASHBOARD_EDIT}>
-                <TooltipWrapper placement="left" title={disabledEdit ? disabledEditTip : null}>
+                <Tooltip
+                    isDisabledButton={disabled || disabledEdit}
+                    placement="left"
+                    title={disabledEdit ? disabledEditTip : null}
+                >
                     <Button
                         disabled={disabled || disabledEdit}
                         variant="contained"
@@ -94,7 +98,7 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
                     >
                         {getIntlText('common.button.edit')}
                     </Button>
-                </TooltipWrapper>
+                </Tooltip>
             </PermissionControlHidden>
         </Stack>
     );

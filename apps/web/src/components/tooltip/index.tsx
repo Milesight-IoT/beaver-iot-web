@@ -10,6 +10,14 @@ export interface MSToolTipProps extends Omit<TooltipProps, 'children'> {
 
     /** Reference element */
     children?: React.ReactElement;
+
+    /**
+     * MUI: You are providing a disabled `button` child to the Tooltip component.
+     * A disabled element does not fire events.
+     * Tooltip needs to listen to the child element's events to display the title.
+     * Add a simple wrapper element, such as a `span`.
+     */
+    isDisabledButton?: boolean;
 }
 
 /**
@@ -22,6 +30,7 @@ const Tooltip: React.FC<MSToolTipProps> = ({
     className,
     title,
     children,
+    isDisabledButton,
     ...props
 }) => {
     const wrapRef = useRef<HTMLDivElement>(null);
@@ -65,7 +74,7 @@ const Tooltip: React.FC<MSToolTipProps> = ({
         </Box>
     );
 
-    return (
+    return title ? (
         <div className={cls('ms-tooltip', className)} ref={wrapRef}>
             <MTooltip
                 placement="top"
@@ -75,7 +84,7 @@ const Tooltip: React.FC<MSToolTipProps> = ({
                 enterNextDelay={300}
                 {...props}
             >
-                {children}
+                {isDisabledButton ? <Box>{children}</Box> : children}
             </MTooltip>
             {autoEllipsis && !contWidth && (
                 <div className="ms-tooltip-virtual-cont" ref={contRef}>
@@ -83,6 +92,8 @@ const Tooltip: React.FC<MSToolTipProps> = ({
                 </div>
             )}
         </div>
+    ) : (
+        children
     );
 };
 

@@ -86,21 +86,20 @@ const TagManagement: React.FC = () => {
             <Stack className="ms-operations-btns" direction="row" spacing="12px">
                 <PermissionControlHidden permissions={PERMISSIONS.TAG_MODULE_MANAGE}>
                     <Tooltip
+                        isDisabledButton={isAddedExceed}
                         title={
                             isAddedExceed ? getIntlText('common.tip.maximum_number_reached') : null
                         }
                     >
-                        <div className="tag-add__wrapper">
-                            <Button
-                                disabled={isAddedExceed}
-                                variant="contained"
-                                sx={{ height: 36, textTransform: 'none' }}
-                                startIcon={<AddIcon />}
-                                onClick={openAddTag}
-                            >
-                                {getIntlText('common.label.add')}
-                            </Button>
-                        </div>
+                        <Button
+                            disabled={isAddedExceed}
+                            variant="contained"
+                            sx={{ height: 36, textTransform: 'none' }}
+                            startIcon={<AddIcon />}
+                            onClick={openAddTag}
+                        >
+                            {getIntlText('common.label.add')}
+                        </Button>
                     </Tooltip>
                 </PermissionControlHidden>
                 <PermissionControlHidden permissions={PERMISSIONS.TAG_MODULE_MANAGE}>

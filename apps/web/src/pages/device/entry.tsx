@@ -17,6 +17,7 @@ import {
     TablePro,
     useConfirm,
     PermissionControlHidden,
+    Tooltip,
     type FiltersRecordType,
     type TableProProps,
     type FilterValue,
@@ -266,7 +267,9 @@ export default () => {
                     />
 
                     <div className="device-right">
-                        <div className="device-right__title">{activeGroupName}</div>
+                        <div className="device-right__title">
+                            <Tooltip autoEllipsis title={activeGroupName} />
+                        </div>
                         <TablePro<TableRowDataType>
                             keepNonExistentRowsSelected
                             filterCondition={[keyword]}

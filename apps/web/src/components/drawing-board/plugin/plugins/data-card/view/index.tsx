@@ -112,13 +112,7 @@ const View = (props: Props) => {
                                 'text-lg': twoByTwo,
                             })}
                         >
-                            {(twoByOne || oneByOne) && (
-                                <Tooltip
-                                    className="data-view-card__title"
-                                    autoEllipsis
-                                    title={title}
-                                />
-                            )}
+                            {(twoByOne || oneByOne) && <Tooltip autoEllipsis title={title} />}
                             <Tooltip autoEllipsis title={currentEntityData?.label || '-'} />
                         </div>
                     </div>
