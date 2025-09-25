@@ -55,7 +55,7 @@ const Blueprint = () => {
         const sourceType = bpSetting?.current_source_type;
         const intlMap: Record<BlueprintSourceType, string> = {
             Default: getIntlText('setting.blueprint.title_official_store'),
-            Upload: getIntlText('setting.blueprint.title_local_upload'),
+            Upload: getIntlText('common.label.local_upload'),
         };
         const result: DescriptionsProps['data'] = [
             {

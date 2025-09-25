@@ -1,5 +1,19 @@
 # @app/web
 
+## 1.2.5
+
+### Patch Changes
+
+-   873b230: Add CamThink-AI-Inference integration
+-   873b230: Add MQTT-Device-Integrated integration
+
+## 1.2.4
+
+### Patch Changes
+
+-   fix entity enum value error
+-   fix typo error in global interfaces
+
 ## 1.2.3
 
 ### Minor Changes

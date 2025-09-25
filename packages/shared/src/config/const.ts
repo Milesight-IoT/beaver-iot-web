@@ -17,7 +17,7 @@ export const PRIVATE_PROPERTY_PREFIX = '$';
  * Base64 image regex
  */
 export const BASE64_IMAGE_REGEX =
-    /^data:image\/([\w/+]+);base64,([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
+    /^data:image\/([\w+-]+);base64,([a-z0-9!$&',()*+;=\-._~:@/?%\s]*?)$/i;
 
 /**
  * Help center address

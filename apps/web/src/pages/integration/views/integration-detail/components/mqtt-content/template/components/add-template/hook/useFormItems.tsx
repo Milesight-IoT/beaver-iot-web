@@ -34,9 +34,9 @@ const useFormItems = ({ prefixTopic }: { prefixTopic: string }) => {
 
     const yamlGuideLink = useMemo(() => {
         if (lang === 'CN') {
-            return 'https://www.milesight.com/beaver-iot/zh-Hans/docs/dev-guides/backend/advanced/entity-definition/#%E5%9F%BA%E4%BA%8Eyaml%E6%9E%84%E5%BB%BA';
+            return 'https://www.milesight.com/beaver-iot/zh-Hans/docs/user-guides/published-integrations/mqtt-devices-integrated';
         }
-        return 'https://www.milesight.com/beaver-iot/docs/dev-guides/backend/advanced/entity-definition/#yaml-based-construction';
+        return 'https://www.milesight.com/beaver-iot/docs/user-guides/published-integrations/mqtt-devices-integrated';
     }, [lang]);
 
     const handleClickLink = () => {
