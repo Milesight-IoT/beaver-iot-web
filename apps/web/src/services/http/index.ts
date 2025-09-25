@@ -6,6 +6,7 @@ export {
     type DeviceAPISchema,
     type DeviceGroupItemProps,
     type AddDeviceProps,
+    type ImportEntityProps,
     type DeviceStatus,
 } from './device';
 

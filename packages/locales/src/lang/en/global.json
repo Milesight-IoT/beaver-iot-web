@@ -282,10 +282,22 @@
     "common.label.album": "Album",
     "common.message.scan_success": "Scan success",
     "common.message.scan_failed": "Scan failed, please check and retry",
+    "common.label.turn_on_flash": "Turn on flash",
+    "common.label.turn_off_flash": "Turn off flash",
+    "common.tip.selected_and_max_count": "已选 {1}, 最多选择 {2}",
+    "common.tip.cannot_selected": "不可操作，将超过最多可选",
+    "common.label.all_groups": "全部分组",
+    "common.label.select_page_all": "全选本页",
+    "common.button.refresh": "Refresh",
+    "common.label.sort_by_chosen_time": "按选定时间排序",
     "common.label.help_center": "Help Center",
     "common.label.file_name": "File Name",
     "common.label.source": "Source",
     "common.message.supported_format": "Supported format: {1}",
     "common.label.online": "Online",
-    "common.label.offline": "Offline"
+    "common.label.offline": "Offline",
+    "common.label.appearance": "Appearance",
+    "common.label.appearance_of_status": "Appearance of {1} status",
+    "common.label.metrics": "指标",
+    "common.label.font_size": "文本插件字体大小表单项标题"
 }

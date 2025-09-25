@@ -11,23 +11,42 @@ import {
     toast,
 } from '@milesight/shared/src/components';
 
-import PermissionControlHidden from '@/components/permission-control-hidden';
+import { PermissionControlHidden, TooltipWrapper } from '@/components';
 import { PERMISSIONS } from '@/constants';
-import { type WidgetDetail, dashboardAPI, awaitWrap, isRequestSuccess } from '@/services/http';
+import {
+    type DeviceAPISchema,
+    type WidgetDetail,
+    dashboardAPI,
+    awaitWrap,
+    isRequestSuccess,
+} from '@/services/http';
 import PluginListPopover from '../components/plugin-list-popover';
 import { useActivityEntity } from '../plugin/hooks';
 import { type DrawingBoardExpose } from '../interface';
 import { filterWidgets } from '../utils';
 
 export interface UseDrawingBoardProps {
+    disabledEditTip?: string;
+    disabledEdit?: boolean;
+    deviceDetail?: ObjectToCamelCase<DeviceAPISchema['getDetail']['response']>;
     onSave?: (widgets?: WidgetDetail[]) => void;
 }
+
+export type DrawingBoardPropsType = {
+    ref: React.RefObject<DrawingBoardExpose>;
+    operatingPlugin: WidgetDetail | undefined;
+    isEdit: boolean;
+    isFullscreen: boolean;
+    changeIsEdit: (isEditing: boolean) => void;
+    updateOperatingPlugin: (plugin?: WidgetDetail) => void;
+    drawingBoardRef: React.RefObject<HTMLDivElement>;
+};
 
 /**
  * Drawing board operation
  */
 export default function useDrawingBoard(props?: UseDrawingBoardProps) {
-    const { onSave } = props || {};
+    const { disabledEdit, disabledEditTip, deviceDetail, onSave } = props || {};
 
     const { getIntlText } = useI18n();
 
@@ -62,13 +81,16 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
                 <FullscreenIcon />
             </IconButton>
             <PermissionControlHidden permissions={PERMISSIONS.DASHBOARD_EDIT}>
-                <Button
-                    variant="contained"
-                    startIcon={<EditIcon />}
-                    onClick={() => setIsEdit(true)}
-                >
-                    {getIntlText('common.button.edit')}
-                </Button>
+                <TooltipWrapper placement="left" title={disabledEdit ? disabledEditTip : null}>
+                    <Button
+                        disabled={disabledEdit}
+                        variant="contained"
+                        startIcon={<EditIcon />}
+                        onClick={() => setIsEdit(true)}
+                    >
+                        {getIntlText('common.button.edit')}
+                    </Button>
+                </TooltipWrapper>
             </PermissionControlHidden>
         </Stack>
     );
@@ -107,7 +129,7 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
 
     const renderEditMode = (
         <Stack className="xl:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
-            <PluginListPopover onSelect={updateOperatingPlugin} />
+            <PluginListPopover deviceDetail={deviceDetail} onSelect={updateOperatingPlugin} />
             <Divider orientation="vertical" variant="middle" flexItem />
             <Button variant="outlined" onClick={handleCancel} startIcon={<CloseIcon />}>
                 {getIntlText('common.button.cancel')}

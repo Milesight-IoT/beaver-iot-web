@@ -1,0 +1,37 @@
+.mobile-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: @padding-md;
+
+        .title {
+            font-weight: @font-weight-medium;
+            .text-size(@font-size-lg);
+        }
+
+        .icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+    }
+
+    .body {
+        padding: 0 @padding-md;
+        overflow: hidden auto;
+    }
+
+    .tip {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: @padding-xs 0 @padding-md;
+        color: var(--text-color-tertiary);
+    }
+}

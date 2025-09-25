@@ -162,6 +162,8 @@ export {
     GridView as GridViewIcon,
     QrCodeScanner as QrCodeScannerIcon,
     FlashlightOn as FlashlightOnIcon,
+    FlashlightOff as FlashlightOffIcon,
+    Dns as DnsIcon,
     SpaceDashboard as SpaceDashboardIcon,
 } from '@mui/icons-material';
 

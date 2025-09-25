@@ -69,7 +69,9 @@ const SortDropdown: React.FC<SortDropdownProps> = props => {
                 <SortIcon />
             </IconButton>
             <Menu id="dropdown-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
-                <div className="ms-table-transfer__sort">Sorting By Chosen Time</div>
+                <div className="ms-table-transfer__sort">
+                    {getIntlText('common.label.sort_by_chosen_time')}
+                </div>
                 {options.map(option => (
                     <MenuItem key={option.value} onClick={() => handleMenuItemClick(option.value)}>
                         {option.icon}

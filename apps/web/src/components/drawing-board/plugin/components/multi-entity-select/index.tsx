@@ -21,6 +21,9 @@ export default React.memo((props: IProps) => {
     >(option => option?.value, []);
     return (
         <EntitySelect
+            sx={{
+                marginBottom: 2,
+            }}
             fieldName="entityId"
             multiple
             maxCount={maxCount}

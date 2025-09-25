@@ -8,22 +8,24 @@ import { AddIcon } from '@milesight/shared/src/components';
 import { WidgetDetail } from '@/services/http/dashboard';
 import { Tooltip } from '@/components';
 import pluginImg from '@/assets/plugin.png';
+import { type DeviceAPISchema } from '@/services/http';
 import { COMPONENT_CLASS } from '../../plugin/constant';
 import useLoadPlugins from '../../hooks/useLoadPlugins';
-import useDrawingBoardStore from '../../store';
+import useFilterPlugins from '../../hooks/useFilterPlugins';
 
 import type { BoardPluginProps } from '../../plugin/types';
 import './style.less';
 
 interface PluginListProps {
+    deviceDetail?: ObjectToCamelCase<DeviceAPISchema['getDetail']['response']>;
     onSelect: (plugin: WidgetDetail) => void;
 }
 
 export default (props: PluginListProps) => {
-    const { onSelect } = props;
+    const { deviceDetail, onSelect } = props;
 
     useLoadPlugins();
-    const { pluginsControlPanel } = useDrawingBoardStore();
+    const { pluginsControlPanel } = useFilterPlugins(deviceDetail);
     const { getIntlText } = useI18n();
 
     const [pluginList, setPluginList] = useState<Record<string, any>>();

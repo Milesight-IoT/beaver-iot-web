@@ -1,3 +1,5 @@
+import { t } from '@milesight/shared/src/utils/tools';
+
 import type {
     ControlPanelConfig,
     BaseControlConfig,
@@ -35,7 +37,7 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                         name: 'entitySelect',
                         config: {
                             type: 'EntitySelect',
-                            label: 'Entity',
+                            label: t('common.label.entity'),
                             controllerProps: {
                                 name: 'entity',
                                 rules: {
@@ -55,7 +57,7 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                         name: 'input',
                         config: {
                             type: 'Input',
-                            label: 'Title',
+                            label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Label',
@@ -69,7 +71,9 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                         name: 'appearanceOfOffStatus',
                         config: {
                             type: 'AppearanceIcon',
-                            label: 'Appearance of off status',
+                            label: t('common.label.appearance_of_status', {
+                                1: 'off',
+                            }),
                             controllerProps: {
                                 name: 'offAppearanceIcon',
                             },
@@ -97,7 +101,9 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                         name: 'appearanceOfOnStatus',
                         config: {
                             type: 'AppearanceIcon',
-                            label: 'Appearance of on status',
+                            label: t('common.label.appearance_of_status', {
+                                1: 'on',
+                            }),
                             controllerProps: {
                                 name: 'onAppearanceIcon',
                             },

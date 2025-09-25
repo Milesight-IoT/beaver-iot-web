@@ -1,4 +1,4 @@
-import { type DrawingBoardDetail, type WidgetDetail, type DeviceDetail } from '@/services/http';
+import { type DrawingBoardDetail, type WidgetDetail, type DeviceAPISchema } from '@/services/http';
 
 export interface DrawingBoardExpose {
     /**
@@ -13,7 +13,7 @@ export interface DrawingBoardExpose {
 
 export interface DrawingBoardProps {
     /** Current device detail */
-    deviceDetail?: DeviceDetail;
+    deviceDetail?: ObjectToCamelCase<DeviceAPISchema['getDetail']['response']>;
     drawingBoardDetail: DrawingBoardDetail;
     isEdit: boolean;
     /**
@@ -25,6 +25,7 @@ export interface DrawingBoardProps {
     isFullscreen: boolean;
     /** Drawing board html div node */
     drawingBoardRef: React.RefObject<HTMLDivElement>;
+    disabledEdit?: boolean;
     updateOperatingPlugin: (plugin?: WidgetDetail) => void;
     /** Change drawing board edit mode */
     changeIsEdit: (isEditing: boolean) => void;

@@ -209,6 +209,21 @@ export interface EntityAPISchema extends APISchema {
         };
         response: Blob;
     };
+
+    /** Batch get entities status data */
+    getEntitiesStatus: {
+        request: {
+            entity_ids: ApiKey[];
+        };
+        response: Record<
+            ApiKey,
+            {
+                value: any;
+                timestamp: string;
+                value_type: EntityValueDataType;
+            }
+        >;
+    };
 }
 
 /**
@@ -229,6 +244,7 @@ export default attachAPI<EntityAPISchema>(client, {
         deleteEntities: `POST ${API_PREFIX}/entity/delete`,
         editEntity: `PUT ${API_PREFIX}/entity/:id`,
         createCustomEntity: `POST ${API_PREFIX}/entity`,
+        getEntitiesStatus: `POST ${API_PREFIX}/entity/batch-get-status`,
         // exportEntityHistory: `GET ${API_PREFIX}/entity/export`,
         async exportEntityHistory({ ids, startTime, endTime, timezone }) {
             const resp = await client.get(`${API_PREFIX}/entity/export`, {

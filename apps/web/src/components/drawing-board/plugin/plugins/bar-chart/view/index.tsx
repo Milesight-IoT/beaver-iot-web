@@ -32,7 +32,7 @@ const View = (props: ViewProps) => {
     const { entity: unStableEntity, title, time } = config || {};
     const { isPreview, pos } = configJson || {};
 
-    const { wGrid = 4, hGrid = 4 } = useGridLayout(pos);
+    const { wGrid = 3, hGrid = 3 } = useGridLayout(isPreview ? { w: 3, h: 3 } : pos);
 
     const { stableValue: entity } = useStableValue(unStableEntity);
     const { getLatestEntityDetail } = useActivityEntity();

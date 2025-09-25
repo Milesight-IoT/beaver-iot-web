@@ -32,7 +32,7 @@ const textControlPanelConfig = (): ControlPanelConfig<TextControlPanelConfig> =>
                         name: 'entitySelect',
                         config: {
                             type: 'EntitySelect',
-                            label: 'Entity',
+                            label: t('common.label.entity'),
                             controllerProps: {
                                 name: 'entity',
                                 rules: {
@@ -51,7 +51,7 @@ const textControlPanelConfig = (): ControlPanelConfig<TextControlPanelConfig> =>
                         name: 'input',
                         config: {
                             type: 'Input',
-                            label: 'Label',
+                            label: t('common.label.title'),
                             controllerProps: {
                                 name: 'label',
                                 defaultValue: 'Text',
@@ -65,7 +65,7 @@ const textControlPanelConfig = (): ControlPanelConfig<TextControlPanelConfig> =>
                         name: 'fontSizeInput',
                         config: {
                             type: 'Input',
-                            label: 'Font Size',
+                            label: t('common.label.font_size'),
                             controllerProps: {
                                 name: 'fontSize',
                                 defaultValue: '14',

@@ -1,5 +1,17 @@
 import { client, attachAPI, API_PREFIX } from './client';
 
+export interface ImportEntityProps {
+    id: ApiKey;
+    key: string;
+    name: string;
+    type: EntityType;
+    value_attribute: Record<string, any>;
+    value_type: EntityValueDataType;
+    access_mod: EntityAccessMode;
+    description?: string;
+    parent?: string;
+}
+
 /**
  * Device status
  */
@@ -35,6 +47,12 @@ export interface DeviceDetail {
     // additional_data?: Record<string, any>;
     /** device group name */
     group_name?: string;
+    /** device group id */
+    group_id?: ApiKey;
+    /** Import entities object */
+    important_entities?: ImportEntityProps[];
+    /** Common entities object */
+    common_entities?: ImportEntityProps[];
     status?: DeviceStatus;
 }
 
@@ -44,6 +62,7 @@ export interface DeviceDetail {
 export interface DeviceGroupItemProps {
     id: ApiKey;
     name: string;
+    device_count?: number;
 }
 
 export interface AddDeviceProps {
@@ -74,6 +93,8 @@ export interface DeviceAPISchema extends APISchema {
             filter_not_grouped?: boolean;
             /** External id of the device */
             identifier?: string;
+            /** Device id List */
+            id_list?: ApiKey[];
         };
         response: SearchResponseType<DeviceDetail[]>;
     };
@@ -131,6 +152,8 @@ export interface DeviceAPISchema extends APISchema {
         request: SearchRequestType & {
             /** Name (Fuzzy search) */
             name?: string;
+            /** is the count of devices required ? */
+            with_device_count?: boolean;
         };
         response: SearchResponseType<DeviceGroupItemProps[]>;
     };

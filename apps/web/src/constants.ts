@@ -124,3 +124,8 @@ export const entityTypeOptions = [
         value: 'STRING',
     },
 ];
+
+/**
+ * Device status entity unique identifier
+ */
+export const DEVICE_STATUS_ENTITY_UNIQUE_ID = '@status';

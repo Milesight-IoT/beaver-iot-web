@@ -5,7 +5,7 @@ import { type Layout } from 'react-grid-layout';
  * Return grid layout information based on grid data
  * eg: w*h
  */
-export function useGridLayout(position?: Layout) {
+export function useGridLayout(position?: Partial<Layout>) {
     /** Width grid */
     const wGrid = useMemo(() => {
         return position?.w;

@@ -1,3 +1,5 @@
+import { t } from '@milesight/shared/src/utils/tools';
+
 import type {
     ControlPanelConfig,
     BaseControlConfig,
@@ -34,7 +36,7 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
                         name: 'entitySelect',
                         config: {
                             type: 'EntitySelect',
-                            label: 'Entity',
+                            label: t('common.label.entity'),
                             controllerProps: {
                                 name: 'entity',
                                 rules: {
@@ -53,7 +55,7 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
                         name: 'input',
                         config: {
                             type: 'Input',
-                            label: 'Title',
+                            label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
                                 defaultValue: 'Title',
@@ -67,7 +69,7 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
                         name: 'chartTimeSelect',
                         config: {
                             type: 'ChartTimeSelect',
-                            label: 'Time',
+                            label: t('common.label.time'),
                             controllerProps: {
                                 name: 'time',
                                 defaultValue: 86400000,
@@ -83,7 +85,7 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
                         name: 'chartMetricsSelect',
                         config: {
                             type: 'ChartMetricsSelect',
-                            label: 'metrics',
+                            label: t('common.label.metrics'),
                             controllerProps: {
                                 name: 'metrics',
                                 defaultValue: 'LAST',
@@ -100,7 +102,7 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
                         name: 'appearanceIcon',
                         config: {
                             type: 'AppearanceIcon',
-                            label: 'Appearance',
+                            label: t('common.label.appearance'),
                             controllerProps: {
                                 name: 'appearanceIcon',
                             },

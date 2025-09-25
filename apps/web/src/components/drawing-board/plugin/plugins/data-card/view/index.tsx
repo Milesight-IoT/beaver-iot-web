@@ -21,12 +21,14 @@ interface Props {
 const View = (props: Props) => {
     const { config, configJson, widgetId, dashboardId } = props;
     const { title, entity } = config || {};
-    const { isPreview } = configJson || {};
+    const { isPreview, pos } = configJson || {};
 
     const { getTimeFormat } = useTime();
     const { getCSSVariableValue } = useTheme();
     const { getLatestEntityDetail } = useActivityEntity();
-    const { twoByTwo, oneByTwo, twoByOne, oneByOne } = useGridLayout(configJson?.pos);
+    const { twoByTwo, oneByTwo, twoByOne, oneByOne } = useGridLayout(
+        isPreview ? { w: 2, h: 1 } : pos,
+    );
 
     const latestEntity = useMemo(() => {
         if (!entity) return {};

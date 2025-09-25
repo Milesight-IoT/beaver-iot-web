@@ -1,8 +1,7 @@
 import { Grid2 as Grid } from '@mui/material';
 import { WidgetDetail } from '@/services/http/dashboard';
 import pluginImg from '@/assets/plugin.png';
-import useDrawingBoardStore from '../../store';
-
+import { useFilterPlugins } from '../../hooks';
 import type { BoardPluginProps } from '../../plugin/types';
 
 import './style.less';
@@ -18,7 +17,7 @@ interface PluginListProps {
 export default (props: PluginListProps) => {
     const { onSelect, changeIsEditMode } = props;
 
-    const { pluginsControlPanel } = useDrawingBoardStore();
+    const { pluginsControlPanel } = useFilterPlugins();
 
     const handleClick = (newPlugin: BoardPluginProps) => {
         onSelect({

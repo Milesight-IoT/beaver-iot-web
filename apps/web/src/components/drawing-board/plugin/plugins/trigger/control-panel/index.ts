@@ -1,3 +1,5 @@
+import { t } from '@milesight/shared/src/utils/tools';
+
 import type {
     ControlPanelConfig,
     BaseControlConfig,
@@ -34,7 +36,7 @@ const triggerControlPanelConfig = (): ControlPanelConfig<TriggerControlPanelConf
                         name: 'entitySelect',
                         config: {
                             type: 'EntitySelect',
-                            label: 'Entity',
+                            label: t('common.label.entity'),
                             controllerProps: {
                                 name: 'entity',
                                 rules: {
@@ -53,7 +55,7 @@ const triggerControlPanelConfig = (): ControlPanelConfig<TriggerControlPanelConf
                         name: 'input',
                         config: {
                             type: 'Input',
-                            label: 'Label',
+                            label: t('common.label.title'),
                             controllerProps: {
                                 name: 'label',
                                 defaultValue: 'Label',
@@ -67,7 +69,7 @@ const triggerControlPanelConfig = (): ControlPanelConfig<TriggerControlPanelConf
                         name: 'appearanceOfStatus',
                         config: {
                             type: 'AppearanceIcon',
-                            label: 'Appearance of status',
+                            label: t('common.label.appearance'),
                             controllerProps: {
                                 name: 'appearanceIcon',
                             },

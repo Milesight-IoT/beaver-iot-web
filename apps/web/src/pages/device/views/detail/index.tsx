@@ -13,13 +13,13 @@ import {
     getResponseData,
     isRequestSuccess,
     type DeviceAPISchema,
-    type DrawingBoardDetail,
 } from '@/services/http';
 import { Breadcrumbs, TabPanel } from '@/components';
 
-import { DrawingBoard, DrawingBoardMock, useDrawingBoard } from '@/components/drawing-board';
+import { useDrawingBoard } from '@/components/drawing-board';
 
-import { BasicTable, EntityData } from './components';
+import { BasicTable, EntityData, DeviceDrawingBoard } from './components';
+import useDeviceDrawingBoard from './components/drawing-board/useDeviceDrawingBoard';
 import './style.less';
 
 type DeviceDetailType = ObjectToCamelCase<DeviceAPISchema['getDetail']['response']>;
@@ -29,11 +29,21 @@ export default () => {
     const { deviceId } = useParams();
     const { getIntlText } = useI18n();
     const { handlePermissionsError } = usePermissionsError();
-    const { drawingBoardProps, renderDrawingBoardOperation } = useDrawingBoard();
 
     // ---------- Device details related logic ----------
     const [loading, setLoading] = useState<boolean>();
     const [deviceDetail, setDeviceDetail] = useState<DeviceDetailType>();
+
+    const {
+        loading: loadingDrawingBoard,
+        drawingBoardDetail,
+        getNewestDrawingBoardDetail,
+    } = useDeviceDrawingBoard(deviceDetail);
+    const { drawingBoardProps, renderDrawingBoardOperation } = useDrawingBoard({
+        deviceDetail,
+        onSave: getNewestDrawingBoardDetail,
+    });
+
     const {
         // loading,
         // data: deviceDetail,
@@ -95,14 +105,24 @@ export default () => {
                 key: 'drawingBoard',
                 label: 'Drawing Board',
                 component: (
-                    <DrawingBoard
-                        {...drawingBoardProps}
-                        drawingBoardDetail={DrawingBoardMock as unknown as DrawingBoardDetail}
+                    <DeviceDrawingBoard
+                        isLoading={loadingDrawingBoard}
+                        deviceDetail={deviceDetail}
+                        drawingBoardProps={drawingBoardProps}
+                        drawingBoardDetail={drawingBoardDetail}
                     />
                 ),
             },
         ];
-    }, [deviceDetail, loading, getIntlText, getDeviceDetail, drawingBoardProps]);
+    }, [
+        deviceDetail,
+        loading,
+        getIntlText,
+        getDeviceDetail,
+        drawingBoardProps,
+        loadingDrawingBoard,
+        drawingBoardDetail,
+    ]);
     const [tabKey, setTabKey] = useRouteTab(tabs[0].key);
 
     return (

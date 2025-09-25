@@ -19,6 +19,7 @@ import {
     AppearanceIcon,
     MultiAppearanceIcon,
     ChartMetricsSelect,
+    MultiDeviceSelect,
 } from '../../components';
 
 export interface ControlComponentProps {
@@ -136,6 +137,8 @@ const ControlComponent: React.FC<ControlComponentProps> = (props: ControlCompone
                     {...config?.componentProps}
                 />
             );
+        case 'MultiDeviceSelect':
+            return <MultiDeviceSelect {...commonProps} {...config?.componentProps} />;
         default:
             return null;
     }

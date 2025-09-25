@@ -1,0 +1,26 @@
+.device-list-view {
+    width: 100%;
+    height: 100%;
+    background-color: var(--main-background);
+
+    &__table {
+        width: 100%;
+        height: 100%;
+        padding: @padding-md;
+
+        &.fullscreenable {
+            .ms-table-pro .ms-table-pro__header {
+                padding-right: 38px;
+            }
+        }
+    }
+
+    &__title {
+        font-weight: @font-weight-medium;
+        .text-size(@font-size-3);
+    }
+
+    .ms-table-pro .ms-table-pro__footer {
+        display: none;
+    }
+}
