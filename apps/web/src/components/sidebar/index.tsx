@@ -84,7 +84,11 @@ const Sidebar: React.FC<Props> = memo(({ menus, logoLinkTo = '/' }) => {
                 setOpen(false);
             }}
         >
-            <Logo className="ms-sidebar-logo" to={logoLinkTo} mini={shrink} />
+            <Logo
+                className="ms-sidebar-logo"
+                to={matchTablet ? undefined : logoLinkTo}
+                mini={shrink}
+            />
             <MenuList className="ms-sidebar-menus">
                 {menus?.map(menu => (
                     <MenuItem
