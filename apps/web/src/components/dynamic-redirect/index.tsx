@@ -1,20 +1,25 @@
 import { useMemo } from 'react';
 import { Navigate } from 'react-router-dom';
+import { useTheme } from '@milesight/shared/src/hooks';
 
-import routes from '@/routes/routes';
+import routes, { filterMobileRoutes } from '@/routes/routes';
 import { useUserPermissions } from '@/hooks';
 
 /**
  * the initial default redirect path
  */
 const DynamicRedirect: React.FC = () => {
+    const { matchTablet } = useTheme();
     const { hasPermission } = useUserPermissions();
+    const finalRoutes = useMemo(() => {
+        return matchTablet ? filterMobileRoutes(routes) : routes;
+    }, [matchTablet]);
 
     /**
      * find the first route that has permission and returns
      */
     const navigatePath = useMemo(() => {
-        const permissionRoute = routes?.find(
+        const permissionRoute = finalRoutes?.find(
             r =>
                 r.path &&
                 r.handle?.layout !== 'blank' &&
@@ -23,7 +28,7 @@ const DynamicRedirect: React.FC = () => {
         );
 
         return permissionRoute?.path || '/403';
-    }, [hasPermission]);
+    }, [finalRoutes, hasPermission]);
 
     return <Navigate to={navigatePath} />;
 };
