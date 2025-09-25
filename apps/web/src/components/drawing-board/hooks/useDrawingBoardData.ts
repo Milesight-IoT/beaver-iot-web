@@ -50,6 +50,10 @@ export default function useDrawingBoardData(props: DrawingBoardProps) {
     useEffect(() => {
         if (isTooSmallScreen) {
             changeIsEdit?.(false);
+
+            /** Restore to the unedited data */
+            const newWidgets = cloneDeep(widgetsRef.current);
+            setWidgets(newWidgets);
         }
     }, [isTooSmallScreen, changeIsEdit]);
 
