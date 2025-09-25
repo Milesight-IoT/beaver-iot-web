@@ -24,7 +24,7 @@ import {
 import PluginListPopover from '../components/plugin-list-popover';
 import { useActivityEntity } from '../plugin/hooks';
 import { type DrawingBoardExpose } from '../interface';
-import { filterWidgets } from '../utils';
+import { filterWidgets, getDeviceIdsInuse } from '../utils';
 
 export interface UseDrawingBoardProps {
     disabled?: boolean;
@@ -124,6 +124,7 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
                     canvas_id: id,
                     widgets: filterWidgets(widgets),
                     entity_ids: currentEntityIds,
+                    device_ids: getDeviceIdsInuse(widgets),
                     name,
                 }),
             );

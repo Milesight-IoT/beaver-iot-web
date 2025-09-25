@@ -150,6 +150,8 @@ export interface DashboardAPISchema extends APISchema {
             widgets?: WidgetDetail[];
             /** The entities ids that is used in dashboard */
             entity_ids?: ApiKey[];
+            /** The device ids that is used in dashboard */
+            device_ids?: ApiKey[];
         };
         response: unknown;
     };
