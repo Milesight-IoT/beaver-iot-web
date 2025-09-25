@@ -3,12 +3,13 @@ import { useMemoizedFn } from 'ahooks';
 
 import { useTheme, useMediaQuery } from '@milesight/shared/src/hooks';
 
+import { type WidgetDetail } from '@/services/http/dashboard';
 import { type BoardPluginProps } from '@/components/drawing-board/plugin/types';
 
 /**
  * Responsive layout based on screen size
  */
-export function useResponsiveLayout() {
+export function useResponsiveLayout(weights: WidgetDetail[]) {
     const { breakpoints } = useTheme();
     const smallScreenSize = useMediaQuery(breakpoints.down('md'));
     const mediumScreenSize = useMediaQuery(breakpoints.between('md', 'xl'));
@@ -89,7 +90,14 @@ export function useResponsiveLayout() {
     });
 
     const currentHeight = useMemoizedFn((plugin: BoardPluginProps) => {
-        return Math.max(plugin?.pos?.h || plugin?.minRow || 2, minHeight(plugin));
+        const height = Math.max(plugin?.pos?.h || plugin?.minRow || 2, minHeight(plugin));
+
+        switch (plugin.type) {
+            case 'deviceList':
+                return smallScreenSize && (weights?.length || 0) > 1 ? 4 : height;
+            default:
+                return height;
+        }
     });
 
     return {

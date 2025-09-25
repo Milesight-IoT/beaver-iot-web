@@ -57,7 +57,7 @@ const Widgets = (props: WidgetProps) => {
         minHeight,
         maxWidth,
         maxHeight,
-    } = useResponsiveLayout();
+    } = useResponsiveLayout(widgets);
     const { helperBg, showHelperBg, setShowHelperBg } = useBackgroundHelper();
     const { handleGridLayoutResize } = useWidgetResize(mainRef);
     const { newDrawingBoardContext } = useWidget();
