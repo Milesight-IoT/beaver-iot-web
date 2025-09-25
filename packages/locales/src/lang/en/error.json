@@ -80,6 +80,7 @@
     "error.http.token_not_found": "Your account hasn't been signed in.",
     "error.http.topic_exists": "Topic already exists.",
     "error.http.user_has_no_permission": "Current user has no privileges",
+    "error.http.user_register_email_exist": "This User Register Email Already Exists.",
     "error.http.blueprint_library_address_access_failed": "更新失败：仓库地址访问失败",
     "error.http.blueprint_library_address_manifest_not_reachable": "更新失败：manifest.yaml 文件获取失败",
     "error.http.blueprint_library_address_manifest_invalid": "更新失败：manifest.yaml 文件内容非法",
