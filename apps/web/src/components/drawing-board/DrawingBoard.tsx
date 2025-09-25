@@ -3,9 +3,10 @@ import cls from 'classnames';
 import { isEmpty } from 'lodash-es';
 import { List } from '@mui/material';
 
-import { useI18n } from '@milesight/shared/src/hooks';
+import { useI18n, useTheme, useMediaQuery } from '@milesight/shared/src/hooks';
 import { LoadingWrapper } from '@milesight/shared/src/components';
 
+import { Empty } from '@/components';
 import { PERMISSIONS } from '@/constants';
 import PermissionControlDisabled from '../permission-control-disabled';
 import { Widgets, PluginList, OperateWidgetModal } from './components';
@@ -31,6 +32,8 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
     } = props;
 
     const { getIntlText } = useI18n();
+    const { breakpoints } = useTheme();
+    const smallScreenSize = useMediaQuery(breakpoints.down('xl'));
 
     const {
         widgets,
@@ -54,23 +57,29 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
     /**
      * Empty data displays plugin list selection
      */
-    const renderEmptyDrawingBoard = (
-        <PermissionControlDisabled permissions={PERMISSIONS.DASHBOARD_EDIT}>
-            <div
-                className={cls('drawing-board__empty', {
-                    disabled: disabledEdit,
-                })}
-            >
-                <div className="drawing-board__empty-title">
-                    {getIntlText('dashboard.empty_text')}
+    const renderEmptyDrawingBoard = () => {
+        if (smallScreenSize) {
+            return <Empty text={getIntlText('dashboard.tip.small_screen_empty')} />;
+        }
+
+        return (
+            <PermissionControlDisabled permissions={PERMISSIONS.DASHBOARD_EDIT}>
+                <div
+                    className={cls('drawing-board__empty', {
+                        disabled: disabledEdit,
+                    })}
+                >
+                    <div className="drawing-board__empty-title">
+                        {getIntlText('dashboard.empty_text')}
+                    </div>
+                    <div className="drawing-board__empty-description">
+                        {getIntlText('dashboard.empty_description')}
+                    </div>
+                    <PluginList onSelect={updateOperatingPlugin} changeIsEditMode={changeIsEdit} />
                 </div>
-                <div className="drawing-board__empty-description">
-                    {getIntlText('dashboard.empty_description')}
-                </div>
-                <PluginList onSelect={updateOperatingPlugin} changeIsEditMode={changeIsEdit} />
-            </div>
-        </PermissionControlDisabled>
-    );
+            </PermissionControlDisabled>
+        );
+    };
 
     const renderDrawingBoard = () => {
         if (loadingWidgets) {
@@ -82,7 +91,7 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
         }
 
         if (!Array.isArray(widgets) || isEmpty(widgets)) {
-            return renderEmptyDrawingBoard;
+            return renderEmptyDrawingBoard();
         }
 
         return (
