@@ -38,7 +38,7 @@ const SourceRadio: React.FC<Props> = ({ label, required, error, helperText, ...p
             {
                 key: 'Upload',
                 icon: <UploadFileIcon />,
-                title: getIntlText('setting.blueprint.title_local_upload'),
+                title: getIntlText('common.label.local_upload'),
                 desc: getIntlText('setting.blueprint.desc_local_upload'),
             },
         ],
