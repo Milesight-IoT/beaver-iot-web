@@ -90,7 +90,7 @@ export default () => {
         breakpoints: muiTheme.breakpoints,
 
         /** Whether the current device is a mobile device based on breakpoints (width < 576px) */
-        matchMobile: matchSmBp || matchLandscape,
+        matchMobile: matchSmBp || (matchLandscape && isMobile()),
 
         /** Whether the current device is a tablet device based on breakpoints (width < 768px) */
         matchTablet: matchMdBp || (matchLandscape && isMobile()),
