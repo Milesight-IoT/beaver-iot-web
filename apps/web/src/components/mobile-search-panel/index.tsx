@@ -1,10 +1,9 @@
 import React, { memo } from 'react';
 import cls from 'classnames';
 import { useControllableValue } from 'ahooks';
-import { Button } from '@mui/material';
+import { Button, TextField, InputAdornment } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
-import { SearchIcon } from '@milesight/shared/src/components';
-import SearchInput from './search-input';
+import { SearchIcon, CancelIcon } from '@milesight/shared/src/components';
 import './style.less';
 
 interface Props {
@@ -24,6 +23,11 @@ interface Props {
     active?: boolean;
 
     /**
+     * Whether the search input is clearable, default is `true`
+     */
+    clearable?: boolean;
+
+    /**
      * Callback when the active state changes
      */
     onActiveChange?: (active: boolean) => void;
@@ -37,7 +41,7 @@ interface Props {
 /**
  * Mobile Search Panel
  */
-const MobileSearchPanel: React.FC<Props> = memo(({ children, ...props }) => {
+const MobileSearchPanel: React.FC<Props> = memo(({ clearable = true, children, ...props }) => {
     const { getIntlText } = useI18n();
     const [active, setActive] = useControllableValue(props, {
         valuePropName: 'active',
@@ -48,12 +52,28 @@ const MobileSearchPanel: React.FC<Props> = memo(({ children, ...props }) => {
     return (
         <div className={cls('ms-mobile-search-panel', { active })}>
             <div className="ms-mobile-search-panel-trigger">
-                <SearchInput
-                    value={keyword}
-                    onChange={e => setKeyword(e.target.value)}
-                    onFocus={() => {
-                        setActive(true);
+                <TextField
+                    fullWidth
+                    autoComplete="off"
+                    className="ms-mobile-search-input"
+                    placeholder={getIntlText('common.label.search')}
+                    slotProps={{
+                        input: {
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            ),
+                            endAdornment: clearable && keyword && (
+                                <InputAdornment position="end" onClick={() => setKeyword('')}>
+                                    <CancelIcon />
+                                </InputAdornment>
+                            ),
+                        },
                     }}
+                    value={keyword}
+                    onChange={e => setKeyword(e.target.value.trim())}
+                    onFocus={() => setActive(true)}
                 />
                 {active && (
                     <Button
