@@ -14,14 +14,15 @@ import {
 export default function useDeviceDrawingBoard(
     deviceDetail?: ObjectToCamelCase<DeviceAPISchema['getDetail']['response']>,
 ) {
-    const [loadingCanvasId, setLoadingCanvasId] = useState<boolean>();
     const [loadingDrawingBoard, setLoadingDrawingBoard] = useState<boolean>();
     const [drawingBoardDetail, setDrawingBoardDetail] = useState<DrawingBoardDetail>();
     const canvasIdRef = useRef<ApiKey>();
 
     const getNewestDrawingBoardDetail = useMemoizedFn(async () => {
         try {
-            setLoadingDrawingBoard(true);
+            if (!loadingDrawingBoard) {
+                setLoadingDrawingBoard(true);
+            }
 
             if (!canvasIdRef.current) {
                 return;
@@ -46,12 +47,12 @@ export default function useDeviceDrawingBoard(
     useRequest(
         async () => {
             try {
-                setLoadingCanvasId(true);
-
                 const deviceId = deviceDetail?.id;
                 if (!deviceId) {
                     return;
                 }
+
+                setLoadingDrawingBoard(true);
 
                 const [error, resp] = await awaitWrap(
                     dashboardAPI.getDeviceDrawingBoard({
@@ -59,6 +60,7 @@ export default function useDeviceDrawingBoard(
                     }),
                 );
                 if (error || !isRequestSuccess(resp)) {
+                    setLoadingDrawingBoard(false);
                     return;
                 }
 
@@ -67,8 +69,8 @@ export default function useDeviceDrawingBoard(
 
                 canvasIdRef.current = canvasId;
                 getNewestDrawingBoardDetail?.();
-            } finally {
-                setLoadingCanvasId(false);
+            } catch {
+                setLoadingDrawingBoard(false);
             }
         },
         {
@@ -78,13 +80,8 @@ export default function useDeviceDrawingBoard(
     );
 
     const loading = useMemo(() => {
-        return (
-            isNil(loadingCanvasId) ||
-            isNil(loadingDrawingBoard) ||
-            loadingCanvasId ||
-            loadingDrawingBoard
-        );
-    }, [loadingCanvasId, loadingDrawingBoard]);
+        return isNil(loadingDrawingBoard) || loadingDrawingBoard;
+    }, [loadingDrawingBoard]);
 
     return {
         loading,

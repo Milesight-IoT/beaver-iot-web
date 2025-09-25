@@ -9,6 +9,7 @@ import {
     CloseIcon,
     CheckIcon,
     toast,
+    LoadingButton,
 } from '@milesight/shared/src/components';
 
 import { PermissionControlHidden, TooltipWrapper } from '@/components';
@@ -26,6 +27,7 @@ import { type DrawingBoardExpose } from '../interface';
 import { filterWidgets } from '../utils';
 
 export interface UseDrawingBoardProps {
+    disabled?: boolean;
     disabledEditTip?: string;
     disabledEdit?: boolean;
     deviceDetail?: ObjectToCamelCase<DeviceAPISchema['getDetail']['response']>;
@@ -46,13 +48,14 @@ export type DrawingBoardPropsType = {
  * Drawing board operation
  */
 export default function useDrawingBoard(props?: UseDrawingBoardProps) {
-    const { disabledEdit, disabledEditTip, deviceDetail, onSave } = props || {};
+    const { disabled, disabledEdit, disabledEditTip, deviceDetail, onSave } = props || {};
 
     const { getIntlText } = useI18n();
 
     const drawingBoardExposeRef = useRef<DrawingBoardExpose>(null);
     const [isEdit, setIsEdit] = useState(false);
     const [operatingPlugin, setOperatingPlugin] = useState<WidgetDetail>();
+    const [loading, setLoading] = useState(false);
 
     const drawingBoardRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, { enterFullscreen }] = useFullscreen(drawingBoardRef);
@@ -69,6 +72,7 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
     const renderNormalMode = (
         <Stack className="xl:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
             <IconButton
+                disabled={disabled}
                 onClick={enterFullscreen}
                 sx={{
                     borderRadius: '6px',
@@ -83,7 +87,7 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
             <PermissionControlHidden permissions={PERMISSIONS.DASHBOARD_EDIT}>
                 <TooltipWrapper placement="left" title={disabledEdit ? disabledEditTip : null}>
                     <Button
-                        disabled={disabledEdit}
+                        disabled={disabled || disabledEdit}
                         variant="contained"
                         startIcon={<EditIcon />}
                         onClick={() => setIsEdit(true)}
@@ -101,42 +105,64 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
     });
 
     const handleSave = useMemoizedFn(async () => {
-        setIsEdit(false);
+        try {
+            setLoading(true);
 
-        const data = drawingBoardExposeRef?.current?.handleSave();
-        const { id, name, widgets } = data || {};
-        if (!id || !widgets) {
-            return;
+            const data = drawingBoardExposeRef?.current?.handleSave();
+            const { id, name, widgets } = data || {};
+            if (!id || !widgets) {
+                return;
+            }
+
+            const currentEntityIds = getCurrentEntityIds(id);
+            const [error, resp] = await awaitWrap(
+                dashboardAPI.updateDrawingBoard({
+                    canvas_id: id,
+                    widgets: filterWidgets(widgets),
+                    entity_ids: currentEntityIds,
+                    name,
+                }),
+            );
+            if (error || !isRequestSuccess(resp)) {
+                return;
+            }
+
+            /** Execute hook callback */
+            onSave?.(widgets);
+            toast.success(getIntlText('common.message.operation_success'));
+        } finally {
+            setLoading(false);
+            /**
+             * Exit edit mode
+             */
+            setIsEdit(false);
         }
-
-        const currentEntityIds = getCurrentEntityIds(id);
-        const [error, resp] = await awaitWrap(
-            dashboardAPI.updateDrawingBoard({
-                canvas_id: id,
-                widgets: filterWidgets(widgets),
-                entity_ids: currentEntityIds,
-                name,
-            }),
-        );
-        if (error || !isRequestSuccess(resp)) {
-            return;
-        }
-
-        /** Execute hook callback */
-        onSave?.(widgets);
-        toast.success(getIntlText('common.message.operation_success'));
     });
 
     const renderEditMode = (
         <Stack className="xl:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
-            <PluginListPopover deviceDetail={deviceDetail} onSelect={updateOperatingPlugin} />
+            <PluginListPopover
+                disabled={loading}
+                deviceDetail={deviceDetail}
+                onSelect={updateOperatingPlugin}
+            />
             <Divider orientation="vertical" variant="middle" flexItem />
-            <Button variant="outlined" onClick={handleCancel} startIcon={<CloseIcon />}>
+            <Button
+                disabled={loading}
+                variant="outlined"
+                onClick={handleCancel}
+                startIcon={<CloseIcon />}
+            >
                 {getIntlText('common.button.cancel')}
             </Button>
-            <Button variant="contained" onClick={handleSave} startIcon={<CheckIcon />}>
+            <LoadingButton
+                loading={loading}
+                variant="contained"
+                onClick={handleSave}
+                startIcon={<CheckIcon />}
+            >
                 {getIntlText('common.button.save')}
-            </Button>
+            </LoadingButton>
         </Stack>
     );
 

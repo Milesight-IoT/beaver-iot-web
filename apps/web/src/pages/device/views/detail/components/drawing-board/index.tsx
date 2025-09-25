@@ -1,5 +1,4 @@
 import React from 'react';
-import { isNil } from 'lodash-es';
 import { List } from '@mui/material';
 
 import { useI18n } from '@milesight/shared/src/hooks';
@@ -21,7 +20,7 @@ const DeviceDrawingBoard: React.FC<DeviceDrawingBoardProps> = props => {
 
     const { getIntlText } = useI18n();
 
-    if (isNil(isLoading) || isLoading || !deviceDetail) {
+    if (isLoading && deviceDetail) {
         return (
             <LoadingWrapper loading>
                 <List sx={{ height: '300px' }} />

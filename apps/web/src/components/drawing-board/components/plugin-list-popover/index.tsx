@@ -17,12 +17,13 @@ import type { BoardPluginProps } from '../../plugin/types';
 import './style.less';
 
 interface PluginListProps {
+    disabled?: boolean;
     deviceDetail?: ObjectToCamelCase<DeviceAPISchema['getDetail']['response']>;
     onSelect: (plugin: WidgetDetail) => void;
 }
 
 export default (props: PluginListProps) => {
-    const { deviceDetail, onSelect } = props;
+    const { disabled, deviceDetail, onSelect } = props;
 
     useLoadPlugins();
     const { pluginsControlPanel } = useFilterPlugins(deviceDetail);
@@ -82,7 +83,12 @@ export default (props: PluginListProps) => {
 
     return (
         <>
-            <Button variant="contained" onClick={handleShowModal} startIcon={<AddIcon />}>
+            <Button
+                disabled={disabled}
+                variant="contained"
+                onClick={handleShowModal}
+                startIcon={<AddIcon />}
+            >
                 {getIntlText('dashboard.add_widget')}
             </Button>
             <Popover

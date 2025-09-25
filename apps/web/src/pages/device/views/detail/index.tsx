@@ -40,6 +40,7 @@ export default () => {
         getNewestDrawingBoardDetail,
     } = useDeviceDrawingBoard(deviceDetail);
     const { drawingBoardProps, renderDrawingBoardOperation } = useDrawingBoard({
+        disabled: !drawingBoardDetail,
         deviceDetail,
         onSave: getNewestDrawingBoardDetail,
     });
