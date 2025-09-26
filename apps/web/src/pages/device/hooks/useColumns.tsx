@@ -6,10 +6,9 @@ import {
     DeleteOutlineIcon,
     DriveFileMoveOutlinedIcon,
 } from '@milesight/shared/src/components';
-import { Tooltip, PermissionControlHidden, type ColumnType } from '@/components';
+import { Tooltip, PermissionControlHidden, DeviceStatus, type ColumnType } from '@/components';
 import { type DeviceAPISchema } from '@/services/http';
 import { PERMISSIONS } from '@/constants';
-import { DeviceStatus } from '../components/device-status';
 
 type OperationType = 'detail' | 'delete' | 'changeGroup';
 

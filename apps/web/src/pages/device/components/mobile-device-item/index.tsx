@@ -1,9 +1,8 @@
 import React, { memo, useMemo } from 'react';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { PERMISSIONS } from '@/constants';
-import { Tooltip, MoreMenu, PermissionControlHidden } from '@/components';
+import { Tooltip, MoreMenu, DeviceStatus, PermissionControlHidden } from '@/components';
 import { type DeviceDetail } from '@/services/http';
-import { DeviceStatus } from '../device-status';
 import './style.less';
 
 /**

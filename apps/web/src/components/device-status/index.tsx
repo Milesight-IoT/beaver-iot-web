@@ -12,7 +12,7 @@ interface Props {
 /**
  * Device Status Component
  */
-export const DeviceStatus: React.FC<Props> = memo(({ type }) => {
+const DeviceStatus: React.FC<Props> = memo(({ type }) => {
     const { getIntlHtml } = useI18n();
     const label = useMemo(() => {
         switch (type) {
@@ -37,3 +37,5 @@ export const DeviceStatus: React.FC<Props> = memo(({ type }) => {
         />
     );
 });
+
+export default DeviceStatus;

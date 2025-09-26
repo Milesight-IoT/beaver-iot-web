@@ -6,9 +6,8 @@ import { get, isNil } from 'lodash-es';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { SettingsIcon, SpaceDashboardIcon, LoadingWrapper } from '@milesight/shared/src/components';
 
-import { Tooltip, type ColumnType } from '@/components';
+import { Tooltip, DeviceStatus, type ColumnType } from '@/components';
 import { type ImportEntityProps, type EntityAPISchema } from '@/services/http';
-import { DeviceStatus } from '@/pages/device/components/device-status';
 import { useDeviceDrawingBoard } from './useDeviceDrawingBoard';
 import { useCallService } from './useCallService';
 
