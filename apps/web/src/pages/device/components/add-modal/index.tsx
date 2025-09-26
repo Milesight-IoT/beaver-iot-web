@@ -33,13 +33,16 @@ const AddModal: React.FC<Props> = ({ visible, onCancel, onError, onSuccess, ...p
     const { activeGroup } = useDeviceStore();
 
     // ---------- Integrates related logic processing ----------
+    const [loading, setLoading] = useState<boolean>();
     const [inteID, setInteID] = useState<ApiKey>('');
     const { data: inteList } = useRequest(
         async () => {
             if (!visible) return;
+            setLoading(true);
             const [error, resp] = await awaitWrap(integrationAPI.getList({ device_addable: true }));
             const respData = getResponseData(resp);
 
+            setLoading(false);
             if (error || !respData || !isRequestSuccess(resp)) return;
             const data = objectToCamelCase(respData);
 
@@ -95,7 +98,6 @@ const AddModal: React.FC<Props> = ({ visible, onCancel, onError, onSuccess, ...p
             }),
         );
 
-        // console.log({ error, resp });
         if (error || !isRequestSuccess(resp)) {
             onError?.(error);
             return;
@@ -115,7 +117,7 @@ const AddModal: React.FC<Props> = ({ visible, onCancel, onError, onSuccess, ...p
     });
 
     useEffect(() => {
-        if (!visible || !activeGroup) return;
+        if (!visible || loading !== false || !activeGroup) return;
 
         /** set group form item default value */
         const defaultValue = [FixedGroupEnum.ALL, FixedGroupEnum.UNGROUPED].includes(
@@ -125,7 +127,12 @@ const AddModal: React.FC<Props> = ({ visible, onCancel, onError, onSuccess, ...p
             : activeGroup.name;
 
         setValue('group', defaultValue);
-    }, [visible, activeGroup, setValue]);
+
+        return () => {
+            reset();
+            setLoading(undefined);
+        };
+    }, [visible, loading, activeGroup, reset, setValue]);
 
     return (
         <Modal
@@ -135,6 +142,7 @@ const AddModal: React.FC<Props> = ({ visible, onCancel, onError, onSuccess, ...p
             className={cls({ loading: formState.isSubmitting })}
             onOk={handleSubmit(onSubmit)}
             onCancel={handleCancel}
+            okButtonProps={{ disabled: loading !== false }}
             {...props}
         >
             <FormControl fullWidth size="small" sx={{ my: 1.5 }}>
