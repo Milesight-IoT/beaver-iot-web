@@ -121,7 +121,9 @@ const EditModal: React.FC<EditModalProps> = ({ data, visible, onError, onSuccess
             setSourceType(data?.current_source_type);
             setValue('source', data?.current_source_type);
         }
-        if (data?.file_name) setValue('file', { name: data?.file_name, size: 0 });
+
+        // No need to backfill the file name, as editing the `Local Upload` type requires re-uploading the file
+        // if (data?.file_name) setValue('file', { name: data?.file_name, size: 0 });
     }, [data, visible, reset, setValue]);
 
     return (
