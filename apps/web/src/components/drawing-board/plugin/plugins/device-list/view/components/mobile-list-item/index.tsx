@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Stack, Button } from '@mui/material';
 import { get, isNil } from 'lodash-es';
 import { useMemoizedFn } from 'ahooks';
@@ -7,7 +7,7 @@ import cls from 'classnames';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { LoadingButton } from '@milesight/shared/src/components';
 
-import { Tooltip } from '@/components';
+import { Tooltip, DeviceStatus } from '@/components';
 import { type ImportEntityProps } from '@/services/http';
 import { type TableRowDataType } from '../../hooks';
 import { DeviceListContext } from '../../context';
@@ -44,6 +44,10 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
 
         return status.value;
     });
+
+    const deviceStatus = useMemo(() => {
+        return get(entitiesStatus, device?.deviceStatus?.id || '');
+    }, [entitiesStatus, device]);
 
     return (
         <div
@@ -83,7 +87,7 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
                         autoEllipsis
                         title={device?.identifier || '-'}
                     />
-                    <Tooltip className={styles.value} autoEllipsis title="在线" />
+                    <DeviceStatus type={deviceStatus?.value} />
                     <Tooltip
                         className={styles.value}
                         autoEllipsis
