@@ -37,7 +37,8 @@ const useColumns = <T extends TableRowDataType>({
     entitiesStatus,
 }: UseColumnsProps) => {
     const { getIntlText } = useI18n();
-    const { loading, handleDeviceDrawingBoard } = useDeviceDrawingBoard(isPreviewMode);
+    const { loading: loadingDeviceDrawingBoard, handleDeviceDrawingBoard } =
+        useDeviceDrawingBoard(isPreviewMode);
     const {
         visible,
         control,
@@ -163,7 +164,11 @@ const useColumns = <T extends TableRowDataType>({
                             </Tooltip>
                             <LoadingWrapper
                                 size={24}
-                                loading={get(loading, String(row?.id), false)}
+                                loading={get(
+                                    loadingDeviceDrawingBoard,
+                                    String(row?.id || ''),
+                                    false,
+                                )}
                             >
                                 <Tooltip title={getIntlText('common.label.detail')}>
                                     <IconButton
@@ -188,7 +193,7 @@ const useColumns = <T extends TableRowDataType>({
         handleDeviceDrawingBoard,
         handleServiceClick,
         entityNameAndStatus,
-        loading,
+        loadingDeviceDrawingBoard,
         entitiesStatus,
     ]);
 
@@ -198,6 +203,7 @@ const useColumns = <T extends TableRowDataType>({
         control,
         formItems,
         modalTitle,
+        loadingDeviceDrawingBoard,
         handleSubmit,
         handleFormSubmit,
         handleModalCancel,

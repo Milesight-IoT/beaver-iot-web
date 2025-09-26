@@ -5,8 +5,9 @@ import { useMemoizedFn } from 'ahooks';
 import cls from 'classnames';
 
 import { useI18n } from '@milesight/shared/src/hooks';
-import { Tooltip } from '@/components';
+import { LoadingButton } from '@milesight/shared/src/components';
 
+import { Tooltip } from '@/components';
 import { type ImportEntityProps } from '@/services/http';
 import { type TableRowDataType } from '../../hooks';
 import { DeviceListContext } from '../../context';
@@ -22,7 +23,12 @@ export interface MobileListItemProps {
 const MobileListItem: React.FC<MobileListItemProps> = props => {
     const { device, isSearchPage, isFullscreen } = props;
     const context = useContext(DeviceListContext);
-    const { entitiesStatus, handleDeviceDrawingBoard, handleServiceClick } = context || {};
+    const {
+        loadingDeviceDrawingBoard,
+        entitiesStatus,
+        handleDeviceDrawingBoard,
+        handleServiceClick,
+    } = context || {};
 
     const { getIntlText } = useI18n();
 
@@ -108,13 +114,14 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
                     {device?.serviceEntities?.[1]?.name || '-'}
                 </Button>
 
-                <Button
+                <LoadingButton
+                    loading={get(loadingDeviceDrawingBoard, String(device?.id || ''), false)}
                     variant="outlined"
                     sx={{ height: 36, textTransform: 'none' }}
                     onClick={() => handleDeviceDrawingBoard?.(device?.id)}
                 >
                     {getIntlText('common.label.detail')}
-                </Button>
+                </LoadingButton>
             </Stack>
         </div>
     );

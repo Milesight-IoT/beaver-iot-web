@@ -121,6 +121,7 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
         formItems,
         control,
         modalTitle,
+        loadingDeviceDrawingBoard,
         handleFormSubmit,
         handleSubmit,
         handleModalCancel,
@@ -137,10 +138,18 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
             setKeyword,
             data: newData,
             entitiesStatus,
+            loadingDeviceDrawingBoard,
             handleDeviceDrawingBoard,
             handleServiceClick,
         };
-    }, [keyword, newData, entitiesStatus, handleDeviceDrawingBoard, handleServiceClick]);
+    }, [
+        keyword,
+        newData,
+        entitiesStatus,
+        loadingDeviceDrawingBoard,
+        handleDeviceDrawingBoard,
+        handleServiceClick,
+    ]);
 
     const renderContent = () => {
         if (matchTablet) {

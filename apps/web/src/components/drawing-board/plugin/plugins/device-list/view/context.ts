@@ -11,6 +11,7 @@ export interface DeviceListContextProps {
      * Current devices all entities status
      */
     entitiesStatus?: EntityAPISchema['getEntitiesStatus']['response'];
+    loadingDeviceDrawingBoard?: Record<string, boolean>;
     handleServiceClick?: (entity?: ImportEntityProps) => Promise<void>;
     handleDeviceDrawingBoard?: (deviceId?: ApiKey) => Promise<void>;
 }

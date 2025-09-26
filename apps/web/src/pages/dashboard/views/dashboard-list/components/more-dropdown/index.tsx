@@ -107,9 +107,8 @@ const MoreDropdown: React.FC<MoreDropdownProps> = props => {
             </IconButton>
             <HoverMenu id="dropdown-menu" {...bindMenu(popupState)} {...bindPopoverEnter}>
                 {options.map(option => (
-                    <PermissionControlDisabled permissions={option.permission}>
+                    <PermissionControlDisabled key={option.value} permissions={option.permission}>
                         <MenuItem
-                            key={option.value}
                             onClick={e =>
                                 handleMenuItemClick({ e, popupState, operate: option.value })
                             }
