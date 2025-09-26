@@ -96,10 +96,13 @@ const ConfigPlugin = (props: ConfigPluginProps) => {
             title={title || getIntlText('common.plugin_add_title', { 1: operatingPlugin.type })}
             width="1200px"
             sx={{
-                '& .MuiDialogContent-root': {
-                    padding: '0px',
-                    overflow: 'hidden',
+                '&.ms-modal-root .MuiPaper-root .ms-modal-content.MuiDialogContent-root': {
                     display: 'flex',
+                    paddingRight: '0px ',
+                    overflow: 'hidden',
+                },
+                '.MuiPaper-root.MuiDialog-paper': {
+                    height: '720px',
                 },
             }}
             footer={null}
