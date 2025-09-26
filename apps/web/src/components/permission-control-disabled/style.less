@@ -1,17 +1,11 @@
 .@{prefix}-permission-control {
     position: relative;
+    flex: 1;
 
     &__disabled {
         clear: both;
         opacity: 0.5;
         pointer-events: none;
         user-select: none;
-
-        /** override ms tooltip */
-        .@{prefix}-tooltip {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
     }
 }
