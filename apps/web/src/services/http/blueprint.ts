@@ -12,11 +12,13 @@ export interface BlueprintAPISchema extends APISchema {
     getSetting: {
         request: void;
         response: {
+            type: 'Zip';
             current_source_type: BlueprintSourceType;
             version: string;
             file_name?: string;
             update_time?: number;
             synced_success?: boolean;
+            url?: string;
         };
     };
 

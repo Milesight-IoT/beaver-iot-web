@@ -100,7 +100,7 @@ export interface ModalProps {
     /**
      * Confirm button props
      */
-    okButtonProps?: ButtonProps;
+    okButtonProps?: LoadingButtonProps;
 
     /**
      * Cancel button props
@@ -220,7 +220,7 @@ const Modal: React.FC<ModalProps> = ({
                     <LoadingButton
                         {...cancelButtonProps}
                         variant="outlined"
-                        disabled={loading}
+                        disabled={loading || cancelButtonProps?.loading}
                         onClick={onCancel}
                         sx={{ mr: 0.5, '&:last-child': { mr: 0 } }}
                     >
@@ -230,7 +230,7 @@ const Modal: React.FC<ModalProps> = ({
                         {...okButtonProps}
                         variant="contained"
                         className="ms-modal-button"
-                        loading={loading}
+                        loading={loading || okButtonProps?.loading}
                         onClick={handleOk}
                     >
                         {onOkText || getIntlText('common.button.confirm')}

@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
-import { useRequest, useMemoizedFn } from 'ahooks';
+import { useState, useCallback, useRef } from 'react';
+import { useRequest, useMemoizedFn, useDebounceEffect } from 'ahooks';
 import { Button } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { AddIcon, toast } from '@milesight/shared/src/components';
@@ -60,9 +60,14 @@ export default () => {
         }) => {
             const [error, resp] = await awaitWrap(
                 deviceAPI.getList({
-                    group_id: groupId === FixedGroupEnum.ALL ? undefined : groupId,
                     page_number: page,
                     page_size: pageSize,
+                    group_id: ([FixedGroupEnum.ALL, FixedGroupEnum.UNGROUPED] as any[]).includes(
+                        groupId,
+                    )
+                        ? undefined
+                        : groupId,
+                    filter_not_grouped: groupId === FixedGroupEnum.UNGROUPED ? true : undefined,
                 }),
             );
 
@@ -105,9 +110,13 @@ export default () => {
     };
 
     // Init device list
-    useEffect(() => {
-        reloadDeviceList(group?.id);
-    }, [group, reloadDeviceList]);
+    useDebounceEffect(
+        () => {
+            reloadDeviceList(group?.id);
+        },
+        [group, reloadDeviceList],
+        { wait: 300 },
+    );
 
     // ---------- Device Item Renderer ----------
     const confirm = useConfirm();

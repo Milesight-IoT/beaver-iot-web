@@ -5,9 +5,5 @@ import MobileEntry from './mobile-entry';
 export default () => {
     const { matchTablet } = useTheme();
 
-    if (matchTablet) {
-        return <MobileEntry />;
-    }
-
-    return <Entry />;
+    return matchTablet ? <MobileEntry /> : <Entry />;
 };
