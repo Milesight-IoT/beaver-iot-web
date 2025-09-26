@@ -11,7 +11,8 @@ import {
 } from '@milesight/shared/src/components';
 import { useI18n } from '@milesight/shared/src/hooks';
 
-import { Breadcrumbs, Empty } from '@/components';
+import { PERMISSIONS } from '@/constants';
+import { Breadcrumbs, Empty, PermissionControlHidden } from '@/components';
 import { useDashboardList } from './hooks';
 import { DashboardItems, OperateModal } from './components';
 import { useOperateModal } from './components/operate-modal/hooks';
@@ -45,29 +46,33 @@ const DashboardList: React.FC = () => {
     useCoverImages(currentDashboard);
 
     const renderAddDashboard = (
-        <Button
-            variant="contained"
-            sx={{ height: 36, textTransform: 'none' }}
-            startIcon={<AddIcon />}
-            onClick={openAddDashboard}
-        >
-            {getIntlText('common.label.add')}
-        </Button>
+        <PermissionControlHidden permissions={PERMISSIONS.DASHBOARD_ADD}>
+            <Button
+                variant="contained"
+                sx={{ height: 36, textTransform: 'none' }}
+                startIcon={<AddIcon />}
+                onClick={openAddDashboard}
+            >
+                {getIntlText('common.label.add')}
+            </Button>
+        </PermissionControlHidden>
     );
 
     const renderHeader = (
         <div className="dashboard-list__header md:d-none">
             <Stack className="ms-operations-btns" direction="row" spacing="12px">
                 {renderAddDashboard}
-                <Button
-                    variant="outlined"
-                    disabled={!selectedDashboard?.length}
-                    sx={{ height: 36, textTransform: 'none' }}
-                    startIcon={<DeleteOutlineIcon />}
-                    onClick={handleBatchDelDashboard}
-                >
-                    {getIntlText('common.label.delete')}
-                </Button>
+                <PermissionControlHidden permissions={PERMISSIONS.DASHBOARD_DELETE}>
+                    <Button
+                        variant="outlined"
+                        disabled={!selectedDashboard?.length}
+                        sx={{ height: 36, textTransform: 'none' }}
+                        startIcon={<DeleteOutlineIcon />}
+                        onClick={handleBatchDelDashboard}
+                    >
+                        {getIntlText('common.label.delete')}
+                    </Button>
+                </PermissionControlHidden>
             </Stack>
             <OutlinedInput
                 placeholder={getIntlText('common.label.search')}

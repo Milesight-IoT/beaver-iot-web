@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle } from 'react';
+import { forwardRef, useImperativeHandle, useMemo } from 'react';
 import cls from 'classnames';
 import { isEmpty } from 'lodash-es';
 import { List } from '@mui/material';
@@ -29,6 +29,7 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
         changeIsEdit,
         updateOperatingPlugin,
         disabledEdit,
+        deviceDetail,
     } = props;
 
     const { getIntlText } = useI18n();
@@ -55,6 +56,17 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
     });
 
     /**
+     * Get dashboard drawing board edit permissions
+     */
+    const editPermissions = useMemo(() => {
+        if (deviceDetail?.id) {
+            return [PERMISSIONS.DEVICE_EDIT];
+        }
+
+        return PERMISSIONS.DASHBOARD_EDIT;
+    }, [deviceDetail]);
+
+    /**
      * Empty data displays plugin list selection
      */
     const renderEmptyDrawingBoard = () => {
@@ -63,7 +75,7 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
         }
 
         return (
-            <PermissionControlDisabled permissions={PERMISSIONS.DASHBOARD_EDIT}>
+            <PermissionControlDisabled permissions={editPermissions}>
                 <div
                     className={cls('drawing-board__empty', {
                         disabled: disabledEdit,

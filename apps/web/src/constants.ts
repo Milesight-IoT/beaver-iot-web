@@ -9,6 +9,7 @@ export enum PERMISSIONS {
     DASHBOARD_VIEW = 'dashboard.view',
     DASHBOARD_ADD = 'dashboard.add',
     DASHBOARD_EDIT = 'dashboard.edit',
+    DASHBOARD_DELETE = 'dashboard.delete',
 
     /**
      * Device module

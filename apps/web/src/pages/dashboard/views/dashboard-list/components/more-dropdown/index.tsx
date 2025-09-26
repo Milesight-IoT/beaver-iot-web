@@ -8,6 +8,9 @@ import HoverMenu from 'material-ui-popup-state/HoverMenu';
 import { MoreHorizIcon, EditIcon, DeleteOutlineIcon } from '@milesight/shared/src/components';
 import { useI18n, usePopoverCloseDelay } from '@milesight/shared/src/hooks';
 
+import { PermissionControlDisabled } from '@/components';
+import { PERMISSIONS } from '@/constants';
+
 export enum MORE_OPERATION {
     EDIT = 'edit',
     DELETE = 'delete',
@@ -43,6 +46,7 @@ const MoreDropdown: React.FC<MoreDropdownProps> = props => {
         label: string;
         value: MORE_OPERATION;
         icon: React.ReactNode;
+        permission: PERMISSIONS;
     }[] = useMemo(() => {
         return [
             {
@@ -53,6 +57,7 @@ const MoreDropdown: React.FC<MoreDropdownProps> = props => {
                         <EditIcon />
                     </ListItemIcon>
                 ),
+                permission: PERMISSIONS.DASHBOARD_EDIT,
             },
             {
                 label: getIntlText('common.label.delete'),
@@ -62,6 +67,7 @@ const MoreDropdown: React.FC<MoreDropdownProps> = props => {
                         <DeleteOutlineIcon />
                     </ListItemIcon>
                 ),
+                permission: PERMISSIONS.DASHBOARD_DELETE,
             },
         ];
     }, [getIntlText]);
@@ -101,13 +107,17 @@ const MoreDropdown: React.FC<MoreDropdownProps> = props => {
             </IconButton>
             <HoverMenu id="dropdown-menu" {...bindMenu(popupState)} {...bindPopoverEnter}>
                 {options.map(option => (
-                    <MenuItem
-                        key={option.value}
-                        onClick={e => handleMenuItemClick({ e, popupState, operate: option.value })}
-                    >
-                        {option.icon}
-                        {option.label}
-                    </MenuItem>
+                    <PermissionControlDisabled permissions={option.permission}>
+                        <MenuItem
+                            key={option.value}
+                            onClick={e =>
+                                handleMenuItemClick({ e, popupState, operate: option.value })
+                            }
+                        >
+                            {option.icon}
+                            {option.label}
+                        </MenuItem>
+                    </PermissionControlDisabled>
                 ))}
             </HoverMenu>
         </div>

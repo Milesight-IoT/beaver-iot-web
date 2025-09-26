@@ -69,6 +69,17 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
         setOperatingPlugin(plugin);
     });
 
+    /**
+     * Get dashboard drawing board edit permissions
+     */
+    const editPermissions = useMemo(() => {
+        if (deviceDetail?.id) {
+            return [PERMISSIONS.DEVICE_EDIT];
+        }
+
+        return PERMISSIONS.DASHBOARD_EDIT;
+    }, [deviceDetail]);
+
     const renderNormalMode = (
         <Stack className="xl:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
             <IconButton
@@ -84,7 +95,7 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
             >
                 <FullscreenIcon />
             </IconButton>
-            <PermissionControlHidden permissions={PERMISSIONS.DASHBOARD_EDIT}>
+            <PermissionControlHidden permissions={editPermissions}>
                 <Tooltip
                     isDisabledButton={disabled || disabledEdit}
                     placement="left"
