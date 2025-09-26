@@ -12,20 +12,15 @@ import {
     type DeviceGroupItemProps,
 } from '@/services/http';
 import useDeviceStore from '../../store';
-import { FixedGroupEnum } from '../../constants';
+import { FIXED_GROUP } from '../../constants';
 import './style.less';
 
-export type GroupItem = PartialOptional<DeviceGroupItemProps, 'name'>;
+export type GroupItem = DeviceGroupItemProps;
 
 export interface Props {
     value?: GroupItem;
     onChange?: (value: GroupItem) => void;
 }
-
-const ALL_DEVICE_ITEM = {
-    id: FixedGroupEnum.ALL,
-    nameIntlKey: 'device.label.all_devices',
-};
 
 /**
  * Group selector for mobile
@@ -57,15 +52,12 @@ const MobileGroupSelect: React.FC<Props> = memo(props => {
             debounceWait: 300,
         },
     );
-    const defaultGroupItem = useMemo(
-        () => ({
-            id: ALL_DEVICE_ITEM.id,
-            name: getIntlText(ALL_DEVICE_ITEM.nameIntlKey),
-        }),
-        [getIntlText],
-    );
+
     const options = useMemo(() => {
-        const result: GroupItem[] = [defaultGroupItem];
+        const result: GroupItem[] = FIXED_GROUP.map(item => ({
+            id: item.id,
+            name: getIntlText(item.name),
+        }));
 
         deviceGroups?.forEach(item => {
             result.push({
@@ -75,7 +67,7 @@ const MobileGroupSelect: React.FC<Props> = memo(props => {
         });
 
         return result;
-    }, [deviceGroups, defaultGroupItem]);
+    }, [deviceGroups, getIntlText]);
 
     // Refresh device groups when open modal
     useLayoutEffect(() => {
@@ -88,14 +80,15 @@ const MobileGroupSelect: React.FC<Props> = memo(props => {
 
     useLayoutEffect(() => {
         if (!value) {
-            setSelectedGroup(defaultGroupItem);
-            updateActiveGroup(defaultGroupItem);
+            setSelectedGroup(options[0]);
+            updateActiveGroup(options[0]);
             return;
         }
+        const group = options.find(item => item.id === value.id);
 
-        setSelectedGroup(value);
-        updateActiveGroup({ id: value.id, name: value.name || '' });
-    }, [open, value, defaultGroupItem, getIntlText, updateActiveGroup]);
+        setSelectedGroup(group);
+        updateActiveGroup(group);
+    }, [open, value, options, getIntlText, updateActiveGroup]);
 
     return (
         <div className="ms-mobile-group-select">
