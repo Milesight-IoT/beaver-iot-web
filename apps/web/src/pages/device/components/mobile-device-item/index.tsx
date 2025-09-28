@@ -51,7 +51,7 @@ const MobileDeviceItem: React.FC<Props> = memo(({ data, onAction }) => {
                     <Tooltip autoEllipsis title={data.name} />
                 </div>
                 <div className="ms-mobile-device-item__status">
-                    {!!data.status && <DeviceStatus type={data.status} />}
+                    <DeviceStatus type={data.status} />
                     <PermissionControlHidden permissions={[PERMISSIONS.DEVICE_DELETE]}>
                         <MoreMenu
                             options={moreMenuOptions}
