@@ -37,7 +37,7 @@ export enum PERMISSIONS {
     ENTITY_DATA_MODULE = 'entity_data',
     ENTITY_DATA_VIEW = 'entity_data.view',
     ENTITY_DATA_EDIT = 'entity_data.edit',
-    ENTITY_DATA_EXPORT = 'entity_data.export',
+    // ENTITY_DATA_EXPORT = 'entity_data.export',
 
     /**
      * User role module

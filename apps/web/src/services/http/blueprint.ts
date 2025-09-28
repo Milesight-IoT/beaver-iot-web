@@ -5,14 +5,24 @@ import { client, attachAPI, API_PREFIX } from './client';
  * @template Default Default source type
  * @template Upload Upload source type
  */
-export type BlueprintSourceType = 'Default' | 'Upload';
+export enum BlueprintSourceType {
+    DEFAULT = 'DEFAULT',
+    UPLOAD = 'UPLOAD',
+}
+
+/**
+ * Blueprint type
+ * @template ZIP ZIP
+ * @template GITHUB GitHub
+ */
+export type BlueprintType = 'ZIP' | 'GITHUB';
 
 export interface BlueprintAPISchema extends APISchema {
     /** Get blueprint setting */
     getSetting: {
         request: void;
         response: {
-            type: 'Zip';
+            type: BlueprintType;
             current_source_type: BlueprintSourceType;
             version: string;
             file_name?: string;
@@ -26,7 +36,7 @@ export interface BlueprintAPISchema extends APISchema {
     updateSetting: {
         request: {
             source_type: BlueprintSourceType;
-            type?: 'Zip';
+            type?: BlueprintType;
             url?: string;
         };
         response: void;

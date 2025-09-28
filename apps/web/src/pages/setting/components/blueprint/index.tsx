@@ -8,7 +8,7 @@ import {
     awaitWrap,
     isRequestSuccess,
     getResponseData,
-    type BlueprintSourceType,
+    BlueprintSourceType,
 } from '@/services/http';
 import ConfigTable from '../config-table';
 import EditModal from './edit-modal';
@@ -39,7 +39,7 @@ const Blueprint = () => {
         return (
             <>
                 <div className="title">{getIntlText('setting.blueprint.management_title')}</div>
-                {sourceType === 'Default' && (
+                {sourceType === BlueprintSourceType.DEFAULT && (
                     <Tooltip
                         autoEllipsis
                         className="subtitle"
@@ -54,8 +54,8 @@ const Blueprint = () => {
     const listData = useMemo(() => {
         const sourceType = bpSetting?.current_source_type;
         const intlMap: Record<BlueprintSourceType, string> = {
-            Default: getIntlText('setting.blueprint.title_official_store'),
-            Upload: getIntlText('common.label.local_upload'),
+            [BlueprintSourceType.DEFAULT]: getIntlText('setting.blueprint.title_official_store'),
+            [BlueprintSourceType.UPLOAD]: getIntlText('common.label.local_upload'),
         };
         const result: DescriptionsProps['data'] = [
             {
@@ -67,7 +67,7 @@ const Blueprint = () => {
         ];
 
         switch (sourceType) {
-            case 'Default': {
+            case BlueprintSourceType.DEFAULT: {
                 result.push(
                     {
                         key: 'version',
@@ -100,7 +100,7 @@ const Blueprint = () => {
                 );
                 break;
             }
-            case 'Upload': {
+            case BlueprintSourceType.UPLOAD: {
                 result.push({
                     key: 'file_name',
                     label: getIntlText('common.label.file_name'),

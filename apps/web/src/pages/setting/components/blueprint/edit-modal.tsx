@@ -9,8 +9,8 @@ import {
     blueprintAPI,
     awaitWrap,
     isRequestSuccess,
+    BlueprintSourceType,
     type BlueprintAPISchema,
-    type BlueprintSourceType,
 } from '@/services/http';
 import SourceRadio from './source-radio';
 
@@ -57,7 +57,7 @@ const EditModal: React.FC<EditModalProps> = ({ data, visible, onError, onSuccess
             },
         ];
 
-        if (sourceType === 'Upload') {
+        if (sourceType === BlueprintSourceType.UPLOAD) {
             result.push({
                 name: 'file',
                 rules: {
@@ -96,8 +96,8 @@ const EditModal: React.FC<EditModalProps> = ({ data, visible, onError, onSuccess
         const [error, resp] = await awaitWrap(
             blueprintAPI.updateSetting({
                 source_type: source,
-                type: source === 'Upload' ? 'Zip' : undefined,
-                url: source === 'Upload' ? file.url : undefined,
+                type: source === BlueprintSourceType.UPLOAD ? 'ZIP' : undefined,
+                url: source === BlueprintSourceType.UPLOAD ? file.url : undefined,
             }),
         );
 
