@@ -3,6 +3,7 @@ import { useRequest, useMemoizedFn } from 'ahooks';
 import { isEmpty } from 'lodash-es';
 import { Controller } from 'react-hook-form';
 import cls from 'classnames';
+import { GridRow } from '@mui/x-data-grid';
 
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 import { Modal } from '@milesight/shared/src/components';
@@ -15,7 +16,13 @@ import { DEVICE_STATUS_ENTITY_UNIQUE_ID } from '@/constants';
 import { type DeviceListControlPanelConfig } from '../control-panel';
 import { type BoardPluginProps } from '../../../types';
 import { useStableValue } from '../../../hooks';
-import { type TableRowDataType, useColumns, useDeviceEntities } from './hooks';
+import {
+    type TableRowDataType,
+    noMoreDataRow,
+    NO_MORE_DATA_SIGN,
+    useColumns,
+    useDeviceEntities,
+} from './hooks';
 import { MobileList } from './components';
 import { DeviceListContext, type DeviceListContextProps } from './context';
 
@@ -151,6 +158,17 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
         handleServiceClick,
     ]);
 
+    /**
+     * Add no more data row to last row
+     */
+    const tableData = useMemo(() => {
+        if (!Array.isArray(newData) || isEmpty(newData)) {
+            return [];
+        }
+
+        return [...newData, noMoreDataRow];
+    }, [newData]);
+
     const renderContent = () => {
         if (matchTablet) {
             return (
@@ -176,9 +194,23 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
                     }}
                     paginationMode="client"
                     getRowId={row => row.id}
-                    rows={newData}
+                    rows={tableData}
                     toolbarRender={toolbarRender}
                     onSearch={handleSearch}
+                    slots={{
+                        // eslint-disable-next-line react/no-unstable-nested-components
+                        row(props, otherProps) {
+                            if (props?.rowId === NO_MORE_DATA_SIGN) {
+                                return (
+                                    <div className="device-list-view__no-data-tip">
+                                        <div>{getIntlText('common.label.no_more_data')}</div>
+                                    </div>
+                                );
+                            }
+
+                            return <GridRow {...props} {...otherProps} />;
+                        },
+                    }}
                 />
             </div>
         );

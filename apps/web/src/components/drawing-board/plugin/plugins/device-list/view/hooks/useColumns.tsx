@@ -21,6 +21,16 @@ export type TableRowDataType = {
     serviceEntities?: ImportEntityProps[];
 };
 
+/**
+ * Show no more data row
+ */
+export const NO_MORE_DATA_SIGN = 'TABLE_NO_MORE_DATA_ROW';
+export const noMoreDataRow: TableRowDataType = {
+    id: NO_MORE_DATA_SIGN,
+    name: NO_MORE_DATA_SIGN,
+    identifier: NO_MORE_DATA_SIGN,
+};
+
 export interface UseColumnsProps {
     /**
      * Is preview mode
