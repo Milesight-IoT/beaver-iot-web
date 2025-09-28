@@ -314,7 +314,7 @@ export default () => {
                         {getIntlText('tag.label.tags')}
                     </Button>
                 </PermissionControlHidden>
-                <PermissionControlHidden permissions={PERMISSIONS.ENTITY_DATA_EXPORT}>
+                <PermissionControlHidden permissions={PERMISSIONS.ENTITY_DATA_VIEW}>
                     <Button
                         variant="outlined"
                         className="md:d-none"
@@ -327,7 +327,7 @@ export default () => {
                     </Button>
                 </PermissionControlHidden>
                 <PermissionControlHidden
-                    permissions={[PERMISSIONS.ENTITY_DATA_EXPORT, PERMISSIONS.ENTITY_DATA_EDIT]}
+                    permissions={[PERMISSIONS.ENTITY_DATA_VIEW, PERMISSIONS.ENTITY_DATA_EDIT]}
                 >
                     <Divider
                         orientation="vertical"
@@ -360,7 +360,7 @@ export default () => {
                 tableName="entity_data"
                 columnSetting
                 checkboxSelection={hasPermission([
-                    PERMISSIONS.ENTITY_DATA_EXPORT,
+                    PERMISSIONS.ENTITY_DATA_VIEW,
                     PERMISSIONS.ENTITY_DATA_EDIT,
                 ])}
                 loading={loading}

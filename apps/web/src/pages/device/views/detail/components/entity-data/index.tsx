@@ -162,7 +162,7 @@ const EntityData: React.FC<Props> = memo(({ data: deviceDetail, onRefresh }) => 
                     }}
                     sx={{ height: 36, width: 'auto' }}
                 />
-                <PermissionControlHidden permissions={PERMISSIONS.ENTITY_DATA_EXPORT}>
+                <PermissionControlHidden permissions={PERMISSIONS.ENTITY_DATA_VIEW}>
                     <Divider
                         orientation="vertical"
                         flexItem
@@ -212,7 +212,7 @@ const EntityData: React.FC<Props> = memo(({ data: deviceDetail, onRefresh }) => 
                 tableName="device_entity_data"
                 filterCondition={[advancedConditions, entityType]}
                 checkboxSelection={hasPermission([
-                    PERMISSIONS.ENTITY_DATA_EXPORT,
+                    PERMISSIONS.ENTITY_DATA_VIEW,
                     PERMISSIONS.ENTITY_DATA_EDIT,
                 ])}
                 loading={loading}
