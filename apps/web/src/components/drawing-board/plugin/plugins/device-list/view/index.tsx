@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useContext } from 'react';
 import { useRequest, useMemoizedFn } from 'ahooks';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, isNil } from 'lodash-es';
 import { Controller } from 'react-hook-form';
 import cls from 'classnames';
 import { GridRow } from '@mui/x-data-grid';
@@ -101,10 +101,10 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
             })
             .filter(
                 d =>
-                    (d.name || '')?.toLowerCase()?.includes(newKeyword) ||
-                    String(d.identifier || '')
+                    String(isNil(d?.name) ? '' : d.name)
                         ?.toLowerCase()
-                        ?.includes(newKeyword),
+                        ?.includes(newKeyword) ||
+                    String(isNil(d?.identifier) ? '' : d.identifier)?.toLowerCase() === newKeyword,
             );
     }, [data, keyword]);
 
@@ -202,7 +202,10 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
                         row(props, otherProps) {
                             if (props?.rowId === NO_MORE_DATA_SIGN) {
                                 return (
-                                    <div className="device-list-view__no-data-tip">
+                                    <div
+                                        key={props.rowId}
+                                        className="device-list-view__no-data-tip"
+                                    >
                                         <div>{getIntlText('common.label.no_more_data')}</div>
                                     </div>
                                 );
