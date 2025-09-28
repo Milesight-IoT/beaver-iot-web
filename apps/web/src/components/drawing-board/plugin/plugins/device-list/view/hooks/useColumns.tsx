@@ -72,7 +72,7 @@ const useColumns = <T extends TableRowDataType>({
                 field: 'name',
                 headerName: getIntlText('device.label.param_device_name'),
                 flex: 1,
-                minWidth: 150,
+                minWidth: 100,
                 ellipsis: true,
             },
             {
@@ -80,14 +80,14 @@ const useColumns = <T extends TableRowDataType>({
                 headerName: getIntlText('device.label.param_external_id'),
                 ellipsis: true,
                 flex: 1,
-                minWidth: 100,
+                minWidth: 80,
             },
             {
                 field: 'deviceStatus',
                 headerName: getIntlText('device.title.device_status'),
                 ellipsis: true,
                 flex: 1,
-                minWidth: 100,
+                minWidth: 80,
                 renderCell({ row }) {
                     const status = get(entitiesStatus, row?.deviceStatus?.id || '');
                     return <DeviceStatus type={status?.value} />;
@@ -97,7 +97,7 @@ const useColumns = <T extends TableRowDataType>({
                 field: 'propertyEntityFirst',
                 headerName: getIntlText('entity.label.property_entity_first'),
                 flex: 1,
-                minWidth: 120,
+                minWidth: 100,
                 ellipsis: true,
                 renderCell({ row }) {
                     return entityNameAndStatus(row?.propertyEntityFirst);
@@ -107,7 +107,7 @@ const useColumns = <T extends TableRowDataType>({
                 field: 'propertyEntitySecond',
                 headerName: getIntlText('entity.label.property_entity_second'),
                 flex: 1,
-                minWidth: 120,
+                minWidth: 100,
                 ellipsis: true,
                 renderCell({ row }) {
                     return entityNameAndStatus(row?.propertyEntitySecond);

@@ -53,6 +53,7 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
 
     const {
         toggleHomeDashboard,
+        isHome,
         homeDashboardClassName,
         homeDashboardIcon,
         homeDashboardTip,
@@ -138,7 +139,12 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
                     onChange={e => handleSelectDashboard(e, item)}
                 />
             </div>
-            <div className="dashboard-item__home md:d-none" onClick={e => e?.stopPropagation()}>
+            <div
+                className={cls('dashboard-item__home md:d-none', {
+                    'is-home': isHome,
+                })}
+                onClick={e => e?.stopPropagation()}
+            >
                 <LoadingWrapper loading={homeLoading} size={24}>
                     <Tooltip title={homeDashboardTip}>
                         <div className={homeDashboardClassName} onClick={toggleHomeDashboard}>

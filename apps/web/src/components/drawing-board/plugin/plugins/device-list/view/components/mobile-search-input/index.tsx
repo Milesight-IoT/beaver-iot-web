@@ -49,6 +49,7 @@ const MobileSearchInput: React.FC<MobileSearchInputProps> = props => {
             onActiveChange={handleShowSearch}
         >
             <InfiniteScrollList
+                isNoMore
                 ref={searchListRef}
                 data={data}
                 itemHeight={228}

@@ -22,9 +22,9 @@ export function useFormItems() {
                 name: 'name',
                 rules: {
                     maxLength: {
-                        value: 63,
+                        value: 64,
                         message: getIntlText('valid.input.max_length', {
-                            1: 63,
+                            1: 64,
                         }),
                     },
                     validate: {
@@ -72,9 +72,9 @@ export function useFormItems() {
                 name: 'description',
                 rules: {
                     maxLength: {
-                        value: 63,
+                        value: 64,
                         message: getIntlText('valid.input.max_length', {
-                            1: 63,
+                            1: 64,
                         }),
                     },
                 },
