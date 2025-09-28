@@ -75,8 +75,18 @@ const MobileQRCodeScanner: React.FC<Props> = ({
     // Select Image from Album
     const handleImgSelect = useMemoizedFn(async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
+        const accepted = file?.type.startsWith('image/');
 
         if (!file) return;
+        if (!accepted) {
+            toast.error({
+                key: 'scan-invalid-type',
+                content: getIntlText('common.message.upload_error_file_invalid_type', {
+                    1: 'JPG/JPEG/PNG',
+                }),
+            });
+            return;
+        }
         setLoading(true);
 
         const img = new Image();
