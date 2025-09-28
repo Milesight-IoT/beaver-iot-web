@@ -14,6 +14,7 @@ import {
     isRequestSuccess,
 } from '@/services/http';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
+import useDashboardStore from '@/pages/dashboard/store';
 
 /**
  * Get Device drawing board data
@@ -23,6 +24,7 @@ export function useDeviceDrawingBoard(isPreview?: boolean) {
     const { getIntlText } = useI18n();
     const navigate = useNavigate();
     const context = useContext(DrawingBoardContext);
+    const { setPath } = useDashboardStore();
 
     const [loading, setLoading] = useState<Record<string, boolean>>({});
 
@@ -80,6 +82,12 @@ export function useDeviceDrawingBoard(isPreview?: boolean) {
             return;
         }
 
+        setPath({
+            id: canvasId,
+            name: '',
+            attach_id: deviceId,
+            attach_type: 'DEVICE',
+        });
         navigate(`/dashboard?id=${canvasId}&deviceId=${deviceId}`);
     });
 

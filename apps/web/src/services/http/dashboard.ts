@@ -5,6 +5,8 @@ import { client, attachAPI, API_PREFIX } from './client';
  */
 export type DashboardCoverType = 'DEFAULT_IMAGE' | 'COLOR' | 'RESOURCE';
 
+export type AttachType = 'DASHBOARD' | 'DEVICE';
+
 /**
  * Device detail definition
  */
@@ -26,8 +28,8 @@ export interface DashboardDetail {
 export interface DrawingBoardDetail {
     id: ApiKey;
     name: string;
-    attach_type: string;
-    attach_id: string;
+    attach_type: AttachType;
+    attach_id: ApiKey;
     widgets: WidgetDetail[];
     entity_ids?: ApiKey[];
     entities?: EntityData[];
@@ -205,7 +207,7 @@ export interface DashboardAPISchema extends APISchema {
         response: {
             canvas_id: string;
             name: string;
-            attach_type: string;
+            attach_type: AttachType;
             attach_id: string;
         };
     };

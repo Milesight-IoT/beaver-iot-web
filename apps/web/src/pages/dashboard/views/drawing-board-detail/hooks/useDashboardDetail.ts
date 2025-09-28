@@ -4,7 +4,7 @@ import { useRequest } from 'ahooks';
 import { useMqtt, MQTT_STATUS, MQTT_EVENT_TYPE, BATCH_PUSH_TIME } from '@/hooks';
 import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
 import { dashboardAPI, getResponseData, isRequestSuccess, awaitWrap } from '@/services/http';
-import useDashboardStore from '@/pages/dashboard/store';
+import useDashboardStore, { type DrawingBoardPath } from '@/pages/dashboard/store';
 
 /**
  * Get dashboard detail
@@ -12,7 +12,7 @@ import useDashboardStore from '@/pages/dashboard/store';
 export function useDashboardDetail(drawingBoardId: ApiKey) {
     const [loading, setLoading] = useState(false);
     const { setLatestEntities, triggerEntityListener } = useActivityEntity();
-    const { setPath } = useDashboardStore();
+    const { paths, setPath, resetPaths } = useDashboardStore();
 
     const { data: dashboardDetail, run: getDashboardDetail } = useRequest(
         async () => {
@@ -28,7 +28,27 @@ export function useDashboardDetail(drawingBoardId: ApiKey) {
                 const data = getResponseData(resp);
 
                 setLatestEntities(data?.entities || []);
-                setPath(data);
+
+                /**
+                 * If the path exists, update it;
+                 * If not, reset all paths.
+                 */
+                if (data) {
+                    const isExisted = paths?.some(p => p.id === data.id);
+                    const newPath: DrawingBoardPath = {
+                        id: data.id,
+                        name: data.name,
+                        attach_id: data.attach_id,
+                        attach_type: data.attach_type,
+                    };
+
+                    if (isExisted) {
+                        setPath(newPath);
+                    } else {
+                        resetPaths([newPath]);
+                    }
+                }
+
                 return data;
             } finally {
                 setLoading(false);

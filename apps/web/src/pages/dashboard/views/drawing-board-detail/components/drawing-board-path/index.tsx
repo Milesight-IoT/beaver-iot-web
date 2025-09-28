@@ -15,7 +15,7 @@ export interface DrawingBoardPathProps {
 const DrawingBoardPath: React.FC<DrawingBoardPathProps> = props => {
     const { className } = props;
 
-    const { paths } = useDashboardStore();
+    const { paths, setPath } = useDashboardStore();
     const navigate = useNavigate();
 
     return (
@@ -33,7 +33,10 @@ const DrawingBoardPath: React.FC<DrawingBoardPathProps> = props => {
                     <div
                         key={path.id}
                         className="dashboard-detail__path"
-                        onClick={() => navigate(`/dashboard?id=${path.id}`)}
+                        onClick={() => {
+                            setPath(path);
+                            navigate(`/dashboard?id=${path.id}`);
+                        }}
                     >
                         <Tooltip title={path.name} autoEllipsis />
                     </div>

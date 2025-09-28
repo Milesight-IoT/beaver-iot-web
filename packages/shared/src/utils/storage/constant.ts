@@ -18,3 +18,7 @@ export const SIDEBAR_COLLAPSE_KEY = 'sidebar-collapsed';
  * take you directly to the main canvas
  */
 export const MAIN_CANVAS_KEY = 'dashboard-main-canvas';
+/**
+ * Dashboard module drawing board paths
+ */
+export const DASHBOARD_DRAWING_BOARD_PATHS_KEY = 'drawing-board-paths';

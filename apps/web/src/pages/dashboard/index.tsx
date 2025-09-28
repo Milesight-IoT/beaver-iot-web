@@ -31,6 +31,16 @@ const DashboardContainer: React.FC = () => {
         }
     }, [id, clearPaths]);
 
+    /**
+     * Jump to default main drawing board
+     */
+    useEffect(() => {
+        if (defaultId) {
+            setSearchParams(`?id=${defaultId}`);
+            setDefaultId(undefined);
+        }
+    }, [defaultId, setDefaultId, setSearchParams]);
+
     const renderDashboard = () => {
         if (loading) {
             return (
@@ -38,11 +48,6 @@ const DashboardContainer: React.FC = () => {
                     <List sx={{ height: '300px' }} />
                 </LoadingWrapper>
             );
-        }
-
-        if (defaultId) {
-            setSearchParams(`?id=${defaultId}`);
-            setDefaultId(undefined);
         }
 
         return id ? <DrawingBoardDetail id={id} deviceId={deviceId} /> : <DashboardList />;

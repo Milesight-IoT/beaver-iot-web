@@ -1,7 +1,6 @@
 import { useState, useEffect, memo, useMemo } from 'react';
 import { useRequest } from 'ahooks';
 import { entityAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/services/http';
-import { useDashboardStore } from '@/stores';
 import { useActivityEntity } from '../../../hooks';
 
 import './style.less';
@@ -9,6 +8,7 @@ import './style.less';
 export interface ViewProps {
     widgetId: ApiKey;
     dashboardId: ApiKey;
+    isEdit: boolean;
     config: {
         entity?: EntityOptionType;
         label?: string;
@@ -20,9 +20,7 @@ export interface ViewProps {
 }
 
 const View = (props: ViewProps) => {
-    const { isEditing } = useDashboardStore();
-
-    const { config, configJson, widgetId, dashboardId } = props;
+    const { config, configJson, widgetId, dashboardId, isEdit } = props;
     const { entity, label, fontSize = 14 } = config || {};
     const { isPreview } = configJson || {};
 
@@ -104,7 +102,7 @@ const View = (props: ViewProps) => {
                 className="text-wrapper__content bg-custom-scrollbar ms-perfect-scrollbar"
                 style={{ fontSize: `${formatFontSize}px`, lineHeight: `${formatFontSize + 8}px` }}
             >
-                {isEditing ? (textContent || '').toString().slice(0, 6000) : textContent}
+                {isEdit ? (textContent || '').toString().slice(0, 6000) : textContent}
             </div>
         </div>
     );

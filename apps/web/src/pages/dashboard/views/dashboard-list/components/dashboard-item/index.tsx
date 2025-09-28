@@ -3,7 +3,6 @@ import { Checkbox } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import cls from 'classnames';
 import { useMemoizedFn } from 'ahooks';
-import { useNavigate } from 'react-router-dom';
 
 import {
     LoadingWrapper,
@@ -18,6 +17,7 @@ import { useHomeDashboard, useDashboardDelete } from '../../hooks';
 import MoreDropdown, { MORE_OPERATION } from '../more-dropdown';
 import useDashboardListStore from '../../store';
 import { getDefaultImg } from '../../utils';
+import { useJumpToDetail } from './useJumpToDetail';
 
 import './style.less';
 
@@ -64,13 +64,11 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
         refreshDashboards: getDashboards,
     });
     const { handleDashboardDelete } = useDashboardDelete(getDashboards);
-    const navigate = useNavigate();
     const { coverImages } = useDashboardListStore();
+    const { resourceCheckLoading, handleJumpToDetail } = useJumpToDetail();
 
     const handleItemClick = useMemoizedFn(() => {
-        if (!item?.main_canvas_id) return;
-
-        navigate(`/dashboard?id=${item.main_canvas_id}`);
+        handleJumpToDetail(item);
     });
 
     const handleDashboardOperation = useMemoizedFn((type: MORE_OPERATION) => {
@@ -101,17 +99,19 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
             })}
             onClick={handleItemClick}
         >
-            <div className="dashboard-item__body">
-                <img
-                    className="dashboard-item__img"
-                    alt="failed"
-                    src={genImageUrl(
-                        item?.cover_data ||
-                            getDefaultImg(coverImages) ||
-                            'https://bing.ee123.net/img/cn/fhd/2025/08/11.jpg',
-                    )}
-                />
-            </div>
+            <LoadingWrapper loading={resourceCheckLoading}>
+                <div className="dashboard-item__body">
+                    <img
+                        className="dashboard-item__img"
+                        alt="failed"
+                        src={genImageUrl(
+                            item?.cover_data ||
+                                getDefaultImg(coverImages) ||
+                                'https://bing.ee123.net/img/cn/fhd/2025/08/11.jpg',
+                        )}
+                    />
+                </div>
+            </LoadingWrapper>
             <div className="dashboard-item__footer">
                 <div className="dashboard-item__info">
                     <Tooltip
