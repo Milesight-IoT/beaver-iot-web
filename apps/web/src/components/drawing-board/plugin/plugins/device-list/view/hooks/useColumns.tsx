@@ -97,7 +97,7 @@ const useColumns = <T extends TableRowDataType>({
                 headerName: getIntlText('device.title.device_status'),
                 ellipsis: true,
                 flex: 1,
-                minWidth: 80,
+                minWidth: 110,
                 renderCell({ row }) {
                     const status = get(entitiesStatus, row?.deviceStatus?.id || '');
                     return <DeviceStatus type={status?.value} />;
