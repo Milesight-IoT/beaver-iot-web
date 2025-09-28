@@ -12,6 +12,7 @@ import {
     DEFAULT_SCAN_REGION_WIDTH,
     DEFAULT_SCAN_REGION_HEIGHT,
     DEFAULT_SCAN_REGION_RADIUS,
+    DEFAULT_TOPBAR_HEIGHT,
 } from './config';
 import Scanner, { type Options as ScannerOptions } from './scanner';
 import { ScanConfig, CameraConfig, ScanResult } from './types';
@@ -137,13 +138,17 @@ const MobileQRCodeScanner: React.FC<Props> = ({
     const scanRegion = useMemo<ScannerOptions['scanRegion']>(() => {
         if (!size) return;
         const width = Math.min(DEFAULT_SCAN_REGION_WIDTH, size.width - 32);
-        const height = Math.min(DEFAULT_SCAN_REGION_HEIGHT, size.height - 32);
+        const height = Math.min(
+            DEFAULT_SCAN_REGION_HEIGHT,
+            size.height - DEFAULT_TOPBAR_HEIGHT - 32,
+        );
+        const regionSize = Math.min(width, height);
 
         return {
-            x: (size.width - width) / 2,
-            y: (size.height - height) / 2,
-            width,
-            height,
+            x: (size.width - regionSize) / 2,
+            y: (size.height - regionSize - DEFAULT_TOPBAR_HEIGHT) / 2,
+            width: regionSize,
+            height: regionSize,
             radius: DEFAULT_SCAN_REGION_RADIUS,
         };
     }, [size]);
@@ -157,7 +162,7 @@ const MobileQRCodeScanner: React.FC<Props> = ({
         try {
             scannerRef.current = new Scanner(wrapper, {
                 width: size.width,
-                height: size.height,
+                height: size.height - DEFAULT_TOPBAR_HEIGHT,
                 scanRegion,
                 scanConfig,
                 cameraConfig,
@@ -209,7 +214,7 @@ const MobileQRCodeScanner: React.FC<Props> = ({
         if (!scanRegion) return {};
         return {
             left: scanRegion.x,
-            top: scanRegion.y,
+            top: scanRegion.y + DEFAULT_TOPBAR_HEIGHT,
             width: scanRegion.width,
             height: scanRegion.height,
         };

@@ -28,3 +28,8 @@ export const DEFAULT_SCAN_REGION_HEIGHT = 256;
  * Default scan region radius
  */
 export const DEFAULT_SCAN_REGION_RADIUS = 12;
+
+/**
+ * Default topbar height
+ */
+export const DEFAULT_TOPBAR_HEIGHT = 48;
