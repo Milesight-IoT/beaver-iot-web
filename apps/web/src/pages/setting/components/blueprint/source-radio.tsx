@@ -5,7 +5,7 @@ import { FormControl, InputLabel, FormHelperText } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { Logo, UploadFileIcon } from '@milesight/shared/src/components';
 import { Tooltip } from '@/components';
-import type { BlueprintSourceType } from '@/services/http';
+import { BlueprintSourceType } from '@/services/http';
 
 interface Props {
     label?: string;
@@ -30,13 +30,13 @@ const SourceRadio: React.FC<Props> = ({ label, required, error, helperText, ...p
     >(
         () => [
             {
-                key: 'Default',
+                key: BlueprintSourceType.DEFAULT,
                 icon: <Logo mini />,
                 title: getIntlText('setting.blueprint.title_official_store'),
                 desc: getIntlText('setting.blueprint.desc_official_store'),
             },
             {
-                key: 'Upload',
+                key: BlueprintSourceType.UPLOAD,
                 icon: <UploadFileIcon />,
                 title: getIntlText('common.label.local_upload'),
                 desc: getIntlText('setting.blueprint.desc_local_upload'),
