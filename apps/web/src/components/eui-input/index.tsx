@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Button,
     FormControl,
@@ -21,6 +21,25 @@ interface Props extends OutlinedInputProps {
 }
 
 /**
+ * Get available cameras
+ */
+const getCameras = () => {
+    return new Promise<MediaDeviceInfo[]>((resolve, reject) => {
+        navigator.mediaDevices
+            .enumerateDevices()
+            .then(devices => {
+                const inputCameras = devices.filter(device => {
+                    return device.kind === 'videoinput';
+                });
+                resolve(inputCameras);
+            })
+            .catch(err => {
+                reject(err);
+            });
+    });
+};
+
+/**
  * EUI input component
  *
  * Support qrcode scan in mobile device
@@ -29,14 +48,24 @@ const EuiInput: React.FC<Props> = ({ label, fullWidth, error, helperText, sx, ..
     const { matchTablet } = useTheme();
     const [value, setValue] = useControllableValue(props);
     const [openScanner, setOpenScanner] = useState(false);
-    const scannerAvailable = useMemo(() => {
-        const { hostname, protocol } = window.location;
-        return (
-            isMobile() &&
-            matchTablet &&
-            (protocol === 'https:' || hostname === 'localhost') &&
-            !!navigator.mediaDevices?.getUserMedia
-        );
+    const [scannerAvailable, setScannerAvailable] = useState(false);
+
+    useEffect(() => {
+        getCameras()
+            .then(cameras => {
+                const { hostname, protocol } = window.location;
+                const available =
+                    isMobile() &&
+                    matchTablet &&
+                    !!cameras.length &&
+                    !!navigator.mediaDevices?.getUserMedia &&
+                    (protocol === 'https:' || hostname === 'localhost');
+
+                setScannerAvailable(available);
+            })
+            .catch(() => {
+                setScannerAvailable(false);
+            });
     }, [matchTablet]);
 
     return (

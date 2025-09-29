@@ -155,7 +155,7 @@ class QRCodeScanner {
      * Get available cameras
      */
     static getCameras() {
-        return new Promise((resolve, reject) => {
+        return new Promise<MediaDeviceInfo[]>((resolve, reject) => {
             navigator.mediaDevices
                 .enumerateDevices()
                 .then(devices => {
