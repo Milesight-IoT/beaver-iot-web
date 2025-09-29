@@ -30,7 +30,7 @@ const Toolbar: React.FC<ToolbarProps> = props => {
 
     const renderSidebar = () => {
         const pathIndex = paths?.findIndex(p => p.id === drawingBoardDetail?.id);
-        if (isNil(pathIndex) || pathIndex < 1) {
+        if (!smallScreenSize || isNil(pathIndex) || pathIndex < 1) {
             return <SidebarController />;
         }
 

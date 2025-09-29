@@ -1,6 +1,7 @@
 import React from 'react';
 import { isNil } from 'lodash-es';
 import { Stack, Button, OutlinedInput, InputAdornment, List } from '@mui/material';
+import cls from 'classnames';
 
 import {
     AddIcon,
@@ -9,7 +10,7 @@ import {
     LoadingWrapper,
     NoDashboardIcon,
 } from '@milesight/shared/src/components';
-import { useI18n } from '@milesight/shared/src/hooks';
+import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 
 import { PERMISSIONS } from '@/constants';
 import { Breadcrumbs, Empty, PermissionControlHidden } from '@/components';
@@ -21,6 +22,7 @@ import { useCoverImages } from './components/cover-selection/hooks';
 import './style.less';
 
 const DashboardList: React.FC = () => {
+    const { matchTablet } = useTheme();
     const { getIntlText } = useI18n();
     const {
         loading,
@@ -59,7 +61,11 @@ const DashboardList: React.FC = () => {
     );
 
     const renderHeader = (
-        <div className="dashboard-list__header md:d-none">
+        <div
+            className={cls('dashboard-list__header', {
+                'd-none': matchTablet,
+            })}
+        >
             <Stack className="ms-operations-btns" direction="row" spacing="12px">
                 {renderAddDashboard}
                 <PermissionControlHidden permissions={PERMISSIONS.DASHBOARD_DELETE}>
@@ -149,7 +155,11 @@ const DashboardList: React.FC = () => {
     return (
         <div className="ms-main">
             <Breadcrumbs />
-            <div className="ms-view dashboard-list md:p-0">
+            <div
+                className={cls('ms-view', 'dashboard-list', {
+                    'p-0': matchTablet,
+                })}
+            >
                 <div className="ms-view__inner">{renderContent()}</div>
 
                 {operateModalVisible && (
