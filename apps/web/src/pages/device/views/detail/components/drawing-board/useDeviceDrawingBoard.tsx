@@ -20,7 +20,9 @@ export default function useDeviceDrawingBoard(
 
     const [loadingDrawingBoard, setLoadingDrawingBoard] = useState<boolean>();
     const [drawingBoardDetail, setDrawingBoardDetail] = useState<DrawingBoardDetail>();
-    const canvasIdRef = useRef<ApiKey>();
+    const [drawingBoardId, setDrawingBoardId] = useState<ApiKey>();
+
+    const drawingBoardIdRef = useRef<ApiKey>();
 
     const getNewestDrawingBoardDetail = useMemoizedFn(async () => {
         try {
@@ -28,13 +30,13 @@ export default function useDeviceDrawingBoard(
                 setLoadingDrawingBoard(true);
             }
 
-            if (!canvasIdRef.current) {
+            if (!drawingBoardIdRef.current) {
                 return;
             }
 
             const [error, resp] = await awaitWrap(
                 dashboardAPI.getDrawingBoardDetail({
-                    canvas_id: canvasIdRef.current,
+                    canvas_id: drawingBoardIdRef.current,
                 }),
             );
             if (error || !isRequestSuccess(resp)) {
@@ -71,9 +73,10 @@ export default function useDeviceDrawingBoard(
                 }
 
                 const result = getResponseData(resp);
-                const canvasId = result?.canvas_id;
+                const newId = result?.canvas_id;
 
-                canvasIdRef.current = canvasId;
+                drawingBoardIdRef.current = newId;
+                setDrawingBoardId(newId);
                 getNewestDrawingBoardDetail?.();
             } catch {
                 setLoadingDrawingBoard(false);
@@ -94,7 +97,6 @@ export default function useDeviceDrawingBoard(
 
     // Subscribe the entity exchange topic
     useEffect(() => {
-        const drawingBoardId = canvasIdRef.current;
         if (!drawingBoardId || !mqttClient || mqttStatus !== MQTT_STATUS.CONNECTED) {
             return;
         }
@@ -108,7 +110,7 @@ export default function useDeviceDrawingBoard(
         });
 
         return removeTriggerListener;
-    }, [mqttStatus, mqttClient, triggerEntityListener]);
+    }, [drawingBoardId, mqttStatus, mqttClient, triggerEntityListener]);
 
     // Unsubscribe the topic when the dashboard page is unmounted
     useEffect(() => {
