@@ -13,7 +13,7 @@
         position: relative;
         display: flex;
         align-items: flex-start;
-        padding: @padding-sm 11px;
+        padding: @padding-sm 3px @padding-sm 11px;
         border: @border-base;
         border-radius: @border-radius-base;
     }
@@ -58,7 +58,7 @@
             display: inline-block;
             width: 77px;
             height: 56px;
-            margin-bottom: @margin-xs;
+            margin: 0 @margin-xs @margin-xs 0;
             overflow: hidden;
             border: @border-base;
             border-radius: @border-radius-base;
@@ -66,10 +66,6 @@
 
             &.active {
                 box-shadow: 0 0 0 2px var(--primary-color-base);
-            }
-
-            &:not(:nth-child(4n)) {
-                margin-right: @margin-xs;
             }
 
             &:not(&.active):hover {
