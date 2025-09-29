@@ -204,7 +204,7 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
                                 return (
                                     <div
                                         key={props.rowId}
-                                        className="device-list-view__no-data-tip"
+                                        className="device-list-view__no-data-tip border-top"
                                     >
                                         <div>{getIntlText('common.label.no_more_data')}</div>
                                     </div>
@@ -212,6 +212,11 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
                             }
 
                             return <GridRow {...props} {...otherProps} />;
+                        },
+                    }}
+                    sx={{
+                        '.MuiDataGrid-filler > div': {
+                            borderTop: 'none',
                         },
                     }}
                 />

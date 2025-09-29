@@ -36,6 +36,7 @@ const TablePro = <DataType extends GridValidRowModel>({
     settingShowOpeColumn = false,
     showSelectedAndTotal = true,
     filterSettingColumns,
+    sx,
     ...props
 }: TableProProps<DataType>) => {
     const { getIntlText } = useI18n();
@@ -216,6 +217,7 @@ const TablePro = <DataType extends GridValidRowModel>({
                     sx={{
                         border: 0,
                         ...columnsFixedClass,
+                        ...sx,
                     }}
                     columnHeaderHeight={44}
                     rowHeight={48}
