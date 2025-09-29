@@ -58,18 +58,28 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 // ellipsis: true,
                 // disableColumnMenu: false,
                 renderCell({ row }) {
+                    const { name, deviceData } = row;
                     // TODO: Render with blueprint tooltip
-                    // return (
-                    //     <TitleIcon
-                    //         title={row.name}
-                    //         tooltip={getIntlText('workflow.tip.blueprint_entity_come_from', {
-                    //             1: 'xxxDeviceName',
-                    //             2: 'xxxExternalID',
-                    //         })}
-                    //     />
-                    // );
-                    return <TitleIcon title={row.name} />;
+                    return (
+                        <TitleIcon
+                            title={name}
+                            tooltip={
+                                deviceData &&
+                                getIntlText('workflow.tip.blueprint_workflow_come_from', {
+                                    1: deviceData.name,
+                                    2: deviceData.identifier,
+                                })
+                            }
+                        />
+                    );
                 },
+            },
+            {
+                field: 'id',
+                headerName: getIntlText('common.label.workflow_id'),
+                flex: 1,
+                minWidth: 150,
+                ellipsis: true,
             },
             {
                 field: 'remark',
@@ -105,6 +115,12 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 flex: 1,
                 minWidth: 100,
                 ellipsis: true,
+                renderCell({ row }) {
+                    const { userNickname, deviceData } = row;
+                    return !deviceData?.name
+                        ? userNickname
+                        : `${deviceData.name} (${deviceData.identifier})`;
+                },
             },
             {
                 field: 'enabled',

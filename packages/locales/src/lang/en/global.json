@@ -300,5 +300,6 @@
     "common.label.appearance_of_status": "Appearance of {1} status",
     "common.label.metrics": "指标",
     "common.label.font_size": "文本插件字体大小表单项标题",
-    "common.label.never_seen": "NeverSeen"
+    "common.label.never_seen": "NeverSeen",
+    "common.label.workflow_id": "Workflow ID"
 }
