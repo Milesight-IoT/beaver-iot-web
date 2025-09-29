@@ -75,7 +75,7 @@ export default function useDeviceDrawingBoard(
         },
         {
             debounceWait: 300,
-            refreshDeps: [deviceDetail],
+            refreshDeps: [deviceDetail?.id],
         },
     );
 
