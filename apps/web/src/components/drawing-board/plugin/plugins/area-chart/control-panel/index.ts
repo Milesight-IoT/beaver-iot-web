@@ -20,7 +20,7 @@ const areaChartControlPanelConfig = (): ControlPanelConfig<AreaChartControlPanel
         icon: AreaChartIcon,
         defaultRow: 2,
         defaultCol: 2,
-        minRow: 1,
+        minRow: 2,
         minCol: 2,
         maxRow: 4,
         maxCol: 12,
