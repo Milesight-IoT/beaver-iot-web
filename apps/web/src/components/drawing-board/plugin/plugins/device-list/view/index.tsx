@@ -9,7 +9,7 @@ import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 import { Modal } from '@milesight/shared/src/components';
 
 import { type EntityFormDataProps } from '@/hooks';
-import { TablePro, HoverSearchInput } from '@/components';
+import { TablePro, HoverSearchInput, Tooltip } from '@/components';
 import { deviceAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
 import { DEVICE_STATUS_ENTITY_UNIQUE_ID } from '@/constants';
@@ -110,7 +110,9 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
 
     const toolbarRender = useMemo(() => {
         return (
-            <div className="device-list-view__title">{getIntlText('device.title.device_list')}</div>
+            <div className="device-list-view__title">
+                <Tooltip autoEllipsis title={getIntlText('device.title.device_list')} />
+            </div>
         );
     }, [getIntlText]);
 
