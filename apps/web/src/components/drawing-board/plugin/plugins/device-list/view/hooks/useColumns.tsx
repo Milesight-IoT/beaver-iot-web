@@ -70,7 +70,7 @@ const useColumns = <T extends TableRowDataType>({
 
         const status = get(entitiesStatus, entity?.id || '');
         if (!status || isNil(status?.value)) {
-            return entity.name;
+            return `${entity.name}: -`;
         }
 
         return `${entity.name}: ${status.value}`;

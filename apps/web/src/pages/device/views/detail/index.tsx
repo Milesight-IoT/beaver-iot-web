@@ -104,7 +104,7 @@ export default () => {
             },
             {
                 key: 'drawingBoard',
-                label: 'Drawing Board',
+                label: getIntlText('dashboard.label.device_drawing_board'),
                 component: (
                     <DeviceDrawingBoard
                         isLoading={loadingDrawingBoard}

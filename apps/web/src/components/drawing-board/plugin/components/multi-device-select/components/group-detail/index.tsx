@@ -72,7 +72,7 @@ const GroupDetail: React.FC<GroupDetailProps> = props => {
                             autoEllipsis
                             title={
                                 item?.group_name
-                                    ? `${item.group_name}, ${getIntlText('device.label.param_external_id')}: ${item.identifier}`
+                                    ? `${getIntlText('device.label.param_external_id')}: ${item.identifier}, ${item.group_name}`
                                     : `${getIntlText('device.label.param_external_id')}: ${item.identifier}`
                             }
                         />

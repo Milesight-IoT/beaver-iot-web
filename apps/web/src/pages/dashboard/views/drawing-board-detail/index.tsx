@@ -53,7 +53,10 @@ const DrawingBoardDetail: React.FC<DashboardDetailProps> = props => {
 
     return (
         <div className="ms-main">
-            <Toolbar drawingBoardOperation={renderDrawingBoardOperation} />
+            <Toolbar
+                drawingBoardDetail={dashboardDetail}
+                drawingBoardOperation={renderDrawingBoardOperation}
+            />
 
             <div className="ms-view dashboard-detail">{renderDetail()}</div>
         </div>

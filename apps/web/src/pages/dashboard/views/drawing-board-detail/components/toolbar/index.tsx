@@ -1,15 +1,18 @@
 import React from 'react';
 import { IconButton, Divider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { isNil } from 'lodash-es';
 
-import { GridViewIcon } from '@milesight/shared/src/components';
+import { GridViewIcon, ArrowBackIcon } from '@milesight/shared/src/components';
 import { useTheme, useMediaQuery, useI18n } from '@milesight/shared/src/hooks';
 
 import { SidebarController, Tooltip } from '@/components';
 import useDashboardStore from '@/pages/dashboard/store';
+import { type DrawingBoardDetail } from '@/services/http';
 import DrawingBoardPath from '../drawing-board-path';
 
 export interface ToolbarProps {
+    drawingBoardDetail?: DrawingBoardDetail;
     drawingBoardOperation: () => JSX.Element;
 }
 
@@ -17,7 +20,7 @@ export interface ToolbarProps {
  * Dashboard detail toolbar
  */
 const Toolbar: React.FC<ToolbarProps> = props => {
-    const { drawingBoardOperation } = props;
+    const { drawingBoardDetail, drawingBoardOperation } = props;
 
     const { getIntlText } = useI18n();
     const navigate = useNavigate();
@@ -25,10 +28,23 @@ const Toolbar: React.FC<ToolbarProps> = props => {
     const smallScreenSize = useMediaQuery(breakpoints.down('md'));
     const { paths } = useDashboardStore();
 
+    const renderSidebar = () => {
+        const pathIndex = paths?.findIndex(p => p.id === drawingBoardDetail?.id);
+        if (isNil(pathIndex) || pathIndex < 1) {
+            return <SidebarController />;
+        }
+
+        return (
+            <IconButton onClick={() => window.history.back()}>
+                <ArrowBackIcon />
+            </IconButton>
+        );
+    };
+
     return (
         <div className="dashboard-detail__toolbar">
             <div className="dashboard-detail__toolbar-left">
-                <SidebarController />
+                {renderSidebar()}
                 <Tooltip
                     className="md:d-none"
                     title={getIntlText('dashboard.tip.return_dashboard_list')}

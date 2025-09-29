@@ -39,5 +39,6 @@
     "dashboard.tip.disabled_edit_device_drawing_board": "当前画布为设备画布，请前往设备详情页编辑",
     "dashboard.label.left_y_axis_title": "折线图插件 Left Y axis label",
     "dashboard.label.right_y_axis_title": "折线图插件 Right Y axis label",
-    "dashboard.tip.small_screen_empty": "当前仪表盘没有组件，请前往 PC 端添加"
+    "dashboard.tip.small_screen_empty": "当前仪表盘没有组件，请前往 PC 端添加",
+    "dashboard.label.device_drawing_board": "设备画布"
 }
