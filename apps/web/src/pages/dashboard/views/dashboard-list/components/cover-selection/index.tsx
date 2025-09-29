@@ -60,7 +60,14 @@ const CoverSelection: React.FC<CoverSelectionProps> = props => {
                     <div className={styles['cover-selection__preview']}>
                         {renderPreviewImage()}
                         <div className={styles.upload}>
-                            <Upload autoUpload={false} onChange={handleUploadImage}>
+                            <Upload
+                                autoUpload={false}
+                                onChange={handleUploadImage}
+                                accept={{
+                                    'image/jpg': ['.jpg', '.jpeg'],
+                                    'image/png': [],
+                                }}
+                            >
                                 <Button fullWidth variant="outlined" startIcon={<UploadIcon />}>
                                     {getIntlText('common.label.local_upload')}
                                 </Button>
