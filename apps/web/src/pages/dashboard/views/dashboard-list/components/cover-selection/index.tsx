@@ -67,6 +67,7 @@ const CoverSelection: React.FC<CoverSelectionProps> = props => {
                                     'image/jpg': ['.jpg', '.jpeg'],
                                     'image/png': [],
                                 }}
+                                maxSize={1024 * 1024 * 5}
                             >
                                 <Button fullWidth variant="outlined" startIcon={<UploadIcon />}>
                                     {getIntlText('common.label.local_upload')}
