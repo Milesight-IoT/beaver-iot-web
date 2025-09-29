@@ -1,7 +1,8 @@
-import { useMemo, useState, useRef } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
 import { useMemoizedFn, useRequest } from 'ahooks';
 import { isNil } from 'lodash-es';
 
+import { useMqtt, MQTT_STATUS, MQTT_EVENT_TYPE, BATCH_PUSH_TIME } from '@/hooks';
 import {
     dashboardAPI,
     awaitWrap,
@@ -10,10 +11,13 @@ import {
     type DeviceAPISchema,
     type DrawingBoardDetail,
 } from '@/services/http';
+import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
 
 export default function useDeviceDrawingBoard(
     deviceDetail?: ObjectToCamelCase<DeviceAPISchema['getDetail']['response']>,
 ) {
+    const { setLatestEntities, triggerEntityListener } = useActivityEntity();
+
     const [loadingDrawingBoard, setLoadingDrawingBoard] = useState<boolean>();
     const [drawingBoardDetail, setDrawingBoardDetail] = useState<DrawingBoardDetail>();
     const canvasIdRef = useRef<ApiKey>();
@@ -37,6 +41,8 @@ export default function useDeviceDrawingBoard(
                 return;
             }
             const data = getResponseData(resp);
+
+            setLatestEntities(data?.entities || []);
 
             setDrawingBoardDetail(data);
         } finally {
@@ -82,6 +88,35 @@ export default function useDeviceDrawingBoard(
     const loading = useMemo(() => {
         return isNil(loadingDrawingBoard) || loadingDrawingBoard;
     }, [loadingDrawingBoard]);
+
+    // ---------- Listen the entities change by Mqtt ----------
+    const { status: mqttStatus, client: mqttClient } = useMqtt();
+
+    // Subscribe the entity exchange topic
+    useEffect(() => {
+        const drawingBoardId = canvasIdRef.current;
+        if (!drawingBoardId || !mqttClient || mqttStatus !== MQTT_STATUS.CONNECTED) {
+            return;
+        }
+
+        const removeTriggerListener = mqttClient.subscribe(MQTT_EVENT_TYPE.EXCHANGE, payload => {
+            triggerEntityListener(payload.payload?.entity_ids || [], {
+                dashboardId: drawingBoardId,
+                payload,
+                periodTime: BATCH_PUSH_TIME,
+            });
+        });
+
+        return removeTriggerListener;
+    }, [mqttStatus, mqttClient, triggerEntityListener]);
+
+    // Unsubscribe the topic when the dashboard page is unmounted
+    useEffect(() => {
+        return () => {
+            mqttClient?.unsubscribe(MQTT_EVENT_TYPE.EXCHANGE);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return {
         loading,
