@@ -56,8 +56,8 @@ const ConfigPlugin = (props: ConfigPluginProps) => {
         formRef.current?.handleSubmit();
     };
 
-    const handleSubmit = (_data: any) => {
-        onOk?.(formData);
+    const handleSubmit = (_data: AnyDict) => {
+        onOk?.(_data);
     };
 
     // Switch the tab page

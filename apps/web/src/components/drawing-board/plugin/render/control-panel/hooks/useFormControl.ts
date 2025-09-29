@@ -43,7 +43,7 @@ export function useFormControl(props: UseFormControlProps) {
             }
 
             updateFormData(newData);
-        }, 100);
+        }, 150);
     });
 
     /**

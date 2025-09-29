@@ -21,7 +21,7 @@ import './style.less';
 
 export interface ControlPanelContainerExposeProps {
     /** Submit the form */
-    handleSubmit: () => void;
+    handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
     /** Reset form data */
     reset: UseFormReset<AnyDict>;
     /** Set form value */
