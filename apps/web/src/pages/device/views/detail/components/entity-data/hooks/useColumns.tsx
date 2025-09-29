@@ -62,17 +62,21 @@ const useColumns = <T extends TableRowDataType>({
                 ]),
                 operatorValueCompType: 'input',
                 renderCell({ row }) {
+                    const { entityName, workflowData } = row;
+
                     // TODO: Render with blueprint tooltip
-                    // return (
-                    //     <TitleIcon
-                    //         title={row.entityName}
-                    //         tooltip={getIntlText('device.tip.blueprint_entity_come_from', {
-                    //             1: row.deviceName,
-                    //             2: row.deviceExternalID,
-                    //         })}
-                    //     />
-                    // );
-                    return <TitleIcon title={row.entityName} />;
+                    return (
+                        <TitleIcon
+                            title={entityName}
+                            tooltip={
+                                workflowData &&
+                                getIntlText('device.tip.blueprint_entity_come_from', {
+                                    1: workflowData.name,
+                                    2: workflowData.id,
+                                })
+                            }
+                        />
+                    );
                 },
             },
             {

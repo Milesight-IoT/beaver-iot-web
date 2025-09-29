@@ -27,7 +27,14 @@ export interface EntityAPISchema extends APISchema {
             /** Advanced filter */
             entity_filter?: AdvancedConditionsType<EntityData>;
         };
-        response: SearchResponseType<EntityData[]>;
+        response: SearchResponseType<
+            (EntityData & {
+                workflow_data?: {
+                    id: ApiKey;
+                    name: string;
+                };
+            })[]
+        >;
     };
     /** Advanced search entity */
     advancedSearch: {
@@ -45,7 +52,14 @@ export interface EntityAPISchema extends APISchema {
                 },
             ];
         };
-        response: SearchResponseType<EntityData[]>;
+        response: SearchResponseType<
+            (EntityData & {
+                workflow_data?: {
+                    id: ApiKey;
+                    name: string;
+                };
+            })[]
+        >;
     };
 
     /** Get historical data */

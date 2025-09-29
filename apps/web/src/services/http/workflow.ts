@@ -52,6 +52,14 @@ export interface WorkflowAPISchema extends APISchema {
                 updated_at: number;
                 /** User Nickname */
                 user_nickname: string;
+                device_data?: {
+                    /** Device ID */
+                    id: ApiKey;
+                    /** External ID */
+                    identifier: ApiKey;
+                    /** Device Name */
+                    name: string;
+                };
             }[]
         >;
     };
