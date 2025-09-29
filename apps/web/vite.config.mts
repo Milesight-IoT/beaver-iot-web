@@ -98,24 +98,24 @@ const plugins: PluginOption[] = [
             cacheId: 'beaver',
             cleanupOutdatedCaches: true,
             maximumFileSizeToCacheInBytes: 5000000,
-            runtimeCaching: [
-                {
-                    urlPattern: /.+\.(?:js|css|svg|png|jpg|jpeg|gif|webp|ttf|woff|woff2|eot|otf|ico)$/,
-                    handler: 'CacheFirst',
-                    options: {
-                        cacheName: 'beaver-static',
-                        expiration: {
-                            // Restrict cache size to 100 entries
-                            maxEntries: 100,
-                            // Cache for 100 days
-                            maxAgeSeconds: 60 * 60 * 24 * 100,
-                        },
-                        cacheableResponse: {
-                            statuses: [0, 200],
-                        },
-                    },
-                },
-            ],
+            // runtimeCaching: [
+            //     {
+            //         urlPattern: /.+\.(?:js|css|svg|png|jpg|jpeg|gif|webp|ttf|woff|woff2|eot|otf|ico)$/,
+            //         handler: 'CacheFirst',
+            //         options: {
+            //             cacheName: 'beaver-static',
+            //             expiration: {
+            //                 // Restrict cache size to 100 entries
+            //                 maxEntries: 100,
+            //                 // Cache for 100 days
+            //                 maxAgeSeconds: 60 * 60 * 24 * 100,
+            //             },
+            //             cacheableResponse: {
+            //                 statuses: [0, 200],
+            //             },
+            //         },
+            //     },
+            // ],
         },
         devOptions: { enabled: ENABLE_SW_DEV === 'true' },
     }),
