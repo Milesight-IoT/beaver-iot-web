@@ -37,6 +37,7 @@ const TablePro = <DataType extends GridValidRowModel>({
     showSelectedAndTotal = true,
     filterSettingColumns,
     sx,
+    searchSlot,
     ...props
 }: TableProProps<DataType>) => {
     const { getIntlText } = useI18n();
@@ -192,6 +193,7 @@ const TablePro = <DataType extends GridValidRowModel>({
                             />
                         </div>
                     )}
+                    {searchSlot}
                     {columnSettingEnable && (
                         <ColumnsSetting<DataType>
                             apiRef={apiRef}

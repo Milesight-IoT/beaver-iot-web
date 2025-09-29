@@ -58,6 +58,10 @@ export interface TableProProps<T extends GridValidRowModel> extends DataGridProp
      */
     showSelectedAndTotal?: boolean;
     /**
+     * Customize toolbar search input component slot
+     */
+    searchSlot?: React.ReactNode;
+    /**
      * Customize filter functions that are not displayed in the settings panel and table.
      * It is used for scenarios where columns within a table need to be dynamically displayed
      */

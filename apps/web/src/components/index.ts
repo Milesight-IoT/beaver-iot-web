@@ -82,3 +82,4 @@ export { default as MobileSearchPanel } from './mobile-search-panel';
 export { default as EuiInput } from './eui-input';
 export { default as TitleIcon } from './title-icon';
 export { default as DeviceStatus } from './device-status';
+export { default as HoverSearchInput } from './hover-search-input';

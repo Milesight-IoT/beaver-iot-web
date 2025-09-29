@@ -21,6 +21,9 @@ const deviceListControlPanelConfig = (): ControlPanelConfig<DeviceListControlPan
         maxCol: 12,
         maxRow: 12,
         fullscreenable: true,
+        fullscreenIconSx: {
+            top: '18px',
+        },
         configProps: [
             {
                 label: 'Device List',

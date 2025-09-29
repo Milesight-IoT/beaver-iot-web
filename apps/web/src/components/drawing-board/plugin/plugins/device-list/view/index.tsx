@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useContext } from 'react';
-import { useRequest, useMemoizedFn } from 'ahooks';
+import { useRequest } from 'ahooks';
 import { isEmpty, isNil } from 'lodash-es';
 import { Controller } from 'react-hook-form';
 import cls from 'classnames';
@@ -9,7 +9,7 @@ import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 import { Modal } from '@milesight/shared/src/components';
 
 import { type EntityFormDataProps } from '@/hooks';
-import { TablePro } from '@/components';
+import { TablePro, HoverSearchInput } from '@/components';
 import { deviceAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
 import { DEVICE_STATUS_ENTITY_UNIQUE_ID } from '@/constants';
@@ -114,10 +114,6 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
         );
     }, [getIntlText]);
 
-    const handleSearch = useMemoizedFn((value: string) => {
-        setKeyword(value);
-    });
-
     const { entitiesStatus } = useDeviceEntities({
         isPreview,
         data,
@@ -196,7 +192,7 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
                     getRowId={row => row.id}
                     rows={tableData}
                     toolbarRender={toolbarRender}
-                    onSearch={handleSearch}
+                    searchSlot={<HoverSearchInput keyword={keyword} changeKeyword={setKeyword} />}
                     slots={{
                         // eslint-disable-next-line react/no-unstable-nested-components
                         row(props, otherProps) {

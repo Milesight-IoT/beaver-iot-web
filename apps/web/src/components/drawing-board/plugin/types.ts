@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { ControllerProps } from 'react-hook-form';
 
-import { type TextFieldProps } from '@mui/material';
+import { type TextFieldProps, type SxProps } from '@mui/material';
 import { type Layout } from 'react-grid-layout';
 import { type ToggleRadioProps, type UploadProps } from '@/components';
 import {
@@ -193,6 +193,8 @@ export interface ControlPanelConfig<T extends AnyDict = AnyDict> {
     icon?: string;
     /** Can it be displayed in fullscreen */
     fullscreenable?: boolean;
+    /** Plugin fullscreen icon sx custom style */
+    fullscreenIconSx?: SxProps;
 }
 
 /**

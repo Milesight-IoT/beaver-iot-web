@@ -200,7 +200,10 @@ const Widgets = (props: WidgetProps) => {
                         className={!isEdit ? 'drawing-board__widget-grid-edit' : ''}
                     >
                         <DrawingBoardContext.Provider value={newDrawingBoardContext(data)}>
-                            <FullscreenModal disabled={!plugin?.fullscreenable || isEdit}>
+                            <FullscreenModal
+                                disabled={!plugin?.fullscreenable || isEdit}
+                                sx={plugin?.fullscreenIconSx}
+                            >
                                 <Widget
                                     onEdit={handleEdit}
                                     onDelete={handleDelete}

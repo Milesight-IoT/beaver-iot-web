@@ -13,6 +13,10 @@ export interface FullscreenModalProps {
      * Disabled fullscreen
      */
     disabled?: boolean;
+    /**
+     * Plugin fullscreen icon sx custom style
+     */
+    sx?: SxProps;
     /** Is fullscreen callback */
     onFullscreen?: (isFullscreen: boolean) => void;
 }
@@ -21,15 +25,15 @@ export interface FullscreenModalProps {
  * Higher order component to fullscreen
  */
 const FullscreenModal: React.FC<FullscreenModalProps> = props => {
-    const { children, disabled, onFullscreen } = props;
+    const { children, disabled, sx, onFullscreen } = props;
 
     const { matchTablet } = useTheme();
 
     const [isFullscreen, setIsFullscreen] = useState(false);
 
     const iconSx = useMemo((): SxProps => {
-        return { position: 'absolute', top: '12px', right: '12px' };
-    }, []);
+        return { position: 'absolute', top: '12px', right: '12px', ...sx };
+    }, [sx]);
 
     const contextVal = useMemo((): PluginFullscreenContextProps => {
         return {
