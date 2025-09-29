@@ -45,6 +45,7 @@ const runtimeVariables = getViteEnvVarsConfig({
     APP_OAUTH_CLIENT_ID: OAUTH_CLIENT_ID,
     APP_OAUTH_CLIENT_SECRET: OAUTH_CLIENT_SECRET,
     APP_WS_HOST: WEB_WS_HOST,
+    APP_ENABLE_VCONSOLE: ENABLE_VCONSOLE === 'true',
 });
 const DEFAULT_LESS_INJECT_MODULES = [
     '@import "@milesight/shared/src/styles/variables.less";',
