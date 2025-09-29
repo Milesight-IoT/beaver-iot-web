@@ -25,3 +25,5 @@ export const oauthClientID = __APP_OAUTH_CLIENT_ID__;
 
 /** OAuth Client Secret */
 export const oauthClientSecret = __APP_OAUTH_CLIENT_SECRET__;
+
+export const enableVConsole = !!__APP_ENABLE_VCONSOLE__;

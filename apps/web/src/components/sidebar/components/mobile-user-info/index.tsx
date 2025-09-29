@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMemoizedFn } from 'ahooks';
 import { Avatar, DialogTitle, IconButton, List, ListItem, ListItemButton } from '@mui/material';
-import { appVersion } from '@milesight/shared/src/config';
+import { appVersion, enableVConsole } from '@milesight/shared/src/config';
 import { useI18n, useStoreShallow } from '@milesight/shared/src/hooks';
 import {
     Modal,
@@ -48,6 +49,33 @@ const MobileUserInfo: React.FC<MobileUserInfoProps> = ({ userInfo }) => {
             </DialogTitle>
         );
     }, []);
+
+    // ---------- Open vConsole ----------
+    const clickTimer = useRef<number | null>();
+    const [clickCount, setClickCount] = useState(0);
+    const handleVersionClick = useMemoizedFn(() => {
+        if (!enableVConsole) return;
+        if (clickTimer.current) {
+            window.clearTimeout(clickTimer.current);
+            clickTimer.current = null;
+        }
+        const count = clickCount + 1;
+
+        if (count === 10) {
+            setClickCount(0);
+            const isVConsoleEnabled = window.sessionStorage.getItem('vconsole') === 'true';
+
+            window.sessionStorage.setItem('vconsole', !isVConsoleEnabled ? 'true' : 'false');
+            window.location.reload();
+            return;
+        }
+        setClickCount(count);
+
+        clickTimer.current = window.setTimeout(() => {
+            setClickCount(0);
+            clickTimer.current = null;
+        }, 300);
+    });
 
     return (
         <>
@@ -99,10 +127,7 @@ const MobileUserInfo: React.FC<MobileUserInfoProps> = ({ userInfo }) => {
                     </ListItem>
                     <ListItem>
                         <ListItemButton>
-                            <InfoOutlinedIcon className="icon-start" />
-                            {/* <div className="action-item__text">
-                                {getIntlText('common.label.sign_out')}
-                            </div> */}
+                            <InfoOutlinedIcon className="icon-start" onClick={handleVersionClick} />
                             <div className="action-item__text version">
                                 <span className="label">{getIntlText('common.label.version')}</span>
                                 <span className="value">{`v${appVersion}`}</span>

@@ -43,7 +43,8 @@ export default function vConsolePlugin(options: VConsolePluginOptions): Plugin {
                     tag: 'script',
                     children: `
                         const isMobile = /Android|iPhone|webOS|BlackBerry|SymbianOS|Windows Phone|iPad|iPod/i.test(window.navigator.userAgent);
-                        const vConsole = isMobile ? new window.VConsole({ theme: "${options.theme ?? 'light'}" }) : null;
+                        const isDebug = window.sessionStorage.getItem('vconsole') === 'true';
+                        const vConsole = (isMobile && isDebug) ? new window.VConsole({ theme: "${options.theme ?? 'light'}" }) : null;
                     `.trim(),
                     injectTo,
                 },

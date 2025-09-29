@@ -63,3 +63,5 @@ declare const __BUILD_TIMESTAMP__: number;
 declare const __GIT_BRANCH__: string;
 /** The latest commit hash when building */
 declare const __LATEST_COMMIT_HASH__: string;
+/** Whether enable VConsole in mobile device */
+declare const __APP_ENABLE_VCONSOLE__: boolean;
