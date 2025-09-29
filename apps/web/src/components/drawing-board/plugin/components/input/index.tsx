@@ -1,14 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { TextField, TextFieldProps } from '@mui/material';
 import { useMemoizedFn } from 'ahooks';
 
 type InputType = TextFieldProps;
 
 const Input = (props: InputType) => {
-    const { sx, value, onChange, ...rest } = props;
+    const { value, onChange, ...rest } = props;
 
     const [inputVal, setInputVal] = useState(value);
-    const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
     useEffect(() => {
         setInputVal(value);
@@ -19,11 +18,10 @@ const Input = (props: InputType) => {
      */
     const handleChange = useMemoizedFn((e: React.ChangeEvent<HTMLInputElement>) => {
         setInputVal(e?.target?.value || '');
+    });
 
-        timeoutRef.current && clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(() => {
-            onChange?.(e);
-        }, 250);
+    const handleBlur = useMemoizedFn((e: React.FocusEvent<HTMLInputElement>) => {
+        onChange?.(e);
     });
 
     return (
@@ -31,12 +29,8 @@ const Input = (props: InputType) => {
             {...rest}
             value={inputVal}
             onChange={handleChange}
+            onBlur={handleBlur}
             fullWidth={rest.fullWidth !== false}
-            sx={{
-                input: {
-                    ...(sx as any),
-                },
-            }}
         />
     );
 };
