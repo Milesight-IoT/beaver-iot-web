@@ -20,7 +20,7 @@ const textControlPanelConfig = (): ControlPanelConfig<TextControlPanelConfig> =>
         icon: TextIcon,
         defaultRow: 4,
         defaultCol: 4,
-        minRow: 1,
+        minRow: 2,
         minCol: 2,
         maxRow: 12,
         maxCol: 12,

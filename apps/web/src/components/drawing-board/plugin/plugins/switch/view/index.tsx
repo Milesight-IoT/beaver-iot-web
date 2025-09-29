@@ -6,7 +6,7 @@ import cls from 'classnames';
 
 import * as Icons from '@milesight/shared/src/components/icons';
 import { entityAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/services/http';
-import { useActivityEntity } from '../../../hooks';
+import { useActivityEntity, useContainerRect } from '../../../hooks';
 import { Tooltip } from '../../../view-components';
 import { BoardPluginProps } from '../../../types';
 
@@ -29,7 +29,9 @@ export interface ViewProps {
 const View = (props: ViewProps) => {
     const { config, configJson, widgetId, dashboardId } = props;
     const { entity, title, onIconColor, offIconColor, offIcon, onIcon } = config || {};
-    const { isPreview, pos } = configJson || {};
+    const { isPreview } = configJson || {};
+
+    const { containerRef, showIconWidth } = useContainerRect();
 
     const [isSwitchOn, setIsSwitchOn] = useState(false);
 
@@ -147,13 +149,14 @@ const View = (props: ViewProps) => {
 
     return (
         <div
+            ref={containerRef}
             className={cls(styles['switch-wrapper'], {
                 [styles.preview]: isPreview,
             })}
         >
             <Tooltip className={styles.text} autoEllipsis title={title} />
             <div className={styles.icon}>
-                {IconComponent}
+                {showIconWidth && IconComponent}
                 <div className={styles.body}>
                     <Switch checked={isSwitchOn} onChange={handleSwitchChange} />
                 </div>

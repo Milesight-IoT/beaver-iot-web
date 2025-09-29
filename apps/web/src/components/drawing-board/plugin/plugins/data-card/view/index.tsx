@@ -5,7 +5,11 @@ import cls from 'classnames';
 import { useTheme, useTime } from '@milesight/shared/src/hooks';
 import * as Icons from '@milesight/shared/src/components/icons';
 
-import { useActivityEntity, useGridLayout } from '@/components/drawing-board/plugin/hooks';
+import {
+    useActivityEntity,
+    useGridLayout,
+    useContainerRect,
+} from '@/components/drawing-board/plugin/hooks';
 import { Tooltip } from '@/components';
 import { useSource } from './hooks';
 import type { ViewConfigProps } from '../typings';
@@ -29,6 +33,7 @@ const View = (props: Props) => {
     const { twoByTwo, oneByTwo, twoByOne, oneByOne } = useGridLayout(
         isPreview ? { w: 2, h: 1 } : pos,
     );
+    const { containerRef, showIconWidth } = useContainerRect();
 
     const latestEntity = useMemo(() => {
         if (!entity) return {};
@@ -86,7 +91,7 @@ const View = (props: Props) => {
     }, [config, currentEntityData]);
 
     return (
-        <div className={`data-view ${isPreview ? 'data-view-preview' : ''}`}>
+        <div ref={containerRef} className={`data-view ${isPreview ? 'data-view-preview' : ''}`}>
             <div className="data-view-card">
                 <div
                     className={cls('data-view-card__content', {
@@ -99,7 +104,7 @@ const View = (props: Props) => {
                         </div>
                     )}
                     <div className="data-view-card__body">
-                        {Icon && (
+                        {Icon && showIconWidth && (
                             <Icon
                                 sx={{
                                     color: iconColor || getCSSVariableValue('--gray-5'),
@@ -110,6 +115,7 @@ const View = (props: Props) => {
                         <div
                             className={cls('data-view-card__data', {
                                 'text-lg': twoByTwo,
+                                'ms-4': showIconWidth,
                             })}
                         >
                             {(twoByOne || oneByOne) && <Tooltip autoEllipsis title={title} />}
