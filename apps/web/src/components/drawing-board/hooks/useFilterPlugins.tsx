@@ -19,6 +19,10 @@ export default function useFilterPlugins(
         return device || deviceDetail;
     }, [device, deviceDetail]);
 
+    /**
+     * During standard iteration, the custom plugin
+     * deviceList plugin is filtered out by default.
+     */
     const newPlugins = useMemo(() => {
         if (!Array.isArray(pluginsControlPanel) || isEmpty(pluginsControlPanel)) {
             return pluginsControlPanel;
