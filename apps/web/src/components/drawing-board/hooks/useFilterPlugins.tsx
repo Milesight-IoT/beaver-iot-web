@@ -28,12 +28,12 @@ export default function useFilterPlugins(
          * Device drawing board needs to filter
          * device list plugin
          */
-        if (currentDevice?.id) {
-            return pluginsControlPanel.filter(p => p.type !== 'deviceList');
-        }
+        // if (currentDevice?.id) {
+        //     return pluginsControlPanel.filter(p => p.type !== 'deviceList');
+        // }
 
-        return pluginsControlPanel;
-    }, [currentDevice, pluginsControlPanel]);
+        return pluginsControlPanel.filter(p => p.type !== 'deviceList');
+    }, [pluginsControlPanel]);
 
     return {
         pluginsControlPanel: newPlugins,
