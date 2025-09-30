@@ -30,6 +30,23 @@ const DateRangePickerStyled = styled('div')(() => ({
     },
 }));
 
+/**
+ * Common slot props for DateTimePicker.
+ */
+const commonSlotProps: DateTimePickerProps<Dayjs>['slotProps'] = {
+    popper: {
+        modifiers: [
+            {
+                name: 'preventOverflow',
+                options: {
+                    mainAxis: true,
+                    altAxis: true,
+                },
+            },
+        ],
+    },
+};
+
 const DateRangePicker: React.FC<DateRangePickerProps> = ({ label, value, onChange, ...props }) => {
     const [startDate, setStartDate] = useState<Dayjs | null>(null);
     const [endDate, setEndDate] = useState<Dayjs | null>(null);
@@ -41,6 +58,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ label, value, onChang
                 label={label?.start}
                 value={value?.start || startDate}
                 closeOnSelect={false}
+                slotProps={commonSlotProps}
                 onChange={start => {
                     // Passing onChange indicates that it is controlled, and no internal value handling is done.
                     if (onChange) {
@@ -60,6 +78,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ label, value, onChang
                 label={label?.end}
                 value={value?.end || endDate}
                 closeOnSelect={false}
+                slotProps={commonSlotProps}
                 onChange={end => {
                     // Passing onChange indicates that it is controlled, and no internal value handling is done.
                     if (onChange) {
