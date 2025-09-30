@@ -59,7 +59,6 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 // disableColumnMenu: false,
                 renderCell({ row }) {
                     const { name, deviceData } = row;
-                    // TODO: Render with blueprint tooltip
                     return (
                         <TitleIcon
                             title={name}
@@ -113,13 +112,26 @@ const useColumns = <T extends TableRowDataType>({ onButtonClick }: UseColumnsPro
                 field: 'userNickname',
                 headerName: getIntlText('common.label.creator'),
                 flex: 1,
-                minWidth: 100,
-                ellipsis: true,
+                minWidth: 150,
+                // ellipsis: true,
                 renderCell({ row }) {
                     const { userNickname, deviceData } = row;
-                    return !deviceData?.name
-                        ? userNickname
-                        : `${deviceData.name} (${deviceData.identifier})`;
+                    return (
+                        <div className="ms-workflow-table-cell-creator">
+                            <Tooltip
+                                autoEllipsis
+                                className="name"
+                                title={deviceData?.name || userNickname}
+                            />
+                            {deviceData?.identifier && (
+                                <Tooltip
+                                    autoEllipsis
+                                    className="desc"
+                                    title={deviceData.identifier}
+                                />
+                            )}
+                        </div>
+                    );
                 },
             },
             {

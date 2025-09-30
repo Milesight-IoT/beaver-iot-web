@@ -8,6 +8,23 @@
         padding: @padding-lg;
     }
 
+    .@{prefix}-workflow-table {
+        .@{prefix}-workflow-table-cell-creator {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+
+            > .@{prefix}-tooltip {
+                .text-size(@font-size-base);
+            }
+
+            .desc {
+                margin-top: 2px;
+                color: var(--text-color-tertiary);
+            }
+        }
+    }
 }
 
 .@{prefix}-workflowIcon {
@@ -30,5 +47,5 @@
     &-item-text {
         margin-left: @margin-xs;
     }
-        
+
 }
