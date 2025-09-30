@@ -13,6 +13,7 @@ import {
     iotLocalStorage,
     TOKEN_CACHE_KEY,
     REGISTERED_KEY,
+    MAIN_CANVAS_KEY,
 } from '@milesight/shared/src/utils/storage';
 import {
     MultiErrorDataEnums,
@@ -56,6 +57,7 @@ const handlerConfigs: ErrorHandlerConfig[] = [
                 },
             });
             iotLocalStorage.removeItem(TOKEN_CACHE_KEY);
+            iotLocalStorage.removeItem(MAIN_CANVAS_KEY);
         },
     },
     /**
