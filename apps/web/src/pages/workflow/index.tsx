@@ -228,12 +228,14 @@ const Workflow = () => {
             <div className="ms-view ms-view-workflow">
                 <div className="ms-view__inner">
                     <TablePro<TableRowDataType>
+                        className="ms-workflow-table"
                         filterCondition={[keyword]}
                         checkboxSelection={hasPermission(PERMISSIONS.WORKFLOW_DELETE)}
                         loading={loading}
                         columns={columns}
                         rows={workflowList?.content}
                         rowCount={workflowList?.total || 0}
+                        rowHeight={64}
                         paginationModel={paginationModel}
                         rowSelectionModel={selectedIds}
                         isRowSelectable={isRowSelectable}

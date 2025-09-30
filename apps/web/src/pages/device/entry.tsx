@@ -95,6 +95,8 @@ export default () => {
 
             if (error || !data || !isRequestSuccess(resp)) return;
 
+            // Refresh selectedIds to render the checkbox in header row
+            setSelectedIds(ids => [...ids]);
             return objectToCamelCase(data);
         },
         {
@@ -145,21 +147,19 @@ export default () => {
                         deviceAPI.deleteDevices({ device_id_list: idsToDelete }),
                     );
 
-                    // console.log({ error, resp });
                     if (error || !isRequestSuccess(resp)) return;
 
-                    refreshDeviceList(idsToDelete);
+                    getDeviceList();
+                    setSelectedIds(selectedIds => {
+                        return selectedIds.filter(id => !idsToDelete.includes(id));
+                    });
+
                     toast.success(getIntlText('common.message.delete_success'));
                 },
             });
         },
         [confirm, getIntlText, getDeviceList, selectedIds],
     );
-
-    const refreshDeviceList = (ids: ApiKey[]) => {
-        setSelectedIds(selectedIds.filter(id => !ids.includes(id)));
-        getDeviceList();
-    };
 
     // ---------- Table rendering related to ----------
     const toolbarRender = useMemo(() => {

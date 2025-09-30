@@ -73,7 +73,7 @@ const useColumns = <T extends TableRowDataType>({
             return `${entity.name}: -`;
         }
 
-        return `${entity.name}: ${status.value}`;
+        return `${entity.name}: ${status.value}${entity?.value_attribute?.unit || ''}`;
     });
 
     const columns: ColumnType<T>[] = useMemo(() => {

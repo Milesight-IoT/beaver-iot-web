@@ -6,6 +6,7 @@ import { useTheme } from '@milesight/shared/src/hooks';
 
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { useSource, useIconRemaining } from './hooks';
+import { useActivityEntity, useStableValue } from '../../../hooks';
 import type { ViewConfigProps } from '../typings';
 import type { BoardPluginProps } from '../../../types';
 import './style.less';
@@ -19,15 +20,23 @@ interface Props {
 
 const View = (props: Props) => {
     const { config, configJson, widgetId, dashboardId } = props;
-    const { title, entity, metrics, time } = config || {};
-    const { aggregateHistoryData } = useSource({ widgetId, dashboardId, entity, metrics, time });
+    const { title, entity: unStableValue, metrics, time } = config || {};
     const { isPreview } = configJson || {};
 
     const { purple, grey } = useTheme();
+    const { getLatestEntityDetail } = useActivityEntity();
+    const { stableValue: entity } = useStableValue(unStableValue);
+    const { aggregateHistoryData } = useSource({ widgetId, dashboardId, entity, metrics, time });
+
+    const latestEntity = useMemo(() => {
+        if (!entity) return {};
+
+        return getLatestEntityDetail(entity);
+    }, [entity, getLatestEntityDetail]) as EntityOptionType;
 
     // Get the percentage value
     const percent = useMemo(() => {
-        const { rawData } = entity || {};
+        const { rawData } = latestEntity || {};
         const { entityValueAttribute } = rawData || {};
         const { min, max } = entityValueAttribute || {};
         const { value } = aggregateHistoryData || {};
@@ -39,7 +48,7 @@ const View = (props: Props) => {
 
         const percent = Math.round((value / range) * 100);
         return Math.min(100, Math.max(0, percent));
-    }, [entity, aggregateHistoryData]);
+    }, [latestEntity, aggregateHistoryData]);
 
     const { svgWrapperRef, containerRef, realPercent, newFontSize } = useIconRemaining(percent);
 

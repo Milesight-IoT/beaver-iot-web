@@ -7,7 +7,7 @@ import type { ViewConfigProps } from '../../typings';
 interface IProps {
     widgetId: ApiKey;
     dashboardId: ApiKey;
-    entity: ViewConfigProps['entity'];
+    entity?: ViewConfigProps['entity'];
     metrics: ViewConfigProps['metrics'];
     time: ViewConfigProps['time'];
 }

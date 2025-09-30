@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Stack, IconButton } from '@mui/material';
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
-import { ListAltIcon, EditIcon } from '@milesight/shared/src/components';
+import { ListAltIcon, EditIcon, WorkflowIcon } from '@milesight/shared/src/components';
 import {
     Tooltip,
     type ColumnType,
@@ -62,9 +62,9 @@ const useEntityColumns = <T extends TableRowDataType>({
                 renderCell({ row }) {
                     const { entityName, workflowData } = row;
 
-                    // TODO: Render with blueprint tooltip
                     return (
                         <TitleIcon
+                            icon={<WorkflowIcon />}
                             title={entityName}
                             tooltip={
                                 workflowData &&

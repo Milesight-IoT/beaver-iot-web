@@ -41,10 +41,14 @@ export function useDeviceEntities(props: useDeviceEntitiesProps) {
                     c.key?.includes(DEVICE_STATUS_ENTITY_UNIQUE_ID),
                 );
 
+                const propertiesEntities = c?.important_entities?.filter(
+                    e => e.type === 'PROPERTY',
+                );
+
                 return [
                     ...a,
                     ...(deviceStatusEntity ? [deviceStatusEntity] : []),
-                    ...(c?.important_entities || []),
+                    ...(propertiesEntities || []),
                 ];
             }, [])
             .map(d => d.id)

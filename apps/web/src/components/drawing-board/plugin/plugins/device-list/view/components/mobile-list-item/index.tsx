@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react';
-import { Stack, Button } from '@mui/material';
+import { Stack, Button, Grid2 as Grid } from '@mui/material';
 import { get, isNil } from 'lodash-es';
 import { useMemoizedFn } from 'ahooks';
 import cls from 'classnames';
@@ -42,7 +42,7 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
             return '-';
         }
 
-        return status.value;
+        return `${status.value}${entity?.value_attribute?.unit || ''}`;
     });
 
     const deviceStatus = useMemo(() => {
@@ -58,56 +58,78 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
         >
             <div className={styles.title}>{device?.name || ''}</div>
 
-            <div className={styles.body}>
-                <div className={styles.left}>
-                    <Tooltip
-                        className={styles.name}
-                        autoEllipsis
-                        title={getIntlText('device.label.param_external_id')}
-                    />
-                    <Tooltip
-                        className={styles.name}
-                        autoEllipsis
-                        title={device?.deviceStatus?.name || '-'}
-                    />
-                    <Tooltip
-                        className={styles.name}
-                        autoEllipsis
-                        title={device?.propertyEntityFirst?.name || '-'}
-                    />
-                    <Tooltip
-                        className={styles.name}
-                        autoEllipsis
-                        title={device?.propertyEntitySecond?.name || '-'}
-                    />
-                </div>
-                <div className={styles.right}>
-                    <Tooltip
-                        className={styles.value}
-                        autoEllipsis
-                        title={device?.identifier || '-'}
-                    />
-                    <DeviceStatus type={deviceStatus?.value} />
-                    <Tooltip
-                        className={styles.value}
-                        autoEllipsis
-                        title={getStatus(device?.propertyEntityFirst)}
-                    />
-                    <Tooltip
-                        className={styles.value}
-                        autoEllipsis
-                        title={getStatus(device?.propertyEntitySecond)}
-                    />
-                </div>
-            </div>
+            <Grid
+                container
+                spacing={1}
+                sx={{
+                    marginBottom: 2,
+                }}
+            >
+                <Grid
+                    size={4}
+                    sx={{
+                        color: 'var(--text-color-secondary)',
+                    }}
+                >
+                    <Tooltip autoEllipsis title={getIntlText('device.label.param_external_id')} />
+                </Grid>
+                <Grid size={8}>
+                    <Tooltip autoEllipsis title={device?.identifier || '-'} />
+                </Grid>
 
-            <Stack direction="row" spacing="12px" sx={{ justifyContent: 'flex-end' }}>
+                <Grid
+                    size={4}
+                    sx={{
+                        color: 'var(--text-color-secondary)',
+                    }}
+                >
+                    <Tooltip autoEllipsis title={device?.deviceStatus?.name || '-'} />
+                </Grid>
+                <Grid size={8}>
+                    <DeviceStatus type={deviceStatus?.value} />
+                </Grid>
+
+                <Grid
+                    size={4}
+                    sx={{
+                        color: 'var(--text-color-secondary)',
+                    }}
+                >
+                    <Tooltip autoEllipsis title={device?.propertyEntityFirst?.name || '-'} />
+                </Grid>
+                <Grid size={8}>
+                    <Tooltip autoEllipsis title={getStatus(device?.propertyEntityFirst)} />
+                </Grid>
+
+                <Grid
+                    size={4}
+                    sx={{
+                        color: 'var(--text-color-secondary)',
+                    }}
+                >
+                    <Tooltip autoEllipsis title={device?.propertyEntitySecond?.name || '-'} />
+                </Grid>
+                <Grid size={8}>
+                    <Tooltip autoEllipsis title={getStatus(device?.propertyEntitySecond)} />
+                </Grid>
+            </Grid>
+
+            <Stack
+                direction="row"
+                spacing="12px"
+                sx={{
+                    justifyContent: 'flex-end',
+                    '.ms-tooltip': {
+                        width: '100%',
+                    },
+                }}
+            >
                 <Button
                     variant="outlined"
                     sx={{ height: 36, textTransform: 'none' }}
                     onClick={() => handleServiceClick?.(device?.serviceEntities?.[0])}
                 >
-                    {device?.serviceEntities?.[0]?.name || '-'}
+                    <Tooltip autoEllipsis title={device?.serviceEntities?.[0]?.name || '-'} />
                 </Button>
 
                 <Button
@@ -115,7 +137,7 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
                     sx={{ height: 36, textTransform: 'none' }}
                     onClick={() => handleServiceClick?.(device?.serviceEntities?.[1])}
                 >
-                    {device?.serviceEntities?.[1]?.name || '-'}
+                    <Tooltip autoEllipsis title={device?.serviceEntities?.[1]?.name || '-'} />
                 </Button>
 
                 <LoadingButton

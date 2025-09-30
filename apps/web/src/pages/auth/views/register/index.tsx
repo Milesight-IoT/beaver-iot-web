@@ -8,6 +8,7 @@ import {
     iotLocalStorage,
     TOKEN_CACHE_KEY,
     REGISTERED_KEY,
+    MAIN_CANVAS_KEY,
 } from '@milesight/shared/src/utils/storage';
 import { globalAPI, awaitWrap, isRequestSuccess } from '@/services/http';
 import useFormItems, { type FormDataProps } from '../useFormItems';
@@ -68,6 +69,7 @@ export default () => {
         iotLocalStorage.setItem(REGISTERED_KEY, true);
         // Clear existing TOKEN data to prevent new users from logging in
         iotLocalStorage.removeItem(TOKEN_CACHE_KEY);
+        iotLocalStorage.removeItem(MAIN_CANVAS_KEY);
         toast.success(getIntlText('auth.message.register_success'));
     };
 
