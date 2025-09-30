@@ -82,9 +82,17 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
 
         return data
             .map(d => {
-                const propertiesEntities = d?.important_entities?.filter(
-                    e => e.type === 'PROPERTY',
-                );
+                const propertiesEntities = d?.important_entities
+                    ?.filter(e => e.type === 'PROPERTY')
+                    ?.sort((a, b) => {
+                        const importantA = a?.value_attribute?.important;
+                        const importantB = b?.value_attribute?.important;
+                        if (isNil(importantA) || isNil(importantB)) {
+                            return 0;
+                        }
+
+                        return importantA - importantB;
+                    });
                 const deviceStatusEntity = d?.common_entities?.find(c =>
                     c.key?.includes(DEVICE_STATUS_ENTITY_UNIQUE_ID),
                 );
@@ -96,7 +104,17 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
                     deviceStatus: deviceStatusEntity,
                     propertyEntityFirst: propertiesEntities?.[0],
                     propertyEntitySecond: propertiesEntities?.[1],
-                    serviceEntities: d?.important_entities?.filter(e => e.type === 'SERVICE'),
+                    serviceEntities: d?.important_entities
+                        ?.filter(e => e.type === 'SERVICE')
+                        ?.sort((a, b) => {
+                            const importantA = a?.value_attribute?.important;
+                            const importantB = b?.value_attribute?.important;
+                            if (isNil(importantA) || isNil(importantB)) {
+                                return 0;
+                            }
+
+                            return importantA - importantB;
+                        }),
                 } as TableRowDataType;
             })
             .filter(

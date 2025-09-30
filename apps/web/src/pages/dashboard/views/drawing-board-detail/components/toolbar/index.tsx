@@ -48,8 +48,6 @@ const Toolbar: React.FC<ToolbarProps> = props => {
                 <Tooltip
                     className="md:d-none"
                     title={getIntlText('dashboard.tip.return_dashboard_list')}
-                    enterDelay={1000}
-                    enterNextDelay={1000}
                 >
                     <IconButton onClick={() => navigate('/dashboard')}>
                         <GridViewIcon />
