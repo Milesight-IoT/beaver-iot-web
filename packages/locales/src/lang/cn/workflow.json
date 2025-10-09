@@ -134,6 +134,7 @@
     "workflow.node.input_variables": "输入变量",
     "workflow.node.service_helper_text": "请先选择要请求的服务。",
     "workflow.node.trigger_switch_label": "内容",
+    "workflow.tip.blueprint_workflow_come_from": "当前的工作流由设备蓝图生成。",
     "workflow.valid.edge_id_duplicated": "边缘（连接节点 {1} 和 {2}）ID 重复。",
     "workflow.valid.invalid_edge_id": "连接节点 {1} 和 {2} 的边缘 ID 无效。",
     "workflow.valid.invalid_edge_type": "连接节点 {1} 和 {2} 的边缘类型无效。",
