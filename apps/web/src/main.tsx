@@ -10,7 +10,7 @@ const router = createBrowserRouter(routes, { basename: '/' });
 const root = createRoot(document.getElementById('root')!);
 
 // Internationalization initialization
-i18n.initI18n('web', 'EN');
+i18n.initI18n('web', 'CN');
 
 // System topic initialization
 theme.initTheme();
