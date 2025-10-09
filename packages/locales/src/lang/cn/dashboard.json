@@ -5,8 +5,12 @@
     "dashboard.edit_title": "编辑仪表板",
     "dashboard.empty_description": "快速插入柱状图、折线图、饼图等组件类型，直观展示数据，使业务动态一目了然",
     "dashboard.empty_text": "选择一个组件并开始构建您的数据仪表板",
+    "dashboard.label.cover": "封面",
+    "dashboard.label.device_drawing_board": "设备画布",
     "dashboard.label.left_y_axis": "左Y轴",
+    "dashboard.label.left_y_axis_title": "左Y轴标签",
     "dashboard.label.right_y_axis": "右Y轴",
+    "dashboard.label.right_y_axis_title": "右Y轴标签",
     "dashboard.label.y_axis": "Y轴",
     "dashboard.label_avg_value": "平均值",
     "dashboard.label_count_value": "计数",
@@ -33,5 +37,8 @@
     "dashboard.set_as_home_dashboard_tip": "置顶仪表盘",
     "dashboard.switch_title_off": "Off",
     "dashboard.switch_title_on": "On",
+    "dashboard.tip.disabled_edit_device_drawing_board": "当前画布为设备画布，请前往设备详情页编辑。",
+    "dashboard.tip.return_dashboard_list": "返回仪表盘列表",
+    "dashboard.tip.small_screen_empty": "没有组件，请前往PC端添加。",
     "dashboard.unset_as_home_dashboard_tip": "取消置顶"
 }
