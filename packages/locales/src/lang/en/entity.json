@@ -27,8 +27,8 @@
     "entity.label.historical_data": "Historical Data",
     "entity.label.latest_value": "Latest Value",
     "entity.label.parent_entity": "Parent Entity",
-    "entity.label.property_entity_first": "设备列表组件属性实体 1",
-    "entity.label.property_entity_second": "设备列表组件属性实体 2",
+    "entity.label.property_entity_first": "Device Attribute 1",
+    "entity.label.property_entity_second": "Device Attribute 2",
     "entity.label.set_enumeration_items": "Set Enumeration Items",
     "entity.label.set_value": "Set Value",
     "entity.label.value_source": "Value Source"

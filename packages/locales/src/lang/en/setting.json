@@ -1,5 +1,5 @@
 {
-    "setting.blueprint.desc_local_upload": "请确保上传的文件内容符合Beaver IoT要求的解析",
+    "setting.blueprint.desc_local_upload": "Please ensure that the uploaded file content complies with Beaver IoT's required parsing format.",
     "setting.blueprint.desc_official_store": "Automatically update when a new version is available; updates take no longer than 3 minutes.",
     "setting.blueprint.edit_modal_title": "Edit Blueprint Source",
     "setting.blueprint.label_sync_result": "Update Result",
