@@ -181,14 +181,19 @@ export function useResponsiveLayout(widgets: WidgetDetail[]) {
                 const id = (widget.widget_id || widget.tempId) as ApiKey;
                 const plugin = widget.data as BoardPluginProps;
 
+                const newWidth = currentWidth(plugin);
+                const newHeight = currentHeight(plugin);
+                const newMinWidth = minWidth(plugin);
+                const newMinHeight = minHeight(plugin);
+
                 const pos: Layout = {
                     ...plugin.pos,
-                    w: currentWidth(plugin),
-                    h: currentHeight(plugin),
-                    minW: minWidth(plugin),
-                    minH: minHeight(plugin),
-                    maxW: maxWidth(plugin),
-                    maxH: maxHeight(plugin),
+                    w: newWidth,
+                    h: newHeight,
+                    minW: newMinWidth,
+                    minH: newMinHeight,
+                    maxW: Math.max(maxWidth(plugin), newWidth, newMinWidth),
+                    maxH: Math.max(maxHeight(plugin), newHeight, newMinHeight),
                     i: String(id),
                     x: plugin.pos?.x || 0,
                     y: plugin.pos?.y || 0,
