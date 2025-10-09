@@ -230,7 +230,7 @@
   "common.time.morning": "a.m.",
   "common.tip.cannot_selected": "A total of 100 devices available",
   "common.tip.maximum_number_reached": "The maximum number has been reached.",
-  "common.tip.selected_and_max_count": "已选 {1}, 最多选择 {2}",
+  "common.tip.selected_and_max_count": "{1} selected, maximum {2}",
   "common.unit.second": "s",
   "dashboard.add_title": "Add a Dashboard",
   "dashboard.add_widget": "Add widget",

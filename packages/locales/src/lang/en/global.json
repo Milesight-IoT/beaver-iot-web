@@ -230,7 +230,7 @@
     "common.time.morning": "a.m.",
     "common.tip.cannot_selected": "A total of 100 devices available",
     "common.tip.maximum_number_reached": "The maximum number has been reached.",
-    "common.tip.selected_and_max_count": "已选 {1}, 最多选择 {2}",
+    "common.tip.selected_and_max_count": "{1} selected, maximum {2}",
     "common.unit.second": "s",
     "valid.date.selected_time_greater_than_now_time": "The time earlier than current time is not supported.",
     "valid.date.start_time_greater_than_end_time": "The start time cannot be later than end time.",

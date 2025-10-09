@@ -230,7 +230,7 @@
   "common.time.morning": "上午",
   "common.tip.cannot_selected": "共计可选100台设备",
   "common.tip.maximum_number_reached": "已达到最大数量。",
-  "common.tip.selected_and_max_count": "{1} selected, maximum {2}",
+  "common.tip.selected_and_max_count": "已选 {1}, 最多选择 {2}",
   "common.unit.second": "秒",
   "dashboard.add_title": "添加仪表板",
   "dashboard.add_widget": "添加组件",
