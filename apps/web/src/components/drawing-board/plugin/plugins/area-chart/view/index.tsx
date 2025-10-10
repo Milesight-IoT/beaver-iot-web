@@ -13,7 +13,8 @@ import {
 import { getChartColor } from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { PluginFullscreenContext } from '@/components/drawing-board/components';
-import { useResizeChart, useYAxisRange, useZoomChart } from './hooks';
+import { EchartsUI, useEcharts } from '@/components/echarts';
+import { useYAxisRange, useZoomChart } from './hooks';
 import type { BoardPluginProps } from '../../../types';
 import styles from './style.module.less';
 
@@ -62,9 +63,8 @@ const View = (props: ViewProps) => {
         time,
         isPreview,
     });
-
+    const { renderEcharts } = useEcharts(chartRef);
     const { getYAxisRange } = useYAxisRange({ chartShowData, entity: latestEntities });
-    const { resizeChart } = useResizeChart({ chartWrapperRef });
     const { zoomChart, hoverZoomBtn } = useZoomChart({
         xAxisConfig,
         xAxisRange,
@@ -73,21 +73,14 @@ const View = (props: ViewProps) => {
     });
 
     useEffect(() => {
-        const chartDom = chartRef.current;
-        if (!chartDom) return;
-
-        const myChart = echarts.init(chartDom);
         const resultColor = getChartColor(chartShowData);
         const [xAxisMin, xAxisMax] = xAxisRange || [];
-
         const { min, max } = getYAxisRange() || {};
 
         let mousePos = [0, 0];
-        myChart.getZr().on('mousemove', e => {
-            mousePos = [e.offsetX, e.offsetY];
-        });
+        let myChart: echarts.ECharts | null = null;
 
-        myChart.setOption({
+        renderEcharts({
             xAxis: {
                 show: wGrid > 2,
                 type: 'time',
@@ -166,13 +159,17 @@ const View = (props: ViewProps) => {
                 textStyle: {
                     color: '#fff',
                 },
-                formatter: (params: any[]) => {
+                formatter: (params: any) => {
+                    if (!myChart) {
+                        return '';
+                    }
+
                     const timeValue = params[0].axisValue;
                     // Take the y value of the current data point
                     const yValue = params[0].data[1];
                     // Take the yAxisIndex of the current series
                     const yAxisIndex =
-                        (myChart as any).getOption()?.series?.[params[0].seriesIndex].yAxisIndex ??
+                        (myChart?.getOption() as any)?.series?.[params[0].seriesIndex].yAxisIndex ??
                         0;
                     // Pass in the complete xAxisIndex/yAxisIndex
                     const pointInGrid = myChart.convertToPixel({ xAxisIndex: 0, yAxisIndex }, [
@@ -187,7 +184,7 @@ const View = (props: ViewProps) => {
 
                     return renderToString(
                         <div>
-                            {params.map((item, index) => {
+                            {params.map((item: any, index: number) => {
                                 const { data, marker, seriesName, seriesIndex, axisValueLabel } =
                                     item || {};
 
@@ -279,16 +276,20 @@ const View = (props: ViewProps) => {
                     },
                 },
             ],
-        });
+        }).then(currentChart => {
+            if (!currentChart) {
+                return;
+            }
 
-        hoverZoomBtn();
-        zoomChart(myChart);
-        // Update the chart when the container size changes
-        const disconnectResize = resizeChart(myChart);
-        return () => {
-            disconnectResize?.();
-            myChart?.dispose();
-        };
+            myChart = currentChart;
+
+            currentChart.getZr().on('mousemove', e => {
+                mousePos = [e.offsetX, e.offsetY];
+            });
+
+            hoverZoomBtn();
+            zoomChart(currentChart);
+        });
     }, [
         wGrid,
         hGrid,
@@ -298,9 +299,9 @@ const View = (props: ViewProps) => {
         chartShowData,
         xAxisRange,
         hoverZoomBtn,
-        resizeChart,
         zoomChart,
         getYAxisRange,
+        renderEcharts,
     ]);
 
     return (
@@ -312,7 +313,7 @@ const View = (props: ViewProps) => {
         >
             {hGrid > 1 && <Tooltip className={styles.name} autoEllipsis title={title} />}
             <div className={styles['area-chart-content']}>
-                <div ref={chartRef} className={styles['area-chart-content__chart']} />
+                <EchartsUI ref={chartRef} />
             </div>
             {React.cloneElement(chartZoomRef.current?.iconNode, {
                 className: cls('reset-chart-zoom', { 'reset-chart-zoom--isEdit': isEdit }),

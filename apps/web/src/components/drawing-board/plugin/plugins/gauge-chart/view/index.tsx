@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { isNil } from 'lodash-es';
 import { useMemoizedFn } from 'ahooks';
-import * as echarts from 'echarts/core';
 import { useTheme } from '@milesight/shared/src/hooks';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
+import { EchartsUI, useEcharts } from '@/components/echarts';
 import { useStableValue } from '../../../hooks';
-import { useSource, useResizeChart } from './hooks';
+import { useSource } from './hooks';
 import type { ViewConfigProps } from '../typings';
 import './style.less';
 
@@ -24,8 +24,8 @@ const View = (props: Props) => {
 
     const { stableValue: entity } = useStableValue(unstableEntity);
     const { purple, grey } = useTheme();
-    const { resizeChart } = useResizeChart({ chartWrapperRef });
     const { aggregateHistoryData } = useSource({ widgetId, dashboardId, entity, metrics, time });
+    const { renderEcharts } = useEcharts(chartRef);
 
     // Calculate the most suitable maximum scale value
     const calculateMaxTickValue = (maxValue: number) => {
@@ -111,14 +111,10 @@ const View = (props: Props) => {
     /** Rendering instrument diagram */
     const renderGaugeChart = useMemoizedFn(
         (datasets: { minValue?: number; maxValue?: number; currentValue: number }) => {
-            const chartDom = chartRef.current;
-            if (!chartDom) return;
-
             const { chartMinValue, chartMaxValue, currentValue, tickCount } =
                 getGaugeChartData(datasets);
 
-            const myChart = echarts.init(chartDom);
-            myChart.setOption({
+            renderEcharts({
                 series: [
                     {
                         name: entity?.label,
@@ -206,13 +202,6 @@ const View = (props: Props) => {
                     },
                 },
             });
-
-            // Update the chart when the container size changes
-            const disconnectResize = resizeChart(myChart);
-            return () => {
-                disconnectResize?.();
-                myChart?.dispose();
-            };
         },
     );
 
@@ -237,7 +226,7 @@ const View = (props: Props) => {
         <div className="ms-gauge-chart" ref={chartWrapperRef}>
             <Tooltip className="ms-gauge-chart__header" autoEllipsis title={title} />
             <div className="ms-gauge-chart__content">
-                <div ref={chartRef} className="ms-chart-content__chart" />
+                <EchartsUI ref={chartRef} />
             </div>
         </div>
     );

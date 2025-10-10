@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { renderToString } from 'react-dom/server';
-import * as echarts from 'echarts/core';
 import { useTheme } from '@milesight/shared/src/hooks';
 import {
     useActivityEntity,
@@ -8,7 +7,8 @@ import {
     useStableValue,
 } from '@/components/drawing-board/plugin/hooks';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
-import { useResizeChart, useSource } from './hooks';
+import { EchartsUI, useEcharts } from '@/components/echarts';
+import { useSource } from './hooks';
 import type { AggregateHistoryList, ViewConfigProps } from '../typings';
 import type { BoardPluginProps } from '../../../types';
 import './style.less';
@@ -28,7 +28,7 @@ const View = (props: IProps) => {
 
     const { wGrid = 3, hGrid = 3 } = useGridLayout(pos);
     const { purple, white, grey } = useTheme();
-    const { resizeChart } = useResizeChart({ chartWrapperRef });
+    const { renderEcharts } = useEcharts(chartRef);
 
     const { stableValue: entityList } = useStableValue(unStableEntityList);
     const { getLatestEntityDetail } = useActivityEntity();
@@ -59,12 +59,7 @@ const View = (props: IProps) => {
         },
         aggregateHistoryList: AggregateHistoryList[],
     ) => {
-        const chartDom = chartRef.current;
-        if (!chartDom) return;
-
-        const myChart = echarts.init(chartDom);
-
-        myChart.setOption({
+        renderEcharts({
             tooltip: {
                 confine: true,
                 trigger: 'item',
@@ -134,7 +129,7 @@ const View = (props: IProps) => {
             radar: [
                 {
                     radius: '80%',
-                    indicator: data?.labels?.map((value: unknown) => ({
+                    indicator: data?.labels?.map(value => ({
                         name: value,
                     })),
                     axisName: {
@@ -161,13 +156,6 @@ const View = (props: IProps) => {
                 },
             ],
         });
-
-        // Update the chart when the container size changes
-        const disconnectResize = resizeChart(myChart);
-        return () => {
-            disconnectResize?.();
-            myChart?.dispose();
-        };
     };
 
     useEffect(() => {
@@ -208,7 +196,7 @@ const View = (props: IProps) => {
         <div className="ms-radar-chart" ref={chartWrapperRef}>
             <Tooltip className="ms-radar-chart__header" autoEllipsis title={title} />
             <div className="ms-radar-chart__content">
-                <div ref={chartRef} className="ms-chart-content__chart" />
+                <EchartsUI ref={chartRef} />
             </div>
         </div>
     );

@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useContext } from 'react';
 import { renderToString } from 'react-dom/server';
 import cls from 'classnames';
-import * as echarts from 'echarts/core';
 import { useTheme } from '@milesight/shared/src/hooks';
 import {
     useBasicChartEntity,
@@ -12,8 +11,9 @@ import {
 import { getChartColor } from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { PluginFullscreenContext } from '@/components/drawing-board/components';
+import { EchartsUI, useEcharts } from '@/components/echarts';
 import styles from './style.module.less';
-import { useResizeChart, useYAxisRange, useZoomChart } from './hooks';
+import { useYAxisRange, useZoomChart } from './hooks';
 import type { BoardPluginProps } from '../../../types';
 
 export interface ViewProps {
@@ -60,9 +60,8 @@ const View = (props: ViewProps) => {
         time,
         isPreview,
     });
-
+    const { renderEcharts } = useEcharts(chartRef);
     const { getYAxisRange } = useYAxisRange({ chartShowData, entity: latestEntities });
-    const { resizeChart } = useResizeChart({ chartWrapperRef });
     const { zoomChart, hoverZoomBtn } = useZoomChart({
         xAxisConfig,
         xAxisRange,
@@ -71,16 +70,12 @@ const View = (props: ViewProps) => {
     });
 
     useEffect(() => {
-        const chartDom = chartRef.current;
-        if (!chartDom) return;
-
-        const myChart = echarts.init(chartDom);
         const resultColor = getChartColor(chartShowData);
         const [xAxisMin, xAxisMax] = xAxisRange || [];
 
         const { min, max } = getYAxisRange() || {};
 
-        myChart.setOption({
+        renderEcharts({
             xAxis: {
                 show: wGrid > 2 && hGrid > 1,
                 type: 'value',
@@ -141,10 +136,10 @@ const View = (props: ViewProps) => {
                 textStyle: {
                     color: '#fff',
                 },
-                formatter: (params: any[]) => {
+                formatter: (params: any) => {
                     return renderToString(
                         <div>
-                            {params.map((item, index) => {
+                            {params.map((item: any, index: number) => {
                                 const { data, marker, seriesName, seriesIndex, axisValueLabel } =
                                     item || {};
 
@@ -191,16 +186,14 @@ const View = (props: ViewProps) => {
                     zoomOnMouseWheel: 'ctrl', // Hold down the ctrl key to zoom
                 },
             ],
-        });
+        }).then(currentChart => {
+            if (!currentChart) {
+                return;
+            }
 
-        hoverZoomBtn();
-        zoomChart(myChart);
-        // Update the chart when the container size changes
-        const disconnectResize = resizeChart(myChart);
-        return () => {
-            disconnectResize?.();
-            myChart?.dispose();
-        };
+            hoverZoomBtn();
+            zoomChart(currentChart);
+        });
     }, [
         wGrid,
         hGrid,
@@ -210,9 +203,9 @@ const View = (props: ViewProps) => {
         chartShowData,
         xAxisRange,
         hoverZoomBtn,
-        resizeChart,
         zoomChart,
         getYAxisRange,
+        renderEcharts,
     ]);
 
     return (
@@ -224,7 +217,7 @@ const View = (props: ViewProps) => {
         >
             {hGrid > 1 && <Tooltip className={styles.name} autoEllipsis title={title} />}
             <div className={styles['horizon-chart-content']}>
-                <div ref={chartRef} className={styles['horizon-chart-content__chart']} />
+                <EchartsUI ref={chartRef} />
             </div>
             {React.cloneElement(chartZoomRef.current?.iconNode, {
                 className: cls('reset-chart-zoom', { 'reset-chart-zoom--isEdit': isEdit }),

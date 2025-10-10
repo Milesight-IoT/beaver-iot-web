@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import cls from 'classnames';
 import { isEmpty } from 'lodash-es';
-import * as echarts from 'echarts/core';
 import { useTheme } from '@milesight/shared/src/hooks';
 import { getChartColor } from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { useGridLayout } from '@/components/drawing-board/plugin/hooks';
-import { useResizeChart, useSourceData } from './hooks';
+import { EchartsUI, useEcharts } from '@/components/echarts';
+import { useSourceData } from './hooks';
 import type { ViewConfigProps } from '../typings';
 import type { BoardPluginProps } from '../../../types';
 import './style.less';
@@ -28,20 +28,16 @@ const View = (props: IProps) => {
     const chartWrapperRef = useRef<HTMLDivElement>(null);
     const { getCSSVariableValue, grey } = useTheme();
 
-    const { resizeChart } = useResizeChart({ chartWrapperRef });
     const { countData } = useSourceData(props);
+    const { renderEcharts } = useEcharts(chartRef);
 
     /** Rendering cake map */
     const renderChart = () => {
-        const chartDom = chartRef.current;
-        if (!chartDom) return;
-
         const data = countData?.data?.count_result || [];
         const resultColor = getChartColor(data);
         const pieColor = !isEmpty(resultColor) ? resultColor : [getCSSVariableValue('--gray-2')];
 
-        const myChart = echarts.init(chartDom);
-        myChart.setOption({
+        renderEcharts({
             legend: {
                 show: hGrid > 2,
                 itemWidth: 10,
@@ -61,7 +57,7 @@ const View = (props: IProps) => {
                     center: ['50%', '55%'],
                     data: (data || []).map(item => ({
                         value: item.count,
-                        name: item.value,
+                        name: item.value as string | number,
                     })),
 
                     itemStyle: {
@@ -88,13 +84,6 @@ const View = (props: IProps) => {
                 },
             },
         });
-
-        // Update the chart when the container size changes
-        const disconnectResize = resizeChart(myChart);
-        return () => {
-            disconnectResize?.();
-            myChart?.dispose();
-        };
     };
     useEffect(() => {
         return renderChart();
@@ -107,7 +96,7 @@ const View = (props: IProps) => {
         >
             <Tooltip className="ms-pie-chart__header" autoEllipsis title={title} />
             <div className="ms-pie-chart__content">
-                <div ref={chartRef} className="ms-chart-content__chart" />
+                <EchartsUI ref={chartRef} />
             </div>
         </div>
     );
