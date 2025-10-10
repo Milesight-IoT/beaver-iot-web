@@ -42,6 +42,8 @@ export type DrawingBoardPropsType = {
     changeIsEdit: (isEditing: boolean) => void;
     updateOperatingPlugin: (plugin?: WidgetDetail) => void;
     drawingBoardRef: React.RefObject<HTMLDivElement>;
+    /** Exit body fullscreen */
+    exitFullscreen: () => void;
 };
 
 /**
