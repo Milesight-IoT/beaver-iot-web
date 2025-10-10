@@ -124,6 +124,9 @@ const View = (props: ViewProps) => {
                     type: 'line',
                     snap: false,
                 },
+                axisLabel: {
+                    hideOverlap: true,
+                },
             },
             yAxis: new Array(newChartShowData.length || 1)
                 .fill({ type: 'value' })
@@ -255,6 +258,7 @@ const View = (props: ViewProps) => {
                     type: 'inside', // Built-in data scaling component
                     filterMode: 'none',
                     zoomOnMouseWheel: 'ctrl', // Hold down the ctrl key to zoom
+                    preventDefaultMouseMove: false,
                 },
                 {
                     type: 'slider',

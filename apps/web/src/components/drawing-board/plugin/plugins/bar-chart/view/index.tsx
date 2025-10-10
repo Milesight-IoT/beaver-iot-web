@@ -86,6 +86,9 @@ const View = (props: ViewProps) => {
                         color: grey[500],
                     },
                 },
+                axisLabel: {
+                    hideOverlap: true,
+                },
             },
             yAxis: {
                 show: hGrid > 2,
@@ -176,6 +179,7 @@ const View = (props: ViewProps) => {
                     type: 'inside', // Built-in data scaling component
                     filterMode: 'empty',
                     zoomOnMouseWheel: 'ctrl', // Hold down the ctrl key to zoom
+                    preventDefaultMouseMove: false,
                 },
                 {
                     type: 'slider',

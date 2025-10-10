@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { useMemoizedFn } from 'ahooks';
 import { type EChartsType } from 'echarts/core';
@@ -59,6 +59,16 @@ export const useZoomChart = ({
     //     };
     // }, [getChartZoom, setChartZoom, xAxisConfig, xAxisRange]);
 
+    const handleWheelEvent = useMemoizedFn((e: WheelEvent) => {
+        if (!e) {
+            return;
+        }
+
+        if (!e?.ctrlKey) {
+            e?.stopImmediatePropagation();
+        }
+    });
+
     /** chart zoom callback */
     const zoomChart = useMemoizedFn((myChart: EChartsType) => {
         myChart.on('dataZoom', (params: any) => {
@@ -66,15 +76,15 @@ export const useZoomChart = ({
             const { dataZoom } = chartOption || {};
             const { start, end } = (dataZoom as any)?.[0] || {};
 
-            const { isZooming } = params || {};
-
-            const isHandleScale = params.batch;
-            isHandleScale && chartZoomRef.current?.show();
+            const { isZooming = true } = params || {};
+            if (isZooming) {
+                chartZoomRef.current?.show();
+            }
 
             setChartZoom({
                 start,
                 end,
-                isZooming: isZooming ?? true,
+                isZooming,
                 initialize: false,
             });
         });
@@ -104,6 +114,13 @@ export const useZoomChart = ({
         chartZoomRef.current?.storeReset({
             resetZoom,
         });
+
+        /**
+         * Add wheel event listener to resolve scroll event prevented
+         */
+        chartWrapperRef.current?.addEventListener('wheel', handleWheelEvent, {
+            capture: true,
+        });
     });
     /** Display zoom button when mouse hover */
     const hoverZoomBtn = useMemoizedFn(() => {
@@ -128,6 +145,20 @@ export const useZoomChart = ({
             chartZoomRef.current?.hide();
         };
     });
+
+    /**
+     * Destroy component and release resources
+     */
+    useEffect(() => {
+        const chartNode = chartWrapperRef.current;
+        if (!chartNode) return;
+
+        return () => {
+            chartNode.onmouseover = null;
+            chartNode.onmouseleave = null;
+            chartNode.removeEventListener('wheel', handleWheelEvent, { capture: true });
+        };
+    }, [chartWrapperRef, handleWheelEvent]);
 
     return {
         zoomChart,

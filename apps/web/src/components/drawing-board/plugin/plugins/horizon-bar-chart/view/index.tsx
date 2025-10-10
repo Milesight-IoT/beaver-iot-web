@@ -99,6 +99,9 @@ const View = (props: ViewProps) => {
                         color: grey[500],
                     },
                 },
+                axisLabel: {
+                    hideOverlap: true,
+                },
             },
             series: chartShowData.map((chart, index) => ({
                 name: chart.entityLabel,
@@ -184,6 +187,7 @@ const View = (props: ViewProps) => {
                     filterMode: 'empty',
                     orient: 'vertical',
                     zoomOnMouseWheel: 'ctrl', // Hold down the ctrl key to zoom
+                    preventDefaultMouseMove: false,
                 },
             ],
         }).then(currentChart => {
