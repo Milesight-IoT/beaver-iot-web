@@ -58,7 +58,7 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
     const [loading, setLoading] = useState(false);
 
     const drawingBoardRef = useRef<HTMLDivElement>(null);
-    const [isFullscreen, { enterFullscreen }] = useFullscreen(drawingBoardRef);
+    const [isFullscreen, { enterFullscreen, exitFullscreen }] = useFullscreen(document.body);
     const { getCurrentEntityIds } = useActivityEntity();
 
     const changeIsEdit = useMemoizedFn((isEditing: boolean) => {
@@ -203,8 +203,17 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
             updateOperatingPlugin,
             /** Drawing board html div node */
             drawingBoardRef,
+            /** Exit body fullscreen */
+            exitFullscreen,
         };
-    }, [operatingPlugin, isEdit, isFullscreen, changeIsEdit, updateOperatingPlugin]);
+    }, [
+        operatingPlugin,
+        isEdit,
+        isFullscreen,
+        changeIsEdit,
+        updateOperatingPlugin,
+        exitFullscreen,
+    ]);
 
     return {
         /**

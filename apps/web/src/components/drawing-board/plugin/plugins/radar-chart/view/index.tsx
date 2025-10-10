@@ -91,6 +91,8 @@ const View = (props: IProps) => {
                             {((value || []) as number[]).map((v, i) => {
                                 return (
                                     <div
+                                        // eslint-disable-next-line react/no-array-index-key
+                                        key={i}
                                         style={{ display: 'flex', justifyContent: 'space-between' }}
                                     >
                                         <div>
@@ -133,7 +135,7 @@ const View = (props: IProps) => {
                 {
                     radius: '80%',
                     indicator: data?.labels?.map((value: unknown) => ({
-                        text: value,
+                        name: value,
                     })),
                     axisName: {
                         color: grey[600],

@@ -29,4 +29,6 @@ export interface DrawingBoardProps {
     updateOperatingPlugin: (plugin?: WidgetDetail) => void;
     /** Change drawing board edit mode */
     changeIsEdit: (isEditing: boolean) => void;
+    /** Exit body fullscreen */
+    exitFullscreen: () => void;
 }

@@ -230,7 +230,7 @@
     "common.time.morning": "上午",
     "common.tip.cannot_selected": "共计可选100台设备",
     "common.tip.maximum_number_reached": "已达到最大数量。",
-    "common.tip.selected_and_max_count": "{1} selected, maximum {2}",
+    "common.tip.selected_and_max_count": "已选 {1}, 最多选择 {2}",
     "common.unit.second": "秒",
     "valid.date.selected_time_greater_than_now_time": "不支持早于当前时间的时间。",
     "valid.date.start_time_greater_than_end_time": "开始时间不能晚于结束时间。",
@@ -299,5 +299,6 @@
     "valid.input.username": "用户名长度最小长度为5。",
     "valid.input.value": "输入值：仅{0}。",
     "valid.input.version": "版本号不符合规范。",
-    "valid.resp.at_least_one": "请至少选择一个{1}。"
+    "valid.resp.at_least_one": "请至少选择一个{1}。",
+    "common.label.workflow_id": "工作流 ID"
 }

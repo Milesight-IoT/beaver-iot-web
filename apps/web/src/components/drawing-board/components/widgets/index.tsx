@@ -46,18 +46,8 @@ interface WidgetProps {
 const Widgets = (props: WidgetProps) => {
     const { widgets, onChangeWidgets, isEdit, onEdit, mainRef, dashboardId } = props;
 
-    const {
-        smallScreenSize,
-        mediumScreenSize,
-        gridLayoutCols,
-        gridRowHeight,
-        currentWidth,
-        currentHeight,
-        minWidth,
-        minHeight,
-        maxWidth,
-        maxHeight,
-    } = useResponsiveLayout(widgets);
+    const { smallScreenSize, mediumScreenSize, gridLayoutCols, gridRowHeight, positionWidgets } =
+        useResponsiveLayout(widgets);
     const { helperBg, showHelperBg, setShowHelperBg } = useBackgroundHelper();
     const { handleGridLayoutResize } = useWidgetResize(mainRef);
     const { newDrawingBoardContext } = useWidget();
@@ -180,23 +170,10 @@ const Widgets = (props: WidgetProps) => {
                 const id = (data.widget_id || data.tempId) as ApiKey;
                 const plugin = data.data as BoardPluginProps;
 
-                const pos: Layout = {
-                    ...plugin.pos,
-                    w: currentWidth(plugin),
-                    h: currentHeight(plugin),
-                    minW: minWidth(plugin),
-                    minH: minHeight(plugin),
-                    maxW: maxWidth(plugin),
-                    maxH: maxHeight(plugin),
-                    i: String(id),
-                    x: plugin.pos?.x || 0,
-                    y: plugin.pos?.y || 0,
-                };
-
                 return (
                     <div
                         key={id}
-                        data-grid={pos}
+                        data-grid={positionWidgets.get(id)}
                         className={!isEdit ? 'drawing-board__widget-grid-edit' : ''}
                     >
                         <DrawingBoardContext.Provider value={newDrawingBoardContext(data)}>

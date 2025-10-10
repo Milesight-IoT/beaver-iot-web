@@ -1,5 +1,5 @@
 import React from 'react';
-import { isNil } from 'lodash-es';
+import { isNil, isEmpty } from 'lodash-es';
 import { Stack, Button, OutlinedInput, InputAdornment, List } from '@mui/material';
 import cls from 'classnames';
 
@@ -102,7 +102,7 @@ const DashboardList: React.FC = () => {
             );
         }
 
-        if (!data) {
+        if (!Array.isArray(data) || isEmpty(data)) {
             return (
                 <Empty
                     size="middle"
