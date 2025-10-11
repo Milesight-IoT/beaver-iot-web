@@ -9,6 +9,7 @@ import { LoadingButton } from '@milesight/shared/src/components';
 
 import { Tooltip, DeviceStatus } from '@/components';
 import { type ImportEntityProps } from '@/services/http';
+import { getIEntityEnumDisplayVal } from '@/utils';
 import { type TableRowDataType } from '../../hooks';
 import { DeviceListContext } from '../../context';
 
@@ -42,7 +43,7 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
             return '-';
         }
 
-        return `${status.value}${entity?.value_attribute?.unit || ''}`;
+        return getIEntityEnumDisplayVal(status.value, entity);
     });
 
     const deviceStatus = useMemo(() => {
