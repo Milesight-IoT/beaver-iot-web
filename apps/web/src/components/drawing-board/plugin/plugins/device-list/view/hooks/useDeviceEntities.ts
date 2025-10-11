@@ -24,14 +24,14 @@ export interface useDeviceEntitiesProps {
  * Handle Devices entities
  */
 export function useDeviceEntities(props: useDeviceEntitiesProps) {
-    const { isPreview, data } = props || {};
+    const { data } = props || {};
 
     const [entitiesStatus, setEntitiesStatus] = useState<
         EntityAPISchema['getEntitiesStatus']['response']
     >({});
 
     const importantEntities = useMemo(() => {
-        if (isPreview || !Array.isArray(data) || isEmpty(data)) {
+        if (!Array.isArray(data) || isEmpty(data)) {
             return;
         }
 
@@ -53,7 +53,7 @@ export function useDeviceEntities(props: useDeviceEntitiesProps) {
             }, [])
             .map(d => d.id)
             .filter(Boolean);
-    }, [data, isPreview]);
+    }, [data]);
 
     const { run: getNewestEntitiesStatus } = useRequest(
         async () => {
