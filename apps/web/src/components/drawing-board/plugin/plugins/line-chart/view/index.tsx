@@ -9,7 +9,7 @@ import {
     useStableValue,
     useGridLayout,
 } from '@/components/drawing-board/plugin/hooks';
-import { getChartColor } from '@/components/drawing-board/plugin/utils';
+import { getChartColor, getChartGridBottom } from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { type ChartEntityPositionValueType } from '@/components/drawing-board/plugin/components/chart-entity-position';
 import { PluginFullscreenContext } from '@/components/drawing-board/components';
@@ -90,6 +90,7 @@ const View = (props: ViewProps) => {
         const [xAxisMin, xAxisMax] = xAxisRange || [];
 
         const xRangeList = getYAxisRange() || {};
+        const yAxisNumber = newChartShowData?.length || 1;
 
         let mousePos = [0, 0];
         let myChart: echarts.ECharts | null = null;
@@ -135,6 +136,9 @@ const View = (props: ViewProps) => {
                     type: 'value',
                     nameLocation: 'middle',
                     nameGap: 40,
+                    axisLabel: {
+                        hideOverlap: true,
+                    },
                     ...(xRangeList[index] || {}),
                 })),
             series: newChartShowData.map((chart, index) => ({
@@ -178,9 +182,9 @@ const View = (props: ViewProps) => {
             grid: {
                 containLabel: true,
                 top: hGrid >= 4 ? '42px' : 30, // Adjust the top blank space of the chart area
-                left: hGrid >= 3 ? 15 : hGrid <= 2 ? '-5%' : 0,
-                right: 18,
-                ...(hGrid >= 4 ? { bottom: 58 } : { bottom: 0 }),
+                left: hGrid > 2 ? 15 : -20,
+                right: yAxisNumber >= 2 ? (hGrid > 2 ? 15 : -20) : wGrid > 2 || hGrid > 2 ? 15 : 0,
+                ...getChartGridBottom(wGrid, hGrid),
             },
             tooltip: {
                 confine: true,

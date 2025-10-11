@@ -10,7 +10,7 @@ import {
     useStableValue,
     useGridLayout,
 } from '@/components/drawing-board/plugin/hooks';
-import { getChartColor } from '@/components/drawing-board/plugin/utils';
+import { getChartColor, getChartGridBottom } from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { PluginFullscreenContext } from '@/components/drawing-board/components';
 import { EchartsUI, useEcharts } from '@/components/echarts';
@@ -106,6 +106,9 @@ const View = (props: ViewProps) => {
                 type: 'value',
                 min,
                 max,
+                axisLabel: {
+                    hideOverlap: true,
+                },
             },
             series: chartShowData.map((chart, index) => ({
                 name: chart.entityLabel,
@@ -150,9 +153,9 @@ const View = (props: ViewProps) => {
             grid: {
                 containLabel: true,
                 top: hGrid >= 4 ? '42px' : 30, // Adjust the top blank space of the chart area
-                left: hGrid >= 4 ? '1%' : hGrid <= 2 ? '-5%' : 0,
-                right: 16,
-                ...(hGrid >= 4 ? {} : { bottom: 0 }),
+                left: hGrid > 2 ? 0 : -20,
+                right: wGrid > 2 || hGrid > 2 ? 15 : 0,
+                ...getChartGridBottom(wGrid, hGrid),
             },
             tooltip: {
                 confine: true,

@@ -92,3 +92,31 @@ export const filterEntityOption = (
         return customFilter(newOptions, context);
     };
 };
+
+/** Get Chart grid bottom value */
+export const getChartGridBottom = (
+    wGrid: number,
+    hGrid: number,
+): {
+    bottom?: number;
+} => {
+    if (hGrid >= 4 && wGrid > 2) {
+        return {};
+    }
+
+    if (hGrid >= 4 && wGrid <= 2) {
+        return {
+            bottom: 50,
+        };
+    }
+
+    if (hGrid < 4 && wGrid <= 2) {
+        return {
+            bottom: -16,
+        };
+    }
+
+    return {
+        bottom: 0,
+    };
+};

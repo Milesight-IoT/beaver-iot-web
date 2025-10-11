@@ -87,6 +87,9 @@ const View = (props: ViewProps) => {
                         color: grey[500],
                     },
                 },
+                axisLabel: {
+                    hideOverlap: true,
+                },
             },
             yAxis: {
                 show: hGrid > 2,
@@ -127,9 +130,9 @@ const View = (props: ViewProps) => {
             grid: {
                 containLabel: true,
                 top: 30, // Adjust the top blank space of the chart area
-                left: hGrid >= 4 ? '-3%' : hGrid <= 2 ? '-5%' : 0,
+                left: hGrid > 2 ? 0 : -66,
                 right: 24,
-                bottom: 0,
+                bottom: wGrid > 2 ? 0 : -16,
             },
             tooltip: {
                 confine: true,
