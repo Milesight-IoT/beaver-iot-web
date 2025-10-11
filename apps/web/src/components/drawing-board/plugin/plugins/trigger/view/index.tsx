@@ -39,7 +39,7 @@ const View = (props: Props) => {
     const { getIntlText } = useI18n();
     const confirm = useConfirm();
     const { getLatestEntityDetail } = useActivityEntity();
-    const { twoByTwo } = useGridLayout(pos);
+    const { wGrid = 2, hGrid = 1 } = useGridLayout(pos);
 
     const [visible, setVisible] = useState(false);
 
@@ -234,8 +234,8 @@ const View = (props: Props) => {
         );
         if (!IconShow) return null;
 
-        return <IconShow sx={{ fontSize: twoByTwo ? 32 : 24 }} />;
-    }, [icon, config, twoByTwo]);
+        return <IconShow sx={{ fontSize: wGrid > 1 && hGrid > 1 ? 32 : 24 }} />;
+    }, [icon, config, wGrid, hGrid]);
 
     const renderTriggerView = (
         <div
@@ -249,7 +249,7 @@ const View = (props: Props) => {
             <div className="trigger-view__label">
                 <Tooltip
                     className={cls('trigger-view__text', {
-                        'text-lg': twoByTwo,
+                        'text-lg': wGrid > 1 && hGrid > 1,
                     })}
                     autoEllipsis
                     title={label}

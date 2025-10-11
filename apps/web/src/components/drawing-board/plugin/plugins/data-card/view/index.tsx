@@ -30,9 +30,7 @@ const View = (props: Props) => {
     const { getTimeFormat } = useTime();
     const { getCSSVariableValue } = useTheme();
     const { getLatestEntityDetail } = useActivityEntity();
-    const { twoByTwo, oneByTwo, twoByOne, oneByOne } = useGridLayout(
-        isPreview ? { w: 2, h: 1 } : pos,
-    );
+    const { wGrid = 2, hGrid = 1 } = useGridLayout(isPreview ? { w: 2, h: 1 } : pos);
     const { containerRef, showIconWidth } = useContainerRect();
 
     const latestEntity = useMemo(() => {
@@ -95,10 +93,10 @@ const View = (props: Props) => {
             <div className="data-view-card">
                 <div
                     className={cls('data-view-card__content', {
-                        'justify-center': twoByOne || oneByOne,
+                        'justify-center': hGrid <= 1,
                     })}
                 >
-                    {(twoByTwo || oneByTwo) && (
+                    {hGrid > 1 && (
                         <div className="data-view-card__header">
                             <Tooltip className="data-view-card__title" autoEllipsis title={title} />
                         </div>
@@ -114,15 +112,15 @@ const View = (props: Props) => {
                         )}
                         <div
                             className={cls('data-view-card__data', {
-                                'text-lg': twoByTwo,
+                                'text-lg': wGrid > 1 && hGrid > 1,
                                 'ms-4': showIconWidth,
                             })}
                         >
-                            {(twoByOne || oneByOne) && <Tooltip autoEllipsis title={title} />}
+                            {hGrid <= 1 && <Tooltip autoEllipsis title={title} />}
                             <Tooltip autoEllipsis title={currentEntityData?.label || '-'} />
                         </div>
                     </div>
-                    {(twoByTwo || oneByTwo) && (
+                    {hGrid > 1 && (
                         <div className="data-view-card__footer">
                             <Tooltip
                                 autoEllipsis
