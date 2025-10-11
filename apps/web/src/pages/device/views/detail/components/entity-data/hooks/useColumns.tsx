@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Stack, IconButton } from '@mui/material';
+import { isNil } from 'lodash-es';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { ListAltIcon, EditIcon, WorkflowIcon } from '@milesight/shared/src/components';
 import {
@@ -150,9 +151,13 @@ const useColumns = <T extends TableRowDataType>({
                 flex: 1,
                 minWidth: 120,
                 ellipsis: true,
-                renderCell({ row, value }) {
-                    const { entityValueAttribute: attr } = row;
-                    return value ? `${value}${attr?.unit || ''}` : '-';
+                renderCell({ row }) {
+                    const { enum: enumMap, unit = '' } = row.entityValueAttribute || {};
+                    const value = isNil(row.entityLatestValue)
+                        ? ''
+                        : enumMap?.[row.entityLatestValue] || `${row.entityLatestValue}`;
+
+                    return value ? `${value}${unit}` : '-';
                 },
             },
             {

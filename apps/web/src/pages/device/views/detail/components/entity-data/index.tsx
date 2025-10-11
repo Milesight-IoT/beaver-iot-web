@@ -90,6 +90,13 @@ const EntityData: React.FC<Props> = memo(({ data: deviceDetail, onRefresh }) => 
             if (error || !data || !isRequestSuccess(resp)) return;
             const result = objectToCamelCase(data);
 
+            result.content.forEach((entity, index) => {
+                if (entity.entityValueAttribute?.enum) {
+                    entity.entityValueAttribute.enum =
+                        data.content[index].entity_value_attribute.enum;
+                }
+            });
+
             return result;
         },
         {
