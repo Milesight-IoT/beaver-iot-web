@@ -24,7 +24,7 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
         name: 'Switch',
         icon: SwitchIcon,
         defaultRow: 1,
-        defaultCol: 1,
+        defaultCol: 2,
         minRow: 1,
         minCol: 1,
         maxRow: 1,

@@ -23,7 +23,7 @@ const dataCardControlPanelConfig = (): ControlPanelConfig<DataCardControlPanelCo
         name: 'Card',
         icon: DataCardIcon,
         defaultRow: 1,
-        defaultCol: 1,
+        defaultCol: 2,
         minRow: 1,
         minCol: 1,
         maxCol: 2,
