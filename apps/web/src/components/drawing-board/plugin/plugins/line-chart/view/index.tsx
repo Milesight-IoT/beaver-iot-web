@@ -89,8 +89,8 @@ const View = (props: ViewProps) => {
         const resultColor = getChartColor(chartShowData);
         const [xAxisMin, xAxisMax] = xAxisRange || [];
 
-        const xRangeList = getYAxisRange() || {};
-        const yAxisNumber = newChartShowData?.length || 1;
+        const yRangeList = getYAxisRange() || {};
+        const yAxisNumber = yRangeList?.length || 1;
 
         let mousePos = [0, 0];
         let myChart: echarts.ECharts | null = null;
@@ -139,7 +139,7 @@ const View = (props: ViewProps) => {
                     axisLabel: {
                         hideOverlap: true,
                     },
-                    ...(xRangeList[index] || {}),
+                    ...(yRangeList[index] || {}),
                 })),
             series: newChartShowData.map((chart, index) => ({
                 name: chart.entityLabel,
