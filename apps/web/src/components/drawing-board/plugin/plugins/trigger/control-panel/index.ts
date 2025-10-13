@@ -23,7 +23,7 @@ const triggerControlPanelConfig = (): ControlPanelConfig<TriggerControlPanelConf
         name: 'Trigger',
         icon: TriggerIcon,
         defaultRow: 1,
-        defaultCol: 1,
+        defaultCol: 2,
         minRow: 1,
         minCol: 1,
         maxRow: 2,

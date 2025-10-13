@@ -8,6 +8,7 @@ import { SettingsIcon, SpaceDashboardIcon, LoadingWrapper } from '@milesight/sha
 
 import { Tooltip, DeviceStatus, type ColumnType } from '@/components';
 import { type ImportEntityProps, type EntityAPISchema } from '@/services/http';
+import { getIEntityEnumDisplayVal } from '@/utils';
 import { useDeviceDrawingBoard } from './useDeviceDrawingBoard';
 import { useCallService } from './useCallService';
 
@@ -73,7 +74,7 @@ const useColumns = <T extends TableRowDataType>({
             return `${entity.name}: -`;
         }
 
-        return `${entity.name}: ${status.value}${entity?.value_attribute?.unit || ''}`;
+        return `${entity.name}: ${getIEntityEnumDisplayVal(status.value, entity)}`;
     });
 
     const columns: ColumnType<T>[] = useMemo(() => {

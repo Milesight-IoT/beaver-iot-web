@@ -125,7 +125,7 @@ const Modal: React.FC<ModalProps> = ({
     children,
     disableEscapeKeyDown = false,
     disabledBackdropClose = true,
-    showCloseIcon = true,
+    showCloseIcon,
     disableScrollLock = false,
     okButtonProps,
     cancelButtonProps,

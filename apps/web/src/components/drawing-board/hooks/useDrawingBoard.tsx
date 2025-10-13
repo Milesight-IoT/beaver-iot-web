@@ -36,11 +36,15 @@ export interface UseDrawingBoardProps {
 
 export type DrawingBoardPropsType = {
     ref: React.RefObject<DrawingBoardExpose>;
+    /** The widget plugin currently being added or edited */
     operatingPlugin: WidgetDetail | undefined;
+    /** Is drawing board in edit mode */
     isEdit: boolean;
     isFullscreen: boolean;
+    /** Change drawing board edit mode */
     changeIsEdit: (isEditing: boolean) => void;
     updateOperatingPlugin: (plugin?: WidgetDetail) => void;
+    /** Drawing board html div node */
     drawingBoardRef: React.RefObject<HTMLDivElement>;
     /** Exit body fullscreen */
     exitFullscreen: () => void;
@@ -192,7 +196,7 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
         return renderNormalMode;
     };
 
-    const drawingBoardProps = useMemo(() => {
+    const drawingBoardProps = useMemo((): DrawingBoardPropsType => {
         return {
             ref: drawingBoardExposeRef,
             /** The widget plugin currently being added or edited */

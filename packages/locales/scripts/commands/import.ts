@@ -25,9 +25,11 @@ function writeFile({
      * Specification: https://www.tapd.cn/51309724/prong/stories/view/1151309724001050183
      */
     function getFileName(key: string) {
-        const platformPrefix = platformKeyPrefixs?.find(item => key.startsWith(item));
+        const platformPrefix = platformKeyPrefixs?.find(item => key.startsWith(`${item}.`));
         // Remove platform prefix
-        const realKey = !platformPrefix ? key : key.replace(new RegExp(`^${platformPrefix}.`), '');
+        const realKey = !platformPrefix
+            ? key
+            : key.replace(new RegExp(`^${platformPrefix}\\.`), '');
         let filename = realKey.split('.')[0];
 
         Object.keys(splitRules).forEach(name => {

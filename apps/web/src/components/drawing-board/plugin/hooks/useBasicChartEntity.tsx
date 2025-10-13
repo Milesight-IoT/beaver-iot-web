@@ -96,6 +96,11 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
      */
     const [chartShowData, setChartShowData] = useState<ChartShowDataProps[]>([]);
     /**
+     * X -axis scale range
+     * The current time is used as the final scale, and the time time is pushed forward as the start scale
+     */
+    const [xAxisRange, setXAxisRange] = useState([Date.now() - time, Date.now()]);
+    /**
      * Chart x -axis label
      */
     const [chartLabels, setChartLabels] = useState<number[]>([]);
@@ -145,76 +150,80 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
      */
     const { run: requestChartData } = useRequest(
         async () => {
-            if (!Array.isArray(entity)) return;
+            try {
+                if (!Array.isArray(entity)) return;
 
-            const promises = (entity || []).map(e =>
-                entityAPI.getHistory({
-                    entity_id: e.value,
-                    start_timestamp: Date.now() - time,
-                    end_timestamp: Date.now(), // Current time
-                    page_number: 1,
-                    page_size: 999999,
-                }),
-            );
-            const [error, resp] = await awaitWrap(Promise.all(promises));
-            const isFailed = (resp || []).some(res => !isRequestSuccess(res));
+                const promises = (entity || []).map(e =>
+                    entityAPI.getHistory({
+                        entity_id: e.value,
+                        start_timestamp: Date.now() - time,
+                        end_timestamp: Date.now(), // Current time
+                        page_number: 1,
+                        page_size: 999999,
+                    }),
+                );
+                const [error, resp] = await awaitWrap(Promise.all(promises));
+                const isFailed = (resp || []).some(res => !isRequestSuccess(res));
 
-            if (error || isFailed) return;
-            const historyData = (resp || [])
-                .map(res => getResponseData(res))
-                .filter(Boolean)
-                .map(d => d?.content || []);
-
-            /**
-             * Re -treatment, get all the time periods of all values
-             */
-            const newChartLabels = historyData
-                .reduce((a: number[], c) => {
-                    const times = (c || [])?.map(h => h.timestamp)?.filter(Boolean) || [];
-
-                    return [...new Set([...a, ...times])];
-                }, [])
-                .sort((a, b) => Number(a) - Number(b));
-            setChartLabels(newChartLabels);
-
-            const newChartShowData: ChartShowDataProps[] = [];
-
-            /**
-             * Physical data conversion
-             */
-            (historyData || []).forEach((h, index) => {
-                const entityLabel = (entity || [])[index]?.label || '';
-                const chartOwnData: ChartShowDataProps['chartOwnData'] = [];
+                if (error || isFailed) return;
+                const historyData = (resp || [])
+                    .map(res => getResponseData(res))
+                    .filter(Boolean)
+                    .map(d => d?.content || []);
 
                 /**
-                 * Determine whether the current entity has data in this time period according to the timestamp
+                 * Re -treatment, get all the time periods of all values
                  */
-                const chartData = newChartLabels.map(l => {
-                    const valueIndex = h.findIndex(item => item.timestamp === l);
-                    if (valueIndex !== -1) {
-                        const currentValue = h[valueIndex].value;
+                const newChartLabels = historyData
+                    .reduce((a: number[], c) => {
+                        const times = (c || [])?.map(h => h.timestamp)?.filter(Boolean) || [];
 
-                        chartOwnData.push({
-                            value: currentValue,
-                            timestamp: Number(l),
+                        return [...new Set([...a, ...times])];
+                    }, [])
+                    .sort((a, b) => Number(a) - Number(b));
+                setChartLabels(newChartLabels);
+
+                const newChartShowData: ChartShowDataProps[] = [];
+
+                /**
+                 * Physical data conversion
+                 */
+                (historyData || []).forEach((h, index) => {
+                    const entityLabel = (entity || [])[index]?.label || '';
+                    const chartOwnData: ChartShowDataProps['chartOwnData'] = [];
+
+                    /**
+                     * Determine whether the current entity has data in this time period according to the timestamp
+                     */
+                    const chartData = newChartLabels.map(l => {
+                        const valueIndex = h.findIndex(item => item.timestamp === l);
+                        if (valueIndex !== -1) {
+                            const currentValue = h[valueIndex].value;
+
+                            chartOwnData.push({
+                                value: currentValue,
+                                timestamp: Number(l),
+                            });
+                            return currentValue;
+                        }
+
+                        return null;
+                    });
+
+                    if (entityLabel) {
+                        newChartShowData.push({
+                            id: (entity || [])[index]?.rawData?.entityId || '',
+                            entityLabel,
+                            entityValues: chartData,
+                            chartOwnData,
                         });
-                        return currentValue;
                     }
-
-                    return null;
                 });
 
-                if (entityLabel) {
-                    newChartShowData.push({
-                        id: (entity || [])[index]?.rawData?.entityId || '',
-                        entityLabel,
-                        entityValues: chartData,
-                        chartOwnData,
-                    });
-                }
-            });
-
-            setChartShowData(newChartShowData);
+                setChartShowData(newChartShowData);
+            } finally {
+                setXAxisRange([Date.now() - time, Date.now()]);
+            }
         },
         {
             manual: true,
@@ -257,12 +266,6 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
             year: 'yyyy',
         };
     }, [format]);
-
-    // X -axis scale range
-    const xAxisRange = useMemo(() => {
-        // The current time is used as the final scale, and the time time is pushed forward as the start scale
-        return [Date.now() - time, Date.now()];
-    }, [time, chartShowData]);
 
     // Calculate the suggested X-axis range
     const xAxisConfig = useMemo(() => {
