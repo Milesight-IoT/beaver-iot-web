@@ -84,7 +84,10 @@ export interface DashboardAPISchema extends APISchema {
             cover_type?: DashboardCoverType;
             cover_data?: string;
         };
-        response: unknown;
+        response: {
+            dashboard_id: ApiKey;
+            main_canvas_id: ApiKey;
+        };
     };
 
     /** Delete dashboard */
