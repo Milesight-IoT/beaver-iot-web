@@ -153,6 +153,7 @@ export interface EntityAPISchema extends APISchema {
         };
         response: {
             value: any;
+            timestamp?: number;
             updated_at: number;
             value_type: EntityValueDataType;
         };
