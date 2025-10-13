@@ -456,7 +456,7 @@ const BindModal: React.FC<Props> = ({
             disableEscapeKeyDown
             size="full"
             className="ms-com-device-bind-modal"
-            title={modalTitle}
+            showCloseIcon={false}
             visible={visible}
             onCancel={onCancel}
         >
