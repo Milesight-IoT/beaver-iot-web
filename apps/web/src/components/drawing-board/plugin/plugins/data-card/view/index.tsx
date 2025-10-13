@@ -65,7 +65,6 @@ const View = (props: Props) => {
             return {
                 label: enumStruct[currentKey],
                 value: currentKey,
-                timestamp: entityStatus?.timestamp,
             };
         }
 
@@ -73,7 +72,6 @@ const View = (props: Props) => {
         return {
             label: unit ? `${currentEntityStatus ?? '- '}${unit}` : `${currentEntityStatus ?? ''}`,
             value: entityValue,
-            timestamp: entityStatus?.timestamp,
         };
     }, [latestEntity, entityStatus]);
 
@@ -127,8 +125,8 @@ const View = (props: Props) => {
                             <Tooltip
                                 autoEllipsis
                                 title={
-                                    currentEntityData?.timestamp &&
-                                    getTimeFormat(Number(currentEntityData.timestamp))
+                                    entityStatus?.timestamp &&
+                                    getTimeFormat(Number(entityStatus.timestamp))
                                 }
                             />
                         </div>
