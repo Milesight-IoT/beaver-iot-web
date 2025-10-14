@@ -6,6 +6,7 @@ import { Descriptions, Tooltip, PermissionControlHidden } from '@/components';
 import { type DeviceAPISchema } from '@/services/http';
 import { PERMISSIONS } from '@/constants';
 import EditDialog from './edit-dialog';
+import './style.less';
 
 interface Props {
     /** Loading or not */
@@ -41,6 +42,7 @@ const BasicTable = (
                 content: (
                     <Stack
                         direction="row"
+                        className="device-name"
                         sx={{ alignItems: 'center', justifyContent: 'space-between' }}
                     >
                         <Tooltip autoEllipsis title={data?.name} />
