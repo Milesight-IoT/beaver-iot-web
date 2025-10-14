@@ -322,6 +322,15 @@ const View = (props: ViewProps) => {
                 mousePos = [e.offsetX, e.offsetY];
             });
 
+            currentChart.on('mousemove', params => {
+                currentChart.dispatchAction({
+                    type: 'showTip',
+                    seriesIndex: params?.seriesIndex,
+                    dataIndex: params?.dataIndex,
+                    name: params?.name,
+                });
+            });
+
             hoverZoomBtn();
             zoomChart(currentChart);
         });
