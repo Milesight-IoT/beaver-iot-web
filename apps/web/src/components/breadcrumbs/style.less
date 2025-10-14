@@ -12,8 +12,27 @@
     }
 
     &__inner {
+        min-width: 0;
+        overflow: hidden;
+
+        .@{mui-prefix}Breadcrumbs-ol {
+            flex-wrap: nowrap;
+        }
+
         .@{mui-prefix}Typography-root {
             .text-size(@font-size-xl);
+        }
+    }
+
+    &-item {
+        max-width: 300px;
+
+        .@{prefix}-tooltip {
+            width: 100%;
+        }
+
+        &--last {
+            color: var(--text-color-base);
         }
     }
 }
