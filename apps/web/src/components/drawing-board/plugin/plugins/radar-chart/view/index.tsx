@@ -136,7 +136,7 @@ const View = (props: IProps) => {
                         color: grey[600],
                         overflow: 'break',
                         padding: -8,
-                        show: wGrid > 2 && hGrid > 2,
+                        show: hGrid > 2,
                     },
                     splitArea: {
                         areaStyle: {
