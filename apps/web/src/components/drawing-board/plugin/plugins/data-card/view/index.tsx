@@ -116,7 +116,13 @@ const View = (props: Props) => {
                                 'ms-4': showIconWidth,
                             })}
                         >
-                            {hGrid <= 1 && <Tooltip autoEllipsis title={title} />}
+                            {hGrid <= 1 && (
+                                <Tooltip
+                                    className="data-view-card__title"
+                                    autoEllipsis
+                                    title={title}
+                                />
+                            )}
                             <Tooltip autoEllipsis title={currentEntityData?.label || '-'} />
                         </div>
                     </div>
