@@ -14,10 +14,10 @@ import {
     checkMaxLength,
     checkRequired,
     checkRangeValue,
+    checkPositiveInt,
     checkStartWithSpecialChar,
 } from '@milesight/shared/src/utils/validators';
 import { ContentCopyIcon, OpenInNewIcon } from '@milesight/shared/src/components';
-import { DEFAULT_DEVICE_OFFLINE_TIMEOUT } from '@/services/http';
 import CodeEditor from '../../code-editor';
 
 export interface FormDataProps {
@@ -147,6 +147,7 @@ const useFormItems = ({ prefixTopic }: { prefixTopic: string }) => {
                 rules: {
                     validate: {
                         checkRequired: checkRequired(),
+                        checkPositiveInt: checkPositiveInt(),
                         checkRangeValue: checkRangeValue({ min: 1, max: 2880 }),
                     },
                 },
