@@ -9,6 +9,7 @@ import {
     UncheckedCheckboxIcon,
     CheckedCheckboxIcon,
 } from '@milesight/shared/src/components';
+import { useTheme } from '@milesight/shared/src/hooks';
 
 import { Tooltip } from '@/components';
 import { type DashboardListProps } from '@/services/http';
@@ -51,6 +52,7 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
         openEditDashboard,
     } = props;
 
+    const { matchMobile } = useTheme();
     const {
         toggleHomeDashboard,
         isHome,
@@ -93,67 +95,74 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
     }, [item, selectedDashboard]);
 
     return (
-        <div
-            className={cls('dashboard-item', {
-                active: isCheckedDashboard,
-            })}
-            onClick={handleItemClick}
-        >
-            <LoadingWrapper loading={resourceCheckLoading}>
-                <div className="dashboard-item__body">
-                    <img
-                        className="dashboard-item__img"
-                        alt="failed"
-                        src={genImageUrl(
-                            item?.cover_data ||
-                                getDefaultImg(coverImages) ||
-                                'https://bing.ee123.net/img/cn/fhd/2025/08/11.jpg',
-                        )}
-                    />
-                </div>
-            </LoadingWrapper>
-            <div className="dashboard-item__footer">
-                <div className="dashboard-item__info">
-                    <Tooltip
-                        autoEllipsis
-                        className="dashboard-item__info-name"
-                        title={item?.name}
-                    />
-                    <Tooltip
-                        autoEllipsis
-                        className="dashboard-item__info-desc"
-                        title={item?.description}
-                    />
-                </div>
-                <MoreDropdown onOperation={handleDashboardOperation} />
-            </div>
-            <div className="dashboard-item__select md:d-none" onClick={e => e?.stopPropagation()}>
-                <Checkbox
-                    icon={<UncheckedCheckboxIcon sx={{ width: '24px', height: '24px' }} />}
-                    checkedIcon={<CheckedCheckboxIcon sx={{ width: '24px', height: '24px' }} />}
-                    checked={isCheckedDashboard}
-                    sx={{
-                        padding: 0,
-                        color: 'var(--text-color-tertiary)',
-                    }}
-                    onChange={e => handleSelectDashboard(e, item)}
-                />
-            </div>
+        <Tooltip title={matchMobile ? undefined : item?.description}>
             <div
-                className={cls('dashboard-item__home md:d-none', {
-                    'is-home': isHome,
+                className={cls('dashboard-item', {
+                    active: isCheckedDashboard,
                 })}
-                onClick={e => e?.stopPropagation()}
+                onClick={handleItemClick}
             >
-                <LoadingWrapper loading={homeLoading} size={24}>
-                    <Tooltip title={homeDashboardTip}>
-                        <div className={homeDashboardClassName} onClick={toggleHomeDashboard}>
-                            {homeDashboardIcon}
-                        </div>
-                    </Tooltip>
+                <LoadingWrapper loading={resourceCheckLoading}>
+                    <div className="dashboard-item__body">
+                        <img
+                            className="dashboard-item__img"
+                            alt="failed"
+                            src={genImageUrl(
+                                item?.cover_data ||
+                                    getDefaultImg(coverImages) ||
+                                    'https://bing.ee123.net/img/cn/fhd/2025/08/11.jpg',
+                            )}
+                        />
+                    </div>
                 </LoadingWrapper>
+                <div className="dashboard-item__footer">
+                    <div className="dashboard-item__info">
+                        <Tooltip
+                            autoEllipsis
+                            className="dashboard-item__info-name"
+                            title={item?.name}
+                        />
+                        {matchMobile && (
+                            <Tooltip
+                                autoEllipsis
+                                className="dashboard-item__info-desc"
+                                title={item?.description}
+                            />
+                        )}
+                    </div>
+                    <MoreDropdown onOperation={handleDashboardOperation} />
+                </div>
+                <div
+                    className="dashboard-item__select md:d-none"
+                    onClick={e => e?.stopPropagation()}
+                >
+                    <Checkbox
+                        icon={<UncheckedCheckboxIcon sx={{ width: '24px', height: '24px' }} />}
+                        checkedIcon={<CheckedCheckboxIcon sx={{ width: '24px', height: '24px' }} />}
+                        checked={isCheckedDashboard}
+                        sx={{
+                            padding: 0,
+                            color: 'var(--text-color-tertiary)',
+                        }}
+                        onChange={e => handleSelectDashboard(e, item)}
+                    />
+                </div>
+                <div
+                    className={cls('dashboard-item__home md:d-none', {
+                        'is-home': isHome,
+                    })}
+                    onClick={e => e?.stopPropagation()}
+                >
+                    <LoadingWrapper loading={homeLoading} size={24}>
+                        <Tooltip title={homeDashboardTip}>
+                            <div className={homeDashboardClassName} onClick={toggleHomeDashboard}>
+                                {homeDashboardIcon}
+                            </div>
+                        </Tooltip>
+                    </LoadingWrapper>
+                </div>
             </div>
-        </div>
+        </Tooltip>
     );
 };
 

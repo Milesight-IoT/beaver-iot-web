@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useRequest } from 'ahooks';
-import { useI18n, useTheme } from '@milesight/shared/src/hooks';
+import cls from 'classnames';
+import { useI18n, useTheme, useStoreShallow } from '@milesight/shared/src/hooks';
 import {
     iotLocalStorage,
     TOKEN_CACHE_KEY,
@@ -12,6 +13,7 @@ import { useUserStore } from '@/stores';
 import { globalAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
 import { Sidebar, RouteLoadingIndicator } from '@/components';
 import { useUserPermissions } from '@/hooks';
+import useSidebarStore from '@/components/sidebar/store';
 import { useRoutePermission, useSWUpdate } from './hooks';
 import { LayoutSkeleton } from './components';
 
@@ -24,6 +26,7 @@ function BasicLayout() {
     const userInfo = useUserStore(state => state.userInfo);
     const setUserInfo = useUserStore(state => state.setUserInfo);
     const token = iotLocalStorage.getItem(TOKEN_CACHE_KEY);
+    const { shrink } = useSidebarStore(useStoreShallow(['shrink']));
 
     useRequest(
         async () => {
@@ -101,7 +104,12 @@ function BasicLayout() {
     useSWUpdate();
 
     return (
-        <section className="ms-layout">
+        <section
+            className={cls('ms-layout', {
+                'ms-layout__sidebar--collapsed': matchTablet ? true : shrink,
+                'ms-layout__sidebar--expanding': matchTablet ? false : !shrink,
+            })}
+        >
             <RouteLoadingIndicator />
             {loading !== false ? (
                 // <CircularProgress sx={{ marginX: 'auto', alignSelf: 'center' }} />
