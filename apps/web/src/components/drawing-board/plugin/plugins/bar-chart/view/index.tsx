@@ -123,7 +123,7 @@ const View = (props: ViewProps) => {
             grid: {
                 containLabel: true,
                 top: hGrid >= 4 ? '42px' : 30, // Adjust the top blank space of the chart area
-                left: hGrid > 2 ? 0 : -20,
+                left: hGrid > 2 ? 0 : -25,
                 right: wGrid > 2 || hGrid > 2 ? 15 : 0,
                 ...getChartGridBottom(wGrid, hGrid),
             },

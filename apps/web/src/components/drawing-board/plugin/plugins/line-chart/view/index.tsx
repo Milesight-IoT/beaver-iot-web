@@ -182,8 +182,8 @@ const View = (props: ViewProps) => {
             grid: {
                 containLabel: true,
                 top: hGrid >= 4 ? '42px' : 30, // Adjust the top blank space of the chart area
-                left: hGrid > 2 ? 15 : -20,
-                right: yAxisNumber >= 2 ? (hGrid > 2 ? 15 : -20) : wGrid > 2 || hGrid > 2 ? 15 : 0,
+                left: hGrid > 2 ? 15 : -25,
+                right: yAxisNumber >= 2 ? (hGrid > 2 ? 17 : -20) : wGrid > 2 || hGrid > 2 ? 15 : 0,
                 ...getChartGridBottom(wGrid, hGrid),
             },
             tooltip: {
