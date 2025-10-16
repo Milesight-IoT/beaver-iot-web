@@ -4,7 +4,11 @@ import { isEmpty, unionBy, pick } from 'lodash-es';
 import { Checkbox } from '@mui/material';
 
 import { useI18n } from '@milesight/shared/src/hooks';
-import { UncheckedCheckboxIcon, CheckedCheckboxIcon } from '@milesight/shared/src/components';
+import {
+    UncheckedCheckboxIcon,
+    CheckedCheckboxIcon,
+    DisabledCheckboxIcon,
+} from '@milesight/shared/src/components';
 
 import { Tooltip } from '@/components';
 import {
@@ -156,7 +160,13 @@ export function useCheckbox() {
 
         const CheckboxNode = (
             <Checkbox
-                icon={<UncheckedCheckboxIcon sx={{ width: '20px', height: '20px' }} />}
+                icon={
+                    disabled ? (
+                        <DisabledCheckboxIcon sx={{ width: '20px', height: '20px' }} />
+                    ) : (
+                        <UncheckedCheckboxIcon sx={{ width: '20px', height: '20px' }} />
+                    )
+                }
                 checkedIcon={<CheckedCheckboxIcon sx={{ width: '20px', height: '20px' }} />}
                 disabled={disabled}
                 indeterminate={isIndeterminate(item)}
