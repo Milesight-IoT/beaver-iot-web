@@ -28,7 +28,7 @@ const View = (props: Props) => {
     const { isPreview, pos } = configJson || {};
 
     const { getTimeFormat } = useTime();
-    const { getCSSVariableValue } = useTheme();
+    const { getCSSVariableValue, matchTablet } = useTheme();
     const { getLatestEntityDetail } = useActivityEntity();
     const { wGrid = 2, hGrid = 1 } = useGridLayout(isPreview ? { w: 2, h: 1 } : pos);
     const { containerRef, showIconWidth } = useContainerRect();
@@ -90,23 +90,25 @@ const View = (props: Props) => {
 
     return (
         <div ref={containerRef} className={`data-view ${isPreview ? 'data-view-preview' : ''}`}>
-            <div className="data-view-card">
+            <div
+                className={cls('data-view-card', {
+                    'py-0': matchTablet && hGrid <= 1,
+                })}
+            >
                 <div
                     className={cls('data-view-card__content', {
                         'justify-center': hGrid <= 1,
                     })}
                 >
-                    {hGrid > 1 && (
-                        <div className="data-view-card__header">
-                            <Tooltip className="data-view-card__title" autoEllipsis title={title} />
-                        </div>
-                    )}
+                    <div className={cls('data-view-card__header', [matchTablet ? 'mb-1' : 'mb-2'])}>
+                        <Tooltip className="data-view-card__title" autoEllipsis title={title} />
+                    </div>
                     <div className="data-view-card__body">
                         {Icon && showIconWidth && (
                             <Icon
                                 sx={{
                                     color: iconColor || getCSSVariableValue('--gray-5'),
-                                    fontSize: 32,
+                                    fontSize: hGrid > 1 ? 32 : 24,
                                 }}
                             />
                         )}
@@ -116,13 +118,6 @@ const View = (props: Props) => {
                                 'ms-4': showIconWidth,
                             })}
                         >
-                            {hGrid <= 1 && (
-                                <Tooltip
-                                    className="data-view-card__title"
-                                    autoEllipsis
-                                    title={title}
-                                />
-                            )}
                             <Tooltip autoEllipsis title={currentEntityData?.label || '-'} />
                         </div>
                     </div>
