@@ -89,8 +89,8 @@ const View = (props: ViewProps) => {
         const resultColor = getChartColor(chartShowData);
         const [xAxisMin, xAxisMax] = xAxisRange || [];
 
-        const xRangeList = getYAxisRange() || {};
-        const yAxisNumber = newChartShowData?.length || 1;
+        const yRangeList = getYAxisRange() || {};
+        const yAxisNumber = yRangeList?.length || 1;
 
         let mousePos = [0, 0];
         let myChart: echarts.ECharts | null = null;
@@ -139,7 +139,7 @@ const View = (props: ViewProps) => {
                     axisLabel: {
                         hideOverlap: true,
                     },
-                    ...(xRangeList[index] || {}),
+                    ...(yRangeList[index] || {}),
                 })),
             series: newChartShowData.map((chart, index) => ({
                 name: chart.entityLabel,
@@ -182,8 +182,8 @@ const View = (props: ViewProps) => {
             grid: {
                 containLabel: true,
                 top: hGrid >= 4 ? '42px' : 30, // Adjust the top blank space of the chart area
-                left: hGrid > 2 ? 15 : -20,
-                right: yAxisNumber >= 2 ? (hGrid > 2 ? 15 : -20) : wGrid > 2 || hGrid > 2 ? 15 : 0,
+                left: hGrid > 2 ? 15 : -25,
+                right: yAxisNumber >= 2 ? (hGrid > 2 ? 17 : -20) : wGrid > 2 || hGrid > 2 ? 15 : 0,
                 ...getChartGridBottom(wGrid, hGrid),
             },
             tooltip: {
@@ -320,6 +320,15 @@ const View = (props: ViewProps) => {
 
             currentChart.getZr().on('mousemove', e => {
                 mousePos = [e.offsetX, e.offsetY];
+            });
+
+            currentChart.on('mousemove', params => {
+                currentChart.dispatchAction({
+                    type: 'showTip',
+                    seriesIndex: params?.seriesIndex,
+                    dataIndex: params?.dataIndex,
+                    name: params?.name,
+                });
             });
 
             hoverZoomBtn();

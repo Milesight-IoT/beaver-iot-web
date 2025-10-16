@@ -39,7 +39,7 @@ const View = (props: Props) => {
         return getLatestEntityDetail(entity);
     }, [entity, getLatestEntityDetail]) as EntityOptionType;
 
-    const { entityStatusValue } = useSource({
+    const { entityStatus } = useSource({
         entity: latestEntity as EntityOptionType,
         widgetId,
         dashboardId,
@@ -53,7 +53,7 @@ const View = (props: Props) => {
         // Get the current selection entity
         const { entityValueAttribute } = currentEntity || {};
         const { enum: enumStruct, unit } = entityValueAttribute || {};
-        const currentEntityStatus = entityStatusValue?.toString();
+        const currentEntityStatus = entityStatus?.value?.toString();
 
         // Enumeration type
         if (enumStruct) {
@@ -73,7 +73,7 @@ const View = (props: Props) => {
             label: unit ? `${currentEntityStatus ?? '- '}${unit}` : `${currentEntityStatus ?? ''}`,
             value: entityValue,
         };
-    }, [latestEntity, entityStatusValue]);
+    }, [latestEntity, entityStatus]);
 
     // Current physical icon
     const { Icon, iconColor } = useMemo(() => {
@@ -116,7 +116,13 @@ const View = (props: Props) => {
                                 'ms-4': showIconWidth,
                             })}
                         >
-                            {hGrid <= 1 && <Tooltip autoEllipsis title={title} />}
+                            {hGrid <= 1 && (
+                                <Tooltip
+                                    className="data-view-card__title"
+                                    autoEllipsis
+                                    title={title}
+                                />
+                            )}
                             <Tooltip autoEllipsis title={currentEntityData?.label || '-'} />
                         </div>
                     </div>
@@ -125,8 +131,8 @@ const View = (props: Props) => {
                             <Tooltip
                                 autoEllipsis
                                 title={
-                                    entity?.rawData?.entityUpdatedAt &&
-                                    getTimeFormat(entity.rawData.entityUpdatedAt)
+                                    entityStatus?.timestamp &&
+                                    getTimeFormat(Number(entityStatus.timestamp))
                                 }
                             />
                         </div>

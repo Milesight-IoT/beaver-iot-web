@@ -93,16 +93,13 @@ const DashboardList: React.FC = () => {
         </div>
     );
 
-    const renderBody = () => {
-        if (loading) {
-            return (
-                <LoadingWrapper loading>
-                    <List sx={{ height: '300px' }} />
-                </LoadingWrapper>
-            );
+    const renderBody = (isLoading: boolean) => {
+        const isNoData = !Array.isArray(data) || isEmpty(data);
+        if (isLoading && isNoData) {
+            return <List sx={{ height: '300px' }} />;
         }
 
-        if (!Array.isArray(data) || isEmpty(data)) {
+        if (isNoData) {
             return (
                 <Empty
                     size="middle"
@@ -125,29 +122,32 @@ const DashboardList: React.FC = () => {
     };
 
     const renderContent = () => {
-        if (!keyword && (isNil(loading) || loading)) {
-            return (
-                <LoadingWrapper loading>
-                    <List sx={{ height: '300px' }} />
-                </LoadingWrapper>
-            );
-        }
+        // if (!keyword && (isNil(loading) || loading)) {
+        //     return (
+        //         <LoadingWrapper loading>
+        //             <List sx={{ height: '300px' }} />
+        //         </LoadingWrapper>
+        //     );
+        // }
 
-        if (!keyword && !data) {
-            return (
-                <Empty
-                    size="middle"
-                    image={<NoDashboardIcon sx={{ width: '200px', height: '200px' }} />}
-                    text={getIntlText('common.label.empty')}
-                    extra={renderAddDashboard}
-                />
-            );
-        }
+        // if (!keyword && (!Array.isArray(data) || isEmpty(data))) {
+        //     return (
+        //         <Empty
+        //             size="middle"
+        //             image={<NoDashboardIcon sx={{ width: '200px', height: '200px' }} />}
+        //             text={getIntlText('common.label.empty')}
+        //             extra={renderAddDashboard}
+        //         />
+        //     );
+        // }
 
+        const isLoading = isNil(loading) || loading;
         return (
             <>
                 {renderHeader}
-                <div className="dashboard-list__body ms-perfect-scrollbar">{renderBody()}</div>
+                <div className="dashboard-list__body ms-perfect-scrollbar">
+                    <LoadingWrapper loading={isLoading}>{renderBody(isLoading)}</LoadingWrapper>
+                </div>
             </>
         );
     };

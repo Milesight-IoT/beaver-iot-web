@@ -83,6 +83,7 @@ const ConfigPlugin = (props: ConfigPluginProps) => {
         const data = operatingPlugin?.config;
 
         if (!isPlainObject(data) || isEmpty(data)) {
+            updateFormData(undefined);
             return;
         }
 

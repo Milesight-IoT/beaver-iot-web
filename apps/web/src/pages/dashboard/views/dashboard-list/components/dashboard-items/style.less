@@ -4,27 +4,63 @@
     justify-content: space-around;
 }
 
-.bp-up(@grid-breakpoints[xl], {
-    .dashboard-items {
+.bp-up(@grid-breakpoints[xxxl], {
+    .ms-layout__sidebar--collapsed .dashboard-items {
+        grid-template-columns: repeat(6, minMax(0, 1fr));
+    }
+
+     .ms-layout__sidebar--expanding .dashboard-items {
         grid-template-columns: repeat(5, minMax(0, 1fr));
     }
 });
 
-.bp-between(@grid-breakpoints[lg], @grid-breakpoints[xl], {
-     .dashboard-items {
+.bp-between(@grid-breakpoints[xxl], @grid-breakpoints[xxxl], {
+    .ms-layout__sidebar--collapsed .dashboard-items {
+        grid-template-columns: repeat(5, minMax(0, 1fr));
+    }
+
+     .ms-layout__sidebar--expanding .dashboard-items {
         grid-template-columns: repeat(4, minMax(0, 1fr));
     }
 });
 
-.bp-between(@grid-breakpoints[md], @grid-breakpoints[lg], {
-     .dashboard-items {
+.bp-between(@grid-breakpoints[xl], @grid-breakpoints[xxl], {
+    .ms-layout__sidebar--collapsed .dashboard-items {
+        grid-template-columns: repeat(4, minMax(0, 1fr));
+    }
+
+     .ms-layout__sidebar--expanding .dashboard-items {
         grid-template-columns: repeat(3, minMax(0, 1fr));
     }
 });
 
-.bp-between(@grid-breakpoints[sm], @grid-breakpoints[md], {
-     .dashboard-items {
+.bp-between(@grid-breakpoints[lg], @grid-breakpoints[xl], {
+    .ms-layout__sidebar--collapsed .dashboard-items {
+        grid-template-columns: repeat(3, minMax(0, 1fr));
+    }
+
+     .ms-layout__sidebar--expanding .dashboard-items {
         grid-template-columns: repeat(2, minMax(0, 1fr));
+    }
+});
+
+.bp-between(@grid-breakpoints[md], @grid-breakpoints[lg], {
+    .ms-layout__sidebar--collapsed .dashboard-items {
+        grid-template-columns: repeat(3, minMax(0, 1fr));
+    }
+
+     .ms-layout__sidebar--expanding .dashboard-items {
+        grid-template-columns: repeat(2, minMax(0, 1fr));
+    }
+});
+
+.bp-between(@grid-breakpoints[sm], @grid-breakpoints[md], {
+    .ms-layout__sidebar--collapsed .dashboard-items {
+        grid-template-columns: repeat(2, minMax(0, 1fr));
+    }
+
+     .ms-layout__sidebar--expanding .dashboard-items {
+        grid-template-columns: repeat(1, minMax(0, 1fr));
     }
 });
 

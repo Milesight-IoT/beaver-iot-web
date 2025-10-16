@@ -1,8 +1,10 @@
 import { memo, useState, useEffect } from 'react';
 import { useMatches, Link as RouterLink } from 'react-router-dom';
+import cls from 'classnames';
 import { useI18n } from '@milesight/shared/src/hooks';
-import { Breadcrumbs, Link, Typography } from '@mui/material';
+import { Breadcrumbs, Link } from '@mui/material';
 import { SidebarController } from '../sidebar';
+import Tooltip from '../tooltip';
 import './style.less';
 
 export type NavsType = {
@@ -83,12 +85,14 @@ const MSBreadcrumbs: React.FC<Props> = memo(({ navs, rewrite }) => {
 
                     if (isLast || !nav.path) {
                         return (
-                            <Typography
+                            <Tooltip
+                                autoEllipsis
+                                className={cls('ms-breadcrumbs-item', {
+                                    'ms-breadcrumbs-item--last': isLast,
+                                })}
                                 key={nav.path || `${index}-${nav.title}`}
-                                sx={!isLast ? undefined : { color: 'text.primary' }}
-                            >
-                                {nav.title}
-                            </Typography>
+                                title={nav.title}
+                            />
                         );
                     }
 
@@ -102,7 +106,11 @@ const MSBreadcrumbs: React.FC<Props> = memo(({ navs, rewrite }) => {
                             state={nav.state}
                             sx={{ '&:hover': { color: 'primary.main' } }}
                         >
-                            {nav.title}
+                            <Tooltip
+                                autoEllipsis
+                                className="ms-breadcrumbs-item"
+                                title={nav.title}
+                            />
                         </Link>
                     );
                 })}

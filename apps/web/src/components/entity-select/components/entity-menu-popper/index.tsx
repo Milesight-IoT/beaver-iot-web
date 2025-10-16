@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Paper, Popper, PopperProps } from '@mui/material';
-import { useVirtualList } from 'ahooks';
+import { useVirtualList } from '@milesight/shared/src/hooks';
 import EntityOption from '../entity-option';
 import type { EntitySelectInnerProps, EntitySelectOption } from '../../types';
 import './style.less';

@@ -12,7 +12,7 @@ interface IProps {
 export const useSource = (props: IProps) => {
     const { entity, widgetId, dashboardId } = props;
 
-    const { data: entityStatusValue, run: getEntityStatusValue } = useRequest(
+    const { data: entityStatus, run: getEntityStatusValue } = useRequest(
         async () => {
             if (!entity?.value) return;
             const { value } = entity || {};
@@ -20,7 +20,7 @@ export const useSource = (props: IProps) => {
             const [error, resp] = await awaitWrap(entityAPI.getEntityStatus({ id: value }));
             if (error || !isRequestSuccess(resp)) return;
 
-            return getResponseData(resp)?.value;
+            return getResponseData(resp);
         },
         {
             manual: true,
@@ -50,6 +50,6 @@ export const useSource = (props: IProps) => {
     }, [entity?.value, widgetId, dashboardId, addEntityListener, getEntityStatusValue]);
 
     return {
-        entityStatusValue,
+        entityStatus,
     };
 };

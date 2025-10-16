@@ -153,7 +153,7 @@ const View = (props: ViewProps) => {
             grid: {
                 containLabel: true,
                 top: hGrid >= 4 ? '42px' : 30, // Adjust the top blank space of the chart area
-                left: hGrid > 2 ? 0 : -20,
+                left: hGrid > 2 ? 0 : -25,
                 right: wGrid > 2 || hGrid > 2 ? 15 : 0,
                 ...getChartGridBottom(wGrid, hGrid),
             },
@@ -292,6 +292,15 @@ const View = (props: ViewProps) => {
 
             currentChart.getZr().on('mousemove', e => {
                 mousePos = [e.offsetX, e.offsetY];
+            });
+
+            currentChart.on('mousemove', params => {
+                currentChart.dispatchAction({
+                    type: 'showTip',
+                    seriesIndex: params?.seriesIndex,
+                    dataIndex: params?.dataIndex,
+                    name: params?.name,
+                });
             });
 
             hoverZoomBtn();

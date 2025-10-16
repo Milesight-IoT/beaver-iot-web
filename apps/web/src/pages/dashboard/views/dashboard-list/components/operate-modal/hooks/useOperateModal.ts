@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useMemoizedFn } from 'ahooks';
+import { useNavigate } from 'react-router-dom';
 
 import { useI18n } from '@milesight/shared/src/hooks';
 import { toast } from '@milesight/shared/src/components';
@@ -10,6 +11,7 @@ import {
     dashboardAPI,
     isRequestSuccess,
     awaitWrap,
+    getResponseData,
 } from '@/services/http';
 import useCoverCroppingStore from '../../cover-selection/components/cover-cropping/store';
 import { MANUAL_UPLOAD } from '../../cover-selection/constants';
@@ -23,6 +25,7 @@ export function useOperateModal(getDashboards?: () => void) {
     const { getIntlText } = useI18n();
     const { getCanvasCroppingImage } = useCoverCroppingStore();
     const { coverImages } = useDashboardListStore();
+    const navigate = useNavigate();
 
     const [operateModalVisible, setOperateModalVisible] = useState(false);
     const [operateType, setOperateType] = useState<OperateModalType>('add');
@@ -92,6 +95,13 @@ export function useOperateModal(getDashboards?: () => void) {
             setOperateModalVisible(false);
             toast.success(getIntlText('common.message.add_success'));
             callback?.();
+
+            /** Jump dashboard main_canvas_id */
+            const result = getResponseData(resp);
+            const jumpId = result?.main_canvas_id;
+            if (jumpId) {
+                navigate(`/dashboard?id=${jumpId}`);
+            }
         },
     );
 

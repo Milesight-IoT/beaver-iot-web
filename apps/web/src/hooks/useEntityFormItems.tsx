@@ -26,6 +26,7 @@ import {
     checkRegexp,
     checkHexNumber,
     checkNumber,
+    checkIsInt,
     checkDecimals,
     checkStartWithHttpOrHttps,
 } from '@milesight/shared/src/utils/validators';
@@ -83,7 +84,7 @@ const getValidators = (entity: NonNullable<Props['entities']>[0], required = fal
     // Check value type
     switch (entity.valueType) {
         case 'LONG': {
-            result.checkNumber = checkNumber();
+            result.checkNumber = checkIsInt();
             break;
         }
         case 'DOUBLE': {

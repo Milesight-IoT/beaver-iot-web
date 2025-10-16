@@ -1,5 +1,7 @@
 import { useState, useEffect, memo, useMemo } from 'react';
 import { useRequest } from 'ahooks';
+import { isNil } from 'lodash-es';
+
 import { entityAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/services/http';
 import { useActivityEntity } from '../../../hooks';
 
@@ -43,7 +45,7 @@ const View = (props: ViewProps) => {
             }
 
             const entityStatus = getResponseData(res);
-            setTextContent(entityStatus?.value || '');
+            setTextContent(String(isNil(entityStatus?.value) ? '' : entityStatus.value));
         },
         {
             manual: true,

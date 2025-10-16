@@ -39,6 +39,7 @@ const LangItem: React.FC<Props> = ({ onChange }) => {
                     const selected = item.key === lang;
                     return (
                         <MenuItem
+                            key={item.key}
                             selected={selected}
                             onClick={() => {
                                 if (selected) return;

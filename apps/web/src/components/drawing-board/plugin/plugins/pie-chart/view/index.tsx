@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import cls from 'classnames';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, isNil } from 'lodash-es';
 import { useTheme } from '@milesight/shared/src/hooks';
 import { getChartColor } from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
@@ -31,8 +31,10 @@ const View = (props: IProps) => {
     const { countData } = useSourceData(props);
     const { renderEcharts } = useEcharts(chartRef);
 
-    /** Rendering cake map */
-    const renderChart = () => {
+    /**
+     * Render pie
+     */
+    useEffect(() => {
         const data = countData?.data?.count_result || [];
         const resultColor = getChartColor(data);
         const pieColor = !isEmpty(resultColor) ? resultColor : [getCSSVariableValue('--gray-2')];
@@ -57,7 +59,7 @@ const View = (props: IProps) => {
                     center: ['50%', '55%'],
                     data: (data || []).map(item => ({
                         value: item.count,
-                        name: item.value as string | number,
+                        name: String(isNil(item?.value) ? '' : item.value),
                     })),
 
                     itemStyle: {
@@ -84,10 +86,7 @@ const View = (props: IProps) => {
                 },
             },
         });
-    };
-    useEffect(() => {
-        return renderChart();
-    }, [countData]);
+    }, [countData, hGrid, grey, getCSSVariableValue, renderEcharts]);
 
     return (
         <div

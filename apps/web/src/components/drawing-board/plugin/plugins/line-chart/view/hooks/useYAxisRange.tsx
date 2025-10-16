@@ -1,4 +1,6 @@
 import { useCallback } from 'react';
+import { min as minFun, max as maxFun } from 'lodash-es';
+
 import type { ChartShowDataProps } from '@/components/drawing-board/plugin/hooks';
 
 interface IProps {
@@ -27,12 +29,15 @@ export const useYAxisRange = ({ entity, newChartShowData }: IProps) => {
         const [MIN, MAX] = [0, 100];
         if (!newChartShowData?.length) return [{ min: MIN, max: MAX }];
 
-        const result: number[] = [];
+        const result: {
+            min: number;
+            max: number;
+            interval: number;
+        }[] = [];
         // If there is data, take it according to the range of the data
-        return (newChartShowData || []).map((chartData, index) => {
+        (newChartShowData || []).forEach((chartData, index) => {
             const { entityValues, yAxisID } = chartData || {};
             const resultIndex = yAxisID === 'y1' ? 1 : 0;
-            if (result[resultIndex]) return;
 
             const currentEntity = entity?.[index];
             const { entityValueAttribute } = currentEntity?.rawData || {};
@@ -49,13 +54,16 @@ export const useYAxisRange = ({ entity, newChartShowData }: IProps) => {
                 }
             });
 
-            result[resultIndex] = 1;
-            return {
-                min: min ?? MIN,
-                max: max ?? MAX,
-                interval: ((max ?? MAX) - (min ?? MIN)) / SPLIT_NUMBER,
+            const newMin = minFun([min, result[resultIndex]?.min]);
+            const newMax = maxFun([max, result[resultIndex]?.max]);
+            result[resultIndex] = {
+                min: newMin ?? MIN,
+                max: newMax ?? MAX,
+                interval: ((newMax ?? MAX) - (newMin ?? MIN)) / SPLIT_NUMBER,
             };
         });
+
+        return result;
     }, [entity, newChartShowData]);
 
     return {
