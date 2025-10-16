@@ -31,7 +31,7 @@ export function useIconRemaining(percent: number) {
             height,
         );
 
-        return realPercent * 100;
+        return Math.abs(realPercent * 100);
     };
 
     useEffect(() => {

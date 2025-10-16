@@ -41,13 +41,13 @@ const View = (props: Props) => {
         const { entityValueAttribute } = rawData || {};
         const { min, max } = entityValueAttribute || {};
         const { value } = aggregateHistoryData || {};
-        if (!value) return 0;
+        if (!value || Number.isNaN(Number(value))) return 0;
 
         const range = (max || 0) - (min || 0);
         if (range === 0 || value === max) return 100;
         if (!range || value === min) return 0;
 
-        const percent = Math.round((value / range) * 100);
+        const percent = Math.round(((value - (min || 0)) / range) * 100);
         return Math.min(100, Math.max(0, percent));
     }, [latestEntity, aggregateHistoryData]);
 

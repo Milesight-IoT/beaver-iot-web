@@ -112,7 +112,7 @@ export const getChartGridBottom = (
 
     if (hGrid < 4 && wGrid <= 2) {
         return {
-            bottom: -16,
+            bottom: -20,
         };
     }
 
