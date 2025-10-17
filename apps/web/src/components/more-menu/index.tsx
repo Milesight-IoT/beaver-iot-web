@@ -46,6 +46,11 @@ const MoreMenu = <TData extends Data>({
                     vertical: 'top',
                     horizontal: 'right',
                 }}
+                BackdropProps={{
+                    onTouchStart() {
+                        setAnchorEl(null);
+                    },
+                }}
                 {...menuProps}
                 className={cls('ms-more-menu', menuProps.className)}
                 open={!!anchorEl}
