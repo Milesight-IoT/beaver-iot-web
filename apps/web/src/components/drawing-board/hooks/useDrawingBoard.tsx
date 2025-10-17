@@ -1,8 +1,8 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import { useMemoizedFn, useFullscreen } from 'ahooks';
 import { Stack, Button, Divider, IconButton } from '@mui/material';
 
-import { useI18n } from '@milesight/shared/src/hooks';
+import { useI18n, useStoreShallow } from '@milesight/shared/src/hooks';
 import {
     FullscreenIcon,
     EditIcon,
@@ -25,6 +25,7 @@ import PluginListPopover from '../components/plugin-list-popover';
 import { useActivityEntity } from '../plugin/hooks';
 import { type DrawingBoardExpose } from '../interface';
 import { filterWidgets, getDeviceIdsInuse } from '../utils';
+import useDrawingBoardStore from '../store';
 
 export interface UseDrawingBoardProps {
     disabled?: boolean;
@@ -57,6 +58,9 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
     const { disabled, disabledEdit, disabledEditTip, deviceDetail, onSave } = props || {};
 
     const { getIntlText } = useI18n();
+    const { setDrawingBoardFullscreen } = useDrawingBoardStore(
+        useStoreShallow('setDrawingBoardFullscreen'),
+    );
 
     const drawingBoardExposeRef = useRef<DrawingBoardExpose>(null);
     const [isEdit, setIsEdit] = useState(false);
@@ -66,6 +70,10 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
     const drawingBoardRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, { enterFullscreen, exitFullscreen }] = useFullscreen(document.body);
     const { getCurrentEntityIds } = useActivityEntity();
+
+    useEffect(() => {
+        setDrawingBoardFullscreen(isFullscreen);
+    }, [setDrawingBoardFullscreen, isFullscreen]);
 
     const changeIsEdit = useMemoizedFn((isEditing: boolean) => {
         setIsEdit(Boolean(isEditing));

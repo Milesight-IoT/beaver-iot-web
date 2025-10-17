@@ -127,7 +127,7 @@ export default () => {
     const [tabKey, setTabKey] = useRouteTab(tabs[0].key);
 
     return (
-        <div className="ms-main">
+        <div className="ms-main ms-main-device-detail">
             <Breadcrumbs
                 rewrite={navs => {
                     const newNavs = [...navs];
