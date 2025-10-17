@@ -1,7 +1,7 @@
 // import { useState } from 'react';
 // import { Tabs, Tab } from '@mui/material';
 // import { useI18n } from '@milesight/shared/src/hooks';
-import { Breadcrumbs } from '@/components';
+import { Breadcrumbs, Map } from '@/components';
 import { Integration } from './components';
 import './style.less';
 
@@ -31,6 +31,9 @@ function IntegrationModule() {
                         <Integration />
                     </TabPanel>
                 </div> */}
+                <div style={{ height: 300, width: 500 }}>
+                    <Map />
+                </div>
             </div>
         </div>
     );

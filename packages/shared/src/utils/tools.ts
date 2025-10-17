@@ -856,3 +856,27 @@ export const imageCompress = async (
         return null;
     }
 };
+
+/**
+ * Get user geolocation
+ */
+export const getGeoLocation = () => {
+    return new Promise<{ lat: number; lng: number }>((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject(new Error('Geolocation is not supported by this browser.'));
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                resolve({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                });
+            },
+            error => {
+                reject(error);
+            },
+        );
+    });
+};
