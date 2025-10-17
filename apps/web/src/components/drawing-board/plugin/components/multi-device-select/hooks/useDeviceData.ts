@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRequest } from 'ahooks';
+import { isNil } from 'lodash-es';
 
 import { deviceAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
 import { FixedGroupEnum } from '@/pages/device/constants';
@@ -48,7 +49,7 @@ export function useDeviceData(keyword: string) {
                 if (selectedGroup?.id) {
                     updateDeviceGroups(
                         deviceGroups.map(group => {
-                            if (group.id === selectedGroup.id && data?.total) {
+                            if (group.id === selectedGroup.id && !isNil(data?.total)) {
                                 return {
                                     ...group,
                                     device_count: data?.total,
