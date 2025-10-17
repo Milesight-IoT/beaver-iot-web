@@ -2,7 +2,7 @@ import { useState, useRef, useMemo, useEffect } from 'react';
 import { useMemoizedFn, useFullscreen } from 'ahooks';
 import { Stack, Button, Divider, IconButton } from '@mui/material';
 
-import { useI18n, useStoreShallow } from '@milesight/shared/src/hooks';
+import { useI18n, useStoreShallow, usePreventLeave } from '@milesight/shared/src/hooks';
 import {
     FullscreenIcon,
     EditIcon,
@@ -12,7 +12,7 @@ import {
     LoadingButton,
 } from '@milesight/shared/src/components';
 
-import { PermissionControlHidden, Tooltip } from '@/components';
+import { PermissionControlHidden, Tooltip, useConfirm } from '@/components';
 import { PERMISSIONS } from '@/constants';
 import {
     type DeviceAPISchema,
@@ -70,6 +70,11 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
     const drawingBoardRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, { enterFullscreen, exitFullscreen }] = useFullscreen(document.body);
     const { getCurrentEntityIds } = useActivityEntity();
+    const confirm = useConfirm();
+    const { showPrevent } = usePreventLeave({
+        isPreventLeave: isEdit,
+        confirm,
+    });
 
     useEffect(() => {
         setDrawingBoardFullscreen(isFullscreen);
@@ -236,5 +241,6 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
          */
         drawingBoardProps,
         renderDrawingBoardOperation,
+        showPrevent,
     };
 }

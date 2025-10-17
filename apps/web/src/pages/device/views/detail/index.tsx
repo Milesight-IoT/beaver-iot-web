@@ -39,7 +39,7 @@ export default () => {
         drawingBoardDetail,
         getNewestDrawingBoardDetail,
     } = useDeviceDrawingBoard(deviceDetail);
-    const { drawingBoardProps, renderDrawingBoardOperation } = useDrawingBoard({
+    const { drawingBoardProps, renderDrawingBoardOperation, showPrevent } = useDrawingBoard({
         disabled: !drawingBoardDetail,
         deviceDetail,
         onSave: getNewestDrawingBoardDetail,
@@ -142,7 +142,23 @@ export default () => {
                     <Tabs
                         className="ms-tabs"
                         value={tabKey}
-                        onChange={(_, value) => setTabKey(value)}
+                        onChange={(_, value) => {
+                            /**
+                             * Drawing board is editing status
+                             * prevent page leave
+                             */
+                            if (drawingBoardProps?.isEdit) {
+                                showPrevent?.({
+                                    onOk: () => {
+                                        setTabKey(value);
+                                        drawingBoardProps?.changeIsEdit?.(false);
+                                    },
+                                });
+                                return;
+                            }
+
+                            setTabKey(value);
+                        }}
                     >
                         {tabs.map(({ key, label }) => (
                             <Tab disableRipple key={key} value={key} title={label} label={label} />
