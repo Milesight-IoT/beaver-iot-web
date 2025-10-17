@@ -7,6 +7,7 @@ import {
     LoadingWrapper,
     UncheckedCheckboxIcon,
     CheckedCheckboxIcon,
+    DisabledCheckboxIcon,
     DnsIcon,
 } from '@milesight/shared/src/components';
 
@@ -34,7 +35,13 @@ const GroupDetail: React.FC<GroupDetailProps> = props => {
 
         const CheckboxNode = (
             <Checkbox
-                icon={<UncheckedCheckboxIcon sx={{ width: '20px', height: '20px' }} />}
+                icon={
+                    disabled ? (
+                        <DisabledCheckboxIcon sx={{ width: '20px', height: '20px' }} />
+                    ) : (
+                        <UncheckedCheckboxIcon sx={{ width: '20px', height: '20px' }} />
+                    )
+                }
                 checkedIcon={<CheckedCheckboxIcon sx={{ width: '20px', height: '20px' }} />}
                 disabled={disabled}
                 indeterminate={false}
@@ -85,7 +92,13 @@ const GroupDetail: React.FC<GroupDetailProps> = props => {
     const renderAllCheckbox = () => {
         const CheckboxNode = (
             <Checkbox
-                icon={<UncheckedCheckboxIcon sx={{ width: '20px', height: '20px' }} />}
+                icon={
+                    allIsDisabled ? (
+                        <DisabledCheckboxIcon sx={{ width: '20px', height: '20px' }} />
+                    ) : (
+                        <UncheckedCheckboxIcon sx={{ width: '20px', height: '20px' }} />
+                    )
+                }
                 checkedIcon={<CheckedCheckboxIcon sx={{ width: '20px', height: '20px' }} />}
                 disabled={allIsDisabled}
                 indeterminate={allIsIndeterminate}

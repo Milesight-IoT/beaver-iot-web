@@ -67,6 +67,7 @@ export function useResponsiveLayout(widgets: WidgetDetail[]) {
             case 'dataCard':
             case 'switch':
             case 'trigger':
+            case 'progress':
                 return width < 2 ? 2 : width;
             default:
                 return width;

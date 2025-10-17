@@ -12,6 +12,11 @@
     border: @border-base;
     border-radius: @border-radius-xxl;
     cursor: pointer;
+
+    // Mobile Responsive
+    .bp-down(@grid-breakpoints[md], {
+        right: @margin-sm;
+    });
 }
 
 .drawing-board__widget {

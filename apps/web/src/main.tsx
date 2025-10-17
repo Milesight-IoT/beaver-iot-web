@@ -1,12 +1,13 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { baseUrl } from '@milesight/shared/src/config';
 import { i18n, theme } from '@milesight/shared/src/services';
 import '@milesight/shared/src/utils/lang-polyfill';
 import routes from '@/routes';
 import '@/styles/index.less';
 
-const router = createBrowserRouter(routes, { basename: '/' });
+const router = createBrowserRouter(routes, { basename: baseUrl || '/' });
 const root = createRoot(document.getElementById('root')!);
 
 // Internationalization initialization

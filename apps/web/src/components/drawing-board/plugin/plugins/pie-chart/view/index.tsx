@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import cls from 'classnames';
-import { isEmpty, isNil } from 'lodash-es';
+import { isEmpty, isNil, get } from 'lodash-es';
 import { useTheme } from '@milesight/shared/src/hooks';
 import { getChartColor } from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
@@ -28,7 +28,7 @@ const View = (props: IProps) => {
     const chartWrapperRef = useRef<HTMLDivElement>(null);
     const { getCSSVariableValue, grey } = useTheme();
 
-    const { countData } = useSourceData(props);
+    const { entity, countData } = useSourceData(props);
     const { renderEcharts } = useEcharts(chartRef);
 
     /**
@@ -59,7 +59,11 @@ const View = (props: IProps) => {
                     center: ['50%', '55%'],
                     data: (data || []).map(item => ({
                         value: item.count,
-                        name: String(isNil(item?.value) ? '' : item.value),
+                        name: get(
+                            entity?.rawData?.entityValueAttribute?.enum,
+                            String(isNil(item?.value) ? '' : item.value),
+                            String(isNil(item?.value) ? '' : item.value),
+                        ),
                     })),
 
                     itemStyle: {
@@ -86,7 +90,7 @@ const View = (props: IProps) => {
                 },
             },
         });
-    }, [countData, hGrid, grey, getCSSVariableValue, renderEcharts]);
+    }, [entity, countData, hGrid, grey, getCSSVariableValue, renderEcharts]);
 
     return (
         <div

@@ -10,6 +10,8 @@ import {
     type DialogProps,
     type ButtonProps,
 } from '@mui/material';
+import { type TransitionProps } from '@mui/material/transitions';
+
 import { isUndefined } from 'lodash-es';
 import useI18n from '../../hooks/useI18n';
 import useTheme from '../../hooks/useTheme';
@@ -106,6 +108,11 @@ export interface ModalProps {
      * Cancel button props
      */
     cancelButtonProps?: LoadingButtonProps;
+
+    /**
+     * Dialog transition props
+     */
+    transitionProps?: TransitionProps;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -129,6 +136,7 @@ const Modal: React.FC<ModalProps> = ({
     disableScrollLock = false,
     okButtonProps,
     cancelButtonProps,
+    transitionProps,
 }) => {
     const { getIntlText } = useI18n();
     const [loading, setLoading] = useState<boolean>();
@@ -192,6 +200,7 @@ const Modal: React.FC<ModalProps> = ({
             sx={{ '& .MuiDialog-paper': { width: modalWidth, maxWidth: 'none' }, ...(sx || {}) }}
             disableScrollLock={disableScrollLock}
             disableEscapeKeyDown={disableEscapeKeyDown}
+            TransitionProps={transitionProps}
         >
             {!!title &&
                 (typeof title === 'string' ? (

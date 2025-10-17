@@ -4,6 +4,7 @@ import { Switch } from '@mui/material';
 import { get } from 'lodash-es';
 import cls from 'classnames';
 
+import { useTheme } from '@milesight/shared/src/hooks';
 import * as Icons from '@milesight/shared/src/components/icons';
 import { entityAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/services/http';
 import { useActivityEntity, useContainerRect } from '../../../hooks';
@@ -31,6 +32,7 @@ const View = (props: ViewProps) => {
     const { entity, title, onIconColor, offIconColor, offIcon, onIcon } = config || {};
     const { isPreview } = configJson || {};
 
+    const { matchTablet } = useTheme();
     const { containerRef, showIconWidth } = useContainerRect();
 
     const [isSwitchOn, setIsSwitchOn] = useState(false);
@@ -154,7 +156,11 @@ const View = (props: ViewProps) => {
                 [styles.preview]: isPreview,
             })}
         >
-            <Tooltip className={styles.text} autoEllipsis title={title} />
+            <Tooltip
+                className={cls(styles.text, [matchTablet ? 'mb-1' : 'mb-2'])}
+                autoEllipsis
+                title={title}
+            />
             <div className={styles.icon}>
                 {showIconWidth && IconComponent}
                 <div className={styles.body}>

@@ -69,7 +69,7 @@ const MobileQRCodeScanner: React.FC<Props> = ({
     // Back
     const handleBack = useMemoizedFn(() => {
         onClose?.();
-        scannerRef.current?.destroy();
+        destroyScanner();
     });
 
     // Select Image from Album
@@ -145,6 +145,13 @@ const MobileQRCodeScanner: React.FC<Props> = ({
     const size = useSize(wrapperRef);
     const docVisible = useDocumentVisibility();
 
+    const destroyScanner = useMemoizedFn(() => {
+        setOpenFlash(false);
+        setFlashAvailable(false);
+        scannerRef.current?.destroy();
+        scannerRef.current = null;
+    });
+
     const scanRegion = useMemo<ScannerOptions['scanRegion']>(() => {
         if (!size) return;
         const width = Math.min(DEFAULT_SCAN_REGION_WIDTH, size.width - 32);
@@ -166,6 +173,7 @@ const MobileQRCodeScanner: React.FC<Props> = ({
     useEffect(() => {
         const wrapper = wrapperRef.current;
         if (loading || !open || !wrapper || !size || !scanRegion || docVisible !== 'visible') {
+            destroyScanner();
             return;
         }
 
@@ -212,9 +220,7 @@ const MobileQRCodeScanner: React.FC<Props> = ({
         }
 
         return () => {
-            setOpenFlash(false);
-            setFlashAvailable(false);
-            scannerRef.current?.destroy();
+            destroyScanner();
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loading, size, scanRegion, docVisible, open, scanConfig, cameraConfig, getIntlText]);

@@ -109,8 +109,8 @@ const getUserMedia = async (constraints?: MediaStreamConstraints) => {
 class QRCodeScanner {
     private options: Options;
     private containerElement: HTMLElement;
-    private videoElement: HTMLVideoElement;
-    private canvasElement: HTMLCanvasElement;
+    private videoElement: HTMLVideoElement | null;
+    private canvasElement: HTMLCanvasElement | null;
     private canvasContext: CanvasRenderingContext2D | null = null;
 
     private flashAvailable: boolean = false;
@@ -198,6 +198,7 @@ class QRCodeScanner {
             height: { ideal: height },
         });
 
+        if (!videoElement) return;
         try {
             const stream = await getUserMedia({
                 audio: false,
@@ -215,12 +216,13 @@ class QRCodeScanner {
             }, 500);
 
             await delay(10);
-            await videoElement.play();
+            await videoElement?.play();
 
             this.scan();
         } catch (error: any) {
             console.warn(
-                'The device does not support it, please check whether the camera permission is allowed',
+                'The device does not support it, please check whether the camera permission is allowed.',
+                error.message,
             );
             this.destroy();
             options.onError?.(error);
@@ -232,6 +234,8 @@ class QRCodeScanner {
      */
     private async scan() {
         const { videoElement, canvasElement, canvasContext, options } = this;
+
+        if (!videoElement || !canvasElement) return;
         const { width, height } = canvasElement;
         const { videoWidth, videoHeight } = videoElement;
         const videoX = Math.max((width - videoWidth) / 2, 0);
@@ -370,20 +374,22 @@ class QRCodeScanner {
      */
     destroy() {
         this.close();
+        this.videoElement?.pause();
+        this.videoElement?.removeAttribute('src');
+        this.videoElement?.removeAttribute('srcObject');
 
         // Remove video element
         if (this.containerElement.contains(this.videoElement)) {
             this.containerElement.removeChild(this.videoElement!);
+            this.videoElement = null;
         }
 
         // Remove canvas
         if (this.containerElement.contains(this.canvasElement)) {
             this.containerElement.removeChild(this.canvasElement!);
+            this.canvasElement = null;
         }
 
-        this.videoElement.pause();
-        this.videoElement.removeAttribute('src');
-        this.videoElement.removeAttribute('srcObject');
         this.scanFrame && cancelAnimationFrame(this.scanFrame);
     }
 }

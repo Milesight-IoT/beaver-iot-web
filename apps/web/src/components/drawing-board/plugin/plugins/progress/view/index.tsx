@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { get } from 'lodash-es';
+import cls from 'classnames';
 
+import { useTheme } from '@milesight/shared/src/hooks';
 import * as Icons from '@milesight/shared/src/components/icons';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import RemainChart from './components/remain-chart';
@@ -21,6 +23,7 @@ const View = (props: Props) => {
     const { title, entity: unStableValue, metrics, time } = config || {};
     const { isPreview, pos } = configJson || {};
 
+    const { matchTablet } = useTheme();
     const { oneByOne } = useGridLayout(pos);
     const { getLatestEntityDetail } = useActivityEntity();
     const { stableValue: entity } = useStableValue(unStableValue);
@@ -38,13 +41,13 @@ const View = (props: Props) => {
         const { entityValueAttribute } = rawData || {};
         const { min, max } = entityValueAttribute || {};
         const { value } = aggregateHistoryData || {};
-        if (!value) return 0;
+        if (!value || Number.isNaN(Number(value))) return 0;
 
         const range = (max || 0) - (min || 0);
         if (range === 0 || value === max) return 100;
         if (!range || value === min) return 0;
 
-        const percent = Math.round((value / range) * 100);
+        const percent = Math.round(((value - (min || 0)) / range) * 100);
         return Math.min(100, Math.max(0, percent));
     }, [latestEntity, aggregateHistoryData]);
 
@@ -61,7 +64,7 @@ const View = (props: Props) => {
 
     return (
         <div className={`ms-progress ${isPreview ? 'ms-progress-preview' : ''}`}>
-            <div className="ms-progress__header">
+            <div className={cls('ms-progress__header', [matchTablet ? 'mb-1' : 'mb-2'])}>
                 <Tooltip autoEllipsis title={title} />
             </div>
             <div className="ms-progress__content">

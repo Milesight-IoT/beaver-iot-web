@@ -324,11 +324,22 @@ const View = (props: ViewProps) => {
         <div
             className={cls(styles['area-chart-wrapper'], {
                 [styles['area-chart-wrapper__preview']]: isPreview,
+                'px-0': hGrid <= 2 && wGrid <= 2,
             })}
             ref={chartWrapperRef}
         >
-            {hGrid > 1 && <Tooltip className={styles.name} autoEllipsis title={title} />}
-            <div className={styles['area-chart-content']}>
+            {hGrid > 1 && (
+                <Tooltip
+                    className={cls(styles.name, { 'ps-4': hGrid <= 2 && wGrid <= 2 })}
+                    autoEllipsis
+                    title={title}
+                />
+            )}
+            <div
+                className={cls(styles['area-chart-content'], {
+                    'px-3': hGrid <= 2 && wGrid <= 2,
+                })}
+            >
                 <EchartsUI ref={chartRef} />
             </div>
             {React.cloneElement(chartZoomRef.current?.iconNode, {

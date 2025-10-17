@@ -2,7 +2,7 @@ import { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMemoizedFn } from 'ahooks';
 import { Avatar, DialogTitle, IconButton, List, ListItem, ListItemButton } from '@mui/material';
-import { appVersion, enableVConsole } from '@milesight/shared/src/config';
+import { appVersion, enableVConsole, baseUrl } from '@milesight/shared/src/config';
 import { useI18n, useStoreShallow } from '@milesight/shared/src/hooks';
 import {
     Modal,
@@ -143,7 +143,12 @@ const MobileUserInfo: React.FC<MobileUserInfoProps> = ({ userInfo }) => {
                                 setUserInfo(null);
                                 iotLocalStorage.removeItem(TOKEN_CACHE_KEY);
                                 iotLocalStorage.removeItem(MAIN_CANVAS_KEY);
-                                navigate('/auth/login');
+
+                                // navigate('/auth/login');
+                                const base = baseUrl || '/';
+                                window.location.replace(
+                                    base.endsWith('/') ? `${base}auth/login` : `${base}/auth/login`,
+                                );
                             }}
                         >
                             <LogoutIcon className="icon-start" />

@@ -1,9 +1,14 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Box, IconButton, type SxProps } from '@mui/material';
+import { Box, IconButton, type SxProps, List } from '@mui/material';
 import { useMemoizedFn } from 'ahooks';
 
 import { useTheme } from '@milesight/shared/src/hooks';
-import { FullscreenIcon, FullscreenExitIcon, Modal } from '@milesight/shared/src/components';
+import {
+    FullscreenIcon,
+    FullscreenExitIcon,
+    Modal,
+    LoadingWrapper,
+} from '@milesight/shared/src/components';
 
 import { PluginFullscreenContext, PluginFullscreenContextProps } from './context';
 
@@ -30,6 +35,8 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
     const { matchTablet } = useTheme();
 
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [showContent, setShowContent] = useState(false);
+    const [showLoading, setShowLoading] = useState(false);
 
     const iconSx = useMemo((): SxProps => {
         return { position: 'absolute', top: '12px', right: '12px', ...sx };
@@ -43,6 +50,10 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
 
     useEffect(() => {
         onFullscreen?.(isFullscreen);
+
+        if (!isFullscreen) {
+            setShowContent(false);
+        }
     }, [onFullscreen, isFullscreen]);
 
     const enterFullscreen = useMemoizedFn(() => {
@@ -78,8 +89,22 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
                             padding: 0,
                         },
                     }}
+                    transitionProps={{
+                        onEntering: () => {
+                            setShowLoading(true);
+                        },
+                        onEntered: () => {
+                            setShowContent(true);
+                            setShowLoading(false);
+                        },
+                    }}
                 >
-                    {children}
+                    {showLoading && (
+                        <LoadingWrapper loading>
+                            <List sx={{ height: '300px' }} />
+                        </LoadingWrapper>
+                    )}
+                    {showContent ? children : null}
                     <Box component="div" sx={iconSx} onClick={exitFullscreen}>
                         <IconButton size="small">
                             <FullscreenExitIcon sx={{ width: '20px', height: '20px' }} />

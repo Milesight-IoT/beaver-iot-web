@@ -77,6 +77,7 @@ export const useSourceData = (props: IProps) => {
     }, [entity?.value, widgetId, dashboardId, addEntityListener, getData]);
 
     return {
+        entity,
         countData,
     };
 };
