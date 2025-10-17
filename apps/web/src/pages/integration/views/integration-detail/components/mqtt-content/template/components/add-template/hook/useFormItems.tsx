@@ -162,7 +162,7 @@ const useFormItems = ({ prefixTopic }: { prefixTopic: string }) => {
                                     endAdornment: (
                                         <InputAdornment position="end">
                                             <Typography sx={{ fontSize: 14 }}>
-                                                {`${getIntlText('common.label.minutes', { 1: '' })}`.trim()}
+                                                {getIntlText('common.unit.minute_short')}
                                             </Typography>
                                         </InputAdornment>
                                     ),
