@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
-import { useI18n } from '@milesight/shared/src/hooks';
+import { useI18n, useTheme } from '@milesight/shared/src/hooks';
+import { MobileTopbar } from '@/components';
 
 import notPermissionImg from './assets/403.svg';
 
@@ -8,10 +9,12 @@ import './style.less';
 
 export default () => {
     const { getIntlText } = useI18n();
+    const { matchTablet } = useTheme();
     const navigate = useNavigate();
 
     return (
         <div className="ms-view-403">
+            {matchTablet && <MobileTopbar />}
             <div className="ms-view-403__wrapper">
                 <div className="ms-view-403__img">
                     <img src={notPermissionImg} alt="not-permission" />
