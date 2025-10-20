@@ -1,14 +1,15 @@
 import React, { useState, useContext } from 'react';
 import { IconButton } from '@mui/material';
-import { isEmpty } from 'lodash-es';
+import { useMemoizedFn } from 'ahooks';
 
 import { useI18n } from '@milesight/shared/src/hooks';
 import { FullscreenExitIcon } from '@milesight/shared/src/components';
 
-import { Empty } from '@/components';
+import { Empty, InfiniteScrollList } from '@/components';
 import MobileListItem from '../mobile-list-item';
 import MobileSearchInput from '../mobile-search-input';
 import { DeviceListContext } from '../../context';
+import { type TableRowDataType } from '../../hooks';
 
 import styles from './style.module.less';
 
@@ -24,21 +25,21 @@ const MobileFullscreen: React.FC<MobileFullscreenProps> = props => {
 
     const [showSearch, setShowSearch] = useState(false);
 
+    const itemRenderer = useMemoizedFn((item: TableRowDataType) => (
+        <MobileListItem isSearchPage key={item.id} device={item} />
+    ));
+
     const renderBody = () => {
-        if (!Array.isArray(context?.data) || isEmpty(context?.data)) {
-            return <Empty text={getIntlText('common.label.empty')} />;
-        }
-
         return (
-            <>
-                {(context?.data || []).map(d => (
-                    <MobileListItem isFullscreen key={d.id} device={d} />
-                ))}
-
-                <div className="device-list-view__no-data-tip">
-                    <div>{getIntlText('common.label.no_more_data')}</div>
-                </div>
-            </>
+            <InfiniteScrollList
+                isNoMore
+                data={context?.data || []}
+                itemHeight={236}
+                loading={false}
+                loadingMore={false}
+                itemRenderer={itemRenderer}
+                emptyRenderer={<Empty text={getIntlText('common.label.empty')} />}
+            />
         );
     };
 
