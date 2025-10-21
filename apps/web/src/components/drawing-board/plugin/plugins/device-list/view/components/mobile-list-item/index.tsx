@@ -1,11 +1,11 @@
 import React, { useContext, useMemo } from 'react';
-import { Stack, Button, Grid2 as Grid } from '@mui/material';
+import { Stack, Button, Grid2 as Grid, IconButton } from '@mui/material';
 import { get, isNil } from 'lodash-es';
 import { useMemoizedFn } from 'ahooks';
 import cls from 'classnames';
 
 import { useI18n } from '@milesight/shared/src/hooks';
-import { LoadingWrapper } from '@milesight/shared/src/components';
+import { LoadingWrapper, ArrowForwardIosIcon } from '@milesight/shared/src/components';
 
 import { Tooltip, DeviceStatus } from '@/components';
 import { type ImportEntityProps } from '@/services/http';
@@ -57,64 +57,83 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
                 [styles['none-border']]: isSearchPage || isFullscreen,
             })}
         >
-            <div className={styles.title}>{device?.name || ''}</div>
-
-            <Grid
-                container
-                spacing={1}
-                sx={{
-                    marginBottom: 2,
-                }}
+            <LoadingWrapper
+                loading={get(loadingDeviceDrawingBoard, String(device?.id || ''), false)}
             >
-                <Grid
-                    size={4}
-                    sx={{
-                        color: 'var(--text-color-secondary)',
-                    }}
-                >
-                    <Tooltip autoEllipsis title={getIntlText('device.label.param_external_id')} />
-                </Grid>
-                <Grid size={8}>
-                    <Tooltip autoEllipsis title={device?.identifier || '-'} />
-                </Grid>
+                <div onClick={() => handleDeviceDrawingBoard?.(device?.id)}>
+                    <div className={styles.header}>
+                        <Tooltip className={styles.title} autoEllipsis title={device?.name || ''} />
+                        <IconButton>
+                            <ArrowForwardIosIcon sx={{ width: '0.75rem', height: '0.75rem' }} />
+                        </IconButton>
+                    </div>
 
-                <Grid
-                    size={4}
-                    sx={{
-                        color: 'var(--text-color-secondary)',
-                    }}
-                >
-                    <Tooltip autoEllipsis title={device?.deviceStatus?.name || '-'} />
-                </Grid>
-                <Grid size={8}>
-                    <DeviceStatus type={deviceStatus?.value} />
-                </Grid>
+                    <Grid
+                        container
+                        spacing={1}
+                        sx={{
+                            marginBottom: 2,
+                        }}
+                    >
+                        <Grid
+                            size={4}
+                            sx={{
+                                color: 'var(--text-color-secondary)',
+                            }}
+                        >
+                            <Tooltip
+                                autoEllipsis
+                                title={getIntlText('device.label.param_external_id')}
+                            />
+                        </Grid>
+                        <Grid size={8}>
+                            <Tooltip autoEllipsis title={device?.identifier || '-'} />
+                        </Grid>
 
-                <Grid
-                    size={4}
-                    sx={{
-                        color: 'var(--text-color-secondary)',
-                    }}
-                >
-                    <Tooltip autoEllipsis title={device?.propertyEntityFirst?.name || '-'} />
-                </Grid>
-                <Grid size={8}>
-                    <Tooltip autoEllipsis title={getStatus(device?.propertyEntityFirst)} />
-                </Grid>
+                        <Grid
+                            size={4}
+                            sx={{
+                                color: 'var(--text-color-secondary)',
+                            }}
+                        >
+                            <Tooltip autoEllipsis title={device?.deviceStatus?.name || '-'} />
+                        </Grid>
+                        <Grid size={8}>
+                            <DeviceStatus type={deviceStatus?.value} />
+                        </Grid>
 
-                <Grid
-                    size={4}
-                    sx={{
-                        color: 'var(--text-color-secondary)',
-                    }}
-                >
-                    <Tooltip autoEllipsis title={device?.propertyEntitySecond?.name || '-'} />
-                </Grid>
-                <Grid size={8}>
-                    <Tooltip autoEllipsis title={getStatus(device?.propertyEntitySecond)} />
-                </Grid>
-            </Grid>
+                        <Grid
+                            size={4}
+                            sx={{
+                                color: 'var(--text-color-secondary)',
+                            }}
+                        >
+                            <Tooltip
+                                autoEllipsis
+                                title={device?.propertyEntityFirst?.name || '-'}
+                            />
+                        </Grid>
+                        <Grid size={8}>
+                            <Tooltip autoEllipsis title={getStatus(device?.propertyEntityFirst)} />
+                        </Grid>
 
+                        <Grid
+                            size={4}
+                            sx={{
+                                color: 'var(--text-color-secondary)',
+                            }}
+                        >
+                            <Tooltip
+                                autoEllipsis
+                                title={device?.propertyEntitySecond?.name || '-'}
+                            />
+                        </Grid>
+                        <Grid size={8}>
+                            <Tooltip autoEllipsis title={getStatus(device?.propertyEntitySecond)} />
+                        </Grid>
+                    </Grid>
+                </div>
+            </LoadingWrapper>
             <Stack
                 direction="row"
                 spacing="12px"
@@ -141,7 +160,7 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
                     <Tooltip autoEllipsis title={device?.serviceEntities?.[1]?.name || '-'} />
                 </Button>
 
-                <LoadingWrapper
+                {/* <LoadingWrapper
                     size={20}
                     loading={get(loadingDeviceDrawingBoard, String(device?.id || ''), false)}
                 >
@@ -152,7 +171,7 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
                     >
                         {getIntlText('common.label.detail')}
                     </Button>
-                </LoadingWrapper>
+                </LoadingWrapper> */}
             </Stack>
         </div>
     );
