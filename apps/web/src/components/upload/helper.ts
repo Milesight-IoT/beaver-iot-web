@@ -1,5 +1,6 @@
 import { isNil } from 'lodash-es';
 import intl from 'react-intl-universal';
+import { getSizeString } from '@milesight/shared/src/utils/tools';
 import type { UseDropzoneProps, ErrorCodeType, FileError } from './typings';
 
 type CheckFileResult = [boolean, null | FileError];
@@ -50,7 +51,7 @@ export const getTooLargeRejectionErr = (maxSize: number): FileError => {
         code: FILE_TOO_LARGE,
         // message: `File is larger than ${maxSize} ${maxSize === 1 ? 'byte' : 'bytes'}`,
         message: intl.get(errorIntlKey[FILE_TOO_LARGE], {
-            1: `${maxSize} ${maxSize === 1 ? 'byte' : 'bytes'}`,
+            1: getSizeString(maxSize),
         }),
     };
 };
@@ -64,7 +65,7 @@ export const getTooSmallRejectionErr = (minSize: number): FileError => {
         code: FILE_TOO_SMALL,
         // message: `File is smaller than ${minSize} ${minSize === 1 ? 'byte' : 'bytes'}`,
         message: intl.get(errorIntlKey[FILE_TOO_SMALL], {
-            1: `${minSize} ${minSize === 1 ? 'byte' : 'bytes'}`,
+            1: getSizeString(minSize),
         }),
     };
 };
@@ -372,17 +373,4 @@ export function acceptPropAsAcceptAttr(accept: UseDropzoneProps['accept']) {
             .filter(v => isMIMEType(v) || isExt(v))
             .join(',')
     );
-}
-
-/**
- * Transform the size in bytes to a human-readable string.
- */
-export function getSizeString(size: number) {
-    const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-    let unitIndex = 0;
-    while (size >= 1024 && unitIndex < units.length - 1) {
-        size /= 1024;
-        unitIndex++;
-    }
-    return `${size.toFixed(2)} ${units[unitIndex]}`;
 }
