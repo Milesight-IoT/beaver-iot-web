@@ -10,7 +10,6 @@ import { Tooltip } from '@/components';
 import pluginImg from '@/assets/plugin.png';
 import { type DeviceAPISchema } from '@/services/http';
 import { COMPONENT_CLASS } from '../../plugin/constant';
-import useLoadPlugins from '../../hooks/useLoadPlugins';
 import useFilterPlugins from '../../hooks/useFilterPlugins';
 
 import type { BoardPluginProps } from '../../plugin/types';
@@ -25,7 +24,6 @@ interface PluginListProps {
 export default (props: PluginListProps) => {
     const { disabled, deviceDetail, onSelect } = props;
 
-    useLoadPlugins();
     const { pluginsControlPanel } = useFilterPlugins(deviceDetail);
     const { getIntlText } = useI18n();
 

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import classNames from 'classnames';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, type CircularProgressProps, Box } from '@mui/material';
 
 import './style.less';
 
@@ -31,6 +31,38 @@ export interface LoadingWrapperProps {
      * the size of the loading
      */
     size?: number | string;
+}
+
+// Inspired by the former Facebook spinners.
+function FacebookCircularProgress(props: CircularProgressProps) {
+    return (
+        <Box sx={{ position: 'relative', display: 'flex' }}>
+            <CircularProgress
+                variant="determinate"
+                sx={{
+                    color: 'transparent',
+                }}
+                size={40}
+                {...props}
+                value={100}
+            />
+            <CircularProgress
+                variant="indeterminate"
+                disableShrink
+                sx={{
+                    color: '#8e66ff',
+                    animationDuration: '550ms',
+                    position: 'absolute',
+                    left: 0,
+                    '& .MuiCircularProgress-circle': {
+                        strokeLinecap: 'round',
+                    },
+                }}
+                size={40}
+                {...props}
+            />
+        </Box>
+    );
 }
 
 /**
@@ -64,7 +96,7 @@ const LoadingWrapper: React.FC<LoadingWrapperProps> = props => {
     const loadingElement: React.ReactNode = (
         <div style={style} className={loadingClassName}>
             <div className="ms-loading__indicator">
-                <CircularProgress size={size} />
+                <FacebookCircularProgress size={size} />
                 {tip && <div className="ms-loading__text">{tip}</div>}
             </div>
         </div>

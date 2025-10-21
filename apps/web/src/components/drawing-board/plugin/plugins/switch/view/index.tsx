@@ -1,5 +1,5 @@
 import { useMemo, useState, useCallback, useEffect } from 'react';
-import { useRequest } from 'ahooks';
+import { useRequest, useDebounceFn } from 'ahooks';
 import { Switch } from '@mui/material';
 import { get } from 'lodash-es';
 import cls from 'classnames';
@@ -98,13 +98,12 @@ const View = (props: ViewProps) => {
         [entity, isPreview],
     );
 
-    const handleSwitchChange = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement>, val: boolean) => {
+    const { run: handleSwitchChange } = useDebounceFn(
+        (_, val: boolean) => {
             setIsSwitchOn(val);
-
             handleEntityStatus(val);
         },
-        [handleEntityStatus],
+        { wait: 300 },
     );
 
     /**

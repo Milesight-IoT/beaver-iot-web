@@ -5,7 +5,7 @@ import { useMemoizedFn } from 'ahooks';
 import cls from 'classnames';
 
 import { useI18n } from '@milesight/shared/src/hooks';
-import { LoadingButton } from '@milesight/shared/src/components';
+import { LoadingWrapper } from '@milesight/shared/src/components';
 
 import { Tooltip, DeviceStatus } from '@/components';
 import { type ImportEntityProps } from '@/services/http';
@@ -141,14 +141,18 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
                     <Tooltip autoEllipsis title={device?.serviceEntities?.[1]?.name || '-'} />
                 </Button>
 
-                <LoadingButton
+                <LoadingWrapper
+                    size={20}
                     loading={get(loadingDeviceDrawingBoard, String(device?.id || ''), false)}
-                    variant="outlined"
-                    sx={{ height: 36, textTransform: 'none' }}
-                    onClick={() => handleDeviceDrawingBoard?.(device?.id)}
                 >
-                    {getIntlText('common.label.detail')}
-                </LoadingButton>
+                    <Button
+                        variant="outlined"
+                        sx={{ height: 36, textTransform: 'none' }}
+                        onClick={() => handleDeviceDrawingBoard?.(device?.id)}
+                    >
+                        {getIntlText('common.label.detail')}
+                    </Button>
+                </LoadingWrapper>
             </Stack>
         </div>
     );

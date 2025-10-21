@@ -174,7 +174,7 @@ const useColumns = <T extends TableRowDataType>({
                                 </IconButton>
                             </Tooltip>
                             <LoadingWrapper
-                                size={24}
+                                size={20}
                                 loading={get(
                                     loadingDeviceDrawingBoard,
                                     String(row?.id || ''),

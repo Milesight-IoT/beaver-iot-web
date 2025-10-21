@@ -25,7 +25,6 @@ import {
     checkRangeLength,
     checkRegexp,
     checkHexNumber,
-    checkNumber,
     checkIsInt,
     checkDecimals,
     checkStartWithHttpOrHttps,
@@ -330,7 +329,9 @@ const useEntityFormItems = ({ entities, isAllReadOnly, imageUploadProps }: Props
                                             />
                                         )}
                                         value={innerValue || null}
-                                        onChange={(_, option) => onChange(option?.value)}
+                                        onChange={(_, option) => {
+                                            onChange(isNil(option?.value) ? '' : option?.value);
+                                        }}
                                     />
                                     {!!error && (
                                         <FormHelperText error>{error.message}</FormHelperText>
