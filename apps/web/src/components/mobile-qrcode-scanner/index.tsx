@@ -92,7 +92,7 @@ const MobileQRCodeScanner: React.FC<Props> = ({
 
         const img = new Image();
         const blob = await imageCompress(file, {
-            quality: 0.8,
+            quality: 1,
             maxWidth: 500,
             maxHeight: 500,
         });

@@ -358,8 +358,8 @@ class QRCodeScanner {
         let tracksClosed = 0;
         const tracksToClose = this.mediaStream!.getVideoTracks().length;
 
-        this.mediaStream!.getVideoTracks().forEach(videoTrack => {
-            this.mediaStream!.removeTrack(videoTrack);
+        this.mediaStream.getVideoTracks().forEach(videoTrack => {
+            this.mediaStream?.removeTrack(videoTrack);
             videoTrack.stop();
             ++tracksClosed;
 
@@ -374,21 +374,21 @@ class QRCodeScanner {
      */
     destroy() {
         this.close();
-        this.videoElement?.pause();
+        // this.videoElement?.pause();
         this.videoElement?.removeAttribute('src');
         this.videoElement?.removeAttribute('srcObject');
+        this.videoElement = null;
 
         // Remove video element
         if (this.containerElement.contains(this.videoElement)) {
             this.containerElement.removeChild(this.videoElement!);
-            this.videoElement = null;
         }
 
         // Remove canvas
         if (this.containerElement.contains(this.canvasElement)) {
             this.containerElement.removeChild(this.canvasElement!);
-            this.canvasElement = null;
         }
+        this.canvasElement = null;
 
         this.scanFrame && cancelAnimationFrame(this.scanFrame);
     }
