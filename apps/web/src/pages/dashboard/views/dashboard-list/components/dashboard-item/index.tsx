@@ -52,7 +52,7 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
         openEditDashboard,
     } = props;
 
-    const { matchMobile } = useTheme();
+    const { matchMobile, matchTablet } = useTheme();
     const {
         toggleHomeDashboard,
         isHome,
@@ -99,6 +99,7 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
             <div
                 className={cls('dashboard-item', {
                     active: isCheckedDashboard,
+                    'hidden-border-color': matchTablet,
                 })}
                 onClick={handleItemClick}
             >
@@ -133,7 +134,9 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
                     <MoreDropdown onOperation={handleDashboardOperation} />
                 </div>
                 <div
-                    className="dashboard-item__select md:d-none"
+                    className={cls('dashboard-item__select', {
+                        'd-none': matchTablet,
+                    })}
                     onClick={e => e?.stopPropagation()}
                 >
                     <Checkbox
@@ -148,8 +151,9 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
                     />
                 </div>
                 <div
-                    className={cls('dashboard-item__home md:d-none', {
+                    className={cls('dashboard-item__home', {
                         'is-home': isHome,
+                        'd-none': matchTablet,
                     })}
                     onClick={e => e?.stopPropagation()}
                 >

@@ -4,9 +4,10 @@ import { IconButton, MenuItem, ListItemIcon } from '@mui/material';
 import { type InjectedProps } from 'material-ui-popup-state';
 import { bindHover, bindMenu, usePopupState } from 'material-ui-popup-state/hooks';
 import HoverMenu from 'material-ui-popup-state/HoverMenu';
+import cls from 'classnames';
 
 import { MoreHorizIcon, EditIcon, DeleteOutlineIcon } from '@milesight/shared/src/components';
-import { useI18n, usePopoverCloseDelay } from '@milesight/shared/src/hooks';
+import { useI18n, usePopoverCloseDelay, useTheme } from '@milesight/shared/src/hooks';
 
 import { PermissionControlDisabled } from '@/components';
 import { PERMISSIONS } from '@/constants';
@@ -26,6 +27,7 @@ export interface MoreDropdownProps {
 const MoreDropdown: React.FC<MoreDropdownProps> = props => {
     const { onOperation } = props;
 
+    const { matchTablet } = useTheme();
     const { getIntlText } = useI18n();
     const popupState = usePopupState({
         variant: 'popover',
@@ -93,7 +95,9 @@ const MoreDropdown: React.FC<MoreDropdownProps> = props => {
     return (
         <div
             ref={triggerWrapperRef}
-            className="dashboard-item__more md:d-none"
+            className={cls('dashboard-item__more', {
+                'd-none': matchTablet,
+            })}
             style={popupState.isOpen ? { display: 'block' } : undefined}
             onClick={e => e?.stopPropagation()}
         >
