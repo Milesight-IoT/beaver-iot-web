@@ -108,7 +108,7 @@ const useColumns = <T extends TableRowDataType>({
                 field: 'propertyEntityFirst',
                 headerName: getIntlText('entity.label.property_entity_first'),
                 flex: 1,
-                minWidth: 100,
+                minWidth: 150,
                 ellipsis: true,
                 renderCell({ row }) {
                     return entityNameAndStatus(row?.propertyEntityFirst);
@@ -118,7 +118,7 @@ const useColumns = <T extends TableRowDataType>({
                 field: 'propertyEntitySecond',
                 headerName: getIntlText('entity.label.property_entity_second'),
                 flex: 1,
-                minWidth: 100,
+                minWidth: 150,
                 ellipsis: true,
                 renderCell({ row }) {
                     return entityNameAndStatus(row?.propertyEntitySecond);
