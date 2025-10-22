@@ -186,6 +186,7 @@
     "common.label.webhook": "Webhook",
     "common.label.week": "Week",
     "common.label.workflow": "Workflow",
+    "common.label.workflow_id": "Workflow ID",
     "common.label.writable": "Writable",
     "common.language.cn": "中文",
     "common.language.cn_short": "ZH",
@@ -205,7 +206,7 @@
     "common.message.scan_success": "Scan success",
     "common.message.something_wrong_title": "Something went wrong",
     "common.message.supported_format": "Supported format: {1}",
-    "common.message.unable_to_access_video_stream": "Unable to access video stream (please make sure you have a webcam enabled)",
+    "common.message.unable_to_access_video_stream": "Unable to access the video stream (please ensure you have an available camera and access permissions)",
     "common.message.upload_error_file_invalid_type": "File type must be {1}.",
     "common.message.upload_error_file_too_large": "File is larger than {1}.",
     "common.message.upload_error_file_too_small": "File is smaller than {1}.",
@@ -231,6 +232,7 @@
     "common.tip.cannot_selected": "A total of 100 devices available",
     "common.tip.maximum_number_reached": "The maximum number has been reached.",
     "common.tip.selected_and_max_count": "{1} selected, maximum {2}",
+    "common.unit.minute_short": "min",
     "common.unit.second": "s",
     "valid.date.selected_time_greater_than_now_time": "The time earlier than current time is not supported.",
     "valid.date.start_time_greater_than_end_time": "The start time cannot be later than end time.",
@@ -251,7 +253,7 @@
     "valid.input.hex_number": "Only hexadecimal values ​​are allowed.",
     "valid.input.image": "Please choose an image with .jpg, .png or .jpeg file format.",
     "valid.input.integer_positive": "Only positive integers are allowed.",
-    "valid.input.integer_positive_negative_zero": "Please enter a positive/negative integer, or zero.",
+    "valid.input.integer_positive_negative_zero": "Please enter an integer.",
     "valid.input.integer_positive_zero": "Please enter a positive integer (Includes Zero).",
     "valid.input.ip_address": "Please enter your IP address in the following format: XXX.XXX.XXX.XXX. XXX should be 1-255.",
     "valid.input.ip_or_domain": "Please enter a valid IP address or domain name.",
@@ -299,7 +301,5 @@
     "valid.input.username": "Minimum username length is 5.",
     "valid.input.value": "Input value: {0} only.",
     "valid.input.version": "The version number does not comply with the specification.",
-    "valid.resp.at_least_one": "Please select at least one {1}.",
-    "common.label.workflow_id": "Workflow ID",
-    "common.unit.minute_short": "min"
+    "valid.resp.at_least_one": "Please select at least one {1}."
 }
