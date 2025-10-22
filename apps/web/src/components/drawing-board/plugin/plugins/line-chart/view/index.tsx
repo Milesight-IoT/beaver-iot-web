@@ -73,11 +73,12 @@ const View = (props: ViewProps) => {
         isPreview,
     });
     const { renderEcharts } = useEcharts(chartRef);
-    const { zoomChart, hoverZoomBtn } = useZoomChart({
+    const { isBigData, zoomChart, hoverZoomBtn } = useZoomChart({
         xAxisConfig,
         xAxisRange,
         chartZoomRef,
         chartWrapperRef,
+        chartShowData,
     });
     const { newChartShowData } = useLineChart({
         entityPosition,
@@ -142,6 +143,7 @@ const View = (props: ViewProps) => {
                     ...(yRangeList[index] || {}),
                 })),
             series: newChartShowData.map((chart, index) => ({
+                sampling: isBigData?.[index] ? 'lttb' : 'none',
                 name: chart.entityLabel,
                 type: 'line',
                 data: chart.chartOwnData.map(v => [v.timestamp, v.value]),
@@ -154,7 +156,7 @@ const View = (props: ViewProps) => {
                     color: resultColor[index], // Data dot color
                 },
                 connectNulls: true,
-                showSymbol: true, // Whether to display data dots
+                showSymbol: !isBigData?.[index], // Whether to display data dots
                 symbolSize: 2, // Data dot size
                 emphasis: {
                     focus: 'series',
@@ -345,6 +347,7 @@ const View = (props: ViewProps) => {
         xAxisRange,
         leftYAxisUnit,
         rightYAxisUnit,
+        isBigData,
         hoverZoomBtn,
         zoomChart,
         getYAxisRange,
