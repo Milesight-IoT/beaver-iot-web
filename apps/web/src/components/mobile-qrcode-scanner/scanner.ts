@@ -103,6 +103,14 @@ const getUserMedia = async (constraints?: MediaStreamConstraints) => {
     return navigator.mediaDevices.getUserMedia(constraints);
 };
 
+// Create Unique video element to avoid video play blocked
+const videoElement = document.createElement('video');
+
+videoElement.setAttribute('autoplay', '');
+videoElement.setAttribute('muted', '');
+videoElement.setAttribute('playsinline', '');
+videoElement.setAttribute('disablePictureInPicture', '');
+
 /**
  * QRCode Scanner
  */
@@ -132,12 +140,11 @@ class QRCodeScanner {
 
         this.barcodeDetector = new BarcodeDetector(scanConfig);
 
-        // Create video element
-        const videoElement = document.createElement('video');
-        videoElement.setAttribute('autoplay', '');
-        videoElement.setAttribute('muted', '');
-        videoElement.setAttribute('playsinline', '');
-        videoElement.setAttribute('disablePictureInPicture', '');
+        // const videoElement = document.createElement('video');
+        // videoElement.setAttribute('autoplay', '');
+        // videoElement.setAttribute('muted', '');
+        // videoElement.setAttribute('playsinline', '');
+        // videoElement.setAttribute('disablePictureInPicture', '');
         videoElement.width = width;
         videoElement.height = height;
         this.videoElement = videoElement;
@@ -385,12 +392,12 @@ class QRCodeScanner {
         // this.videoElement?.pause();
         this.videoElement?.removeAttribute('src');
         this.videoElement?.removeAttribute('srcObject');
-        this.videoElement = null;
 
         // Remove video element
         if (this.containerElement.contains(this.videoElement)) {
             this.containerElement.removeChild(this.videoElement!);
         }
+        this.videoElement = null;
 
         // Remove canvas
         if (this.containerElement.contains(this.canvasElement)) {
