@@ -54,9 +54,6 @@ export const useZoomChart = ({
      */
     const [isBigData, setIsBigData] = useState<boolean[]>([]);
     const isBigDataRef = useRef<boolean[]>([]);
-    useEffect(() => {
-        isBigDataRef.current = isBigData;
-    }, [isBigData]);
 
     // const chartZoomTimeValue = useMemo(() => {
     //     const { stepSize = 10, unit = 'minute' } = xAxisConfig || {};
@@ -149,6 +146,7 @@ export const useZoomChart = ({
 
             const newIsBigData = getIsBigData(startValue, endValue, isZooming);
             if (!isEqual(newIsBigData, isBigDataRef.current)) {
+                isBigDataRef.current = newIsBigData;
                 setIsBigData(newIsBigData);
             }
 
