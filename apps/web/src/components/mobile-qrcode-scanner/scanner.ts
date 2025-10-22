@@ -1,6 +1,6 @@
-import jsQR from 'jsqr';
 import { merge } from 'lodash-es';
 import { delay } from '@milesight/shared/src/utils/tools';
+import BarcodeDetector from './barcode-detector';
 import { DEFAULT_SCAN_CONFIG, DEFAULT_CAMERA_CONFIG } from './config';
 import type { ScanConfig, CameraConfig, ScanResult } from './types';
 
@@ -103,11 +103,20 @@ const getUserMedia = async (constraints?: MediaStreamConstraints) => {
     return navigator.mediaDevices.getUserMedia(constraints);
 };
 
+// Create Unique video element to avoid video play blocked
+const videoElement = document.createElement('video');
+
+videoElement.setAttribute('autoplay', '');
+videoElement.setAttribute('muted', '');
+videoElement.setAttribute('playsinline', '');
+videoElement.setAttribute('disablePictureInPicture', '');
+
 /**
  * QRCode Scanner
  */
 class QRCodeScanner {
     private options: Options;
+    private barcodeDetector: BarcodeDetector | null;
     private containerElement: HTMLElement;
     private videoElement: HTMLVideoElement | null;
     private canvasElement: HTMLCanvasElement | null;
@@ -127,13 +136,15 @@ class QRCodeScanner {
 
         const width = this.options.width || DEFAULT_VIDEO_WIDTH;
         const height = this.options.height || DEFAULT_VIDEO_HEIGHT;
+        const scanConfig = this.options.scanConfig || DEFAULT_SCAN_CONFIG;
 
-        // Create video element
-        const videoElement = document.createElement('video');
-        videoElement.setAttribute('autoplay', '');
-        videoElement.setAttribute('muted', '');
-        videoElement.setAttribute('playsinline', '');
-        videoElement.setAttribute('disablePictureInPicture', '');
+        this.barcodeDetector = new BarcodeDetector(scanConfig);
+
+        // const videoElement = document.createElement('video');
+        // videoElement.setAttribute('autoplay', '');
+        // videoElement.setAttribute('muted', '');
+        // videoElement.setAttribute('playsinline', '');
+        // videoElement.setAttribute('disablePictureInPicture', '');
         videoElement.width = width;
         videoElement.height = height;
         this.videoElement = videoElement;
@@ -233,14 +244,13 @@ class QRCodeScanner {
      * Scan video frame
      */
     private async scan() {
-        const { videoElement, canvasElement, canvasContext, options } = this;
+        const { barcodeDetector, videoElement, canvasElement, canvasContext, options } = this;
 
-        if (!videoElement || !canvasElement) return;
+        if (!barcodeDetector || !videoElement || !canvasElement) return;
         const { width, height } = canvasElement;
         const { videoWidth, videoHeight } = videoElement;
         const videoX = Math.max((width - videoWidth) / 2, 0);
         const videoY = Math.max((height - videoHeight) / 2, 0);
-        const scanConfig = options.scanConfig || DEFAULT_SCAN_CONFIG;
 
         if (canvasContext && videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
             const { scanRegion } = options;
@@ -250,80 +260,85 @@ class QRCodeScanner {
 
             if (!scanRegion) {
                 const imageData = canvasContext.getImageData(0, 0, width, height);
-                scanResult = jsQR(imageData.data, imageData.width, imageData.height, scanConfig);
-            } else {
-                // Only scan specified region
-                const scanRegionX = scanRegion?.x || 0;
-                const scanRegionY = scanRegion?.y || 0;
-                const scanRegionWidth = scanRegion?.width || width;
-                const scanRegionHeight = scanRegion?.height || height;
-                const scanRegionRadius = scanRegion?.radius || 0;
-                const scanRegionOpacity = scanRegion?.opacity || 0.5;
 
-                canvasContext.beginPath();
-                canvasContext.rect(0, 0, width, height);
-                canvasContext.moveTo(scanRegionX + scanRegionRadius, scanRegionY);
-                canvasContext.arcTo(
-                    scanRegionX + scanRegionWidth,
-                    scanRegionY,
-                    scanRegionX + scanRegionWidth,
-                    scanRegionY + scanRegionHeight,
-                    scanRegionRadius,
-                );
-                canvasContext.arcTo(
-                    scanRegionX + scanRegionWidth,
-                    scanRegionY + scanRegionHeight,
-                    scanRegionX,
-                    scanRegionY + scanRegionHeight,
-                    scanRegionRadius,
-                );
-                canvasContext.arcTo(
-                    scanRegionX,
-                    scanRegionY + scanRegionHeight,
-                    scanRegionX,
-                    scanRegionY,
-                    scanRegionRadius,
-                );
-                canvasContext.arcTo(
-                    scanRegionX,
-                    scanRegionY,
-                    scanRegionX + scanRegionWidth,
-                    scanRegionY,
-                    scanRegionRadius,
-                );
-                canvasContext.closePath();
-                canvasContext.fillStyle = `rgba(0, 0, 0, ${scanRegionOpacity})`;
-                canvasContext.fill('evenodd');
+                barcodeDetector.detect(imageData).then(results => {
+                    scanResult = results[0];
 
-                const imageData = canvasContext.getImageData(
-                    scanRegionX,
-                    scanRegionY,
-                    scanRegionWidth,
-                    scanRegionHeight,
-                );
-                scanResult = jsQR(imageData.data, imageData.width, imageData.height, scanConfig);
+                    if (!scanResult?.rawValue) return;
 
-                if (scanResult?.location) {
-                    Object.keys(scanResult.location).forEach(key => {
-                        const locate = key as keyof NonNullable<ScanResult>['location'];
-                        if (scanResult?.location[locate]) {
-                            scanResult.location[locate].x += scanRegionX;
-                        }
-                        if (scanResult?.location[locate]) {
-                            scanResult.location[locate].y += scanRegionY;
-                        }
-                    });
-                }
-            }
-
-            if (scanResult?.data) {
-                options.onSuccess?.(scanResult);
-                if (!options.continuous) {
+                    options.onSuccess?.(scanResult);
+                    if (options.continuous) return;
                     this.close();
                     this.scanFrame && cancelAnimationFrame(this.scanFrame);
-                    return;
-                }
+                });
+
+                return;
             }
+
+            // Only scan specified region
+            const scanRegionX = scanRegion?.x || 0;
+            const scanRegionY = scanRegion?.y || 0;
+            const scanRegionWidth = scanRegion?.width || width;
+            const scanRegionHeight = scanRegion?.height || height;
+            const scanRegionRadius = scanRegion?.radius || 0;
+            const scanRegionOpacity = scanRegion?.opacity || 0.5;
+
+            canvasContext.beginPath();
+            canvasContext.rect(0, 0, width, height);
+            canvasContext.moveTo(scanRegionX + scanRegionRadius, scanRegionY);
+            canvasContext.arcTo(
+                scanRegionX + scanRegionWidth,
+                scanRegionY,
+                scanRegionX + scanRegionWidth,
+                scanRegionY + scanRegionHeight,
+                scanRegionRadius,
+            );
+            canvasContext.arcTo(
+                scanRegionX + scanRegionWidth,
+                scanRegionY + scanRegionHeight,
+                scanRegionX,
+                scanRegionY + scanRegionHeight,
+                scanRegionRadius,
+            );
+            canvasContext.arcTo(
+                scanRegionX,
+                scanRegionY + scanRegionHeight,
+                scanRegionX,
+                scanRegionY,
+                scanRegionRadius,
+            );
+            canvasContext.arcTo(
+                scanRegionX,
+                scanRegionY,
+                scanRegionX + scanRegionWidth,
+                scanRegionY,
+                scanRegionRadius,
+            );
+            canvasContext.closePath();
+            canvasContext.fillStyle = `rgba(0, 0, 0, ${scanRegionOpacity})`;
+            canvasContext.fill('evenodd');
+
+            const imageData = canvasContext.getImageData(
+                scanRegionX,
+                scanRegionY,
+                scanRegionWidth,
+                scanRegionHeight,
+            );
+
+            barcodeDetector.detect(imageData).then(results => {
+                scanResult = results[0];
+
+                if (!scanResult?.rawValue) return;
+                scanResult?.cornerPoints.forEach(point => {
+                    point.x += scanRegionX;
+                    point.y += scanRegionY;
+                });
+
+                options.onSuccess?.(scanResult);
+                if (options.continuous) return;
+                this.close();
+                this.scanFrame && cancelAnimationFrame(this.scanFrame);
+            });
         }
 
         this.scanFrame = requestAnimationFrame(this.scan.bind(this));
@@ -358,8 +373,8 @@ class QRCodeScanner {
         let tracksClosed = 0;
         const tracksToClose = this.mediaStream!.getVideoTracks().length;
 
-        this.mediaStream!.getVideoTracks().forEach(videoTrack => {
-            this.mediaStream!.removeTrack(videoTrack);
+        this.mediaStream.getVideoTracks().forEach(videoTrack => {
+            this.mediaStream?.removeTrack(videoTrack);
             videoTrack.stop();
             ++tracksClosed;
 
@@ -374,21 +389,21 @@ class QRCodeScanner {
      */
     destroy() {
         this.close();
-        this.videoElement?.pause();
+        // this.videoElement?.pause();
         this.videoElement?.removeAttribute('src');
         this.videoElement?.removeAttribute('srcObject');
 
         // Remove video element
         if (this.containerElement.contains(this.videoElement)) {
             this.containerElement.removeChild(this.videoElement!);
-            this.videoElement = null;
         }
+        this.videoElement = null;
 
         // Remove canvas
         if (this.containerElement.contains(this.canvasElement)) {
             this.containerElement.removeChild(this.canvasElement!);
-            this.canvasElement = null;
         }
+        this.canvasElement = null;
 
         this.scanFrame && cancelAnimationFrame(this.scanFrame);
     }

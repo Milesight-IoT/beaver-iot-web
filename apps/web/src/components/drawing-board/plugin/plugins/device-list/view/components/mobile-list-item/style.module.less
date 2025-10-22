@@ -13,8 +13,16 @@
         border: none;
     }
 
-    .title {
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         margin-bottom: @margin-xs;
-        font-weight: @font-weight-medium;
+
+        .title {
+            flex: 1;
+            width: 0;
+            font-weight: @font-weight-medium;
+        }
     }
 }

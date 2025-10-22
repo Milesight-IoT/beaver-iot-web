@@ -2,9 +2,10 @@ import React from 'react';
 import { IconButton, Divider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { isNil } from 'lodash-es';
+import cls from 'classnames';
 
 import { GridViewIcon, ArrowBackIcon } from '@milesight/shared/src/components';
-import { useTheme, useMediaQuery, useI18n } from '@milesight/shared/src/hooks';
+import { useTheme, useI18n } from '@milesight/shared/src/hooks';
 
 import { SidebarController, Tooltip } from '@/components';
 import useDashboardStore from '@/pages/dashboard/store';
@@ -24,13 +25,12 @@ const Toolbar: React.FC<ToolbarProps> = props => {
 
     const { getIntlText } = useI18n();
     const navigate = useNavigate();
-    const { breakpoints } = useTheme();
-    const smallScreenSize = useMediaQuery(breakpoints.down('md'));
+    const { matchTablet } = useTheme();
     const { paths } = useDashboardStore();
 
     const renderSidebar = () => {
         const pathIndex = paths?.findIndex(p => p.id === drawingBoardDetail?.id);
-        if (!smallScreenSize || isNil(pathIndex) || pathIndex < 1) {
+        if (!matchTablet || isNil(pathIndex) || pathIndex < 1) {
             return <SidebarController />;
         }
 
@@ -46,7 +46,9 @@ const Toolbar: React.FC<ToolbarProps> = props => {
             <div className="dashboard-detail__toolbar-left">
                 {renderSidebar()}
                 <Tooltip
-                    className="md:d-none"
+                    className={cls({
+                        'd-none': matchTablet,
+                    })}
                     title={getIntlText('dashboard.tip.return_dashboard_list')}
                 >
                     <IconButton onClick={() => navigate('/dashboard')}>
@@ -54,7 +56,9 @@ const Toolbar: React.FC<ToolbarProps> = props => {
                     </IconButton>
                 </Tooltip>
                 <Divider
-                    className="md:d-none"
+                    className={cls({
+                        'd-none': matchTablet,
+                    })}
                     orientation="vertical"
                     variant="middle"
                     flexItem
@@ -62,9 +66,13 @@ const Toolbar: React.FC<ToolbarProps> = props => {
                         margin: '6px 12px',
                     }}
                 />
-                <DrawingBoardPath className="md:d-none" />
+                <DrawingBoardPath
+                    className={cls({
+                        'd-none': matchTablet,
+                    })}
+                />
             </div>
-            {smallScreenSize && (
+            {matchTablet && (
                 <div className="dashboard-detail__toolbar-middle">
                     <Tooltip
                         autoEllipsis
@@ -73,7 +81,7 @@ const Toolbar: React.FC<ToolbarProps> = props => {
                 </div>
             )}
             <div className="dashboard-detail__toolbar-right">
-                {smallScreenSize && (
+                {matchTablet && (
                     <IconButton onClick={() => navigate('/dashboard')}>
                         <GridViewIcon />
                     </IconButton>

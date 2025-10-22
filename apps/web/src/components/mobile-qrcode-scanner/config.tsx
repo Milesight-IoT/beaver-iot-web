@@ -4,7 +4,7 @@ import type { CameraConfig, ScanConfig } from './types';
  * Default scan config
  */
 export const DEFAULT_SCAN_CONFIG: ScanConfig = {
-    inversionAttempts: 'dontInvert',
+    formats: ['qr_code'],
 };
 
 /**

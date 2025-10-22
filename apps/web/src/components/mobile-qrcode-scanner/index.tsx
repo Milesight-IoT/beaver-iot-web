@@ -1,11 +1,11 @@
-import React, { useRef, useEffect, useMemo, useState } from 'react';
+import React, { useRef, useMemo, useState } from 'react';
 import { Dialog, IconButton, CircularProgress } from '@mui/material';
-import jsQR from 'jsqr';
 import cls from 'classnames';
-import { useSize, useMemoizedFn, useDocumentVisibility } from 'ahooks';
+import { useSize, useMemoizedFn, useDocumentVisibility, useDebounceEffect } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { ArrowBackIcon, FlashlightOnIcon, toast } from '@milesight/shared/src/components';
 import { imageCompress } from '@milesight/shared/src/utils/tools';
+import BarcodeDetector from './barcode-detector';
 import {
     DEFAULT_SCAN_CONFIG,
     DEFAULT_CAMERA_CONFIG,
@@ -50,6 +50,8 @@ interface Props {
     onSuccess?: (data: ScanResult) => void;
 }
 
+const barcodeDetector = new BarcodeDetector(DEFAULT_SCAN_CONFIG);
+
 /**
  * Mobile QR Code Scanner
  */
@@ -76,6 +78,7 @@ const MobileQRCodeScanner: React.FC<Props> = ({
     const handleImgSelect = useMemoizedFn(async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         const accepted = file?.type.startsWith('image/');
+        e.target.value = '';
 
         if (!file) return;
         if (!accepted) {
@@ -89,9 +92,8 @@ const MobileQRCodeScanner: React.FC<Props> = ({
         }
         setLoading(true);
 
-        const img = new Image();
         const blob = await imageCompress(file, {
-            quality: 0.8,
+            quality: 1,
             maxWidth: 500,
             maxHeight: 500,
         });
@@ -101,25 +103,9 @@ const MobileQRCodeScanner: React.FC<Props> = ({
             return;
         }
 
-        img.src = blob instanceof Blob ? URL.createObjectURL(blob) : blob;
-        await new Promise(resolve => {
-            img.addEventListener('load', resolve);
-        });
+        const result = (await barcodeDetector.detect(blob as Blob))[0];
 
-        const { naturalWidth, naturalHeight } = img;
-        const canvas = new OffscreenCanvas(naturalWidth, naturalHeight);
-        const ctx = canvas.getContext('2d');
-
-        if (!ctx) {
-            setLoading(false);
-            return;
-        }
-
-        ctx.drawImage(img, 0, 0, naturalWidth, naturalHeight);
-        const imageData = ctx.getImageData(0, 0, naturalWidth, naturalHeight);
-        const result = jsQR(imageData.data, naturalWidth, naturalHeight, scanConfig);
-
-        if (!result?.data) {
+        if (!result?.rawValue) {
             toast.error({
                 key: 'scan-no-data',
                 content: getIntlText('common.label.empty'),
@@ -170,60 +156,64 @@ const MobileQRCodeScanner: React.FC<Props> = ({
         };
     }, [size]);
 
-    useEffect(() => {
-        const wrapper = wrapperRef.current;
-        if (loading || !open || !wrapper || !size || !scanRegion || docVisible !== 'visible') {
-            destroyScanner();
-            return;
-        }
+    useDebounceEffect(
+        () => {
+            const wrapper = wrapperRef.current;
+            if (loading || !open || !wrapper || !size || !scanRegion || docVisible !== 'visible') {
+                destroyScanner();
+                return;
+            }
 
-        try {
-            scannerRef.current = new Scanner(wrapper, {
-                width: size.width,
-                height: size.height - DEFAULT_TOPBAR_HEIGHT,
-                scanRegion,
-                scanConfig,
-                cameraConfig,
-                onError() {
-                    handleBack();
-                    onError?.();
-                    toast.error({
-                        key: 'scan-start-error',
-                        content: getIntlText('common.message.unable_to_access_video_stream'),
-                    });
-                },
-                onSuccess(result) {
-                    if (loading) return;
+            try {
+                scannerRef.current = new Scanner(wrapper, {
+                    width: size.width,
+                    height: size.height - DEFAULT_TOPBAR_HEIGHT,
+                    scanRegion,
+                    scanConfig,
+                    cameraConfig,
+                    onError() {
+                        handleBack();
+                        onError?.();
+                        toast.error({
+                            key: 'scan-start-error',
+                            content: getIntlText('common.message.unable_to_access_video_stream'),
+                        });
+                    },
+                    onSuccess(result) {
+                        if (loading) return;
 
-                    handleBack();
-                    onSuccess?.(result);
-                    toast.success({
-                        key: 'scan-success',
-                        content: getIntlText('common.message.scan_success'),
-                    });
-                },
-                onFlashReady(available) {
-                    // console.log('flashAvailable', available);
-                    setFlashAvailable(available);
-                },
-                onFlashStateChange(active) {
-                    setOpenFlash(active);
-                },
-            });
-        } catch {
-            handleBack();
-            onError?.();
-            toast.error({
-                key: 'scan-start-error',
-                content: getIntlText('common.message.unable_to_access_video_stream'),
-            });
-        }
+                        handleBack();
+                        onSuccess?.(result);
+                        toast.success({
+                            key: 'scan-success',
+                            content: getIntlText('common.message.scan_success'),
+                        });
+                    },
+                    onFlashReady(available) {
+                        // console.log('flashAvailable', available);
+                        setFlashAvailable(available);
+                    },
+                    onFlashStateChange(active) {
+                        setOpenFlash(active);
+                    },
+                });
+            } catch {
+                handleBack();
+                onError?.();
+                toast.error({
+                    key: 'scan-start-error',
+                    content: getIntlText('common.message.unable_to_access_video_stream'),
+                });
+            }
 
-        return () => {
-            destroyScanner();
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loading, size, scanRegion, docVisible, open, scanConfig, cameraConfig, getIntlText]);
+            return () => {
+                destroyScanner();
+            };
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        },
+        [loading, size, scanRegion, docVisible, open, scanConfig, cameraConfig, getIntlText],
+        { wait: 100 },
+    );
 
     // ---------- Render scan region box ----------
     const scanRegionStyle = useMemo<React.CSSProperties>(() => {

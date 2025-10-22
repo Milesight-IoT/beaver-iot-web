@@ -59,7 +59,7 @@
     "error.http.name_repeated": "Repetition of names",
     "error.http.network_timeout": "Network connection timeout.",
     "error.http.no_valid_profile_for_device": "The gateway does not provide the profile required by the device.",
-    "error.http.ns_gateway_device_data_encode_failed": "Device downlink encoding error.",
+    "error.http.ns_gateway_device_data_encode_failed": "Device downlink data encoding failed.",
     "error.http.number_of_entity_tags_exceeded": "The number of tags created exceeds the limit.",
     "error.http.number_of_tags_per_entity_exceeded": "The maximum number of tags that can be added to a single entity has been reached.",
     "error.http.page_not_found": "Sorry, the page you visited does not exist.",

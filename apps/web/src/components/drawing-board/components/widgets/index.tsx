@@ -178,6 +178,7 @@ const Widgets = (props: WidgetProps) => {
                     >
                         <DrawingBoardContext.Provider value={newDrawingBoardContext(data)}>
                             <FullscreenModal
+                                plugin={plugin}
                                 disabled={!plugin?.fullscreenable || isEdit}
                                 sx={plugin?.fullscreenIconSx}
                             >

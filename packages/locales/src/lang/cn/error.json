@@ -59,7 +59,7 @@
     "error.http.name_repeated": "名称重复",
     "error.http.network_timeout": "网络连接超时。",
     "error.http.no_valid_profile_for_device": "网关未提供设备需要的profile。",
-    "error.http.ns_gateway_device_data_encode_failed": "设备下行编码错误。",
+    "error.http.ns_gateway_device_data_encode_failed": "设备下行数据编码失败。",
     "error.http.number_of_entity_tags_exceeded": "创建的标签数量超过上限。",
     "error.http.number_of_tags_per_entity_exceeded": "单个实体可添加的标签数量已达上限。",
     "error.http.page_not_found": "抱歉，您访问的页面不存在。",

@@ -1,9 +1,15 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useState, useRef } from 'react';
 import dayjs from 'dayjs';
 import { useMemoizedFn } from 'ahooks';
 import { type EChartsType } from 'echarts/core';
-import { useSignalState } from '@milesight/shared/src/hooks';
-import { useBasicChartEntity } from '@/components/drawing-board/plugin/hooks';
+import { isEmpty, isNil, isEqual } from 'lodash-es';
+
+import { useSignalState, useTheme } from '@milesight/shared/src/hooks';
+
+import {
+    useBasicChartEntity,
+    type ChartShowDataProps,
+} from '@/components/drawing-board/plugin/hooks';
 
 const generateTimes = (
     range: number[],
@@ -27,19 +33,29 @@ interface IProps {
     chartWrapperRef: React.RefObject<HTMLDivElement>;
     xAxisConfig: ReturnType<typeof useBasicChartEntity>['xAxisConfig'];
     chartZoomRef: ReturnType<typeof useBasicChartEntity>['chartZoomRef'];
+    chartShowData: ChartShowDataProps[];
 }
 export const useZoomChart = ({
     xAxisConfig,
     xAxisRange,
     chartZoomRef,
     chartWrapperRef,
+    chartShowData,
 }: IProps) => {
+    const { matchTablet, matchLandscape } = useTheme();
+
     const [getChartZoom, setChartZoom] = useSignalState({
         start: 0,
         end: 100,
         isZooming: false,
         initialize: true,
     });
+
+    /**
+     * The current data is big data set
+     */
+    const [isBigData, setIsBigData] = useState<boolean[]>([]);
+    const isBigDataRef = useRef<boolean[]>([]);
 
     // const chartZoomTimeValue = useMemo(() => {
     //     const { stepSize = 10, unit = 'minute' } = xAxisConfig || {};
@@ -69,16 +85,71 @@ export const useZoomChart = ({
         }
     });
 
+    /**
+     * Enable big data optimization sampling lttb threshold value
+     * PC: 600
+     * Mobile: 300
+     */
+    const samplingThreshold = useMemo(() => {
+        if (matchLandscape) {
+            return 600;
+        }
+
+        return matchTablet ? 300 : 600;
+    }, [matchTablet, matchLandscape]);
+
+    /**
+     * Calculate current is big data
+     */
+    const getIsBigData = useMemoizedFn(
+        (startValue: number, endValue: number, isZooming: boolean) => {
+            if (
+                !Array.isArray(chartShowData) ||
+                isEmpty(chartShowData) ||
+                isNil(startValue) ||
+                Number.isNaN(Number(startValue)) ||
+                isNil(endValue) ||
+                Number.isNaN(Number(endValue))
+            ) {
+                return [];
+            }
+
+            return chartShowData.map(item => {
+                const { chartOwnData = [] } = item || {};
+                let dataLength = chartOwnData.length;
+
+                if (isZooming) {
+                    const sortData = chartOwnData.sort((a, b) => a.timestamp - b.timestamp);
+                    let startIndex = sortData.findIndex(d => d.timestamp >= startValue);
+                    let endIndex = sortData.findIndex(d => d.timestamp >= endValue);
+
+                    startIndex = startIndex === -1 ? 0 : startIndex;
+                    endIndex = endIndex === -1 ? sortData.length - 1 : endIndex;
+
+                    dataLength = endIndex - startIndex;
+                }
+
+                return dataLength > samplingThreshold;
+            });
+        },
+    );
+
     /** chart zoom callback */
     const zoomChart = useMemoizedFn((myChart: EChartsType) => {
         myChart.on('dataZoom', (params: any) => {
             const chartOption = myChart.getOption();
             const { dataZoom } = chartOption || {};
-            const { start, end } = (dataZoom as any)?.[0] || {};
+            const { start, end, startValue, endValue } = (dataZoom as any)?.[0] || {};
 
             const { isZooming = true } = params || {};
             if (isZooming) {
                 chartZoomRef.current?.show();
+            }
+
+            const newIsBigData = getIsBigData(startValue, endValue, isZooming);
+            if (!isEqual(newIsBigData, isBigDataRef.current)) {
+                isBigDataRef.current = newIsBigData;
+                setIsBigData(newIsBigData);
             }
 
             setChartZoom({
@@ -160,6 +231,10 @@ export const useZoomChart = ({
     }, [chartWrapperRef, handleWheelEvent]);
 
     return {
+        /**
+         * It's a big data set
+         */
+        isBigData,
         zoomChart,
         hoverZoomBtn,
     };

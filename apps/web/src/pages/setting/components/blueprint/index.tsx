@@ -40,11 +40,14 @@ const Blueprint = () => {
             <>
                 <div className="title">{getIntlText('setting.blueprint.management_title')}</div>
                 {sourceType === BlueprintSourceType.DEFAULT && (
-                    <Tooltip
-                        autoEllipsis
-                        className="subtitle"
-                        title={getIntlText('setting.blueprint.official_store_helper_text')}
-                    />
+                    <div className="subtitle">
+                        {getIntlText('setting.blueprint.official_store_helper_text')}
+                    </div>
+                    // <Tooltip
+                    //     autoEllipsis
+                    //     className="subtitle"
+                    //     title={getIntlText('setting.blueprint.official_store_helper_text')}
+                    // />
                 )}
             </>
         );
