@@ -11,8 +11,10 @@ import {
 } from '@milesight/shared/src/components';
 
 import { PluginFullscreenContext, PluginFullscreenContextProps } from './context';
+import { type BoardPluginProps, type PluginType } from '../../plugin/types';
 
 export interface FullscreenModalProps {
+    plugin: BoardPluginProps;
     children?: React.ReactNode;
     /**
      * Disabled fullscreen
@@ -30,7 +32,7 @@ export interface FullscreenModalProps {
  * Higher order component to fullscreen
  */
 const FullscreenModal: React.FC<FullscreenModalProps> = props => {
-    const { children, disabled, sx, onFullscreen } = props;
+    const { plugin, children, disabled, sx, onFullscreen } = props;
 
     const { matchTablet } = useTheme();
 
@@ -71,7 +73,7 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
     /**
      * Mobile compatible
      */
-    if (matchTablet || disabled) {
+    if ((matchTablet && (['deviceList'] as PluginType[]).includes(plugin?.type)) || disabled) {
         return children;
     }
 
