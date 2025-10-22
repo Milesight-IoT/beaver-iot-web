@@ -212,7 +212,7 @@ const MobileQRCodeScanner: React.FC<Props> = ({
             // eslint-disable-next-line react-hooks/exhaustive-deps
         },
         [loading, size, scanRegion, docVisible, open, scanConfig, cameraConfig, getIntlText],
-        { wait: 100 },
+        { wait: 300 },
     );
 
     // ---------- Render scan region box ----------
