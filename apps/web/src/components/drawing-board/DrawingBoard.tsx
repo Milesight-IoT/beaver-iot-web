@@ -95,14 +95,6 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
     };
 
     const renderDrawingBoard = () => {
-        if (loadingWidgets) {
-            return (
-                <LoadingWrapper loading>
-                    <List />
-                </LoadingWrapper>
-            );
-        }
-
         if (!Array.isArray(widgets) || isEmpty(widgets)) {
             return renderEmptyDrawingBoard();
         }
@@ -119,44 +111,13 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
         );
     };
 
-    // const DrawingBoardContent = (
-    //     <DrawingBoardContext.Provider value={drawingBoardContext}>
-    //         <div className="drawing-board">
-    //             <div ref={drawingBoardRef} className="drawing-board__wrapper ms-perfect-scrollbar">
-    //                 <div className="drawing-board__container">{renderDrawingBoard()}</div>
-    //             </div>
-
-    //             {!!operatingPlugin && (
-    //                 <OperateWidgetModal
-    //                     widgets={widgets}
-    //                     plugin={operatingPlugin}
-    //                     handleWidgetChange={handleWidgetChange}
-    //                     onCancel={handleCloseModel}
-    //                 />
-    //             )}
-    //         </div>
-    //     </DrawingBoardContext.Provider>
-    // );
-
-    // if (isFullscreen) {
-    //     return (
-    //         <Modal
-    //             fullScreen
-    //             visible={isFullscreen}
-    //             showCloseIcon={false}
-    //             onCancel={exitFullscreen}
-    //             footer={null}
-    //             sx={{
-    //                 '&.ms-modal-root .ms-modal-content.MuiDialogContent-root': {
-    //                     padding: 0,
-    //                 },
-    //             }}
-    //         >
-    //             {DrawingBoardContent}
-    //         </Modal>
-    //     );
-    // }
-
+    if (loadingWidgets) {
+        return (
+            <LoadingWrapper loading>
+                <List sx={{ height: '300px' }} />
+            </LoadingWrapper>
+        );
+    }
     return (
         <DrawingBoardContext.Provider value={drawingBoardContext}>
             <div className="drawing-board">
