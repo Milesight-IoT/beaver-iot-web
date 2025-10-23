@@ -35,6 +35,7 @@ export default function vConsolePlugin(options: VConsolePluginOptions): Plugin {
                 {
                     tag: 'script',
                     attrs: {
+                        defer: true,
                         src: options.src || defaultSrc,
                     },
                     injectTo,
