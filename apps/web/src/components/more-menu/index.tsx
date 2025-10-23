@@ -34,7 +34,14 @@ const MoreMenu = <TData extends Data>({
 
     return (
         <div className="ms-more-menu-root">
-            <IconButton disabled={disabled} onClick={e => setAnchorEl(e.currentTarget)}>
+            <IconButton
+                className={cls({ active: !!anchorEl })}
+                disabled={disabled}
+                onClick={e => {
+                    e.stopPropagation();
+                    setAnchorEl(e.currentTarget);
+                }}
+            >
                 {children || <MoreHorizIcon />}
             </IconButton>
             <Menu

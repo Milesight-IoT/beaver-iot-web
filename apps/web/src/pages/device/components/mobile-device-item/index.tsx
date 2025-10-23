@@ -54,6 +54,7 @@ const MobileDeviceItem: React.FC<Props> = memo(({ data, onAction }) => {
                     <DeviceStatus type={data.status} />
                     <PermissionControlHidden permissions={[PERMISSIONS.DEVICE_DELETE]}>
                         <MoreMenu
+                            key={data.id}
                             options={moreMenuOptions}
                             onClick={menu => onAction?.(menu.value, data)}
                         />
