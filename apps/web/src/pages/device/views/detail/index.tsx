@@ -18,7 +18,7 @@ import { Breadcrumbs, TabPanel } from '@/components';
 
 import { useDrawingBoard } from '@/components/drawing-board';
 
-import { BasicTable, EntityData, DeviceDrawingBoard } from './components';
+import { BasicTable, EntityData, DeviceDrawingBoard, Location } from './components';
 import useDeviceDrawingBoard from './components/drawing-board/useDeviceDrawingBoard';
 import './style.less';
 
@@ -114,6 +114,12 @@ export default () => {
                     />
                 ),
             },
+            {
+                key: 'location',
+                // TODO: i18n
+                label: '位置',
+                component: <Location />,
+            },
         ];
     }, [
         deviceDetail,
@@ -153,7 +159,7 @@ export default () => {
                     )}
                 </div>
                 <div
-                    className={cls('ms-tab-content', {
+                    className={cls('ms-tab-content', `ms-tab-content--${tabKey}`, {
                         'drawing-board__tab': tabKey === 'drawingBoard',
                     })}
                 >

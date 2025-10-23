@@ -1,60 +1,71 @@
-import React, { memo, useState, useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { type LeafletEventHandlerFnMap } from 'leaflet';
-import {
-    Marker,
-    useMap,
-    useMapEvents,
-    type MarkerProps,
-    type MapContainerProps,
-} from 'react-leaflet';
+import { useMap, useMapEvents, type MapContainerProps } from 'react-leaflet';
 import 'proj4leaflet';
 import TileLayer, { type TileLayerProps } from '../tile-layer';
 
 interface Props extends TileLayerProps {
-    showMarker?: boolean;
-
+    /**
+     * Whether to center the map base on the current location
+     */
     autoCenterLocate?: boolean | MapContainerProps['center'];
 
-    markers?: Omit<MarkerProps, 'children' | 'eventHandlers'>[];
-
+    /**
+     * Map click event handler
+     */
     onClick?: LeafletEventHandlerFnMap['click'];
+
+    /**
+     * Location error event handler
+     */
+    onLocationError?: LeafletEventHandlerFnMap['locationerror'];
+
+    /**
+     * Current location found event handler
+     */
+    onLocationFound?: LeafletEventHandlerFnMap['locationfound'];
 }
 
-const MapLayer = memo(({ showMarker, autoCenterLocate, ...props }: Props) => {
-    const map = useMap();
-    const [position, setPosition] = useState<MapContainerProps['center'] | null>(null);
+// const bounds: MarkerProps['position'][] = [
+//     [31.59, 120.29],
+//     [39.905531, 116.391305],
+//     [24.624821056984395, 118.03075790405273],
+// ];
 
-    useMapEvents({
-        // click(e) {
-        //     const { latlng } = e;
-        //     const result = gcj2wgsExact(latlng.lat, latlng.lng);
-        //     console.log({ latlng, result });
+/**
+ * Map Layer Component
+ * @description The component is used for integrating tile layer and map events
+ */
+const MapLayer = memo(
+    ({ autoCenterLocate, onClick, onLocationError, onLocationFound, ...props }: Props) => {
+        const map = useMap();
 
-        //     setPosition(latlng);
-        //     onLocationFound?.(latlng);
-        //     map.flyTo(latlng, map.getZoom());
-        // },
-        locationfound(e) {
-            const { latlng } = e;
-            // const result = wgs2gcj(latlng.lat, latlng.lng);
+        useMapEvents({
+            click(e) {
+                onClick?.(e);
+            },
+            locationerror(err) {
+                onLocationError?.(err);
+            },
+            locationfound(e) {
+                const { latlng } = e;
 
-            // console.log({ latlng, result });
-            setPosition(latlng);
-            // onLocationFound?.(latlng);
-            map.flyTo(latlng, map.getZoom());
-        },
-    });
+                if (autoCenterLocate) {
+                    map.flyTo(latlng, 13);
+                }
 
-    useEffect(() => {
-        map.locate();
-    }, [map]);
+                onLocationFound?.(e);
+                // map.flyTo(latlng, map.getZoom());
+                // map.fitBounds(bounds);
+            },
+        });
 
-    return (
-        <>
-            <TileLayer {...props} />
-            {!position || !showMarker ? null : <Marker position={position} />}
-        </>
-    );
-});
+        useEffect(() => {
+            map.locate();
+        }, [map]);
+
+        return <TileLayer {...props} />;
+    },
+);
 
 export default MapLayer;
