@@ -46,7 +46,7 @@ const View = (props: ViewProps) => {
 
     const chartWrapperRef = useRef<HTMLDivElement>(null);
 
-    const { grey } = useTheme();
+    const { grey, matchTablet } = useTheme();
     const pluginFullscreenCxt = useContext(PluginFullscreenContext);
     const { wGrid = 3, hGrid = 3 } = useGridLayout(
         pluginFullscreenCxt?.pluginFullScreen ? { w: 4, h: 4 } : isPreview ? { w: 3, h: 3 } : pos,
@@ -159,6 +159,7 @@ const View = (props: ViewProps) => {
                 showSymbol: !isBigData?.[index], // Whether to display data dots
                 symbolSize: 2, // Data dot size
                 emphasis: {
+                    disabled: matchTablet,
                     focus: 'series',
                     scale: 4,
                     itemStyle: {
@@ -348,6 +349,7 @@ const View = (props: ViewProps) => {
         leftYAxisUnit,
         rightYAxisUnit,
         isBigData,
+        matchTablet,
         hoverZoomBtn,
         zoomChart,
         getYAxisRange,

@@ -10,6 +10,7 @@ prepareZXingModule({
             return prefix + path;
         },
     },
+    fireImmediately: true,
 });
 
 export default BarcodeDetector;

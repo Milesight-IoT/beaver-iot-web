@@ -4,6 +4,16 @@
             padding: 0;
             color: var(--icon-color-gray-secondary);
 
+            &.@{mui-prefix}IconButton-root {
+                &:hover {
+                    color: var(--icon-color-gray-secondary);
+                }
+
+                &.active {
+                    color: var(--icon-color-active);
+                }
+            }
+
             &.@{mui-prefix}-disabled {
                 color: var(--icon-color-disable);
             }
