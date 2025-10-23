@@ -235,7 +235,7 @@ const MobileQRCodeScanner: React.FC<Props> = ({
         };
 
         if (scanRegion) {
-            result.top = scanRegion.y + scanRegion.height + 60;
+            result.top = scanRegion.y + scanRegion.height + DEFAULT_TOPBAR_HEIGHT + 60;
         } else {
             result.bottom = 100;
         }
