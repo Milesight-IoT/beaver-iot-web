@@ -80,16 +80,18 @@ const MultiDeviceSelect: React.FC<MultiDeviceSelectProps> = props => {
                     })}
                 >
                     <div className="multi-device-select__search">
-                        <OutlinedInput
-                            fullWidth
-                            placeholder={getIntlText('common.label.search')}
-                            onChange={handleSearch}
-                            startAdornment={
-                                <InputAdornment position="start">
-                                    <SearchIcon />
-                                </InputAdornment>
-                            }
-                        />
+                        <FormControl fullWidth>
+                            <OutlinedInput
+                                fullWidth
+                                placeholder={getIntlText('common.label.search')}
+                                onChange={handleSearch}
+                                startAdornment={
+                                    <InputAdornment position="start">
+                                        <SearchIcon />
+                                    </InputAdornment>
+                                }
+                            />
+                        </FormControl>
                     </div>
 
                     <div className="multi-device-select__path">
