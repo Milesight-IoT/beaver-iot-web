@@ -103,13 +103,19 @@ const getUserMedia = async (constraints?: MediaStreamConstraints) => {
     return navigator.mediaDevices.getUserMedia(constraints);
 };
 
-// Create Unique video element to avoid video play blocked
-const videoElement = document.createElement('video');
+const createBasicVideoElement = () => {
+    const videoElement = document.createElement('video');
 
-videoElement.setAttribute('autoplay', '');
-videoElement.setAttribute('muted', '');
-videoElement.setAttribute('playsinline', '');
-videoElement.setAttribute('disablePictureInPicture', '');
+    videoElement.setAttribute('autoplay', '');
+    videoElement.setAttribute('muted', '');
+    videoElement.setAttribute('playsinline', '');
+    videoElement.setAttribute('disablePictureInPicture', '');
+
+    return videoElement;
+};
+
+// Create Unique video element to avoid video play blocked
+let globalVideoElement = createBasicVideoElement();
 
 /**
  * QRCode Scanner
@@ -140,14 +146,10 @@ class QRCodeScanner {
 
         this.barcodeDetector = new BarcodeDetector(scanConfig);
 
-        // const videoElement = document.createElement('video');
-        // videoElement.setAttribute('autoplay', '');
-        // videoElement.setAttribute('muted', '');
-        // videoElement.setAttribute('playsinline', '');
-        // videoElement.setAttribute('disablePictureInPicture', '');
-        videoElement.width = width;
-        videoElement.height = height;
-        this.videoElement = videoElement;
+        // Set current video element
+        this.videoElement = globalVideoElement;
+        this.videoElement.width = width;
+        this.videoElement.height = height;
         // this.containerElement.appendChild(videoElement);
 
         // Create canvas element
@@ -226,17 +228,25 @@ class QRCodeScanner {
                 options.onFlashReady?.(this.flashAvailable);
             }, 500);
 
+            videoElement.load();
             await delay(10);
-            await videoElement?.play();
+            // await videoElement?.play();
 
             this.scan();
         } catch (error: any) {
             console.warn(
                 'The device does not support it, please check whether the camera permission is allowed.',
-                error.message,
+                error,
+                {
+                    name: error.name,
+                    code: error.code,
+                    message: error.message,
+                },
             );
+
             this.destroy();
             options.onError?.(error);
+            globalVideoElement = createBasicVideoElement();
         }
     }
 
