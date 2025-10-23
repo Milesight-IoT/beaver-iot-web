@@ -96,7 +96,10 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
                                 color: 'var(--text-color-secondary)',
                             }}
                         >
-                            <Tooltip autoEllipsis title={device?.deviceStatus?.name || '-'} />
+                            <Tooltip
+                                autoEllipsis
+                                title={getIntlText('device.title.device_status')}
+                            />
                         </Grid>
                         <Grid size={8}>
                             <DeviceStatus type={deviceStatus?.value} />
