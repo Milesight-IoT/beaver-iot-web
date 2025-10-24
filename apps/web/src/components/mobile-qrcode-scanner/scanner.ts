@@ -167,14 +167,16 @@ class QRCodeScanner {
     /**
      * Get available cameras
      */
-    static getCameras() {
+    static getCameras(options?: { filter?: (device: MediaDeviceInfo) => boolean }) {
         return new Promise<MediaDeviceInfo[]>((resolve, reject) => {
             navigator.mediaDevices
                 .enumerateDevices()
                 .then(devices => {
-                    const inputCameras = devices.filter(device => {
-                        return device.kind === 'videoinput';
-                    });
+                    const inputCameras = devices
+                        .filter(device => {
+                            return device.kind === 'videoinput';
+                        })
+                        .filter(options?.filter || (() => true));
                     resolve(inputCameras);
                 })
                 .catch(err => {
@@ -206,10 +208,29 @@ class QRCodeScanner {
         const width = options.width || DEFAULT_VIDEO_WIDTH;
         const height = options.height || DEFAULT_VIDEO_HEIGHT;
 
+        const cameras = await QRCodeScanner.getCameras({
+            filter: ({ label }) => !label?.includes('front'),
+        });
         const cameraConfig = merge({}, DEFAULT_CAMERA_CONFIG, options.cameraConfig, {
             width: { ideal: width },
             height: { ideal: height },
         });
+
+        /**
+         * Compatible with HarmonyOS system
+         * Note: HarmonyOS has multiple cameras, and the last one usually is
+         * the clearest back camera.
+         */
+        if (cameras.length > 1) {
+            const camera =
+                cameras.reverse().find(device => {
+                    // @ts-ignore
+                    const { facingMode } = device.getCapabilities?.() || {};
+                    return facingMode?.includes('environment');
+                }) || cameras[cameras.length - 1];
+
+            cameraConfig.deviceId = camera.deviceId;
+        }
 
         if (!videoElement) return;
         try {
