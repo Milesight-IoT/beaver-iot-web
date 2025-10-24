@@ -157,6 +157,7 @@ const MultiDeviceSelect: React.FC<MultiDeviceSelectProps> = props => {
                                         },
                                     },
                                     'li button.MuiButtonBase-root.Mui-disabled': {
+                                        color: 'var(--gray-4)',
                                         backgroundColor: 'var(--gray-2)',
                                     },
                                     ul: {

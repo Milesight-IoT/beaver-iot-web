@@ -86,6 +86,7 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
                         <IconButton
                             size="small"
                             sx={{
+                                color: 'text.secondary',
                                 '&.MuiIconButton-root:hover': {
                                     backgroundColor: 'var(--hover-background-1)',
                                     borderRadius: '50%',
@@ -111,6 +112,7 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
                         <IconButton
                             size="small"
                             sx={{
+                                color: 'text.secondary',
                                 '&.MuiIconButton-root:hover': {
                                     backgroundColor: 'var(--hover-background-1)',
                                     borderRadius: '50%',
