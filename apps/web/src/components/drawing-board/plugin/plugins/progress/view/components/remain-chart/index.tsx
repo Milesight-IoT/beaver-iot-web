@@ -32,7 +32,7 @@ export default React.memo(({ Icon, color, percent, showIcon = true }: IProps) =>
                         }}
                     />
                 </div>
-                <div className="ms-remain-chart__percent">{`${percent || 0}%`}</div>
+                <div className="ms-remain-chart__percent">{`${percent || '- '}%`}</div>
             </div>
         </div>
     );
