@@ -51,7 +51,10 @@ const Toolbar: React.FC<ToolbarProps> = props => {
                     })}
                     title={getIntlText('dashboard.tip.return_dashboard_list')}
                 >
-                    <IconButton onClick={() => navigate('/dashboard')}>
+                    <IconButton
+                        sx={{ color: 'text.secondary' }}
+                        onClick={() => navigate('/dashboard')}
+                    >
                         <GridViewIcon />
                     </IconButton>
                 </Tooltip>

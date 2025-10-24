@@ -100,7 +100,7 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
     }, [deviceDetail]);
 
     const renderNormalMode = (
-        <Stack className="xl:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+        <Stack className="xl:d-none" direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
             <IconButton
                 disabled={disabled}
                 onClick={enterFullscreen}
@@ -119,6 +119,9 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
                     isDisabledButton={disabled || disabledEdit}
                     placement="left"
                     title={disabledEdit ? disabledEditTip : null}
+                    sx={{
+                        cursor: disabled || disabledEdit ? 'not-allowed' : undefined,
+                    }}
                 >
                     <Button
                         disabled={disabled || disabledEdit}
@@ -175,7 +178,7 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
     });
 
     const renderEditMode = (
-        <Stack className="xl:d-none" direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+        <Stack className="xl:d-none" direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
             <PluginListPopover
                 disabled={loading}
                 deviceDetail={deviceDetail}

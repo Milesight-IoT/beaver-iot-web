@@ -4,13 +4,12 @@
 
     &__container {
         // height: 257px;
-        padding: 0 @padding-md;
     }
 
     .check-all {
         display: flex;
         align-items: center;
-        margin-bottom: @margin-md;
+        padding: @padding-xs @padding-md;
 
         .title {
             margin-left: @margin-xs;
@@ -21,8 +20,12 @@
         display: flex;
         gap: 8px;
         align-items: center;
-        padding: @padding-xxs 0;
-        margin-bottom: @margin-xs;
+        padding: @padding-xs @padding-md;
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--hover-background-1);
+        }
 
         .info {
             display: flex;
@@ -33,6 +36,22 @@
             .description {
                 color: var(--text-color-tertiary);
                 .text-size(@font-size-1);
+            }
+        }
+
+        &.disabled {
+            cursor: default;
+
+            .info {
+                color: var(--text-color-disable);
+
+                .description {
+                    color: var(--text-color-disable);
+                }
+            }
+
+            &:hover {
+                background-color: var(--component-background);
             }
         }
     }

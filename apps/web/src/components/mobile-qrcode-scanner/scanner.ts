@@ -167,14 +167,16 @@ class QRCodeScanner {
     /**
      * Get available cameras
      */
-    static getCameras() {
+    static getCameras(options?: { filter?: (device: MediaDeviceInfo) => boolean }) {
         return new Promise<MediaDeviceInfo[]>((resolve, reject) => {
             navigator.mediaDevices
                 .enumerateDevices()
                 .then(devices => {
-                    const inputCameras = devices.filter(device => {
-                        return device.kind === 'videoinput';
-                    });
+                    const inputCameras = devices
+                        .filter(device => {
+                            return device.kind === 'videoinput';
+                        })
+                        .filter(options?.filter || (() => true));
                     resolve(inputCameras);
                 })
                 .catch(err => {
@@ -206,10 +208,39 @@ class QRCodeScanner {
         const width = options.width || DEFAULT_VIDEO_WIDTH;
         const height = options.height || DEFAULT_VIDEO_HEIGHT;
 
+        const cameras = await QRCodeScanner.getCameras({
+            filter: ({ label }) => !label?.includes('front'),
+        });
         const cameraConfig = merge({}, DEFAULT_CAMERA_CONFIG, options.cameraConfig, {
             width: { ideal: width },
             height: { ideal: height },
+            resizeMode: 'none',
         });
+
+        /**
+         * Compatible with HarmonyOS system
+         * Note: HarmonyOS has multiple back cameras, and we should use the one that has
+         * maximum `aspectRatio.max` value.
+         */
+        if (cameras.length > 1) {
+            const camera =
+                cameras
+                    .sort((a, b) => {
+                        // @ts-ignore
+                        const aAspectRatio = a.getCapabilities?.()?.aspectRatio || '';
+                        // @ts-ignore
+                        const bAspectRatio = b.getCapabilities?.()?.aspectRatio || '';
+                        if (!aAspectRatio.max || !bAspectRatio.max) return 0;
+                        return bAspectRatio.max - aAspectRatio.max;
+                    })
+                    .find(device => {
+                        // @ts-ignore
+                        const facingMode = device.getCapabilities?.()?.facingMode || [];
+                        return facingMode?.includes('environment');
+                    }) || cameras[cameras.length - 1];
+
+            cameraConfig.deviceId = camera.deviceId;
+        }
 
         if (!videoElement) return;
         try {

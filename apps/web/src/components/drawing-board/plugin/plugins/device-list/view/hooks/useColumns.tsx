@@ -146,7 +146,7 @@ const useColumns = <T extends TableRowDataType>({
                                 }
                             >
                                 <IconButton
-                                    sx={{ width: 30, height: 30 }}
+                                    sx={{ width: 30, height: 30, color: 'text.secondary' }}
                                     onClick={() => {
                                         handleServiceClick(row?.serviceEntities?.[0]);
                                     }}
