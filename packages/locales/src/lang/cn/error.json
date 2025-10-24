@@ -10,6 +10,7 @@
     "error.http.blueprint_library_resources_fetch_failed": "更新失败：设备蓝图文件包解析失败。",
     "error.http.codec_resource_format_error": "codec资源的格式不合法。",
     "error.http.codec_resource_request_error": "设备编解码器codec仓库请求错误。",
+    "error.http.custom_device_must_input_app_key": "添加失败，非Milesight设备Application Key必填。",
     "error.http.dashboard_name_exist": "仪表板名称已存在",
     "error.http.data_no_found": "数据未找到",
     "error.http.device_bind_error": "设备绑定错误",
