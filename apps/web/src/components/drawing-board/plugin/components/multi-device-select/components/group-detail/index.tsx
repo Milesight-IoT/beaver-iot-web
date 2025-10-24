@@ -51,6 +51,9 @@ const GroupDetail: React.FC<GroupDetailProps> = props => {
                     color: 'var(--text-color-tertiary)',
                 }}
                 onChange={(_, checked) => handleCheckedChange(checked, item)}
+                onClick={e => {
+                    e?.stopPropagation();
+                }}
             />
         );
 
@@ -67,7 +70,11 @@ const GroupDetail: React.FC<GroupDetailProps> = props => {
 
     const renderDeviceItem = (item: DeviceDetail) => {
         return (
-            <div key={item.key} className={styles['device-item']}>
+            <div
+                key={item.key}
+                className={styles['device-item']}
+                onClick={() => handleCheckedChange(!isChecked(item), item)}
+            >
                 {renderCheckbox(item)}
                 <Avatar>
                     <DnsIcon />

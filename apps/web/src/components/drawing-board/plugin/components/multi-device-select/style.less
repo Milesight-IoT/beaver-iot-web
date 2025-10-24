@@ -49,7 +49,14 @@
 
         &-all {
             color: var(--text-color-secondary);
-            cursor: pointer;
+
+            &.active {
+                cursor: pointer;
+
+                &:hover {
+                    color: var(--primary-color-base);
+                }
+            }
         }
 
         &-group {

@@ -96,8 +96,14 @@ const MultiDeviceSelect: React.FC<MultiDeviceSelectProps> = props => {
 
                     <div className="multi-device-select__path">
                         <div
-                            className="multi-device-select__path-all"
+                            className={cls('multi-device-select__path-all', {
+                                active: !!selectedGroup,
+                            })}
                             onClick={() => {
+                                if (!selectedGroup) {
+                                    return;
+                                }
+
                                 updateSelectedGroup(undefined);
                                 setPageNum(1);
                             }}

@@ -21,8 +21,14 @@
         display: flex;
         gap: 8px;
         align-items: center;
-        padding: @padding-xxs 0;
+        padding: @padding-xxs 0 @padding-xxs @padding-xxs;
         margin-bottom: @margin-xs;
+        border-radius: @border-radius-xs;
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--hover-background-1);
+        }
 
         .info {
             display: flex;
