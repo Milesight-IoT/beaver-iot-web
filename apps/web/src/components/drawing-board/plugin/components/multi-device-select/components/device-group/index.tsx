@@ -25,13 +25,13 @@ const DeviceGroup: React.FC<DeviceGroupProps> = props => {
 
     const renderItem = (item: DeviceGroupItemProps) => {
         return (
-            <div key={item.id} className={styles.item}>
+            <div key={item.id} className={styles.item} onClick={() => updateSelectedGroup(item)}>
                 {renderCheckbox(item)}
                 <div className={styles.name}>
                     <Tooltip autoEllipsis title={item.name} />
                 </div>
                 <div className={styles.count}>{item.device_count}</div>
-                <div className={styles.icon} onClick={() => updateSelectedGroup(item)}>
+                <div className={styles.icon}>
                     <IconButton>
                         <ArrowForwardIosIcon sx={{ width: '10px', height: '10px' }} />
                     </IconButton>

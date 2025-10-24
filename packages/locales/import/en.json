@@ -350,6 +350,7 @@
   "error.http.blueprint_library_resources_fetch_failed": "Update failed: Failed to parse the device blueprint file package.",
   "error.http.codec_resource_format_error": "The codec resource format is invalid.",
   "error.http.codec_resource_request_error": "Device codec repository request error.",
+  "error.http.custom_device_must_input_app_key": "Addition failed. Application Key is required for non-Milesight devices.",
   "error.http.dashboard_name_exist": "Dashboard name already exists",
   "error.http.data_no_found": "Data not found",
   "error.http.device_bind_error": "Device binding error",

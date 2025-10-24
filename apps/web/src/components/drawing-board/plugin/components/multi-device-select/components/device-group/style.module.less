@@ -13,7 +13,13 @@
     .item {
         display: flex;
         align-items: center;
-        padding: @padding-xs 0;
+        padding: @padding-xs 0 @padding-xs @padding-xxs;
+        border-radius: @border-radius-xs;
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--hover-background-1);
+        }
     }
 
     .name {
@@ -30,9 +36,9 @@
     .icon {
         display: flex;
 
-        &:hover {
-            background-color: var(--hover-background-1);
-            border-radius: @border-radius-xxl;
-        }
+        // &:hover {
+        //     background-color: var(--hover-background-1);
+        //     border-radius: @border-radius-xxl;
+        // }
     }
 }
