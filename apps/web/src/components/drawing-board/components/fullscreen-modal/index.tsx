@@ -62,9 +62,9 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
     /**
      * Mobile compatible
      */
-    if ((matchTablet && (['deviceList'] as PluginType[]).includes(plugin?.type)) || disabled) {
-        return children;
-    }
+    const hiddenEnterFullscreen = useMemo(() => {
+        return (matchTablet && (['deviceList'] as PluginType[]).includes(plugin?.type)) || disabled;
+    }, [matchTablet, plugin, disabled]);
 
     return (
         <>
@@ -92,7 +92,14 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
             {isFullscreen ? null : (
                 <>
                     {children}
-                    <Box component="div" sx={iconSx} onClick={enterFullscreen}>
+                    <Box
+                        component="div"
+                        sx={{
+                            ...iconSx,
+                            display: hiddenEnterFullscreen ? 'none' : undefined,
+                        }}
+                        onClick={enterFullscreen}
+                    >
                         <IconButton size="small">
                             <FullscreenIcon sx={{ width: '20px', height: '20px' }} />
                         </IconButton>

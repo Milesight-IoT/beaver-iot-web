@@ -141,6 +141,12 @@ const MultiDeviceSelect: React.FC<MultiDeviceSelectProps> = props => {
                                             backgroundColor: 'transparent',
                                         },
                                     },
+                                    'li button.MuiButtonBase-root.Mui-disabled': {
+                                        backgroundColor: 'var(--gray-2)',
+                                    },
+                                    ul: {
+                                        gap: '4px',
+                                    },
                                 }}
                             />
                         </div>
