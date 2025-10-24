@@ -8,7 +8,11 @@ import {
     useStableValue,
     useGridLayout,
 } from '@/components/drawing-board/plugin/hooks';
-import { getChartColor, getChartGridBottom } from '@/components/drawing-board/plugin/utils';
+import {
+    getChartColor,
+    getChartGridBottom,
+    getChartGridRight,
+} from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { PluginFullscreenContext } from '@/components/drawing-board/components';
 import { EchartsUI, useEcharts } from '@/components/echarts';
@@ -124,7 +128,7 @@ const View = (props: ViewProps) => {
                 containLabel: true,
                 top: hGrid >= 4 ? '42px' : 30, // Adjust the top blank space of the chart area
                 left: hGrid > 2 ? 0 : -26,
-                right: wGrid > 2 || hGrid > 2 ? 15 : 0,
+                right: getChartGridRight(wGrid, hGrid),
                 ...getChartGridBottom(wGrid, hGrid),
             },
             tooltip: {
