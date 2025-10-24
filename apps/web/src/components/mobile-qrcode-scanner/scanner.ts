@@ -214,20 +214,30 @@ class QRCodeScanner {
         const cameraConfig = merge({}, DEFAULT_CAMERA_CONFIG, options.cameraConfig, {
             width: { ideal: width },
             height: { ideal: height },
+            resizeMode: 'none',
         });
 
         /**
          * Compatible with HarmonyOS system
-         * Note: HarmonyOS has multiple cameras, and the last one usually is
-         * the clearest back camera.
+         * Note: HarmonyOS has multiple back cameras, and we should use the one that has
+         * maximum `aspectRatio.max` value.
          */
         if (cameras.length > 1) {
             const camera =
-                cameras.reverse().find(device => {
-                    // @ts-ignore
-                    const { facingMode } = device.getCapabilities?.() || {};
-                    return facingMode?.includes('environment');
-                }) || cameras[cameras.length - 1];
+                cameras
+                    .sort((a, b) => {
+                        // @ts-ignore
+                        const aAspectRatio = a.getCapabilities?.()?.aspectRatio || '';
+                        // @ts-ignore
+                        const bAspectRatio = b.getCapabilities?.()?.aspectRatio || '';
+                        if (!aAspectRatio.max || !bAspectRatio.max) return 0;
+                        return bAspectRatio.max - aAspectRatio.max;
+                    })
+                    .find(device => {
+                        // @ts-ignore
+                        const facingMode = device.getCapabilities?.()?.facingMode || [];
+                        return facingMode?.includes('environment');
+                    }) || cameras[cameras.length - 1];
 
             cameraConfig.deviceId = camera.deviceId;
         }
