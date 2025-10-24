@@ -127,5 +127,6 @@ export function useData(props: MultiDeviceSelectProps) {
         setPageNum,
         handleSearch,
         updateSelectedGroup,
+        setKeyword,
     };
 }

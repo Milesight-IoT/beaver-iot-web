@@ -83,7 +83,15 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
                 >
                     {children}
                     <Box component="div" sx={iconSx} onClick={exitFullscreen}>
-                        <IconButton size="small">
+                        <IconButton
+                            size="small"
+                            sx={{
+                                '&.MuiIconButton-root:hover': {
+                                    backgroundColor: 'var(--hover-background-1)',
+                                    borderRadius: '50%',
+                                },
+                            }}
+                        >
                             <FullscreenExitIcon sx={{ width: '20px', height: '20px' }} />
                         </IconButton>
                     </Box>
@@ -100,7 +108,15 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
                         }}
                         onClick={enterFullscreen}
                     >
-                        <IconButton size="small">
+                        <IconButton
+                            size="small"
+                            sx={{
+                                '&.MuiIconButton-root:hover': {
+                                    backgroundColor: 'var(--hover-background-1)',
+                                    borderRadius: '50%',
+                                },
+                            }}
+                        >
                             <FullscreenIcon sx={{ width: '20px', height: '20px' }} />
                         </IconButton>
                     </Box>

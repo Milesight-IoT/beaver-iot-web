@@ -81,7 +81,7 @@ export function useBackgroundHelper() {
 
                 const imageData = canvas.toDataURL();
                 setHelperBg({
-                    minHeight: 'calc(100% + 60px)',
+                    minHeight: '100%',
                     backgroundImage: `url(${imageData})`,
                     backgroundPosition: `${GRID_LAYOUT_MARGIN}px ${GRID_LAYOUT_MARGIN}px`,
                     backgroundSize: `${gridWidth}px ${HELPER_RECT_HEIGHT}px`,

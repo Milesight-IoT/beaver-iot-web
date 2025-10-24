@@ -4,12 +4,13 @@
 
     &__container {
         // height: 257px;
-        padding: 0 @padding-md;
+        padding: 0 @padding-md 0 @padding-sm;
     }
 
     .check-all {
         display: flex;
         align-items: center;
+        padding-left: @padding-xxs;
         margin-bottom: @margin-md;
 
         .title {
@@ -39,6 +40,22 @@
             .description {
                 color: var(--text-color-tertiary);
                 .text-size(@font-size-1);
+            }
+        }
+
+        &.disabled {
+            cursor: default;
+
+            .info {
+                color: var(--text-color-disable);
+
+                .description {
+                    color: var(--text-color-disable);
+                }
+            }
+
+            &:hover {
+                background-color: var(--component-background);
             }
         }
     }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Checkbox, Avatar } from '@mui/material';
 import { isEmpty } from 'lodash-es';
+import cls from 'classnames';
 
 import { useI18n } from '@milesight/shared/src/hooks';
 import {
@@ -69,14 +70,28 @@ const GroupDetail: React.FC<GroupDetailProps> = props => {
     };
 
     const renderDeviceItem = (item: DeviceDetail) => {
+        const disabledItem = isDisabled(item);
+
         return (
             <div
                 key={item.key}
-                className={styles['device-item']}
-                onClick={() => handleCheckedChange(!isChecked(item), item)}
+                className={cls(styles['device-item'], {
+                    [styles.disabled]: disabledItem,
+                })}
+                onClick={() => {
+                    if (disabledItem) {
+                        return;
+                    }
+
+                    handleCheckedChange(!isChecked(item), item);
+                }}
             >
                 {renderCheckbox(item)}
-                <Avatar>
+                <Avatar
+                    sx={{
+                        backgroundColor: disabledItem ? 'var(--gray-3)' : undefined,
+                    }}
+                >
                     <DnsIcon />
                 </Avatar>
                 <div className={styles.info}>

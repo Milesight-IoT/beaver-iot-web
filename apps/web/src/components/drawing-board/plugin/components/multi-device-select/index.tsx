@@ -10,7 +10,7 @@ import {
 import cls from 'classnames';
 
 import { useI18n } from '@milesight/shared/src/hooks';
-import { SearchIcon, RefreshIcon } from '@milesight/shared/src/components';
+import { SearchIcon, RefreshIcon, CancelIcon } from '@milesight/shared/src/components';
 
 import { Tooltip } from '@/components';
 import { DeviceGroup, GroupDetail } from './components';
@@ -42,6 +42,7 @@ const MultiDeviceSelect: React.FC<MultiDeviceSelectProps> = props => {
         setPageNum,
         handleSearch,
         updateSelectedGroup,
+        setKeyword,
     } = useData(props);
 
     const renderContent = () => {
@@ -82,6 +83,7 @@ const MultiDeviceSelect: React.FC<MultiDeviceSelectProps> = props => {
                     <div className="multi-device-select__search">
                         <FormControl fullWidth>
                             <OutlinedInput
+                                value={keyword}
                                 fullWidth
                                 placeholder={getIntlText('common.label.search')}
                                 onChange={handleSearch}
@@ -89,6 +91,19 @@ const MultiDeviceSelect: React.FC<MultiDeviceSelectProps> = props => {
                                     <InputAdornment position="start">
                                         <SearchIcon />
                                     </InputAdornment>
+                                }
+                                endAdornment={
+                                    keyword ? (
+                                        <CancelIcon
+                                            sx={{ color: 'var(--gray-4)', cursor: 'pointer' }}
+                                            onClick={e => {
+                                                e?.preventDefault();
+                                                e?.stopPropagation();
+
+                                                setKeyword('');
+                                            }}
+                                        />
+                                    ) : undefined
                                 }
                             />
                         </FormControl>
