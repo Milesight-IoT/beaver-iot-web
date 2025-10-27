@@ -1,5 +1,6 @@
 import { merge } from 'lodash-es';
 import { delay } from '@milesight/shared/src/utils/tools';
+import { isWeiXin } from '@milesight/shared/src/utils/userAgent';
 import BarcodeDetector from './barcode-detector';
 import { DEFAULT_SCAN_CONFIG, DEFAULT_CAMERA_CONFIG } from './config';
 import type { ScanConfig, CameraConfig, ScanResult } from './types';
@@ -222,7 +223,7 @@ class QRCodeScanner {
          * Note: HarmonyOS has multiple back cameras, and we should use the one that has
          * maximum `aspectRatio.max` value.
          */
-        if (cameras.length > 1) {
+        if (cameras.length > 1 && !isWeiXin()) {
             const camera =
                 cameras
                     .sort((a, b) => {
