@@ -319,6 +319,11 @@ label.@{mui-prefix}FormControlLabel-root {
 
                 &:hover {
                     color: var(--primary-color-7);
+
+                    // Mobile Responsive: Don't change color on hover
+                    .bp-down(@grid-breakpoints[sm], {
+                        color: var(--icon-color-gray-secondary);
+                    });
                 }
 
                 .@{mui-prefix}SvgIcon-root {
