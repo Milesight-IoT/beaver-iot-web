@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from 'react';
+import React, { useMemo, useContext, useRef } from 'react';
 import { useMemoizedFn, useRequest } from 'ahooks';
 import { isEmpty, isNil, get } from 'lodash-es';
 import { Controller } from 'react-hook-form';
@@ -40,6 +40,7 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
     const { isPreview } = configJson || {};
     const context = useContext(DrawingBoardContext);
     const pluginFullscreenCxt = useContext(PluginFullscreenContext);
+    const deviceListRef = useRef<HTMLDivElement>(null);
 
     const keyword = useMemo(() => {
         return get(pluginFullscreenCxt?.extraParams, 'keyword', '');
@@ -227,11 +228,19 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
                     slots={{
                         // eslint-disable-next-line react/no-unstable-nested-components
                         row(props, otherProps) {
+                            const newWidth = deviceListRef?.current?.getBoundingClientRect()?.width;
+
                             if (props?.rowId === NO_MORE_DATA_SIGN) {
                                 return (
                                     <div
                                         key={props.rowId}
                                         className="device-list-view__no-data-tip border-top"
+                                        style={{
+                                            maxWidth:
+                                                newWidth && newWidth > 32
+                                                    ? `${newWidth - 32}px`
+                                                    : undefined,
+                                        }}
                                     >
                                         <div>{getIntlText('common.label.no_more_data')}</div>
                                     </div>
@@ -252,7 +261,7 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
     };
 
     return (
-        <div className="device-list-view">
+        <div ref={deviceListRef} className="device-list-view">
             {renderContent()}
             {visible && (
                 <Modal
