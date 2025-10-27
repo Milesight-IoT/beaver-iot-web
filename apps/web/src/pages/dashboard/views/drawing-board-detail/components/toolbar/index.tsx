@@ -1,5 +1,5 @@
-import React from 'react';
-import { IconButton, Divider } from '@mui/material';
+import React, { useMemo } from 'react';
+import { IconButton, Divider, type SxProps } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { isNil } from 'lodash-es';
 import cls from 'classnames';
@@ -41,6 +41,29 @@ const Toolbar: React.FC<ToolbarProps> = props => {
         );
     };
 
+    const gridViewIconSx: SxProps = useMemo(() => {
+        const baseSx: SxProps = {
+            color: 'text.secondary',
+        };
+
+        if (matchTablet) {
+            return {
+                ...baseSx,
+                '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                    color: 'text.secondary',
+                },
+            };
+        }
+
+        return baseSx;
+    }, [matchTablet]);
+
+    const GridViewIconJSX = (
+        <IconButton sx={gridViewIconSx} onClick={() => navigate('/dashboard')}>
+            <GridViewIcon />
+        </IconButton>
+    );
+
     return (
         <div className="dashboard-detail__toolbar">
             <div className="dashboard-detail__toolbar-left">
@@ -51,12 +74,7 @@ const Toolbar: React.FC<ToolbarProps> = props => {
                     })}
                     title={getIntlText('dashboard.tip.return_dashboard_list')}
                 >
-                    <IconButton
-                        sx={{ color: 'text.secondary' }}
-                        onClick={() => navigate('/dashboard')}
-                    >
-                        <GridViewIcon />
-                    </IconButton>
+                    {GridViewIconJSX}
                 </Tooltip>
                 <Divider
                     className={cls({
@@ -84,11 +102,7 @@ const Toolbar: React.FC<ToolbarProps> = props => {
                 </div>
             )}
             <div className="dashboard-detail__toolbar-right">
-                {matchTablet && (
-                    <IconButton onClick={() => navigate('/dashboard')}>
-                        <GridViewIcon />
-                    </IconButton>
-                )}
+                {matchTablet && GridViewIconJSX}
                 {drawingBoardOperation?.()}
             </div>
         </div>
