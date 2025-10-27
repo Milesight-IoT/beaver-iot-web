@@ -106,7 +106,7 @@ export const getChartGridBottom = (
 
     if (hGrid >= 4 && wGrid <= 2) {
         return {
-            bottom: 50,
+            bottom: 40,
         };
     }
 
@@ -125,4 +125,13 @@ export const getChartGridBottom = (
     return {
         bottom: 0,
     };
+};
+
+/** Get Chart grid right value */
+export const getChartGridRight = (wGrid: number, hGrid: number): number => {
+    if (hGrid > 2 && wGrid <= 2) {
+        return 5;
+    }
+
+    return wGrid > 2 || hGrid > 2 ? 15 : 0;
 };

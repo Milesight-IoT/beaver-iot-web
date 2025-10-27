@@ -6,7 +6,7 @@ import type { HoverSearchInputProps } from './interface';
 export function useSearch(props: HoverSearchInputProps) {
     const { keyword, changeKeyword } = props || {};
 
-    const [showSearch, setShowSearch] = useState(false);
+    const [showSearch, setShowSearch] = useState(!!keyword);
 
     const inputRef = useRef<HTMLInputElement>();
     const textFieldRef = useRef(null);

@@ -1,5 +1,6 @@
 import { merge } from 'lodash-es';
 import { delay } from '@milesight/shared/src/utils/tools';
+// import { isWeiXin } from '@milesight/shared/src/utils/userAgent';
 import BarcodeDetector from './barcode-detector';
 import { DEFAULT_SCAN_CONFIG, DEFAULT_CAMERA_CONFIG } from './config';
 import type { ScanConfig, CameraConfig, ScanResult } from './types';
@@ -127,6 +128,7 @@ class QRCodeScanner {
     private videoElement: HTMLVideoElement | null;
     private canvasElement: HTMLCanvasElement | null;
     private canvasContext: CanvasRenderingContext2D | null = null;
+    private maskElement: HTMLCanvasElement | null = null;
 
     private flashAvailable: boolean = false;
     private scanFrame: number | null = null;
@@ -150,7 +152,7 @@ class QRCodeScanner {
         this.videoElement = globalVideoElement;
         this.videoElement.width = width;
         this.videoElement.height = height;
-        // this.containerElement.appendChild(videoElement);
+        // this.containerElement.appendChild(this.videoElement);
 
         // Create canvas element
         const canvasElement = document.createElement('canvas');
@@ -199,6 +201,64 @@ class QRCodeScanner {
     }
 
     /**
+     * Draw mask
+     */
+    private drawMask({
+        width,
+        height,
+        scanAreaX,
+        scanAreaY,
+        scanAreaWidth,
+        scanAreaHeight,
+        radius,
+        opacity,
+    }: {
+        width: number;
+        height: number;
+        scanAreaX: number;
+        scanAreaY: number;
+        scanAreaWidth: number;
+        scanAreaHeight: number;
+        radius: number;
+        opacity: number;
+    }) {
+        const maskElement = document.createElement('canvas');
+        const maskContext = maskElement.getContext('2d');
+
+        maskElement.width = width;
+        maskElement.height = height;
+        maskElement.style.position = 'relative';
+        maskElement.style.top = `-${height}px`;
+        if (!maskContext) return;
+
+        maskContext.beginPath();
+        maskContext.rect(0, 0, width, height);
+        maskContext.moveTo(scanAreaX + radius, scanAreaY);
+        maskContext.arcTo(
+            scanAreaX + scanAreaWidth,
+            scanAreaY,
+            scanAreaX + scanAreaWidth,
+            scanAreaY + scanAreaHeight,
+            radius,
+        );
+        maskContext.arcTo(
+            scanAreaX + scanAreaWidth,
+            scanAreaY + scanAreaHeight,
+            scanAreaX,
+            scanAreaY + scanAreaHeight,
+            radius,
+        );
+        maskContext.arcTo(scanAreaX, scanAreaY + scanAreaHeight, scanAreaX, scanAreaY, radius);
+        maskContext.arcTo(scanAreaX, scanAreaY, scanAreaX + scanAreaWidth, scanAreaY, radius);
+        maskContext.closePath();
+        maskContext.fillStyle = `rgba(0, 0, 0, ${opacity})`;
+        maskContext.fill('evenodd');
+
+        this.maskElement = maskElement;
+        this.containerElement.appendChild(maskElement);
+    }
+
+    /**
      * Start scanner
      * @param CameraConfig Camera config
      * @returns
@@ -209,13 +269,33 @@ class QRCodeScanner {
         const height = options.height || DEFAULT_VIDEO_HEIGHT;
 
         const cameras = await QRCodeScanner.getCameras({
-            filter: ({ label }) => !label?.includes('front'),
+            filter: device => {
+                // @ts-ignore
+                const facingMode = device.getCapabilities?.()?.facingMode;
+
+                if (facingMode?.length) {
+                    return !facingMode.includes('user');
+                }
+                return !device.label?.includes('front');
+            },
         });
         const cameraConfig = merge({}, DEFAULT_CAMERA_CONFIG, options.cameraConfig, {
             width: { ideal: width },
             height: { ideal: height },
             resizeMode: 'none',
         });
+
+        // console.warn(
+        //     'cameras',
+        //     cameras.map(camera => camera.toJSON()),
+        // );
+        // console.warn('cameraConfig', cameraConfig);
+        // cameras.forEach(camera => {
+        //     // @ts-ignore
+        //     const capabilities = camera.getCapabilities?.() || {};
+
+        //     console.warn('capabilities', capabilities);
+        // });
 
         /**
          * Compatible with HarmonyOS system
@@ -324,40 +404,18 @@ class QRCodeScanner {
             const scanRegionRadius = scanRegion?.radius || 0;
             const scanRegionOpacity = scanRegion?.opacity || 0.5;
 
-            canvasContext.beginPath();
-            canvasContext.rect(0, 0, width, height);
-            canvasContext.moveTo(scanRegionX + scanRegionRadius, scanRegionY);
-            canvasContext.arcTo(
-                scanRegionX + scanRegionWidth,
-                scanRegionY,
-                scanRegionX + scanRegionWidth,
-                scanRegionY + scanRegionHeight,
-                scanRegionRadius,
-            );
-            canvasContext.arcTo(
-                scanRegionX + scanRegionWidth,
-                scanRegionY + scanRegionHeight,
-                scanRegionX,
-                scanRegionY + scanRegionHeight,
-                scanRegionRadius,
-            );
-            canvasContext.arcTo(
-                scanRegionX,
-                scanRegionY + scanRegionHeight,
-                scanRegionX,
-                scanRegionY,
-                scanRegionRadius,
-            );
-            canvasContext.arcTo(
-                scanRegionX,
-                scanRegionY,
-                scanRegionX + scanRegionWidth,
-                scanRegionY,
-                scanRegionRadius,
-            );
-            canvasContext.closePath();
-            canvasContext.fillStyle = `rgba(0, 0, 0, ${scanRegionOpacity})`;
-            canvasContext.fill('evenodd');
+            if (!this.maskElement) {
+                this.drawMask({
+                    width,
+                    height,
+                    scanAreaX: scanRegionX,
+                    scanAreaY: scanRegionY,
+                    scanAreaWidth: scanRegionWidth,
+                    scanAreaHeight: scanRegionHeight,
+                    radius: scanRegionRadius,
+                    opacity: scanRegionOpacity,
+                });
+            }
 
             const imageData = canvasContext.getImageData(
                 scanRegionX,
@@ -445,6 +503,13 @@ class QRCodeScanner {
             this.containerElement.removeChild(this.canvasElement!);
         }
         this.canvasElement = null;
+        this.canvasContext = null;
+
+        // Remove mask
+        if (this.containerElement.contains(this.maskElement)) {
+            this.containerElement.removeChild(this.maskElement!);
+        }
+        this.maskElement = null;
 
         this.scanFrame && cancelAnimationFrame(this.scanFrame);
     }

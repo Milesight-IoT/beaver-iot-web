@@ -32,6 +32,7 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
     const { matchTablet } = useTheme();
 
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [extraParams, setExtraParams] = useState<Record<string, any>>({});
 
     const iconSx = useMemo((): SxProps => {
         return { position: 'absolute', top: '12px', right: '12px', ...sx };
@@ -40,8 +41,10 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
     const contextVal = useMemo((): PluginFullscreenContextProps => {
         return {
             pluginFullScreen: isFullscreen,
+            extraParams,
+            setExtraParams,
         };
-    }, [isFullscreen]);
+    }, [extraParams, isFullscreen]);
 
     useEffect(() => {
         onFullscreen?.(isFullscreen);
@@ -66,38 +69,48 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
         return (matchTablet && (['deviceList'] as PluginType[]).includes(plugin?.type)) || disabled;
     }, [matchTablet, plugin, disabled]);
 
+    const fullscreenIconSx: SxProps = useMemo(() => {
+        const baseSx: SxProps = {
+            color: 'text.secondary',
+            '&.MuiIconButton-root:hover': {
+                backgroundColor: 'var(--hover-background-1)',
+                borderRadius: '50%',
+            },
+        };
+
+        if (matchTablet) {
+            return {
+                ...baseSx,
+                '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                    color: 'text.secondary',
+                },
+            };
+        }
+
+        return baseSx;
+    }, [matchTablet]);
+
     return (
-        <>
-            <PluginFullscreenContext.Provider value={contextVal}>
-                <Modal
-                    fullScreen
-                    visible={isFullscreen}
-                    showCloseIcon={false}
-                    onCancel={exitFullscreen}
-                    footer={null}
-                    sx={{
-                        '&.ms-modal-root .ms-modal-content.MuiDialogContent-root': {
-                            padding: 0,
-                        },
-                    }}
-                >
-                    {children}
-                    <Box component="div" sx={iconSx} onClick={exitFullscreen}>
-                        <IconButton
-                            size="small"
-                            sx={{
-                                color: 'text.secondary',
-                                '&.MuiIconButton-root:hover': {
-                                    backgroundColor: 'var(--hover-background-1)',
-                                    borderRadius: '50%',
-                                },
-                            }}
-                        >
-                            <FullscreenExitIcon sx={{ width: '20px', height: '20px' }} />
-                        </IconButton>
-                    </Box>
-                </Modal>
-            </PluginFullscreenContext.Provider>
+        <PluginFullscreenContext.Provider value={contextVal}>
+            <Modal
+                fullScreen
+                visible={isFullscreen}
+                showCloseIcon={false}
+                onCancel={exitFullscreen}
+                footer={null}
+                sx={{
+                    '&.ms-modal-root .ms-modal-content.MuiDialogContent-root': {
+                        padding: 0,
+                    },
+                }}
+            >
+                {children}
+                <Box component="div" sx={iconSx} onClick={exitFullscreen}>
+                    <IconButton size="small" sx={fullscreenIconSx}>
+                        <FullscreenExitIcon sx={{ width: '20px', height: '20px' }} />
+                    </IconButton>
+                </Box>
+            </Modal>
             {isFullscreen ? null : (
                 <>
                     {children}
@@ -109,22 +122,13 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
                         }}
                         onClick={enterFullscreen}
                     >
-                        <IconButton
-                            size="small"
-                            sx={{
-                                color: 'text.secondary',
-                                '&.MuiIconButton-root:hover': {
-                                    backgroundColor: 'var(--hover-background-1)',
-                                    borderRadius: '50%',
-                                },
-                            }}
-                        >
+                        <IconButton size="small" sx={fullscreenIconSx}>
                             <FullscreenIcon sx={{ width: '20px', height: '20px' }} />
                         </IconButton>
                     </Box>
                 </>
             )}
-        </>
+        </PluginFullscreenContext.Provider>
     );
 };
 

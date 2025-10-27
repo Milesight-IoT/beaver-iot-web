@@ -48,7 +48,15 @@ const MobileFullscreen: React.FC<MobileFullscreenProps> = props => {
             <div className={styles.header}>
                 <div className={styles.title}>{getIntlText('device.title.device_list')}</div>
                 <div className={styles.icon}>
-                    <IconButton onClick={() => setFullscreen(false)}>
+                    <IconButton
+                        sx={{
+                            color: 'text.secondary',
+                            '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                                color: 'text.secondary',
+                            },
+                        }}
+                        onClick={() => setFullscreen(false)}
+                    >
                         <FullscreenExitIcon sx={{ width: '20px', height: '20px' }} />
                     </IconButton>
                 </div>
