@@ -1,10 +1,10 @@
-import React, { memo, useMemo, forwardRef } from 'react';
+import React, { memo, forwardRef, useMemo } from 'react';
 import { type Map as LeafletMap, type LeafletEventHandlerFnMap, type LatLng } from 'leaflet';
 import { MapContainer, type MapContainerProps } from 'react-leaflet';
 import 'proj4leaflet';
 import { getTileLayerConfig, type MapTileType } from '@/services/map';
 import { DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT, DEFAULT_MAP_CENTER } from './constants';
-import { MapLayer } from './components';
+import { MapLayer, ZoomControl } from './components';
 
 import './style.less';
 
@@ -98,6 +98,7 @@ const Map = forwardRef<LeafletMap, MapOptions>(
                     style={{ width, height }}
                     zoom={zoom ?? defaultZoom}
                     center={center || DEFAULT_MAP_CENTER}
+                    zoomControl={false}
                     scrollWheelZoom={false}
                     // @ts-ignore Has one argument and it's a map instance
                     whenReady={e => {
@@ -116,6 +117,7 @@ const Map = forwardRef<LeafletMap, MapOptions>(
                         onLocationError={onLocationError}
                         onLocationFound={onLocationFound}
                     />
+                    <ZoomControl />
                     {children}
                 </MapContainer>
             </div>

@@ -1,0 +1,23 @@
+.leaflet-control.leaflet-control-zoom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    overflow: hidden;
+    border: 1px solid var(--border-color-base);
+    border-radius: @border-radius-base;
+
+    > [class^="leaflet-control-zoom-"] {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        text-decoration: none;
+        border: none;
+        .text-size(@font-size-xl);
+
+        &:not(:last-child) {
+            border-right: 1px solid var(--border-color-base);
+        }
+    }
+}

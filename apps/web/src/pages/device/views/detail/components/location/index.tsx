@@ -1,6 +1,6 @@
-import { useRef } from 'react';
-import { useSize } from 'ahooks';
-import { Map, MapMarker, type LeafletMap, type LatLng } from '@/components';
+import { useRef, useState } from 'react';
+import { useSize, useTimeout } from 'ahooks';
+import { Map, MapMarker, type LeafletMap, type LeafletMarker, type LatLng } from '@/components';
 import './style.less';
 
 const demoData = [
@@ -13,6 +13,17 @@ const Location = () => {
     const ref = useRef<HTMLDivElement>(null);
     const size = useSize(ref);
     const mapRef = useRef<LeafletMap>(null);
+    const [markers, setMarkers] = useState<Record<string, LeafletMarker>>({});
+
+    const handleMarkerReady = (key: string, marker: LeafletMarker) => {
+        setMarkers(prev => ({ ...prev, [key]: marker }));
+    };
+
+    useTimeout(() => {
+        const marker = markers[Object.keys(markers)[0]];
+
+        marker?.openPopup();
+    }, 3000);
 
     return (
         <div className="ms-com-device-location" ref={ref}>
@@ -38,7 +49,15 @@ const Location = () => {
                     }}
                 >
                     {demoData.map(latlng => (
-                        <MapMarker key={latlng.toString()} position={latlng} />
+                        <MapMarker
+                            key={latlng.toString()}
+                            position={latlng}
+                            popup={latlng.toString()}
+                            tooltip={latlng.toString()}
+                            onReady={marker => {
+                                handleMarkerReady(latlng.toString(), marker);
+                            }}
+                        />
                     ))}
                 </Map>
             )}

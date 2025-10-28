@@ -1,0 +1,66 @@
+// ========== Marker Icon ==========
+.@{prefix}-map-marker-icon-root {
+    font-size: 48px;
+    color: var(--icon-color-base);
+
+    .@{prefix}-map-marker-icon {
+        width: 1em;
+        height: 1em;
+        color: currentcolor;
+    }
+
+    &.@{prefix}-map-marker-color {
+        &-info {
+            color: var(--primary-color-8);
+        }
+
+        &-danger {
+            color: var(--icon-color-error);
+        }
+
+        &-warning {
+            color: var(--icon-color-warning);
+        }
+
+        &-success {
+            color: var(--icon-color-success);
+        }
+
+        &-disabled {
+            color: var(--icon-color-gray-tertiary);
+        }
+    }
+}
+
+// ========== Popup ==========
+.@{prefix}-map-popup.leaflet-popup {
+    .leaflet-popup-content {
+        margin: @margin-sm;
+        margin-right: 40px;
+    }
+
+    .leaflet-popup-close-button {
+        top: @margin-xs;
+        right: @margin-xs;
+        color: var(--icon-color-gray-tertiary);
+
+        &:hover,
+        &:focus {
+            color: var(--icon-color-gray-secondary);
+        }
+    }
+}
+
+// ========== Tooltip ==========
+.@{prefix}-map-tooltip.leaflet-tooltip {
+    padding: @padding-xxs @padding-xs;
+    color: var(--white);
+    background-color: var(--gray-color-9);
+    border-color: var(--gray-color-9);
+    border-radius: @border-radius-base;
+    // opacity: 1 !important;
+
+    &::before {
+        border-top-color: var(--gray-color-9);
+    }
+}
