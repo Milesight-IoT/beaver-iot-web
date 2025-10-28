@@ -89,6 +89,7 @@ const GroupDetail: React.FC<GroupDetailProps> = props => {
                 {renderCheckbox(item)}
                 <Avatar
                     sx={{
+                        color: '#ffffff',
                         backgroundColor: disabledItem ? 'var(--gray-3)' : undefined,
                     }}
                 >
