@@ -163,8 +163,8 @@ export interface ControlPanelConfig<T extends AnyDict = AnyDict> {
      */
     defaultCol: number;
     /**
-     * Set the component to display the default container, the minimum value is 1, and the maximum is 24
-     * @description The height of each behavior container is 1/24
+     * Set the component to display the default container, the minimum value is 1, and the maximum is 12
+     * @description The height of each behavior container is 1/12
      */
     defaultRow: number;
     /**
@@ -173,8 +173,8 @@ export interface ControlPanelConfig<T extends AnyDict = AnyDict> {
      */
     minCol?: number;
     /**
-     * Set the component to display the minimum container, the minimum value is 1, and the maximum is 24
-     * @description The height of each behavior container is 1/24
+     * Set the component to display the maximum container, the minimum value is 1, and the maximum is 12
+     * @description The height of each behavior container is 1/12
      */
     maxCol?: number;
     /**
@@ -183,8 +183,8 @@ export interface ControlPanelConfig<T extends AnyDict = AnyDict> {
      */
     minRow?: number;
     /**
-     * Set the component to display the minimum container, the minimum value is 1, and the maximum is 24
-     * @description The height of each behavior container is 1/24
+     * Set the component to display the maximum container, the minimum value is 1, and the maximum is 12
+     * @description The height of each behavior container is 1/12
      */
     maxRow?: number;
     /**
