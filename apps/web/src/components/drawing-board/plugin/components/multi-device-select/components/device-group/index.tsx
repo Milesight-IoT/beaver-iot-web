@@ -42,7 +42,10 @@ const DeviceGroup: React.FC<DeviceGroupProps> = props => {
 
     return (
         <div className={styles['device-group']}>
-            <LoadingWrapper loading={loading || devicesLoading}>
+            <LoadingWrapper
+                wrapperClassName={styles['device-group__loading']}
+                loading={loading || devicesLoading}
+            >
                 <div className={styles['device-group__container']}>
                     {deviceGroups.map(g => renderItem(g))}
                 </div>
