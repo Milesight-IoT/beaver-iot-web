@@ -29,6 +29,12 @@
                 .@{mui-prefix}InputBase-input {
                     padding-right: 0;
                 }
+
+                .@{mui-prefix}OutlinedInput-notchedOutline,
+                &:hover .@{mui-prefix}OutlinedInput-notchedOutline {
+                    border-color: var(--body-background);
+                    box-shadow: none !important;
+                }
             }
 
             .@{mui-prefix}SvgIcon-root {
