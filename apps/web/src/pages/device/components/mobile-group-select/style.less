@@ -13,6 +13,15 @@
 
     &-modal {
         .group-list {
+            .@{prefix}-loading {
+                max-height: calc(100vh - 130px);
+            }
+
+            &.loading {
+                max-height: 100%;
+                overflow: hidden;
+            }
+
             .group-item {
                 padding: @padding-md;
                 margin-bottom: @margin-sm;

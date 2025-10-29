@@ -1,7 +1,7 @@
 .@{prefix}-breadcrumbs {
     display: flex;
     align-items: center;
-    height: 49px;
+    height: 56px;
     padding: 0 @padding-md;
     background-color: var(--component-background);
     border-bottom: 1px solid var(--border-color-base);
@@ -20,6 +20,7 @@
         }
 
         .@{mui-prefix}Typography-root {
+            font-weight: @font-weight-medium;
             .text-size(@font-size-xl);
         }
     }
@@ -32,7 +33,9 @@
         }
 
         &--last {
+            font-weight: @font-weight-medium;
             color: var(--text-color-base);
+            .text-size(@font-size-xl);
         }
     }
 }

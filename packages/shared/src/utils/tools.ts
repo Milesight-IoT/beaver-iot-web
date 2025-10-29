@@ -880,3 +880,18 @@ export const getGeoLocation = () => {
         );
     });
 };
+
+/**
+ * Transform the size in bytes to a human-readable string.
+ * @param size Size in bytes
+ * @returns Human-readable size string
+ */
+export function getSizeString(size: number, decimalPlaces = 2) {
+    const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    let unitIndex = 0;
+    while (size >= 1024 && unitIndex < units.length - 1) {
+        size /= 1024;
+        unitIndex++;
+    }
+    return `${size.toFixed(decimalPlaces)} ${units[unitIndex]}`;
+}

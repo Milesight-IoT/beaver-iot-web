@@ -4,7 +4,7 @@ import { isEmpty } from 'lodash-es';
 import { List } from '@mui/material';
 
 import { useI18n, useTheme, useMediaQuery } from '@milesight/shared/src/hooks';
-import { LoadingWrapper, Modal } from '@milesight/shared/src/components';
+import { LoadingWrapper } from '@milesight/shared/src/components';
 
 import { Empty } from '@/components';
 import { PERMISSIONS } from '@/constants';
@@ -95,14 +95,6 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
     };
 
     const renderDrawingBoard = () => {
-        if (loadingWidgets) {
-            return (
-                <LoadingWrapper loading>
-                    <List />
-                </LoadingWrapper>
-            );
-        }
-
         if (!Array.isArray(widgets) || isEmpty(widgets)) {
             return renderEmptyDrawingBoard();
         }
@@ -119,7 +111,14 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
         );
     };
 
-    const DrawingBoardContent = (
+    if (loadingWidgets) {
+        return (
+            <LoadingWrapper loading>
+                <List sx={{ height: '300px' }} />
+            </LoadingWrapper>
+        );
+    }
+    return (
         <DrawingBoardContext.Provider value={drawingBoardContext}>
             <div className="drawing-board">
                 <div ref={drawingBoardRef} className="drawing-board__wrapper ms-perfect-scrollbar">
@@ -137,27 +136,6 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
             </div>
         </DrawingBoardContext.Provider>
     );
-
-    if (isFullscreen) {
-        return (
-            <Modal
-                fullScreen
-                visible={isFullscreen}
-                showCloseIcon={false}
-                onCancel={exitFullscreen}
-                footer={null}
-                sx={{
-                    '&.ms-modal-root .ms-modal-content.MuiDialogContent-root': {
-                        padding: 0,
-                    },
-                }}
-            >
-                {DrawingBoardContent}
-            </Modal>
-        );
-    }
-
-    return DrawingBoardContent;
 });
 
 export default DrawingBoard;

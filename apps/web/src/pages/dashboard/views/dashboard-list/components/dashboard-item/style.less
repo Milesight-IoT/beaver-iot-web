@@ -16,8 +16,8 @@
         height: 0;
         padding-bottom: 56.25%;
         overflow: hidden;
-        border-top-left-radius: @border-radius-base;
-        border-top-right-radius: @border-radius-base;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
     }
 
     &__img {
@@ -135,5 +135,11 @@
         }
 
         .border-color-before();
+    }
+
+    &.hidden-border-color {
+        &::before {
+            display: none;
+        }
     }
 }

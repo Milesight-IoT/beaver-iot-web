@@ -5,8 +5,9 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: @padding-xs @padding-md;
+        padding: 10px @padding-md;
         background-color: var(--main-background);
+        border-bottom: @border-base;
 
         &-left {
             display: flex;
@@ -46,4 +47,8 @@
         color: var(--text-color-primary);
         .text-size(@font-size-4);
     }
+}
+
+.my-layout__drawing-board--fullscreen .dashboard-detail__toolbar {
+    display: none;
 }

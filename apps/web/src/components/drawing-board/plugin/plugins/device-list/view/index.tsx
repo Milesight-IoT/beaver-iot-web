@@ -1,6 +1,6 @@
-import React, { useMemo, useState, useContext } from 'react';
-import { useRequest } from 'ahooks';
-import { isEmpty, isNil } from 'lodash-es';
+import React, { useMemo, useContext, useRef } from 'react';
+import { useMemoizedFn, useRequest } from 'ahooks';
+import { isEmpty, isNil, get } from 'lodash-es';
 import { Controller } from 'react-hook-form';
 import cls from 'classnames';
 import { GridRow } from '@mui/x-data-grid';
@@ -12,6 +12,7 @@ import { type EntityFormDataProps } from '@/hooks';
 import { TablePro, HoverSearchInput, Tooltip } from '@/components';
 import { deviceAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
+import { PluginFullscreenContext } from '@/components/drawing-board/components';
 import { DEVICE_STATUS_ENTITY_UNIQUE_ID } from '@/constants';
 import { type DeviceListControlPanelConfig } from '../control-panel';
 import { type BoardPluginProps } from '../../../types';
@@ -38,8 +39,18 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
     const { devices: unStableDevices } = config || {};
     const { isPreview } = configJson || {};
     const context = useContext(DrawingBoardContext);
+    const pluginFullscreenCxt = useContext(PluginFullscreenContext);
+    const deviceListRef = useRef<HTMLDivElement>(null);
 
-    const [keyword, setKeyword] = useState('');
+    const keyword = useMemo(() => {
+        return get(pluginFullscreenCxt?.extraParams, 'keyword', '');
+    }, [pluginFullscreenCxt?.extraParams]);
+
+    const setKeyword = useMemoizedFn((newVal: string) => {
+        pluginFullscreenCxt?.setExtraParams({
+            keyword: newVal,
+        });
+    });
 
     const { getIntlText } = useI18n();
     const { matchTablet } = useTheme();
@@ -172,6 +183,7 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
         loadingDeviceDrawingBoard,
         handleDeviceDrawingBoard,
         handleServiceClick,
+        setKeyword,
     ]);
 
     /**
@@ -216,11 +228,19 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
                     slots={{
                         // eslint-disable-next-line react/no-unstable-nested-components
                         row(props, otherProps) {
+                            const newWidth = deviceListRef?.current?.getBoundingClientRect()?.width;
+
                             if (props?.rowId === NO_MORE_DATA_SIGN) {
                                 return (
                                     <div
                                         key={props.rowId}
                                         className="device-list-view__no-data-tip border-top"
+                                        style={{
+                                            maxWidth:
+                                                newWidth && newWidth > 32
+                                                    ? `${newWidth - 32}px`
+                                                    : undefined,
+                                        }}
                                     >
                                         <div>{getIntlText('common.label.no_more_data')}</div>
                                     </div>
@@ -241,7 +261,7 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
     };
 
     return (
-        <div className="device-list-view">
+        <div ref={deviceListRef} className="device-list-view">
             {renderContent()}
             {visible && (
                 <Modal

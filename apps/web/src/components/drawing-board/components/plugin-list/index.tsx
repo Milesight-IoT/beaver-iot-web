@@ -2,7 +2,7 @@ import { Grid2 as Grid } from '@mui/material';
 import { WidgetDetail } from '@/services/http/dashboard';
 import pluginImg from '@/assets/plugin.png';
 import { useFilterPlugins } from '../../hooks';
-import type { BoardPluginProps } from '../../plugin/types';
+import type { BoardPluginProps, PluginType } from '../../plugin/types';
 
 import './style.less';
 
@@ -29,28 +29,30 @@ export default (props: PluginListProps) => {
     return (
         <div className="board-plugin-list">
             <Grid container gap={2}>
-                {pluginsControlPanel?.map((pluginConfig: BoardPluginProps) => {
-                    return (
-                        <Grid
-                            key={pluginConfig.type}
-                            size={2}
-                            className="board-plugin-item"
-                            sx={{ width: 120, height: 120 }}
-                        >
-                            <div
-                                className="board-plugin-item-content"
-                                onClick={() => handleClick(pluginConfig)}
+                {pluginsControlPanel
+                    ?.filter(p => !(['radarChart'] as PluginType[]).includes(p?.type))
+                    ?.map((pluginConfig: BoardPluginProps) => {
+                        return (
+                            <Grid
+                                key={pluginConfig.type}
+                                size={2}
+                                className="board-plugin-item"
+                                sx={{ width: 120, height: 120 }}
                             >
-                                <img
-                                    className="board-plugin-item-content-icon"
-                                    src={pluginConfig?.icon || pluginImg}
-                                    alt="plugin"
-                                />
-                                <span>{pluginConfig.name}</span>
-                            </div>
-                        </Grid>
-                    );
-                })}
+                                <div
+                                    className="board-plugin-item-content"
+                                    onClick={() => handleClick(pluginConfig)}
+                                >
+                                    <img
+                                        className="board-plugin-item-content-icon"
+                                        src={pluginConfig?.icon || pluginImg}
+                                        alt="plugin"
+                                    />
+                                    <span>{pluginConfig.name}</span>
+                                </div>
+                            </Grid>
+                        );
+                    })}
             </Grid>
         </div>
     );

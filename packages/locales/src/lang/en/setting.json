@@ -4,7 +4,7 @@
     "setting.blueprint.edit_modal_title": "Edit Blueprint Source",
     "setting.blueprint.label_sync_result": "Update Result",
     "setting.blueprint.management_title": "Device Blueprint Source Management",
-    "setting.blueprint.message_sync_failed": "Update failed. Please check your network connection.",
+    "setting.blueprint.message_sync_failed": "Update failed. Please check if the blueprint repository is available.",
     "setting.blueprint.message_sync_success": "Already the latest version.",
     "setting.blueprint.official_store_helper_text": "By default, the source checks the Beaver IoT official repository every three hours for the latest available version and automatically updates if one is found. Click the [Edit] button on the right to switch to manual upload.",
     "setting.blueprint.title_official_store": "Beaver IoT Official Blueprint Repository",

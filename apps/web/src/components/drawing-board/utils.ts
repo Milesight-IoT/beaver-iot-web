@@ -24,7 +24,9 @@ export const filterWidgets = (widgets: WidgetDetail[]): WidgetDetail[] => {
                 'isPreview',
                 'configProps',
                 'view',
-            ]),
+                'fullscreenable',
+                'fullscreenIconSx',
+            ] as (keyof BoardPluginProps)[]),
         };
     });
 };

@@ -319,11 +319,21 @@ label.@{mui-prefix}FormControlLabel-root {
 
                 &:hover {
                     color: var(--primary-color-7);
+
+                    // Mobile Responsive: Don't change color on hover
+                    .bp-down(@grid-breakpoints[sm], {
+                        color: var(--icon-color-gray-secondary);
+                    });
                 }
 
                 .@{mui-prefix}SvgIcon-root {
                     &:hover {
                         fill: var(--primary-color-7);
+
+                        // Mobile Responsive: Don't change color on hover
+                        .bp-down(@grid-breakpoints[sm], {
+                            fill: var(--icon-color-gray-secondary);
+                        });
                     }
                 }
             }
@@ -357,7 +367,7 @@ label.@{mui-prefix}FormControlLabel-root {
             color: var(--icon-color-gray-tertiary);
         }
 
-        &:has(.@{mui-prefix}FormLabel-asterisk) {
+        &.@{mui-prefix}-required {
             padding-left: @padding-xs;
         }
 
