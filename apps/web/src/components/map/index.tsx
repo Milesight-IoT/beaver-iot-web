@@ -1,10 +1,14 @@
 import React, { memo, forwardRef, useMemo } from 'react';
-import { type Map as LeafletMap, type LeafletEventHandlerFnMap, type LatLng } from 'leaflet';
-import { MapContainer, AttributionControl, type MapContainerProps } from 'react-leaflet';
+import {
+    type Map as MapInstance,
+    type LeafletEventHandlerFnMap,
+    type LatLngExpression as LatLng,
+} from 'leaflet';
+import { MapContainer, type MapContainerProps } from 'react-leaflet';
 import 'proj4leaflet';
 import { getTileLayerConfig, type MapTileType } from '@/services/map';
 import { DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT, DEFAULT_MAP_CENTER } from './constants';
-import { MapLayer, ZoomControl } from './components';
+import { MapLayer, MapZoomControl } from './components';
 
 import './style.less';
 
@@ -45,14 +49,14 @@ interface MapOptions {
     zoomControl?: boolean | React.ReactNode;
 
     /**
-     * Map ready event handler
+     * Map event handlers
      */
-    onReady?: (map: LeafletMap) => void;
+    eventHandlers?: LeafletEventHandlerFnMap;
 
     /**
-     * Map click event handler
+     * Map ready event handler
      */
-    onClick?: LeafletEventHandlerFnMap['click'];
+    onReady?: (map: MapInstance) => void;
 
     /**
      * Location error event handler
@@ -68,7 +72,7 @@ interface MapOptions {
 /**
  * Map Component
  */
-const Map = forwardRef<LeafletMap, MapOptions>(
+const Map = forwardRef<MapInstance, MapOptions>(
     (
         {
             type = 'openStreet.normal',
@@ -78,9 +82,9 @@ const Map = forwardRef<LeafletMap, MapOptions>(
             zoom,
             center,
             children,
-            zoomControl = <ZoomControl />,
+            zoomControl = <MapZoomControl />,
+            eventHandlers,
             onReady,
-            onClick,
             onLocationError,
             onLocationFound,
         },
@@ -119,7 +123,7 @@ const Map = forwardRef<LeafletMap, MapOptions>(
                         attribution={attribution}
                         coordType={coordType}
                         autoCenterLocate={!center}
-                        onClick={onClick}
+                        eventHandlers={eventHandlers}
                         onLocationError={onLocationError}
                         onLocationFound={onLocationFound}
                     />
@@ -131,6 +135,6 @@ const Map = forwardRef<LeafletMap, MapOptions>(
     },
 );
 
-export { MapMarker, type LeafletMarker } from './components';
-export { type LeafletMap, type LatLng };
+export { MapMarker, MapControl, MapZoomControl, type MarkerInstance } from './components';
+export { type MapInstance, type LatLng };
 export default memo(Map) as typeof Map;

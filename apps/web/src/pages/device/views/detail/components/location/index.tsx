@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useSize, useTimeout } from 'ahooks';
-import { Map, MapMarker, type LeafletMap, type LeafletMarker, type LatLng } from '@/components';
+import { Map, MapMarker, type MapInstance, type MarkerInstance, type LatLng } from '@/components';
 import './style.less';
 
 const demoData = [
@@ -12,10 +12,10 @@ const demoData = [
 const Location = () => {
     const ref = useRef<HTMLDivElement>(null);
     const size = useSize(ref);
-    const mapRef = useRef<LeafletMap>(null);
-    const [markers, setMarkers] = useState<Record<string, LeafletMarker>>({});
+    const mapRef = useRef<MapInstance>(null);
+    const [markers, setMarkers] = useState<Record<string, MarkerInstance>>({});
 
-    const handleMarkerReady = (key: string, marker: LeafletMarker) => {
+    const handleMarkerReady = (key: string, marker: MarkerInstance) => {
         setMarkers(prev => ({ ...prev, [key]: marker }));
     };
 
@@ -46,6 +46,11 @@ const Location = () => {
                         mapRef.current?.fitBounds(demoData as any, {
                             padding: [20, 20],
                         });
+                    }}
+                    eventHandlers={{
+                        move(e) {
+                            console.log(e);
+                        },
                     }}
                 >
                     {demoData.map(latlng => (
