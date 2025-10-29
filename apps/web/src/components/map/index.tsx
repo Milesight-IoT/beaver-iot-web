@@ -1,6 +1,6 @@
 import React, { memo, forwardRef, useMemo } from 'react';
 import { type Map as LeafletMap, type LeafletEventHandlerFnMap, type LatLng } from 'leaflet';
-import { MapContainer, type MapContainerProps } from 'react-leaflet';
+import { MapContainer, AttributionControl, type MapContainerProps } from 'react-leaflet';
 import 'proj4leaflet';
 import { getTileLayerConfig, type MapTileType } from '@/services/map';
 import { DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT, DEFAULT_MAP_CENTER } from './constants';
@@ -40,6 +40,11 @@ interface MapOptions {
     children?: React.ReactNode;
 
     /**
+     * Whether to show zoom control or custom zoom control
+     */
+    zoomControl?: boolean | React.ReactNode;
+
+    /**
      * Map ready event handler
      */
     onReady?: (map: LeafletMap) => void;
@@ -73,6 +78,7 @@ const Map = forwardRef<LeafletMap, MapOptions>(
             zoom,
             center,
             children,
+            zoomControl = <ZoomControl />,
             onReady,
             onClick,
             onLocationError,
@@ -117,7 +123,7 @@ const Map = forwardRef<LeafletMap, MapOptions>(
                         onLocationError={onLocationError}
                         onLocationFound={onLocationFound}
                     />
-                    <ZoomControl />
+                    {zoomControl}
                     {children}
                 </MapContainer>
             </div>

@@ -3,6 +3,7 @@ import { type LeafletEventHandlerFnMap } from 'leaflet';
 import { useMap, useMapEvents, type MapContainerProps } from 'react-leaflet';
 import 'proj4leaflet';
 import TileLayer, { type TileLayerProps } from '../tile-layer';
+import { PREFER_ZOOM_LEVEL } from '../../constants';
 
 interface Props extends TileLayerProps {
     /**
@@ -51,7 +52,7 @@ const MapLayer = memo(
                 const { latlng } = e;
 
                 if (autoCenterLocate) {
-                    map.flyTo(latlng, 13);
+                    map.flyTo(latlng, PREFER_ZOOM_LEVEL);
                 }
 
                 onLocationFound?.(e);
