@@ -25,7 +25,7 @@ import './style.less';
  * Select device component
  */
 const MultiDeviceSelect: React.FC<MultiDeviceSelectProps> = props => {
-    const { required, label, error, helperText } = props;
+    const { sx, required, label, error, helperText } = props;
 
     const { getIntlText } = useI18n();
     const {
@@ -54,7 +54,15 @@ const MultiDeviceSelect: React.FC<MultiDeviceSelectProps> = props => {
 
     return (
         <MultiDeviceSelectContext.Provider value={contextVal}>
-            <FormControl className="multi-device-select" fullWidth required={required}>
+            <FormControl
+                className="multi-device-select"
+                fullWidth
+                required={required}
+                sx={{
+                    height: '100%',
+                    ...sx,
+                }}
+            >
                 <div className="multi-device-select__header">
                     <InputLabel required={required}>
                         {label || getIntlText('setting.integration.ai_bind_device_choose_device')}

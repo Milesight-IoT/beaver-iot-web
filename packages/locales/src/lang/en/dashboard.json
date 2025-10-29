@@ -40,5 +40,6 @@
     "dashboard.tip.disabled_edit_device_drawing_board": "The current canvas is the device canvas. Please go to the device details page to edit it.",
     "dashboard.tip.return_dashboard_list": "Return to Dashboard List",
     "dashboard.tip.small_screen_empty": "There are no widgets here. Please add them on the PC.",
-    "dashboard.unset_as_home_dashboard_tip": "Cancel Top"
+    "dashboard.unset_as_home_dashboard_tip": "Cancel Top",
+    "dashboard.plugin_name_map": "Map"
 }

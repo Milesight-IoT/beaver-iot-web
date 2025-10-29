@@ -1,0 +1,22 @@
+.map-plugin-view {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: @padding-md;
+    background-color: var(--main-background);
+
+    &__header {
+        margin-bottom: @margin-md;
+        font-weight: @font-weight-medium;
+        .text-size(@font-size-lg);
+    }
+
+    &__map {
+        flex: 1;
+
+        .ms-map-root .leaflet-container {
+            border-radius: @border-radius-base;
+        }
+    }
+}

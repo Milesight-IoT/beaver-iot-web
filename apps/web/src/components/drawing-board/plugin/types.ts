@@ -112,7 +112,8 @@ export type PluginType =
     | 'switch'
     | 'text'
     | 'trigger'
-    | 'deviceList';
+    | 'deviceList'
+    | 'map';
 
 /**
  * The plugin control panel config
