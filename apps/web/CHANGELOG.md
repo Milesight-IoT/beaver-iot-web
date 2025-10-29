@@ -1,5 +1,29 @@
 # @app/web
 
+## 1.3.0
+
+### Minor Changes
+
+-   4b3e233: Device Module Details: New Device Canvas Tab Added.
+-   4b3e233: The Dashboard module plugin now features a full-screen mode.
+-   4b3e233: Newly Added Devices List Component.
+-   308b5b6: Add mobile device page
+-   321d648: Support scanning QR codes to quickly fill in EUI
+-   4e89f86: Migrated existing plugin directories to the DrawingBoard component directory for a clearer, unified structure.
+-   8e275fe: Add help center entrance and verison info in sidebar
+-   6574c2a: Add device_offline_timeout field for MQTT integration
+-   3f2bc2b: Making it a installable PWA
+-   835477f: Introduced a dedicated DrawingBoard component for plugin rendering, enabling modularised management of plugin rendering.
+-   6ed9c4f: Support advanced filters in device detail module
+-   1f58e8f: Add blueprint source management module
+-   308b5b6: Add some components for mobile devices
+-   6db867a: Remove the tab for switching dashboard, Add a dashboard list page, and access dashboard details through the dashboard list.
+-   4e89f86: Upgraded plugin Control Panel configurations from JSON to TypeScript format, supporting functions and complex logical expressions. This allows for more flexible parameter configuration and effortlessly implements dynamic associations between form fields.
+
+### Patch Changes
+
+-   4c00ddb: Support vconsole in mobile, and local https
+
 ## 1.2.5
 
 ### Patch Changes
