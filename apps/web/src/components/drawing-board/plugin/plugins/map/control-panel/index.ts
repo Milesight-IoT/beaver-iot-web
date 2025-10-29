@@ -24,6 +24,7 @@ const mapControlPanelConfig = (): ControlPanelConfig<MapConfigType> => {
         minCol: 3,
         maxRow: 12,
         maxCol: 12,
+        fullscreenable: true,
         configProps: [
             {
                 label: 'map config',

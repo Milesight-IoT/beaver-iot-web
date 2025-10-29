@@ -165,6 +165,7 @@ export {
     FlashlightOff as FlashlightOffIcon,
     Dns as DnsIcon,
     SpaceDashboard as SpaceDashboardIcon,
+    LocationOn as LocationOnIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';

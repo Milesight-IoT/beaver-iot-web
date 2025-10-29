@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Tooltip } from '@/components';
 import { useStableValue } from '../../../hooks';
-import { BaseMap } from './component';
+import { BaseMap, Alarm } from './component';
 
 import { type MapConfigType } from '../control-panel';
 import { type BoardPluginProps } from '../../../types';
@@ -21,13 +21,13 @@ const MapView: React.FC<MapViewProps> = props => {
 
     const { stableValue: devices } = useStableValue(unStableValue);
 
-    console.log('props ? ', props);
-
     return (
         <div className="map-plugin-view">
             {title && <Tooltip className="map-plugin-view__header" autoEllipsis title={title} />}
 
             <BaseMap />
+
+            <Alarm />
         </div>
     );
 };
