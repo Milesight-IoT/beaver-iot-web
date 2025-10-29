@@ -176,6 +176,9 @@ export function useCheckbox() {
                     color: 'var(--text-color-tertiary)',
                 }}
                 onChange={(_, checked) => handleCheckedChange(checked, item)}
+                onClick={e => {
+                    e?.stopPropagation();
+                }}
             />
         );
 

@@ -12,7 +12,7 @@ import {
     Stack,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { appVersion, HELP_CENTER_ADDRESS } from '@milesight/shared/src/config';
+import { appVersion, HELP_CENTER_ADDRESS, baseUrl } from '@milesight/shared/src/config';
 import { LogoutIcon, HelpOutlineIcon, InfoOutlinedIcon } from '@milesight/shared/src/components';
 import {
     iotLocalStorage,
@@ -115,7 +115,12 @@ const MoreUserInfo: React.FC<MoreUserInfoProps> = ({ userInfo }) => {
                                 setUserInfo(null);
                                 iotLocalStorage.removeItem(TOKEN_CACHE_KEY);
                                 iotLocalStorage.removeItem(MAIN_CANVAS_KEY);
-                                navigate('/auth/login');
+
+                                // navigate('/auth/login');
+                                const base = baseUrl || '/';
+                                window.location.replace(
+                                    base.endsWith('/') ? `${base}auth/login` : `${base}/auth/login`,
+                                );
                             }}
                         >
                             <ListItemIcon>

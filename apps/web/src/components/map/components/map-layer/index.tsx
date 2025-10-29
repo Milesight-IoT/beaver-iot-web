@@ -3,6 +3,7 @@ import { type LeafletEventHandlerFnMap } from 'leaflet';
 import { useMap, useMapEvents, type MapContainerProps } from 'react-leaflet';
 import 'proj4leaflet';
 import TileLayer, { type TileLayerProps } from '../tile-layer';
+import { PREFER_ZOOM_LEVEL } from '../../constants';
 
 interface Props extends TileLayerProps {
     /**
@@ -10,10 +11,7 @@ interface Props extends TileLayerProps {
      */
     autoCenterLocate?: boolean | MapContainerProps['center'];
 
-    /**
-     * Map click event handler
-     */
-    onClick?: LeafletEventHandlerFnMap['click'];
+    eventHandlers?: LeafletEventHandlerFnMap;
 
     /**
      * Location error event handler
@@ -37,13 +35,16 @@ interface Props extends TileLayerProps {
  * @description The component is used for integrating tile layer and map events
  */
 const MapLayer = memo(
-    ({ autoCenterLocate, onClick, onLocationError, onLocationFound, ...props }: Props) => {
+    ({
+        autoCenterLocate,
+        eventHandlers = {},
+        onLocationError,
+        onLocationFound,
+        ...props
+    }: Props) => {
         const map = useMap();
 
         useMapEvents({
-            click(e) {
-                onClick?.(e);
-            },
             locationerror(err) {
                 onLocationError?.(err);
             },
@@ -51,7 +52,7 @@ const MapLayer = memo(
                 const { latlng } = e;
 
                 if (autoCenterLocate) {
-                    map.flyTo(latlng, 13);
+                    map.flyTo(latlng, PREFER_ZOOM_LEVEL);
                 }
 
                 onLocationFound?.(e);
@@ -59,6 +60,8 @@ const MapLayer = memo(
                 // map.fitBounds(bounds);
             },
         });
+
+        useMapEvents(eventHandlers);
 
         useEffect(() => {
             map.locate();

@@ -1,6 +1,6 @@
 import { memo, forwardRef, useRef, useImperativeHandle, useEffect } from 'react';
 import cls from 'classnames';
-import L, { Marker as LeafletMarker } from 'leaflet';
+import L, { Marker as MarkerInstance } from 'leaflet';
 import {
     Marker,
     Popup,
@@ -32,7 +32,7 @@ interface BMarkerProps extends MarkerProps {
     /** Tooltip props */
     tooltipProps?: TooltipProps;
 
-    onReady?: (marker: LeafletMarker) => void;
+    onReady?: (marker: MarkerInstance) => void;
 }
 
 const genLocationIcon = ({ color, colorType }: { color?: string; colorType: ColorType }) => {
@@ -60,7 +60,7 @@ const genLocationIcon = ({ color, colorType }: { color?: string; colorType: Colo
 /**
  * Map Marker Component
  */
-const BMarker = forwardRef<LeafletMarker, BMarkerProps>(
+const BMarker = forwardRef<MarkerInstance, BMarkerProps>(
     (
         {
             colorType = 'info',
@@ -74,7 +74,7 @@ const BMarker = forwardRef<LeafletMarker, BMarkerProps>(
         },
         ref,
     ) => {
-        const markerRef = useRef<LeafletMarker>(null);
+        const markerRef = useRef<MarkerInstance>(null);
 
         useEffect(() => {
             onReady?.(markerRef.current!);
@@ -109,5 +109,5 @@ const BMarker = forwardRef<LeafletMarker, BMarkerProps>(
     },
 );
 
-export type { LeafletMarker };
+export type { MarkerInstance };
 export default memo(BMarker) as typeof BMarker;

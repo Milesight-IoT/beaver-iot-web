@@ -6,12 +6,16 @@
     &__table {
         width: 100%;
         height: 100%;
-        padding: @padding-md;
+        padding: 10px @padding-md @padding-md @padding-md;
 
         &.fullscreenable {
             .ms-table-pro .ms-table-pro__header {
                 padding-right: @margin-xxl;
             }
+        }
+
+        .ms-table-pro .ms-table-pro__header {
+            margin-bottom: 10px;
         }
     }
 
@@ -30,6 +34,7 @@
         align-items: center;
         justify-content: center;
         padding: @padding-xs 0 @padding-md;
+        line-height: 24px;
         color: var(--text-color-tertiary);
 
         &.border-top {

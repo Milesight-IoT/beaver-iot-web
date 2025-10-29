@@ -1,4 +1,5 @@
 .@{prefix}-view-403 {
+    position: relative;
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -6,6 +7,13 @@
     justify-content: center;
     height: 100%;
     text-align: center;
+
+    .@{prefix}-mobile-topbar {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+    }
 
     &__wrapper {
         display: flex;

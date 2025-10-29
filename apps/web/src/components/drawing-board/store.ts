@@ -8,6 +8,10 @@ interface DrawingBoardStore {
     pluginsControlPanel: BoardPluginProps[];
     /** update all plugins control panel */
     updatePluginsControlPanel: (panels: BoardPluginProps[]) => void;
+    /** The entire drawing board displayed in fullscreen */
+    drawingBoardFullscreen: boolean;
+    /** Set whether the entire drawing board displayed in fullscreen */
+    setDrawingBoardFullscreen: (isFullscreen: boolean) => void;
 }
 
 /**
@@ -18,6 +22,10 @@ const useDrawingBoardStore = create(
         pluginsControlPanel: [],
         updatePluginsControlPanel(panels) {
             set(() => ({ pluginsControlPanel: panels }));
+        },
+        drawingBoardFullscreen: false,
+        setDrawingBoardFullscreen(isFullscreen) {
+            set(() => ({ drawingBoardFullscreen: isFullscreen }));
         },
     })),
 );

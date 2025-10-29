@@ -14,6 +14,7 @@ import { globalAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/servi
 import { Sidebar, RouteLoadingIndicator } from '@/components';
 import { useUserPermissions } from '@/hooks';
 import useSidebarStore from '@/components/sidebar/store';
+import useDrawingBoardStore from '@/components/drawing-board/store';
 import { useRoutePermission, useSWUpdate } from './hooks';
 import { LayoutSkeleton } from './components';
 
@@ -27,6 +28,9 @@ function BasicLayout() {
     const setUserInfo = useUserStore(state => state.setUserInfo);
     const token = iotLocalStorage.getItem(TOKEN_CACHE_KEY);
     const { shrink } = useSidebarStore(useStoreShallow(['shrink']));
+    const { drawingBoardFullscreen } = useDrawingBoardStore(
+        useStoreShallow('drawingBoardFullscreen'),
+    );
 
     useRequest(
         async () => {
@@ -108,6 +112,7 @@ function BasicLayout() {
             className={cls('ms-layout', {
                 'ms-layout__sidebar--collapsed': matchTablet ? true : shrink,
                 'ms-layout__sidebar--expanding': matchTablet ? false : !shrink,
+                'my-layout__drawing-board--fullscreen': drawingBoardFullscreen,
             })}
         >
             <RouteLoadingIndicator />

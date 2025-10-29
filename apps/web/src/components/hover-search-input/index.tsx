@@ -59,7 +59,10 @@ const HoverSearchInput: React.FC<HoverSearchInputProps> = props => {
                             }}
                         />
                     ) : (
-                        <SearchIcon color={showSearch ? 'disabled' : 'action'} />
+                        <SearchIcon
+                            sx={{ color: 'text.secondary' }}
+                            color={showSearch ? 'disabled' : 'action'}
+                        />
                     ),
                 },
             }}

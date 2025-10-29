@@ -10,7 +10,11 @@ import {
     useStableValue,
     useGridLayout,
 } from '@/components/drawing-board/plugin/hooks';
-import { getChartColor, getChartGridBottom } from '@/components/drawing-board/plugin/utils';
+import {
+    getChartColor,
+    getChartGridBottom,
+    getChartGridRight,
+} from '@/components/drawing-board/plugin/utils';
 import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { PluginFullscreenContext } from '@/components/drawing-board/components';
 import { EchartsUI, useEcharts } from '@/components/echarts';
@@ -38,7 +42,7 @@ const View = (props: ViewProps) => {
 
     const chartWrapperRef = useRef<HTMLDivElement>(null);
 
-    const { grey } = useTheme();
+    const { grey, matchTablet } = useTheme();
     const pluginFullscreenCxt = useContext(PluginFullscreenContext);
     const { wGrid = 3, hGrid = 3 } = useGridLayout(
         pluginFullscreenCxt?.pluginFullScreen ? { w: 4, h: 4 } : isPreview ? { w: 3, h: 3 } : pos,
@@ -65,11 +69,12 @@ const View = (props: ViewProps) => {
     });
     const { renderEcharts } = useEcharts(chartRef);
     const { getYAxisRange } = useYAxisRange({ chartShowData, entity: latestEntities });
-    const { zoomChart, hoverZoomBtn } = useZoomChart({
+    const { isBigData, zoomChart, hoverZoomBtn } = useZoomChart({
         xAxisConfig,
         xAxisRange,
         chartZoomRef,
         chartWrapperRef,
+        chartShowData,
     });
 
     useEffect(() => {
@@ -111,6 +116,7 @@ const View = (props: ViewProps) => {
                 },
             },
             series: chartShowData.map((chart, index) => ({
+                sampling: isBigData?.[index] ? 'lttb' : 'none',
                 name: chart.entityLabel,
                 type: 'line',
                 data: chart.chartOwnData.map(v => [v.timestamp, v.value]),
@@ -125,9 +131,10 @@ const View = (props: ViewProps) => {
                     color: resultColor[index], // Data dot color
                 },
                 connectNulls: true,
-                showSymbol: true, // Whether to display data dots
+                showSymbol: !isBigData?.[index], // Whether to display data dots
                 symbolSize: 2, // Data dot size
                 emphasis: {
+                    disabled: matchTablet,
                     focus: 'series',
                     scale: 4,
                     itemStyle: {
@@ -154,7 +161,7 @@ const View = (props: ViewProps) => {
                 containLabel: true,
                 top: hGrid >= 4 ? '42px' : 30, // Adjust the top blank space of the chart area
                 left: hGrid > 2 ? 0 : -25,
-                right: wGrid > 2 || hGrid > 2 ? 15 : 0,
+                right: getChartGridRight(wGrid, hGrid),
                 ...getChartGridBottom(wGrid, hGrid),
             },
             tooltip: {
@@ -314,6 +321,8 @@ const View = (props: ViewProps) => {
         chartRef,
         chartShowData,
         xAxisRange,
+        isBigData,
+        matchTablet,
         hoverZoomBtn,
         zoomChart,
         getYAxisRange,

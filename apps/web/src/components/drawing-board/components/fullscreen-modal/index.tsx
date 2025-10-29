@@ -6,8 +6,10 @@ import { useTheme } from '@milesight/shared/src/hooks';
 import { FullscreenIcon, FullscreenExitIcon, Modal } from '@milesight/shared/src/components';
 
 import { PluginFullscreenContext, PluginFullscreenContextProps } from './context';
+import { type BoardPluginProps, type PluginType } from '../../plugin/types';
 
 export interface FullscreenModalProps {
+    plugin: BoardPluginProps;
     children?: React.ReactNode;
     /**
      * Disabled fullscreen
@@ -25,11 +27,12 @@ export interface FullscreenModalProps {
  * Higher order component to fullscreen
  */
 const FullscreenModal: React.FC<FullscreenModalProps> = props => {
-    const { children, disabled, sx, onFullscreen } = props;
+    const { plugin, children, disabled, sx, onFullscreen } = props;
 
     const { matchTablet } = useTheme();
 
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [extraParams, setExtraParams] = useState<Record<string, any>>({});
 
     const iconSx = useMemo((): SxProps => {
         return { position: 'absolute', top: '12px', right: '12px', ...sx };
@@ -38,8 +41,10 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
     const contextVal = useMemo((): PluginFullscreenContextProps => {
         return {
             pluginFullScreen: isFullscreen,
+            extraParams,
+            setExtraParams,
         };
-    }, [isFullscreen]);
+    }, [extraParams, isFullscreen]);
 
     useEffect(() => {
         onFullscreen?.(isFullscreen);
@@ -60,45 +65,70 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
     /**
      * Mobile compatible
      */
-    if (matchTablet || disabled) {
-        return children;
-    }
+    const hiddenEnterFullscreen = useMemo(() => {
+        return (matchTablet && (['deviceList'] as PluginType[]).includes(plugin?.type)) || disabled;
+    }, [matchTablet, plugin, disabled]);
 
-    if (isFullscreen) {
-        return (
-            <PluginFullscreenContext.Provider value={contextVal}>
-                <Modal
-                    fullScreen
-                    visible={isFullscreen}
-                    showCloseIcon={false}
-                    onCancel={exitFullscreen}
-                    footer={null}
-                    sx={{
-                        '&.ms-modal-root .ms-modal-content.MuiDialogContent-root': {
-                            padding: 0,
-                        },
-                    }}
-                >
-                    {children}
-                    <Box component="div" sx={iconSx} onClick={exitFullscreen}>
-                        <IconButton size="small">
-                            <FullscreenExitIcon sx={{ width: '20px', height: '20px' }} />
-                        </IconButton>
-                    </Box>
-                </Modal>
-            </PluginFullscreenContext.Provider>
-        );
-    }
+    const fullscreenIconSx: SxProps = useMemo(() => {
+        const baseSx: SxProps = {
+            color: 'text.secondary',
+            '&.MuiIconButton-root:hover': {
+                backgroundColor: 'var(--hover-background-1)',
+                borderRadius: '50%',
+            },
+        };
+
+        if (matchTablet) {
+            return {
+                ...baseSx,
+                '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                    color: 'text.secondary',
+                },
+            };
+        }
+
+        return baseSx;
+    }, [matchTablet]);
 
     return (
-        <>
-            {children}
-            <Box component="div" sx={iconSx} onClick={enterFullscreen}>
-                <IconButton size="small">
-                    <FullscreenIcon sx={{ width: '20px', height: '20px' }} />
-                </IconButton>
-            </Box>
-        </>
+        <PluginFullscreenContext.Provider value={contextVal}>
+            <Modal
+                fullScreen
+                visible={isFullscreen}
+                showCloseIcon={false}
+                onCancel={exitFullscreen}
+                footer={null}
+                sx={{
+                    '&.ms-modal-root .ms-modal-content.MuiDialogContent-root': {
+                        padding: 0,
+                    },
+                }}
+            >
+                {children}
+                <Box component="div" sx={iconSx} onClick={exitFullscreen}>
+                    <IconButton size="small" sx={fullscreenIconSx}>
+                        <FullscreenExitIcon sx={{ width: '20px', height: '20px' }} />
+                    </IconButton>
+                </Box>
+            </Modal>
+            {isFullscreen ? null : (
+                <>
+                    {children}
+                    <Box
+                        component="div"
+                        sx={{
+                            ...iconSx,
+                            display: hiddenEnterFullscreen ? 'none' : undefined,
+                        }}
+                        onClick={enterFullscreen}
+                    >
+                        <IconButton size="small" sx={fullscreenIconSx}>
+                            <FullscreenIcon sx={{ width: '20px', height: '20px' }} />
+                        </IconButton>
+                    </Box>
+                </>
+            )}
+        </PluginFullscreenContext.Provider>
     );
 };
 

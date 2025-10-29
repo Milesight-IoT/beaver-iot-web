@@ -1,6 +1,7 @@
-import jsQR from 'jsqr';
 import { merge } from 'lodash-es';
 import { delay } from '@milesight/shared/src/utils/tools';
+// import { isWeiXin } from '@milesight/shared/src/utils/userAgent';
+import BarcodeDetector from './barcode-detector';
 import { DEFAULT_SCAN_CONFIG, DEFAULT_CAMERA_CONFIG } from './config';
 import type { ScanConfig, CameraConfig, ScanResult } from './types';
 
@@ -103,15 +104,31 @@ const getUserMedia = async (constraints?: MediaStreamConstraints) => {
     return navigator.mediaDevices.getUserMedia(constraints);
 };
 
+const createBasicVideoElement = () => {
+    const videoElement = document.createElement('video');
+
+    videoElement.setAttribute('autoplay', '');
+    videoElement.setAttribute('muted', '');
+    videoElement.setAttribute('playsinline', '');
+    videoElement.setAttribute('disablePictureInPicture', '');
+
+    return videoElement;
+};
+
+// Create Unique video element to avoid video play blocked
+let globalVideoElement = createBasicVideoElement();
+
 /**
  * QRCode Scanner
  */
 class QRCodeScanner {
     private options: Options;
+    private barcodeDetector: BarcodeDetector | null;
     private containerElement: HTMLElement;
-    private videoElement: HTMLVideoElement;
-    private canvasElement: HTMLCanvasElement;
+    private videoElement: HTMLVideoElement | null;
+    private canvasElement: HTMLCanvasElement | null;
     private canvasContext: CanvasRenderingContext2D | null = null;
+    private maskElement: HTMLCanvasElement | null = null;
 
     private flashAvailable: boolean = false;
     private scanFrame: number | null = null;
@@ -127,17 +144,15 @@ class QRCodeScanner {
 
         const width = this.options.width || DEFAULT_VIDEO_WIDTH;
         const height = this.options.height || DEFAULT_VIDEO_HEIGHT;
+        const scanConfig = this.options.scanConfig || DEFAULT_SCAN_CONFIG;
 
-        // Create video element
-        const videoElement = document.createElement('video');
-        videoElement.setAttribute('autoplay', '');
-        videoElement.setAttribute('muted', '');
-        videoElement.setAttribute('playsinline', '');
-        videoElement.setAttribute('disablePictureInPicture', '');
-        videoElement.width = width;
-        videoElement.height = height;
-        this.videoElement = videoElement;
-        // this.containerElement.appendChild(videoElement);
+        this.barcodeDetector = new BarcodeDetector(scanConfig);
+
+        // Set current video element
+        this.videoElement = globalVideoElement;
+        this.videoElement.width = width;
+        this.videoElement.height = height;
+        // this.containerElement.appendChild(this.videoElement);
 
         // Create canvas element
         const canvasElement = document.createElement('canvas');
@@ -154,14 +169,16 @@ class QRCodeScanner {
     /**
      * Get available cameras
      */
-    static getCameras() {
+    static getCameras(options?: { filter?: (device: MediaDeviceInfo) => boolean }) {
         return new Promise<MediaDeviceInfo[]>((resolve, reject) => {
             navigator.mediaDevices
                 .enumerateDevices()
                 .then(devices => {
-                    const inputCameras = devices.filter(device => {
-                        return device.kind === 'videoinput';
-                    });
+                    const inputCameras = devices
+                        .filter(device => {
+                            return device.kind === 'videoinput';
+                        })
+                        .filter(options?.filter || (() => true));
                     resolve(inputCameras);
                 })
                 .catch(err => {
@@ -184,6 +201,64 @@ class QRCodeScanner {
     }
 
     /**
+     * Draw mask
+     */
+    private drawMask({
+        width,
+        height,
+        scanAreaX,
+        scanAreaY,
+        scanAreaWidth,
+        scanAreaHeight,
+        radius,
+        opacity,
+    }: {
+        width: number;
+        height: number;
+        scanAreaX: number;
+        scanAreaY: number;
+        scanAreaWidth: number;
+        scanAreaHeight: number;
+        radius: number;
+        opacity: number;
+    }) {
+        const maskElement = document.createElement('canvas');
+        const maskContext = maskElement.getContext('2d');
+
+        maskElement.width = width;
+        maskElement.height = height;
+        maskElement.style.position = 'relative';
+        maskElement.style.top = `-${height}px`;
+        if (!maskContext) return;
+
+        maskContext.beginPath();
+        maskContext.rect(0, 0, width, height);
+        maskContext.moveTo(scanAreaX + radius, scanAreaY);
+        maskContext.arcTo(
+            scanAreaX + scanAreaWidth,
+            scanAreaY,
+            scanAreaX + scanAreaWidth,
+            scanAreaY + scanAreaHeight,
+            radius,
+        );
+        maskContext.arcTo(
+            scanAreaX + scanAreaWidth,
+            scanAreaY + scanAreaHeight,
+            scanAreaX,
+            scanAreaY + scanAreaHeight,
+            radius,
+        );
+        maskContext.arcTo(scanAreaX, scanAreaY + scanAreaHeight, scanAreaX, scanAreaY, radius);
+        maskContext.arcTo(scanAreaX, scanAreaY, scanAreaX + scanAreaWidth, scanAreaY, radius);
+        maskContext.closePath();
+        maskContext.fillStyle = `rgba(0, 0, 0, ${opacity})`;
+        maskContext.fill('evenodd');
+
+        this.maskElement = maskElement;
+        this.containerElement.appendChild(maskElement);
+    }
+
+    /**
      * Start scanner
      * @param CameraConfig Camera config
      * @returns
@@ -193,11 +268,61 @@ class QRCodeScanner {
         const width = options.width || DEFAULT_VIDEO_WIDTH;
         const height = options.height || DEFAULT_VIDEO_HEIGHT;
 
+        const cameras = await QRCodeScanner.getCameras({
+            filter: device => {
+                // @ts-ignore
+                const facingMode = device.getCapabilities?.()?.facingMode;
+
+                if (facingMode?.length) {
+                    return !facingMode.includes('user');
+                }
+                return !device.label?.includes('front');
+            },
+        });
         const cameraConfig = merge({}, DEFAULT_CAMERA_CONFIG, options.cameraConfig, {
             width: { ideal: width },
             height: { ideal: height },
+            resizeMode: 'none',
         });
 
+        // console.warn(
+        //     'cameras',
+        //     cameras.map(camera => camera.toJSON()),
+        // );
+        // console.warn('cameraConfig', cameraConfig);
+        // cameras.forEach(camera => {
+        //     // @ts-ignore
+        //     const capabilities = camera.getCapabilities?.() || {};
+
+        //     console.warn('capabilities', capabilities);
+        // });
+
+        /**
+         * Compatible with HarmonyOS system
+         * Note: HarmonyOS has multiple back cameras, and we should use the one that has
+         * maximum `aspectRatio.max` value.
+         */
+        if (cameras.length > 1) {
+            const camera =
+                cameras
+                    .sort((a, b) => {
+                        // @ts-ignore
+                        const aAspectRatio = a.getCapabilities?.()?.aspectRatio || '';
+                        // @ts-ignore
+                        const bAspectRatio = b.getCapabilities?.()?.aspectRatio || '';
+                        if (!aAspectRatio.max || !bAspectRatio.max) return 0;
+                        return bAspectRatio.max - aAspectRatio.max;
+                    })
+                    .find(device => {
+                        // @ts-ignore
+                        const facingMode = device.getCapabilities?.()?.facingMode || [];
+                        return facingMode?.includes('environment');
+                    }) || cameras[cameras.length - 1];
+
+            cameraConfig.deviceId = camera.deviceId;
+        }
+
+        if (!videoElement) return;
         try {
             const stream = await getUserMedia({
                 audio: false,
@@ -214,16 +339,25 @@ class QRCodeScanner {
                 options.onFlashReady?.(this.flashAvailable);
             }, 500);
 
+            videoElement.load();
             await delay(10);
-            await videoElement.play();
+            // await videoElement?.play();
 
             this.scan();
         } catch (error: any) {
             console.warn(
-                'The device does not support it, please check whether the camera permission is allowed',
+                'The device does not support it, please check whether the camera permission is allowed.',
+                error,
+                {
+                    name: error.name,
+                    code: error.code,
+                    message: error.message,
+                },
             );
+
             this.destroy();
             options.onError?.(error);
+            globalVideoElement = createBasicVideoElement();
         }
     }
 
@@ -231,12 +365,13 @@ class QRCodeScanner {
      * Scan video frame
      */
     private async scan() {
-        const { videoElement, canvasElement, canvasContext, options } = this;
+        const { barcodeDetector, videoElement, canvasElement, canvasContext, options } = this;
+
+        if (!barcodeDetector || !videoElement || !canvasElement) return;
         const { width, height } = canvasElement;
         const { videoWidth, videoHeight } = videoElement;
         const videoX = Math.max((width - videoWidth) / 2, 0);
         const videoY = Math.max((height - videoHeight) / 2, 0);
-        const scanConfig = options.scanConfig || DEFAULT_SCAN_CONFIG;
 
         if (canvasContext && videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
             const { scanRegion } = options;
@@ -246,80 +381,63 @@ class QRCodeScanner {
 
             if (!scanRegion) {
                 const imageData = canvasContext.getImageData(0, 0, width, height);
-                scanResult = jsQR(imageData.data, imageData.width, imageData.height, scanConfig);
-            } else {
-                // Only scan specified region
-                const scanRegionX = scanRegion?.x || 0;
-                const scanRegionY = scanRegion?.y || 0;
-                const scanRegionWidth = scanRegion?.width || width;
-                const scanRegionHeight = scanRegion?.height || height;
-                const scanRegionRadius = scanRegion?.radius || 0;
-                const scanRegionOpacity = scanRegion?.opacity || 0.5;
 
-                canvasContext.beginPath();
-                canvasContext.rect(0, 0, width, height);
-                canvasContext.moveTo(scanRegionX + scanRegionRadius, scanRegionY);
-                canvasContext.arcTo(
-                    scanRegionX + scanRegionWidth,
-                    scanRegionY,
-                    scanRegionX + scanRegionWidth,
-                    scanRegionY + scanRegionHeight,
-                    scanRegionRadius,
-                );
-                canvasContext.arcTo(
-                    scanRegionX + scanRegionWidth,
-                    scanRegionY + scanRegionHeight,
-                    scanRegionX,
-                    scanRegionY + scanRegionHeight,
-                    scanRegionRadius,
-                );
-                canvasContext.arcTo(
-                    scanRegionX,
-                    scanRegionY + scanRegionHeight,
-                    scanRegionX,
-                    scanRegionY,
-                    scanRegionRadius,
-                );
-                canvasContext.arcTo(
-                    scanRegionX,
-                    scanRegionY,
-                    scanRegionX + scanRegionWidth,
-                    scanRegionY,
-                    scanRegionRadius,
-                );
-                canvasContext.closePath();
-                canvasContext.fillStyle = `rgba(0, 0, 0, ${scanRegionOpacity})`;
-                canvasContext.fill('evenodd');
+                barcodeDetector.detect(imageData).then(results => {
+                    scanResult = results[0];
 
-                const imageData = canvasContext.getImageData(
-                    scanRegionX,
-                    scanRegionY,
-                    scanRegionWidth,
-                    scanRegionHeight,
-                );
-                scanResult = jsQR(imageData.data, imageData.width, imageData.height, scanConfig);
+                    if (!scanResult?.rawValue) return;
 
-                if (scanResult?.location) {
-                    Object.keys(scanResult.location).forEach(key => {
-                        const locate = key as keyof NonNullable<ScanResult>['location'];
-                        if (scanResult?.location[locate]) {
-                            scanResult.location[locate].x += scanRegionX;
-                        }
-                        if (scanResult?.location[locate]) {
-                            scanResult.location[locate].y += scanRegionY;
-                        }
-                    });
-                }
-            }
-
-            if (scanResult?.data) {
-                options.onSuccess?.(scanResult);
-                if (!options.continuous) {
+                    options.onSuccess?.(scanResult);
+                    if (options.continuous) return;
                     this.close();
                     this.scanFrame && cancelAnimationFrame(this.scanFrame);
-                    return;
-                }
+                });
+
+                return;
             }
+
+            // Only scan specified region
+            const scanRegionX = scanRegion?.x || 0;
+            const scanRegionY = scanRegion?.y || 0;
+            const scanRegionWidth = scanRegion?.width || width;
+            const scanRegionHeight = scanRegion?.height || height;
+            const scanRegionRadius = scanRegion?.radius || 0;
+            const scanRegionOpacity = scanRegion?.opacity || 0.5;
+
+            if (!this.maskElement) {
+                this.drawMask({
+                    width,
+                    height,
+                    scanAreaX: scanRegionX,
+                    scanAreaY: scanRegionY,
+                    scanAreaWidth: scanRegionWidth,
+                    scanAreaHeight: scanRegionHeight,
+                    radius: scanRegionRadius,
+                    opacity: scanRegionOpacity,
+                });
+            }
+
+            const imageData = canvasContext.getImageData(
+                scanRegionX,
+                scanRegionY,
+                scanRegionWidth,
+                scanRegionHeight,
+            );
+
+            barcodeDetector.detect(imageData).then(results => {
+                scanResult = results[0];
+
+                if (!scanResult?.rawValue) return;
+                scanResult?.cornerPoints.forEach(point => {
+                    point.x += scanRegionX;
+                    point.y += scanRegionY;
+                });
+
+                options.onSuccess?.(scanResult);
+                if (options.continuous) return;
+                this.close();
+                this.scanFrame && cancelAnimationFrame(this.scanFrame);
+            });
         }
 
         this.scanFrame = requestAnimationFrame(this.scan.bind(this));
@@ -354,8 +472,8 @@ class QRCodeScanner {
         let tracksClosed = 0;
         const tracksToClose = this.mediaStream!.getVideoTracks().length;
 
-        this.mediaStream!.getVideoTracks().forEach(videoTrack => {
-            this.mediaStream!.removeTrack(videoTrack);
+        this.mediaStream.getVideoTracks().forEach(videoTrack => {
+            this.mediaStream?.removeTrack(videoTrack);
             videoTrack.stop();
             ++tracksClosed;
 
@@ -370,20 +488,29 @@ class QRCodeScanner {
      */
     destroy() {
         this.close();
+        // this.videoElement?.pause();
+        this.videoElement?.removeAttribute('src');
+        this.videoElement?.removeAttribute('srcObject');
 
         // Remove video element
         if (this.containerElement.contains(this.videoElement)) {
             this.containerElement.removeChild(this.videoElement!);
         }
+        this.videoElement = null;
 
         // Remove canvas
         if (this.containerElement.contains(this.canvasElement)) {
             this.containerElement.removeChild(this.canvasElement!);
         }
+        this.canvasElement = null;
+        this.canvasContext = null;
 
-        this.videoElement.pause();
-        this.videoElement.removeAttribute('src');
-        this.videoElement.removeAttribute('srcObject');
+        // Remove mask
+        if (this.containerElement.contains(this.maskElement)) {
+            this.containerElement.removeChild(this.maskElement!);
+        }
+        this.maskElement = null;
+
         this.scanFrame && cancelAnimationFrame(this.scanFrame);
     }
 }

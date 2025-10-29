@@ -126,6 +126,7 @@ export default () => {
         confirm({
             title: getIntlText('common.label.delete'),
             description: getIntlText('device.message.delete_tip'),
+            confirmButtonText: getIntlText('common.label.delete'),
             onConfirm: async () => {
                 const [error, resp] = await awaitWrap(
                     deviceAPI.deleteDevices({

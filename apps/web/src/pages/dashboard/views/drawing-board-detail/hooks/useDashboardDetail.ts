@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useRequest } from 'ahooks';
 
-import { useMqtt, MQTT_STATUS, MQTT_EVENT_TYPE, BATCH_PUSH_TIME } from '@/hooks';
+import {
+    useMqtt,
+    MQTT_STATUS,
+    MQTT_EVENT_TYPE,
+    BATCH_PUSH_TIME,
+    usePermissionsError,
+} from '@/hooks';
 import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
 import { dashboardAPI, getResponseData, isRequestSuccess, awaitWrap } from '@/services/http';
 import useDashboardStore, { type DrawingBoardPath } from '@/pages/dashboard/store';
@@ -13,6 +19,7 @@ export function useDashboardDetail(drawingBoardId: ApiKey) {
     const [loading, setLoading] = useState(false);
     const { setLatestEntities, triggerEntityListener } = useActivityEntity();
     const { paths, setPath, resetPaths } = useDashboardStore();
+    const { handlePermissionsError } = usePermissionsError();
 
     const { data: dashboardDetail, run: getDashboardDetail } = useRequest(
         async () => {
@@ -24,7 +31,10 @@ export function useDashboardDetail(drawingBoardId: ApiKey) {
                     dashboardAPI.getDrawingBoardDetail({ canvas_id: drawingBoardId }),
                 );
 
-                if (error || !isRequestSuccess(resp)) return;
+                if (error || !isRequestSuccess(resp)) {
+                    handlePermissionsError(error);
+                    return;
+                }
                 const data = getResponseData(resp);
 
                 setLatestEntities(data?.entities || []);

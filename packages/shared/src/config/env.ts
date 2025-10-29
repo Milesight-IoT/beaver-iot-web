@@ -9,6 +9,9 @@ window.$metaEnv = {
 /** Application running mode */
 export const mode = import.meta.env.MODE;
 
+/** Application base url */
+export const baseUrl = import.meta.env.BASE_URL;
+
 /** Application interface Origin */
 export const apiOrigin = __APP_API_ORIGIN__ === '/' ? origin : __APP_API_ORIGIN__;
 

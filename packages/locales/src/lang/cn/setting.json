@@ -4,7 +4,7 @@
     "setting.blueprint.edit_modal_title": "编辑蓝图来源",
     "setting.blueprint.label_sync_result": "更新结果",
     "setting.blueprint.management_title": "设备蓝图来源管理",
-    "setting.blueprint.message_sync_failed": "更新失败，请检查网络连接。",
+    "setting.blueprint.message_sync_failed": "更新失败，请检查蓝图仓库是否可用。",
     "setting.blueprint.message_sync_success": "已是最新版本",
     "setting.blueprint.official_store_helper_text": "默认来源为每三个小时从 BeaverIoT 官方仓库检查是否有最新的可用版本，若存在则自动更新。点击右侧【编辑】按钮可切换至手动上传。",
     "setting.blueprint.title_official_store": "Beaver IoT 官方蓝图仓库",

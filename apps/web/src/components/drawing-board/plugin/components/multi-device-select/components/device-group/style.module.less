@@ -2,18 +2,26 @@
     flex: 1;
     overflow: hidden auto;
 
+    &__loading {
+        height: 100%;
+    }
+
     &__container {
         position: relative;
         display: flex;
         flex-direction: column;
         // height: 300px;
-        padding: 0 @padding-md;
     }
 
     .item {
         display: flex;
         align-items: center;
-        padding: @padding-xs 0;
+        padding: @padding-xs @padding-md;
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--hover-background-1);
+        }
     }
 
     .name {
@@ -30,9 +38,9 @@
     .icon {
         display: flex;
 
-        &:hover {
-            background-color: var(--hover-background-1);
-            border-radius: @border-radius-xxl;
-        }
+        // &:hover {
+        //     background-color: var(--hover-background-1);
+        //     border-radius: @border-radius-xxl;
+        // }
     }
 }

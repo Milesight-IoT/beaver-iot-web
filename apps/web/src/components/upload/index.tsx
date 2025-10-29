@@ -4,12 +4,13 @@ import { useRequest, useUpdateEffect, useMemoizedFn } from 'ahooks';
 import { FieldError } from 'react-hook-form';
 import { Button, IconButton, CircularProgress } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
+import { getSizeString } from '@milesight/shared/src/utils/tools';
 import { UploadFileIcon, ImageIcon, DeleteIcon } from '@milesight/shared/src/components';
 import { globalAPI, awaitWrap, pLimit, getResponseData, isRequestSuccess } from '@/services/http';
 import Tooltip from '../tooltip';
 import useDropzone from './useDropzone';
 import { DEFAULT_MIN_SIZE, DEFAULT_MAX_SIZE, DEFAULT_PARALLEL_UPLOADING_FILES } from './constants';
-import { getSizeString, SERVER_ERROR, errorIntlKey } from './helper';
+import { SERVER_ERROR, errorIntlKey } from './helper';
 import { UseDropzoneProps, FileWithPath, FileError } from './typings';
 import './style.less';
 

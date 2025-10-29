@@ -77,6 +77,7 @@ const useColumns = <T extends TableRowDataType>({
                                     }}
                                 />
                             )}
+                            getOptionKey={option => option.value}
                             value={innerValue || null}
                             onChange={(_, option: any) => {
                                 handleChangeModel(row.eui, option?.value);

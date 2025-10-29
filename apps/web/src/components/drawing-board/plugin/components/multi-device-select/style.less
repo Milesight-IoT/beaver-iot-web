@@ -14,6 +14,7 @@
             display: flex;
             gap: 12px;
             align-items: center;
+            margin-bottom: @margin-xxs;
         }
     }
 
@@ -22,7 +23,7 @@
         flex: 1;
         flex-direction: column;
         height: 0;
-        padding: @padding-md 0;
+        padding-top: @padding-md;
         border: @border-base;
         border-radius: @border-radius-base;
 
@@ -45,11 +46,18 @@
         display: flex;
         align-items: center;
         padding: 0 @padding-md;
-        margin-bottom: @margin-md;
+        margin-bottom: @margin-xs;
 
         &-all {
             color: var(--text-color-secondary);
-            cursor: pointer;
+
+            &.active {
+                cursor: pointer;
+
+                &:hover {
+                    color: var(--primary-color-base);
+                }
+            }
         }
 
         &-group {
@@ -62,7 +70,7 @@
     &__pagination {
         display: flex;
         justify-content: flex-end;
-        padding: @padding-md @padding-md 0;
+        padding: @padding-md;
         border-top: @border-base;
     }
 
@@ -70,6 +78,7 @@
         display: flex;
         gap: 4px;
         align-items: center;
+        font-weight: @font-weight-medium;
         color: var(--primary-color-base);
         cursor: pointer;
         .text-size(@font-size-1);

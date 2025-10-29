@@ -86,7 +86,7 @@ const plugins: PluginOption[] = [
         customChunk: customChunkSplit,
     }),
     vConsolePlugin({
-        enable: !isProd && ENABLE_VCONSOLE === 'true',
+        enable: ENABLE_VCONSOLE === 'true',
     }),
     react(),
     // @ts-ignore

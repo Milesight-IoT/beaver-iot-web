@@ -163,7 +163,7 @@ const Widgets = (props: WidgetProps) => {
             onDragStop={() => setShowHelperBg(false)}
             onResizeStart={() => setShowHelperBg(true)}
             onResizeStop={() => setShowHelperBg(false)}
-            style={showHelperBg ? helperBg : { minHeight: 'calc(100% + 60px)' }}
+            style={showHelperBg ? helperBg : { minHeight: '100%' }}
             onResize={handleGridLayoutResize}
         >
             {widgets.map((data: WidgetDetail) => {
@@ -178,6 +178,7 @@ const Widgets = (props: WidgetProps) => {
                     >
                         <DrawingBoardContext.Provider value={newDrawingBoardContext(data)}>
                             <FullscreenModal
+                                plugin={plugin}
                                 disabled={!plugin?.fullscreenable || isEdit}
                                 sx={plugin?.fullscreenIconSx}
                             >

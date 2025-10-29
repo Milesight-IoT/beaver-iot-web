@@ -5,7 +5,7 @@ import { type TableRowDataType } from './hooks';
 
 export interface DeviceListContextProps {
     keyword: string;
-    setKeyword: React.Dispatch<React.SetStateAction<string>>;
+    setKeyword: (newVal: string) => void;
     data?: TableRowDataType[];
     /**
      * Current devices all entities status

@@ -1,5 +1,6 @@
-import React, { useRef, useContext } from 'react';
-import { useMemoizedFn } from 'ahooks';
+import React, { useRef, useContext, useState, useMemo } from 'react';
+import { useMemoizedFn, useDebounce } from 'ahooks';
+import { isNil } from 'lodash-es';
 
 import { useI18n } from '@milesight/shared/src/hooks';
 
@@ -23,13 +24,13 @@ const MobileSearchInput: React.FC<MobileSearchInputProps> = props => {
 
     const { getIntlText } = useI18n();
     const context = useContext(DeviceListContext);
-    const { keyword, setKeyword, data } = context || {};
+    const { data } = context || {};
 
+    const [keyword, setKeyword] = useState('');
     const searchListRef = useRef<InfiniteScrollListRef>(null);
 
     const handleKeywordChange = useMemoizedFn((keyword?: string) => {
         searchListRef.current?.scrollTo(0);
-
         setKeyword?.(keyword || '');
     });
 
@@ -41,6 +42,17 @@ const MobileSearchInput: React.FC<MobileSearchInputProps> = props => {
         <MobileListItem isSearchPage key={item.id} device={item} />
     );
 
+    const newKeyword = useDebounce(keyword, { wait: 300 });
+    const newData = useMemo(() => {
+        return (data || []).filter(
+            d =>
+                String(isNil(d?.name) ? '' : d.name)
+                    ?.toLowerCase()
+                    ?.includes(newKeyword) ||
+                String(isNil(d?.identifier) ? '' : d.identifier)?.toLowerCase() === newKeyword,
+        );
+    }, [data, newKeyword]);
+
     return (
         <MobileSearchPanel
             value={keyword}
@@ -51,8 +63,8 @@ const MobileSearchInput: React.FC<MobileSearchInputProps> = props => {
             <InfiniteScrollList
                 isNoMore
                 ref={searchListRef}
-                data={data}
-                itemHeight={228}
+                data={newKeyword !== keyword ? [] : newData}
+                itemHeight={236}
                 loading={false}
                 loadingMore={false}
                 itemRenderer={itemRenderer}

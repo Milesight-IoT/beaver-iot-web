@@ -97,7 +97,7 @@ const EuiInput: React.FC<Props> = ({ label, fullWidth, error, helperText, sx, ..
                         <MobileQRCodeScanner
                             open={openScanner}
                             onClose={() => setOpenScanner(false)}
-                            onSuccess={data => setValue(data?.data || '')}
+                            onSuccess={data => setValue(data?.rawValue || '')}
                         />
                     </>
                 )}

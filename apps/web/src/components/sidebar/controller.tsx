@@ -17,7 +17,13 @@ const Controller = () => {
         <div className="ms-sidebar-controller">
             <IconButton
                 className="ms-sidebar-controller-icon"
-                sx={{ p: 0.5 }}
+                sx={{
+                    p: 0.5,
+                    color: 'text.secondary',
+                    '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                        color: 'text.secondary',
+                    },
+                }}
                 onClick={() => {
                     setOpen(!open);
                     setShrink(false);

@@ -108,7 +108,7 @@ const useColumns = <T extends TableRowDataType>({
                 field: 'propertyEntityFirst',
                 headerName: getIntlText('entity.label.property_entity_first'),
                 flex: 1,
-                minWidth: 100,
+                minWidth: 150,
                 ellipsis: true,
                 renderCell({ row }) {
                     return entityNameAndStatus(row?.propertyEntityFirst);
@@ -118,7 +118,7 @@ const useColumns = <T extends TableRowDataType>({
                 field: 'propertyEntitySecond',
                 headerName: getIntlText('entity.label.property_entity_second'),
                 flex: 1,
-                minWidth: 100,
+                minWidth: 150,
                 ellipsis: true,
                 renderCell({ row }) {
                     return entityNameAndStatus(row?.propertyEntitySecond);
@@ -146,7 +146,7 @@ const useColumns = <T extends TableRowDataType>({
                                 }
                             >
                                 <IconButton
-                                    sx={{ width: 30, height: 30 }}
+                                    sx={{ width: 30, height: 30, color: 'text.secondary' }}
                                     onClick={() => {
                                         handleServiceClick(row?.serviceEntities?.[0]);
                                     }}
@@ -174,7 +174,7 @@ const useColumns = <T extends TableRowDataType>({
                                 </IconButton>
                             </Tooltip>
                             <LoadingWrapper
-                                size={24}
+                                size={20}
                                 loading={get(
                                     loadingDeviceDrawingBoard,
                                     String(row?.id || ''),

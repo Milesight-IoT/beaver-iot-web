@@ -122,7 +122,7 @@ const View = (props: Props) => {
                         min: chartMinValue,
                         max: chartMaxValue,
                         splitNumber: tickCount,
-                        radius: '80%',
+                        radius: '100%',
                         itemStyle: {
                             color: purple[600],
                         },
