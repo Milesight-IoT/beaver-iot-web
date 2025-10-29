@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import cls from 'classnames';
 
-import { Tooltip } from '@/components';
+import { Tooltip, HoverSearchAutocomplete } from '@/components';
+import { PluginFullscreenContext } from '@/components/drawing-board/components';
 import { useStableValue } from '../../../hooks';
 import { BaseMap, Alarm } from './component';
 
@@ -20,10 +22,37 @@ const MapView: React.FC<MapViewProps> = props => {
     const { isPreview } = configJson || {};
 
     const { stableValue: devices } = useStableValue(unStableValue);
+    const pluginFullscreenCxt = useContext(PluginFullscreenContext);
+
+    const [keyword, setKeyword] = useState('');
+
+    /**
+     * Update plugin fullscreen icon sx
+     */
+    useEffect(() => {
+        if (title) {
+            pluginFullscreenCxt?.setExtraFullscreenSx(undefined);
+        } else {
+            pluginFullscreenCxt?.setExtraFullscreenSx({
+                top: '24px',
+                right: '24px',
+                borderRadius: '50%',
+                backgroundColor: 'var(--component-background)',
+            });
+        }
+    }, [title, pluginFullscreenCxt]);
 
     return (
         <div className="map-plugin-view">
             {title && <Tooltip className="map-plugin-view__header" autoEllipsis title={title} />}
+            <div
+                className={cls('map-plugin-view__search', {
+                    'no-title': title,
+                })}
+            >
+                <HoverSearchAutocomplete keyword={keyword} changeKeyword={setKeyword} />
+            </div>
+            {!title && <div className="map-plugin-view__search-bg" />}
 
             <BaseMap />
 

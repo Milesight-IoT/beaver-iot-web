@@ -92,3 +92,4 @@ export {
     type MarkerInstance,
     type LatLng,
 } from './map';
+export { default as HoverSearchAutocomplete } from './hover-search-autocomplete';

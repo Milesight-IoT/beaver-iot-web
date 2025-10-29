@@ -33,16 +33,25 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
 
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [extraParams, setExtraParams] = useState<Record<string, any>>({});
+    const [extraFullscreenSx, setExtraFullscreenSx] = useState<SxProps>();
 
     const iconSx = useMemo((): SxProps => {
-        return { position: 'absolute', top: '12px', right: '12px', ...sx };
-    }, [sx]);
+        return {
+            position: 'absolute',
+            top: '12px',
+            right: '12px',
+            zIndex: '999999',
+            ...sx,
+            ...extraFullscreenSx,
+        } as SxProps;
+    }, [sx, extraFullscreenSx]);
 
     const contextVal = useMemo((): PluginFullscreenContextProps => {
         return {
             pluginFullScreen: isFullscreen,
             extraParams,
             setExtraParams,
+            setExtraFullscreenSx,
         };
     }, [extraParams, isFullscreen]);
 

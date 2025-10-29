@@ -13,6 +13,29 @@
         .text-size(@font-size-lg);
     }
 
+    &__search {
+        position: absolute;
+        top: 22px;
+        right: 60px;
+        z-index: 1000;
+
+        &.no-title {
+            top: 10px;
+            right: 48px;
+        }
+    }
+
+    &__search-bg {
+        position: absolute;
+        top: 24px;
+        right: 68px;
+        z-index: 999;
+        width: 30px;
+        height: 30px;
+        background-color: var(--component-background);
+        border-radius: @border-radius-xxl;
+    }
+
     &__map {
         flex: 1;
 
