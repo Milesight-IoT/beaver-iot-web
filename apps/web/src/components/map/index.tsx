@@ -142,6 +142,7 @@ const Map = forwardRef<MapInstance, MapOptions>(
     },
 );
 
+export { DEFAULT_MAP_CENTER, PREFER_ZOOM_LEVEL } from './constants';
 export { MapMarker, MapControl, MapZoomControl, type MarkerInstance } from './components';
 export { type MapInstance, type LatLng };
 export default memo(Map) as typeof Map;

@@ -88,6 +88,8 @@ export {
     MapMarker,
     MapControl,
     MapZoomControl,
+    DEFAULT_MAP_CENTER,
+    PREFER_ZOOM_LEVEL,
     type MapInstance,
     type MarkerInstance,
     type LatLng,
