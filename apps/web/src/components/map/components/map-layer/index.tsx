@@ -11,7 +11,7 @@ interface Props extends TileLayerProps {
      */
     autoCenterLocate?: boolean | MapContainerProps['center'];
 
-    eventHandlers?: LeafletEventHandlerFnMap;
+    events?: LeafletEventHandlerFnMap;
 
     /**
      * Location error event handler
@@ -35,13 +35,7 @@ interface Props extends TileLayerProps {
  * @description The component is used for integrating tile layer and map events
  */
 const MapLayer = memo(
-    ({
-        autoCenterLocate,
-        eventHandlers = {},
-        onLocationError,
-        onLocationFound,
-        ...props
-    }: Props) => {
+    ({ autoCenterLocate, events = {}, onLocationError, onLocationFound, ...props }: Props) => {
         const map = useMap();
 
         useMapEvents({
@@ -61,7 +55,7 @@ const MapLayer = memo(
             },
         });
 
-        useMapEvents(eventHandlers);
+        useMapEvents(events);
 
         useEffect(() => {
             map.locate();
