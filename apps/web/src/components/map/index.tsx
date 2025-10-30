@@ -34,6 +34,12 @@ interface MapOptions {
     zoom?: number;
 
     /**
+     * Whether the map can be zoomed by using the mouse wheel. If passed 'center',
+     * it will zoom to the center of the view regardless of where the mouse was.
+     */
+    scrollWheelZoom?: MapContainerProps['scrollWheelZoom'];
+
+    /**
      * Map center coordinate
      */
     center?: MapContainerProps['center'];
@@ -80,6 +86,7 @@ const Map = forwardRef<MapInstance, MapOptions>(
             width = DEFAULT_MAP_WIDTH,
             height = DEFAULT_MAP_HEIGHT,
             zoom,
+            scrollWheelZoom = false,
             center,
             children,
             zoomControl = <MapZoomControl />,
@@ -109,7 +116,7 @@ const Map = forwardRef<MapInstance, MapOptions>(
                     zoom={zoom ?? defaultZoom}
                     center={center || DEFAULT_MAP_CENTER}
                     zoomControl={false}
-                    scrollWheelZoom={false}
+                    scrollWheelZoom={scrollWheelZoom}
                     // @ts-ignore Has one argument and it's a map instance
                     whenReady={e => {
                         onReady?.(e.target);
