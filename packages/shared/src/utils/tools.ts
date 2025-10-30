@@ -858,6 +858,30 @@ export const imageCompress = async (
 };
 
 /**
+ * Get user geolocation
+ */
+export const getGeoLocation = () => {
+    return new Promise<{ lat: number; lng: number }>((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject(new Error('Geolocation is not supported by this browser.'));
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                resolve({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                });
+            },
+            error => {
+                reject(error);
+            },
+        );
+    });
+};
+
+/**
  * Transform the size in bytes to a human-readable string.
  * @param size Size in bytes
  * @returns Human-readable size string

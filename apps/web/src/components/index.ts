@@ -83,3 +83,12 @@ export { default as EuiInput } from './eui-input';
 export { default as TitleIcon } from './title-icon';
 export { default as DeviceStatus } from './device-status';
 export { default as HoverSearchInput } from './hover-search-input';
+export {
+    default as Map,
+    MapMarker,
+    MapControl,
+    MapZoomControl,
+    type MapInstance,
+    type MarkerInstance,
+    type LatLng,
+} from './map';

@@ -1,0 +1,63 @@
+.leaflet-control.leaflet-control-zoom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    overflow: hidden;
+    border: 1px solid var(--border-color-base);
+    border-radius: @border-radius-base;
+
+    > [class^="leaflet-control-zoom-"] {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        text-decoration: none;
+        border: none;
+        .text-size(@font-size-xl);
+
+        &:not(:last-child) {
+            border-right: 1px solid var(--border-color-base);
+        }
+    }
+}
+
+.@{prefix}-map-zoom-control.leaflet-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    overflow: hidden;
+    border: 1px solid var(--border-color-base);
+    border-radius: @border-radius-base;
+
+    .@{prefix}-map-control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 100%;
+        color: var(--icon-color-gray-secondary);
+        text-decoration: none;
+        background-color: var(--component-background);
+        border: none;
+        cursor: pointer;
+
+        &.disabled {
+            color: var(--icon-color-disable);
+            cursor: not-allowed;
+        }
+
+        &:not([disabled]):hover {
+            background-color: var(--component-background-gray);
+        }
+
+        &:not(:last-child) {
+            border-right: 1px solid var(--border-color-base);
+        }
+
+        .@{mui-prefix}SvgIcon-root {
+            font-size: @font-size-lg;
+        }
+    }
+}

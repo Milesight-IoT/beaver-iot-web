@@ -107,6 +107,9 @@ importers:
       '@mui/x-date-pickers':
         specifier: ^7.18.0
         version: 7.18.0(@emotion/react@11.13.3(@types/react@18.3.5)(react@18.3.1))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.3.5)(react@18.3.1))(@types/react@18.3.5)(react@18.3.1))(@mui/material@6.1.0(@emotion/react@11.13.3(@types/react@18.3.5)(react@18.3.1))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.3.5)(react@18.3.1))(@types/react@18.3.5)(react@18.3.1))(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mui/system@6.1.0(@emotion/react@11.13.3(@types/react@18.3.5)(react@18.3.1))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.3.5)(react@18.3.1))(@types/react@18.3.5)(react@18.3.1))(@types/react@18.3.5)(react@18.3.1))(@types/react@18.3.5)(date-fns@4.1.0)(dayjs@1.11.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@react-leaflet/core':
+        specifier: ^2.1.0
+        version: 2.1.0(leaflet@1.9.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@uiw/codemirror-theme-vscode':
         specifier: ^4.23.7
         version: 4.23.7(@codemirror/language@6.10.8)(@codemirror/state@6.5.0)(@codemirror/view@6.36.1)
@@ -149,6 +152,9 @@ importers:
       konva:
         specifier: ^9.3.20
         version: 9.3.20
+      leaflet:
+        specifier: ^1.9.4
+        version: 1.9.4
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -158,6 +164,9 @@ importers:
       mqtt:
         specifier: ^5.13.0
         version: 5.13.0
+      proj4leaflet:
+        specifier: ^1.0.2
+        version: 1.0.2
       qs:
         specifier: ^6.13.0
         version: 6.13.0
@@ -188,6 +197,9 @@ importers:
       react-konva-utils:
         specifier: ^1.1.0
         version: 1.1.0(konva@9.3.20)(react-dom@18.3.1(react@18.3.1))(react-konva@18.2.10(@types/react@18.3.5)(konva@9.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      react-leaflet:
+        specifier: ^4.2.1
+        version: 4.2.1(leaflet@1.9.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-router:
         specifier: ^6.26.1
         version: 6.26.1(react@18.3.1)
@@ -210,12 +222,18 @@ importers:
       '@milesight/spec':
         specifier: workspace:*
         version: link:../../packages/spec
+      '@types/leaflet':
+        specifier: ^1.9.21
+        version: 1.9.21
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
       '@types/node':
         specifier: ^20.14.8
         version: 20.16.5
+      '@types/proj4leaflet':
+        specifier: ^1.0.12
+        version: 1.0.12
       '@types/qs':
         specifier: ^6.9.15
         version: 6.9.15
@@ -2012,6 +2030,13 @@ packages:
   '@react-dnd/shallowequal@4.0.2':
     resolution: {integrity: sha512-/RVXdLvJxLg4QKvMoM5WlwNR9ViO9z8B/qPcc+C0Sa/teJY7QG7kJ441DwzOjMYEY7GmU4dj5EcGHIkKZiQZCA==}
 
+  '@react-leaflet/core@2.1.0':
+    resolution: {integrity: sha512-Qk7Pfu8BSarKGqILj4x7bCSZ1pjuAPZ+qmRwH5S7mDS91VSbVVsJSrW4qA+GPrro8t69gFYVMWb1Zc4yFmPiVg==}
+    peerDependencies:
+      leaflet: ^1.9.0
+      react: ^18.0.0
+      react-dom: ^18.0.0
+
   '@remix-run/router@1.19.1':
     resolution: {integrity: sha512-S45oynt/WH19bHbIXjtli6QmwNYvaz+vtnubvNpNDvUOoA/OWh6j1OikIP3G+v5GHdxyC6EXoChG3HgYGEUfcg==}
     engines: {node: '>=14.0.0'}
@@ -2396,11 +2421,17 @@ packages:
   '@types/fs-extra@9.0.13':
     resolution: {integrity: sha512-nEnwB++1u5lVDM2UI4c1+5R+FYaKfaAzS4OococimjVm3nQw3TuzH5UNsocrcTBbhnerblyHj4A49qXbIiZdpA==}
 
+  '@types/geojson@7946.0.16':
+    resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
+
   '@types/inquirer@8.2.10':
     resolution: {integrity: sha512-IdD5NmHyVjWM8SHWo/kPBgtzXatwPkfwzyP3fN1jF2g9BWt5WO+8hL2F4o2GKIYsU40PpqeevuUWvkS/roXJkA==}
 
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+
+  '@types/leaflet@1.9.21':
+    resolution: {integrity: sha512-TbAd9DaPGSnzp6QvtYngntMZgcRk+igFELwR2N99XZn7RXUdKgsXMR+28bUO0rPsWp8MIu/f47luLIQuSLYv/w==}
 
   '@types/less@3.0.6':
     resolution: {integrity: sha512-PecSzorDGdabF57OBeQO/xFbAkYWo88g4Xvnsx7LRwqLC17I7OoKtA3bQB9uXkY6UkMWCOsA8HSVpaoitscdXw==}
@@ -2425,6 +2456,9 @@ packages:
 
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
+
+  '@types/proj4leaflet@1.0.12':
+    resolution: {integrity: sha512-SkWDAdQK3ddPSq995UGYe/WZODQR1bf3CDMjp+S7cq9+AnISSIhKr8vUQ7g/hMAWYNiNIFjH/atTcMAkNl3c9w==}
 
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
@@ -4527,6 +4561,9 @@ packages:
     resolution: {integrity: sha512-MbjN408fEndfiQXbFQ1vnd+1NoLDsnQW41410oQBXiyXDMYH5z505juWa4KUE1LqxRC7DgOgZDbKLxHIwm27hA==}
     engines: {node: '>=0.10'}
 
+  leaflet@1.9.4:
+    resolution: {integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==}
+
   less@4.2.0:
     resolution: {integrity: sha512-P3b3HJDBtSzsXUl0im2L7gTO5Ubg8mEN6G8qoTS77iXxXX4Hvu4Qj540PZDvQ8V6DmX6iXo98k7Md0Cm1PrLaA==}
     engines: {node: '>=6'}
@@ -4713,6 +4750,9 @@ packages:
   merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
+
+  mgrs@1.0.0:
+    resolution: {integrity: sha512-awNbTOqCxK1DBGjalK3xqWIstBZgN6fxsMSiXLs9/spqWkF2pAhb2rrYCFSsr1/tT7PhcDGjZndG8SWYn0byYA==}
 
   micromatch@4.0.8:
     resolution: {integrity: sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==}
@@ -5181,6 +5221,12 @@ packages:
     resolution: {integrity: sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==}
     engines: {node: '>= 0.6.0'}
 
+  proj4@2.19.10:
+    resolution: {integrity: sha512-uL6/C6kA8+ncJAEDmUeV8PmNJcTlRLDZZa4/87CzRpb8My4p+Ame4LhC4G3H/77z2icVqcu3nNL9h5buSdnY+g==}
+
+  proj4leaflet@1.0.2:
+    resolution: {integrity: sha512-6GdDeUlhX/tHUiMEj80xQhlPjwrXcdfD0D5OBymY8WvxfbmZcdhNqQk7n7nFf53ue6QdP9ls9ZPjsAxnbZDTsw==}
+
   prop-types@15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
 
@@ -5299,6 +5345,13 @@ packages:
       konva: ^8.0.1 || ^7.2.5 || ^9.0.0
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
+
+  react-leaflet@4.2.1:
+    resolution: {integrity: sha512-p9chkvhcKrWn/H/1FFeVSqLdReGwn2qmiobOQGO3BifX+/vV/39qhY8dGqbdcPh1e6jxh/QHriLXr7a4eLFK4Q==}
+    peerDependencies:
+      leaflet: ^1.9.0
+      react: ^18.0.0
+      react-dom: ^18.0.0
 
   react-reconciler@0.29.2:
     resolution: {integrity: sha512-zZQqIiYgDCTP/f1N/mAR10nJGrPD2ZR+jDSEsKWJHYC7Cm2wodlwbR3upZRdC3cjIjSlTLNVyO7Iu0Yy7t2AYg==}
@@ -6176,6 +6229,9 @@ packages:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
     engines: {node: '>= 8'}
     hasBin: true
+
+  wkt-parser@1.5.2:
+    resolution: {integrity: sha512-1ZUiV1FTwSiSrgWzV9KXJuOF2BVW91KY/mau04BhnmgOdroRQea7Q0s5TVqwGLm0D2tZwObd/tBYXW49sSxp3Q==}
 
   word-wrap@1.2.5:
     resolution: {integrity: sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==}
@@ -8182,6 +8238,12 @@ snapshots:
 
   '@react-dnd/shallowequal@4.0.2': {}
 
+  '@react-leaflet/core@2.1.0(leaflet@1.9.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      leaflet: 1.9.4
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   '@remix-run/router@1.19.1': {}
 
   '@rolldown/pluginutils@1.0.0-beta.32': {}
@@ -8497,12 +8559,18 @@ snapshots:
     dependencies:
       '@types/node': 20.16.5
 
+  '@types/geojson@7946.0.16': {}
+
   '@types/inquirer@8.2.10':
     dependencies:
       '@types/through': 0.0.33
       rxjs: 7.8.1
 
   '@types/json5@0.0.29': {}
+
+  '@types/leaflet@1.9.21':
+    dependencies:
+      '@types/geojson': 7946.0.16
 
   '@types/less@3.0.6': {}
 
@@ -8523,6 +8591,12 @@ snapshots:
   '@types/normalize-package-data@2.4.4': {}
 
   '@types/parse-json@4.0.2': {}
+
+  '@types/proj4leaflet@1.0.12':
+    dependencies:
+      '@types/geojson': 7946.0.16
+      '@types/leaflet': 1.9.21
+      proj4: 2.19.10
 
   '@types/prop-types@15.7.12': {}
 
@@ -10928,6 +11002,8 @@ snapshots:
     dependencies:
       language-subtag-registry: 0.3.23
 
+  leaflet@1.9.4: {}
+
   less@4.2.0:
     dependencies:
       copy-anything: 2.0.6
@@ -11131,6 +11207,8 @@ snapshots:
   merge-stream@2.0.0: {}
 
   merge2@1.4.1: {}
+
+  mgrs@1.0.0: {}
 
   micromatch@4.0.8:
     dependencies:
@@ -11615,6 +11693,15 @@ snapshots:
 
   process@0.11.10: {}
 
+  proj4@2.19.10:
+    dependencies:
+      mgrs: 1.0.0
+      wkt-parser: 1.5.2
+
+  proj4leaflet@1.0.2:
+    dependencies:
+      proj4: 2.19.10
+
   prop-types@15.8.1:
     dependencies:
       loose-envify: 1.4.0
@@ -11744,6 +11831,13 @@ snapshots:
       scheduler: 0.23.2
     transitivePeerDependencies:
       - '@types/react'
+
+  react-leaflet@4.2.1(leaflet@1.9.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      '@react-leaflet/core': 2.1.0(leaflet@1.9.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      leaflet: 1.9.4
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   react-reconciler@0.29.2(react@18.3.1):
     dependencies:
@@ -12739,6 +12833,8 @@ snapshots:
   which@2.0.2:
     dependencies:
       isexe: 2.0.0
+
+  wkt-parser@1.5.2: {}
 
   word-wrap@1.2.5: {}
 
