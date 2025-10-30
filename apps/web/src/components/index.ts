@@ -90,6 +90,7 @@ export {
     MapZoomControl,
     DEFAULT_MAP_CENTER,
     PREFER_ZOOM_LEVEL,
+    type MapProps,
     type MapInstance,
     type MarkerInstance,
     type LatLng,

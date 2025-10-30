@@ -12,7 +12,7 @@ import { MapLayer, MapZoomControl } from './components';
 
 import './style.less';
 
-interface MapOptions {
+export interface MapProps {
     /**
      * Map tile type
      */
@@ -78,7 +78,7 @@ interface MapOptions {
 /**
  * Map Component
  */
-const Map = forwardRef<MapInstance, MapOptions>(
+const Map = forwardRef<MapInstance, MapProps>(
     (
         {
             type = 'openStreet.normal',
