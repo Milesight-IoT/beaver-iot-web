@@ -16,7 +16,7 @@ import './style.less';
  */
 type ColorType = 'info' | 'danger' | 'warning' | 'success' | 'disabled';
 
-interface BMarkerProps extends MarkerProps {
+interface BMarkerProps extends Omit<MarkerProps, 'eventHandlers'> {
     /** Color Type */
     colorType?: ColorType;
 
@@ -31,6 +31,9 @@ interface BMarkerProps extends MarkerProps {
 
     /** Tooltip props */
     tooltipProps?: TooltipProps;
+
+    /** Event handlers */
+    events?: L.LeafletEventHandlerFnMap;
 
     onReady?: (marker: MarkerInstance) => void;
 }
@@ -69,6 +72,7 @@ const BMarker = forwardRef<MarkerInstance, BMarkerProps>(
             popupProps,
             tooltip,
             tooltipProps,
+            events,
             onReady,
             ...props
         },
@@ -88,6 +92,7 @@ const BMarker = forwardRef<MarkerInstance, BMarkerProps>(
                 ref={markerRef}
                 position={position}
                 icon={genLocationIcon({ colorType })}
+                eventHandlers={events}
             >
                 {popup && (
                     <Popup {...popupProps} className={cls('ms-map-popup', popupProps?.className)}>
