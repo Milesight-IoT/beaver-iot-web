@@ -51,7 +51,7 @@ interface MapOptions {
     /**
      * Map event handlers
      */
-    eventHandlers?: LeafletEventHandlerFnMap;
+    events?: LeafletEventHandlerFnMap;
 
     /**
      * Map ready event handler
@@ -83,7 +83,7 @@ const Map = forwardRef<MapInstance, MapOptions>(
             center,
             children,
             zoomControl = <MapZoomControl />,
-            eventHandlers,
+            events,
             onReady,
             onLocationError,
             onLocationFound,
@@ -123,7 +123,7 @@ const Map = forwardRef<MapInstance, MapOptions>(
                         attribution={attribution}
                         coordType={coordType}
                         autoCenterLocate={!center}
-                        eventHandlers={eventHandlers}
+                        eventHandlers={events}
                         onLocationError={onLocationError}
                         onLocationFound={onLocationFound}
                     />

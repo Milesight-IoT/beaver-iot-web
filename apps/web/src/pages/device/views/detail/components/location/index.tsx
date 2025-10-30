@@ -47,7 +47,7 @@ const Location = () => {
                             padding: [20, 20],
                         });
                     }}
-                    eventHandlers={{
+                    events={{
                         move(e) {
                             console.log(e);
                         },
