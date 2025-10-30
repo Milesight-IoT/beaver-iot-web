@@ -1,4 +1,6 @@
-export interface HoverSearchInputProps {
-    keyword: string;
-    changeKeyword: (newVal: string) => void;
-}
+import { type AutocompleteProps } from '@mui/material';
+
+export type HoverSearchAutocompleteProps<T = unknown> = Omit<
+    AutocompleteProps<T, false, false, false>,
+    'renderInput'
+>;

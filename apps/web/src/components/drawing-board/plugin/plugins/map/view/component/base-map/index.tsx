@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import { useSize, useTimeout } from 'ahooks';
-
-import { Map, MapMarker, type LeafletMap, type LeafletMarker, type LatLng } from '@/components';
+import { Map, MapMarker, type MapInstance, type MarkerInstance, type LatLng } from '@/components';
 
 const demoData = [
     [31.59, 120.29],
@@ -9,13 +8,13 @@ const demoData = [
     [24.624821056984395, 118.03075790405273],
 ] as unknown as LatLng[];
 
-const BaseMap = () => {
+const Location = () => {
     const ref = useRef<HTMLDivElement>(null);
     const size = useSize(ref);
-    const mapRef = useRef<LeafletMap>(null);
-    const [markers, setMarkers] = useState<Record<string, LeafletMarker>>({});
+    const mapRef = useRef<MapInstance>(null);
+    const [markers, setMarkers] = useState<Record<string, MarkerInstance>>({});
 
-    const handleMarkerReady = (key: string, marker: LeafletMarker) => {
+    const handleMarkerReady = (key: string, marker: MarkerInstance) => {
         setMarkers(prev => ({ ...prev, [key]: marker }));
     };
 
@@ -33,12 +32,17 @@ const BaseMap = () => {
                     width={size.width}
                     height={size.height}
                     onReady={map => {
-                        console.log('map ? ', map);
+                        console.log(map);
                     }}
-                    onLocationFound={() => {
+                    onLocationFound={e => {
                         mapRef.current?.fitBounds(demoData as any, {
                             padding: [20, 20],
                         });
+                    }}
+                    eventHandlers={{
+                        move(e) {
+                            console.log(e);
+                        },
                     }}
                 >
                     {demoData.map(latLng => (
@@ -46,7 +50,6 @@ const BaseMap = () => {
                             key={latLng.toString()}
                             position={latLng}
                             popup={latLng.toString()}
-                            tooltip={latLng.toString()}
                             onReady={marker => {
                                 handleMarkerReady(latLng.toString(), marker);
                             }}
@@ -58,4 +61,4 @@ const BaseMap = () => {
     );
 };
 
-export default BaseMap;
+export default Location;

@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { TextField } from '@mui/material';
 import { omit, pick } from 'lodash-es';
 
+import { useI18n } from '@milesight/shared/src/hooks';
 import { SearchIcon, CancelIcon } from '@milesight/shared/src/components';
 
 import { useSearch } from './useSearch';
@@ -14,6 +15,7 @@ import type { HoverSearchInputProps } from './interface';
 const HoverSearchInput: React.FC<HoverSearchInputProps> = props => {
     const { keyword, changeKeyword } = props;
 
+    const { getIntlText } = useI18n();
     const { showSearch, textFieldRef, inputRef, handleChange, handleMouseEnter, handleMouseLeave } =
         useSearch({
             keyword,
@@ -41,7 +43,7 @@ const HoverSearchInput: React.FC<HoverSearchInputProps> = props => {
             ref={textFieldRef}
             inputRef={inputRef}
             size="small"
-            placeholder="Search"
+            placeholder={getIntlText('common.label.search')}
             value={keyword}
             onChange={handleChange}
             onMouseEnter={handleMouseEnter}

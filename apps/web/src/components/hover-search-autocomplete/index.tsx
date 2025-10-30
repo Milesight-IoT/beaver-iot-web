@@ -1,27 +1,31 @@
-import React, { useMemo } from 'react';
-import { TextField } from '@mui/material';
+import { useMemo } from 'react';
+import { TextField, Autocomplete, type SxProps } from '@mui/material';
 import { omit, pick } from 'lodash-es';
 
-import { SearchIcon, CancelIcon } from '@milesight/shared/src/components';
+import { useI18n } from '@milesight/shared/src/hooks';
+import { SearchIcon } from '@milesight/shared/src/components';
 
 import { useSearch } from './useSearch';
-import type { HoverSearchInputProps } from './interface';
+import type { HoverSearchAutocompleteProps } from './interface';
 
 /**
- * Component Search input displayed only upon
+ * Component Search autocomplete input displayed only upon
  * hovering the mouse over the search icon
  */
-const HoverSearchInput: React.FC<HoverSearchInputProps> = props => {
-    const { keyword, changeKeyword } = props;
-
-    const { showSearch, textFieldRef, inputRef, handleChange, handleMouseEnter, handleMouseLeave } =
-        useSearch({
-            keyword,
-            changeKeyword,
-        });
+function HoverSearchInput<T>(props: HoverSearchAutocompleteProps<T>) {
+    const { getIntlText } = useI18n();
+    const {
+        showSearch,
+        open,
+        inputRef,
+        autocompleteRef,
+        handleMouseEnter,
+        handleMouseLeave,
+        handleOpen,
+    } = useSearch();
 
     const textFieldSx = useMemo(() => {
-        const result = {
+        const result: SxProps = {
             inputWidth: 0,
             '& .MuiOutlinedInput-notchedOutline': {
                 border: 'none',
@@ -29,7 +33,7 @@ const HoverSearchInput: React.FC<HoverSearchInputProps> = props => {
         };
 
         if (showSearch) {
-            result.inputWidth = 120;
+            result.inputWidth = 185;
             return pick(result, ['inputWidth']);
         }
 
@@ -37,54 +41,56 @@ const HoverSearchInput: React.FC<HoverSearchInputProps> = props => {
     }, [showSearch]);
 
     return (
-        <TextField
-            ref={textFieldRef}
-            inputRef={inputRef}
-            size="small"
-            placeholder="Search"
-            value={keyword}
-            onChange={handleChange}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            slotProps={{
-                input: {
-                    endAdornment: keyword ? (
-                        <CancelIcon
-                            sx={{ color: 'var(--gray-4)' }}
-                            onClick={e => {
-                                e?.preventDefault();
-                                e?.stopPropagation();
-
-                                changeKeyword('');
-                            }}
-                        />
-                    ) : (
-                        <SearchIcon
-                            sx={{ color: 'text.secondary' }}
-                            color={showSearch ? 'disabled' : 'action'}
-                        />
-                    ),
-                },
-            }}
+        <Autocomplete
+            {...props}
+            ref={autocompleteRef}
+            open={open}
+            renderInput={params => (
+                <TextField
+                    inputRef={inputRef}
+                    placeholder={getIntlText('common.label.search')}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                    onChange={handleOpen}
+                    onClick={handleOpen}
+                    sx={{
+                        backgroundColor: 'transparent',
+                        '&.MuiFormControl-root': {
+                            maxWidth: '240px',
+                            marginBottom: 0,
+                            '.MuiInputBase-root': {
+                                backgroundColor: showSearch ? undefined : 'transparent',
+                            },
+                        },
+                        '.MuiAutocomplete-inputRoot input.MuiAutocomplete-input': {
+                            minWidth: 0,
+                            width: textFieldSx.inputWidth,
+                            transition: 'all .2s',
+                            '&:focus': {
+                                boxShadow: 'none',
+                            },
+                        },
+                        svg: {
+                            cursor: 'pointer',
+                        },
+                        ...omit(textFieldSx, ['inputWidth']),
+                    }}
+                    {...params}
+                />
+            )}
+            popupIcon={
+                <SearchIcon
+                    sx={{ color: 'text.secondary' }}
+                    color={showSearch ? 'disabled' : 'action'}
+                />
+            }
             sx={{
-                backgroundColor: 'transparent',
-                '&.MuiFormControl-root': {
-                    marginBottom: 0,
-                    '.MuiInputBase-root': {
-                        backgroundColor: showSearch ? undefined : 'transparent',
-                    },
+                '& .MuiAutocomplete-popupIndicatorOpen': {
+                    transform: 'none',
                 },
-                input: {
-                    width: textFieldSx.inputWidth,
-                    transition: 'all .2s',
-                },
-                svg: {
-                    cursor: 'pointer',
-                },
-                ...omit(textFieldSx, ['inputWidth']),
             }}
         />
     );
-};
+}
 
 export default HoverSearchInput;
