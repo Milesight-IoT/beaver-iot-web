@@ -1,14 +1,7 @@
-import { memo, forwardRef, useRef, useImperativeHandle, useEffect } from 'react';
+import { memo, forwardRef, useRef, useImperativeHandle, useEffect, useMemo } from 'react';
 import cls from 'classnames';
-import L, { Marker as MarkerInstance } from 'leaflet';
-import {
-    Marker,
-    Popup,
-    Tooltip,
-    type MarkerProps,
-    type PopupProps,
-    type TooltipProps,
-} from 'react-leaflet';
+import L, { type Marker as MarkerInstance } from 'leaflet';
+import { Marker, Popup, Tooltip, type MarkerProps } from 'react-leaflet';
 import './style.less';
 
 /**
@@ -24,17 +17,20 @@ interface BMarkerProps extends Omit<MarkerProps, 'eventHandlers'> {
     popup?: React.ReactNode;
 
     /** Popup props */
-    popupProps?: PopupProps;
+    popupProps?: L.PopupOptions;
 
     /** Tooltip content */
     tooltip?: React.ReactNode;
 
     /** Tooltip props */
-    tooltipProps?: TooltipProps;
+    tooltipProps?: L.TooltipOptions;
 
     /** Event handlers */
     events?: L.LeafletEventHandlerFnMap;
 
+    /**
+     * Callback when the marker is ready
+     */
     onReady?: (marker: MarkerInstance) => void;
 }
 
@@ -78,6 +74,7 @@ const BMarker = forwardRef<MarkerInstance, BMarkerProps>(
         },
         ref,
     ) => {
+        // ---------- Expose marker instance ----------
         const markerRef = useRef<MarkerInstance>(null);
 
         useEffect(() => {
@@ -92,7 +89,15 @@ const BMarker = forwardRef<MarkerInstance, BMarkerProps>(
                 ref={markerRef}
                 position={position}
                 icon={genLocationIcon({ colorType })}
-                eventHandlers={events}
+                eventHandlers={{
+                    ...events,
+                    move(e) {
+                        if (tooltip) {
+                            e.target.closeTooltip();
+                        }
+                        events?.move?.(e);
+                    },
+                }}
             >
                 {popup && (
                     <Popup {...popupProps} className={cls('ms-map-popup', popupProps?.className)}>
