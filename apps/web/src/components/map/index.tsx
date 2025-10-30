@@ -12,7 +12,7 @@ import { MapLayer, MapZoomControl } from './components';
 
 import './style.less';
 
-interface MapOptions {
+export interface MapProps {
     /**
      * Map tile type
      */
@@ -32,6 +32,12 @@ interface MapOptions {
      * Map zoom level
      */
     zoom?: number;
+
+    /**
+     * Whether the map can be zoomed by using the mouse wheel. If passed 'center',
+     * it will zoom to the center of the view regardless of where the mouse was.
+     */
+    scrollWheelZoom?: MapContainerProps['scrollWheelZoom'];
 
     /**
      * Map center coordinate
@@ -72,7 +78,7 @@ interface MapOptions {
 /**
  * Map Component
  */
-const Map = forwardRef<MapInstance, MapOptions>(
+const Map = forwardRef<MapInstance, MapProps>(
     (
         {
             type = 'openStreet.normal',
@@ -80,6 +86,7 @@ const Map = forwardRef<MapInstance, MapOptions>(
             width = DEFAULT_MAP_WIDTH,
             height = DEFAULT_MAP_HEIGHT,
             zoom,
+            scrollWheelZoom = false,
             center,
             children,
             zoomControl = <MapZoomControl />,
@@ -109,7 +116,7 @@ const Map = forwardRef<MapInstance, MapOptions>(
                     zoom={zoom ?? defaultZoom}
                     center={center || DEFAULT_MAP_CENTER}
                     zoomControl={false}
-                    scrollWheelZoom={false}
+                    scrollWheelZoom={scrollWheelZoom}
                     // @ts-ignore Has one argument and it's a map instance
                     whenReady={e => {
                         onReady?.(e.target);
@@ -135,6 +142,7 @@ const Map = forwardRef<MapInstance, MapOptions>(
     },
 );
 
+export { DEFAULT_MAP_CENTER, PREFER_ZOOM_LEVEL } from './constants';
 export { MapMarker, MapControl, MapZoomControl, type MarkerInstance } from './components';
 export { type MapInstance, type LatLng };
 export default memo(Map) as typeof Map;
