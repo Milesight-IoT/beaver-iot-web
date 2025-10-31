@@ -9,6 +9,10 @@ import './style.less';
  */
 type ColorType = 'info' | 'danger' | 'warning' | 'success' | 'disabled';
 
+interface MarkerEventHandlerFnMap extends Omit<L.LeafletEventHandlerFnMap, 'move'> {
+    move?: (e: L.LeafletMouseEvent) => void;
+}
+
 interface BMarkerProps extends Omit<MarkerProps, 'eventHandlers'> {
     /** Color Type */
     colorType?: ColorType;
@@ -26,7 +30,7 @@ interface BMarkerProps extends Omit<MarkerProps, 'eventHandlers'> {
     tooltipProps?: L.TooltipOptions;
 
     /** Event handlers */
-    events?: L.LeafletEventHandlerFnMap;
+    events?: MarkerEventHandlerFnMap;
 
     /**
      * Callback when the marker is ready
@@ -95,7 +99,7 @@ const BMarker = forwardRef<MarkerInstance, BMarkerProps>(
                         if (tooltip) {
                             e.target.closeTooltip();
                         }
-                        events?.move?.(e);
+                        events?.move?.(e as L.LeafletMouseEvent);
                     },
                 }}
             >
