@@ -4,12 +4,15 @@ import { useMap, useMapEvents, type MapContainerProps } from 'react-leaflet';
 import 'proj4leaflet';
 import TileLayer, { type TileLayerProps } from '../tile-layer';
 
-interface Props extends TileLayerProps {
+interface Props extends Omit<TileLayerProps, 'eventHandlers'> {
     /**
      * Whether to center the map base on the current location
      */
     autoCenterLocate?: boolean | MapContainerProps['center'];
 
+    /**
+     * Map events
+     */
     events?: LeafletEventHandlerFnMap;
 
     /**

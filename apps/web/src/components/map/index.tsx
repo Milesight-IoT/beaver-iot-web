@@ -143,7 +143,7 @@ const Map = forwardRef<MapInstance, MapProps>(
                         attribution={attribution}
                         coordType={coordType}
                         autoCenterLocate={!center}
-                        eventHandlers={events}
+                        events={events}
                         onLocationError={onLocationError}
                         onLocationFound={onLocationFound}
                     />
