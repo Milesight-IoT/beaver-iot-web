@@ -1,4 +1,4 @@
-import React, { memo, forwardRef, useMemo } from 'react';
+import React, { memo, useMemo, useState, forwardRef } from 'react';
 import {
     type Map as MapInstance,
     type LeafletEventHandlerFnMap,
@@ -6,6 +6,7 @@ import {
 } from 'leaflet';
 import { MapContainer, type MapContainerProps } from 'react-leaflet';
 import 'proj4leaflet';
+import { useDebounceEffect } from 'ahooks';
 import { getTileLayerConfig, type MapTileType } from '@/services/map';
 import { DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT, DEFAULT_MAP_CENTER } from './constants';
 import { MapLayer, MapZoomControl } from './components';
@@ -107,11 +108,23 @@ const Map = forwardRef<MapInstance, MapProps>(
             ...configs
         } = useMemo(() => getTileLayerConfig(type), [type]);
 
+        // ---------- Auto rerender ---------
+        const [mapKey, setMapKey] = useState('');
+
+        useDebounceEffect(
+            () => {
+                setMapKey(`${width}-${height}`);
+            },
+            [width, height],
+            { wait: 300, leading: true },
+        );
+
         return (
             <div className="ms-map-root">
                 <MapContainer
                     {...configs}
                     ref={ref}
+                    key={mapKey}
                     style={{ width, height }}
                     zoom={zoom ?? defaultZoom}
                     center={center || DEFAULT_MAP_CENTER}
@@ -130,7 +143,7 @@ const Map = forwardRef<MapInstance, MapProps>(
                         attribution={attribution}
                         coordType={coordType}
                         autoCenterLocate={!center}
-                        eventHandlers={events}
+                        events={events}
                         onLocationError={onLocationError}
                         onLocationFound={onLocationFound}
                     />

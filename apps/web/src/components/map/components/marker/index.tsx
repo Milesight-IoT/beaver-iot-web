@@ -1,4 +1,4 @@
-import { memo, forwardRef, useRef, useImperativeHandle, useEffect, useMemo } from 'react';
+import { memo, forwardRef, useRef, useImperativeHandle, useEffect } from 'react';
 import cls from 'classnames';
 import L, { type Marker as MarkerInstance } from 'leaflet';
 import { Marker, Popup, Tooltip, type MarkerProps } from 'react-leaflet';

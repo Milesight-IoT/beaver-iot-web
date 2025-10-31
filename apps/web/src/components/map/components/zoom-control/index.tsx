@@ -75,7 +75,7 @@ const ZoomControl = memo(({ position = 'bottomright', locateCenter, onButtonClic
             }
             case 'locate-center': {
                 if (!locateCenter) break;
-                map.setView(locateCenter, PREFER_ZOOM_LEVEL);
+                map.setView(locateCenter);
                 break;
             }
             default:
