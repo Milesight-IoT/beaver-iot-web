@@ -1,4 +1,4 @@
-import { memo, forwardRef, useRef, useImperativeHandle, useEffect, useMemo } from 'react';
+import { memo, forwardRef, useRef, useImperativeHandle, useEffect } from 'react';
 import cls from 'classnames';
 import L, { type Marker as MarkerInstance } from 'leaflet';
 import { Marker, Popup, Tooltip, type MarkerProps } from 'react-leaflet';
@@ -8,10 +8,6 @@ import './style.less';
  * Marker color type
  */
 type ColorType = 'info' | 'danger' | 'warning' | 'success' | 'disabled';
-
-interface MarkerEventHandlerFnMap extends Omit<L.LeafletEventHandlerFnMap, 'move'> {
-    move?: (e: L.LeafletMouseEvent) => void;
-}
 
 interface BMarkerProps extends Omit<MarkerProps, 'eventHandlers'> {
     /** Color Type */
@@ -30,7 +26,7 @@ interface BMarkerProps extends Omit<MarkerProps, 'eventHandlers'> {
     tooltipProps?: L.TooltipOptions;
 
     /** Event handlers */
-    events?: MarkerEventHandlerFnMap;
+    events?: L.LeafletEventHandlerFnMap;
 
     /**
      * Callback when the marker is ready
@@ -99,7 +95,7 @@ const BMarker = forwardRef<MarkerInstance, BMarkerProps>(
                         if (tooltip) {
                             e.target.closeTooltip();
                         }
-                        events?.move?.(e as L.LeafletMouseEvent);
+                        events?.move?.(e);
                     },
                 }}
             >
