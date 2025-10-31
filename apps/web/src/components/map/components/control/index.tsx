@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import cls from 'classnames';
+import { useMap } from 'react-leaflet';
 import { POSITION_CLASSES } from '../../constants';
 import PrependPortal from './prepend-portal';
 
@@ -16,6 +17,8 @@ interface Props extends React.PropsWithChildren {
 }
 
 const MapControl: React.FC<Props> = memo(({ position, children, className }) => {
+    const map = useMap();
+
     return (
         <PrependPortal
             container={() => {
@@ -23,7 +26,9 @@ const MapControl: React.FC<Props> = memo(({ position, children, className }) => 
                     .split(' ')
                     .map(item => `.${item}`)
                     .join('');
-                return document.querySelector(`.leaflet-control-container ${positionClass}`);
+                return map
+                    .getContainer()
+                    .querySelector(`.leaflet-control-container ${positionClass}`);
             }}
         >
             <div className={cls('leaflet-control leaflet-bar', className)}>{children}</div>
