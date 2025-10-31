@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRequest, useMemoizedFn } from 'ahooks';
 import { isEmpty } from 'lodash-es';
 
@@ -41,10 +41,19 @@ export function useDeviceData(devices?: DeviceSelectData[]) {
         setSelectDevice(args?.[1] || null);
     });
 
+    const selectDeviceDetail = useMemo(() => {
+        if (!selectDevice || !Array.isArray(data) || isEmpty(data)) {
+            return null;
+        }
+
+        return data?.find(d => d.identifier === selectDevice.identifier) || null;
+    }, [data, selectDevice]);
+
     return {
         loading,
         data,
         selectDevice,
+        selectDeviceDetail,
         handleSelectDevice,
     };
 }

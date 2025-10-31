@@ -43,5 +43,7 @@
     "dashboard.unset_as_home_dashboard_tip": "Cancel Top",
     "dashboard.plugin_name_map": "Map",
     "dashboard.tip.alarm_device": "Alarm device",
-    "dashboard.tip.offline_device": "Offline device"
+    "dashboard.tip.offline_device": "Offline device",
+    "dashboard.tip.navigate_here": "Navigate Here",
+    "dashboard.tip.delete_spot": "Delete Spot"
 }

@@ -166,6 +166,10 @@ export {
     Dns as DnsIcon,
     SpaceDashboard as SpaceDashboardIcon,
     LocationOn as LocationOnIcon,
+    WaterDrop as WaterDropIcon,
+    OfflineBolt as OfflineBoltIcon,
+    NearMe as NearMeIcon,
+    CheckCircleOutline as CheckCircleOutlineIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';

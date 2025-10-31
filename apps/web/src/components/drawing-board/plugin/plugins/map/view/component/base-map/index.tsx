@@ -2,13 +2,15 @@ import { useRef, useState } from 'react';
 import { useSize, useTimeout } from 'ahooks';
 import { Map, MapMarker, type MapInstance, type MarkerInstance, type LatLng } from '@/components';
 
+import DevicePopup from '../device-popup';
+
 const demoData = [
     [31.59, 120.29],
     [39.905531, 116.391305],
     [24.624821056984395, 118.03075790405273],
 ] as unknown as LatLng[];
 
-const Location = () => {
+const BaseMap = () => {
     const ref = useRef<HTMLDivElement>(null);
     const size = useSize(ref);
     const mapRef = useRef<MapInstance>(null);
@@ -32,14 +34,21 @@ const Location = () => {
                     width={size.width}
                     height={size.height}
                     onReady={map => {
-                        console.log(map);
+                        // console.log(map);
+                        // map.fitBounds([
+                        //     [31.59, 120.29],
+                        //     [39.905531, 116.391305],
+                        //     [24.624821056984395, 118.03075790405273],
+                        // ]);
+                        // setTimeout(() => console.log(map.fitBounds), 0);
+                        // console.log(mapRef.current);
                     }}
                     onLocationFound={e => {
                         mapRef.current?.fitBounds(demoData as any, {
                             padding: [20, 20],
                         });
                     }}
-                    eventHandlers={{
+                    events={{
                         move(e) {
                             console.log(e);
                         },
@@ -49,7 +58,8 @@ const Location = () => {
                         <MapMarker
                             key={latLng.toString()}
                             position={latLng}
-                            popup={latLng.toString()}
+                            popup={<DevicePopup />}
+                            tooltip={latLng.toString()}
                             onReady={marker => {
                                 handleMarkerReady(latLng.toString(), marker);
                             }}
@@ -61,4 +71,4 @@ const Location = () => {
     );
 };
 
-export default Location;
+export default BaseMap;

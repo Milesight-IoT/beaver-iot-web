@@ -49,9 +49,8 @@ const MapView: React.FC<MapViewProps> = props => {
         }
     }, [title, pluginFullscreenCxt]);
 
-    return (
-        <div className="map-plugin-view">
-            {title && <Tooltip className="map-plugin-view__header" autoEllipsis title={title} />}
+    const RenderSearchAutocomplete = (
+        <>
             <div
                 className={cls('map-plugin-view__search', {
                     'no-title': title,
@@ -107,9 +106,17 @@ const MapView: React.FC<MapViewProps> = props => {
                                     state.inputValue,
                         )
                     }
+                    noOptionsText={getIntlText('common.label.no_options')}
                 />
             </div>
             {!title && <div className="map-plugin-view__search-bg" />}
+        </>
+    );
+
+    return (
+        <div className="map-plugin-view">
+            {title && <Tooltip className="map-plugin-view__header" autoEllipsis title={title} />}
+            {RenderSearchAutocomplete}
 
             <BaseMap />
 
