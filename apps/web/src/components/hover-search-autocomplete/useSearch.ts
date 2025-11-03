@@ -60,7 +60,11 @@ export function useSearch() {
         clearTimeout(timeoutRef.current);
     });
 
-    const handleOpen = useMemoizedFn(() => {
+    const handleOpen = useMemoizedFn(e => {
+        if (checkIsClearNode(e?.target as HTMLElement)) {
+            return;
+        }
+
         const inputWidth = inputRef?.current?.getBoundingClientRect()?.width;
         const maxWidth = inputRef?.current?.value ? 166 : 192;
         if (!inputWidth || inputWidth < maxWidth) {
@@ -70,6 +74,10 @@ export function useSearch() {
         if (!open) {
             setOpen(true);
         }
+    });
+
+    const hiddenSearch = useMemoizedFn(() => {
+        setShowSearch(false);
     });
 
     return {
@@ -82,5 +90,6 @@ export function useSearch() {
         handleMouseEnter,
         handleMouseLeave,
         handleOpen,
+        hiddenSearch,
     };
 }

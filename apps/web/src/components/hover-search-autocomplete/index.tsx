@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo, forwardRef, useImperativeHandle } from 'react';
 import { TextField, Autocomplete, type SxProps } from '@mui/material';
 import { omit, pick } from 'lodash-es';
 
@@ -6,13 +6,16 @@ import { useI18n } from '@milesight/shared/src/hooks';
 import { SearchIcon } from '@milesight/shared/src/components';
 
 import { useSearch } from './useSearch';
-import type { HoverSearchAutocompleteProps } from './interface';
+import type { HoverSearchAutocompleteProps, HoverSearchAutocompleteExpose } from './interface';
 
 /**
  * Component Search autocomplete input displayed only upon
  * hovering the mouse over the search icon
  */
-function HoverSearchInput<T>(props: HoverSearchAutocompleteProps<T>) {
+function HoverSearchInput<T>(
+    props: HoverSearchAutocompleteProps<T>,
+    ref: React.ForwardedRef<HoverSearchAutocompleteExpose>,
+) {
     const { getIntlText } = useI18n();
     const {
         showSearch,
@@ -22,7 +25,17 @@ function HoverSearchInput<T>(props: HoverSearchAutocompleteProps<T>) {
         handleMouseEnter,
         handleMouseLeave,
         handleOpen,
+        hiddenSearch,
     } = useSearch();
+
+    /**
+     * Expose methods to parent component
+     */
+    useImperativeHandle(ref, () => {
+        return {
+            hiddenSearch,
+        };
+    });
 
     const textFieldSx = useMemo(() => {
         const result: SxProps = {
@@ -93,4 +106,10 @@ function HoverSearchInput<T>(props: HoverSearchAutocompleteProps<T>) {
     );
 }
 
-export default HoverSearchInput;
+const HoverSearchInputWithRef = forwardRef(HoverSearchInput) as <T>(
+    props: HoverSearchAutocompleteProps<T> & {
+        ref?: React.ForwardedRef<HoverSearchAutocompleteExpose>;
+    },
+) => ReturnType<typeof HoverSearchInput>;
+
+export default HoverSearchInputWithRef;

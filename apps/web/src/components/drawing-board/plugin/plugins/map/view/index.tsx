@@ -6,14 +6,15 @@ import { isNil } from 'lodash-es';
 import { useI18n } from '@milesight/shared/src/hooks';
 
 import { Tooltip, HoverSearchAutocomplete } from '@/components';
+import { DrawingBoardContext } from '@/components/drawing-board/context';
 import { PluginFullscreenContext } from '@/components/drawing-board/components';
+import { type DeviceDetail } from '@/services/http';
 import { useStableValue } from '../../../hooks';
 import { BaseMap, Alarm } from './component';
 import { useDeviceData } from './hooks';
 
 import { type MapConfigType } from '../control-panel';
 import { type BoardPluginProps } from '../../../types';
-import type { SearchDeviceProps } from './interface';
 
 import './style.less';
 
@@ -30,8 +31,16 @@ const MapView: React.FC<MapViewProps> = props => {
     const { getIntlText } = useI18n();
 
     const { stableValue: devices } = useStableValue(unStableValue);
+    const context = useContext(DrawingBoardContext);
     const pluginFullscreenCxt = useContext(PluginFullscreenContext);
-    const { data, selectDevice, handleSelectDevice } = useDeviceData(devices);
+    const {
+        data,
+        selectDevice,
+        handleSelectDevice,
+        cancelSelectDevice,
+        demoMapData,
+        hoverSearchRef,
+    } = useDeviceData(devices);
 
     /**
      * Update plugin fullscreen icon sx
@@ -53,11 +62,14 @@ const MapView: React.FC<MapViewProps> = props => {
         <>
             <div
                 className={cls('map-plugin-view__search', {
-                    'no-title': title,
+                    'has-title': !!title,
+                    'has-title-edit': !!context?.isEdit && !!title,
+                    'edit-search': !!context?.isEdit && !title,
                 })}
             >
-                <HoverSearchAutocomplete<SearchDeviceProps>
-                    options={(data || []).map(d => ({ identifier: d.identifier, name: d.name }))}
+                <HoverSearchAutocomplete<DeviceDetail>
+                    ref={hoverSearchRef}
+                    options={data || []}
                     value={selectDevice}
                     renderOption={(props, option) => {
                         const { key, ...optionProps } = props || {};
@@ -83,13 +95,13 @@ const MapView: React.FC<MapViewProps> = props => {
                                         lineHeight: '20px',
                                         color: 'text.secondary',
                                     }}
-                                    title={`${getIntlText('device.label.param_external_id')}: ${option.identifier}`}
+                                    title={`${getIntlText('device.label.param_external_id')}: ${option.id}`}
                                 />
                             </Box>
                         );
                     }}
                     getOptionLabel={option => option.name}
-                    getOptionKey={option => option.identifier}
+                    getOptionKey={option => option.id}
                     ListboxProps={{
                         sx: {
                             maxHeight: '236px',
@@ -109,16 +121,26 @@ const MapView: React.FC<MapViewProps> = props => {
                     noOptionsText={getIntlText('common.label.no_options')}
                 />
             </div>
-            {!title && <div className="map-plugin-view__search-bg" />}
+            {!title && (
+                <div
+                    className={cls('map-plugin-view__search-bg', {
+                        'edit-search': !!context?.isEdit,
+                    })}
+                />
+            )}
         </>
     );
 
     return (
         <div className="map-plugin-view">
             {title && <Tooltip className="map-plugin-view__header" autoEllipsis title={title} />}
-            {RenderSearchAutocomplete}
+            {!isPreview && RenderSearchAutocomplete}
 
-            <BaseMap />
+            <BaseMap
+                devices={demoMapData}
+                selectDevice={selectDevice}
+                cancelSelectDevice={cancelSelectDevice}
+            />
 
             <Alarm />
         </div>

@@ -4,3 +4,7 @@ export type HoverSearchAutocompleteProps<T = unknown> = Omit<
     AutocompleteProps<T, false, false, false>,
     'renderInput'
 >;
+
+export interface HoverSearchAutocompleteExpose {
+    hiddenSearch: () => void;
+}

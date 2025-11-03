@@ -1,5 +1,6 @@
 import React from 'react';
 import { Alert, IconButton } from '@mui/material';
+import { useMemoizedFn } from 'ahooks';
 
 import { useI18n } from '@milesight/shared/src/hooks';
 import {
@@ -13,11 +14,27 @@ import {
 } from '@milesight/shared/src/components';
 
 import { Tooltip } from '@/components';
+import { type DeviceDetail } from '@/services/http';
 
 import styles from './style.module.less';
 
-const DevicePopup: React.FC = () => {
+export interface DevicePopupProps {
+    device?: DeviceDetail;
+}
+
+const DevicePopup: React.FC<DevicePopupProps> = props => {
+    const { device } = props;
+
     const { getIntlText } = useI18n();
+
+    const openGoogleMap = useMemoizedFn(() => {
+        if (!device?.location) {
+            return;
+        }
+
+        const url = `https://www.google.com/maps?q=${device.location.latitude},${device.location.longitude}`;
+        window.open(url, '_blank');
+    });
 
     return (
         <div className={styles['device-popup']}>
@@ -30,7 +47,7 @@ const DevicePopup: React.FC = () => {
                         }}
                         className={styles.name}
                         autoEllipsis
-                        title="Device123 Device123 Device123 Device123 Device123 Device123 Device123"
+                        title={device?.name || ''}
                     />
                 </div>
                 <div className={styles.right}>
@@ -63,7 +80,7 @@ const DevicePopup: React.FC = () => {
                 }}
                 className={styles.identify}
                 autoEllipsis
-                title="24E123456789 24E123456789 24E123456789 24E123456789 24E123456789"
+                title={device?.identifier || ''}
             />
             <Alert
                 icon={false}
@@ -160,7 +177,9 @@ const DevicePopup: React.FC = () => {
                         height: '16px',
                     }}
                 />
-                <div className={styles['info-item__name']}>22.228671,25.121666</div>
+                <div
+                    className={styles['info-item__name']}
+                >{`${device?.location?.latitude || ''}, ${device?.location?.longitude || ''}`}</div>
                 <Tooltip
                     PopperProps={{
                         disablePortal: true,
@@ -170,7 +189,7 @@ const DevicePopup: React.FC = () => {
                     }}
                     title={getIntlText('dashboard.tip.navigate_here')}
                 >
-                    <IconButton sx={{ paddingLeft: '4px' }} size="small">
+                    <IconButton sx={{ paddingLeft: '4px' }} size="small" onClick={openGoogleMap}>
                         <NearMeIcon
                             color="primary"
                             sx={{
