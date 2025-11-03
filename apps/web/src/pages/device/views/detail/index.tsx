@@ -48,7 +48,8 @@ export default () => {
     const {
         // loading,
         // data: deviceDetail,
-        run: getDeviceDetail,
+        // run: getDeviceDetail,
+        runAsync: getDeviceDetailAsync,
     } = useRequest(
         async () => {
             if (!deviceId) return;
@@ -63,6 +64,13 @@ export default () => {
             }
 
             const data = objectToCamelCase(respData);
+
+            // Demo data
+            const demoLocation = {
+                longitude: 117.88900894408232,
+                latitude: 24.523339775150006,
+            };
+            data.location = data.location || demoLocation;
 
             setDeviceDetail(data);
             return data;
@@ -93,14 +101,14 @@ export default () => {
                     <BasicTable
                         data={deviceDetail}
                         loading={loading}
-                        onEditSuccess={getDeviceDetail}
+                        onEditSuccess={getDeviceDetailAsync}
                     />
                 ),
             },
             {
                 key: 'entity',
                 label: getIntlText('device.detail.entity_data'),
-                component: <EntityData data={deviceDetail} onRefresh={getDeviceDetail} />,
+                component: <EntityData data={deviceDetail} onRefresh={getDeviceDetailAsync} />,
             },
             {
                 key: 'drawingBoard',
@@ -116,16 +124,15 @@ export default () => {
             },
             {
                 key: 'location',
-                // TODO: i18n
-                label: '位置',
-                component: <Location />,
+                label: getIntlText('common.label.location'),
+                component: <Location data={deviceDetail} onEditSuccess={getDeviceDetailAsync} />,
             },
         ];
     }, [
         deviceDetail,
         loading,
         getIntlText,
-        getDeviceDetail,
+        getDeviceDetailAsync,
         drawingBoardProps,
         loadingDrawingBoard,
         drawingBoardDetail,

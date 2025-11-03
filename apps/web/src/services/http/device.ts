@@ -54,6 +54,11 @@ export interface DeviceDetail {
     /** Common entities object */
     common_entities?: ImportEntityProps[];
     status?: DeviceStatus;
+    location?: {
+        longitude: number;
+        latitude: number;
+        address?: string;
+    };
 }
 
 /**

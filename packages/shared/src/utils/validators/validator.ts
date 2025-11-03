@@ -216,9 +216,10 @@ export const checkRangeLength: TValidator<{ min: number; max: number }> = rule =
         });
 
     return value => {
+        const val = `${value}`;
         try {
             // @ts-ignore rule is possibly 'undefined'
-            if (value && !isRangeLength(value, rule.min, rule.max)) {
+            if (val && !isRangeLength(val, rule.min, rule.max)) {
                 return message;
             }
         } catch (e) {
