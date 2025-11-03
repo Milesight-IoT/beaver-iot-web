@@ -24,10 +24,25 @@ const DevicePopup: React.FC = () => {
             <div className={styles.header}>
                 <div className={styles.left}>
                     <div className={`${styles.status} ${styles.online}`} />
-                    <Tooltip className={styles.name} autoEllipsis title="Device123" />
+                    <Tooltip
+                        PopperProps={{
+                            disablePortal: true,
+                        }}
+                        className={styles.name}
+                        autoEllipsis
+                        title="Device123 Device123 Device123 Device123 Device123 Device123 Device123"
+                    />
                 </div>
                 <div className={styles.right}>
-                    <Tooltip title={getIntlText('dashboard.tip.delete_spot')}>
+                    <Tooltip
+                        PopperProps={{
+                            disablePortal: true,
+                            sx: {
+                                minWidth: 'max-content',
+                            },
+                        }}
+                        title={getIntlText('dashboard.tip.delete_spot')}
+                    >
                         <IconButton
                             sx={{
                                 width: '24px',
@@ -42,12 +57,27 @@ const DevicePopup: React.FC = () => {
                     </Tooltip>
                 </div>
             </div>
-            <div className={styles.identify}>24E123456789</div>
+            <Tooltip
+                PopperProps={{
+                    disablePortal: true,
+                }}
+                className={styles.identify}
+                autoEllipsis
+                title="24E123456789 24E123456789 24E123456789 24E123456789 24E123456789"
+            />
             <Alert
                 icon={false}
                 severity="error"
                 action={
-                    <Tooltip title={getIntlText('common.tip.click_to_claim')}>
+                    <Tooltip
+                        PopperProps={{
+                            disablePortal: true,
+                            sx: {
+                                minWidth: 'max-content',
+                            },
+                        }}
+                        title={getIntlText('common.tip.click_to_claim')}
+                    >
                         <IconButton
                             sx={{
                                 width: '24px',
@@ -75,6 +105,7 @@ const DevicePopup: React.FC = () => {
                         paddingBottom: 0,
                         fontSize: '0.75rem',
                         lineHeight: '1.25rem',
+                        overflow: 'unset',
                     },
                     '.MuiAlert-action': {
                         paddingTop: 0,
@@ -82,6 +113,9 @@ const DevicePopup: React.FC = () => {
                 }}
             >
                 <Tooltip
+                    PopperProps={{
+                        disablePortal: true,
+                    }}
                     autoEllipsis
                     title="Abnormal soil conditions at the site at the site at the site."
                 />
@@ -127,7 +161,15 @@ const DevicePopup: React.FC = () => {
                     }}
                 />
                 <div className={styles['info-item__name']}>22.228671,25.121666</div>
-                <Tooltip title={getIntlText('dashboard.tip.navigate_here')}>
+                <Tooltip
+                    PopperProps={{
+                        disablePortal: true,
+                        sx: {
+                            minWidth: 'max-content',
+                        },
+                    }}
+                    title={getIntlText('dashboard.tip.navigate_here')}
+                >
                     <IconButton sx={{ paddingLeft: '4px' }} size="small">
                         <NearMeIcon
                             color="primary"

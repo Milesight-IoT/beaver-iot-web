@@ -59,7 +59,6 @@ const BaseMap = () => {
                             key={latLng.toString()}
                             position={latLng}
                             popup={<DevicePopup />}
-                            tooltip={latLng.toString()}
                             onReady={marker => {
                                 handleMarkerReady(latLng.toString(), marker);
                             }}

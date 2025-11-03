@@ -8,9 +8,11 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        padding-right: 38px;
 
         .left {
             display: flex;
+            flex: 1;
             align-items: center;
         }
 
@@ -29,6 +31,8 @@
         }
 
         .name {
+            flex: 1;
+            width: 0;
             padding-left: @padding-xs;
             font-weight: @font-weight-medium;
             .text-size(@font-size-base);
@@ -37,7 +41,7 @@
         .right {
             position: absolute;
             top: -4px;
-            right: -8px;
+            right: 16px;
         }
     }
 
@@ -50,6 +54,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        padding-right: @padding-xxl;
         margin-top: @margin-xs;
 
         &-item {
