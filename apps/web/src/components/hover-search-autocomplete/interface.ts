@@ -6,5 +6,5 @@ export type HoverSearchAutocompleteProps<T = unknown> = Omit<
 >;
 
 export interface HoverSearchAutocompleteExpose {
-    hiddenSearch: () => void;
+    toggleShowSearch: (isShow?: boolean) => void;
 }

@@ -26,6 +26,7 @@ const BaseMap: React.FC<BaseMapProps> = props => {
     const mapRef = useRef<MapInstance>(null);
     const isInitialFit = useRef(false);
     const currentOpenMarker = useRef<MarkerInstance | null>(null);
+    const isComponentDestroy = useRef(false);
     const [markers, setMarkers] = useState<Record<string, MarkerInstance>>({});
 
     const mapData = useMemo(() => {
@@ -90,10 +91,21 @@ const BaseMap: React.FC<BaseMapProps> = props => {
      * Listener popup close
      */
     const handlePopupclose = useMemoizedFn((id: ApiKey) => {
-        if (selectDevice?.id && id && selectDevice.id === id) {
+        if (selectDevice?.id && id && selectDevice.id === id && !isComponentDestroy?.current) {
             cancelSelectDevice?.();
         }
     });
+
+    /**
+     * Component destroy
+     */
+    useEffect(() => {
+        isComponentDestroy.current = false;
+
+        return () => {
+            isComponentDestroy.current = true;
+        };
+    }, []);
 
     return (
         <div className="map-plugin-view__map" ref={ref}>

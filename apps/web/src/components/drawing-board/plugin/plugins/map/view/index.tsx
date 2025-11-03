@@ -40,7 +40,7 @@ const MapView: React.FC<MapViewProps> = props => {
         cancelSelectDevice,
         demoMapData,
         hoverSearchRef,
-    } = useDeviceData(devices);
+    } = useDeviceData(pluginFullscreenCxt, devices);
 
     /**
      * Update plugin fullscreen icon sx

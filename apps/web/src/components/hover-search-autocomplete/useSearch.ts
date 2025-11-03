@@ -1,8 +1,10 @@
 import { useState, useRef } from 'react';
 import { useClickAway, useMemoizedFn } from 'ahooks';
 
-export function useSearch() {
-    const [showSearch, setShowSearch] = useState(false);
+import { HoverSearchAutocompleteProps } from './interface';
+
+export function useSearch<T>(props: HoverSearchAutocompleteProps<T>) {
+    const [showSearch, setShowSearch] = useState(!!props?.value);
     const [open, setOpen] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>();
@@ -37,7 +39,7 @@ export function useSearch() {
 
             setOpen(false);
 
-            if (inputRef?.current?.value) return;
+            if (props?.value) return;
 
             setShowSearch(false);
             inputRef?.current?.blur();
@@ -76,8 +78,8 @@ export function useSearch() {
         }
     });
 
-    const hiddenSearch = useMemoizedFn(() => {
-        setShowSearch(false);
+    const toggleShowSearch = useMemoizedFn((isShow?: boolean) => {
+        setShowSearch(!!isShow);
     });
 
     return {
@@ -90,6 +92,6 @@ export function useSearch() {
         handleMouseEnter,
         handleMouseLeave,
         handleOpen,
-        hiddenSearch,
+        toggleShowSearch,
     };
 }

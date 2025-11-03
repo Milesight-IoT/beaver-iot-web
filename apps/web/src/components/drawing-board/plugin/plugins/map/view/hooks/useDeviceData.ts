@@ -1,6 +1,6 @@
-import { useState, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useRequest, useMemoizedFn } from 'ahooks';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, get } from 'lodash-es';
 
 import {
     deviceAPI,
@@ -11,6 +11,7 @@ import {
 } from '@/services/http';
 import { type DeviceSelectData } from '@/components/drawing-board/plugin/components/multi-device-select/interface';
 import { type HoverSearchAutocompleteExpose } from '@/components/hover-search-autocomplete/interface';
+import { type PluginFullscreenContextProps } from '@/components/drawing-board/components';
 
 function randomFloatWithSixDecimals(isLatitude?: boolean) {
     const randomLat = (18 + Math.random() * (54 - 18)).toFixed(6); // 18 ~ 54
@@ -23,9 +24,21 @@ function randomFloatWithSixDecimals(isLatitude?: boolean) {
     return parseFloat(randomLng);
 }
 
-export function useDeviceData(devices?: DeviceSelectData[]) {
-    const [selectDevice, setSelectDevice] = useState<DeviceDetail | null>(null);
+export function useDeviceData(
+    pluginFullscreenCxt: PluginFullscreenContextProps | null,
+    devices?: DeviceSelectData[],
+) {
     const hoverSearchRef = useRef<HoverSearchAutocompleteExpose>(null);
+
+    const selectDevice = useMemo((): DeviceDetail | null => {
+        return get(pluginFullscreenCxt?.extraParams, 'selectDevice', null);
+    }, [pluginFullscreenCxt?.extraParams]);
+
+    const setSelectDevice = useMemoizedFn((newVal?: DeviceDetail | null) => {
+        pluginFullscreenCxt?.setExtraParams({
+            selectDevice: newVal || null,
+        });
+    });
 
     const { loading, data } = useRequest(
         async () => {
@@ -61,7 +74,7 @@ export function useDeviceData(devices?: DeviceSelectData[]) {
 
     const cancelSelectDevice = useMemoizedFn(() => {
         setSelectDevice(null);
-        hoverSearchRef?.current?.hiddenSearch();
+        hoverSearchRef?.current?.toggleShowSearch(false);
     });
 
     /**

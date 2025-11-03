@@ -25,15 +25,15 @@ function HoverSearchInput<T>(
         handleMouseEnter,
         handleMouseLeave,
         handleOpen,
-        hiddenSearch,
-    } = useSearch();
+        toggleShowSearch,
+    } = useSearch<T>(props);
 
     /**
      * Expose methods to parent component
      */
     useImperativeHandle(ref, () => {
         return {
-            hiddenSearch,
+            toggleShowSearch,
         };
     });
 
