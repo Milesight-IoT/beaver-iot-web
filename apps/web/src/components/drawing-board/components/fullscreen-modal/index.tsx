@@ -111,6 +111,9 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
                     '&.ms-modal-root .ms-modal-content.MuiDialogContent-root': {
                         padding: 0,
                     },
+                    '&.ms-modal-root .drawing-board__widget': {
+                        borderRadius: 0,
+                    },
                 }}
             >
                 {children}

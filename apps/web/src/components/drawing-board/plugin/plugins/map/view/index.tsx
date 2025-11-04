@@ -3,7 +3,7 @@ import cls from 'classnames';
 import { Box } from '@mui/material';
 import { isNil } from 'lodash-es';
 
-import { useI18n } from '@milesight/shared/src/hooks';
+import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 
 import { Tooltip, HoverSearchAutocomplete } from '@/components';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
@@ -30,10 +30,12 @@ const MapView: React.FC<MapViewProps> = props => {
     const { isPreview } = configJson || {};
 
     const { getIntlText } = useI18n();
+    const { matchTablet } = useTheme();
 
     const { stableValue: devices } = useStableValue(unStableValue);
     const context = useContext(DrawingBoardContext);
     const pluginFullscreenCxt = useContext(PluginFullscreenContext);
+    const { setExtraFullscreenSx, pluginFullScreen } = pluginFullscreenCxt || {};
     const {
         data,
         selectDevice,
@@ -61,16 +63,16 @@ const MapView: React.FC<MapViewProps> = props => {
      */
     useEffect(() => {
         if (title) {
-            pluginFullscreenCxt?.setExtraFullscreenSx(undefined);
+            setExtraFullscreenSx?.(undefined);
         } else {
-            pluginFullscreenCxt?.setExtraFullscreenSx({
+            setExtraFullscreenSx?.({
                 top: '24px',
                 right: '24px',
                 borderRadius: '50%',
                 backgroundColor: 'var(--component-background)',
             });
         }
-    }, [title, pluginFullscreenCxt]);
+    }, [title, setExtraFullscreenSx]);
 
     const RenderSearchAutocomplete = (
         <>
@@ -147,9 +149,23 @@ const MapView: React.FC<MapViewProps> = props => {
 
     return (
         <MapContext.Provider value={mapContextValue}>
-            <div className="map-plugin-view">
+            <div
+                className={cls('map-plugin-view', [
+                    !!pluginFullScreen && matchTablet ? 'p-0' : 'p-4',
+                ])}
+            >
                 {title && (
-                    <Tooltip className="map-plugin-view__header" autoEllipsis title={title} />
+                    <Tooltip
+                        className={cls(
+                            'map-plugin-view__header',
+                            [!!pluginFullScreen && matchTablet ? 'p-4' : 'pb-4'],
+                            {
+                                'text-center': !!pluginFullScreen && matchTablet,
+                            },
+                        )}
+                        autoEllipsis
+                        title={title}
+                    />
                 )}
                 {!isPreview && RenderSearchAutocomplete}
 

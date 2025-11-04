@@ -15,8 +15,28 @@ html {
 @enable-mobile-first: false;
 @enable-utilities-important: true;
 
+@custom-utilities: {
+    @border-radius: {
+        responsive: true;
+        property: border-radius;
+        class: rounded;
+        @values: {
+            none: 0;
+            2xs: @border-radius-xxs;
+            xs: @border-radius-xs;
+            sm: @border-radius-sm;
+            md: @border-radius-md;
+            lg: @border-radius-lg;
+            2xl: @border-radius-xxl;
+        };
+    };
+};
+
 .gen-utils();
 .gen-breakpoints-utils();
+
+.gen-utils('', @custom-utilities);
+.gen-breakpoints-utils(@enable-mobile-first, @grid-breakpoints, @custom-utilities);
 
 // ---------- Layout ----------
 .@{prefix}-layout {

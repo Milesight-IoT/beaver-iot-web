@@ -1,10 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState, useContext } from 'react';
 import { useSize, useMemoizedFn } from 'ahooks';
 import { isEmpty, get } from 'lodash-es';
+import cls from 'classnames';
 
 import { type LatLngTuple } from 'leaflet';
 
+import { useTheme } from '@milesight/shared/src/hooks';
+
 import { Map, MapMarker, type MapInstance, type MarkerInstance } from '@/components';
+import { PluginFullscreenContext } from '@/components/drawing-board/components';
 import { type DeviceDetail } from '@/services/http';
 import DevicePopup from '../device-popup';
 import { MapContext } from '../../context';
@@ -22,8 +26,11 @@ export interface BaseMapProps {
 const BaseMap: React.FC<BaseMapProps> = props => {
     const { selectDevice, devices, cancelSelectDevice } = props;
 
+    const { matchTablet } = useTheme();
     const mapContext = useContext(MapContext);
     const { getDeviceStatusById } = mapContext || {};
+    const pluginFullscreenCxt = useContext(PluginFullscreenContext);
+    const { pluginFullScreen } = pluginFullscreenCxt || {};
 
     const ref = useRef<HTMLDivElement>(null);
     const size = useSize(ref);
@@ -119,7 +126,12 @@ const BaseMap: React.FC<BaseMapProps> = props => {
     });
 
     return (
-        <div className="map-plugin-view__map" ref={ref}>
+        <div
+            className={cls('map-plugin-view__map', {
+                'rounded-none': !!pluginFullScreen && matchTablet,
+            })}
+            ref={ref}
+        >
             {size && (
                 <Map
                     ref={mapRef}
