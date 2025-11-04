@@ -139,6 +139,7 @@ const MapView: React.FC<MapViewProps> = props => {
             <BaseMap
                 devices={demoMapData}
                 selectDevice={selectDevice}
+                isPreview={isPreview}
                 cancelSelectDevice={cancelSelectDevice}
             />
 

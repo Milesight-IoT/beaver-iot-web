@@ -15,11 +15,12 @@ export interface MapDataProps extends DeviceDetail {
 export interface BaseMapProps {
     selectDevice?: DeviceDetail | null;
     devices?: DeviceDetail[];
+    isPreview?: boolean;
     cancelSelectDevice?: () => void;
 }
 
 const BaseMap: React.FC<BaseMapProps> = props => {
-    const { selectDevice, devices, cancelSelectDevice } = props;
+    const { selectDevice, devices, isPreview, cancelSelectDevice } = props;
 
     const ref = useRef<HTMLDivElement>(null);
     const size = useSize(ref);
@@ -107,6 +108,15 @@ const BaseMap: React.FC<BaseMapProps> = props => {
         };
     }, []);
 
+    const closeMarkerPopup = useMemoizedFn((id: ApiKey) => {
+        const marker = get(markers, String(id));
+        if (!marker) {
+            return;
+        }
+
+        marker?.closePopup();
+    });
+
     return (
         <div className="map-plugin-view__map" ref={ref}>
             {size && (
@@ -126,7 +136,13 @@ const BaseMap: React.FC<BaseMapProps> = props => {
                         <MapMarker
                             key={d.id}
                             position={d.latLng}
-                            popup={<DevicePopup device={d} />}
+                            popup={
+                                <DevicePopup
+                                    device={d}
+                                    isPreview={isPreview}
+                                    closeMarkerPopup={closeMarkerPopup}
+                                />
+                            }
                             onReady={marker => {
                                 handleMarkerReady(d.id, marker);
                             }}

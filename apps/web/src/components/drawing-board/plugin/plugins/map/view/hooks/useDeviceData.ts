@@ -9,7 +9,7 @@ import {
     getResponseData,
     type DeviceDetail,
 } from '@/services/http';
-import { type DeviceSelectData } from '@/components/drawing-board/plugin/components/multi-device-select/interface';
+import { type DeviceSelectData } from '@/components/drawing-board/plugin/components';
 import { type HoverSearchAutocompleteExpose } from '@/components/hover-search-autocomplete/interface';
 import { type PluginFullscreenContextProps } from '@/components/drawing-board/components';
 

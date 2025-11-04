@@ -1,8 +1,10 @@
 import React from 'react';
 import { Alert, IconButton } from '@mui/material';
-import { useMemoizedFn } from 'ahooks';
+import { useMemoizedFn, useDebounceFn } from 'ahooks';
+import cls from 'classnames';
+import { isEmpty } from 'lodash-es';
 
-import { useI18n } from '@milesight/shared/src/hooks';
+import { useI18n, useStoreShallow } from '@milesight/shared/src/hooks';
 import {
     CheckCircleOutlineIcon,
     DeviceThermostatIcon,
@@ -15,17 +17,24 @@ import {
 
 import { Tooltip } from '@/components';
 import { type DeviceDetail } from '@/services/http';
+import useControlPanelStore from '@/components/drawing-board/plugin/store';
+import { type DeviceSelectData } from '@/components/drawing-board/plugin/components';
 
 import styles from './style.module.less';
 
 export interface DevicePopupProps {
     device?: DeviceDetail;
+    isPreview?: boolean;
+    closeMarkerPopup: (id: ApiKey) => void;
 }
 
 const DevicePopup: React.FC<DevicePopupProps> = props => {
-    const { device } = props;
+    const { device, isPreview, closeMarkerPopup } = props;
 
     const { getIntlText } = useI18n();
+    const { formData, setValuesToFormConfig } = useControlPanelStore(
+        useStoreShallow(['formData', 'setValuesToFormConfig']),
+    );
 
     const openGoogleMap = useMemoizedFn(() => {
         if (!device?.location) {
@@ -35,6 +44,29 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
         const url = `https://www.google.com/maps?q=${device.location.latitude},${device.location.longitude}`;
         window.open(url, '_blank');
     });
+
+    const { run: handleDeleteSpot } = useDebounceFn(
+        () => {
+            if (!isPreview || !device) {
+                return;
+            }
+
+            closeMarkerPopup(device.id);
+
+            const { devices = [] } = formData || {};
+            const selectDevices = devices as DeviceSelectData[];
+            if (!Array.isArray(selectDevices) || isEmpty(selectDevices)) {
+                return;
+            }
+
+            setValuesToFormConfig({
+                devices: [...selectDevices.filter(d => d.id !== device.id)],
+            });
+        },
+        {
+            wait: 300,
+        },
+    );
 
     return (
         <div className={styles['device-popup']}>
@@ -50,7 +82,11 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                         title={device?.name || ''}
                     />
                 </div>
-                <div className={styles.right}>
+                <div
+                    className={cls(styles.right, {
+                        'd-none': !isPreview,
+                    })}
+                >
                     <Tooltip
                         PopperProps={{
                             disablePortal: true,
@@ -66,6 +102,7 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                                 height: '24px',
                             }}
                             size="small"
+                            onClick={handleDeleteSpot}
                         >
                             <DeleteOutlineIcon
                                 sx={{ color: 'text.secondary', width: '16px', height: '16px' }}

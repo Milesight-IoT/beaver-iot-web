@@ -1,7 +1,7 @@
 import { t } from '@milesight/shared/src/utils/tools';
 
 import type { ControlPanelConfig } from '@/components/drawing-board/plugin/types';
-import type { DeviceSelectData } from '../../../components/multi-device-select/interface';
+import type { DeviceSelectData } from '../../../components';
 import MapIcon from '../Map.svg';
 
 export interface MapConfigType {
