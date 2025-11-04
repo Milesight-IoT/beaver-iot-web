@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useContext } from 'react';
 import { useSize, useMemoizedFn } from 'ahooks';
 import { isEmpty, get } from 'lodash-es';
 
@@ -7,6 +7,7 @@ import { type LatLngTuple } from 'leaflet';
 import { Map, MapMarker, type MapInstance, type MarkerInstance } from '@/components';
 import { type DeviceDetail } from '@/services/http';
 import DevicePopup from '../device-popup';
+import { MapContext } from '../../context';
 
 export interface MapDataProps extends DeviceDetail {
     latLng: LatLngTuple;
@@ -15,17 +16,18 @@ export interface MapDataProps extends DeviceDetail {
 export interface BaseMapProps {
     selectDevice?: DeviceDetail | null;
     devices?: DeviceDetail[];
-    isPreview?: boolean;
     cancelSelectDevice?: () => void;
 }
 
 const BaseMap: React.FC<BaseMapProps> = props => {
-    const { selectDevice, devices, isPreview, cancelSelectDevice } = props;
+    const { selectDevice, devices, cancelSelectDevice } = props;
+
+    const mapContext = useContext(MapContext);
+    const { getDeviceStatusById } = mapContext || {};
 
     const ref = useRef<HTMLDivElement>(null);
     const size = useSize(ref);
     const mapRef = useRef<MapInstance>(null);
-    const isInitialFit = useRef(false);
     const currentOpenMarker = useRef<MarkerInstance | null>(null);
     const isComponentDestroy = useRef(false);
     const [markers, setMarkers] = useState<Record<string, MarkerInstance>>({});
@@ -61,7 +63,6 @@ const BaseMap: React.FC<BaseMapProps> = props => {
         mapRef.current?.fitBounds(latLangs, {
             padding: [20, 20],
         });
-        isInitialFit.current = true;
     });
     useEffect(() => {
         mapFitBounds?.();
@@ -124,25 +125,20 @@ const BaseMap: React.FC<BaseMapProps> = props => {
                     ref={mapRef}
                     width={size.width}
                     height={size.height}
-                    onReady={() => {
-                        if (isInitialFit.current) {
-                            return;
-                        }
-
-                        mapFitBounds();
+                    onLocationFound={() => {
+                        mapFitBounds?.();
                     }}
                 >
                     {mapData.map(d => (
                         <MapMarker
                             key={d.id}
-                            position={d.latLng}
-                            popup={
-                                <DevicePopup
-                                    device={d}
-                                    isPreview={isPreview}
-                                    closeMarkerPopup={closeMarkerPopup}
-                                />
+                            colorType={
+                                getDeviceStatusById?.(d)?.value === 'ONLINE'
+                                    ? undefined
+                                    : 'disabled'
                             }
+                            position={d.latLng}
+                            popup={<DevicePopup device={d} closeMarkerPopup={closeMarkerPopup} />}
                             onReady={marker => {
                                 handleMarkerReady(d.id, marker);
                             }}

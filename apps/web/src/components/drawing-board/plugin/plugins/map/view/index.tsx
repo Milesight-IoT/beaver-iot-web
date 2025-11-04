@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import cls from 'classnames';
 import { Box } from '@mui/material';
 import { isNil } from 'lodash-es';
@@ -11,7 +11,8 @@ import { PluginFullscreenContext } from '@/components/drawing-board/components';
 import { type DeviceDetail } from '@/services/http';
 import { useStableValue } from '../../../hooks';
 import { BaseMap, Alarm } from './component';
-import { useDeviceData } from './hooks';
+import { useDeviceData, useDeviceEntities } from './hooks';
+import { MapContext, type MapContextProps } from './context';
 
 import { type MapConfigType } from '../control-panel';
 import { type BoardPluginProps } from '../../../types';
@@ -41,6 +42,19 @@ const MapView: React.FC<MapViewProps> = props => {
         demoMapData,
         hoverSearchRef,
     } = useDeviceData(pluginFullscreenCxt, devices);
+    const { entitiesStatus, getDeviceStatusById, getNoOnlineDevicesCount } = useDeviceEntities({
+        isPreview,
+        data,
+    });
+
+    const mapContextValue = useMemo((): MapContextProps => {
+        return {
+            isPreview,
+            entitiesStatus,
+            getDeviceStatusById,
+            getNoOnlineDevicesCount,
+        };
+    }, [isPreview, entitiesStatus, getDeviceStatusById, getNoOnlineDevicesCount]);
 
     /**
      * Update plugin fullscreen icon sx
@@ -132,19 +146,22 @@ const MapView: React.FC<MapViewProps> = props => {
     );
 
     return (
-        <div className="map-plugin-view">
-            {title && <Tooltip className="map-plugin-view__header" autoEllipsis title={title} />}
-            {!isPreview && RenderSearchAutocomplete}
+        <MapContext.Provider value={mapContextValue}>
+            <div className="map-plugin-view">
+                {title && (
+                    <Tooltip className="map-plugin-view__header" autoEllipsis title={title} />
+                )}
+                {!isPreview && RenderSearchAutocomplete}
 
-            <BaseMap
-                devices={demoMapData}
-                selectDevice={selectDevice}
-                isPreview={isPreview}
-                cancelSelectDevice={cancelSelectDevice}
-            />
+                <BaseMap
+                    devices={demoMapData}
+                    selectDevice={selectDevice}
+                    cancelSelectDevice={cancelSelectDevice}
+                />
 
-            <Alarm />
-        </div>
+                <Alarm />
+            </div>
+        </MapContext.Provider>
     );
 };
 

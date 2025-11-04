@@ -130,3 +130,11 @@ export const entityTypeOptions = [
  * Device status entity unique identifier
  */
 export const DEVICE_STATUS_ENTITY_UNIQUE_ID = '@status';
+/**
+ * Device latitude entity unique identifier
+ */
+export const DEVICE_LATITUDE_ENTITY_UNIQUE_ID = '@location.@latitude';
+/**
+ * Device longitude entity unique identifier
+ */
+export const DEVICE_LONGITUDE_ENTITY_UNIQUE_ID = '@location.@longitude';

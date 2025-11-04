@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Alert, IconButton } from '@mui/material';
 import { useMemoizedFn, useDebounceFn } from 'ahooks';
 import cls from 'classnames';
@@ -19,22 +19,24 @@ import { Tooltip } from '@/components';
 import { type DeviceDetail } from '@/services/http';
 import useControlPanelStore from '@/components/drawing-board/plugin/store';
 import { type DeviceSelectData } from '@/components/drawing-board/plugin/components';
+import { MapContext } from '../../context';
 
 import styles from './style.module.less';
 
 export interface DevicePopupProps {
     device?: DeviceDetail;
-    isPreview?: boolean;
     closeMarkerPopup: (id: ApiKey) => void;
 }
 
 const DevicePopup: React.FC<DevicePopupProps> = props => {
-    const { device, isPreview, closeMarkerPopup } = props;
+    const { device, closeMarkerPopup } = props;
 
     const { getIntlText } = useI18n();
     const { formData, setValuesToFormConfig } = useControlPanelStore(
         useStoreShallow(['formData', 'setValuesToFormConfig']),
     );
+    const mapContext = useContext(MapContext);
+    const { isPreview, getDeviceStatusById } = mapContext || {};
 
     const openGoogleMap = useMemoizedFn(() => {
         if (!device?.location) {
@@ -72,7 +74,12 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
         <div className={styles['device-popup']}>
             <div className={styles.header}>
                 <div className={styles.left}>
-                    <div className={`${styles.status} ${styles.online}`} />
+                    <div
+                        className={cls(styles.status, {
+                            [styles.online]: getDeviceStatusById?.(device)?.value === 'ONLINE',
+                            [styles.offline]: getDeviceStatusById?.(device)?.value !== 'ONLINE',
+                        })}
+                    />
                     <Tooltip
                         PopperProps={{
                             disablePortal: true,
