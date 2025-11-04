@@ -33,6 +33,11 @@ interface Props {
     onActiveChange?: (active: boolean) => void;
 
     /**
+     * Whether to show the device search placeholder, default is `true`
+     */
+    showSearchPlaceholder?: boolean;
+
+    /**
      * The children of the search panel
      */
     children?: React.ReactNode;
@@ -41,63 +46,65 @@ interface Props {
 /**
  * Mobile Search Panel
  */
-const MobileSearchPanel: React.FC<Props> = memo(({ clearable = true, children, ...props }) => {
-    const { getIntlText } = useI18n();
-    const [active, setActive] = useControllableValue(props, {
-        valuePropName: 'active',
-        trigger: 'onActiveChange',
-    });
-    const [keyword, setKeyword] = useControllableValue(props);
+const MobileSearchPanel: React.FC<Props> = memo(
+    ({ clearable = true, showSearchPlaceholder = true, children, ...props }) => {
+        const { getIntlText } = useI18n();
+        const [active, setActive] = useControllableValue(props, {
+            valuePropName: 'active',
+            trigger: 'onActiveChange',
+        });
+        const [keyword, setKeyword] = useControllableValue(props);
 
-    return (
-        <div className={cls('ms-mobile-search-panel', { active })}>
-            <div className="ms-mobile-search-panel-trigger">
-                <TextField
-                    fullWidth
-                    autoComplete="off"
-                    className="ms-mobile-search-input"
-                    placeholder={getIntlText('common.label.search')}
-                    slotProps={{
-                        input: {
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon />
-                                </InputAdornment>
-                            ),
-                            endAdornment: clearable && keyword && (
-                                <InputAdornment position="end" onClick={() => setKeyword('')}>
-                                    <CancelIcon />
-                                </InputAdornment>
-                            ),
-                        },
-                    }}
-                    value={keyword}
-                    onChange={e => setKeyword(e.target.value.trim())}
-                    onFocus={() => setActive(true)}
-                />
-                {active && (
-                    <Button
-                        onClick={() => {
-                            setKeyword('');
-                            setActive(false);
+        return (
+            <div className={cls('ms-mobile-search-panel', { active })}>
+                <div className="ms-mobile-search-panel-trigger">
+                    <TextField
+                        fullWidth
+                        autoComplete="off"
+                        className="ms-mobile-search-input"
+                        placeholder={getIntlText('common.label.search')}
+                        slotProps={{
+                            input: {
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon />
+                                    </InputAdornment>
+                                ),
+                                endAdornment: clearable && keyword && (
+                                    <InputAdornment position="end" onClick={() => setKeyword('')}>
+                                        <CancelIcon />
+                                    </InputAdornment>
+                                ),
+                            },
                         }}
-                    >
-                        {getIntlText('common.button.cancel')}
-                    </Button>
-                )}
+                        value={keyword}
+                        onChange={e => setKeyword(e.target.value.trim())}
+                        onFocus={() => setActive(true)}
+                    />
+                    {active && (
+                        <Button
+                            onClick={() => {
+                                setKeyword('');
+                                setActive(false);
+                            }}
+                        >
+                            {getIntlText('common.button.cancel')}
+                        </Button>
+                    )}
+                </div>
+                <div className="ms-mobile-search-panel-body">
+                    {!keyword && showSearchPlaceholder ? (
+                        <div className="placeholder">
+                            <SearchIcon />
+                            <span className="desc">{getIntlText('device.search.placeholder')}</span>
+                        </div>
+                    ) : (
+                        children
+                    )}
+                </div>
             </div>
-            <div className="ms-mobile-search-panel-body">
-                {!keyword ? (
-                    <div className="placeholder">
-                        <SearchIcon />
-                        <span className="desc">{getIntlText('device.search.placeholder')}</span>
-                    </div>
-                ) : (
-                    children
-                )}
-            </div>
-        </div>
-    );
-});
+        );
+    },
+);
 
 export default MobileSearchPanel;

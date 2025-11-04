@@ -20,11 +20,12 @@ export interface MapDataProps extends DeviceDetail {
 export interface BaseMapProps {
     selectDevice?: DeviceDetail | null;
     devices?: DeviceDetail[];
+    showMobileSearch?: boolean;
     cancelSelectDevice?: () => void;
 }
 
 const BaseMap: React.FC<BaseMapProps> = props => {
-    const { selectDevice, devices, cancelSelectDevice } = props;
+    const { selectDevice, devices, showMobileSearch, cancelSelectDevice } = props;
 
     const { matchTablet } = useTheme();
     const mapContext = useContext(MapContext);
@@ -128,7 +129,8 @@ const BaseMap: React.FC<BaseMapProps> = props => {
     return (
         <div
             className={cls('map-plugin-view__map', {
-                'rounded-none': !!pluginFullScreen && matchTablet,
+                'rounded-none': (!!pluginFullScreen || showMobileSearch) && matchTablet,
+                'mobile-search-page': showMobileSearch,
             })}
             ref={ref}
         >
@@ -137,6 +139,9 @@ const BaseMap: React.FC<BaseMapProps> = props => {
                     ref={mapRef}
                     width={size.width}
                     height={size.height}
+                    onLocationError={() => {
+                        mapFitBounds?.();
+                    }}
                     onLocationFound={() => {
                         mapFitBounds?.();
                     }}

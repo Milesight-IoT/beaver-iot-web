@@ -1,16 +1,17 @@
 import React, { useContext, useEffect, useMemo } from 'react';
 import cls from 'classnames';
-import { Box } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import { isNil } from 'lodash-es';
 
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
+import { SearchIcon, Modal } from '@milesight/shared/src/components';
 
 import { Tooltip, HoverSearchAutocomplete } from '@/components';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
 import { PluginFullscreenContext } from '@/components/drawing-board/components';
 import { type DeviceDetail } from '@/services/http';
 import { useStableValue } from '../../../hooks';
-import { BaseMap, Alarm } from './component';
+import { BaseMap, Alarm, MobileSearchInput } from './component';
 import { useDeviceData, useDeviceEntities } from './hooks';
 import { MapContext, type MapContextProps } from './context';
 
@@ -43,6 +44,8 @@ const MapView: React.FC<MapViewProps> = props => {
         cancelSelectDevice,
         demoMapData,
         hoverSearchRef,
+        showMobileSearch,
+        setShowMobileSearch,
     } = useDeviceData(pluginFullscreenCxt, devices);
     const { entitiesStatus, getDeviceStatusById, getNoOnlineDevicesCount } = useDeviceEntities({
         isPreview,
@@ -74,68 +77,92 @@ const MapView: React.FC<MapViewProps> = props => {
         }
     }, [title, setExtraFullscreenSx]);
 
+    const renderSearch = () => {
+        if (matchTablet) {
+            return (
+                <IconButton
+                    onClick={() => setShowMobileSearch(true)}
+                    sx={{
+                        color: 'text.secondary',
+                        '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                            color: 'text.secondary',
+                        },
+                    }}
+                >
+                    <SearchIcon sx={{ width: '20px', height: '20px' }} />
+                </IconButton>
+            );
+        }
+
+        return (
+            <HoverSearchAutocomplete<DeviceDetail>
+                ref={hoverSearchRef}
+                options={data || []}
+                value={selectDevice}
+                renderOption={(props, option) => {
+                    const { key, ...optionProps } = props || {};
+
+                    return (
+                        <Box
+                            key={key}
+                            component="li"
+                            sx={{
+                                flexDirection: 'column',
+                                alignItems: 'flex-start !important',
+                                '& > div': {
+                                    width: '100%',
+                                },
+                            }}
+                            {...optionProps}
+                        >
+                            <Tooltip autoEllipsis title={option.name} />
+                            <Tooltip
+                                autoEllipsis
+                                sx={{
+                                    fontSize: '12px',
+                                    lineHeight: '20px',
+                                    color: 'text.secondary',
+                                }}
+                                title={`${getIntlText('device.label.param_external_id')}: ${option.id}`}
+                            />
+                        </Box>
+                    );
+                }}
+                getOptionLabel={option => option.name}
+                getOptionKey={option => option.id}
+                ListboxProps={{
+                    sx: {
+                        maxHeight: '236px',
+                    },
+                }}
+                onChange={handleSelectDevice}
+                filterOptions={(options, state) =>
+                    (options || []).filter(
+                        d =>
+                            String(isNil(d?.name) ? '' : d.name)
+                                ?.toLowerCase()
+                                ?.includes(state.inputValue) ||
+                            String(isNil(d?.identifier) ? '' : d.identifier)?.toLowerCase() ===
+                                state.inputValue,
+                    )
+                }
+                noOptionsText={getIntlText('common.label.no_options')}
+            />
+        );
+    };
+
     const RenderSearchAutocomplete = (
         <>
             <div
                 className={cls('map-plugin-view__search', {
                     'has-title': !!title,
                     'has-title-edit': !!context?.isEdit && !!title,
+                    'has-title-mobile': !!title && matchTablet,
                     'edit-search': !!context?.isEdit && !title,
+                    'search-mobile': !title && matchTablet,
                 })}
             >
-                <HoverSearchAutocomplete<DeviceDetail>
-                    ref={hoverSearchRef}
-                    options={data || []}
-                    value={selectDevice}
-                    renderOption={(props, option) => {
-                        const { key, ...optionProps } = props || {};
-
-                        return (
-                            <Box
-                                key={key}
-                                component="li"
-                                sx={{
-                                    flexDirection: 'column',
-                                    alignItems: 'flex-start !important',
-                                    '& > div': {
-                                        width: '100%',
-                                    },
-                                }}
-                                {...optionProps}
-                            >
-                                <Tooltip autoEllipsis title={option.name} />
-                                <Tooltip
-                                    autoEllipsis
-                                    sx={{
-                                        fontSize: '12px',
-                                        lineHeight: '20px',
-                                        color: 'text.secondary',
-                                    }}
-                                    title={`${getIntlText('device.label.param_external_id')}: ${option.id}`}
-                                />
-                            </Box>
-                        );
-                    }}
-                    getOptionLabel={option => option.name}
-                    getOptionKey={option => option.id}
-                    ListboxProps={{
-                        sx: {
-                            maxHeight: '236px',
-                        },
-                    }}
-                    onChange={handleSelectDevice}
-                    filterOptions={(options, state) =>
-                        (options || []).filter(
-                            d =>
-                                String(isNil(d?.name) ? '' : d.name)
-                                    ?.toLowerCase()
-                                    ?.includes(state.inputValue) ||
-                                String(isNil(d?.identifier) ? '' : d.identifier)?.toLowerCase() ===
-                                    state.inputValue,
-                        )
-                    }
-                    noOptionsText={getIntlText('common.label.no_options')}
-                />
+                {renderSearch()}
             </div>
             {!title && (
                 <div
@@ -145,6 +172,15 @@ const MapView: React.FC<MapViewProps> = props => {
                 />
             )}
         </>
+    );
+
+    const RenderBaseMap = (
+        <BaseMap
+            showMobileSearch={showMobileSearch}
+            devices={demoMapData}
+            selectDevice={selectDevice}
+            cancelSelectDevice={cancelSelectDevice}
+        />
     );
 
     return (
@@ -169,13 +205,29 @@ const MapView: React.FC<MapViewProps> = props => {
                 )}
                 {!isPreview && RenderSearchAutocomplete}
 
-                <BaseMap
-                    devices={demoMapData}
-                    selectDevice={selectDevice}
-                    cancelSelectDevice={cancelSelectDevice}
-                />
+                {!showMobileSearch && RenderBaseMap}
 
                 <Alarm />
+
+                <Modal
+                    showCloseIcon={false}
+                    fullScreen
+                    visible={showMobileSearch}
+                    onCancel={() => setShowMobileSearch(false)}
+                    footer={null}
+                    sx={{
+                        '&.ms-modal-root .ms-mobile-search-panel-body': {
+                            padding: 0,
+                        },
+                    }}
+                >
+                    <MobileSearchInput
+                        showSearch={showMobileSearch}
+                        setShowSearch={setShowMobileSearch}
+                    >
+                        {RenderBaseMap}
+                    </MobileSearchInput>
+                </Modal>
             </div>
         </MapContext.Provider>
     );

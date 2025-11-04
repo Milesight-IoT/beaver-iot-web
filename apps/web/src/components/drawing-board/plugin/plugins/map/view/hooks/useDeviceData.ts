@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useRequest, useMemoizedFn } from 'ahooks';
 import { isEmpty, get } from 'lodash-es';
 
@@ -28,6 +28,7 @@ export function useDeviceData(
     pluginFullscreenCxt: PluginFullscreenContextProps | null,
     devices?: DeviceSelectData[],
 ) {
+    const [showMobileSearch, setShowMobileSearch] = useState(false);
     const hoverSearchRef = useRef<HoverSearchAutocompleteExpose>(null);
 
     const selectDevice = useMemo((): DeviceDetail | null => {
@@ -102,6 +103,8 @@ export function useDeviceData(
         selectDevice,
         demoMapData,
         hoverSearchRef,
+        showMobileSearch,
+        setShowMobileSearch,
         handleSelectDevice,
         cancelSelectDevice,
     };
