@@ -2,20 +2,17 @@ import { useMemo } from 'react';
 import { TextField } from '@mui/material';
 import { type ControllerProps } from 'react-hook-form';
 import { useI18n } from '@milesight/shared/src/hooks';
-
 import {
     checkRequired,
     checkRangeValue,
     checkRangeLength,
 } from '@milesight/shared/src/utils/validators';
+import { type LocationType } from '@/services/http';
 
-export type LocationType = {
-    latitude: number;
-    longitude: number;
-    address?: string;
-};
-
-const useFormItems = () => {
+/**
+ * Location form items
+ */
+const useLocationFormItems = () => {
     const { getIntlText } = useI18n();
 
     const formItems = useMemo(() => {
@@ -87,13 +84,12 @@ const useFormItems = () => {
                             fullWidth
                             type="text"
                             autoComplete="off"
-                            defaultValue=""
                             sx={{ my: 1.5 }}
                             disabled={disabled}
                             label={getIntlText('common.label.address')}
                             error={!!error}
                             helperText={error ? error.message : null}
-                            value={value}
+                            value={value || ''}
                             onChange={onChange}
                         />
                     );
@@ -107,4 +103,4 @@ const useFormItems = () => {
     return formItems;
 };
 
-export default useFormItems;
+export default useLocationFormItems;

@@ -17,6 +17,12 @@ export interface ImportEntityProps {
  */
 export type DeviceStatus = 'ONLINE' | 'OFFLINE';
 
+export type LocationType = {
+    latitude: number;
+    longitude: number;
+    address?: string;
+};
+
 /**
  * Device detail definition
  */
@@ -54,11 +60,7 @@ export interface DeviceDetail {
     /** Common entities object */
     common_entities?: ImportEntityProps[];
     status?: DeviceStatus;
-    location?: {
-        longitude: number;
-        latitude: number;
-        address?: string;
-    };
+    location?: LocationType;
 }
 
 /**
@@ -75,6 +77,8 @@ export interface AddDeviceProps {
     integration: ApiKey;
     /** name */
     name?: string;
+    /** location */
+    location?: LocationType;
     /** device group name */
     group_name?: string;
     /** Integrate additional information needed for new devices */

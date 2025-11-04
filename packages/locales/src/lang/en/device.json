@@ -31,5 +31,7 @@
     "device.title.move_device_to_group": "Move to the Group",
     "device.message.no_device_location": "No Device Location Information",
     "device.label.edit_position": "Edit Position",
-    "device.message.confirm_remove_location": "Are you sure to remove the location?"
+    "device.message.confirm_remove_location": "Are you sure to remove the location?",
+    "device.title.add_location_modal": "Add Location Information",
+    "device.message.get_location_failed": "Failed to get location information"
 }

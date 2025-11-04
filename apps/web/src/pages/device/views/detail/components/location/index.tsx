@@ -22,8 +22,8 @@ import {
     type MapProps,
     type MapInstance,
 } from '@/components';
-import { awaitWrap, type DeviceAPISchema } from '@/services/http';
-import useFormItems, { type LocationType } from './useFormItems';
+import { awaitWrap, type DeviceAPISchema, type LocationType } from '@/services/http';
+import useLocationFormItems from '@/pages/device/hooks/useLocationFormItems';
 import './style.less';
 
 type PanelState = 'view' | 'edit' | 'nodata';
@@ -64,7 +64,8 @@ const Location: React.FC<Props> = ({ loading, data, onEditSuccess }) => {
             } else {
                 setLocation({ latitude: 0, longitude: 0 });
             }
-            // TODO: Toast error message: Failed to get location information
+
+            toast.error(getIntlText('device.message.get_location_failed'));
             return;
         }
 
@@ -82,7 +83,7 @@ const Location: React.FC<Props> = ({ loading, data, onEditSuccess }) => {
         mode: 'onChange',
         shouldUnregister: true,
     });
-    const formItems = useFormItems();
+    const formItems = useLocationFormItems();
     const [formLat, formLng] = watch(['latitude', 'longitude']);
 
     // Edit Save
@@ -212,6 +213,7 @@ const Location: React.FC<Props> = ({ loading, data, onEditSuccess }) => {
                                 <li className="location-detail-item">
                                     <div className="location-detail-item-label">
                                         {getIntlText('common.label.latitude')}
+                                        {getIntlText('common.symbol.colon')}
                                     </div>
                                     <div className="location-detail-item-value">
                                         {location?.latitude || '-'}
@@ -220,6 +222,7 @@ const Location: React.FC<Props> = ({ loading, data, onEditSuccess }) => {
                                 <li className="location-detail-item">
                                     <div className="location-detail-item-label">
                                         {getIntlText('common.label.longitude')}
+                                        {getIntlText('common.symbol.colon')}
                                     </div>
                                     <div className="location-detail-item-value">
                                         {location?.longitude || '-'}
@@ -228,6 +231,7 @@ const Location: React.FC<Props> = ({ loading, data, onEditSuccess }) => {
                                 <li className="location-detail-item">
                                     <div className="location-detail-item-label">
                                         {getIntlText('common.label.address')}
+                                        {getIntlText('common.symbol.colon')}
                                     </div>
                                     <div className="location-detail-item-value">
                                         {location?.address || '-'}
