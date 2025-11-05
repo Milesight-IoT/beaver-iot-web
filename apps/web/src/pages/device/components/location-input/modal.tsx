@@ -1,18 +1,13 @@
-import React, { memo, useEffect, useState, useRef, useMemo } from 'react';
-import { Button, Tooltip } from '@mui/material';
+import React, { memo, useEffect, useState, useRef, useCallback } from 'react';
+import { Button } from '@mui/material';
 import { useSize, useDebounceEffect } from 'ahooks';
 import { useForm, Controller } from 'react-hook-form';
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
-import { Modal, LocationPinIcon, toast, type ModalProps } from '@milesight/shared/src/components';
+import { Modal, toast, type ModalProps } from '@milesight/shared/src/components';
 import { getGeoLocation } from '@milesight/shared/src/utils/tools';
-import {
-    Map,
-    MapZoomControl,
-    PREFER_ZOOM_LEVEL,
-    type MapProps,
-    type MapInstance,
-} from '@/components';
+import { PREFER_ZOOM_LEVEL, type MapInstance } from '@/components';
 import { type LocationType } from '@/services/http';
+import LocationMap, { type Props as LocationMapProps } from '../location-map';
 import useLocationFormItems from '../../hooks/useLocationFormItems';
 
 interface Props extends Omit<ModalProps, 'onOk'> {
@@ -24,9 +19,9 @@ interface Props extends Omit<ModalProps, 'onOk'> {
 const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, ...props }) => {
     const { getIntlText } = useI18n();
     const { matchTablet } = useTheme();
-    const [mapInstance, setMapInstance] = useState<MapInstance>();
 
     // ---------- Map ----------
+    const [mapInstance, setMapInstance] = useState<MapInstance>();
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const mapSize = useSize(mapContainerRef);
 
@@ -45,34 +40,14 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
 
     // ---------- Location Data Update and Interactions ----------
     const [location, setLocation] = useState<LocationType>();
-    const events = useMemo<MapProps['events']>(
-        () => ({
-            click({ target, originalEvent, latlng }) {
-                if ((target as MapInstance).getContainer() !== originalEvent.target) {
-                    return;
-                }
-                setLocation(data => ({
-                    ...data,
-                    latitude: latlng.lat,
-                    longitude: latlng.lng,
-                }));
-            },
-            dragend(e) {
-                const center = (e.target as MapInstance).getCenter();
-
-                setLocation(data => {
-                    if (data?.latitude === center.lat && data?.longitude === center.lng) {
-                        return data;
-                    }
-
-                    return {
-                        ...data,
-                        latitude: center.lat,
-                        longitude: center.lng,
-                    };
-                });
-            },
-        }),
+    const handlePositionChange = useCallback<NonNullable<LocationMapProps['onPositionChange']>>(
+        position => {
+            setLocation(d => ({
+                ...d,
+                latitude: position[0],
+                longitude: position[1],
+            }));
+        },
         [],
     );
 
@@ -148,29 +123,19 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
             onOk={handleConfirm}
         >
             <div className="map-wrap" ref={mapContainerRef}>
-                <Map
+                <LocationMap
                     scrollWheelZoom
+                    state="edit"
                     width={mapSize?.width}
                     height={mapSize?.height}
-                    zoomControl={
-                        <MapZoomControl
-                            zoomCenter={
-                                !location ? undefined : [location.latitude, location.longitude]
-                            }
-                        />
-                    }
                     onReady={map => {
                         setMapInstance(map);
                         if (location?.latitude && location?.longitude) {
                             map.setView([location.latitude, location.longitude], PREFER_ZOOM_LEVEL);
                         }
                     }}
-                    events={events}
-                >
-                    <Tooltip title={getIntlText('common.message.click_to_mark_and_drag_to_move')}>
-                        <LocationPinIcon className="location-input-map-marker" />
-                    </Tooltip>
-                </Map>
+                    onPositionChange={handlePositionChange}
+                />
             </div>
             <div className="form-wrap">
                 <div className="form-list">

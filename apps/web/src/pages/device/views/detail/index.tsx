@@ -62,15 +62,7 @@ export default () => {
                 handlePermissionsError(error);
                 return;
             }
-
             const data = objectToCamelCase(respData);
-
-            // Demo data
-            const demoLocation = {
-                longitude: 117.88900894408232,
-                latitude: 24.523339775150006,
-            };
-            data.location = data.location || demoLocation;
 
             setDeviceDetail(data);
             return data;

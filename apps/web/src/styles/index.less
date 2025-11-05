@@ -15,22 +15,8 @@ html {
 @enable-mobile-first: false;
 @enable-utilities-important: true;
 
-// @ms-utilities: {
-//     @border-radius: {
-//         responsive: true;
-//         property: border-radius;
-//         class: rounded;
-//         @values: {
-//             none: 0;
-//         };
-//     }
-// };
-
-// .gen-utils();
-// .gen-breakpoints-utils();
-
-// .gen-utils('', @ms-utilities);
-// .gen-breakpoints-utils(@enable-mobile-first, @grid-breakpoints, @ms-utilities);
+.gen-utils();
+.gen-breakpoints-utils();
 
 // ---------- Layout ----------
 .@{prefix}-layout {

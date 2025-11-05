@@ -230,6 +230,27 @@ export interface DeviceAPISchema extends APISchema {
         };
         response: Blob;
     };
+    /** Set device location */
+    setLocation: {
+        request: {
+            id: ApiKey;
+        } & LocationType;
+        response: void;
+    };
+    /** Get device location */
+    getLocation: {
+        request: {
+            id: ApiKey;
+        };
+        response: LocationType;
+    };
+    /** Clear device location */
+    clearLocation: {
+        request: {
+            id: ApiKey;
+        };
+        response: void;
+    };
 }
 
 /**
@@ -263,5 +284,8 @@ export default attachAPI<DeviceAPISchema>(client, {
                 'Content-Type': 'multipart/form-data',
             },
         },
+        setLocation: `PUT ${API_PREFIX}/device/:id/location`,
+        getLocation: `GET ${API_PREFIX}/device/:id/location`,
+        clearLocation: `POST ${API_PREFIX}/device/:id/clear-location`,
     },
 });
