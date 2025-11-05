@@ -81,10 +81,6 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
     const fullscreenIconSx: SxProps = useMemo(() => {
         const baseSx: SxProps = {
             color: 'text.secondary',
-            '&.MuiIconButton-root:hover': {
-                backgroundColor: 'var(--hover-background-1)',
-                borderRadius: '50%',
-            },
         };
 
         if (matchTablet) {
@@ -96,7 +92,13 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
             };
         }
 
-        return baseSx;
+        return {
+            ...baseSx,
+            '&.MuiIconButton-root:hover': {
+                backgroundColor: 'var(--hover-background-1)',
+                borderRadius: '50%',
+            },
+        };
     }, [matchTablet]);
 
     return (

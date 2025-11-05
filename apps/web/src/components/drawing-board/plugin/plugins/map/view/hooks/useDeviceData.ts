@@ -29,6 +29,8 @@ export function useDeviceData(
     devices?: DeviceSelectData[],
 ) {
     const [showMobileSearch, setShowMobileSearch] = useState(false);
+    const [mobileKeyword, setMobileKeyword] = useState('');
+
     const hoverSearchRef = useRef<HoverSearchAutocompleteExpose>(null);
 
     const selectDevice = useMemo((): DeviceDetail | null => {
@@ -76,6 +78,7 @@ export function useDeviceData(
     const cancelSelectDevice = useMemoizedFn(() => {
         setSelectDevice(null);
         hoverSearchRef?.current?.toggleShowSearch(false);
+        setMobileKeyword('');
     });
 
     /**
@@ -104,8 +107,11 @@ export function useDeviceData(
         demoMapData,
         hoverSearchRef,
         showMobileSearch,
+        mobileKeyword,
         setShowMobileSearch,
         handleSelectDevice,
         cancelSelectDevice,
+        setSelectDevice,
+        setMobileKeyword,
     };
 }

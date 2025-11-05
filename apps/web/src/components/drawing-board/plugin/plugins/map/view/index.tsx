@@ -46,6 +46,9 @@ const MapView: React.FC<MapViewProps> = props => {
         hoverSearchRef,
         showMobileSearch,
         setShowMobileSearch,
+        setSelectDevice,
+        mobileKeyword,
+        setMobileKeyword,
     } = useDeviceData(pluginFullscreenCxt, devices);
     const { entitiesStatus, getDeviceStatusById, getNoOnlineDevicesCount } = useDeviceEntities({
         isPreview,
@@ -54,12 +57,23 @@ const MapView: React.FC<MapViewProps> = props => {
 
     const mapContextValue = useMemo((): MapContextProps => {
         return {
+            deviceData: data,
             isPreview,
             entitiesStatus,
+            selectDevice,
             getDeviceStatusById,
             getNoOnlineDevicesCount,
+            setSelectDevice,
         };
-    }, [isPreview, entitiesStatus, getDeviceStatusById, getNoOnlineDevicesCount]);
+    }, [
+        data,
+        isPreview,
+        entitiesStatus,
+        selectDevice,
+        getDeviceStatusById,
+        getNoOnlineDevicesCount,
+        setSelectDevice,
+    ]);
 
     /**
      * Update plugin fullscreen icon sx
@@ -141,9 +155,9 @@ const MapView: React.FC<MapViewProps> = props => {
                         d =>
                             String(isNil(d?.name) ? '' : d.name)
                                 ?.toLowerCase()
-                                ?.includes(state.inputValue) ||
+                                ?.includes((state?.inputValue || '').toLowerCase()) ||
                             String(isNil(d?.identifier) ? '' : d.identifier)?.toLowerCase() ===
-                                state.inputValue,
+                                (state?.inputValue || '').toLowerCase(),
                     )
                 }
                 noOptionsText={getIntlText('common.label.no_options')}
@@ -219,14 +233,21 @@ const MapView: React.FC<MapViewProps> = props => {
                         '&.ms-modal-root .ms-mobile-search-panel-body': {
                             padding: 0,
                         },
+                        '.ms-mobile-infinite-scroll-root .ms-mobile-infinite-scroll-indicator': {
+                            display: 'none',
+                        },
                     }}
                 >
-                    <MobileSearchInput
-                        showSearch={showMobileSearch}
-                        setShowSearch={setShowMobileSearch}
-                    >
-                        {RenderBaseMap}
-                    </MobileSearchInput>
+                    {showMobileSearch && (
+                        <MobileSearchInput
+                            keyword={mobileKeyword}
+                            setKeyword={setMobileKeyword}
+                            showSearch={showMobileSearch}
+                            setShowSearch={setShowMobileSearch}
+                        >
+                            {RenderBaseMap}
+                        </MobileSearchInput>
+                    )}
                 </Modal>
             </div>
         </MapContext.Provider>
