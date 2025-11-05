@@ -38,8 +38,9 @@ export function useData(props: MultiDeviceSelectProps) {
         return {
             selectedDevices,
             setSelectedDevices,
+            ...props,
         };
-    }, [selectedDevices, setSelectedDevices]);
+    }, [selectedDevices, setSelectedDevices, props]);
 
     /**
      * Update current selected devices data

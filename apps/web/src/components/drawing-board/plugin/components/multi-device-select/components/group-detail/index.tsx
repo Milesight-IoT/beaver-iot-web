@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Checkbox, Avatar } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import cls from 'classnames';
@@ -10,11 +10,13 @@ import {
     CheckedCheckboxIcon,
     DisabledCheckboxIcon,
     DnsIcon,
+    NotListedLocationIcon,
 } from '@milesight/shared/src/components';
 
 import { Tooltip, Empty } from '@/components';
 import { type DeviceDetail } from '@/services/http';
 import { useAllChecked, useSingleChecked } from './hooks';
+import { MultiDeviceSelectContext } from '../../context';
 
 import styles from './style.module.less';
 
@@ -30,6 +32,8 @@ const GroupDetail: React.FC<GroupDetailProps> = props => {
     const { allIsChecked, allIsIndeterminate, allIsDisabled, handleAllCheckedChange } =
         useAllChecked(data);
     const { isChecked, isDisabled, handleCheckedChange } = useSingleChecked();
+    const context = useContext(MultiDeviceSelectContext);
+    const { locationRequired } = context || {};
 
     const renderCheckbox = (item: DeviceDetail) => {
         const disabled = isDisabled(item);
@@ -60,7 +64,13 @@ const GroupDetail: React.FC<GroupDetailProps> = props => {
 
         if (disabled) {
             return (
-                <Tooltip title={getIntlText('common.tip.cannot_selected')}>
+                <Tooltip
+                    title={
+                        locationRequired && !item?.location
+                            ? getIntlText('device.tip.not_set_location')
+                            : getIntlText('common.tip.cannot_selected')
+                    }
+                >
                     <div>{CheckboxNode}</div>
                 </Tooltip>
             );
@@ -96,7 +106,18 @@ const GroupDetail: React.FC<GroupDetailProps> = props => {
                     <DnsIcon />
                 </Avatar>
                 <div className={styles.info}>
-                    <Tooltip autoEllipsis title={item.name} />
+                    <div className={styles.top}>
+                        <Tooltip className={styles.name} autoEllipsis title={item.name} />
+                        {locationRequired && !item?.location ? (
+                            <NotListedLocationIcon
+                                sx={{
+                                    color: 'text.tertiary',
+                                    width: '16px',
+                                    height: '16px',
+                                }}
+                            />
+                        ) : null}
+                    </div>
                     <div className={styles.description}>
                         <Tooltip
                             autoEllipsis
@@ -136,7 +157,13 @@ const GroupDetail: React.FC<GroupDetailProps> = props => {
 
         if (allIsDisabled) {
             return (
-                <Tooltip title={getIntlText('common.tip.cannot_selected')}>
+                <Tooltip
+                    title={
+                        locationRequired && !data?.some(d => !!d?.location)
+                            ? getIntlText('device.tip.not_set_location')
+                            : getIntlText('common.tip.cannot_selected')
+                    }
+                >
                     <div>{CheckboxNode}</div>
                 </Tooltip>
             );

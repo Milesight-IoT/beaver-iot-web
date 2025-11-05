@@ -70,6 +70,19 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
         },
     );
 
+    const toSixDecimals = (num?: number) => {
+        if (!num) {
+            return '';
+        }
+
+        const toNum = Number(num);
+        if (Number.isNaN(toNum)) {
+            return '';
+        }
+
+        return toNum.toFixed(6);
+    };
+
     return (
         <div className={styles['device-popup']}>
             <div className={styles.header}>
@@ -223,7 +236,7 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                 />
                 <div
                     className={styles['info-item__name']}
-                >{`${device?.location?.latitude || ''}, ${device?.location?.longitude || ''}`}</div>
+                >{`${toSixDecimals(device?.location?.latitude)}, ${toSixDecimals(device?.location?.longitude)}`}</div>
                 <Tooltip
                     PopperProps={{
                         disablePortal: true,

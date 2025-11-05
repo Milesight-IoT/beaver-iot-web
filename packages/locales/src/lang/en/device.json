@@ -28,5 +28,7 @@
     "device.title.device_list": "Device list",
     "device.title.device_status": "Status",
     "device.title.mark_device_to_ungrouped": "Marked as Ungrouped",
-    "device.title.move_device_to_group": "Move to the Group"
+    "device.title.move_device_to_group": "Move to the Group",
+    "device.tip.not_set_location": "The device has not been set to a location.",
+    "device.tip.plugin_add_failed": "{1} device(s) Failed to add, Please check the device information."
 }

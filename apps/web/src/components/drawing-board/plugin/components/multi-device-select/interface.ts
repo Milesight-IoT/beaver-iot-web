@@ -12,6 +12,10 @@ export interface MultiDeviceSelectProps {
     error?: boolean;
     helperText?: string | null;
     value?: Partial<DeviceDetail>[];
+    /**
+     * Whether the device location is required to be selected
+     */
+    locationRequired?: boolean;
     onChange?: (newVal: Partial<DeviceDetail>[]) => void;
 }
 

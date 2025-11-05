@@ -42,7 +42,6 @@ const MapView: React.FC<MapViewProps> = props => {
         selectDevice,
         handleSelectDevice,
         cancelSelectDevice,
-        demoMapData,
         hoverSearchRef,
         showMobileSearch,
         setShowMobileSearch,
@@ -191,7 +190,7 @@ const MapView: React.FC<MapViewProps> = props => {
     const RenderBaseMap = (
         <BaseMap
             showMobileSearch={showMobileSearch}
-            devices={demoMapData}
+            devices={data}
             selectDevice={selectDevice}
             cancelSelectDevice={cancelSelectDevice}
         />

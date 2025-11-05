@@ -170,6 +170,7 @@ export {
     OfflineBolt as OfflineBoltIcon,
     NearMe as NearMeIcon,
     CheckCircleOutline as CheckCircleOutlineIcon,
+    NotListedLocation as NotListedLocationIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';

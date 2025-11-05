@@ -13,16 +13,16 @@ import { type DeviceSelectData } from '@/components/drawing-board/plugin/compone
 import { type HoverSearchAutocompleteExpose } from '@/components/hover-search-autocomplete/interface';
 import { type PluginFullscreenContextProps } from '@/components/drawing-board/components';
 
-function randomFloatWithSixDecimals(isLatitude?: boolean) {
-    const randomLat = (18 + Math.random() * (54 - 18)).toFixed(6); // 18 ~ 54
-    const randomLng = (73 + Math.random() * (135 - 73)).toFixed(6); // 73 ~ 135
+// function randomFloatWithSixDecimals(isLatitude?: boolean) {
+//     const randomLat = (18 + Math.random() * (54 - 18)).toFixed(6);
+//     const randomLng = (73 + Math.random() * (135 - 73)).toFixed(6);
 
-    if (isLatitude) {
-        return parseFloat(randomLat);
-    }
+//     if (isLatitude) {
+//         return parseFloat(randomLat);
+//     }
 
-    return parseFloat(randomLng);
-}
+//     return parseFloat(randomLng);
+// }
 
 export function useDeviceData(
     pluginFullscreenCxt: PluginFullscreenContextProps | null,
@@ -81,30 +81,10 @@ export function useDeviceData(
         setMobileKeyword('');
     });
 
-    /**
-     * TODO: delete demo data
-     */
-    const demoMapData = useMemo((): DeviceDetail[] => {
-        if (!Array.isArray(data) || isEmpty(data)) {
-            return [];
-        }
-
-        return data.map(d => {
-            return {
-                ...d,
-                location: {
-                    latitude: randomFloatWithSixDecimals(true),
-                    longitude: randomFloatWithSixDecimals(),
-                },
-            };
-        });
-    }, [data]);
-
     return {
         loading,
         data,
         selectDevice,
-        demoMapData,
         hoverSearchRef,
         showMobileSearch,
         mobileKeyword,

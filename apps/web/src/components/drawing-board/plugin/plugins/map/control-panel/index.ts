@@ -58,6 +58,7 @@ const mapControlPanelConfig = (): ControlPanelConfig<MapConfigType> => {
                                 sx: {
                                     height: 'calc(100% - 78px)',
                                 },
+                                locationRequired: true,
                             },
                         },
                     },
