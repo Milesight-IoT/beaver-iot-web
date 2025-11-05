@@ -1,19 +1,24 @@
 import React, { memo, useState, useMemo } from 'react';
-import { type LatLngExpression } from 'leaflet';
+import { type Map, type LatLngExpression } from 'leaflet';
 import { useMap, useMapEvent } from 'react-leaflet';
 import cls from 'classnames';
-import { AddIcon, RemoveIcon, MyLocationIcon } from '@milesight/shared/src/components';
-import { POSITION_CLASSES, PREFER_ZOOM_LEVEL } from '../../constants';
+import { AddIcon, RemoveIcon } from '@milesight/shared/src/components';
+import { POSITION_CLASSES } from '../../constants';
 import Control from '../control';
 import './style.less';
 
-type ActionType = 'zoom-in' | 'zoom-out' | 'locate-center';
+export type ActionType = 'zoom-in' | 'zoom-out';
 
-interface Props {
+interface Props<CustomActionType extends string = never> {
     /**
      * Position of the control
      */
     position?: keyof typeof POSITION_CLASSES;
+
+    /**
+     * Control root element class name
+     */
+    className?: string;
 
     /**
      * The center to zoom when zoom-in or zoom-out button is clicked
@@ -21,20 +26,21 @@ interface Props {
     zoomCenter?: LatLngExpression;
 
     /**
-     * The center to locate when locate-center button is clicked
+     * Custom actions to be added to the control
      */
-    locateCenter?: LatLngExpression;
+    actions?: { type: ActionType | CustomActionType; icon: React.ReactNode }[];
 
     /**
      * Callback when a button is clicked
+     * @returns Whether the default behavior should be prevented
      */
-    onButtonClick?: (type: ActionType) => void;
+    onButtonClick?: (type: ActionType | CustomActionType, map: Map) => void | boolean;
 }
 
 /**
  * Default actions to be added to the control
  */
-const DEFAULT_ACTIONS: { type: ActionType; icon: React.ReactNode }[] = [
+const DEFAULT_ACTIONS: Props['actions'] = [
     {
         type: 'zoom-in',
         icon: <AddIcon />,
@@ -43,94 +49,90 @@ const DEFAULT_ACTIONS: { type: ActionType; icon: React.ReactNode }[] = [
         type: 'zoom-out',
         icon: <RemoveIcon />,
     },
-    {
-        type: 'locate-center',
-        icon: <MyLocationIcon />,
-    },
 ];
 
 /**
  * Map Zoom Control Component
  */
-const ZoomControl = memo(
-    ({ position = 'bottomright', zoomCenter, locateCenter, onButtonClick }: Props) => {
-        const map = useMap();
-        const maxZoom = map.getMaxZoom();
-        const minZoom = map.getMinZoom();
-        const [zoom, setZoom] = useState(map.getZoom());
+const ZoomControl = <T extends string>({
+    position = 'bottomright',
+    zoomCenter,
+    className,
+    actions: customActions,
+    onButtonClick,
+}: Props<T>) => {
+    const map = useMap();
+    const maxZoom = map.getMaxZoom();
+    const minZoom = map.getMinZoom();
+    const [zoom, setZoom] = useState(map.getZoom());
 
-        const actions = useMemo(() => {
-            return DEFAULT_ACTIONS.filter(item => item.type !== 'locate-center' || locateCenter);
-        }, [locateCenter]);
+    const actions = useMemo(() => {
+        return [...DEFAULT_ACTIONS, ...(customActions || [])];
+    }, [customActions]);
 
-        const handleActionClick = (type: ActionType) => {
-            onButtonClick?.(type);
+    const handleActionClick = (type: ActionType | T) => {
+        const preventDefault = onButtonClick?.(type, map) ?? false;
 
-            switch (type) {
-                case 'zoom-in': {
-                    const nextZoom = Math.min(map.getZoom() + 1, maxZoom);
+        if (preventDefault) return;
+        switch (type) {
+            case 'zoom-in': {
+                const nextZoom = Math.min(map.getZoom() + 1, maxZoom);
 
-                    map.setView(zoomCenter || map.getCenter(), nextZoom);
-                    break;
-                }
-                case 'zoom-out': {
-                    const nextZoom = Math.max(map.getZoom() - 1, minZoom);
-
-                    map.setView(zoomCenter || map.getCenter(), nextZoom);
-                    break;
-                }
-                case 'locate-center': {
-                    if (!locateCenter) break;
-                    map.setView(locateCenter);
-                    break;
-                }
-                default:
-                    break;
+                map.setView(zoomCenter || map.getCenter(), nextZoom);
+                break;
             }
-        };
+            case 'zoom-out': {
+                const nextZoom = Math.max(map.getZoom() - 1, minZoom);
 
-        useMapEvent('zoomend', () => {
-            setZoom(map.getZoom());
-        });
+                map.setView(zoomCenter || map.getCenter(), nextZoom);
+                break;
+            }
+            default:
+                break;
+        }
+    };
 
-        return (
-            <Control position={position} className="ms-map-zoom-control">
-                {actions.map(item => {
-                    let disabled = false;
+    useMapEvent('zoomend', () => {
+        setZoom(map.getZoom());
+    });
 
-                    switch (item.type) {
-                        case 'zoom-in':
-                            disabled = zoom >= maxZoom;
-                            break;
-                        case 'zoom-out':
-                            disabled = zoom <= minZoom;
-                            break;
-                        default:
-                            disabled = false;
-                            break;
-                    }
+    return (
+        <Control position={position} className={cls('ms-map-zoom-control', className)}>
+            {actions.map(item => {
+                let disabled = false;
 
-                    return (
-                        <button
-                            key={item.type}
-                            type="button"
-                            disabled={disabled}
-                            className={cls('ms-map-control', `ms-map-control-${item.type}`, {
-                                disabled,
-                            })}
-                            onClick={e => {
-                                e.stopPropagation();
-                                handleActionClick(item.type);
-                            }}
-                            onDoubleClick={e => e.stopPropagation()}
-                        >
-                            {item.icon}
-                        </button>
-                    );
-                })}
-            </Control>
-        );
-    },
-);
+                switch (item.type) {
+                    case 'zoom-in':
+                        disabled = zoom >= maxZoom;
+                        break;
+                    case 'zoom-out':
+                        disabled = zoom <= minZoom;
+                        break;
+                    default:
+                        disabled = false;
+                        break;
+                }
 
-export default ZoomControl;
+                return (
+                    <button
+                        key={item.type}
+                        type="button"
+                        disabled={disabled}
+                        className={cls('ms-map-control', `ms-map-control-${item.type}`, {
+                            disabled,
+                        })}
+                        onClick={e => {
+                            e.stopPropagation();
+                            handleActionClick(item.type);
+                        }}
+                        onDoubleClick={e => e.stopPropagation()}
+                    >
+                        {item.icon}
+                    </button>
+                );
+            })}
+        </Control>
+    );
+};
+
+export default memo(ZoomControl) as typeof ZoomControl;
