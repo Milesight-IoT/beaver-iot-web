@@ -23,16 +23,12 @@ import {
     MobileGroupSelect,
     MobileSearchInput,
     MobileDeviceItem,
+    DEVICE_ITEM_HEIGHT,
     type GroupItem,
     type ActionType,
 } from './components';
 import { FixedGroupEnum } from './constants';
 import './style.less';
-
-/**
- * Device item height
- */
-const DEVICE_ITEM_HEIGHT = 116;
 
 export default () => {
     const { getIntlText } = useI18n();
