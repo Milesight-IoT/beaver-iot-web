@@ -8,4 +8,13 @@
         color: var(--primary-color-8);
         transform: translate(-50%, -42px);
     }
+
+    &.is-mobile {
+        .@{prefix}-map-zoom-control {
+            .@{prefix}-map-control-zoom-in,
+            .@{prefix}-map-control-zoom-out {
+                display: none;
+            }
+        }
+    }
 }
