@@ -20,6 +20,7 @@ import { type DeviceDetail } from '@/services/http';
 import useControlPanelStore from '@/components/drawing-board/plugin/store';
 import { type DeviceSelectData } from '@/components/drawing-board/plugin/components';
 import { MapContext } from '../../context';
+import { useEntityStatus } from './useEntityStatus';
 
 import styles from './style.module.less';
 
@@ -36,7 +37,8 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
         useStoreShallow(['formData', 'setValuesToFormConfig']),
     );
     const mapContext = useContext(MapContext);
-    const { isPreview, getDeviceStatusById } = mapContext || {};
+    const { isPreview, entitiesStatus, getDeviceStatusById } = mapContext || {};
+    const { getDeviceLatitude, getDeviceLongitude } = useEntityStatus(entitiesStatus);
 
     const openGoogleMap = useMemoizedFn(() => {
         if (!device?.location) {
@@ -236,7 +238,7 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                 />
                 <div
                     className={styles['info-item__name']}
-                >{`${toSixDecimals(device?.location?.latitude)}, ${toSixDecimals(device?.location?.longitude)}`}</div>
+                >{`${toSixDecimals(getDeviceLatitude(device))}, ${toSixDecimals(getDeviceLongitude(device))}`}</div>
                 <Tooltip
                     PopperProps={{
                         disablePortal: true,
