@@ -8,6 +8,7 @@ export {
     type AddDeviceProps,
     type ImportEntityProps,
     type DeviceStatus,
+    type DeviceAlarmDetail,
 } from './device';
 
 export { default as entityAPI, type EntityAPISchema } from './entity';

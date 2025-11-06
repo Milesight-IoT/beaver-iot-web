@@ -171,6 +171,7 @@ export {
     NearMe as NearMeIcon,
     CheckCircleOutline as CheckCircleOutlineIcon,
     NotListedLocation as NotListedLocationIcon,
+    NearMeOutlined as NearMeOutlinedIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';

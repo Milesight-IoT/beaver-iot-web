@@ -135,3 +135,21 @@ export const getChartGridRight = (wGrid: number, hGrid: number): number => {
 
     return wGrid > 2 || hGrid > 2 ? 15 : 0;
 };
+
+/**
+ * Round a number to 6 decimal places
+ * @param num Number to be processed
+ * @returns Number with 6 decimal places
+ */
+export const toSixDecimals = (num?: number) => {
+    if (!num) {
+        return '';
+    }
+
+    const toNum = Number(num);
+    if (Number.isNaN(toNum)) {
+        return '';
+    }
+
+    return toNum.toFixed(6);
+};

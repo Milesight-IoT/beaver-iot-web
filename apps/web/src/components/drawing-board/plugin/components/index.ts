@@ -34,3 +34,4 @@ export {
     type MultiDeviceSelectProps,
     type DeviceSelectData,
 } from './multi-device-select';
+export { default as AlarmTimeSelect } from './alarm-time-select';

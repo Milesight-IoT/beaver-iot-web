@@ -302,5 +302,7 @@
     "valid.input.value": "Input value: {0} only.",
     "valid.input.version": "The version number does not comply with the specification.",
     "valid.resp.at_least_one": "Please select at least one {1}.",
-    "common.tip.click_to_claim": "点击进行确认"
+    "common.tip.click_to_claim": "点击进行确认",
+    "common.label.default_time": "默认时间",
+    "common.label.position": "位置"
 }

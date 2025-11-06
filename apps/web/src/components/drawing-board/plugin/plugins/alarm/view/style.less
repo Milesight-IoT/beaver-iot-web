@@ -1,0 +1,28 @@
+.alarm-view {
+    width: 100%;
+    height: 100%;
+    background-color: var(--main-background);
+    border-radius: @border-radius-base;
+
+    &__table {
+        width: 100%;
+        height: 100%;
+        padding: 10px @padding-md @padding-md @padding-md;
+
+        &.fullscreenable {
+            .ms-table-pro .ms-table-pro__header {
+                padding-right: @margin-xxl;
+            }
+        }
+
+        .ms-table-pro .ms-table-pro__header {
+            margin-bottom: 10px;
+        }
+    }
+
+    &__title {
+        margin-right: @margin-xxs;
+        font-weight: @font-weight-medium;
+        .text-size(@font-size-3);
+    }
+}

@@ -19,6 +19,7 @@
     "dashboard.label_min_value": "Min. Value",
     "dashboard.label_nearly_half_year": "Past 6 Months",
     "dashboard.label_nearly_one_days": "Nearly one day",
+    "dashboard.label_nearly_three_days": "近3天",
     "dashboard.label_nearly_one_month": "Past Month",
     "dashboard.label_nearly_one_week": "Past Week",
     "dashboard.label_nearly_one_year": "Past Year",
@@ -45,5 +46,6 @@
     "dashboard.tip.alarm_device": "Alarm device",
     "dashboard.tip.offline_device": "Offline device",
     "dashboard.tip.navigate_here": "Navigate Here",
-    "dashboard.tip.delete_spot": "Delete Spot"
+    "dashboard.tip.delete_spot": "Delete Spot",
+    "dashboard.plugin_name_alarm": "Alarm"
 }

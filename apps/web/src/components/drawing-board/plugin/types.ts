@@ -30,7 +30,8 @@ export type ControlType =
     | 'MultiAppearanceIcon'
     | 'MultiEntitySelect'
     | 'ChartMetricsSelect'
-    | 'MultiDeviceSelect';
+    | 'MultiDeviceSelect'
+    | 'AlarmTimeSelect';
 
 export type ControlTypePropsMap = {
     Input: Partial<TextFieldProps>;
@@ -44,6 +45,7 @@ export type ControlTypePropsMap = {
     MultiEntitySelect: Partial<MultipleEntitySelectProps>;
     ChartMetricsSelect: Partial<ChartMetricsSelectProps>;
     MultiDeviceSelect: MultiDeviceSelectProps;
+    AlarmTimeSelect: Partial<PluginSelectProps>;
 };
 
 // Check the completeness of ControlTypePropsMap
@@ -113,7 +115,8 @@ export type PluginType =
     | 'text'
     | 'trigger'
     | 'deviceList'
-    | 'map';
+    | 'map'
+    | 'alarm';
 
 /**
  * The plugin control panel config

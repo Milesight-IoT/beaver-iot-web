@@ -19,6 +19,7 @@ import { Tooltip } from '@/components';
 import { type DeviceDetail } from '@/services/http';
 import useControlPanelStore from '@/components/drawing-board/plugin/store';
 import { type DeviceSelectData } from '@/components/drawing-board/plugin/components';
+import { toSixDecimals } from '@/components/drawing-board/plugin/utils';
 import { MapContext } from '../../context';
 import { useEntityStatus } from './useEntityStatus';
 
@@ -71,19 +72,6 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
             wait: 300,
         },
     );
-
-    const toSixDecimals = (num?: number) => {
-        if (!num) {
-            return '';
-        }
-
-        const toNum = Number(num);
-        if (Number.isNaN(toNum)) {
-            return '';
-        }
-
-        return toNum.toFixed(6);
-    };
 
     return (
         <div className={styles['device-popup']}>
