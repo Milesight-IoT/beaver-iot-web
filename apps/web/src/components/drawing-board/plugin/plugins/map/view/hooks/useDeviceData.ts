@@ -63,7 +63,7 @@ export function useDeviceData(
 
             const result = getResponseData(resp);
 
-            return result?.content || [];
+            return (result?.content || []).filter(d => !!d?.location);
         },
         {
             refreshDeps: [devices],

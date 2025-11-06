@@ -46,7 +46,7 @@ const BaseMap: React.FC<BaseMapProps> = props => {
         }
 
         return devices
-            .filter(d => !!d.location)
+            .filter(d => !!d?.location)
             .map(d => {
                 return {
                     ...d,

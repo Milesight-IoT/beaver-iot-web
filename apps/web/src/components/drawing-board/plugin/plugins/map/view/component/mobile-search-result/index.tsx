@@ -5,7 +5,7 @@ import { isNil, isEmpty } from 'lodash-es';
 
 import { useI18n } from '@milesight/shared/src/hooks';
 
-import { InfiniteScrollList, type InfiniteScrollListRef } from '@/components';
+import { InfiniteScrollList, type InfiniteScrollListRef, Tooltip } from '@/components';
 import { type DeviceDetail } from '@/services/http';
 import { MapContext } from '../../context';
 
@@ -72,8 +72,8 @@ const MobileSearchResult: React.FC<MobileSearchResultProps> = props => {
             })}
             onClick={() => handleSelectDevice(item)}
         >
-            <div className={styles.name}>{item.name}</div>
-            <div className={styles.identifier}>{item.identifier}</div>
+            <Tooltip autoEllipsis className={styles.name} title={item.name} />
+            <Tooltip autoEllipsis className={styles.identifier} title={item.identifier} />
         </div>
     );
 
