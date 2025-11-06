@@ -1,6 +1,8 @@
 import React, { memo, useMemo } from 'react';
 import HoverPopover from 'material-ui-popup-state/HoverPopover';
 import { usePopupState, bindHover, bindPopover } from 'material-ui-popup-state/hooks';
+import { BASE64_IMAGE_REGEX } from '@milesight/shared/src/config';
+import { API_PREFIX } from '@/services/http';
 import './style.less';
 
 interface Props {
@@ -25,6 +27,12 @@ const DEFAULT_NORMAL_WIDTH = 36;
 const DEFAULT_NORMAL_HEIGHT = 28;
 const DEFAULT_PREVIEW_WIDTH = 360;
 const DEFAULT_PREVIEW_HEIGHT = 240;
+
+const genImageSource = (src?: string) => {
+    if (!src) return '';
+    if (BASE64_IMAGE_REGEX.test(src)) return src;
+    return src.startsWith('http') ? src : `${API_PREFIX}${src.startsWith('/') ? '' : '/'}${src}`;
+};
 
 /**
  *  Image preview component
@@ -61,7 +69,7 @@ const ImagePreview: React.FC<Props> = memo(
                     style={normalStyle}
                     {...bindHover(popupState)}
                 >
-                    <img src={src} alt="preview" />
+                    <img src={genImageSource(src)} alt="preview" />
                 </div>
                 <HoverPopover
                     {...bindPopover(popupState)}
@@ -71,7 +79,7 @@ const ImagePreview: React.FC<Props> = memo(
                     }}
                 >
                     <div className="ms-com-image-preview-picture" style={previewStyle}>
-                        <img src={src} alt="preview" />
+                        <img src={genImageSource(src)} alt="preview" />
                     </div>
                 </HoverPopover>
             </>
