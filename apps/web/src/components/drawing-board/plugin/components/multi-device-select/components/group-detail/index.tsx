@@ -109,13 +109,15 @@ const GroupDetail: React.FC<GroupDetailProps> = props => {
                     <div className={styles.top}>
                         <Tooltip className={styles.name} autoEllipsis title={item.name} />
                         {locationRequired && !item?.location ? (
-                            <NotListedLocationIcon
-                                sx={{
-                                    color: 'text.tertiary',
-                                    width: '16px',
-                                    height: '16px',
-                                }}
-                            />
+                            <Tooltip title={getIntlText('device.tip.not_set_location')}>
+                                <NotListedLocationIcon
+                                    sx={{
+                                        color: 'text.tertiary',
+                                        width: '16px',
+                                        height: '16px',
+                                    }}
+                                />
+                            </Tooltip>
                         ) : null}
                     </div>
                     <div className={styles.description}>

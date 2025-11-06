@@ -90,7 +90,20 @@ export function useAllChecked(data?: DeviceDetail[]) {
                 return !isCurrentData;
             })?.length || 0;
 
-        return selectedCount + data.length > MAX_COUNT;
+        return (
+            selectedCount +
+                data.filter(d => {
+                    /**
+                     * Filter out the devices that have no location if the location is required.
+                     */
+                    if (locationRequired && !d?.location) {
+                        return false;
+                    }
+
+                    return true;
+                }).length >
+            MAX_COUNT
+        );
     }, [context?.selectedDevices, data, allIsIndeterminate, locationRequired, allIsChecked]);
 
     const handleAllCheckedChange = useMemoizedFn((checked: boolean) => {
