@@ -132,9 +132,14 @@ export function useDeviceEntities(props: useDeviceEntitiesProps) {
             return 0;
         }
 
-        return data.reduce((a: number, c) => {
-            return getDeviceStatusById?.(c)?.value !== 'ONLINE' ? a + 1 : a;
-        }, 0);
+        /**
+         * Filter devices with location
+         */
+        return data
+            .filter(d => !!d?.location)
+            .reduce((a: number, c) => {
+                return getDeviceStatusById?.(c)?.value !== 'ONLINE' ? a + 1 : a;
+            }, 0);
     });
 
     return {
