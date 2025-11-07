@@ -101,6 +101,14 @@ function HoverSearchInput<T>(
                 '& .MuiAutocomplete-popupIndicatorOpen': {
                     transform: 'none',
                 },
+                '& .MuiAutocomplete-endAdornment': {
+                    'button.MuiAutocomplete-clearIndicator': {
+                        visibility: 'visible',
+                    },
+                    'button + button': {
+                        display: 'none',
+                    },
+                },
             }}
         />
     );

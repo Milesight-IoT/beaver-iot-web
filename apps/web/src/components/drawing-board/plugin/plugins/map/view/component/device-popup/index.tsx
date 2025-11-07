@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Alert, IconButton } from '@mui/material';
-import { useMemoizedFn, useDebounceFn } from 'ahooks';
+import { useDebounceFn } from 'ahooks';
 import cls from 'classnames';
 import { isEmpty } from 'lodash-es';
 
@@ -19,7 +19,7 @@ import { Tooltip } from '@/components';
 import { type DeviceDetail } from '@/services/http';
 import useControlPanelStore from '@/components/drawing-board/plugin/store';
 import { type DeviceSelectData } from '@/components/drawing-board/plugin/components';
-import { toSixDecimals } from '@/components/drawing-board/plugin/utils';
+import { toSixDecimals, openGoogleMap } from '@/components/drawing-board/plugin/utils';
 import { MapContext } from '../../context';
 import { useEntityStatus } from './useEntityStatus';
 
@@ -40,15 +40,6 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
     const mapContext = useContext(MapContext);
     const { isPreview, entitiesStatus, getDeviceStatusById } = mapContext || {};
     const { getDeviceLatitude, getDeviceLongitude } = useEntityStatus(entitiesStatus);
-
-    const openGoogleMap = useMemoizedFn(() => {
-        if (!device?.location) {
-            return;
-        }
-
-        const url = `https://www.google.com/maps?q=${device.location.latitude},${device.location.longitude}`;
-        window.open(url, '_blank');
-    });
 
     const { run: handleDeleteSpot } = useDebounceFn(
         () => {
@@ -236,7 +227,13 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                     }}
                     title={getIntlText('dashboard.tip.navigate_here')}
                 >
-                    <IconButton sx={{ paddingLeft: '4px' }} size="small" onClick={openGoogleMap}>
+                    <IconButton
+                        sx={{ paddingLeft: '4px' }}
+                        size="small"
+                        onClick={() =>
+                            openGoogleMap(device?.location?.latitude, device?.location?.longitude)
+                        }
+                    >
                         <NearMeIcon
                             color="primary"
                             sx={{

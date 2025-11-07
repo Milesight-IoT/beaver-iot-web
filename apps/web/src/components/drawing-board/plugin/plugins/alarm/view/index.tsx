@@ -1,12 +1,13 @@
 import React, { useMemo, useContext } from 'react';
 import cls from 'classnames';
 
-import { TablePro, HoverSearchInput, Tooltip } from '@/components';
+import { TablePro, Tooltip } from '@/components';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
 import { type AlarmConfigType } from '../control-panel';
 import { type BoardPluginProps } from '../../../types';
 import { useStableValue } from '../../../hooks';
 import { useColumns, type TableRowDataType, useDeviceData, generateMockTableData } from './hooks';
+import { SearchSlot } from './components';
 
 import './style.less';
 
@@ -52,7 +53,7 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
                     toolbarRender={toolbarRender}
                     paginationModel={paginationModel}
                     onPaginationModelChange={setPaginationModel}
-                    searchSlot={<HoverSearchInput keyword={keyword} changeKeyword={setKeyword} />}
+                    searchSlot={<SearchSlot keyword={keyword} setKeyword={setKeyword} />}
                 />
             </div>
         </div>

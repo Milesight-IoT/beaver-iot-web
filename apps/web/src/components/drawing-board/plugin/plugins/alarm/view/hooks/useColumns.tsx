@@ -11,7 +11,7 @@ import {
 } from '@milesight/shared/src/components';
 
 import { Tooltip, type ColumnType } from '@/components';
-import { toSixDecimals } from '@/components/drawing-board/plugin/utils';
+import { toSixDecimals, openGoogleMap } from '@/components/drawing-board/plugin/utils';
 import { type EntityAPISchema, type DeviceAlarmDetail } from '@/services/http';
 
 export type TableRowDataType = ObjectToCamelCase<DeviceAlarmDetail>;
@@ -27,7 +27,7 @@ export interface UseColumnsProps {
     entitiesStatus?: EntityAPISchema['getEntitiesStatus']['response'];
 }
 
-const useColumns = <T extends TableRowDataType>({ entitiesStatus }: UseColumnsProps) => {
+const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: UseColumnsProps) => {
     const { getIntlText } = useI18n();
     const { getTimeFormat } = useTime();
 
@@ -95,7 +95,13 @@ const useColumns = <T extends TableRowDataType>({ entitiesStatus }: UseColumnsPr
                                             height: 30,
                                             color: 'text.secondary',
                                         }}
-                                        onClick={() => console.log('click to claim')}
+                                        onClick={() => {
+                                            if (isPreview) {
+                                                return;
+                                            }
+
+                                            console.log('click to claim', row);
+                                        }}
                                     >
                                         <CheckCircleOutlineIcon sx={{ width: 20, height: 20 }} />
                                     </IconButton>
@@ -109,7 +115,11 @@ const useColumns = <T extends TableRowDataType>({ entitiesStatus }: UseColumnsPr
                                         color: 'text.secondary',
                                     }}
                                     onClick={() => {
-                                        console.log('ok');
+                                        if (isPreview) {
+                                            return;
+                                        }
+
+                                        openGoogleMap(row?.latitude, row?.longitude);
                                     }}
                                 >
                                     <NearMeOutlinedIcon sx={{ width: 20, height: 20 }} />
@@ -120,7 +130,7 @@ const useColumns = <T extends TableRowDataType>({ entitiesStatus }: UseColumnsPr
                 },
             },
         ];
-    }, [getIntlText, getTimeFormat]);
+    }, [getIntlText, getTimeFormat, isPreview]);
 
     return {
         columns,
@@ -131,6 +141,9 @@ const useColumns = <T extends TableRowDataType>({ entitiesStatus }: UseColumnsPr
 
 export default useColumns;
 
+/**
+ * Mock data function
+ */
 function generateApiKey(length = 16): string {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';

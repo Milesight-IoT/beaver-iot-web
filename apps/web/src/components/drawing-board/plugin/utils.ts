@@ -1,4 +1,4 @@
-import { isEmpty, get } from 'lodash-es';
+import { isEmpty, get, isNil } from 'lodash-es';
 
 import { type DrawingBoardContextProps } from '@/components/drawing-board/context';
 import { type EntitySelectOption, type EntityValueType } from '@/components';
@@ -152,4 +152,18 @@ export const toSixDecimals = (num?: number) => {
     }
 
     return toNum.toFixed(6);
+};
+
+/**
+ * Open Google Map with latitude and longitude
+ * @param latitude Latitude
+ * @param longitude Longitude
+ */
+export const openGoogleMap = (latitude?: number, longitude?: number) => {
+    if (isNil(latitude) || isNil(longitude)) {
+        return;
+    }
+
+    const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+    window.open(url, '_blank');
 };
