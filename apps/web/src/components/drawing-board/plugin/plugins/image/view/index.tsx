@@ -1,5 +1,5 @@
 import { useState, useEffect, memo } from 'react';
-import { useRequest, useMemoizedFn } from 'ahooks';
+import { useRequest } from 'ahooks';
 import { BrokenImageIcon } from '@milesight/shared/src/components';
 import {
     entityAPI,
@@ -8,6 +8,7 @@ import {
     getResponseData,
     API_PREFIX,
 } from '@/services/http';
+import { genImageSource } from '@/utils';
 import { useActivityEntity } from '../../../hooks';
 import { ImageConfigType } from '../typings';
 
@@ -71,7 +72,7 @@ const View = (props: ViewProps) => {
             }
 
             const entityStatus = getResponseData(res);
-            setImageSrc(!entityStatus?.value ? '' : `${entityStatus.value}`);
+            setImageSrc(genImageSource(entityStatus?.value));
         },
         {
             manual: true,
@@ -86,7 +87,7 @@ const View = (props: ViewProps) => {
     useEffect(() => {
         switch (dataType) {
             case 'upload':
-                setImageSrc(genFullUrl(file?.url) || '');
+                setImageSrc(genImageSource(file?.url));
                 break;
             case 'url':
                 setImageSrc(url || '');
