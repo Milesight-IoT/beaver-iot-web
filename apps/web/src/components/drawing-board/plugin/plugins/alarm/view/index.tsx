@@ -1,5 +1,6 @@
 import React, { useMemo, useContext } from 'react';
 import cls from 'classnames';
+import { GridFooter } from '@mui/x-data-grid';
 
 import { TablePro, Tooltip } from '@/components';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
@@ -16,7 +17,7 @@ export interface AlarmViewProps {
     configJson: BoardPluginProps;
 }
 
-const mockData = generateMockTableData(120);
+const mockData = generateMockTableData(28);
 
 const AlarmView: React.FC<AlarmViewProps> = props => {
     const { config, configJson } = props;
@@ -25,11 +26,11 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
     const context = useContext(DrawingBoardContext);
 
     const { stableValue: devices } = useStableValue(unStableValue);
-
-    const { keyword, setKeyword } = useDeviceData();
     const { columns, paginationModel, setPaginationModel, handleFilterChange } = useColumns({
         isPreview,
     });
+    const { keyword, setKeyword, alarmRef, alarmContainerWidth, selectTime, setSelectTime } =
+        useDeviceData();
 
     const toolbarRender = useMemo(() => {
         return (
@@ -40,7 +41,7 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
     }, [title]);
 
     return (
-        <div className="alarm-view">
+        <div ref={alarmRef} className="alarm-view">
             <div
                 className={cls('alarm-view__table', {
                     fullscreenable: !(isPreview || context?.isEdit),
@@ -55,9 +56,38 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
                     toolbarRender={toolbarRender}
                     paginationModel={paginationModel}
                     onPaginationModelChange={setPaginationModel}
-                    searchSlot={<SearchSlot keyword={keyword} setKeyword={setKeyword} />}
+                    searchSlot={
+                        <SearchSlot
+                            keyword={keyword}
+                            setKeyword={setKeyword}
+                            selectTime={selectTime}
+                            setSelectTime={setSelectTime}
+                        />
+                    }
                     onFilterInfoChange={handleFilterChange}
                     rowHeight={64}
+                    slots={{
+                        footer: GridFooter,
+                    }}
+                    slotProps={{
+                        footer: {
+                            sx: {
+                                '& .MuiTablePagination-root': {
+                                    overflow: 'hidden',
+                                },
+                                '& .MuiTablePagination-root .MuiTablePagination-selectLabel': {
+                                    display: alarmContainerWidth > 500 ? undefined : 'none',
+                                },
+                                '& .MuiTablePagination-root .MuiTablePagination-input': {
+                                    display: alarmContainerWidth > 500 ? undefined : 'none',
+                                },
+                            },
+                        },
+                        pagination: {
+                            showFirstButton: true,
+                            showLastButton: true,
+                        },
+                    }}
                 />
             </div>
         </div>

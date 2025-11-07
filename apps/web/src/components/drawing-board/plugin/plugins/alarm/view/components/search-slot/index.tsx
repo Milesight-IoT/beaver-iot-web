@@ -1,17 +1,26 @@
 import React, { useMemo } from 'react';
 import { Autocomplete, TextField, IconButton, Divider } from '@mui/material';
+import { isNil } from 'lodash-es';
 
 import { useI18n } from '@milesight/shared/src/hooks';
 import { SaveAltIcon } from '@milesight/shared/src/components';
 
+import { useMemoizedFn } from 'ahooks';
 import { HoverSearchInput } from '@/components';
 
 export interface SearchSlotProps {
     keyword: string;
     setKeyword: React.Dispatch<React.SetStateAction<string>>;
+    selectTime: number;
+    setSelectTime: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const SearchSlot: React.FC<SearchSlotProps> = ({ keyword, setKeyword }) => {
+const SearchSlot: React.FC<SearchSlotProps> = ({
+    keyword,
+    setKeyword,
+    selectTime,
+    setSelectTime,
+}) => {
     const { getIntlText } = useI18n();
 
     const timeOptions = useMemo(() => {
@@ -43,10 +52,18 @@ const SearchSlot: React.FC<SearchSlotProps> = ({ keyword, setKeyword }) => {
         ];
     }, [getIntlText]);
 
+    const handleSelectTime = useMemoizedFn((option: OptionsProps<number>) => {
+        if (isNil(option?.value)) {
+            return;
+        }
+
+        setSelectTime(option.value);
+    });
+
     return (
         <div className="alarm-view__search-slot">
             <Autocomplete
-                defaultValue={timeOptions[0]}
+                value={timeOptions.find(t => t.value === selectTime)}
                 options={timeOptions}
                 disableClearable
                 renderInput={params => <TextField {...params} variant="standard" />}
@@ -66,6 +83,7 @@ const SearchSlot: React.FC<SearchSlotProps> = ({ keyword, setKeyword }) => {
                         disableRipple: true,
                     },
                 }}
+                onChange={(_, option) => handleSelectTime(option)}
             />
             <Divider
                 orientation="vertical"
