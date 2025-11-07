@@ -22,6 +22,16 @@
                 width: 0;
             }
         }
+
+        &-content {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0;
+
+            > div {
+                .text-size(@font-size-base);
+            }
+        }
     }
 
     &__title {

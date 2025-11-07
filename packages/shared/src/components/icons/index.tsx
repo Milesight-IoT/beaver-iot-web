@@ -172,6 +172,7 @@ export {
     CheckCircleOutline as CheckCircleOutlineIcon,
     NotListedLocation as NotListedLocationIcon,
     NearMeOutlined as NearMeOutlinedIcon,
+    AccessTimeFilled as AccessTimeFilledIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';

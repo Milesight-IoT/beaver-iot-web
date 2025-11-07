@@ -5,14 +5,16 @@ import { get, isNil } from 'lodash-es';
 
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
 import {
+    FilterAltIcon,
     CheckCircleOutlineIcon,
     NearMeOutlinedIcon,
     LoadingWrapper,
 } from '@milesight/shared/src/components';
 
-import { Tooltip, type ColumnType } from '@/components';
+import { Tooltip, type ColumnType, type TableProProps, type FilterValue } from '@/components';
 import { toSixDecimals, openGoogleMap } from '@/components/drawing-board/plugin/utils';
 import { type EntityAPISchema, type DeviceAlarmDetail } from '@/services/http';
+import { ClaimChip } from '../components';
 
 export type TableRowDataType = ObjectToCamelCase<DeviceAlarmDetail>;
 
@@ -27,11 +29,30 @@ export interface UseColumnsProps {
     entitiesStatus?: EntityAPISchema['getEntitiesStatus']['response'];
 }
 
+export enum AlarmStatus {
+    Claimed = 1,
+    Unclaimed = 0,
+}
+
 const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: UseColumnsProps) => {
     const { getIntlText } = useI18n();
     const { getTimeFormat } = useTime();
 
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
+    const [filteredInfo, setFilteredInfo] = useState<Record<string, any>>({});
+
+    const statusFilterOptions = useMemo(() => {
+        return [
+            {
+                label: getIntlText('common.label.claimed'),
+                value: AlarmStatus.Claimed,
+            },
+            {
+                label: getIntlText('common.label.unclaimed'),
+                value: AlarmStatus.Unclaimed,
+            },
+        ];
+    }, [getIntlText]);
 
     const columns: ColumnType<T>[] = useMemo(() => {
         return [
@@ -40,17 +61,37 @@ const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: U
                 headerName: getIntlText('device.label.device_status'),
                 flex: 1,
                 minWidth: 120,
-                ellipsis: true,
+                filteredValue: filteredInfo?.alarmStatus,
+                filterIcon: (filtered: boolean) => {
+                    return (
+                        <FilterAltIcon
+                            sx={{
+                                color: filtered ? 'var(--primary-color-7)' : 'var(--gray-color-5)',
+                            }}
+                        />
+                    );
+                },
+                filters: statusFilterOptions.map(o => ({
+                    text: o.label,
+                    value: o.value,
+                })),
                 renderCell({ value }) {
-                    return value ? '已认领' : '未认领';
+                    return <ClaimChip claimed={!!value} />;
                 },
             },
             {
                 field: 'alarmContent',
                 headerName: getIntlText('common.label.content'),
-                ellipsis: true,
                 flex: 1,
                 minWidth: 240,
+                renderCell({ row }) {
+                    return (
+                        <div className="alarm-view__table-content">
+                            <Tooltip autoEllipsis title={row?.deviceName || '-'} />
+                            <Tooltip autoEllipsis title={row?.alarmContent || '-'} />
+                        </div>
+                    );
+                },
             },
             {
                 field: 'alarmTime',
@@ -130,12 +171,19 @@ const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: U
                 },
             },
         ];
-    }, [getIntlText, getTimeFormat, isPreview]);
+    }, [getIntlText, getTimeFormat, isPreview, filteredInfo, statusFilterOptions]);
+
+    const handleFilterChange: TableProProps<TableRowDataType>['onFilterInfoChange'] = (
+        filters: Record<string, FilterValue | null>,
+    ) => {
+        setFilteredInfo(filters);
+    };
 
     return {
         columns,
         paginationModel,
         setPaginationModel,
+        handleFilterChange,
     };
 };
 
@@ -171,13 +219,19 @@ function generateAlarmContent(): string {
         '设备异常重启',
         '传感器故障',
         '通信超时',
-        '定位漂移严重',
+        '定位漂移非常非常非常非常非常非常非常非常非常非常非常非常非常非常严重',
     ];
     return contents[Math.floor(Math.random() * contents.length)];
 }
 
 function generateDeviceName(): string {
-    const models = ['Tracker', 'Locator', 'Beacon', 'Guardian', 'Sentinel'];
+    const models = [
+        'Tracker',
+        'Locator',
+        'Beacon',
+        'Guardian',
+        'SentinelLongLongLongLongLongLongLongLongLongLongLongLong',
+    ];
     const id = Math.floor(Math.random() * 1000)
         .toString()
         .padStart(3, '0');

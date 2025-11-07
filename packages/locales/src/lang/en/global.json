@@ -305,5 +305,7 @@
     "common.tip.click_to_claim": "点击进行确认",
     "common.label.default_time": "默认时间",
     "common.label.position": "位置",
-    "common.label.custom": "Custom"
+    "common.label.custom": "Custom",
+    "common.label.claimed": "已确认",
+    "common.label.unclaimed": "待确认"
 }

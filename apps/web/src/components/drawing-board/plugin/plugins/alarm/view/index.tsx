@@ -27,7 +27,9 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
     const { stableValue: devices } = useStableValue(unStableValue);
 
     const { keyword, setKeyword } = useDeviceData();
-    const { columns, paginationModel, setPaginationModel } = useColumns({ isPreview });
+    const { columns, paginationModel, setPaginationModel, handleFilterChange } = useColumns({
+        isPreview,
+    });
 
     const toolbarRender = useMemo(() => {
         return (
@@ -54,6 +56,8 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
                     paginationModel={paginationModel}
                     onPaginationModelChange={setPaginationModel}
                     searchSlot={<SearchSlot keyword={keyword} setKeyword={setKeyword} />}
+                    onFilterInfoChange={handleFilterChange}
+                    rowHeight={64}
                 />
             </div>
         </div>
