@@ -156,5 +156,9 @@
     "workflow.valid.parameter_required": "The {1} node parameter is required.",
     "workflow.valid.range_length": "The length of the {1} field value should be greater than or equal to {2} and less than or equal to {3}.",
     "workflow.valid.range_num": "The value assigned to entity {1} shall be greater than or equal to {2} and less than or equal to {3}.",
-    "workflow.valid.required": "The {1} field is required."
+    "workflow.valid.required": "The {1} field is required.",
+    "workflow.label.select_entities": "Select Entities",
+    "workflow.label.select_by_tags": "Select by Tags",
+    "workflow.message.batch_select_by_tags_tip": "Modifying tags will synchronize the selected tags.",
+    "workflow.label.entity_count": "{1} Entities"
 }

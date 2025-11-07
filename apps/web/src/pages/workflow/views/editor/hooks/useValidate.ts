@@ -178,6 +178,24 @@ const useValidate = () => {
             },
         };
 
+        const entityDataChecker: Record<string, NodeDataValidator> = {
+            checkRequired(
+                value: NonNullable<ListenerNodeDataType['parameters']>['entityData'],
+                fieldName?: string,
+            ) {
+                const { keys, tags } = value || {};
+                if (
+                    (keys?.length && keys.some(item => !isEmpty(item))) ||
+                    (tags?.length && tags.some(item => !isEmpty(item)))
+                ) {
+                    return true;
+                }
+
+                const message = getIntlText(ErrorIntlKey.required, { 1: fieldName });
+                return message;
+            },
+        };
+
         // Check referenced param is valid in object data
         const checkReferenceParam: NodeDataValidator<Record<ApiKey, any>> = (
             data,
@@ -273,7 +291,9 @@ const useValidate = () => {
             },
             // Check listener.entities, select.entities
             'listener.entities': entitiesChecker,
+            'listener.entityData': entityDataChecker,
             'select.entities': entitiesChecker,
+            'select.entityData': entityDataChecker,
             'trigger.entityConfigs': {
                 checkRequired(
                     value?: NonNullable<TriggerNodeDataType['parameters']>['entityConfigs'],

@@ -1,0 +1,104 @@
+.@{prefix}-tag-select {
+    &__empty,
+    &__loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: @padding-lg @padding-md;
+        color: var(--text-color-secondary);
+    }
+
+    .@{mui-prefix}InputBase-root {
+        padding-right: 54px !important;
+
+        .@{prefix}-tag-select-entity-count {
+            color: var(--text-color-tertiary);
+        }
+
+        .@{mui-prefix}Autocomplete-clearIndicator {
+            .@{mui-prefix}SvgIcon-root {
+                font-size: 16px !important;
+            }
+        }
+    }
+
+    // &.@{mui-prefix}-expanded {
+    //     .@{mui-prefix}InputBase-root {
+    //         &.@{mui-prefix}-focused {
+    //             .@{mui-prefix}InputBase-input,
+    //             .@{prefix}-tag-select-entity-count {
+    //                 color: var(--text-color-quaternary);
+    //             }
+    //         }
+    //     }
+    // }
+}
+
+.@{prefix}-tag-select-listbox.@{mui-prefix}Autocomplete-listbox {
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+
+    .data-list-root {
+        display: flex;
+        height: 240px;
+        max-height: 240px;
+        overflow: auto;
+        overflow-x: hidden;
+
+        &.empty {
+            align-items: center;
+            justify-content: center;
+            height: 92px;
+
+            .inte-list,
+            .tag-list {
+                display: none;
+            }
+        }
+
+        &.data-list-search {
+            display: none;
+            height: auto;
+            max-height: 240px;
+        }
+
+        .tag-list {
+            flex: 1;
+            padding: @padding-xxs 0;
+
+            .tag-item {
+                display: flex;
+                gap: @margin-xs;
+                align-items: center;
+                justify-content: space-between;
+                height: 36px;
+                padding: 0 @padding-md;
+                cursor: pointer;
+                .text-size(@font-size-base);
+
+                &:hover {
+                    background-color: var(--component-background-gray);
+                }
+
+                &.active {
+                    background-color: transparent;
+                    .opacity-background(var(--primary-color-8), .08);
+
+                    .@{mui-prefix}SvgIcon-root {
+                        color: var(--text-color-main);
+                    }
+                }
+
+                .@{prefix}-tooltip {
+                    flex: 1;
+                    width: 0;
+                }
+
+                .tag-item-count {
+                    color: var(--text-color-tertiary);
+                }
+            }
+        }
+    }
+}

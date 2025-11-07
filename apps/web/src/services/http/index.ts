@@ -64,5 +64,5 @@ export {
     type MqttBrokerInfoType,
     type DataReportResult,
 } from './mqtt';
-export { default as tagAPI, type TagItemProps, TagOperationEnums } from './tag';
+export { default as tagAPI, type TagAPISchema, type TagItemProps, TagOperationEnums } from './tag';
 export { default as blueprintAPI, BlueprintSourceType, type BlueprintAPISchema } from './blueprint';
