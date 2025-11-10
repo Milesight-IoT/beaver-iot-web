@@ -238,6 +238,7 @@ const useNodeFormItems = ({ nodeId, nodeType, readonly }: Props) => {
                                             : assignerNodeEntityFilterModel;
                                     return (
                                         <EntityAssignSelect
+                                            // enableSelectParam
                                             required={required}
                                             filterModel={filterModel}
                                             value={value}
