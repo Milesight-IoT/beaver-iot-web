@@ -114,6 +114,11 @@ const EntityParamSelect: React.FC<EntityParamSelectProps> = ({
         ),
         [],
     );
+    const inputBlur = useCallback(() => {
+        setTimeout(() => {
+            containerRef.current?.querySelector('input')?.blur();
+        }, 0);
+    }, []);
 
     const filterModelValue = useMemo(() => {
         const { type, valueType, accessMode, excludeChildren } = filterModel || {};
@@ -193,20 +198,21 @@ const EntityParamSelect: React.FC<EntityParamSelectProps> = ({
                 open={!!anchorEl}
                 anchorEl={anchorEl}
                 onClose={() => {
-                    // setFocused(false);
                     setAnchorEl(null);
+                    inputBlur();
                 }}
                 {...commonPopoverProps}
             >
                 <UpstreamNodeList
-                    filter={filter}
+                    filter={filter || (data => data.valueType === 'STRING')}
                     value={paramValue}
                     onChange={node => {
-                        // setFocused(false);
                         setAnchorEl(null);
                         setParamValue(node);
                         setEntityValue(undefined);
                         setData(node.valueKey);
+
+                        inputBlur();
                     }}
                 />
             </Popover>
