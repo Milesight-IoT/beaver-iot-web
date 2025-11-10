@@ -8,7 +8,7 @@ import { type AlarmConfigType } from '../control-panel';
 import { type BoardPluginProps } from '../../../types';
 import { useStableValue } from '../../../hooks';
 import { useColumns, type TableRowDataType, useDeviceData, generateMockTableData } from './hooks';
-import { SearchSlot } from './components';
+import { SearchSlot, DateRangeModal } from './components';
 
 import './style.less';
 
@@ -29,8 +29,16 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
     const { columns, paginationModel, setPaginationModel, handleFilterChange } = useColumns({
         isPreview,
     });
-    const { keyword, setKeyword, alarmRef, alarmContainerWidth, selectTime, setSelectTime } =
-        useDeviceData();
+    const {
+        keyword,
+        setKeyword,
+        alarmRef,
+        alarmContainerWidth,
+        selectTime,
+        setSelectTime,
+        modalVisible,
+        setModalVisible,
+    } = useDeviceData();
 
     const toolbarRender = useMemo(() => {
         return (
@@ -62,6 +70,7 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
                             setKeyword={setKeyword}
                             selectTime={selectTime}
                             setSelectTime={setSelectTime}
+                            setModalVisible={setModalVisible}
                         />
                     }
                     onFilterInfoChange={handleFilterChange}
@@ -90,6 +99,14 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
                     }}
                 />
             </div>
+
+            {modalVisible && (
+                <DateRangeModal
+                    visible={modalVisible}
+                    onCancel={() => setModalVisible(false)}
+                    onSuccess={() => setModalVisible(false)}
+                />
+            )}
         </div>
     );
 };

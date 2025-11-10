@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
-import { Autocomplete, TextField, IconButton, Divider } from '@mui/material';
+import { IconButton, Divider, type SelectChangeEvent } from '@mui/material';
 import { isNil } from 'lodash-es';
 
-import { useI18n } from '@milesight/shared/src/hooks';
-import { SaveAltIcon } from '@milesight/shared/src/components';
+import { useI18n, useTheme } from '@milesight/shared/src/hooks';
+import { SaveAltIcon, Select } from '@milesight/shared/src/components';
 
 import { useMemoizedFn } from 'ahooks';
 import { HoverSearchInput } from '@/components';
@@ -13,6 +13,7 @@ export interface SearchSlotProps {
     setKeyword: React.Dispatch<React.SetStateAction<string>>;
     selectTime: number;
     setSelectTime: React.Dispatch<React.SetStateAction<number>>;
+    setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SearchSlot: React.FC<SearchSlotProps> = ({
@@ -20,8 +21,10 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
     setKeyword,
     selectTime,
     setSelectTime,
+    setModalVisible,
 }) => {
     const { getIntlText } = useI18n();
+    const { matchTablet } = useTheme();
 
     const timeOptions = useMemo(() => {
         return [
@@ -52,44 +55,44 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
         ];
     }, [getIntlText]);
 
-    const handleSelectTime = useMemoizedFn((option: OptionsProps<number>) => {
-        if (isNil(option?.value)) {
+    const handleSelectTimeChange = useMemoizedFn((e: SelectChangeEvent<number>) => {
+        const val = e?.target?.value as number;
+        if (isNil(val)) {
             return;
         }
 
-        setSelectTime(option.value);
+        setSelectTime(val);
+    });
+
+    const handleOptionClick = useMemoizedFn((option: OptionsProps) => {
+        if (option?.value === -1) {
+            setModalVisible(true);
+        }
     });
 
     return (
         <div className="alarm-view__search-slot">
-            <Autocomplete
-                value={timeOptions.find(t => t.value === selectTime)}
+            <Select
+                value={selectTime}
                 options={timeOptions}
-                disableClearable
-                renderInput={params => <TextField {...params} variant="standard" />}
+                onChange={handleSelectTimeChange}
+                placeholder={getIntlText('common.label.please_select')}
                 sx={{
-                    width: 145,
-                    '&.MuiAutocomplete-root div.MuiFormControl-root.MuiFormControl-marginDense.MuiFormControl-fullWidth':
-                        {
-                            margin: 0,
-                        },
-                    '& .MuiInputBase-root.MuiInput-root::before, & .MuiInputBase-root.MuiInput-root::after':
-                        {
-                            display: 'none',
-                        },
-                }}
-                slotProps={{
-                    popupIndicator: {
-                        disableRipple: true,
+                    '&.MuiInputBase-root .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
                     },
+                    '&.MuiInputBase-root.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':
+                        {
+                            boxShadow: 'none',
+                        },
                 }}
-                onChange={(_, option) => handleSelectTime(option)}
+                onOptionClick={handleOptionClick}
             />
             <Divider
                 orientation="vertical"
                 variant="middle"
                 flexItem
-                sx={{ marginRight: '36px', marginLeft: '8px' }}
+                sx={{ marginRight: '36px' }}
             />
             <div className="hover-search">
                 <HoverSearchInput inputWidth={125} keyword={keyword} changeKeyword={setKeyword} />

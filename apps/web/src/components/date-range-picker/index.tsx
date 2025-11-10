@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { type Dayjs } from 'dayjs';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { DateTimePicker, DateTimePickerProps } from '@mui/x-date-pickers/DateTimePicker';
+
+import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 
 export type DateRangePickerValueType = {
     start?: Dayjs | null;
@@ -20,15 +22,8 @@ interface DateRangePickerProps
     };
     onChange?: (value: DateRangePickerValueType | null) => void;
     views?: ViewsType[];
+    hasError?: boolean;
 }
-
-const DateRangePickerStyled = styled('div')(() => ({
-    display: 'flex',
-    alignItems: 'center',
-    '& .MuiFormControl-root': {
-        flex: 1,
-    },
-}));
 
 /**
  * Common slot props for DateTimePicker.
@@ -47,18 +42,56 @@ const commonSlotProps: DateTimePickerProps<Dayjs>['slotProps'] = {
     },
 };
 
-const DateRangePicker: React.FC<DateRangePickerProps> = ({ label, value, onChange, ...props }) => {
+const DateRangePicker: React.FC<DateRangePickerProps> = ({
+    label,
+    value,
+    onChange,
+    slotProps,
+    hasError,
+    ...props
+}) => {
+    const { getIntlText } = useI18n();
+    const { matchTablet } = useTheme();
+
     const [startDate, setStartDate] = useState<Dayjs | null>(null);
     const [endDate, setEndDate] = useState<Dayjs | null>(null);
+
+    const DateRangePickerStyled = useMemo(() => {
+        return styled('div')(() => ({
+            display: 'flex',
+            flexDirection: matchTablet ? 'column' : 'row',
+            alignItems: matchTablet ? 'flex-start' : 'center',
+            '& .MuiFormControl-root': {
+                flex: 1,
+            },
+            marginBottom: matchTablet ? '16px' : undefined,
+            '& .MuiFormControl-root:last-child': {
+                paddingTop: matchTablet ? undefined : '26px',
+            },
+            '& .MuiFormControl-root.MuiFormControl-marginDense': {
+                marginBottom: matchTablet ? '12px' : undefined,
+            },
+        }));
+    }, [matchTablet]);
 
     return (
         <DateRangePickerStyled>
             <DateTimePicker
                 ampm={false}
-                label={label?.start}
+                label={getIntlText('common.label.date_range')}
                 value={value?.start || startDate}
                 closeOnSelect={false}
-                slotProps={commonSlotProps}
+                slotProps={{
+                    ...commonSlotProps,
+                    ...{
+                        ...slotProps,
+                        textField: {
+                            error: Boolean(!value?.start && hasError),
+                            placeholder: getIntlText('common.label.start_date'),
+                            ...slotProps?.textField,
+                        },
+                    },
+                }}
                 onChange={start => {
                     // Passing onChange indicates that it is controlled, and no internal value handling is done.
                     if (onChange) {
@@ -70,15 +103,25 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ label, value, onChang
                         setStartDate(start);
                     }
                 }}
+                maxDateTime={value?.end || undefined}
                 {...props}
             />
-            <Box sx={{ mx: 2 }}> — </Box>
+            {!matchTablet && <Box sx={{ mx: 2 }}> — </Box>}
             <DateTimePicker
                 ampm={false}
-                label={label?.end}
                 value={value?.end || endDate}
                 closeOnSelect={false}
-                slotProps={commonSlotProps}
+                slotProps={{
+                    ...commonSlotProps,
+                    ...{
+                        ...slotProps,
+                        textField: {
+                            error: Boolean(!value?.end && hasError),
+                            placeholder: getIntlText('common.label.end_date'),
+                            ...slotProps?.textField,
+                        },
+                    },
+                }}
                 onChange={end => {
                     // Passing onChange indicates that it is controlled, and no internal value handling is done.
                     if (onChange) {
@@ -90,6 +133,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ label, value, onChang
                         setEndDate(end);
                     }
                 }}
+                minDateTime={value?.start || undefined}
                 {...props}
             />
         </DateRangePickerStyled>

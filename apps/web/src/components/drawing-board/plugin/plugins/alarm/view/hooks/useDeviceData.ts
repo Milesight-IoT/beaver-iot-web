@@ -3,6 +3,7 @@ import { useState, useRef } from 'react';
 export function useDeviceData() {
     const [keyword, setKeyword] = useState('');
     const [selectTime, setSelectTime] = useState<number>(1440 * 60 * 1000);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const alarmRef = useRef<HTMLDivElement>(null);
     const alarmContainerWidth = alarmRef.current?.getBoundingClientRect()?.width || 0;
@@ -14,5 +15,7 @@ export function useDeviceData() {
         alarmContainerWidth,
         selectTime,
         setSelectTime,
+        modalVisible,
+        setModalVisible,
     };
 }

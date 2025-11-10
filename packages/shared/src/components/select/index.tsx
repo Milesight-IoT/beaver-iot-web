@@ -41,6 +41,10 @@ type Props<T extends ApiKey> = {
      * Custom empty content
      */
     renderEmpty?: () => React.ReactNode;
+    /**
+     * Custom drop-down option click event
+     */
+    onOptionClick?: (option: OptionsProps) => void;
 };
 
 export type SelectProps<T extends ApiKey> = Props<T> & Omit<MuiSelectProps<T>, 'error'>;
@@ -60,6 +64,7 @@ const Select = <T extends ApiKey = ApiKey>(props: SelectProps<T>) => {
         multiple,
         renderValue,
         renderEmpty,
+        onOptionClick,
         ...rest
     } = props;
     const { getIntlText } = useI18n();
@@ -145,7 +150,11 @@ const Select = <T extends ApiKey = ApiKey>(props: SelectProps<T>) => {
                     ? renderOptions(options)
                     : getMenuItems?.map((item: OptionsProps) => {
                           return item?.value !== undefined ? (
-                              <MenuItem value={item.value} key={item.value}>
+                              <MenuItem
+                                  value={item.value}
+                                  key={item.value}
+                                  onClick={() => onOptionClick?.(item)}
+                              >
                                   {item.label}
                               </MenuItem>
                           ) : (
