@@ -45,6 +45,7 @@ const EntitySelect = <
         size = 'medium',
         noOptionsText,
         loadingText,
+        endAdornment,
         ...rest
     } = props;
 
@@ -125,6 +126,12 @@ const EntitySelect = <
                 InputProps={{
                     ...params.InputProps,
                     size,
+                    endAdornment: (
+                        <>
+                            {params.InputProps.endAdornment}
+                            {endAdornment}
+                        </>
+                    ),
                 }}
                 error={error}
                 helperText={helperText}
@@ -133,7 +140,7 @@ const EntitySelect = <
                 placeholder={placeholder}
             />
         ),
-        [error, helperText, label, required, placeholder, size],
+        [error, helperText, label, required, placeholder, size, endAdornment],
     );
 
     /**
