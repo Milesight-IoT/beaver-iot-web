@@ -32,9 +32,9 @@ const UpstreamNodeList: React.FC<UpstreamNodeListProps> = ({ filter, ...props })
         const nodes = cloneDeep(upstreamNodes);
 
         if (filter) {
-            nodes?.forEach((node, index) => {
-                node.outputs.forEach((output, idx) => {
-                    const data = {
+            nodes?.forEach(node => {
+                const outputs = node.outputs?.filter(output =>
+                    filter({
                         ...node,
                         valueKey: output.key,
                         valueOriginKey: output.originKey,
@@ -42,12 +42,10 @@ const UpstreamNodeList: React.FC<UpstreamNodeListProps> = ({ filter, ...props })
                         valueType: output.type,
                         valueTypeLabel: output.typeLabel,
                         enums: output.enums,
-                    };
+                    }),
+                );
 
-                    if (!filter(data)) {
-                        nodes[index].outputs.splice(idx, 1);
-                    }
-                });
+                node.outputs = outputs;
             });
         }
 
