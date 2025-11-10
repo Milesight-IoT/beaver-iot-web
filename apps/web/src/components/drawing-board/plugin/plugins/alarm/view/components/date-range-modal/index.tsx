@@ -1,16 +1,17 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useForm, Controller, type SubmitHandler, type ControllerProps } from 'react-hook-form';
-import { Box, FormControl, FormHelperText, IconButton } from '@mui/material';
+import { Box, FormControl, FormHelperText } from '@mui/material';
 
-import { useI18n, useTime, useTheme } from '@milesight/shared/src/hooks';
-import { Modal, toast, type ModalProps, SaveAltIcon } from '@milesight/shared/src/components';
+import { useI18n, useTheme } from '@milesight/shared/src/hooks';
+import { Modal, toast, type ModalProps } from '@milesight/shared/src/components';
 import { checkRequired } from '@milesight/shared/src/utils/validators';
 
-import { DateRangePickerValueType } from '@/components/date-range-picker';
-import { DateRangePicker } from '@/components';
+import { DateRangePicker, type DateRangePickerValueType } from '@/components';
 
 interface IProps extends Omit<ModalProps, 'onOk'> {
-    onSuccess?: () => void;
+    timeRange?: DateRangePickerValueType | null;
+    setTimeRange?: (value: DateRangePickerValueType | null) => void;
+    onSuccess?: (time: DateRangePickerValueType) => void;
 }
 
 type FormDataProps = {
@@ -20,10 +21,15 @@ type FormDataProps = {
 /**
  * Date Range Picker Modal Component
  */
-const DateRangeModal: React.FC<IProps> = ({ onCancel, onSuccess, ...props }) => {
+const DateRangeModal: React.FC<IProps> = ({
+    timeRange,
+    setTimeRange,
+    onCancel,
+    onSuccess,
+    ...props
+}) => {
     const { getIntlText } = useI18n();
     const { matchTablet } = useTheme();
-    const { timezone, dayjs, getTimeFormat } = useTime();
 
     const formItems = useMemo<ControllerProps<FormDataProps>[]>(
         () => [
@@ -95,16 +101,27 @@ const DateRangeModal: React.FC<IProps> = ({ onCancel, onSuccess, ...props }) => 
         ],
         [getIntlText, matchTablet],
     );
-    const { control, handleSubmit } = useForm<FormDataProps>({
+    const { control, handleSubmit, setValue } = useForm<FormDataProps>({
         shouldUnregister: true,
     });
     const handleOk: SubmitHandler<FormDataProps> = async ({ time }) => {
-        console.log('handleOk ? ', time);
+        if (!time) {
+            return;
+        }
 
+        setTimeRange?.(time);
         onCancel?.();
-        onSuccess?.();
+        onSuccess?.(time);
         toast.success(getIntlText('common.message.operation_success'));
     };
+
+    useEffect(() => {
+        if (!props?.visible) {
+            return;
+        }
+
+        setValue('time', timeRange);
+    }, [props?.visible, timeRange, setValue]);
 
     return (
         <Modal

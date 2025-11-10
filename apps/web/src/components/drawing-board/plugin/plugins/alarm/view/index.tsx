@@ -38,6 +38,10 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
         setSelectTime,
         modalVisible,
         setModalVisible,
+        timeRange,
+        setTimeRange,
+        handleCustomTimeRange,
+        onSelectTime,
     } = useDeviceData();
 
     const toolbarRender = useMemo(() => {
@@ -71,6 +75,7 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
                             selectTime={selectTime}
                             setSelectTime={setSelectTime}
                             setModalVisible={setModalVisible}
+                            onSelectTime={onSelectTime}
                         />
                     }
                     onFilterInfoChange={handleFilterChange}
@@ -104,7 +109,9 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
                 <DateRangeModal
                     visible={modalVisible}
                     onCancel={() => setModalVisible(false)}
-                    onSuccess={() => setModalVisible(false)}
+                    onSuccess={handleCustomTimeRange}
+                    timeRange={timeRange}
+                    setTimeRange={setTimeRange}
                 />
             )}
         </div>

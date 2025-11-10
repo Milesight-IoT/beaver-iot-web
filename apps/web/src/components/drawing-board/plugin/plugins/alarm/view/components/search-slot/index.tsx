@@ -14,6 +14,7 @@ export interface SearchSlotProps {
     selectTime: number;
     setSelectTime: React.Dispatch<React.SetStateAction<number>>;
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onSelectTime?: (time: number) => void;
 }
 
 const SearchSlot: React.FC<SearchSlotProps> = ({
@@ -22,6 +23,7 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
     selectTime,
     setSelectTime,
     setModalVisible,
+    onSelectTime,
 }) => {
     const { getIntlText } = useI18n();
     const { matchTablet } = useTheme();
@@ -57,11 +59,12 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
 
     const handleSelectTimeChange = useMemoizedFn((e: SelectChangeEvent<number>) => {
         const val = e?.target?.value as number;
-        if (isNil(val)) {
+        if (isNil(val) || val === -1) {
             return;
         }
 
         setSelectTime(val);
+        onSelectTime?.(val);
     });
 
     const handleOptionClick = useMemoizedFn((option: OptionsProps) => {
