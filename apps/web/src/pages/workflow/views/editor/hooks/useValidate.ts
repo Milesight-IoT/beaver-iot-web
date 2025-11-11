@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react';
 import { useReactFlow } from '@xyflow/react';
-import { isObject, isNil, isNumber, merge } from 'lodash-es';
+import { isObject, isNil, isNumber, merge, flatten } from 'lodash-es';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { toast } from '@milesight/shared/src/components';
 import {
@@ -207,7 +207,9 @@ const useValidate = () => {
 
             if (
                 data &&
-                Object.values(data).some(item => isRefParamKey(item) && !paramKeys?.includes(item))
+                flatten(Object.entries(data)).some(
+                    item => isRefParamKey(item) && !paramKeys?.includes(item),
+                )
             ) {
                 return getIntlText(ErrorIntlKey.refParam, {
                     1: fieldName,
