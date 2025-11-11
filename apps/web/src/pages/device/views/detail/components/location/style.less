@@ -5,8 +5,97 @@
 }
 
 .@{prefix}-com-device-location {
+    position: relative;
     width: 100%;
     height: 100%;
     overflow: hidden;
     border-radius: @border-radius-base;
+}
+
+.@{prefix}-com-location-edit-panel {
+    position: absolute;
+    z-index: 1001;
+
+    &.state-nodata {
+        inset: 0;
+        padding: @padding-md;
+
+        &::before {
+            position: absolute;
+            inset: 0;
+            background-color: var(--normal-color);
+            opacity: .5;
+            content: '';
+        }
+    }
+
+    &.state-edit,
+    &.state-view {
+        top: @margin-md;
+        left: @margin-md;
+    }
+
+    // ---------- NoData main ----------
+    .edit-panel-nodata {
+        .empty-tip {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-weight: @font-weight-medium;
+            color: var(--white);
+            transform: translate(-50%, -50%);
+            .text-size(@font-size-xl);
+        }
+    }
+
+    // ---------- Edit & View main ----------
+    .edit-panel-edit,
+    .edit-panel-view {
+        width: 320px;
+        padding: @padding-md;
+        overflow: hidden;
+        color: var(--text-color-base);
+        border: 1px solid var(--white);
+        border-radius: @border-radius-md;
+        .opacity-background(var(--white), .8);
+
+        &-header,
+        &-body,
+        &-footer {
+            position: relative;
+        }
+
+        &-footer {
+            display: flex;
+            gap: @margin-sm;
+        }
+    }
+
+    // ---------- Edit main ----------
+    .edit-panel-edit {
+        &-header {
+            margin-bottom: @margin-md;
+            font-weight: @font-weight-medium;
+            .text-size(@font-size-xxl);
+        }
+    }
+
+    // ---------- View main ----------
+    .edit-panel-view {
+        .location-detail-list {
+            padding: 0;
+            margin: 0;
+            margin-bottom: @margin-md;
+            list-style: none;
+        }
+
+        .location-detail-item {
+            display: flex;
+            .text-size(@font-size-base);
+
+            &-value {
+                margin-left: @margin-xxs;
+            }
+        }
+    }
 }

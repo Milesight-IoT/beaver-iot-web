@@ -12,3 +12,4 @@ export { default as NoDashboardIcon } from './no-dashboard';
 export { default as UncheckedCheckboxIcon } from './unchecked-checkbox';
 export { default as CheckedCheckboxIcon } from './checked-checkbox';
 export { default as DisabledCheckboxIcon } from './disabled-checkbox';
+export { default as LocationPinIcon } from './location-pin';

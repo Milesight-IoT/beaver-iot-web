@@ -55,6 +55,10 @@ export interface ModalProps {
      */
     className?: string;
     /**
+     * Whether to keep the modal mounted when hidden
+     */
+    keepMounted?: boolean;
+    /**
      * If `true`, hitting escape will not fire the `onClose` callback.
      * @default false
      */
@@ -124,6 +128,7 @@ const Modal: React.FC<ModalProps> = ({
     onOkText,
     onCancelText,
     className,
+    keepMounted,
     sx,
     onOk,
     onCancel,
@@ -195,6 +200,7 @@ const Modal: React.FC<ModalProps> = ({
             className={cls('ms-modal-root', className, { loading })}
             open={!!visible}
             fullScreen={isFullScreen}
+            keepMounted={keepMounted}
             onClose={handleClose}
             container={container}
             sx={{ '& .MuiDialog-paper': { width: modalWidth, maxWidth: 'none' }, ...(sx || {}) }}

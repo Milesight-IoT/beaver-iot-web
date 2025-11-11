@@ -17,6 +17,12 @@ export interface ImportEntityProps {
  */
 export type DeviceStatus = 'ONLINE' | 'OFFLINE';
 
+export type LocationType = {
+    latitude: number;
+    longitude: number;
+    address?: string;
+};
+
 /**
  * Device detail definition
  */
@@ -54,6 +60,7 @@ export interface DeviceDetail {
     /** Common entities object */
     common_entities?: ImportEntityProps[];
     status?: DeviceStatus;
+    location?: LocationType;
 }
 
 /**
@@ -70,6 +77,8 @@ export interface AddDeviceProps {
     integration: ApiKey;
     /** name */
     name?: string;
+    /** location */
+    location?: LocationType;
     /** device group name */
     group_name?: string;
     /** Integrate additional information needed for new devices */
@@ -221,6 +230,27 @@ export interface DeviceAPISchema extends APISchema {
         };
         response: Blob;
     };
+    /** Set device location */
+    setLocation: {
+        request: {
+            id: ApiKey;
+        } & LocationType;
+        response: void;
+    };
+    /** Get device location */
+    getLocation: {
+        request: {
+            id: ApiKey;
+        };
+        response: LocationType;
+    };
+    /** Clear device location */
+    clearLocation: {
+        request: {
+            id: ApiKey;
+        };
+        response: void;
+    };
 }
 
 /**
@@ -254,5 +284,8 @@ export default attachAPI<DeviceAPISchema>(client, {
                 'Content-Type': 'multipart/form-data',
             },
         },
+        setLocation: `PUT ${API_PREFIX}/device/:id/location`,
+        getLocation: `GET ${API_PREFIX}/device/:id/location`,
+        clearLocation: `POST ${API_PREFIX}/device/:id/clear-location`,
     },
 });

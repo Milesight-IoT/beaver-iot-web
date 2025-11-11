@@ -8,6 +8,7 @@ import { checkRequired, checkMaxLength } from '@milesight/shared/src/utils/valid
 
 import { type IntegrationAPISchema } from '@/services/http';
 import { useEntityFormItems } from '@/hooks';
+import LocationInput from '../location-input';
 import useDeviceStore from '../../store';
 
 interface Props {
@@ -97,6 +98,22 @@ const useDynamicFormItems = ({ entities }: Props) => {
                             />
                             {!!error && <FormHelperText error>{error.message}</FormHelperText>}
                         </FormControl>
+                    );
+                },
+            },
+            {
+                name: 'location',
+                defaultValue: {},
+                render({ field: { onChange, value }, fieldState: { error } }) {
+                    return (
+                        <LocationInput
+                            fullWidth
+                            label={getIntlText('common.label.location')}
+                            error={!!error}
+                            helperText={error ? error.message : null}
+                            value={value}
+                            onChange={onChange}
+                        />
                     );
                 },
             },

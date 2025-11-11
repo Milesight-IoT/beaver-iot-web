@@ -86,12 +86,13 @@ const AddModal: React.FC<Props> = ({ visible, onCancel, onError, onSuccess, ...p
         },
     );
     const { formItems, decodeFormParams } = useDynamicFormItems({ entities });
-    const onSubmit: SubmitHandler<FormDataProps> = async ({ name, group, ...params }) => {
+    const onSubmit: SubmitHandler<FormDataProps> = async ({ name, group, location, ...params }) => {
         const entityParams = decodeFormParams(params);
 
         const [error, resp] = await awaitWrap(
             deviceAPI.addDevice({
                 name,
+                location,
                 group_name: group,
                 integration: inteID,
                 param_entities: entityParams,

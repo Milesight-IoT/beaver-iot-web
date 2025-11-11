@@ -1,6 +1,6 @@
 import { get } from 'lodash-es';
 
-import { apiOrigin } from '@milesight/shared/src/config';
+import { apiOrigin, BASE64_IMAGE_REGEX } from '@milesight/shared/src/config';
 import { genApiUrl } from '@milesight/shared/src/utils/tools';
 import { API_PREFIX, type ImportEntityProps } from '@/services/http';
 
@@ -26,4 +26,13 @@ export const getIEntityEnumDisplayVal = (value: any, entity?: ImportEntityProps)
         String(value),
         `${value}${entity?.value_attribute?.unit || ''}`,
     );
+};
+
+/**
+ * Generate image source
+ */
+export const genImageSource = (src?: string) => {
+    if (!src) return '';
+    if (BASE64_IMAGE_REGEX.test(src)) return src;
+    return src.startsWith('http') ? src : `${API_PREFIX}${src.startsWith('/') ? '' : '/'}${src}`;
 };
