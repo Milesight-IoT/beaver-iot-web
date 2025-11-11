@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState, useContext } from 'react';
-import { useSize, useMemoizedFn } from 'ahooks';
+import { useSize, useMemoizedFn, useDebounceEffect } from 'ahooks';
 import { isEmpty, get } from 'lodash-es';
 import cls from 'classnames';
 
-import { type LatLngTuple } from 'leaflet';
+import Leaf, { type LatLngTuple } from 'leaflet';
 
 import { useTheme } from '@milesight/shared/src/hooks';
 
@@ -39,6 +39,7 @@ const BaseMap: React.FC<BaseMapProps> = props => {
     const currentOpenMarker = useRef<MarkerInstance | null>(null);
     const isComponentDestroy = useRef(false);
     const [markers, setMarkers] = useState<Record<string, MarkerInstance>>({});
+    const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
     const mapData = useMemo(() => {
         if (!Array.isArray(devices) || isEmpty(devices)) {
@@ -79,23 +80,54 @@ const BaseMap: React.FC<BaseMapProps> = props => {
     /**
      * To open select device popup
      */
-    useEffect(() => {
-        const marker = get(markers, String(selectDevice?.id));
-        if (!marker) {
-            /**
-             * Close the popup that was previously opened
-             */
-            if (!selectDevice?.id && currentOpenMarker.current?.isPopupOpen()) {
-                currentOpenMarker.current?.closePopup();
-                currentOpenMarker.current = null;
+    useDebounceEffect(
+        () => {
+            const marker = get(markers, String(selectDevice?.id));
+            if (!marker) {
+                /**
+                 * Close the popup that was previously opened
+                 */
+                if (!selectDevice?.id && currentOpenMarker.current?.isPopupOpen()) {
+                    currentOpenMarker.current?.closePopup();
+                    currentOpenMarker.current = null;
+                }
+
+                return;
             }
 
-            return;
-        }
+            /**
+             * Set the current open marker
+             */
+            currentOpenMarker.current = marker;
 
-        marker?.openPopup();
-        currentOpenMarker.current = marker;
-    }, [selectDevice, markers]);
+            /**
+             * Pan to marker location to map center with offset
+             */
+            const markerLatLng = marker?.getLatLng();
+            const map = mapRef?.current;
+            if (markerLatLng && map) {
+                const zoom = map.getZoom();
+                const markerPixel = map.project(markerLatLng, zoom);
+                const newPixel = markerPixel.add(Leaf.point(0, -102));
+                const newLatLng = map.unproject(newPixel, zoom);
+                map.panTo(newLatLng, { animate: true });
+            }
+
+            /**
+             * Delay open popup
+             */
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+            timeoutRef.current = setTimeout(() => {
+                marker?.openPopup();
+            }, 300);
+        },
+        [selectDevice, markers],
+        {
+            wait: 300,
+        },
+    );
 
     /**
      * Listener popup close
