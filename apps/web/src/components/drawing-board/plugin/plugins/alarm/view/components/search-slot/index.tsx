@@ -1,12 +1,13 @@
-import React, { useMemo } from 'react';
-import { IconButton, Divider, type SelectChangeEvent } from '@mui/material';
+import React, { useMemo, useContext } from 'react';
+import { IconButton, Divider, type SelectChangeEvent, type SxProps } from '@mui/material';
 import { isNil } from 'lodash-es';
+import { useMemoizedFn } from 'ahooks';
 
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
-import { SaveAltIcon, Select } from '@milesight/shared/src/components';
+import { SaveAltIcon, Select, SearchIcon } from '@milesight/shared/src/components';
 
-import { useMemoizedFn } from 'ahooks';
 import { HoverSearchInput } from '@/components';
+import { AlarmContext } from '../../context';
 
 export interface SearchSlotProps {
     keyword: string;
@@ -27,6 +28,7 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
 }) => {
     const { getIntlText } = useI18n();
     const { matchTablet } = useTheme();
+    const { setShowMobileSearch } = useContext(AlarmContext) || {};
 
     const timeOptions = useMemo(() => {
         return [
@@ -73,6 +75,31 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
         }
     });
 
+    const saveAltIconSx = useMemo((): SxProps => {
+        const baseSx: SxProps = {
+            width: 36,
+            height: 36,
+            color: 'text.secondary',
+        };
+
+        if (matchTablet) {
+            return {
+                ...baseSx,
+                '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                    color: 'text.secondary',
+                },
+            };
+        }
+
+        return {
+            ...baseSx,
+            '&.MuiIconButton-root:hover': {
+                backgroundColor: 'var(--hover-background-1)',
+                borderRadius: '50%',
+            },
+        };
+    }, [matchTablet]);
+
     return (
         <div className="alarm-view__search-slot">
             <Select
@@ -98,19 +125,30 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
                 sx={{ marginRight: '36px' }}
             />
             <div className="hover-search">
-                <HoverSearchInput inputWidth={125} keyword={keyword} changeKeyword={setKeyword} />
+                {matchTablet ? (
+                    <IconButton
+                        sx={{
+                            width: 36,
+                            height: 36,
+                            color: 'text.secondary',
+                            '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                                color: 'text.secondary',
+                            },
+                        }}
+                        disableRipple
+                        onClick={() => setShowMobileSearch?.(true)}
+                    >
+                        <SearchIcon sx={{ width: 20, height: 20 }} />
+                    </IconButton>
+                ) : (
+                    <HoverSearchInput
+                        inputWidth={125}
+                        keyword={keyword}
+                        changeKeyword={setKeyword}
+                    />
+                )}
             </div>
-            <IconButton
-                sx={{
-                    width: 36,
-                    height: 36,
-                    color: 'text.secondary',
-                    '&.MuiIconButton-root:hover': {
-                        backgroundColor: 'var(--hover-background-1)',
-                        borderRadius: '50%',
-                    },
-                }}
-            >
+            <IconButton sx={saveAltIconSx}>
                 <SaveAltIcon sx={{ width: 20, height: 20 }} />
             </IconButton>
         </div>

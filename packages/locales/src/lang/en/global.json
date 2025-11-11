@@ -309,5 +309,6 @@
     "common.label.claimed": "已确认",
     "common.label.unclaimed": "待确认",
     "common.label.date_range": "日期范围",
-    "common.tip.select_date_range": "请选择正确的日期范围"
+    "common.tip.select_date_range": "请选择正确的日期范围",
+    "common.label.claim": "Claim"
 }

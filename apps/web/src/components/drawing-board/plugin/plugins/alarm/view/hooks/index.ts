@@ -1,7 +1,2 @@
-export {
-    default as useColumns,
-    type UseColumnsProps,
-    type TableRowDataType,
-    generateMockTableData,
-} from './useColumns';
+export { default as useColumns, type UseColumnsProps, type TableRowDataType } from './useColumns';
 export { useDeviceData } from './useDeviceData';
