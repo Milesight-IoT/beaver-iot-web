@@ -310,5 +310,10 @@
     "common.label.unclaimed": "待确认",
     "common.label.date_range": "日期范围",
     "common.tip.select_date_range": "请选择正确的日期范围",
-    "common.label.claim": "Claim"
+    "common.label.claim": "Claim",
+    "common.label.location": "Location",
+    "common.message.click_to_mark_and_drag_to_move": "可以单击地图进行标记，或者拖拽标记进行移动",
+    "common.label.latitude": "Latitude",
+    "common.label.longitude": "Longitude",
+    "common.label.address": "Address"
 }

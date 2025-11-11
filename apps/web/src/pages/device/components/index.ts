@@ -10,3 +10,4 @@ export {
 } from './mobile-device-item';
 export { default as MobileGroupSelect, type GroupItem } from './mobile-group-select';
 export { default as MobileSearchInput } from './mobile-search-input';
+export { default as LocationMap, type Props as LocationMapProps } from './location-map';

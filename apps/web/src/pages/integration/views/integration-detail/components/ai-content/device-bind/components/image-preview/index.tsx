@@ -1,6 +1,7 @@
 import React, { memo, useMemo } from 'react';
 import HoverPopover from 'material-ui-popup-state/HoverPopover';
 import { usePopupState, bindHover, bindPopover } from 'material-ui-popup-state/hooks';
+import { genImageSource } from '@/utils';
 import './style.less';
 
 interface Props {
@@ -61,7 +62,7 @@ const ImagePreview: React.FC<Props> = memo(
                     style={normalStyle}
                     {...bindHover(popupState)}
                 >
-                    <img src={src} alt="preview" />
+                    <img src={genImageSource(src)} alt="preview" />
                 </div>
                 <HoverPopover
                     {...bindPopover(popupState)}
@@ -71,7 +72,7 @@ const ImagePreview: React.FC<Props> = memo(
                     }}
                 >
                     <div className="ms-com-image-preview-picture" style={previewStyle}>
-                        <img src={src} alt="preview" />
+                        <img src={genImageSource(src)} alt="preview" />
                     </div>
                 </HoverPopover>
             </>

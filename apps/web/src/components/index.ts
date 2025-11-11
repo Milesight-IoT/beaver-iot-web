@@ -90,9 +90,13 @@ export {
     MapZoomControl,
     DEFAULT_MAP_CENTER,
     PREFER_ZOOM_LEVEL,
+    useMap,
+    useMapEvent,
+    useMapEvents,
     type MapProps,
     type MapInstance,
     type MarkerInstance,
     type LatLng,
+    type ZoomControlActionType,
 } from './map';
 export { default as HoverSearchAutocomplete } from './hover-search-autocomplete';

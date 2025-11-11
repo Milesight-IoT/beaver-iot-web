@@ -26,7 +26,7 @@ interface Props {
 /**
  * Device item height
  */
-export const DEVICE_ITEM_HEIGHT = 116;
+export const DEVICE_ITEM_HEIGHT = 142;
 
 /**
  * Mobile device item
@@ -74,6 +74,19 @@ const MobileDeviceItem: React.FC<Props> = memo(({ data, onAction }) => {
                     </div>
                     <div className="ms-mobile-device-item__info-value">
                         <Tooltip autoEllipsis title={data.group_name || '-'} />
+                    </div>
+                    <div className="ms-mobile-device-item__info-label">
+                        {getIntlText('common.label.location')}
+                    </div>
+                    <div className="ms-mobile-device-item__info-value">
+                        <Tooltip
+                            autoEllipsis
+                            title={
+                                !data.location
+                                    ? '-'
+                                    : `${data.location.latitude}, ${data.location.longitude}`
+                            }
+                        />
                     </div>
                 </div>
             </div>

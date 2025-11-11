@@ -80,6 +80,21 @@ const useColumns = <T extends TableRowDataType>({
                 minWidth: 250,
             },
             {
+                field: 'location',
+                headerName: getIntlText('common.label.location'),
+                ellipsis: true,
+                flex: 1,
+                minWidth: 250,
+                renderCell({ row }) {
+                    const { location } = row;
+                    if (!location?.latitude || !location?.longitude) {
+                        return '-';
+                    }
+
+                    return `${location?.latitude}, ${location?.longitude}`;
+                },
+            },
+            {
                 field: 'integrationName',
                 headerName: getIntlText('common.label.source'),
                 ellipsis: true,

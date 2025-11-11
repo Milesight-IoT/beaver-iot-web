@@ -1,0 +1,159 @@
+import React, { memo, useEffect, useState, useRef, useCallback } from 'react';
+import { Button } from '@mui/material';
+import { useSize, useDebounceEffect } from 'ahooks';
+import { useForm, Controller } from 'react-hook-form';
+import { useI18n, useTheme } from '@milesight/shared/src/hooks';
+import { Modal, toast, type ModalProps } from '@milesight/shared/src/components';
+import { getGeoLocation } from '@milesight/shared/src/utils/tools';
+import { PREFER_ZOOM_LEVEL, type MapInstance } from '@/components';
+import { type LocationType } from '@/services/http';
+import LocationMap, { type Props as LocationMapProps } from '../location-map';
+import useLocationFormItems from '../../hooks/useLocationFormItems';
+
+interface Props extends Omit<ModalProps, 'onOk'> {
+    data?: LocationType;
+
+    onConfirm: (data: Props['data']) => void;
+}
+
+const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, ...props }) => {
+    const { getIntlText } = useI18n();
+    const { matchTablet } = useTheme();
+
+    // ---------- Map ----------
+    const [mapInstance, setMapInstance] = useState<MapInstance>();
+    const mapContainerRef = useRef<HTMLDivElement>(null);
+    const mapSize = useSize(mapContainerRef);
+
+    // ---------- Form Items and Actions ----------
+    const { control, formState, handleSubmit, reset, watch, setValue } = useForm<LocationType>({
+        mode: 'onChange',
+        shouldUnregister: true,
+    });
+    const formItems = useLocationFormItems();
+    const [formLat, formLng] = watch(['latitude', 'longitude']);
+
+    const handleConfirm = handleSubmit(data => {
+        onConfirm(data);
+        setLocation({ ...data });
+    });
+
+    // ---------- Location Data Update and Interactions ----------
+    const [location, setLocation] = useState<LocationType>();
+    const handlePositionChange = useCallback<NonNullable<LocationMapProps['onPositionChange']>>(
+        position => {
+            setLocation(d => ({
+                ...d,
+                latitude: position[0],
+                longitude: position[1],
+            }));
+        },
+        [],
+    );
+
+    // Reset form data when modal close
+    useEffect(() => {
+        if (visible) return;
+        reset();
+        setLocation(undefined);
+    }, [visible, reset]);
+
+    // Update form data when external data change
+    useEffect(() => {
+        if (!visible || !mapInstance || location?.latitude || location?.longitude) return;
+
+        if (data?.latitude && data?.longitude) {
+            setLocation({ ...data });
+            mapInstance?.setView([data.latitude, data.longitude], PREFER_ZOOM_LEVEL);
+            return;
+        }
+
+        getGeoLocation()
+            .then(resp => {
+                setLocation(d => ({
+                    ...d,
+                    latitude: resp.lat,
+                    longitude: resp.lng,
+                }));
+                mapInstance?.setView([resp.lat, resp.lng], PREFER_ZOOM_LEVEL);
+            })
+            .catch(err => {
+                console.error(err);
+                toast.error(getIntlText('device.message.get_location_failed'));
+            });
+    }, [data, visible, mapInstance, location, reset, getIntlText]);
+
+    // Update Location when form values change
+    useDebounceEffect(
+        () => {
+            if (!visible || !formLat || !formLng || Object.keys(formState.errors).length) {
+                return;
+            }
+            setLocation(d => ({
+                ...d,
+                latitude: formLat,
+                longitude: formLng,
+            }));
+            mapInstance?.setView([formLat, formLng]);
+        },
+        [visible, formLat, formLng, formState.errors],
+        { wait: 300 },
+    );
+
+    // Update Form Values when location change
+    useEffect(() => {
+        if (!location?.latitude || !location?.longitude) return;
+        setValue('latitude', location.latitude);
+        setValue('longitude', location.longitude);
+        setValue('address', location.address);
+    }, [location, setValue]);
+
+    return (
+        <Modal
+            className="ms-location-input-modal"
+            {...props}
+            keepMounted
+            showCloseIcon
+            width="1200px"
+            fullScreen={matchTablet}
+            title={getIntlText('device.title.add_location_modal')}
+            footer={null}
+            visible={visible}
+            onCancel={onCancel}
+            onOk={handleConfirm}
+        >
+            <div className="map-wrap" ref={mapContainerRef}>
+                <LocationMap
+                    scrollWheelZoom
+                    state="edit"
+                    width={mapSize?.width}
+                    height={mapSize?.height}
+                    onReady={map => {
+                        setMapInstance(map);
+                        if (location?.latitude && location?.longitude) {
+                            map.setView([location.latitude, location.longitude], PREFER_ZOOM_LEVEL);
+                        }
+                    }}
+                    onPositionChange={handlePositionChange}
+                />
+            </div>
+            <div className="form-wrap">
+                <div className="form-list">
+                    {formItems.map(item => (
+                        <Controller key={item.name} control={control} {...item} />
+                    ))}
+                </div>
+                <div className="form-actions">
+                    <Button variant="outlined" onClick={onCancel}>
+                        {getIntlText('common.button.cancel')}
+                    </Button>
+                    <Button variant="contained" fullWidth={matchTablet} onClick={handleConfirm}>
+                        {getIntlText('common.button.confirm')}
+                    </Button>
+                </div>
+            </div>
+        </Modal>
+    );
+});
+
+export default InputModal;

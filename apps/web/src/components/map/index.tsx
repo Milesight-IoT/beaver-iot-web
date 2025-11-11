@@ -6,6 +6,7 @@ import {
 } from 'leaflet';
 import { MapContainer, type MapContainerProps } from 'react-leaflet';
 import 'proj4leaflet';
+import cls from 'classnames';
 import { useDebounceEffect } from 'ahooks';
 import { getTileLayerConfig, type MapTileType } from '@/services/map';
 import { DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT, DEFAULT_MAP_CENTER } from './constants';
@@ -41,6 +42,11 @@ export interface MapProps {
     scrollWheelZoom?: MapContainerProps['scrollWheelZoom'];
 
     /**
+     * Whether the map can be zoomed by double clicking on it.
+     */
+    doubleClickZoom?: MapContainerProps['doubleClickZoom'];
+
+    /**
      * Map center coordinate
      */
     center?: MapContainerProps['center'];
@@ -49,6 +55,11 @@ export interface MapProps {
      * Children elements
      */
     children?: React.ReactNode;
+
+    /**
+     * Map container class name
+     */
+    className?: string;
 
     /**
      * Whether to show zoom control or custom zoom control
@@ -88,8 +99,10 @@ const Map = forwardRef<MapInstance, MapProps>(
             height = DEFAULT_MAP_HEIGHT,
             zoom,
             scrollWheelZoom = false,
+            doubleClickZoom = false,
             center,
             children,
+            className,
             zoomControl = <MapZoomControl />,
             events,
             onReady,
@@ -120,7 +133,7 @@ const Map = forwardRef<MapInstance, MapProps>(
         );
 
         return (
-            <div className="ms-map-root">
+            <div className={cls('ms-map-root', className)}>
                 <MapContainer
                     {...configs}
                     ref={ref}
@@ -130,6 +143,7 @@ const Map = forwardRef<MapInstance, MapProps>(
                     center={center || DEFAULT_MAP_CENTER}
                     zoomControl={false}
                     scrollWheelZoom={scrollWheelZoom}
+                    doubleClickZoom={doubleClickZoom}
                     // @ts-ignore Has one argument and it's a map instance
                     whenReady={e => {
                         onReady?.(e.target);
@@ -155,7 +169,14 @@ const Map = forwardRef<MapInstance, MapProps>(
     },
 );
 
+export { useMap, useMapEvent, useMapEvents } from 'react-leaflet';
 export { DEFAULT_MAP_CENTER, PREFER_ZOOM_LEVEL } from './constants';
-export { MapMarker, MapControl, MapZoomControl, type MarkerInstance } from './components';
+export {
+    MapMarker,
+    MapControl,
+    MapZoomControl,
+    type MarkerInstance,
+    type ZoomControlActionType,
+} from './components';
 export { type MapInstance, type LatLng };
 export default memo(Map) as typeof Map;

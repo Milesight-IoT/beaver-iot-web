@@ -8,6 +8,7 @@ export {
     type AddDeviceProps,
     type ImportEntityProps,
     type DeviceStatus,
+    type LocationType,
     type DeviceAlarmDetail,
 } from './device';
 

@@ -860,7 +860,13 @@ export const imageCompress = async (
 /**
  * Get user geolocation
  */
-export const getGeoLocation = () => {
+export const getGeoLocation = (
+    options: PositionOptions = {
+        timeout: 60 * 1000,
+        maximumAge: 30 * 60 * 1000,
+        enableHighAccuracy: true,
+    },
+) => {
     return new Promise<{ lat: number; lng: number }>((resolve, reject) => {
         if (!navigator.geolocation) {
             reject(new Error('Geolocation is not supported by this browser.'));
@@ -877,6 +883,7 @@ export const getGeoLocation = () => {
             error => {
                 reject(error);
             },
+            options,
         );
     });
 };
