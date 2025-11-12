@@ -136,6 +136,7 @@ const Map = forwardRef<MapInstance, MapProps>(
             <div className={cls('ms-map-root', className)}>
                 <MapContainer
                     {...configs}
+                    worldCopyJump
                     ref={ref}
                     key={mapKey}
                     style={{ width, height }}
@@ -153,6 +154,8 @@ const Map = forwardRef<MapInstance, MapProps>(
                     <MapLayer
                         tms={tms}
                         url={url}
+                        minZoom={configs.minZoom}
+                        maxZoom={configs.maxZoom}
                         subdomains={subdomains}
                         attribution={attribution}
                         coordType={coordType}

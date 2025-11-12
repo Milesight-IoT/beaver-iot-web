@@ -76,7 +76,7 @@ const configs: Record<MapType, MapConfigItem> = {
         coordType: 'wgs84',
         zoom: 2,
         minZoom: 2,
-        maxZoom: 18,
+        maxZoom: 19,
         service: {
             normal: '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         },
