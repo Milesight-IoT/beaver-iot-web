@@ -51,7 +51,7 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
                     <Tooltip autoEllipsis title={getIntlText('device.title.device_status')} />
                 </Grid>
                 <Grid size={9}>
-                    <ClaimChip claimed={device?.alarmStatus} />
+                    <ClaimChip unclaimed={!!device?.alarmStatus} />
                 </Grid>
 
                 <Grid

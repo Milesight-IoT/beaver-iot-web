@@ -24,7 +24,7 @@ export interface MobileDeviceListProps {
 const MobileDeviceList: React.FC<MobileDeviceListProps> = ({ headerSlot }) => {
     const { getIntlText } = useI18n();
 
-    const { data, showMobileSearch, setShowMobileSearch } = useContext(AlarmContext) || {};
+    const { showMobileSearch, setShowMobileSearch } = useContext(AlarmContext) || {};
     const { pluginFullScreen } = useContext(PluginFullscreenContext) || {};
 
     const itemRenderer = useMemoizedFn((item: TableRowDataType) => (
@@ -34,7 +34,7 @@ const MobileDeviceList: React.FC<MobileDeviceListProps> = ({ headerSlot }) => {
     const RenderList = (
         <InfiniteScrollList
             isNoMore
-            data={data || []}
+            data={[]}
             itemHeight={pluginFullScreen ? 248 : 250}
             loading={false}
             loadingMore={false}

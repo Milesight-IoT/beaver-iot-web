@@ -3,9 +3,11 @@ import { IconButton, Divider, type SelectChangeEvent, type SxProps } from '@mui/
 import { isNil } from 'lodash-es';
 import { useMemoizedFn } from 'ahooks';
 
-import { useI18n, useTheme } from '@milesight/shared/src/hooks';
-import { SaveAltIcon, Select, SearchIcon } from '@milesight/shared/src/components';
+import { useI18n, useTheme, useTime } from '@milesight/shared/src/hooks';
+import { SaveAltIcon, Select, SearchIcon, toast } from '@milesight/shared/src/components';
+import { linkDownload, genRandomString } from '@milesight/shared/src/utils/tools';
 
+import { deviceAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
 import { HoverSearchInput } from '@/components';
 import { AlarmContext } from '../../context';
 
@@ -28,7 +30,8 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
 }) => {
     const { getIntlText } = useI18n();
     const { matchTablet } = useTheme();
-    const { setShowMobileSearch } = useContext(AlarmContext) || {};
+    const { getTimeFormat, dayjs } = useTime();
+    const { setShowMobileSearch, searchCondition } = useContext(AlarmContext) || {};
 
     const timeOptions = useMemo(() => {
         return [
@@ -73,6 +76,26 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
         if (option?.value === -1) {
             setModalVisible(true);
         }
+    });
+
+    const handleExport = useMemoizedFn(async () => {
+        if (!searchCondition) {
+            return;
+        }
+
+        const [error, resp] = await awaitWrap(deviceAPI.exportDeviceAlarms(searchCondition));
+        if (error || !isRequestSuccess(resp)) {
+            return;
+        }
+
+        const blobData = getResponseData(resp);
+        const fileName = `AlarmData_${getTimeFormat(dayjs(), 'simpleDateFormat').replace(
+            /-/g,
+            '_',
+        )}_${genRandomString(6, { upperCase: false, lowerCase: true })}.csv`;
+
+        linkDownload(blobData!, fileName);
+        toast.success(getIntlText('common.message.operation_success'));
     });
 
     const saveAltIconSx = useMemo((): SxProps => {
@@ -148,7 +171,7 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
                     />
                 )}
             </div>
-            <IconButton sx={saveAltIconSx}>
+            <IconButton sx={saveAltIconSx} onClick={handleExport}>
                 <SaveAltIcon sx={{ width: 20, height: 20 }} />
             </IconButton>
         </div>

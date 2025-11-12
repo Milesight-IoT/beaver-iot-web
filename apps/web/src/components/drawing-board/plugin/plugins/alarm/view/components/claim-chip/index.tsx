@@ -8,28 +8,28 @@ import './style.less';
 
 export interface ClaimChipProps {
     /**
-     * Whether the chip is claimed
+     * Whether the chip is unclaimed
      */
-    claimed?: boolean;
+    unclaimed?: boolean;
 }
 
 /**
  * ClaimChip component
  */
-const ClaimChip: React.FC<ClaimChipProps> = ({ claimed = false }) => {
+const ClaimChip: React.FC<ClaimChipProps> = ({ unclaimed = false }) => {
     const { getIntlText } = useI18n();
 
     return (
-        <div className={cls('claim-chip', { 'claim-chip--claimed': claimed })}>
-            {claimed ? (
-                <CheckIcon sx={{ width: 16, height: 16 }} />
-            ) : (
+        <div className={cls('claim-chip', { 'claim-chip--claimed': !unclaimed })}>
+            {unclaimed ? (
                 <AccessTimeFilledIcon sx={{ width: 16, height: 16 }} />
+            ) : (
+                <CheckIcon sx={{ width: 16, height: 16 }} />
             )}
             <div className="claim-chip__text">
-                {claimed
-                    ? getIntlText('common.label.claimed')
-                    : getIntlText('common.label.unclaimed')}
+                {unclaimed
+                    ? getIntlText('common.label.unclaimed')
+                    : getIntlText('common.label.claimed')}
             </div>
         </div>
     );

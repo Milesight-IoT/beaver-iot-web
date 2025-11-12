@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Stack, IconButton } from '@mui/material';
-import { useMemoizedFn } from 'ahooks';
-import { get, isNil } from 'lodash-es';
+import { get } from 'lodash-es';
 
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
 import {
@@ -15,6 +14,7 @@ import { Tooltip, type ColumnType, type TableProProps, type FilterValue } from '
 import { toSixDecimals, openGoogleMap } from '@/components/drawing-board/plugin/utils';
 import { type EntityAPISchema, type DeviceAlarmDetail } from '@/services/http';
 import { ClaimChip } from '../components';
+import { useAlarmClaim } from './useAlarmClaim';
 
 export type TableRowDataType = ObjectToCamelCase<DeviceAlarmDetail>;
 
@@ -30,13 +30,14 @@ export interface UseColumnsProps {
 }
 
 export enum AlarmStatus {
-    Claimed = 1,
-    Unclaimed = 0,
+    Claimed = 0,
+    Unclaimed = 1,
 }
 
 const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: UseColumnsProps) => {
     const { getIntlText } = useI18n();
     const { getTimeFormat } = useTime();
+    const { claimAlarm, claimLoading } = useAlarmClaim();
 
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
     const [filteredInfo, setFilteredInfo] = useState<Record<string, any>>({});
@@ -44,12 +45,12 @@ const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: U
     const statusFilterOptions = useMemo(() => {
         return [
             {
-                label: getIntlText('common.label.claimed'),
-                value: AlarmStatus.Claimed,
-            },
-            {
                 label: getIntlText('common.label.unclaimed'),
                 value: AlarmStatus.Unclaimed,
+            },
+            {
+                label: getIntlText('common.label.claimed'),
+                value: AlarmStatus.Claimed,
             },
         ];
     }, [getIntlText]);
@@ -76,7 +77,7 @@ const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: U
                     value: o.value,
                 })),
                 renderCell({ value }) {
-                    return <ClaimChip claimed={!!value} />;
+                    return <ClaimChip unclaimed={!!value} />;
                 },
             },
             {
@@ -110,6 +111,10 @@ const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: U
                 flex: 1,
                 minWidth: 178,
                 renderCell({ row }) {
+                    if (!row?.latitude || !row?.longitude) {
+                        return '-';
+                    }
+
                     return `${toSixDecimals(row?.latitude)}, ${toSixDecimals(row?.longitude)}`;
                 },
             },
@@ -128,9 +133,16 @@ const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: U
                             spacing="4px"
                             sx={{ height: '100%', alignItems: 'center', justifyContent: 'end' }}
                         >
-                            <LoadingWrapper size={20} loading={false}>
-                                <Tooltip title={getIntlText('common.tip.click_to_claim')}>
+                            <LoadingWrapper
+                                size={20}
+                                loading={get(claimLoading, String(row?.deviceId), false)}
+                            >
+                                <Tooltip
+                                    isDisabledButton={!row?.alarmStatus}
+                                    title={getIntlText('common.tip.click_to_claim')}
+                                >
                                     <IconButton
+                                        disabled={!row?.alarmStatus}
                                         sx={{
                                             width: 30,
                                             height: 30,
@@ -141,7 +153,7 @@ const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: U
                                                 return;
                                             }
 
-                                            console.log('click to claim', row);
+                                            claimAlarm?.(row?.deviceId);
                                         }}
                                     >
                                         <CheckCircleOutlineIcon sx={{ width: 20, height: 20 }} />
@@ -171,7 +183,15 @@ const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: U
                 },
             },
         ];
-    }, [getIntlText, getTimeFormat, isPreview, filteredInfo, statusFilterOptions]);
+    }, [
+        getIntlText,
+        getTimeFormat,
+        isPreview,
+        filteredInfo,
+        statusFilterOptions,
+        claimLoading,
+        claimAlarm,
+    ]);
 
     const handleFilterChange: TableProProps<TableRowDataType>['onFilterInfoChange'] = (
         filters: Record<string, FilterValue | null>,
@@ -182,6 +202,7 @@ const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: U
     return {
         columns,
         paginationModel,
+        filteredInfo,
         setPaginationModel,
         handleFilterChange,
     };

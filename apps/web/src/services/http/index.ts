@@ -10,6 +10,7 @@ export {
     type DeviceStatus,
     type LocationType,
     type DeviceAlarmDetail,
+    type AlarmSearchCondition,
 } from './device';
 
 export { default as entityAPI, type EntityAPISchema } from './entity';

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo, useRef } from 'react';
 import cls from 'classnames';
 import { GridFooter } from '@mui/x-data-grid';
 
@@ -6,12 +6,13 @@ import { useTheme } from '@milesight/shared/src/hooks';
 
 import { TablePro, Tooltip } from '@/components';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
+import { type AlarmSearchCondition } from '@/services/http';
 import { type AlarmConfigType } from '../control-panel';
 import { type BoardPluginProps } from '../../../types';
 import { useStableValue } from '../../../hooks';
 import { useColumns, type TableRowDataType, useDeviceData } from './hooks';
 import { SearchSlot, DateRangeModal, MobileList } from './components';
-import { AlarmContext } from './context';
+import { AlarmContext, type AlarmContextProps } from './context';
 
 import './style.less';
 
@@ -26,11 +27,17 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
     const { isPreview } = configJson || {};
     const context = useContext(DrawingBoardContext);
 
+    /**
+     * Used to get device alarm data search condition
+     */
+    const searchConditionRef = useRef<AlarmSearchCondition | null>(null);
+
     const { matchTablet } = useTheme();
     const { stableValue: devices } = useStableValue(unStableValue);
-    const { columns, paginationModel, setPaginationModel, handleFilterChange } = useColumns({
-        isPreview,
-    });
+    const { columns, paginationModel, setPaginationModel, filteredInfo, handleFilterChange } =
+        useColumns({
+            isPreview,
+        });
     const {
         data,
         keyword,
@@ -45,8 +52,28 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
         setTimeRange,
         handleCustomTimeRange,
         onSelectTime,
-        contextVal,
-    } = useDeviceData();
+        showMobileSearch,
+        setShowMobileSearch,
+        loading,
+        getDeviceAlarmData,
+    } = useDeviceData({
+        paginationModel,
+        filteredInfo,
+        devices,
+        searchConditionRef,
+    });
+
+    const contextVal = useMemo(
+        (): AlarmContextProps => ({
+            showMobileSearch,
+            setShowMobileSearch,
+            timeRange,
+            setTimeRange,
+            searchCondition: searchConditionRef.current,
+            getDeviceAlarmData,
+        }),
+        [showMobileSearch, timeRange, setShowMobileSearch, setTimeRange, getDeviceAlarmData],
+    );
 
     const RenderTitle = (
         <div className="alarm-view__title">
@@ -72,11 +99,11 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
             })}
         >
             <TablePro<TableRowDataType>
-                loading={false}
+                loading={loading}
                 columns={columns}
                 getRowId={row => row.id}
-                rows={data}
-                rowCount={data?.length || 0}
+                rows={data?.content || []}
+                rowCount={data?.total || 0}
                 toolbarRender={RenderTitle}
                 paginationModel={paginationModel}
                 onPaginationModelChange={setPaginationModel}

@@ -1,96 +1,33 @@
 import { useState, useRef, useMemo } from 'react';
-import { useMemoizedFn } from 'ahooks';
+import { useMemoizedFn, useRequest } from 'ahooks';
+import { isEmpty } from 'lodash-es';
+
+import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
 
 import { type DateRangePickerValueType } from '@/components';
-import { type AlarmContextProps } from '../context';
-import { type TableRowDataType } from './useColumns';
+import { type DeviceSelectData } from '@/components/drawing-board/plugin/components';
+import {
+    deviceAPI,
+    awaitWrap,
+    getResponseData,
+    isRequestSuccess,
+    type AlarmSearchCondition,
+} from '@/services/http';
 
-/**
- * Mock data function
- */
-function generateApiKey(length = 16): string {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-}
-
-function generateRandomAddress(): string {
-    const prefixes = ['北京市', '上海市', '广州市', '深圳市', '杭州市'];
-    const suffixes = ['XX路123号', 'XX大厦', 'XX小区5栋', 'XX园区A座', 'XX广场'];
-    return (
-        prefixes[Math.floor(Math.random() * prefixes.length)] +
-        suffixes[Math.floor(Math.random() * suffixes.length)]
-    );
-}
-
-function generateAlarmContent(): string {
-    const contents = [
-        'Abnormal soil, temperature: 100°C, humidity: 100%, conductivity: 5000',
-        'Abnormal soil, temperature: 20°C, humidity: 50%, conductivity: 500',
-        'Abnormal soil, temperature: 25°C, humidity: 50%, conductivity: 500',
-        'Abnormal soil, temperature: 100°C, humidity: 50%, conductivity: 500',
-        'Abnormal soil, temperature: 30°C, humidity: 50%, conductivity: 500',
-        'Abnormal soil, temperature: 50°C, humidity: 50%, conductivity: 500',
-        'Abnormal soil, temperature: 60°C, humidity: 50%, conductivity: 500',
-        'Abnormal soil, temperature: 70°C, humidity: 50%, conductivity: 500',
-    ];
-    return contents[Math.floor(Math.random() * contents.length)];
-}
-
-function generateDeviceName(): string {
-    const models = [
-        'Tracker',
-        'Locator',
-        'Beacon',
-        'Guardian',
-        'SentinelLongLongLongLongLongLongLongLongLongLongLongLong',
-    ];
-    const id = Math.floor(Math.random() * 1000)
-        .toString()
-        .padStart(3, '0');
-    return `${models[Math.floor(Math.random() * models.length)]}-${id}`;
-}
-
-export function generateMockTableData(count: number): TableRowDataType[] {
-    const data: TableRowDataType[] = [];
-
-    for (let i = 0; i < count; i++) {
-        // 随机生成时间（过去7天内）
-        const now = Date.now();
-        const sevenDays = 7 * 24 * 60 * 60 * 1000;
-        const alarmTime = now - Math.floor(Math.random() * sevenDays);
-
-        // 随机坐标（以北京为中心的小范围）
-        const baseLat = 39.9042;
-        const baseLng = 116.4074;
-        const latitude = baseLat + (Math.random() - 0.5) * 0.1; // ±0.05°
-        const longitude = baseLng + (Math.random() - 0.5) * 0.1;
-
-        const alarmStatus = Math.random() > 0.3; // 70% 为 true
-        const includeAddress = Math.random() > 0.2; // 80% 包含地址
-
-        data.push({
-            id: generateApiKey(),
-            alarmStatus,
-            alarmTime,
-            alarmContent: generateAlarmContent(),
-            latitude,
-            longitude,
-            address: includeAddress ? generateRandomAddress() : undefined,
-            deviceId: generateApiKey(),
-            deviceName: generateDeviceName(),
-        });
-    }
-
-    return data;
-}
-
-const mockData = generateMockTableData(28);
-
-export function useDeviceData() {
+export function useDeviceData({
+    paginationModel,
+    filteredInfo,
+    devices,
+    searchConditionRef,
+}: {
+    paginationModel?: {
+        page: number;
+        pageSize: number;
+    };
+    filteredInfo?: Record<string, any>;
+    devices?: DeviceSelectData[];
+    searchConditionRef: React.MutableRefObject<AlarmSearchCondition | null>;
+}) {
     const [keyword, setKeyword] = useState('');
     const [selectTime, setSelectTime] = useState<number>(1440 * 60 * 1000);
     const [modalVisible, setModalVisible] = useState(false);
@@ -100,12 +37,88 @@ export function useDeviceData() {
     const alarmRef = useRef<HTMLDivElement>(null);
     const alarmContainerWidth = alarmRef.current?.getBoundingClientRect()?.width || 0;
 
-    const handleCustomTimeRange = useMemoizedFn((time: DateRangePickerValueType) => {
+    /**
+     * Get alarm status from filtered info
+     */
+    const alarmStatus = useMemo(() => {
+        const status = filteredInfo?.alarmStatus;
+
+        if (!Array.isArray(status) || isEmpty(status)) {
+            return;
+        }
+
+        const statusList = (status as string[]).map(s => !!Number(s));
+        if (statusList?.length === 2) {
+            return;
+        }
+
+        return statusList[0];
+    }, [filteredInfo]);
+
+    const {
+        loading,
+        data,
+        run: getDeviceAlarmData,
+    } = useRequest(
+        async () => {
+            if (!Array.isArray(devices) || isEmpty(devices)) {
+                return;
+            }
+
+            let dateTimeRange: number[] | null = null;
+
+            /**
+             * If select time is not -1, then use select time as time range
+             * If time range is not null, then use time range as time range
+             */
+            if (selectTime !== -1) {
+                dateTimeRange = [Date.now() - selectTime, Date.now()];
+            } else if (timeRange?.start && timeRange?.end) {
+                dateTimeRange = [
+                    timeRange.start.startOf('day').valueOf(),
+                    timeRange.end.endOf('day').valueOf(),
+                ];
+            }
+            if (!dateTimeRange) {
+                return;
+            }
+
+            const searchCondition: AlarmSearchCondition = {
+                keyword,
+                device_ids: devices.map(d => d.id),
+                start_timestamp: dateTimeRange[0],
+                end_timestamp: dateTimeRange[1],
+                alarm_status: alarmStatus,
+            };
+            searchConditionRef.current = searchCondition;
+
+            const [error, resp] = await awaitWrap(
+                deviceAPI.getDeviceAlarms({
+                    ...searchCondition,
+                    page_number: (paginationModel?.page || 0) + 1,
+                    page_size: paginationModel?.pageSize || 10,
+                }),
+            );
+
+            const data = getResponseData(resp);
+
+            if (error || !isRequestSuccess(resp) || !data) {
+                return;
+            }
+
+            return objectToCamelCase(data);
+        },
+        {
+            debounceWait: 300,
+            refreshDeps: [devices, keyword, alarmStatus, selectTime, timeRange, paginationModel],
+        },
+    );
+
+    const handleCustomTimeRange = useMemoizedFn(() => {
         /**
          * Custom time range, set select time to -1
          */
         setSelectTime(-1);
-        console.log('handleCustomTimeRange ? ', time);
     });
 
     const onSelectTime = useMemoizedFn((time: number) => {
@@ -113,15 +126,6 @@ export function useDeviceData() {
             setTimeRange(null);
         }
     });
-
-    const contextVal = useMemo(
-        (): AlarmContextProps => ({
-            data: mockData,
-            showMobileSearch,
-            setShowMobileSearch,
-        }),
-        [showMobileSearch],
-    );
 
     return {
         keyword,
@@ -139,7 +143,10 @@ export function useDeviceData() {
          */
         handleCustomTimeRange,
         onSelectTime,
-        contextVal,
-        data: mockData,
+        data,
+        showMobileSearch,
+        setShowMobileSearch,
+        loading,
+        getDeviceAlarmData,
     };
 }

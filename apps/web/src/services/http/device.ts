@@ -98,6 +98,17 @@ export interface DeviceAlarmDetail {
 }
 
 /**
+ * Device alarm data search condition
+ */
+export interface AlarmSearchCondition {
+    keyword?: string;
+    device_ids?: ApiKey[];
+    start_timestamp: number;
+    end_timestamp: number;
+    alarm_status?: boolean;
+}
+
+/**
  * Device related interface definition
  */
 export interface DeviceAPISchema extends APISchema {
@@ -265,26 +276,14 @@ export interface DeviceAPISchema extends APISchema {
     };
     /** Get device alarms */
     getDeviceAlarms: {
-        request: SearchRequestType & {
-            device_ids: ApiKey[];
-            keyword?: string;
-            start_timestamp: number;
-            end_timestamp: number;
-            alarm_status?: boolean;
-        };
+        request: SearchRequestType & AlarmSearchCondition;
         response: SearchResponseType<DeviceAlarmDetail[]>;
     };
     /**
      * Export device alarms
      */
     exportDeviceAlarms: {
-        request: {
-            device_ids: ApiKey[];
-            keyword?: string;
-            start_timestamp: number;
-            end_timestamp: number;
-            alarm_status?: boolean;
-        };
+        request: AlarmSearchCondition;
         response: Blob;
     };
     /**
