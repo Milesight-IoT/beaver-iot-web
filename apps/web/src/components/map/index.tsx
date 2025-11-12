@@ -14,7 +14,7 @@ import { MapLayer, MapZoomControl } from './components';
 
 import './style.less';
 
-export interface MapProps {
+export interface MapProps extends Omit<MapContainerProps, 'whenReady' | 'zoomControl'> {
     /**
      * Map tile type
      */
@@ -34,22 +34,6 @@ export interface MapProps {
      * Map zoom level
      */
     zoom?: number;
-
-    /**
-     * Whether the map can be zoomed by using the mouse wheel. If passed 'center',
-     * it will zoom to the center of the view regardless of where the mouse was.
-     */
-    scrollWheelZoom?: MapContainerProps['scrollWheelZoom'];
-
-    /**
-     * Whether the map can be zoomed by double clicking on it.
-     */
-    doubleClickZoom?: MapContainerProps['doubleClickZoom'];
-
-    /**
-     * Map center coordinate
-     */
-    center?: MapContainerProps['center'];
 
     /**
      * Children elements
@@ -108,6 +92,7 @@ const Map = forwardRef<MapInstance, MapProps>(
             onReady,
             onLocationError,
             onLocationFound,
+            ...props
         },
         ref,
     ) => {
@@ -135,6 +120,8 @@ const Map = forwardRef<MapInstance, MapProps>(
         return (
             <div className={cls('ms-map-root', className)}>
                 <MapContainer
+                    worldCopyJump
+                    {...props}
                     {...configs}
                     ref={ref}
                     key={mapKey}
@@ -153,6 +140,8 @@ const Map = forwardRef<MapInstance, MapProps>(
                     <MapLayer
                         tms={tms}
                         url={url}
+                        minZoom={configs.minZoom}
+                        maxZoom={configs.maxZoom}
                         subdomains={subdomains}
                         attribution={attribution}
                         coordType={coordType}
