@@ -1,29 +1,18 @@
-import React, { useRef, useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { useMemoizedFn } from 'ahooks';
 
 import { useI18n } from '@milesight/shared/src/hooks';
 
-import {
-    Empty,
-    InfiniteScrollList,
-    MobileSearchPanel,
-    type InfiniteScrollListRef,
-} from '@/components';
+import { Empty, InfiniteScrollList, MobileSearchPanel } from '@/components';
 import MobileListItem from '../mobile-list-item';
-import { type TableRowDataType } from '../../hooks';
+import { type TableRowDataType, useMobileData } from '../../hooks';
 import { AlarmContext } from '../../context';
 
 const MobileSearchInput: React.FC = () => {
     const { getIntlText } = useI18n();
-    const { data, showMobileSearch, setShowMobileSearch } = useContext(AlarmContext) || {};
-
-    const [keyword, setKeyword] = useState('');
-    const searchListRef = useRef<InfiniteScrollListRef>(null);
-
-    const handleKeywordChange = useMemoizedFn((keyword?: string) => {
-        searchListRef.current?.scrollTo(0);
-        setKeyword?.(keyword || '');
-    });
+    const { showMobileSearch, setShowMobileSearch } = useContext(AlarmContext) || {};
+    const { loading, data, listRef, pagination, keyword, handleKeywordChange, handleLoadMore } =
+        useMobileData();
 
     const handleShowSearch = useMemoizedFn((show: boolean) => {
         setShowMobileSearch?.(show);
@@ -41,13 +30,14 @@ const MobileSearchInput: React.FC = () => {
             onActiveChange={handleShowSearch}
         >
             <InfiniteScrollList
-                isNoMore
-                ref={searchListRef}
-                data={data || []}
+                isNoMore={data.list.length >= data.total}
+                ref={listRef}
+                data={data.list}
                 itemHeight={248}
-                loading={false}
-                loadingMore={false}
+                loading={loading && pagination.page === 0}
+                loadingMore={loading}
                 itemRenderer={itemRenderer}
+                onLoadMore={handleLoadMore}
                 emptyRenderer={<Empty text={getIntlText('device.search.placeholder_empty')} />}
             />
         </MobileSearchPanel>

@@ -1,26 +1,24 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import { useI18n } from '@milesight/shared/src/hooks';
 import { toast } from '@milesight/shared/src/components';
 
 import { deviceAPI, awaitWrap, isRequestSuccess } from '@/services/http';
-import { AlarmContext } from '../context';
 
-export function useAlarmClaim() {
+export function useAlarmClaim(refreshList?: () => void) {
     const { getIntlText } = useI18n();
-    const { getDeviceAlarmData } = useContext(AlarmContext) || {};
 
     const [claimLoading, setClaimLoading] = useState<Record<string, boolean>>({});
 
     const { run: claimAlarm } = useRequest(
-        async (deviceId?: ApiKey) => {
-            if (!deviceId) {
+        async (deviceId?: ApiKey, alarmId?: ApiKey) => {
+            if (!deviceId || !alarmId) {
                 return;
             }
 
             try {
-                setClaimLoading({ [deviceId]: true });
+                setClaimLoading({ [alarmId]: true });
                 const [error, resp] = await awaitWrap(
                     deviceAPI.claimDeviceAlarm({
                         device_id: deviceId,
@@ -30,7 +28,7 @@ export function useAlarmClaim() {
                     return;
                 }
 
-                getDeviceAlarmData?.();
+                refreshList?.();
                 toast.success(getIntlText('common.message.operation_success'));
             } finally {
                 setClaimLoading({});
@@ -38,6 +36,7 @@ export function useAlarmClaim() {
         },
         {
             manual: true,
+            debounceWait: 300,
         },
     );
 

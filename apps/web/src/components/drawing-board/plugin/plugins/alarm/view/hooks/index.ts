@@ -1,2 +1,3 @@
 export { default as useColumns, type UseColumnsProps, type TableRowDataType } from './useColumns';
 export { useDeviceData } from './useDeviceData';
+export { useMobileData } from './useMobileData';

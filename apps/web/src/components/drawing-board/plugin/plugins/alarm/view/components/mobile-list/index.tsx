@@ -10,7 +10,7 @@ import { PluginFullscreenContext } from '@/components/drawing-board/components';
 import MobileListItem from '../mobile-list-item';
 import MobileSearchInput from '../mobile-search-input';
 import { AlarmContext } from '../../context';
-import { type TableRowDataType } from '../../hooks';
+import { type TableRowDataType, useMobileData } from '../../hooks';
 
 import styles from './style.module.less';
 
@@ -26,6 +26,7 @@ const MobileDeviceList: React.FC<MobileDeviceListProps> = ({ headerSlot }) => {
 
     const { showMobileSearch, setShowMobileSearch } = useContext(AlarmContext) || {};
     const { pluginFullScreen } = useContext(PluginFullscreenContext) || {};
+    const { loading, data, handleLoadMore, pagination, listRef } = useMobileData();
 
     const itemRenderer = useMemoizedFn((item: TableRowDataType) => (
         <MobileListItem isFullscreen={pluginFullScreen} key={item.id} device={item} />
@@ -33,12 +34,14 @@ const MobileDeviceList: React.FC<MobileDeviceListProps> = ({ headerSlot }) => {
 
     const RenderList = (
         <InfiniteScrollList
-            isNoMore
-            data={[]}
+            ref={listRef}
+            isNoMore={data.list.length >= data.total}
+            data={data.list}
             itemHeight={pluginFullScreen ? 248 : 250}
-            loading={false}
-            loadingMore={false}
+            loading={loading && pagination.page === 0}
+            loadingMore={loading}
             itemRenderer={itemRenderer}
+            onLoadMore={handleLoadMore}
             emptyRenderer={<Empty text={getIntlText('common.label.empty')} />}
         />
     );

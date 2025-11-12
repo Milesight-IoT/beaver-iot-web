@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useRef } from 'react';
+import React, { useContext, useMemo } from 'react';
 import cls from 'classnames';
 import { GridFooter } from '@mui/x-data-grid';
 
@@ -6,7 +6,6 @@ import { useTheme } from '@milesight/shared/src/hooks';
 
 import { TablePro, Tooltip } from '@/components';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
-import { type AlarmSearchCondition } from '@/services/http';
 import { type AlarmConfigType } from '../control-panel';
 import { type BoardPluginProps } from '../../../types';
 import { useStableValue } from '../../../hooks';
@@ -23,21 +22,12 @@ export interface AlarmViewProps {
 
 const AlarmView: React.FC<AlarmViewProps> = props => {
     const { config, configJson } = props;
-    const { title, devices: unStableValue } = config || {};
+    const { title, devices: unStableValue, defaultTime } = config || {};
     const { isPreview } = configJson || {};
     const context = useContext(DrawingBoardContext);
 
-    /**
-     * Used to get device alarm data search condition
-     */
-    const searchConditionRef = useRef<AlarmSearchCondition | null>(null);
-
     const { matchTablet } = useTheme();
     const { stableValue: devices } = useStableValue(unStableValue);
-    const { columns, paginationModel, setPaginationModel, filteredInfo, handleFilterChange } =
-        useColumns({
-            isPreview,
-        });
     const {
         data,
         keyword,
@@ -56,23 +46,40 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
         setShowMobileSearch,
         loading,
         getDeviceAlarmData,
-    } = useDeviceData({
-        paginationModel,
-        filteredInfo,
-        devices,
         searchConditionRef,
+        paginationModel,
+        setPaginationModel,
+        handleFilterChange,
+    } = useDeviceData({
+        devices,
+        defaultTime,
+    });
+    const { columns } = useColumns({
+        isPreview,
+        refreshList: getDeviceAlarmData,
     });
 
     const contextVal = useMemo(
         (): AlarmContextProps => ({
+            devices,
             showMobileSearch,
             setShowMobileSearch,
             timeRange,
             setTimeRange,
-            searchCondition: searchConditionRef.current,
-            getDeviceAlarmData,
+            searchConditionRef,
+            selectTime,
+            isPreview,
         }),
-        [showMobileSearch, timeRange, setShowMobileSearch, setTimeRange, getDeviceAlarmData],
+        [
+            devices,
+            showMobileSearch,
+            timeRange,
+            setShowMobileSearch,
+            setTimeRange,
+            searchConditionRef,
+            selectTime,
+            isPreview,
+        ],
     );
 
     const RenderTitle = (
@@ -137,6 +144,9 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
     );
 
     const renderContent = () => {
+        /**
+         * Render mobile list
+         */
         if (matchTablet) {
             return (
                 <MobileList
@@ -150,6 +160,9 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
             );
         }
 
+        /**
+         * Render desktop table
+         */
         return RenderTable;
     };
 

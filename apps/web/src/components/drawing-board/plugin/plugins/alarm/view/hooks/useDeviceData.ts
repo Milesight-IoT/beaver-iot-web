@@ -2,9 +2,10 @@ import { useState, useRef, useMemo } from 'react';
 import { useMemoizedFn, useRequest } from 'ahooks';
 import { isEmpty } from 'lodash-es';
 
+import { useTheme } from '@milesight/shared/src/hooks';
 import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
 
-import { type DateRangePickerValueType } from '@/components';
+import { type DateRangePickerValueType, type TableProProps, type FilterValue } from '@/components';
 import { type DeviceSelectData } from '@/components/drawing-board/plugin/components';
 import {
     deviceAPI,
@@ -13,26 +14,26 @@ import {
     isRequestSuccess,
     type AlarmSearchCondition,
 } from '@/services/http';
+import { getAlarmTimeRange } from '../utils';
+import { type TableRowDataType } from './useColumns';
 
 export function useDeviceData({
-    paginationModel,
-    filteredInfo,
     devices,
-    searchConditionRef,
+    defaultTime,
 }: {
-    paginationModel?: {
-        page: number;
-        pageSize: number;
-    };
-    filteredInfo?: Record<string, any>;
     devices?: DeviceSelectData[];
-    searchConditionRef: React.MutableRefObject<AlarmSearchCondition | null>;
+    defaultTime?: number;
 }) {
     const [keyword, setKeyword] = useState('');
-    const [selectTime, setSelectTime] = useState<number>(1440 * 60 * 1000);
+    const [selectTime, setSelectTime] = useState<number>(defaultTime || 1440 * 60 * 1000);
     const [modalVisible, setModalVisible] = useState(false);
     const [timeRange, setTimeRange] = useState<DateRangePickerValueType | null>(null);
     const [showMobileSearch, setShowMobileSearch] = useState(false);
+    const searchConditionRef = useRef<AlarmSearchCondition | null>(null);
+    const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
+    const [filteredInfo, setFilteredInfo] = useState<Record<string, any>>({});
+
+    const { matchTablet } = useTheme();
 
     const alarmRef = useRef<HTMLDivElement>(null);
     const alarmContainerWidth = alarmRef.current?.getBoundingClientRect()?.width || 0;
@@ -55,30 +56,20 @@ export function useDeviceData({
         return statusList[0];
     }, [filteredInfo]);
 
+    /**
+     * Desktop only
+     */
     const {
         loading,
         data,
         run: getDeviceAlarmData,
     } = useRequest(
         async () => {
-            if (!Array.isArray(devices) || isEmpty(devices)) {
+            if (!Array.isArray(devices) || isEmpty(devices) || matchTablet) {
                 return;
             }
 
-            let dateTimeRange: number[] | null = null;
-
-            /**
-             * If select time is not -1, then use select time as time range
-             * If time range is not null, then use time range as time range
-             */
-            if (selectTime !== -1) {
-                dateTimeRange = [Date.now() - selectTime, Date.now()];
-            } else if (timeRange?.start && timeRange?.end) {
-                dateTimeRange = [
-                    timeRange.start.startOf('day').valueOf(),
-                    timeRange.end.endOf('day').valueOf(),
-                ];
-            }
+            const dateTimeRange = getAlarmTimeRange(selectTime, timeRange);
             if (!dateTimeRange) {
                 return;
             }
@@ -110,7 +101,15 @@ export function useDeviceData({
         },
         {
             debounceWait: 300,
-            refreshDeps: [devices, keyword, alarmStatus, selectTime, timeRange, paginationModel],
+            refreshDeps: [
+                devices,
+                keyword,
+                alarmStatus,
+                selectTime,
+                timeRange,
+                paginationModel,
+                matchTablet,
+            ],
         },
     );
 
@@ -126,6 +125,12 @@ export function useDeviceData({
             setTimeRange(null);
         }
     });
+
+    const handleFilterChange: TableProProps<TableRowDataType>['onFilterInfoChange'] = (
+        filters: Record<string, FilterValue | null>,
+    ) => {
+        setFilteredInfo(filters);
+    };
 
     return {
         keyword,
@@ -148,5 +153,12 @@ export function useDeviceData({
         setShowMobileSearch,
         loading,
         getDeviceAlarmData,
+        /**
+         * Used to get device alarm data search condition
+         */
+        searchConditionRef,
+        handleFilterChange,
+        paginationModel,
+        setPaginationModel,
     };
 }

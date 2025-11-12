@@ -2,6 +2,7 @@ import React, { useMemo, useContext } from 'react';
 import { IconButton, Divider, type SelectChangeEvent, type SxProps } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { useMemoizedFn } from 'ahooks';
+import cls from 'classnames';
 
 import { useI18n, useTheme, useTime } from '@milesight/shared/src/hooks';
 import { SaveAltIcon, Select, SearchIcon, toast } from '@milesight/shared/src/components';
@@ -31,7 +32,7 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
     const { getIntlText } = useI18n();
     const { matchTablet } = useTheme();
     const { getTimeFormat, dayjs } = useTime();
-    const { setShowMobileSearch, searchCondition } = useContext(AlarmContext) || {};
+    const { setShowMobileSearch, searchConditionRef, isPreview } = useContext(AlarmContext) || {};
 
     const timeOptions = useMemo(() => {
         return [
@@ -79,11 +80,12 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
     });
 
     const handleExport = useMemoizedFn(async () => {
-        if (!searchCondition) {
+        const params = searchConditionRef?.current;
+        if (!params) {
             return;
         }
 
-        const [error, resp] = await awaitWrap(deviceAPI.exportDeviceAlarms(searchCondition));
+        const [error, resp] = await awaitWrap(deviceAPI.exportDeviceAlarms(params));
         if (error || !isRequestSuccess(resp)) {
             return;
         }
@@ -124,7 +126,11 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
     }, [matchTablet]);
 
     return (
-        <div className="alarm-view__search-slot">
+        <div
+            className={cls('alarm-view__search-slot', {
+                'd-none': isPreview,
+            })}
+        >
             <Select
                 value={selectTime}
                 options={timeOptions}
@@ -147,7 +153,11 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
                 flexItem
                 sx={{ marginRight: '36px' }}
             />
-            <div className="hover-search">
+            <div
+                className={cls('hover-search', {
+                    'mobile-search': matchTablet,
+                })}
+            >
                 {matchTablet ? (
                     <IconButton
                         sx={{
@@ -171,9 +181,11 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
                     />
                 )}
             </div>
-            <IconButton sx={saveAltIconSx} onClick={handleExport}>
-                <SaveAltIcon sx={{ width: 20, height: 20 }} />
-            </IconButton>
+            {!matchTablet && (
+                <IconButton sx={saveAltIconSx} onClick={handleExport}>
+                    <SaveAltIcon sx={{ width: 20, height: 20 }} />
+                </IconButton>
+            )}
         </div>
     );
 };

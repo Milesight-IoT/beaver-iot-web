@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Stack, IconButton } from '@mui/material';
 import { get } from 'lodash-es';
 
@@ -10,10 +10,10 @@ import {
     LoadingWrapper,
 } from '@milesight/shared/src/components';
 
-import { Tooltip, type ColumnType, type TableProProps, type FilterValue } from '@/components';
+import { Tooltip, type ColumnType } from '@/components';
 import { toSixDecimals, openGoogleMap } from '@/components/drawing-board/plugin/utils';
 import { type EntityAPISchema, type DeviceAlarmDetail } from '@/services/http';
-import { ClaimChip } from '../components';
+import ClaimChip from '../components/claim-chip';
 import { useAlarmClaim } from './useAlarmClaim';
 
 export type TableRowDataType = ObjectToCamelCase<DeviceAlarmDetail>;
@@ -27,6 +27,11 @@ export interface UseColumnsProps {
      * Current devices all entities status
      */
     entitiesStatus?: EntityAPISchema['getEntitiesStatus']['response'];
+    /**
+     * Refresh list callback
+     */
+    refreshList?: () => void;
+    filteredInfo?: Record<string, any>;
 }
 
 export enum AlarmStatus {
@@ -34,13 +39,15 @@ export enum AlarmStatus {
     Unclaimed = 1,
 }
 
-const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: UseColumnsProps) => {
+const useColumns = <T extends TableRowDataType>({
+    isPreview,
+    entitiesStatus,
+    refreshList,
+    filteredInfo,
+}: UseColumnsProps) => {
     const { getIntlText } = useI18n();
     const { getTimeFormat } = useTime();
-    const { claimAlarm, claimLoading } = useAlarmClaim();
-
-    const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
-    const [filteredInfo, setFilteredInfo] = useState<Record<string, any>>({});
+    const { claimAlarm, claimLoading } = useAlarmClaim(refreshList);
 
     const statusFilterOptions = useMemo(() => {
         return [
@@ -135,7 +142,7 @@ const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: U
                         >
                             <LoadingWrapper
                                 size={20}
-                                loading={get(claimLoading, String(row?.deviceId), false)}
+                                loading={get(claimLoading, String(row?.id), false)}
                             >
                                 <Tooltip
                                     isDisabledButton={!row?.alarmStatus}
@@ -153,7 +160,7 @@ const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: U
                                                 return;
                                             }
 
-                                            claimAlarm?.(row?.deviceId);
+                                            claimAlarm?.(row?.deviceId, row?.id);
                                         }}
                                     >
                                         <CheckCircleOutlineIcon sx={{ width: 20, height: 20 }} />
@@ -193,18 +200,8 @@ const useColumns = <T extends TableRowDataType>({ isPreview, entitiesStatus }: U
         claimAlarm,
     ]);
 
-    const handleFilterChange: TableProProps<TableRowDataType>['onFilterInfoChange'] = (
-        filters: Record<string, FilterValue | null>,
-    ) => {
-        setFilteredInfo(filters);
-    };
-
     return {
         columns,
-        paginationModel,
-        filteredInfo,
-        setPaginationModel,
-        handleFilterChange,
     };
 };
 
