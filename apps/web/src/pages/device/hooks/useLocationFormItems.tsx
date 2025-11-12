@@ -18,33 +18,6 @@ const useLocationFormItems = () => {
     const formItems = useMemo(() => {
         const result: ControllerProps<LocationType>[] = [
             {
-                name: 'longitude',
-                rules: {
-                    validate: {
-                        checkRequired: checkRequired(),
-                        checkRangeValue: checkRangeValue({ min: -180, max: 180 }),
-                        checkRangeLength: checkRangeLength({ min: 1, max: 64 }),
-                    },
-                },
-                render({ field: { onChange, value, disabled }, fieldState: { error } }) {
-                    return (
-                        <TextField
-                            required
-                            fullWidth
-                            type="text"
-                            autoComplete="off"
-                            sx={{ my: 1.5 }}
-                            disabled={disabled}
-                            label={getIntlText('common.label.longitude')}
-                            error={!!error}
-                            helperText={error ? error.message : null}
-                            value={value || ''}
-                            onChange={onChange}
-                        />
-                    );
-                },
-            },
-            {
                 name: 'latitude',
                 rules: {
                     validate: {
@@ -67,6 +40,35 @@ const useLocationFormItems = () => {
                             helperText={error ? error.message : null}
                             value={value || ''}
                             onChange={onChange}
+                            onBlur={event => onChange(event?.target?.value?.trim())}
+                        />
+                    );
+                },
+            },
+            {
+                name: 'longitude',
+                rules: {
+                    validate: {
+                        checkRequired: checkRequired(),
+                        checkRangeValue: checkRangeValue({ min: -180, max: 180 }),
+                        checkRangeLength: checkRangeLength({ min: 1, max: 64 }),
+                    },
+                },
+                render({ field: { onChange, value, disabled }, fieldState: { error } }) {
+                    return (
+                        <TextField
+                            required
+                            fullWidth
+                            type="text"
+                            autoComplete="off"
+                            sx={{ my: 1.5 }}
+                            disabled={disabled}
+                            label={getIntlText('common.label.longitude')}
+                            error={!!error}
+                            helperText={error ? error.message : null}
+                            value={value || ''}
+                            onChange={onChange}
+                            onBlur={event => onChange(event?.target?.value?.trim())}
                         />
                     );
                 },
@@ -91,6 +93,7 @@ const useLocationFormItems = () => {
                             helperText={error ? error.message : null}
                             value={value || ''}
                             onChange={onChange}
+                            onBlur={event => onChange(event?.target?.value?.trim())}
                         />
                     );
                 },

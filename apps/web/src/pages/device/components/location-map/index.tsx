@@ -1,8 +1,9 @@
-import React, { memo, useMemo, useRef } from 'react';
+import React, { memo, useEffect, useMemo, useRef } from 'react';
 import cls from 'classnames';
 import { Tooltip } from '@mui/material';
-import { useMemoizedFn } from 'ahooks';
+import { useMemoizedFn, useThrottleFn } from 'ahooks';
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
+import { formatPrecision } from '@milesight/shared/src/utils/tools';
 import { MyLocationIcon, LocationPinIcon } from '@milesight/shared/src/components';
 import {
     Map,
@@ -25,6 +26,8 @@ export interface Props extends MapProps {
 
     marker?: LatLng;
 
+    preferZoomLevel?: number;
+
     onPositionChange?: (position: [number, number]) => void;
 }
 
@@ -32,29 +35,46 @@ export interface Props extends MapProps {
  * Location map component
  */
 const LocationMap: React.FC<Props> = memo(
-    ({ state, marker, className, onPositionChange, ...props }) => {
+    ({
+        state,
+        marker,
+        className,
+        preferZoomLevel = PREFER_ZOOM_LEVEL,
+        onPositionChange,
+        ...props
+    }) => {
         const { getIntlText } = useI18n();
         const { matchTablet } = useTheme();
         const editing = state === 'edit';
 
         // ---------- Zoom Control ----------
         const zoomCenterRef = useRef<LatLng>();
+        const controlProcessingRef = useRef(false);
 
-        const handleControlClick = useMemoizedFn(
+        const { run: handleControlClick } = useThrottleFn(
             (type: ZoomControlActionType | CustomActionType, map: MapInstance) => {
                 switch (type) {
                     case 'zoom-in': {
                         const nextZoom = Math.min(map.getZoom() + 1, map.getMaxZoom());
-                        map.setView(zoomCenterRef.current || map.getCenter(), nextZoom);
+
+                        controlProcessingRef.current = true;
+                        // map.setView(zoomCenterRef.current || map.getCenter(), nextZoom);
+                        map.setZoom(nextZoom);
                         break;
                     }
                     case 'zoom-out': {
                         const nextZoom = Math.max(map.getZoom() - 1, map.getMinZoom());
-                        map.setView(zoomCenterRef.current || map.getCenter(), nextZoom);
+
+                        controlProcessingRef.current = true;
+                        // map.setView(zoomCenterRef.current || map.getCenter(), nextZoom);
+                        map.setZoom(nextZoom);
                         break;
                     }
                     case 'locate-center': {
-                        map.setView(zoomCenterRef.current || map.getCenter(), PREFER_ZOOM_LEVEL);
+                        if (map.getZoom() !== preferZoomLevel) {
+                            controlProcessingRef.current = true;
+                        }
+                        map.setView(zoomCenterRef.current || map.getCenter(), preferZoomLevel);
                         break;
                     }
                     default: {
@@ -64,6 +84,7 @@ const LocationMap: React.FC<Props> = memo(
 
                 return true;
             },
+            { wait: 300 },
         );
         const zoomControl = useMemo<React.ReactNode>(
             () => (
@@ -75,8 +96,21 @@ const LocationMap: React.FC<Props> = memo(
             [handleControlClick],
         );
 
+        useEffect(() => {
+            if (editing) return;
+            zoomCenterRef.current = marker;
+        }, [editing, marker]);
+
         // ---------- Map Events ----------
-        const handlePositionChange = useMemoizedFn(onPositionChange || (() => {}));
+        const handlePositionChange = useMemoizedFn((position: [number, number]) => {
+            if (!onPositionChange) return;
+
+            // onPositionChange(position);
+            onPositionChange([
+                formatPrecision(position[0], 6, { resultType: 'number' }),
+                formatPrecision(position[1], 6, { resultType: 'number' }),
+            ]);
+        });
         const events = useMemo<MapProps['events']>(
             () => ({
                 click({ target, originalEvent, latlng }) {
@@ -90,17 +124,19 @@ const LocationMap: React.FC<Props> = memo(
                     zoomCenterRef.current = latlng;
                     handlePositionChange([latlng.lat, latlng.lng]);
                 },
-                zoomend(e) {
-                    if (!editing) return;
-                    const center = (e.target as MapInstance).getCenter();
-
-                    zoomCenterRef.current = center;
-                    handlePositionChange([center.lat, center.lng]);
-                },
                 moveend(e) {
-                    if (!editing) return;
+                    if (!editing || controlProcessingRef.current) {
+                        controlProcessingRef.current = false;
+                        return;
+                    }
+
+                    /**
+                     * Note: The moveend event will also be triggered when zooming,
+                     * that is, the center of the map will change.
+                     */
                     const center = (e.target as MapInstance).getCenter();
 
+                    // console.log('moveend', center);
                     zoomCenterRef.current = center;
                     handlePositionChange([center.lat, center.lng]);
                 },
@@ -110,7 +146,8 @@ const LocationMap: React.FC<Props> = memo(
 
         return (
             <Map
-                scrollWheelZoom
+                touchZoom="center"
+                scrollWheelZoom="center"
                 {...props}
                 events={events}
                 zoomControl={zoomControl}
@@ -118,7 +155,10 @@ const LocationMap: React.FC<Props> = memo(
             >
                 {!editing && marker && <MapMarker position={marker} />}
                 {editing && (
-                    <Tooltip title={getIntlText('common.message.click_to_mark_and_drag_to_move')}>
+                    <Tooltip
+                        // open
+                        title={getIntlText('common.message.drag_or_click_to_update_coord')}
+                    >
                         <LocationPinIcon className="ms-com-location-map-marker" />
                     </Tooltip>
                 )}

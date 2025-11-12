@@ -12,7 +12,7 @@ import {
     toast,
 } from '@milesight/shared/src/components';
 import { getGeoLocation } from '@milesight/shared/src/utils/tools';
-import { PREFER_ZOOM_LEVEL, useConfirm, type MapInstance } from '@/components';
+import { PermissionControlHidden, useConfirm, type MapInstance } from '@/components';
 import {
     deviceAPI,
     awaitWrap,
@@ -20,6 +20,7 @@ import {
     type DeviceAPISchema,
     type LocationType,
 } from '@/services/http';
+import { PERMISSIONS } from '@/constants';
 import useLocationFormItems from '@/pages/device/hooks/useLocationFormItems';
 import { LocationMap, type LocationMapProps } from '@/pages/device/components';
 import './style.less';
@@ -36,6 +37,8 @@ interface Props {
     /** Edit successful callback */
     onEditSuccess?: () => void | Promise<any>;
 }
+
+const PREFER_ZOOM_LEVEL = 16;
 
 const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
     const { getIntlText } = useI18n();
@@ -84,7 +87,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
         if (!data?.id) return;
         const formData = getValues();
 
-        console.log({ formData, location });
+        // console.log({ formData, location });
         setLoading(true);
         const [err, res] = await awaitWrap(
             deviceAPI.setLocation({
@@ -157,11 +160,14 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
 
     const handlePositionChange = useCallback<NonNullable<LocationMapProps['onPositionChange']>>(
         position => {
-            setLocation(d => ({
-                ...d,
-                latitude: position[0],
-                longitude: position[1],
-            }));
+            setLocation(d => {
+                if (position.toString() === [d?.latitude, d?.longitude].toString()) return d;
+                return {
+                    ...d,
+                    latitude: position[0],
+                    longitude: position[1],
+                };
+            });
         },
         [],
     );
@@ -214,13 +220,15 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
             <div className={cls('ms-com-location-edit-panel', `state-${state}`)}>
                 {state === 'nodata' && (
                     <div className="edit-panel-nodata">
-                        <Button
-                            variant="contained"
-                            startIcon={<EditIcon />}
-                            onClick={() => openEditState()}
-                        >
-                            {getIntlText('device.label.edit_position')}
-                        </Button>
+                        <PermissionControlHidden permissions={PERMISSIONS.DEVICE_EDIT}>
+                            <Button
+                                variant="contained"
+                                startIcon={<EditIcon />}
+                                onClick={() => openEditState()}
+                            >
+                                {getIntlText('device.label.edit_position')}
+                            </Button>
+                        </PermissionControlHidden>
                         <div className="empty-tip">
                             {getIntlText('device.message.no_device_location')}
                         </div>
@@ -292,28 +300,30 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
                             </ul>
                         </div>
                         <div className="edit-panel-view-footer">
-                            <Button
-                                variant="contained"
-                                startIcon={<EditIcon />}
-                                disabled={loading}
-                                onClick={openEditState}
-                            >
-                                {getIntlText('device.label.edit_position')}
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                startIcon={
-                                    !loading ? (
-                                        <DeleteOutlineIcon />
-                                    ) : (
-                                        <CircularProgress size={16} />
-                                    )
-                                }
-                                disabled={loading}
-                                onClick={handleRemove}
-                            >
-                                {getIntlText('common.label.remove')}
-                            </Button>
+                            <PermissionControlHidden permissions={PERMISSIONS.DEVICE_EDIT}>
+                                <Button
+                                    variant="contained"
+                                    startIcon={<EditIcon />}
+                                    disabled={loading}
+                                    onClick={openEditState}
+                                >
+                                    {getIntlText('device.label.edit_position')}
+                                </Button>
+                                <Button
+                                    variant="outlined"
+                                    startIcon={
+                                        !loading ? (
+                                            <DeleteOutlineIcon />
+                                        ) : (
+                                            <CircularProgress size={16} />
+                                        )
+                                    }
+                                    disabled={loading}
+                                    onClick={handleRemove}
+                                >
+                                    {getIntlText('common.label.remove')}
+                                </Button>
+                            </PermissionControlHidden>
                         </div>
                     </div>
                 )}
@@ -321,6 +331,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
             <LocationMap
                 width={size?.width}
                 height={size?.height}
+                preferZoomLevel={PREFER_ZOOM_LEVEL}
                 state={editing && !loading ? 'edit' : 'view'}
                 className={cls({ 'd-none': !size?.width || !size?.height })}
                 marker={!editing && location ? [location.latitude, location.longitude] : undefined}

@@ -303,7 +303,7 @@
     "valid.input.version": "The version number does not comply with the specification.",
     "valid.resp.at_least_one": "Please select at least one {1}.",
     "common.label.location": "Location",
-    "common.message.click_to_mark_and_drag_to_move": "可以单击地图进行标记，或者拖拽标记进行移动",
+    "common.message.drag_or_click_to_update_coord": "推拽地图或单击空白处来更新坐标位置",
     "common.label.latitude": "Latitude",
     "common.label.longitude": "Longitude",
     "common.label.address": "Address"
