@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Alert, IconButton } from '@mui/material';
 import { useDebounceFn } from 'ahooks';
 import cls from 'classnames';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, get } from 'lodash-es';
 
 import { useI18n, useStoreShallow } from '@milesight/shared/src/hooks';
 import {
@@ -13,6 +13,7 @@ import {
     LocationOnIcon,
     NearMeIcon,
     DeleteOutlineIcon,
+    LoadingWrapper,
 } from '@milesight/shared/src/components';
 
 import { Tooltip } from '@/components';
@@ -20,6 +21,7 @@ import { type DeviceDetail } from '@/services/http';
 import useControlPanelStore from '@/components/drawing-board/plugin/store';
 import { type DeviceSelectData } from '@/components/drawing-board/plugin/components';
 import { toSixDecimals, openGoogleMap } from '@/components/drawing-board/plugin/utils';
+import { useAlarmClaim } from '@/components/drawing-board/plugin/plugins/alarm/view/hooks/useAlarmClaim';
 import { MapContext } from '../../context';
 import { useEntityStatus } from './useEntityStatus';
 
@@ -38,8 +40,18 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
         useStoreShallow(['formData', 'setValuesToFormConfig']),
     );
     const mapContext = useContext(MapContext);
-    const { isPreview, entitiesStatus, getDeviceStatusById } = mapContext || {};
-    const { getDeviceLatitude, getDeviceLongitude } = useEntityStatus(entitiesStatus);
+    const { isPreview, entitiesStatus, getDeviceStatus, getNewestEntitiesStatus } =
+        mapContext || {};
+    const {
+        getDeviceLatitude,
+        getDeviceLongitude,
+        aStatus,
+        aContent,
+        temperature,
+        moisture,
+        conductivity,
+    } = useEntityStatus(entitiesStatus);
+    const { claimLoading, claimAlarm } = useAlarmClaim(getNewestEntitiesStatus);
 
     const { run: handleDeleteSpot } = useDebounceFn(
         () => {
@@ -70,8 +82,8 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                 <div className={styles.left}>
                     <div
                         className={cls(styles.status, {
-                            [styles.online]: getDeviceStatusById?.(device)?.value === 'ONLINE',
-                            [styles.offline]: getDeviceStatusById?.(device)?.value !== 'ONLINE',
+                            [styles.online]: getDeviceStatus?.(device) === 'ONLINE',
+                            [styles.offline]: getDeviceStatus?.(device) !== 'ONLINE',
                         })}
                     />
                     <Tooltip
@@ -120,61 +132,69 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                 autoEllipsis
                 title={device?.identifier || ''}
             />
-            <Alert
-                icon={false}
-                severity="error"
-                action={
+            {aStatus(device) && (
+                <Alert
+                    icon={false}
+                    severity="error"
+                    action={
+                        <LoadingWrapper
+                            size={16}
+                            loading={get(claimLoading, String(device?.key), false)}
+                        >
+                            <Tooltip
+                                PopperProps={{
+                                    disablePortal: true,
+                                    sx: {
+                                        minWidth: 'max-content',
+                                    },
+                                }}
+                                title={getIntlText('common.tip.click_to_claim')}
+                            >
+                                <IconButton
+                                    sx={{
+                                        width: '24px',
+                                        height: '24px',
+                                        '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                                            color: 'inherit',
+                                        },
+                                    }}
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => claimAlarm(device?.id, device?.key)}
+                                >
+                                    <CheckCircleOutlineIcon fontSize="inherit" />
+                                </IconButton>
+                            </Tooltip>
+                        </LoadingWrapper>
+                    }
+                    sx={{
+                        '&.MuiAlert-root': {
+                            display: 'flex',
+                            alignItems: 'center',
+                            padding: '0 8px',
+                            marginBottom: 0,
+                        },
+                        '.MuiAlert-message': {
+                            paddingTop: 0,
+                            paddingBottom: 0,
+                            fontSize: '0.75rem',
+                            lineHeight: '1.25rem',
+                            overflow: 'unset',
+                        },
+                        '.MuiAlert-action': {
+                            paddingTop: 0,
+                        },
+                    }}
+                >
                     <Tooltip
                         PopperProps={{
                             disablePortal: true,
-                            sx: {
-                                minWidth: 'max-content',
-                            },
                         }}
-                        title={getIntlText('common.tip.click_to_claim')}
-                    >
-                        <IconButton
-                            sx={{
-                                width: '24px',
-                                height: '24px',
-                                '&.MuiButtonBase-root.MuiIconButton-root:hover': {
-                                    color: 'inherit',
-                                },
-                            }}
-                            color="inherit"
-                            size="small"
-                        >
-                            <CheckCircleOutlineIcon fontSize="inherit" />
-                        </IconButton>
-                    </Tooltip>
-                }
-                sx={{
-                    '&.MuiAlert-root': {
-                        display: 'flex',
-                        alignItems: 'center',
-                        padding: '0 8px',
-                        marginBottom: 0,
-                    },
-                    '.MuiAlert-message': {
-                        paddingTop: 0,
-                        paddingBottom: 0,
-                        fontSize: '0.75rem',
-                        lineHeight: '1.25rem',
-                        overflow: 'unset',
-                    },
-                    '.MuiAlert-action': {
-                        paddingTop: 0,
-                    },
-                }}
-            >
-                <Tooltip
-                    PopperProps={{
-                        disablePortal: true,
-                    }}
-                    autoEllipsis
-                    title="Abnormal soil conditions at the site at the site at the site."
-                />
-            </Alert>
+                        autoEllipsis
+                        title={aContent(device) || ''}
+                    />
+                </Alert>
+            )}
             <div className={styles.info}>
                 <div className={styles['info-item']}>
                     <DeviceThermostatIcon
@@ -184,7 +204,7 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                             height: '16px',
                         }}
                     />
-                    <div className={styles['info-item__name']}>24%</div>
+                    <div className={styles['info-item__name']}>{temperature(device)}</div>
                 </div>
                 <div className={styles['info-item']}>
                     <WaterDropIcon
@@ -194,7 +214,7 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                             height: '16px',
                         }}
                     />
-                    <div className={styles['info-item__name']}>67%</div>
+                    <div className={styles['info-item__name']}>{moisture(device)}</div>
                 </div>
                 <div className={styles['info-item']}>
                     <OfflineBoltIcon
@@ -204,7 +224,7 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                             height: '16px',
                         }}
                     />
-                    <div className={styles['info-item__name']}>0.68</div>
+                    <div className={styles['info-item__name']}>{conductivity(device)}</div>
                 </div>
             </div>
             <div className={styles['info-item']}>

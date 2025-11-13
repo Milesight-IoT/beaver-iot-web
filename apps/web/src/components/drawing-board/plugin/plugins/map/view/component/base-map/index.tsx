@@ -29,7 +29,7 @@ const BaseMap: React.FC<BaseMapProps> = props => {
 
     const { matchTablet } = useTheme();
     const mapContext = useContext(MapContext);
-    const { getDeviceStatusById } = mapContext || {};
+    const { getColorType } = mapContext || {};
     const pluginFullscreenCxt = useContext(PluginFullscreenContext);
     const { pluginFullScreen } = pluginFullscreenCxt || {};
 
@@ -181,11 +181,7 @@ const BaseMap: React.FC<BaseMapProps> = props => {
                     {mapData.map(d => (
                         <MapMarker
                             key={d.id}
-                            colorType={
-                                getDeviceStatusById?.(d)?.value === 'ONLINE'
-                                    ? undefined
-                                    : 'disabled'
-                            }
+                            colorType={getColorType?.(d)}
                             position={d.latLng}
                             popup={<DevicePopup device={d} closeMarkerPopup={closeMarkerPopup} />}
                             onReady={marker => {

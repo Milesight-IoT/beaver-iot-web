@@ -49,7 +49,14 @@ const MapView: React.FC<MapViewProps> = props => {
         mobileKeyword,
         setMobileKeyword,
     } = useDeviceData(pluginFullscreenCxt, devices);
-    const { entitiesStatus, getDeviceStatusById, getNoOnlineDevicesCount } = useDeviceEntities({
+    const {
+        entitiesStatus,
+        getDeviceStatus,
+        getNoOnlineDevicesCount,
+        getColorType,
+        getAlarmDevicesCount,
+        getNewestEntitiesStatus,
+    } = useDeviceEntities({
         isPreview,
         data,
     });
@@ -60,18 +67,24 @@ const MapView: React.FC<MapViewProps> = props => {
             isPreview,
             entitiesStatus,
             selectDevice,
-            getDeviceStatusById,
+            getDeviceStatus,
             getNoOnlineDevicesCount,
             setSelectDevice,
+            getColorType,
+            getAlarmDevicesCount,
+            getNewestEntitiesStatus,
         };
     }, [
         data,
         isPreview,
         entitiesStatus,
         selectDevice,
-        getDeviceStatusById,
+        getDeviceStatus,
         getNoOnlineDevicesCount,
         setSelectDevice,
+        getColorType,
+        getAlarmDevicesCount,
+        getNewestEntitiesStatus,
     ]);
 
     /**

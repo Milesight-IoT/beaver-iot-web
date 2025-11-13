@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 
-import { type DeviceDetail, type EntityAPISchema } from '@/services/http';
+import { type DeviceDetail, type EntityAPISchema, type DeviceStatus } from '@/services/http';
+import { type ColorType } from '@/components/map/components/marker';
 
 export interface MapContextProps {
     deviceData?: DeviceDetail[];
@@ -20,8 +21,20 @@ export interface MapContextProps {
      * Set selected device
      */
     setSelectDevice?: (newVal?: DeviceDetail | null) => void;
-    getDeviceStatusById?: (device?: DeviceDetail) => EntityStatusData | undefined;
+    getDeviceStatus?: (device?: DeviceDetail) => DeviceStatus | undefined;
     getNoOnlineDevicesCount?: () => number;
+    /**
+     * Get color type by device status
+     */
+    getColorType?: (device?: DeviceDetail) => ColorType | undefined;
+    /**
+     * Statistics alarm devices count
+     */
+    getAlarmDevicesCount?: () => number;
+    /**
+     * Get newest entities status
+     */
+    getNewestEntitiesStatus?: () => void;
 }
 
 export const MapContext = createContext<MapContextProps | null>(null);

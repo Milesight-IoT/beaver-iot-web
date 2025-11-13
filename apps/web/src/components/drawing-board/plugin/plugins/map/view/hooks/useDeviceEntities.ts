@@ -6,6 +6,7 @@ import {
     type ImportEntityProps,
     type DeviceDetail,
     type EntityAPISchema,
+    type DeviceStatus,
     entityAPI,
     isRequestSuccess,
     getResponseData,
@@ -13,10 +14,14 @@ import {
 } from '@/services/http';
 import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
+import { type ColorType } from '@/components/map/components/marker';
 import {
     DEVICE_STATUS_ENTITY_UNIQUE_ID,
     DEVICE_LATITUDE_ENTITY_UNIQUE_ID,
     DEVICE_LONGITUDE_ENTITY_UNIQUE_ID,
+    DEVICE_ALARM_STATUS_ENTITY_UNIQUE_ID,
+    DEVICE_ALARM_TIME_ENTITY_UNIQUE_ID,
+    DEVICE_ALARM_CONTENT_ENTITY_UNIQUE_ID,
 } from '@/constants';
 
 export interface useDeviceEntitiesProps {
@@ -50,12 +55,34 @@ export function useDeviceEntities(props: useDeviceEntitiesProps) {
                 const deviceLongitudeEntity = c?.common_entities?.find(c =>
                     c.key?.includes(DEVICE_LONGITUDE_ENTITY_UNIQUE_ID),
                 );
+                const alarmStatus = c?.common_entities?.find(c =>
+                    c.key?.includes(DEVICE_ALARM_STATUS_ENTITY_UNIQUE_ID),
+                );
+                const alarmTime = c?.common_entities?.find(c =>
+                    c.key?.includes(DEVICE_ALARM_TIME_ENTITY_UNIQUE_ID),
+                );
+                const alarmContent = c?.common_entities?.find(c =>
+                    c.key?.includes(DEVICE_ALARM_CONTENT_ENTITY_UNIQUE_ID),
+                );
+                const temperature = c?.important_entities?.find(c =>
+                    c.key?.includes('temperature'),
+                );
+                const moisture = c?.important_entities?.find(c => c.key?.includes('soil_moisture'));
+                const conductivity = c?.important_entities?.find(c =>
+                    c.key?.includes('conductivity'),
+                );
 
                 return [
                     ...a,
                     ...(deviceStatusEntity ? [deviceStatusEntity] : []),
                     ...(deviceLatitudeEntity ? [deviceLatitudeEntity] : []),
                     ...(deviceLongitudeEntity ? [deviceLongitudeEntity] : []),
+                    ...(alarmStatus ? [alarmStatus] : []),
+                    ...(alarmTime ? [alarmTime] : []),
+                    ...(alarmContent ? [alarmContent] : []),
+                    ...(temperature ? [temperature] : []),
+                    ...(moisture ? [moisture] : []),
+                    ...(conductivity ? [conductivity] : []),
                 ];
             }, [])
             .map(d => d.id)
@@ -116,7 +143,7 @@ export function useDeviceEntities(props: useDeviceEntitiesProps) {
         };
     }, [widget, drawingBoardDetail, importantEntities, addEntityListener, getNewestEntitiesStatus]);
 
-    const getDeviceStatusById = useMemoizedFn((device?: DeviceDetail) => {
+    const getDeviceStatus = useMemoizedFn((device?: DeviceDetail): DeviceStatus | undefined => {
         const deviceStatusEntity = device?.common_entities?.find(c =>
             c.key?.includes(DEVICE_STATUS_ENTITY_UNIQUE_ID),
         );
@@ -124,7 +151,18 @@ export function useDeviceEntities(props: useDeviceEntitiesProps) {
             return;
         }
 
-        return get(entitiesStatus, String(deviceStatusEntity.id));
+        return get(entitiesStatus, String(deviceStatusEntity.id))?.value;
+    });
+
+    const getAlarmStatus = useMemoizedFn((device?: DeviceDetail): boolean | undefined => {
+        const alarmStatusEntity = device?.common_entities?.find(c =>
+            c.key?.includes(DEVICE_ALARM_STATUS_ENTITY_UNIQUE_ID),
+        );
+        if (!alarmStatusEntity?.id) {
+            return;
+        }
+
+        return get(entitiesStatus, String(alarmStatusEntity.id))?.value;
     });
 
     const getNoOnlineDevicesCount = useMemoizedFn(() => {
@@ -138,8 +176,26 @@ export function useDeviceEntities(props: useDeviceEntitiesProps) {
         return data
             .filter(d => !!d?.location)
             .reduce((a: number, c) => {
-                return getDeviceStatusById?.(c)?.value !== 'ONLINE' ? a + 1 : a;
+                return getDeviceStatus?.(c) !== 'ONLINE' ? a + 1 : a;
             }, 0);
+    });
+
+    const getColorType = useMemoizedFn((device?: DeviceDetail): ColorType | undefined => {
+        if (getDeviceStatus?.(device) !== 'ONLINE') {
+            return 'disabled';
+        }
+
+        return getAlarmStatus?.(device) ? 'danger' : undefined;
+    });
+
+    const getAlarmDevicesCount = useMemoizedFn(() => {
+        if (!Array.isArray(data) || isEmpty(data)) {
+            return 0;
+        }
+
+        return data.reduce((a: number, c) => {
+            return getDeviceStatus?.(c) === 'ONLINE' && getAlarmStatus?.(c) ? a + 1 : a;
+        }, 0);
     });
 
     return {
@@ -150,10 +206,22 @@ export function useDeviceEntities(props: useDeviceEntitiesProps) {
         /**
          * Get Device status
          */
-        getDeviceStatusById,
+        getDeviceStatus,
         /**
          * Statistics no online devices count
          */
         getNoOnlineDevicesCount,
+        /**
+         * Get color type by device status
+         */
+        getColorType,
+        /**
+         * Statistics alarm devices count
+         */
+        getAlarmDevicesCount,
+        /**
+         * Get newest entities status
+         */
+        getNewestEntitiesStatus,
     };
 }
