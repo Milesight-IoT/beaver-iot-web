@@ -73,7 +73,7 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
     return {
         class: 'data_chart',
         type: 'lineChart',
-        name: 'Line',
+        name: 'dashboard.plugin_name_line',
         icon: LineChartIcon,
         defaultRow: 2,
         defaultCol: 2,
@@ -93,7 +93,7 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
                             label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
-                                defaultValue: 'Title',
+                                defaultValue: t('dashboard.plugin_name_line'),
                                 rules: {
                                     maxLength: 35,
                                 },

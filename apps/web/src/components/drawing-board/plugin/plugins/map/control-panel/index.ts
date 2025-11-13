@@ -16,7 +16,7 @@ const mapControlPanelConfig = (): ControlPanelConfig<MapConfigType> => {
     return {
         class: 'data_card',
         type: 'map',
-        name: 'map',
+        name: 'dashboard.plugin_name_map',
         icon: MapIcon,
         defaultRow: 4,
         defaultCol: 4,

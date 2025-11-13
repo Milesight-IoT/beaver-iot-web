@@ -20,7 +20,7 @@ const triggerControlPanelConfig = (): ControlPanelConfig<TriggerControlPanelConf
     return {
         class: 'operate',
         type: 'trigger',
-        name: 'Trigger',
+        name: 'dashboard.plugin_name_trigger',
         icon: TriggerIcon,
         defaultRow: 1,
         defaultCol: 2,
@@ -58,7 +58,7 @@ const triggerControlPanelConfig = (): ControlPanelConfig<TriggerControlPanelConf
                             label: t('common.label.title'),
                             controllerProps: {
                                 name: 'label',
-                                defaultValue: 'Label',
+                                defaultValue: t('dashboard.plugin_name_trigger'),
                                 rules: {
                                     maxLength: 35,
                                 },

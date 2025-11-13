@@ -12,7 +12,7 @@ import {
 
 import { Tooltip, type ColumnType } from '@/components';
 import { toSixDecimals, openGoogleMap } from '@/components/drawing-board/plugin/utils';
-import { type EntityAPISchema, type DeviceAlarmDetail } from '@/services/http';
+import { type DeviceAlarmDetail } from '@/services/http';
 import ClaimChip from '../components/claim-chip';
 import { useAlarmClaim } from './useAlarmClaim';
 
@@ -23,10 +23,6 @@ export interface UseColumnsProps {
      * Is preview mode
      */
     isPreview?: boolean;
-    /**
-     * Current devices all entities status
-     */
-    entitiesStatus?: EntityAPISchema['getEntitiesStatus']['response'];
     /**
      * Refresh list callback
      */
@@ -41,7 +37,6 @@ export enum AlarmStatus {
 
 const useColumns = <T extends TableRowDataType>({
     isPreview,
-    entitiesStatus,
     refreshList,
     filteredInfo,
 }: UseColumnsProps) => {

@@ -178,6 +178,7 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
                         inputWidth={125}
                         keyword={keyword}
                         changeKeyword={setKeyword}
+                        placeholder={getIntlText('dashboard.placeholder.search_alarm')}
                     />
                 )}
             </div>

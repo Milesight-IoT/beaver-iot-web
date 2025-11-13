@@ -40,5 +40,22 @@
     "dashboard.tip.disabled_edit_device_drawing_board": "当前画布为设备画布，请前往设备详情页编辑。",
     "dashboard.tip.return_dashboard_list": "返回仪表盘列表",
     "dashboard.tip.small_screen_empty": "没有组件，请前往PC端添加。",
-    "dashboard.unset_as_home_dashboard_tip": "取消置顶"
+    "dashboard.unset_as_home_dashboard_tip": "取消置顶",
+    "dashboard.plugin_name_map": "地图",
+    "dashboard.plugin_name_alarm": "告警列表",
+    "dashboard.plugin_name_area": "面积图",
+    "dashboard.plugin_name_bar": "柱状图",
+    "dashboard.plugin_name_line": "折线图",
+    "dashboard.plugin_name_pie": "饼图",
+    "dashboard.plugin_name_gauge": "仪表盘",
+    "dashboard.plugin_name_horizon_bar": "横向柱状图",
+    "dashboard.plugin_name_remaining": "余量图",
+    "dashboard.plugin_name_progress": "进度图",
+    "dashboard.plugin_name_radar": "雷达图",
+    "dashboard.plugin_name_switch": "开关",
+    "dashboard.plugin_name_trigger": "按钮",
+    "dashboard.plugin_name_card": "数据卡片",
+    "dashboard.plugin_name_image": "图片",
+    "dashboard.plugin_name_text": "文本",
+    "dashboard.plugin_name_device_list": "设备列表"
 }

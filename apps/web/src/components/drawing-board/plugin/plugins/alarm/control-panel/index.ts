@@ -17,7 +17,7 @@ const alarmControlPanelConfig = (): ControlPanelConfig<AlarmConfigType> => {
     return {
         class: 'data_card',
         type: 'alarm',
-        name: 'Alarm',
+        name: 'dashboard.plugin_name_alarm',
         icon: AlarmIcon,
         defaultRow: 4,
         defaultCol: 8,

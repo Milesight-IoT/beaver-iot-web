@@ -12,7 +12,7 @@ import type { HoverSearchInputProps } from './interface';
  * hovering the mouse over the search icon
  */
 const HoverSearchInput: React.FC<HoverSearchInputProps> = props => {
-    const { keyword, changeKeyword, inputWidth } = props;
+    const { keyword, changeKeyword, inputWidth, placeholder } = props;
 
     const { getIntlText } = useI18n();
     const { showSearch, textFieldRef, inputRef, handleChange, handleMouseEnter, handleMouseLeave } =
@@ -48,7 +48,7 @@ const HoverSearchInput: React.FC<HoverSearchInputProps> = props => {
             ref={textFieldRef}
             inputRef={inputRef}
             size="small"
-            placeholder={getIntlText('common.label.search')}
+            placeholder={placeholder || getIntlText('common.label.search')}
             value={keyword}
             onChange={handleChange}
             onMouseEnter={handleMouseEnter}

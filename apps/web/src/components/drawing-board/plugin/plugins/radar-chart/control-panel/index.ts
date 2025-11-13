@@ -17,7 +17,7 @@ const radarChartControlPanelConfig = (): ControlPanelConfig<RadarChartControlPan
     return {
         class: 'data_chart',
         type: 'radarChart',
-        name: 'Radar',
+        name: 'dashboard.plugin_name_radar',
         icon: RadarChartIcon,
         defaultRow: 3,
         defaultCol: 3,
@@ -56,7 +56,7 @@ const radarChartControlPanelConfig = (): ControlPanelConfig<RadarChartControlPan
                             label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
-                                defaultValue: 'Title',
+                                defaultValue: t('dashboard.plugin_name_radar'),
                                 rules: {
                                     maxLength: 35,
                                 },
