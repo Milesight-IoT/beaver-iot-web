@@ -189,7 +189,7 @@ const TagSelect = <
                 }}
                 label={label}
                 required={required}
-                placeholder={getIntlText('common.placeholder.select')}
+                placeholder={getIntlText('common.placeholder.select_tag')}
             />
         ),
         [size, label, required, tagEntitiesCount, getIntlText],

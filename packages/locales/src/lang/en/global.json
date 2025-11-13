@@ -306,5 +306,6 @@
     "common.message.drag_or_click_to_update_coord": "推拽地图或单击空白处来更新坐标位置",
     "common.label.latitude": "Latitude",
     "common.label.longitude": "Longitude",
-    "common.label.address": "Address"
+    "common.label.address": "Address",
+    "common.placeholder.select_tag": "Select tag"
 }
