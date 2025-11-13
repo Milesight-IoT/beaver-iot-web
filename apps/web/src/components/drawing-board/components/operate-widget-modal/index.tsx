@@ -84,8 +84,12 @@ export default (props: WidgetProps) => {
             onChange={handleChange}
             title={
                 operatingPlugin?.widget_id || operatingPlugin?.tempId
-                    ? getIntlText('common.label.edit_title', { 1: operatingPlugin?.data?.type })
-                    : getIntlText('common.plugin_add_title', { 1: operatingPlugin?.data?.type })
+                    ? getIntlText('dashboard.title.edit_widget', {
+                          1: getIntlText(operatingPlugin?.data?.name),
+                      })
+                    : getIntlText('dashboard.title.add_widget', {
+                          1: getIntlText(operatingPlugin?.data?.name),
+                      })
             }
         />
     ) : null;

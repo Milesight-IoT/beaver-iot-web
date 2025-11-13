@@ -4,6 +4,7 @@ import { isEmpty } from 'lodash-es';
 import { type DeviceAPISchema } from '@/services/http';
 import { DrawingBoardContext } from '../context';
 import useDrawingBoardStore from '../store';
+import { type PluginType } from '../plugin/types';
 
 /**
  * Filter out specified plugins based on conditions
@@ -36,7 +37,9 @@ export default function useFilterPlugins(
         //     return pluginsControlPanel.filter(p => p.type !== 'deviceList');
         // }
 
-        return pluginsControlPanel.filter(p => p.type !== 'deviceList');
+        return pluginsControlPanel.filter(
+            p => !(['deviceList', 'alarm', 'map'] as PluginType[]).includes(p.type),
+        );
     }, [pluginsControlPanel]);
 
     return {

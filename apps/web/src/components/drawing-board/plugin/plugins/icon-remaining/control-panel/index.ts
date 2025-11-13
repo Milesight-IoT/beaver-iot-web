@@ -20,7 +20,7 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
     return {
         class: 'data_chart',
         type: 'iconRemaining',
-        name: 'Remaining',
+        name: 'dashboard.plugin_name_remaining',
         icon: RemainingIcon,
         defaultRow: 2,
         defaultCol: 2,
@@ -58,7 +58,7 @@ const iconRemainingControlPanelConfig = (): ControlPanelConfig<IconRemainingCont
                             label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
-                                defaultValue: 'Title',
+                                defaultValue: t('dashboard.plugin_name_remaining'),
                                 rules: {
                                     maxLength: 35,
                                 },

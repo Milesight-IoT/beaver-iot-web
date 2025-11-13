@@ -165,6 +165,14 @@ export {
     FlashlightOff as FlashlightOffIcon,
     Dns as DnsIcon,
     SpaceDashboard as SpaceDashboardIcon,
+    LocationOn as LocationOnIcon,
+    WaterDrop as WaterDropIcon,
+    OfflineBolt as OfflineBoltIcon,
+    NearMe as NearMeIcon,
+    CheckCircleOutline as CheckCircleOutlineIcon,
+    NotListedLocation as NotListedLocationIcon,
+    NearMeOutlined as NearMeOutlinedIcon,
+    AccessTimeFilled as AccessTimeFilledIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';

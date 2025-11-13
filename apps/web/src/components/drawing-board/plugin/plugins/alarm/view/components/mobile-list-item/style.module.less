@@ -1,0 +1,28 @@
+.mobile-list-item {
+    padding: @padding-md;
+    margin: 0 @margin-md @margin-xs;
+    background-color: var(--main-background);
+    border: @border-base;
+    border-radius: @border-radius-base;
+
+    &.search {
+        margin: 0 @margin-md @margin-xs;
+    }
+
+    &.none-border {
+        border: none;
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: @margin-xs;
+
+        .title {
+            flex: 1;
+            width: 0;
+            font-weight: @font-weight-medium;
+        }
+    }
+}

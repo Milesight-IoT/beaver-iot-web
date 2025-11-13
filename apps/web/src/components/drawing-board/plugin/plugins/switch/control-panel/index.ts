@@ -21,7 +21,7 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
     return {
         class: 'operate',
         type: 'switch',
-        name: 'Switch',
+        name: 'dashboard.plugin_name_switch',
         icon: SwitchIcon,
         defaultRow: 1,
         defaultCol: 2,
@@ -60,7 +60,7 @@ const switchControlPanelConfig = (): ControlPanelConfig<SwitchControlPanelConfig
                             label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
-                                defaultValue: 'Label',
+                                defaultValue: t('dashboard.plugin_name_switch'),
                                 rules: {
                                     maxLength: 35,
                                 },

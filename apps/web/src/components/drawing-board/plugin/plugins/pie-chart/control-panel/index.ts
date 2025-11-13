@@ -17,7 +17,7 @@ const pieChartControlPanelConfig = (): ControlPanelConfig<PieChartControlPanelCo
     return {
         class: 'data_chart',
         type: 'pieChart',
-        name: 'Pie',
+        name: 'dashboard.plugin_name_pie',
         icon: PieChartIcon,
         defaultRow: 3,
         defaultCol: 3,
@@ -56,7 +56,7 @@ const pieChartControlPanelConfig = (): ControlPanelConfig<PieChartControlPanelCo
                             label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
-                                defaultValue: 'Title',
+                                defaultValue: t('dashboard.plugin_name_pie'),
                                 rules: {
                                     maxLength: 35,
                                 },

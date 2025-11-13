@@ -85,6 +85,29 @@ export interface AddDeviceProps {
     param_entities: Record<string, any>;
 }
 
+export interface DeviceAlarmDetail {
+    id: ApiKey;
+    alarm_status: boolean;
+    alarm_time: number;
+    alarm_content: string;
+    latitude: number;
+    longitude: number;
+    address?: string;
+    device_id: ApiKey;
+    device_name: string;
+}
+
+/**
+ * Device alarm data search condition
+ */
+export interface AlarmSearchCondition {
+    keyword?: string;
+    device_ids?: ApiKey[];
+    start_timestamp: number;
+    end_timestamp: number;
+    alarm_status?: boolean;
+}
+
 /**
  * Device related interface definition
  */
@@ -251,6 +274,27 @@ export interface DeviceAPISchema extends APISchema {
         };
         response: void;
     };
+    /** Get device alarms */
+    getDeviceAlarms: {
+        request: SearchRequestType & AlarmSearchCondition;
+        response: SearchResponseType<DeviceAlarmDetail[]>;
+    };
+    /**
+     * Export device alarms
+     */
+    exportDeviceAlarms: {
+        request: AlarmSearchCondition;
+        response: Blob;
+    };
+    /**
+     * Claim device alarm
+     */
+    claimDeviceAlarm: {
+        request: {
+            device_id: ApiKey;
+        };
+        response: void;
+    };
 }
 
 /**
@@ -287,5 +331,15 @@ export default attachAPI<DeviceAPISchema>(client, {
         setLocation: `PUT ${API_PREFIX}/device/:id/location`,
         getLocation: `GET ${API_PREFIX}/device/:id/location`,
         clearLocation: `POST ${API_PREFIX}/device/:id/clear-location`,
+        getDeviceAlarms: `POST ${API_PREFIX}/device/alarms/search`,
+        async exportDeviceAlarms(params) {
+            const resp = await client.get(`${API_PREFIX}/device/alarms/export`, {
+                responseType: 'blob',
+                params,
+            });
+
+            return resp;
+        },
+        claimDeviceAlarm: `POST ${API_PREFIX}/device/alarms/claim`,
     },
 });

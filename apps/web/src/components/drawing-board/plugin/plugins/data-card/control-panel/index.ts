@@ -20,7 +20,7 @@ const dataCardControlPanelConfig = (): ControlPanelConfig<DataCardControlPanelCo
     return {
         class: 'data_card',
         type: 'dataCard',
-        name: 'Card',
+        name: 'dashboard.plugin_name_card',
         icon: DataCardIcon,
         defaultRow: 1,
         defaultCol: 2,
@@ -58,7 +58,7 @@ const dataCardControlPanelConfig = (): ControlPanelConfig<DataCardControlPanelCo
                             label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
-                                defaultValue: 'Label',
+                                defaultValue: t('dashboard.plugin_name_card'),
                                 rules: {
                                     maxLength: 35,
                                 },

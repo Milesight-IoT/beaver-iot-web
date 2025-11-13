@@ -29,4 +29,9 @@ export {
     default as MultiAppearanceIcon,
     type MultiAppearanceIconProps,
 } from './multi-appearance-icon';
-export { default as MultiDeviceSelect, type MultiDeviceSelectProps } from './multi-device-select';
+export {
+    default as MultiDeviceSelect,
+    type MultiDeviceSelectProps,
+    type DeviceSelectData,
+} from './multi-device-select';
+export { default as AlarmTimeSelect } from './alarm-time-select';

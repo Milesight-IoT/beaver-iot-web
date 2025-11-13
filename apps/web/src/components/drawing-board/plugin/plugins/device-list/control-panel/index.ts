@@ -12,7 +12,7 @@ const deviceListControlPanelConfig = (): ControlPanelConfig<DeviceListControlPan
     return {
         class: 'operate',
         type: 'deviceList',
-        name: 'DeviceList',
+        name: 'dashboard.plugin_name_device_list',
         icon: DeviceListIcon,
         defaultCol: 4,
         defaultRow: 3,

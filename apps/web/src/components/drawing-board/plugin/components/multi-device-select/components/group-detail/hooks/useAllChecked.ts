@@ -8,6 +8,7 @@ import { MAX_COUNT } from '../../../constants';
 
 export function useAllChecked(data?: DeviceDetail[]) {
     const context = useContext(MultiDeviceSelectContext);
+    const { locationRequired } = context || {};
 
     const allIsChecked = useMemo(() => {
         const selected = context?.selectedDevices;
@@ -58,7 +59,7 @@ export function useAllChecked(data?: DeviceDetail[]) {
     }, [context?.selectedDevices, data]);
 
     const allIsDisabled = useMemo(() => {
-        if (allIsIndeterminate) {
+        if (allIsChecked || allIsIndeterminate) {
             return false;
         }
 
@@ -72,6 +73,16 @@ export function useAllChecked(data?: DeviceDetail[]) {
             return false;
         }
 
+        /**
+         * If the location is required, and the item has no location, then it is disabled.
+         */
+        if (locationRequired && !data?.some(d => !!d?.location)) {
+            return true;
+        }
+
+        /**
+         * If the selected devices count plus the data count is greater than the max count, then it is disabled.
+         */
         const selectedCount =
             selected.filter(s => {
                 const isCurrentData = data.some(d => d.id === s.id);
@@ -79,8 +90,21 @@ export function useAllChecked(data?: DeviceDetail[]) {
                 return !isCurrentData;
             })?.length || 0;
 
-        return selectedCount + data.length > MAX_COUNT;
-    }, [context?.selectedDevices, data, allIsIndeterminate]);
+        return (
+            selectedCount +
+                data.filter(d => {
+                    /**
+                     * Filter out the devices that have no location if the location is required.
+                     */
+                    if (locationRequired && !d?.location) {
+                        return false;
+                    }
+
+                    return true;
+                }).length >
+            MAX_COUNT
+        );
+    }, [context?.selectedDevices, data, allIsIndeterminate, locationRequired, allIsChecked]);
 
     const handleAllCheckedChange = useMemoizedFn((checked: boolean) => {
         if (!Array.isArray(data) || isEmpty(data)) {
@@ -89,7 +113,20 @@ export function useAllChecked(data?: DeviceDetail[]) {
 
         if (checked && !allIsIndeterminate) {
             context?.setSelectedDevices(devices => {
-                return unionBy(devices, data, 'id').map(d => pick(d, ['id', 'group_id']));
+                return unionBy(
+                    devices,
+                    data.filter(d => {
+                        /**
+                         * Filter out the devices that have no location if the location is required.
+                         */
+                        if (locationRequired && !d?.location) {
+                            return false;
+                        }
+
+                        return true;
+                    }),
+                    'id',
+                ).map(d => pick(d, ['id', 'group_id']));
             });
         } else {
             context?.setSelectedDevices(devices => {

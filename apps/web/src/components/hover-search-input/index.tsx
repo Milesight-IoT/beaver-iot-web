@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import { TextField } from '@mui/material';
-import { omit, pick } from 'lodash-es';
+import { TextField, type SxProps } from '@mui/material';
 
+import { useI18n } from '@milesight/shared/src/hooks';
 import { SearchIcon, CancelIcon } from '@milesight/shared/src/components';
 
 import { useSearch } from './useSearch';
@@ -12,28 +12,35 @@ import type { HoverSearchInputProps } from './interface';
  * hovering the mouse over the search icon
  */
 const HoverSearchInput: React.FC<HoverSearchInputProps> = props => {
-    const { keyword, changeKeyword } = props;
+    const { keyword, changeKeyword, inputWidth, placeholder } = props;
 
+    const { getIntlText } = useI18n();
     const { showSearch, textFieldRef, inputRef, handleChange, handleMouseEnter, handleMouseLeave } =
         useSearch({
             keyword,
             changeKeyword,
         });
 
-    const textFieldSx = useMemo(() => {
-        const result = {
-            inputWidth: 0,
+    /**
+     * No show search input custom style
+     */
+    const noShowSearchTextFieldSx = useMemo((): SxProps | undefined => {
+        if (showSearch) {
+            return;
+        }
+
+        return {
             '& .MuiOutlinedInput-notchedOutline': {
                 border: 'none',
             },
+            '&.MuiFormControl-root .MuiInputBase-root': {
+                paddingRight: 1,
+                paddingLeft: 0,
+                input: {
+                    paddingRight: 1,
+                },
+            },
         };
-
-        if (showSearch) {
-            result.inputWidth = 120;
-            return pick(result, ['inputWidth']);
-        }
-
-        return result;
     }, [showSearch]);
 
     return (
@@ -41,7 +48,7 @@ const HoverSearchInput: React.FC<HoverSearchInputProps> = props => {
             ref={textFieldRef}
             inputRef={inputRef}
             size="small"
-            placeholder="Search"
+            placeholder={placeholder || getIntlText('common.label.search')}
             value={keyword}
             onChange={handleChange}
             onMouseEnter={handleMouseEnter}
@@ -72,13 +79,16 @@ const HoverSearchInput: React.FC<HoverSearchInputProps> = props => {
                     marginBottom: 0,
                 },
                 input: {
-                    width: textFieldSx.inputWidth,
+                    width: showSearch ? inputWidth || 120 : 0,
                     transition: 'all .2s',
                 },
                 svg: {
                     cursor: 'pointer',
                 },
-                ...omit(textFieldSx, ['inputWidth']),
+                '&.MuiFormControl-root .MuiInputBase-root': {
+                    paddingRight: 1,
+                },
+                ...noShowSearchTextFieldSx,
             }}
         />
     );

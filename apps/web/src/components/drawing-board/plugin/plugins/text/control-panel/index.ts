@@ -16,7 +16,7 @@ const textControlPanelConfig = (): ControlPanelConfig<TextControlPanelConfig> =>
     return {
         class: 'data_card',
         type: 'text',
-        name: 'Text',
+        name: 'dashboard.plugin_name_text',
         icon: TextIcon,
         defaultRow: 4,
         defaultCol: 4,
@@ -54,7 +54,7 @@ const textControlPanelConfig = (): ControlPanelConfig<TextControlPanelConfig> =>
                             label: t('common.label.title'),
                             controllerProps: {
                                 name: 'label',
-                                defaultValue: 'Text',
+                                defaultValue: t('dashboard.plugin_name_text'),
                                 rules: {
                                     maxLength: 35,
                                 },

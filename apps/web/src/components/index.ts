@@ -21,7 +21,7 @@ export { default as TabPanel } from './tab-panel';
 export { default as Descriptions, type Props as DescriptionsProps } from './descriptions';
 export { useConfirm, ConfirmProvider } from './confirm';
 export { default as Tooltip } from './tooltip';
-export { default as DateRangePicker } from './date-range-picker';
+export { default as DateRangePicker, type DateRangePickerValueType } from './date-range-picker';
 export { default as RouteLoadingIndicator } from './route-loading-indicator';
 export { default as Empty } from './empty';
 export {
@@ -99,4 +99,5 @@ export {
     type LatLng,
     type ZoomControlActionType,
 } from './map';
+export { default as HoverSearchAutocomplete } from './hover-search-autocomplete';
 export { default as TagSelect, useTagSelectStore } from './tag-select';

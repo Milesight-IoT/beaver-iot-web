@@ -1,0 +1,15 @@
+.claim-chip {
+    display: flex;
+    align-items: center;
+    height: var(--height);
+    color: var(--error-color);
+
+    &--claimed {
+        color: var(--success-color);
+    }
+
+    &__text {
+        padding-left: @padding-xxs;
+        .text-size(@font-size-base);
+    }
+}

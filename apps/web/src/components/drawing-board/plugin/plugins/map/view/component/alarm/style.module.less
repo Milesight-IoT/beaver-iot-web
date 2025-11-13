@@ -1,0 +1,18 @@
+.alarm {
+    position: absolute;
+    bottom: @padding-xxl;
+    left: @padding-xxl;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    padding: @padding-xs;
+    background-color: var(--component-background);
+    border: @border-base;
+    border-radius: @border-radius-base;
+
+    .text {
+        padding-left: @padding-xxs;
+        font-weight: @font-weight-medium;
+        .text-size(@font-size-base);
+    }
+}

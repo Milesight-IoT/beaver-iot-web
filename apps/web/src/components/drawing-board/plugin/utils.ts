@@ -1,4 +1,4 @@
-import { isEmpty, get } from 'lodash-es';
+import { isEmpty, get, isNil } from 'lodash-es';
 
 import { type DrawingBoardContextProps } from '@/components/drawing-board/context';
 import { type EntitySelectOption, type EntityValueType } from '@/components';
@@ -134,4 +134,36 @@ export const getChartGridRight = (wGrid: number, hGrid: number): number => {
     }
 
     return wGrid > 2 || hGrid > 2 ? 15 : 0;
+};
+
+/**
+ * Round a number to 6 decimal places
+ * @param num Number to be processed
+ * @returns Number with 6 decimal places
+ */
+export const toSixDecimals = (num?: number) => {
+    if (!num) {
+        return '';
+    }
+
+    const toNum = Number(num);
+    if (Number.isNaN(toNum)) {
+        return '';
+    }
+
+    return toNum.toFixed(6);
+};
+
+/**
+ * Open Google Map with latitude and longitude
+ * @param latitude Latitude
+ * @param longitude Longitude
+ */
+export const openGoogleMap = (latitude?: number, longitude?: number) => {
+    if (isNil(latitude) || isNil(longitude)) {
+        return;
+    }
+
+    const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+    window.open(url, '_blank');
 };

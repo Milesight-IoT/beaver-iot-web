@@ -33,6 +33,18 @@
             flex-direction: column;
             width: 0;
 
+            .top {
+                display: flex;
+                gap: 4px;
+                align-items: center;
+
+                .name {
+                    flex: 1;
+                    width: 0;
+                    max-width: fit-content;
+                }
+            }
+
             .description {
                 color: var(--text-color-tertiary);
                 .text-size(@font-size-1);

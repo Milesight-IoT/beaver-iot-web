@@ -11,7 +11,7 @@ const imageControlPanelConfig = (): ControlPanelConfig<ImageConfigType> => {
     return {
         class: 'data_card',
         type: 'image',
-        name: 'image',
+        name: 'dashboard.plugin_name_image',
         icon: ImageIcon,
         defaultRow: 4,
         defaultCol: 4,
@@ -30,7 +30,7 @@ const imageControlPanelConfig = (): ControlPanelConfig<ImageConfigType> => {
                             label: t('common.label.title'),
                             controllerProps: {
                                 name: 'label',
-                                defaultValue: 'Title',
+                                defaultValue: t('dashboard.plugin_name_image'),
                                 rules: {
                                     maxLength: 35,
                                 },
