@@ -1,5 +1,5 @@
 ---
-'@app/web': major
+'@app/web': patch
 ---
 
-Dashboard drawing board plugins names internationalisation
+Dashboard drawing board plugins names internationalization.
