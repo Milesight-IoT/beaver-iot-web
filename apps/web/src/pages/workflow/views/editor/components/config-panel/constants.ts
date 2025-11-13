@@ -47,7 +47,8 @@ export const DEFAULT_VALUES: Partial<Record<WorkflowNodeType, Record<string, any
         payload: [],
     },
     select: {
-        entities: [''],
+        // entities: [''],
+        entityData: {},
     },
     code: {
         inputArguments: {
