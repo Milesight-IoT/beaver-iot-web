@@ -1,7 +1,11 @@
-.ms-header-select {
+.@{prefix}-header-select {
     min-width: 100px;
     color: var(--text-color-secondary);
     .text-size(@font-size-md);
+
+    &.@{mui-prefix}InputBase-root.@{mui-prefix}InputBase-formControl {
+        background-color: transparent;
+    }
 
     .@{mui-prefix}Select-select.@{mui-prefix}InputBase-input {
         padding: 0;

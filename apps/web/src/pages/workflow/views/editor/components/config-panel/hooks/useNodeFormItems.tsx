@@ -31,6 +31,7 @@ import {
     EmailSendSource,
     EmailRecipients,
     HttpBodyInput,
+    EntityDataSelect,
     type EntityAssignSelectProps,
     type EntityMultipleSelectProps,
 } from '../components';
@@ -212,6 +213,7 @@ const useNodeFormItems = ({ nodeId, nodeType, readonly }: Props) => {
                                             ? undefined
                                             : selectNodeEntityFilterModel;
                                     return (
+                                        // <EntityDataSelect value={value} onChange={onChange} />
                                         <EntityMultipleSelect
                                             required={required}
                                             filterModel={filterModel}
@@ -219,6 +221,12 @@ const useNodeFormItems = ({ nodeId, nodeType, readonly }: Props) => {
                                             onChange={onChange}
                                         />
                                     );
+                                };
+                                break;
+                            }
+                            case 'entityDataSelect': {
+                                formItem.render = ({ field: { onChange, value } }) => {
+                                    return <EntityDataSelect value={value} onChange={onChange} />;
                                 };
                                 break;
                             }
@@ -230,6 +238,7 @@ const useNodeFormItems = ({ nodeId, nodeType, readonly }: Props) => {
                                             : assignerNodeEntityFilterModel;
                                     return (
                                         <EntityAssignSelect
+                                            // enableSelectParam
                                             required={required}
                                             filterModel={filterModel}
                                             value={value}

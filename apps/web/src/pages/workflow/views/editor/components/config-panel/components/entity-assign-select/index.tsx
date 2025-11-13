@@ -7,6 +7,7 @@ import { AddIcon, CloseIcon } from '@milesight/shared/src/components';
 import useWorkflow from '../../../../hooks/useWorkflow';
 import { DEFAULT_BOOLEAN_DATA_ENUMS } from '../../../../constants';
 import EntitySelect, { type EntitySelectProps } from '../entity-select';
+import EntityParamSelect from '../entity-param-select';
 import ParamInputSelect from '../param-input-select';
 import './style.less';
 
@@ -20,6 +21,10 @@ export interface EntityAssignSelectProps {
     required?: boolean;
     multiple?: boolean;
     error?: boolean;
+    /**
+     * Whether enable to select param from upstream nodes
+     */
+    enableSelectParam?: boolean;
     helperText?: React.ReactNode;
     value?: EntityAssignInputValueType;
     defaultValue?: EntityAssignInputValueType;
@@ -53,6 +58,7 @@ const EntityAssignSelect: React.FC<EntityAssignSelectProps> = ({
     required = true,
     multiple = true,
     filterModel,
+    enableSelectParam,
     ...props
 }) => {
     const { getIntlText } = useI18n();
@@ -104,16 +110,29 @@ const EntityAssignSelect: React.FC<EntityAssignSelectProps> = ({
         <div className="ms-entity-assign-select">
             {list.map((item, index) => (
                 <div className="ms-entity-assign-select-item" key={getKey(index)}>
-                    <EntitySelect
-                        size="small"
-                        required={required}
-                        filterModel={filterModel}
-                        value={item?.[0] || ''}
-                        onChange={value => {
-                            replace(index, [`${value || ''}`, item?.[1] || '']);
-                        }}
-                        dropdownMatchSelectWidth={360}
-                    />
+                    {!enableSelectParam ? (
+                        <EntitySelect
+                            size="small"
+                            required={required}
+                            filterModel={filterModel}
+                            value={item?.[0] || ''}
+                            onChange={value => {
+                                replace(index, [`${value || ''}`, item?.[1] || '']);
+                            }}
+                            dropdownMatchSelectWidth={360}
+                        />
+                    ) : (
+                        <EntityParamSelect
+                            size="small"
+                            required={required}
+                            filterModel={filterModel}
+                            value={item?.[0] || ''}
+                            onChange={value => {
+                                replace(index, [`${value || ''}`, item?.[1] || '']);
+                            }}
+                            dropdownMatchSelectWidth={360}
+                        />
+                    )}
                     <ParamInputSelect
                         size="small"
                         required={required}
