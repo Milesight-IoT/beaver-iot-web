@@ -97,10 +97,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
         );
 
         setLoading(false);
-        if (err || !isRequestSuccess(res)) {
-            toast.error(getIntlText('common.message.operation_failed'));
-            return;
-        }
+        if (err || !isRequestSuccess(res)) return;
 
         await onEditSuccess?.();
         setState('view');
@@ -144,10 +141,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
                 );
 
                 setLoading(false);
-                if (err || !isRequestSuccess(res)) {
-                    toast.error(getIntlText('common.message.operation_failed'));
-                    return;
-                }
+                if (err || !isRequestSuccess(res)) return;
 
                 await onEditSuccess?.();
                 setLocation(undefined);
