@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useRef } from 'react';
 import cls from 'classnames';
 import { GridFooter } from '@mui/x-data-grid';
 
@@ -9,8 +9,8 @@ import { DrawingBoardContext } from '@/components/drawing-board/context';
 import { type AlarmConfigType } from '../control-panel';
 import { type BoardPluginProps } from '../../../types';
 import { useStableValue } from '../../../hooks';
-import { useColumns, type TableRowDataType, useDeviceData } from './hooks';
-import { SearchSlot, DateRangeModal, MobileList } from './components';
+import { useColumns, type TableRowDataType, useDeviceData, useDeviceEntities } from './hooks';
+import { SearchSlot, DateRangeModal, MobileList, type MobileDeviceListExpose } from './components';
 import { AlarmContext, type AlarmContextProps } from './context';
 
 import './style.less';
@@ -26,6 +26,7 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
     const { isPreview } = configJson || {};
     const context = useContext(DrawingBoardContext);
 
+    const mobileListRef = useRef<MobileDeviceListExpose>(null);
     const { matchTablet } = useTheme();
     const { stableValue: devices } = useStableValue(unStableValue);
     const {
@@ -53,6 +54,19 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
     } = useDeviceData({
         devices,
         defaultTime,
+    });
+    /**
+     * Handle listening devices entities status refresh
+     */
+    useDeviceEntities({
+        devices,
+        refreshList: () => {
+            if (matchTablet) {
+                mobileListRef.current?.refreshList?.();
+            } else {
+                getDeviceAlarmData?.();
+            }
+        },
     });
     const { columns } = useColumns({
         isPreview,
@@ -150,6 +164,7 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
         if (matchTablet) {
             return (
                 <MobileList
+                    ref={mobileListRef}
                     headerSlot={
                         <>
                             {RenderTitle}

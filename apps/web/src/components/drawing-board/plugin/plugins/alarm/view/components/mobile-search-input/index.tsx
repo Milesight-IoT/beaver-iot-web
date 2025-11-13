@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, forwardRef, useImperativeHandle } from 'react';
 import { useMemoizedFn } from 'ahooks';
 
 import { useI18n } from '@milesight/shared/src/hooks';
@@ -8,11 +8,34 @@ import MobileListItem from '../mobile-list-item';
 import { type TableRowDataType, useMobileData } from '../../hooks';
 import { AlarmContext } from '../../context';
 
-const MobileSearchInput: React.FC = () => {
+export interface MobileSearchInputProps {
+    children?: React.ReactNode;
+}
+
+export interface MobileSearchInputExpose {
+    refreshList?: () => void;
+}
+
+const MobileSearchInput = forwardRef<MobileSearchInputExpose, MobileSearchInputProps>((_, ref) => {
     const { getIntlText } = useI18n();
     const { showMobileSearch, setShowMobileSearch } = useContext(AlarmContext) || {};
-    const { loading, data, listRef, pagination, keyword, handleKeywordChange, handleLoadMore } =
-        useMobileData();
+    const {
+        loading,
+        data,
+        listRef,
+        pagination,
+        keyword,
+        handleKeywordChange,
+        handleLoadMore,
+        reloadList,
+    } = useMobileData();
+
+    /**
+     * Export methods to parent component
+     */
+    useImperativeHandle(ref, () => ({
+        refreshList: reloadList,
+    }));
 
     const handleShowSearch = useMemoizedFn((show: boolean) => {
         setShowMobileSearch?.(show);
@@ -42,6 +65,6 @@ const MobileSearchInput: React.FC = () => {
             />
         </MobileSearchPanel>
     );
-};
+});
 
 export default MobileSearchInput;

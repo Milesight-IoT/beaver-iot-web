@@ -83,6 +83,7 @@ export const useMobileData = () => {
         await getAlarmList({
             page: 1,
             pageSize: pagination.pageSize,
+            keyword,
         });
         listRef.current?.scrollTo(0);
     });
@@ -109,7 +110,7 @@ export const useMobileData = () => {
         });
     };
 
-    // Init device list
+    // Update list
     useDebounceEffect(
         () => {
             reloadList();

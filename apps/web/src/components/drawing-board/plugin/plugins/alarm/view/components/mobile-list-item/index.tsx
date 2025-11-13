@@ -1,13 +1,18 @@
 import React from 'react';
 import { Stack, Button, Grid2 as Grid } from '@mui/material';
 import cls from 'classnames';
+import { get } from 'lodash-es';
 
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
-import { NearMeOutlinedIcon, CheckCircleOutlineIcon } from '@milesight/shared/src/components';
+import {
+    NearMeOutlinedIcon,
+    CheckCircleOutlineIcon,
+    LoadingWrapper,
+} from '@milesight/shared/src/components';
 
 import { Tooltip } from '@/components';
 import { openGoogleMap } from '@/components/drawing-board/plugin/utils';
-import { type TableRowDataType } from '../../hooks';
+import { type TableRowDataType, useAlarmClaim } from '../../hooks';
 import ClaimChip from '../claim-chip';
 
 import styles from './style.module.less';
@@ -16,13 +21,15 @@ export interface MobileListItemProps {
     device?: TableRowDataType;
     isSearchPage?: boolean;
     isFullscreen?: boolean;
+    refreshList?: () => void;
 }
 
 const MobileListItem: React.FC<MobileListItemProps> = props => {
-    const { device, isSearchPage, isFullscreen } = props;
+    const { device, isSearchPage, isFullscreen, refreshList } = props;
 
     const { getIntlText } = useI18n();
     const { getTimeFormat } = useTime();
+    const { claimAlarm, claimLoading } = useAlarmClaim(refreshList);
 
     return (
         <div
@@ -100,16 +107,25 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
                     <Tooltip autoEllipsis title={getIntlText('dashboard.tip.navigate_here')} />
                 </Button>
 
-                <Button
-                    variant="contained"
-                    sx={{ height: 36, textTransform: 'none' }}
-                    startIcon={
-                        <CheckCircleOutlineIcon sx={{ width: '1.25rem', height: '1.25rem' }} />
-                    }
-                    onClick={() => console.log('click to claim')}
-                >
-                    <Tooltip autoEllipsis title={getIntlText('common.label.claim')} />
-                </Button>
+                {!!device?.alarmStatus && (
+                    <LoadingWrapper
+                        size={20}
+                        loading={get(claimLoading, String(device?.id), false)}
+                    >
+                        <Button
+                            variant="contained"
+                            sx={{ height: 36, textTransform: 'none' }}
+                            startIcon={
+                                <CheckCircleOutlineIcon
+                                    sx={{ width: '1.25rem', height: '1.25rem' }}
+                                />
+                            }
+                            onClick={() => claimAlarm(device?.deviceId, device?.id)}
+                        >
+                            <Tooltip autoEllipsis title={getIntlText('common.label.claim')} />
+                        </Button>
+                    </LoadingWrapper>
+                )}
             </Stack>
         </div>
     );
