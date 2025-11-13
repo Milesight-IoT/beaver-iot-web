@@ -99,4 +99,4 @@ export {
     type LatLng,
     type ZoomControlActionType,
 } from './map';
-export { default as TagSelect } from './tag-select';
+export { default as TagSelect, useTagSelectStore } from './tag-select';

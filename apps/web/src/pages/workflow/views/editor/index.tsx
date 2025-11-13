@@ -268,6 +268,17 @@ const WorkflowEditor = () => {
         { wait: 300 },
     );
 
+    // ---------- Fetch Tag List ----------
+    // const refreshTags = useTagSelectStore(state => state.refreshTags);
+
+    // useDebounceEffect(
+    //     () => {
+    //         refreshTags(true);
+    //     },
+    //     [refreshTags],
+    //     { wait: 300 },
+    // );
+
     // ---------- Handle Import Data ----------
     const { state } = useLocation();
     const importedData = state?.workflowSchema as WorkflowSchema | undefined;
