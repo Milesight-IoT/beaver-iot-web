@@ -763,7 +763,7 @@ const useValidate = () => {
                 },
                 checkReferenceParam,
                 checkValueByEntityRule(data, fieldName, options) {
-                    if (!options?.entityList?.length) return true;
+                    if (!data || !options?.entityList?.length) return true;
                     for (const [key, value] of Object.entries(data).filter(
                         ([key, value]) => !!key && !!value && !isRefParamKey(value as string),
                     )) {
