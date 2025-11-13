@@ -1,4 +1,40 @@
 .@{prefix}-toggle-button-group {
+    .@{mui-prefix}ButtonBase-root {
+        text-transform: none;
+    }
+
+    &.@{mui-prefix}ToggleButtonGroup-horizontal {
+        background-color: var(--gray-color-2);
+        border: 2px solid var(--gray-color-2);
+
+        .@{mui-prefix}ToggleButtonGroup-grouped {
+            display: inline-block;
+            padding: 5px @padding-sm;
+            border: none;
+            border-radius: @border-radius-base;
+            .text-size(@font-size-base);
+
+            &::after {
+                display: block;
+                height: 1px;
+                margin-bottom: -1px;
+                overflow: hidden;
+                font-weight: @font-weight-medium;
+                visibility: hidden;
+                content: attr(aria-label);
+            }
+
+            &.@{mui-prefix}-selected {
+                font-weight: @font-weight-medium;
+                background-color: var(--component-background);
+
+                &.@{mui-prefix}-disabled {
+                    color: var(--text-color-secondary);
+                }
+            }
+        }
+    }
+
     &-small {
         &.@{mui-prefix}ToggleButtonGroup-root {
             .@{mui-prefix}ToggleButtonGroup-grouped {
@@ -11,7 +47,6 @@
 
     &-item{
         font-weight: @font-weight-regular !important;
-        line-height: @font-size-2 !important;
 
         &__active {
             font-weight: @font-weight-medium !important;

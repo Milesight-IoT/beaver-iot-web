@@ -20,7 +20,7 @@ export enum TagOperationEnums {
 /**
  * Tag Management API
  */
-export interface DashboardAPISchema extends APISchema {
+export interface TagAPISchema extends APISchema {
     /** Get list */
     getTagList: {
         request: SearchRequestType & {
@@ -76,7 +76,7 @@ export interface DashboardAPISchema extends APISchema {
 /**
  * Tag-related API services
  */
-export default attachAPI<DashboardAPISchema>(client, {
+export default attachAPI<TagAPISchema>(client, {
     apis: {
         getTagList: `POST ${API_PREFIX}/entity/tags/search`,
         getTagNumberByUserAdded: `GET ${API_PREFIX}/entity/tags/number`,

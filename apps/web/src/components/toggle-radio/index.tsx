@@ -4,9 +4,9 @@ import { useControllableValue } from 'ahooks';
 import cls from 'classnames';
 import './style.less';
 
-type ValueType = string | number;
+// type ValueType = string | number;
 
-export interface Props {
+export interface Props<ValueType = string | number> {
     size?: 'default' | 'small';
 
     value?: ValueType;
@@ -28,7 +28,13 @@ export interface Props {
 /**
  * ToggleRadio Component
  */
-const ToggleRadio: React.FC<Props> = ({ size = 'default', options, disabled, sx, ...props }) => {
+const ToggleRadio = <ValueType extends string | number>({
+    size = 'default',
+    options,
+    disabled,
+    sx,
+    ...props
+}: Props<ValueType>) => {
     const [value, setValue] = useControllableValue<ValueType>(props);
 
     return (

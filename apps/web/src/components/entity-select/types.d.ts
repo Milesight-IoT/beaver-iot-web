@@ -108,6 +108,10 @@ export interface EntitySelectProps<
      * @default 'entityKey'
      */
     fieldName?: 'entityKey' | 'entityId';
+    /**
+     * The extra end adornment of the select
+     */
+    endAdornment?: ReactNode;
 }
 
 export interface EntitySelectComponentProps<

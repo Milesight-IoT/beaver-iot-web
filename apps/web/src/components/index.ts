@@ -100,3 +100,4 @@ export {
     type ZoomControlActionType,
 } from './map';
 export { default as HoverSearchAutocomplete } from './hover-search-autocomplete';
+export { default as TagSelect } from './tag-select';

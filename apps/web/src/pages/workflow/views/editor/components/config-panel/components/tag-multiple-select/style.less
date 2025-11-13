@@ -1,4 +1,4 @@
-.@{prefix}-param-assign-input {
+.@{prefix}-tag-multiple-select {
     padding: @padding-md;
     background-color: var(--component-background-gray);
     border-radius: @border-radius-base;
@@ -9,14 +9,6 @@
         align-items: center;
         margin-bottom: @margin-sm;
 
-        &:not(&:first-child) {
-            .@{mui-prefix}FormControl-root {
-                .@{mui-prefix}FormLabel-root {
-                    display: none;
-                }
-            }
-        }
-
         .@{mui-prefix}FormControl-root {
             margin: 0 !important;
 
@@ -26,24 +18,9 @@
             }
         }
 
-        > .@{prefix}-param-select,
-        > .@{prefix}-param-input-select,
-        > .@{mui-prefix}FormControl-root {
+        > .@{mui-prefix}FormControl-root,
+        > .@{mui-prefix}Autocomplete-root {
             flex: 1;
-            max-width: calc(100% / 2);
-
-            .@{mui-prefix}InputBase-root,
-            .@{mui-prefix}InputBase-root .@{mui-prefix}InputBase-input {
-                padding-right: @padding-xxs;
-                padding-left: @padding-xxs;
-            }
-        }
-
-        > .@{prefix}-param-select {
-            .@{mui-prefix}InputBase-root,
-            .@{mui-prefix}InputBase-root .@{mui-prefix}InputBase-input {
-                padding-right: @padding-sm;
-            }
         }
 
         .btn-delete {

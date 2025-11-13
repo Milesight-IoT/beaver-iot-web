@@ -155,6 +155,10 @@ declare type TimerNodeDataType = BaseNodeDataType<{
  */
 declare type ListenerNodeDataType = BaseNodeDataType<{
     entities: ApiKey[];
+    entityData?: {
+        keys?: ApiKey[];
+        tags?: ApiKey[];
+    };
 }>;
 
 /**
@@ -301,6 +305,7 @@ declare type AssignerNodeDataType = BaseNodeDataType<{
  */
 declare type SelectNodeDataType = BaseNodeDataType<{
     entities: ApiKey[];
+    entityData?: NonNullable<ListenerNodeDataType['parameters']>['entityData'];
 }>;
 
 /**

@@ -1,0 +1,77 @@
+.@{prefix}-entity-param-select {
+    position: relative;
+
+    .@{mui-prefix}FormControl-root {
+        margin: 0 !important;
+    }
+
+    .@{mui-prefix}InputBase-root {
+        // padding-right: @padding-xxs !important;
+
+        .@{mui-prefix}Autocomplete-endAdornment {
+            right: @margin-xxl !important;
+        }
+
+        .@{prefix}-entity-param-select-param-trigger {
+            position: absolute;
+            right: @margin-xs;
+        }
+
+        .@{mui-prefix}IconButton-sizeSmall {
+            padding: @padding-xxs;
+
+            .@{mui-prefix}SvgIcon-root {
+                font-size: @font-size-lg !important;
+            }
+        }
+    }
+
+    .@{mui-prefix}Autocomplete-root.hide-cursor {
+        .@{mui-prefix}InputBase-input {
+            color: transparent !important;
+        }
+    }
+
+    & &-chip {
+        position: absolute;
+        bottom: @margin-xxs;
+        left: @margin-sm;
+        max-width: calc(100% - 72px);
+        border-radius: @border-radius-base;
+
+        .@{mui-prefix}Chip-label {
+            .name {
+                display: block;
+                .ellipsis();
+            }
+        }
+    }
+
+    &-option-groupname.@{mui-prefix}ListSubheader-root {
+        .text-size(@font-size-sm);
+
+        margin: @margin-xs 0 @margin-xxs;
+    }
+
+    &-option.@{mui-prefix}MenuItem-root {
+        padding: @padding-xs @padding-md;
+
+        .@{prefix}-param-input-select-item {
+            display: flex;
+            .text-size(@font-size-base);
+
+            .name {
+                max-width: 200px;
+            }
+
+            .type {
+                display: inline-block;
+                padding: 0 @padding-xxs;
+                margin-left: @margin-md;
+                color: var(--text-color-tertiary);
+                background-color: var(--component-background-gray);
+                border-radius: @border-radius-base;
+            }
+        }
+    }
+}
