@@ -16,7 +16,7 @@ const areaChartControlPanelConfig = (): ControlPanelConfig<AreaChartControlPanel
     return {
         class: 'data_chart',
         type: 'areaChart',
-        name: 'Area',
+        name: 'dashboard.plugin_name_area',
         icon: AreaChartIcon,
         defaultRow: 2,
         defaultCol: 2,
@@ -56,7 +56,7 @@ const areaChartControlPanelConfig = (): ControlPanelConfig<AreaChartControlPanel
                             label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
-                                defaultValue: 'Title',
+                                defaultValue: t('dashboard.plugin_name_area'),
                                 rules: {
                                     maxLength: 35,
                                 },

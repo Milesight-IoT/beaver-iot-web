@@ -130,3 +130,23 @@ export const entityTypeOptions = [
  * Device status entity unique identifier
  */
 export const DEVICE_STATUS_ENTITY_UNIQUE_ID = '@status';
+/**
+ * Device latitude entity unique identifier
+ */
+export const DEVICE_LATITUDE_ENTITY_UNIQUE_ID = '@location.@latitude';
+/**
+ * Device longitude entity unique identifier
+ */
+export const DEVICE_LONGITUDE_ENTITY_UNIQUE_ID = '@location.@longitude';
+/**
+ * Device alarm status entity unique identifier
+ */
+export const DEVICE_ALARM_STATUS_ENTITY_UNIQUE_ID = '@alarm.@alarm_status';
+/**
+ * Device alarm time entity unique identifier
+ */
+export const DEVICE_ALARM_TIME_ENTITY_UNIQUE_ID = '@alarm.@alarm_time';
+/**
+ * Device alarm content entity unique identifier
+ */
+export const DEVICE_ALARM_CONTENT_ENTITY_UNIQUE_ID = '@alarm.@alarm_content';

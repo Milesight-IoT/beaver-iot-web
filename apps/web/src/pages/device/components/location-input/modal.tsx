@@ -16,6 +16,11 @@ interface Props extends Omit<ModalProps, 'onOk'> {
     onConfirm: (data: Props['data']) => void;
 }
 
+type PositionType = [number | string, number | string];
+const isPosEqual = (pos1: PositionType, pos2: PositionType) => {
+    return +pos1[0] === +pos2[0] && +pos1[1] === +pos2[1];
+};
+
 const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, ...props }) => {
     const { getIntlText } = useI18n();
     const { matchTablet } = useTheme();
@@ -26,12 +31,31 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
     const mapSize = useSize(mapContainerRef);
 
     // ---------- Form Items and Actions ----------
-    const { control, formState, handleSubmit, reset, watch, setValue } = useForm<LocationType>({
+    const { control, formState, handleSubmit, reset, setValue, getValues } = useForm<LocationType>({
         mode: 'onChange',
         shouldUnregister: true,
     });
-    const formItems = useLocationFormItems();
-    const [formLat, formLng] = watch(['latitude', 'longitude']);
+    const handleBlur = useCallback(() => {
+        const { latitude, longitude } = getValues();
+
+        if (!visible || !latitude || !longitude || Object.keys(formState.errors).length) return;
+
+        setLocation(d => {
+            if (d && isPosEqual([latitude, longitude], [d.latitude, d.longitude])) {
+                return d;
+            }
+
+            // @ts-ignore
+            mapInstance?.setView([latitude, longitude], undefined, { reset: true });
+            return {
+                ...d,
+                latitude,
+                longitude,
+            };
+        });
+    }, [visible, formState.errors, mapInstance, getValues]);
+    const formItems = useLocationFormItems({ onBlur: handleBlur });
+    // const [formLat, formLng] = watch(['latitude', 'longitude']);
 
     const handleConfirm = handleSubmit(data => {
         onConfirm(data);
@@ -84,25 +108,26 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
     }, [data, visible, mapInstance, location, reset, getIntlText]);
 
     // Update Location when form values change
-    useDebounceEffect(
-        () => {
-            if (!visible || !formLat || !formLng || Object.keys(formState.errors).length) {
-                return;
-            }
-            setLocation(d => ({
-                ...d,
-                latitude: formLat,
-                longitude: formLng,
-            }));
-            mapInstance?.setView([formLat, formLng]);
-        },
-        [visible, formLat, formLng, formState.errors],
-        { wait: 300 },
-    );
+    // useDebounceEffect(
+    //     () => {
+    //         if (!visible || !formLat || !formLng || Object.keys(formState.errors).length) {
+    //             return;
+    //         }
+    //         setLocation(d => ({
+    //             ...d,
+    //             latitude: formLat,
+    //             longitude: formLng,
+    //         }));
+    //         mapInstance?.setView([formLat, formLng]);
+    //     },
+    //     [visible, formLat, formLng, formState.errors],
+    //     { wait: 300 },
+    // );
 
     // Update Form Values when location change
     useEffect(() => {
         if (!location?.latitude || !location?.longitude) return;
+
         setValue('latitude', location.latitude);
         setValue('longitude', location.longitude);
         setValue('address', location.address);

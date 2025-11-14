@@ -14,7 +14,7 @@ import './style.less';
 /**
  * Marker color type
  */
-type ColorType = 'info' | 'danger' | 'warning' | 'success' | 'disabled';
+export type ColorType = 'info' | 'danger' | 'warning' | 'success' | 'disabled';
 
 interface BMarkerProps extends Omit<MarkerProps, 'eventHandlers'> {
     /** Color Type */

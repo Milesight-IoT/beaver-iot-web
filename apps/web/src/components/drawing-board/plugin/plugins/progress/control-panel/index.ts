@@ -20,7 +20,7 @@ const progressControlPanelConfig = (): ControlPanelConfig<ProgressControlPanelCo
     return {
         class: 'data_chart',
         type: 'progress',
-        name: 'Progress',
+        name: 'dashboard.plugin_name_progress',
         icon: ProgressIcon,
         defaultRow: 1,
         defaultCol: 2,
@@ -58,7 +58,7 @@ const progressControlPanelConfig = (): ControlPanelConfig<ProgressControlPanelCo
                             label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
-                                defaultValue: 'Title',
+                                defaultValue: t('dashboard.plugin_name_progress'),
                                 rules: {
                                     maxLength: 35,
                                 },

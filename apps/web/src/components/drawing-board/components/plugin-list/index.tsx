@@ -1,4 +1,5 @@
 import { Grid2 as Grid } from '@mui/material';
+import { useI18n } from '@milesight/shared/src/hooks';
 import { WidgetDetail } from '@/services/http/dashboard';
 import pluginImg from '@/assets/plugin.png';
 import { useFilterPlugins } from '../../hooks';
@@ -17,6 +18,7 @@ interface PluginListProps {
 export default (props: PluginListProps) => {
     const { onSelect, changeIsEditMode } = props;
 
+    const { getIntlText } = useI18n();
     const { pluginsControlPanel } = useFilterPlugins();
 
     const handleClick = (newPlugin: BoardPluginProps) => {
@@ -48,7 +50,7 @@ export default (props: PluginListProps) => {
                                         src={pluginConfig?.icon || pluginImg}
                                         alt="plugin"
                                     />
-                                    <span>{pluginConfig.name}</span>
+                                    <span>{getIntlText(pluginConfig.name)}</span>
                                 </div>
                             </Grid>
                         );

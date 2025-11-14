@@ -8,6 +8,7 @@ import {
     UncheckedCheckboxIcon,
     CheckedCheckboxIcon,
     DisabledCheckboxIcon,
+    toast,
 } from '@milesight/shared/src/components';
 
 import { Tooltip } from '@/components';
@@ -29,6 +30,7 @@ export function useCheckbox() {
 
     const { getIntlText } = useI18n();
     const context = useContext(MultiDeviceSelectContext);
+    const { locationRequired } = context || {};
 
     const isChecked = useMemoizedFn((groupItem: DeviceGroupItemProps) => {
         const devices = context?.selectedDevices;
@@ -129,9 +131,26 @@ export function useCheckbox() {
                 }),
             );
 
-            context?.setSelectedDevices(devices => {
-                return unionBy(devices, newData, 'id').map(d => pick(d, ['id', 'group_id']));
+            /**
+             * Filter devices with location required
+             */
+            const validData = newData.filter(d => {
+                if (locationRequired && !d?.location) {
+                    return false;
+                }
+                return true;
             });
+            context?.setSelectedDevices(devices => {
+                return unionBy(devices, validData, 'id').map(d => pick(d, ['id', 'group_id']));
+            });
+
+            if (validData.length !== newData.length) {
+                toast.warning(
+                    getIntlText('device.tip.plugin_add_failed', {
+                        1: newData.length - validData.length,
+                    }),
+                );
+            }
         } finally {
             setDevicesLoading(false);
         }

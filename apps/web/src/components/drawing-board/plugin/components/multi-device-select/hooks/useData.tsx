@@ -16,6 +16,8 @@ import { useDeviceData } from './useDeviceData';
 import { useDeviceGroup } from './useDeviceGroup';
 
 export function useData(props: MultiDeviceSelectProps) {
+    const { locationRequired } = props || {};
+
     const [keyword, setKeyword] = useState('');
     const [selectedUpdating, setSelectedUpdating] = useState(false);
     /**
@@ -38,8 +40,9 @@ export function useData(props: MultiDeviceSelectProps) {
         return {
             selectedDevices,
             setSelectedDevices,
+            ...props,
         };
-    }, [selectedDevices, setSelectedDevices]);
+    }, [selectedDevices, setSelectedDevices, props]);
 
     /**
      * Update current selected devices data
@@ -68,7 +71,18 @@ export function useData(props: MultiDeviceSelectProps) {
             }
 
             const result = getResponseData(resp);
-            const data = (result?.content || []).map(d => pick(d, ['id', 'group_id']));
+            const data = (result?.content || [])
+                .filter(d => {
+                    /**
+                     * Filter out the devices that have no location if the location is required.
+                     */
+                    if (locationRequired && !d?.location) {
+                        return false;
+                    }
+
+                    return true;
+                })
+                .map(d => pick(d, ['id', 'group_id']));
 
             if (!isInitRef.current) {
                 isInitRef.current = true;

@@ -16,7 +16,7 @@ const barChartControlPanelConfig = (): ControlPanelConfig<BarChartControlPanelCo
     return {
         class: 'data_chart',
         type: 'barChart',
-        name: 'Bar',
+        name: 'dashboard.plugin_name_bar',
         icon: BarChartIcon,
         defaultRow: 2,
         defaultCol: 2,
@@ -56,7 +56,7 @@ const barChartControlPanelConfig = (): ControlPanelConfig<BarChartControlPanelCo
                             label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
-                                defaultValue: 'Title',
+                                defaultValue: t('dashboard.plugin_name_bar'),
                                 rules: {
                                     maxLength: 35,
                                 },

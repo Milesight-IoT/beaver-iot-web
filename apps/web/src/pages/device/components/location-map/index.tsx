@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useMemo, useRef } from 'react';
+import React, { memo, useEffect, useMemo, useRef, forwardRef, useImperativeHandle } from 'react';
 import cls from 'classnames';
 import { Tooltip } from '@mui/material';
 import { useMemoizedFn, useThrottleFn } from 'ahooks';
@@ -15,6 +15,7 @@ import {
     type LatLng,
     type ZoomControlActionType,
 } from '@/components';
+import { DEVICE_LOCATION_PRECISION } from '../../constants';
 import './style.less';
 
 type OperationState = 'view' | 'edit';
@@ -31,18 +32,25 @@ export interface Props extends MapProps {
     onPositionChange?: (position: [number, number]) => void;
 }
 
+export interface LocationMapRef {
+    setPosition: (position: [number, number]) => void;
+}
+
 /**
  * Location map component
  */
 const LocationMap: React.FC<Props> = memo(
-    ({
-        state,
-        marker,
-        className,
-        preferZoomLevel = PREFER_ZOOM_LEVEL,
-        onPositionChange,
-        ...props
-    }) => {
+    (
+        {
+            state,
+            marker,
+            className,
+            preferZoomLevel = PREFER_ZOOM_LEVEL,
+            onPositionChange,
+            ...props
+        }: Props,
+        ref?: React.ForwardedRef<LocationMapRef>,
+    ) => {
         const { getIntlText } = useI18n();
         const { matchTablet } = useTheme();
         const editing = state === 'edit';
@@ -104,11 +112,16 @@ const LocationMap: React.FC<Props> = memo(
         // ---------- Map Events ----------
         const handlePositionChange = useMemoizedFn((position: [number, number]) => {
             if (!onPositionChange) return;
+            const formatConfig = {
+                round: false,
+                resultType: 'number',
+                precision: DEVICE_LOCATION_PRECISION,
+            } as const;
 
             // onPositionChange(position);
             onPositionChange([
-                formatPrecision(position[0], 6, { resultType: 'number' }),
-                formatPrecision(position[1], 6, { resultType: 'number' }),
+                formatPrecision(position[0], formatConfig),
+                formatPrecision(position[1], formatConfig),
             ]);
         });
         const events = useMemo<MapProps['events']>(
@@ -124,20 +137,25 @@ const LocationMap: React.FC<Props> = memo(
                     zoomCenterRef.current = latlng;
                     handlePositionChange([latlng.lat, latlng.lng]);
                 },
+                // dragend(e) {
+                //     console.log('dragend', e);
+                // },
                 moveend(e) {
                     if (!editing || controlProcessingRef.current) {
                         controlProcessingRef.current = false;
                         return;
                     }
+                    const map = e.target as MapInstance;
 
                     /**
                      * Note: The moveend event will also be triggered when zooming,
                      * that is, the center of the map will change.
                      */
-                    const center = (e.target as MapInstance).getCenter();
+                    const center = map.getCenter();
 
                     // console.log('moveend', center);
                     zoomCenterRef.current = center;
+
                     handlePositionChange([center.lat, center.lng]);
                 },
             }),

@@ -139,11 +139,15 @@ export default (props: PluginListProps) => {
                                                                       alt="plugin"
                                                                   />
                                                                   <Tooltip
-                                                                      title={pluginConfig.name}
+                                                                      title={getIntlText(
+                                                                          pluginConfig.name,
+                                                                      )}
                                                                       autoEllipsis
                                                                   >
                                                                       <div className="board-plugin-class-item-content-name">
-                                                                          {pluginConfig.name}
+                                                                          {getIntlText(
+                                                                              pluginConfig.name,
+                                                                          )}
                                                                       </div>
                                                                   </Tooltip>
                                                               </div>

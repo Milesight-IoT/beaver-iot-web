@@ -172,3 +172,12 @@ declare interface EntityHistoryData {
     timestamp: number;
     value_type: EntityValueDataType;
 }
+
+/**
+ * Entity Status Data
+ */
+declare interface EntityStatusData {
+    value: any;
+    timestamp: string;
+    value_type: EntityValueDataType;
+}

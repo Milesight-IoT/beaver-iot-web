@@ -17,7 +17,7 @@ const gaugeChartControlPanelConfig = (): ControlPanelConfig<GaugeChartControlPan
     return {
         class: 'data_chart',
         type: 'gaugeChart',
-        name: 'Gauge',
+        name: 'dashboard.plugin_name_gauge',
         icon: GaugeChartIcon,
         defaultRow: 3,
         defaultCol: 3,
@@ -55,7 +55,7 @@ const gaugeChartControlPanelConfig = (): ControlPanelConfig<GaugeChartControlPan
                             label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
-                                defaultValue: 'Title',
+                                defaultValue: t('dashboard.plugin_name_gauge'),
                                 rules: {
                                     maxLength: 35,
                                 },

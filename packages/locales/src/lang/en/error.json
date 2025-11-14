@@ -93,5 +93,11 @@
     "error.http.token_not_found": "Your account hasn't been signed in.",
     "error.http.topic_exists": "Topic already exists.",
     "error.http.user_has_no_permission": "Current user has no privileges",
-    "error.http.user_register_email_exist": "This User Register Email Already Exists."
+    "error.http.user_register_email_exist": "This User Register Email Already Exists.",
+    "error.http.device_location_setting_address_without_latitude_and_longitude": "设备位置只设置地址未设置纬度和经度",
+    "error.http.device_location_latitude_and_longitude_not_both_provided": "设备位置纬度和经度没有同时设置",
+    "error.http.device_location_latitude_type_error": "设备位置的纬度类型错误",
+    "error.http.device_location_longitude_type_error": "设备位置的经度类型错误",
+    "error.http.duplicated_device_on_gateway": "网关上已存在相同eui或者名称的设备",
+    "error.http.device_num_limited_on_gateway": "UG63/SG50: 网关上的节点设备数量达到上限"
 }

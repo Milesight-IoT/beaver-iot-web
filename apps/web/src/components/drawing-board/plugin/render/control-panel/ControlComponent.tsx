@@ -20,6 +20,7 @@ import {
     MultiAppearanceIcon,
     ChartMetricsSelect,
     MultiDeviceSelect,
+    AlarmTimeSelect,
 } from '../../components';
 
 export interface ControlComponentProps {
@@ -139,6 +140,13 @@ const ControlComponent: React.FC<ControlComponentProps> = (props: ControlCompone
             );
         case 'MultiDeviceSelect':
             return <MultiDeviceSelect {...commonProps} {...config?.componentProps} />;
+        case 'AlarmTimeSelect':
+            return (
+                <AlarmTimeSelect
+                    {...omit(commonProps, ['helperText'])}
+                    {...config?.componentProps}
+                />
+            );
         default:
             return null;
     }

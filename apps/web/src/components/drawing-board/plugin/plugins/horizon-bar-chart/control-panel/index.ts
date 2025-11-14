@@ -16,7 +16,7 @@ const horizonBarControlPanelConfig = (): ControlPanelConfig<BarChartControlPanel
     return {
         class: 'data_chart',
         type: 'horizonBarChart',
-        name: 'Horizon Bar',
+        name: 'dashboard.plugin_name_horizon_bar',
         icon: HorizonBarChartIcon,
         defaultRow: 2,
         defaultCol: 2,
@@ -56,7 +56,7 @@ const horizonBarControlPanelConfig = (): ControlPanelConfig<BarChartControlPanel
                             label: t('common.label.title'),
                             controllerProps: {
                                 name: 'title',
-                                defaultValue: 'Title',
+                                defaultValue: t('dashboard.plugin_name_horizon_bar'),
                                 rules: {
                                     maxLength: 35,
                                 },

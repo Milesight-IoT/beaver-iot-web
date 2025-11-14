@@ -21,7 +21,11 @@ const Input = (props: InputType) => {
     });
 
     const handleBlur = useMemoizedFn((e: React.FocusEvent<HTMLInputElement>) => {
-        onChange?.(e);
+        const val = e?.target?.value;
+        const newVal = typeof val === 'string' ? val.trim() : val;
+
+        setInputVal(newVal);
+        (onChange as (...event: any[]) => void)?.(newVal);
     });
 
     return (

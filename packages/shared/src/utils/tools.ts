@@ -906,8 +906,8 @@ export function getSizeString(size: number, decimalPlaces = 2) {
 /**
  * Format map coordinate precision
  * @param value The coordinate value to be formatted (number or string)
- * @param precision Number of decimal places to retain
  * @param options Optional configuration
+ * @param options.precision Number of decimal places to retain (default: 6)
  * @param options.round Whether to round the result (default: true)
  * @param options.padZeros Whether to pad with zeros when decimal places are insufficient (default: true)
  * @param options.resultType The type of the returned result ('string' or 'number')
@@ -915,15 +915,20 @@ export function getSizeString(size: number, decimalPlaces = 2) {
  */
 export function formatPrecision<T extends 'string' | 'number' = 'string'>(
     value: number | string,
-    precision: number,
     options?: {
+        precision?: number;
         round?: boolean;
         padZeros?: boolean;
         resultType?: T;
     },
 ): T extends 'number' ? number : string {
     // Default configuration
-    const { round = true, padZeros = true, resultType = 'string' as T } = options || {};
+    const {
+        precision = 6,
+        round = true,
+        padZeros = true,
+        resultType = 'string' as T,
+    } = options || {};
 
     // Parameter validation
     if (
