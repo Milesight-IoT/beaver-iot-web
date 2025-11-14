@@ -72,7 +72,7 @@ const LocationInput: React.FC<Props> = ({
                                     {getIntlText('common.symbol.colon')}
                                 </span>
                                 <span className="location-input-detail-item-value">
-                                    {value?.latitude}
+                                    {!value ? '' : +value.latitude}
                                 </span>
                             </div>
                             <div className="location-input-detail-item">
@@ -81,7 +81,7 @@ const LocationInput: React.FC<Props> = ({
                                     {getIntlText('common.symbol.colon')}
                                 </span>
                                 <span className="location-input-detail-item-value">
-                                    {value?.longitude}
+                                    {!value ? '' : +value.longitude}
                                 </span>
                             </div>
                             <div className="location-input-detail-item">

@@ -49,6 +49,8 @@ const useLocationFormItems = ({ onBlur }: Options = {}) => {
                             onChange={onChange}
                             onBlur={event => {
                                 const value = event?.target?.value?.trim();
+                                if (isNaN(+value)) return;
+
                                 const result = !value
                                     ? ''
                                     : formatPrecision(value, {
@@ -87,6 +89,8 @@ const useLocationFormItems = ({ onBlur }: Options = {}) => {
                             onChange={onChange}
                             onBlur={event => {
                                 const value = event?.target?.value?.trim();
+                                if (isNaN(+value)) return;
+
                                 const result = !value
                                     ? ''
                                     : formatPrecision(value, {

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import cls from 'classnames';
-import { useSize, useDebounceEffect } from 'ahooks';
+import { useSize } from 'ahooks';
 import { Button, CircularProgress } from '@mui/material';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { useI18n } from '@milesight/shared/src/hooks';
@@ -23,6 +23,7 @@ import {
 import { PERMISSIONS } from '@/constants';
 import useLocationFormItems from '@/pages/device/hooks/useLocationFormItems';
 import { LocationMap, type LocationMapProps } from '@/pages/device/components';
+import { DEVICE_LOCATION_PRECISION } from '@/pages/device/constants';
 import './style.less';
 
 type PanelState = 'view' | 'edit' | 'nodata';
@@ -174,17 +175,19 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
     const [location, setLocation] = useState<LocationType>();
 
     const handlePositionChange = useCallback<NonNullable<LocationMapProps['onPositionChange']>>(
-        position => {
+        pos => {
             setLocation(d => {
-                if (d && isPosEqual(position, [d.latitude, d.longitude])) return d;
+                if (d && isPosEqual(pos, [d.latitude, d.longitude])) return d;
+
+                mapInstance?.setView([pos[0], pos[1]]);
                 return {
                     ...d,
-                    latitude: position[0],
-                    longitude: position[1],
+                    latitude: pos[0],
+                    longitude: pos[1],
                 };
             });
         },
-        [],
+        [mapInstance],
     );
 
     // Reset form data panel state change
@@ -210,10 +213,16 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
     // Update Form Values when location change
     useEffect(() => {
         if (!editing || !location?.latitude || !location?.longitude) return;
+        const formatConfig = {
+            precision: DEVICE_LOCATION_PRECISION,
+            resultType: 'string',
+        } as const;
 
         setValue('address', location.address);
-        setValue('latitude', location.latitude);
-        setValue('longitude', location.longitude);
+        // @ts-ignore
+        setValue('latitude', formatPrecision(location.latitude, formatConfig));
+        // @ts-ignore
+        setValue('longitude', formatPrecision(location.longitude, formatConfig));
     }, [editing, location, setValue]);
 
     return (

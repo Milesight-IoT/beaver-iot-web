@@ -1,12 +1,13 @@
 import React, { memo, useEffect, useState, useRef, useCallback } from 'react';
 import { Button } from '@mui/material';
-import { useSize, useDebounceEffect } from 'ahooks';
+import { useSize } from 'ahooks';
 import { useForm, Controller } from 'react-hook-form';
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 import { Modal, toast, type ModalProps } from '@milesight/shared/src/components';
 import { getGeoLocation } from '@milesight/shared/src/utils/tools';
 import { PREFER_ZOOM_LEVEL, type MapInstance } from '@/components';
 import { type LocationType } from '@/services/http';
+// import { DEVICE_LOCATION_PRECISION } from '../../constants';
 import LocationMap, { type Props as LocationMapProps } from '../location-map';
 import useLocationFormItems from '../../hooks/useLocationFormItems';
 
@@ -65,14 +66,21 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
     // ---------- Location Data Update and Interactions ----------
     const [location, setLocation] = useState<LocationType>();
     const handlePositionChange = useCallback<NonNullable<LocationMapProps['onPositionChange']>>(
-        position => {
-            setLocation(d => ({
-                ...d,
-                latitude: position[0],
-                longitude: position[1],
-            }));
+        pos => {
+            setLocation(d => {
+                if (d && isPosEqual([pos[0], pos[1]], [d.latitude, d.longitude])) {
+                    return d;
+                }
+
+                mapInstance?.setView([pos[0], pos[1]]);
+                return {
+                    ...d,
+                    latitude: pos[0],
+                    longitude: pos[1],
+                };
+            });
         },
-        [],
+        [mapInstance],
     );
 
     // Reset form data when modal close
@@ -88,7 +96,10 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
 
         if (data?.latitude && data?.longitude) {
             setLocation({ ...data });
-            mapInstance?.setView([data.latitude, data.longitude], PREFER_ZOOM_LEVEL);
+            mapInstance?.setView([data.latitude, data.longitude], PREFER_ZOOM_LEVEL, {
+                // @ts-ignore
+                reset: true,
+            });
             return;
         }
 
@@ -106,23 +117,6 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
                 toast.error(getIntlText('device.message.get_location_failed'));
             });
     }, [data, visible, mapInstance, location, reset, getIntlText]);
-
-    // Update Location when form values change
-    // useDebounceEffect(
-    //     () => {
-    //         if (!visible || !formLat || !formLng || Object.keys(formState.errors).length) {
-    //             return;
-    //         }
-    //         setLocation(d => ({
-    //             ...d,
-    //             latitude: formLat,
-    //             longitude: formLng,
-    //         }));
-    //         mapInstance?.setView([formLat, formLng]);
-    //     },
-    //     [visible, formLat, formLng, formState.errors],
-    //     { wait: 300 },
-    // );
 
     // Update Form Values when location change
     useEffect(() => {
@@ -149,16 +143,10 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
         >
             <div className="map-wrap" ref={mapContainerRef}>
                 <LocationMap
-                    scrollWheelZoom
                     state="edit"
                     width={mapSize?.width}
                     height={mapSize?.height}
-                    onReady={map => {
-                        setMapInstance(map);
-                        if (location?.latitude && location?.longitude) {
-                            map.setView([location.latitude, location.longitude], PREFER_ZOOM_LEVEL);
-                        }
-                    }}
+                    onReady={setMapInstance}
                     onPositionChange={handlePositionChange}
                 />
             </div>
