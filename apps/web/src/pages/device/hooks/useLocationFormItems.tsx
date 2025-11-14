@@ -2,17 +2,24 @@ import { useMemo } from 'react';
 import { TextField } from '@mui/material';
 import { type ControllerProps } from 'react-hook-form';
 import { useI18n } from '@milesight/shared/src/hooks';
+import { formatPrecision } from '@milesight/shared/src/utils/tools';
 import {
     checkRequired,
     checkRangeValue,
     checkRangeLength,
 } from '@milesight/shared/src/utils/validators';
 import { type LocationType } from '@/services/http';
+import { DEVICE_LOCATION_PRECISION } from '../constants';
+
+interface Options {
+    onBlur?: (fieldKey: keyof LocationType, value: LocationType[keyof LocationType]) => void;
+    // onChange?: (fieldKey: keyof LocationType, value: LocationType[keyof LocationType]) => void;
+}
 
 /**
  * Location form items
  */
-const useLocationFormItems = () => {
+const useLocationFormItems = ({ onBlur }: Options = {}) => {
     const { getIntlText } = useI18n();
 
     const formItems = useMemo(() => {
@@ -40,7 +47,17 @@ const useLocationFormItems = () => {
                             helperText={error ? error.message : null}
                             value={value || ''}
                             onChange={onChange}
-                            onBlur={event => onChange(event?.target?.value?.trim())}
+                            onBlur={event => {
+                                const value = event?.target?.value?.trim();
+                                const result = !value
+                                    ? ''
+                                    : formatPrecision(value, {
+                                          precision: DEVICE_LOCATION_PRECISION,
+                                          resultType: 'string',
+                                      });
+                                onChange(result);
+                                onBlur?.('latitude', result);
+                            }}
                         />
                     );
                 },
@@ -68,7 +85,17 @@ const useLocationFormItems = () => {
                             helperText={error ? error.message : null}
                             value={value || ''}
                             onChange={onChange}
-                            onBlur={event => onChange(event?.target?.value?.trim())}
+                            onBlur={event => {
+                                const value = event?.target?.value?.trim();
+                                const result = !value
+                                    ? ''
+                                    : formatPrecision(value, {
+                                          precision: DEVICE_LOCATION_PRECISION,
+                                          resultType: 'string',
+                                      });
+                                onChange(result);
+                                onBlur?.('latitude', result);
+                            }}
                         />
                     );
                 },
@@ -101,7 +128,7 @@ const useLocationFormItems = () => {
         ];
 
         return result;
-    }, [getIntlText]);
+    }, [onBlur, getIntlText]);
 
     return formItems;
 };

@@ -15,3 +15,8 @@ export const FIXED_GROUP = [
         name: 'device.label.ungrouped_devices',
     },
 ];
+
+/**
+ * Device location precision
+ */
+export const DEVICE_LOCATION_PRECISION = 6;

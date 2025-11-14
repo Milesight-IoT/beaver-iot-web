@@ -11,7 +11,7 @@ import {
     DeleteOutlineIcon,
     toast,
 } from '@milesight/shared/src/components';
-import { getGeoLocation } from '@milesight/shared/src/utils/tools';
+import { getGeoLocation, formatPrecision } from '@milesight/shared/src/utils/tools';
 import { PermissionControlHidden, useConfirm, type MapInstance } from '@/components';
 import {
     deviceAPI,
@@ -37,8 +37,12 @@ interface Props {
     /** Edit successful callback */
     onEditSuccess?: () => void | Promise<any>;
 }
+type PositionType = [number | string, number | string];
 
 const PREFER_ZOOM_LEVEL = 16;
+const isPosEqual = (pos1: PositionType, pos2: PositionType) => {
+    return +pos1[0] === +pos2[0] && +pos1[1] === +pos2[1];
+};
 
 const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
     const { getIntlText } = useI18n();
@@ -74,13 +78,30 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
 
     // ---------- Form Items and Actions ----------
     const [loading, setLoading] = useState(false);
-    const { control, formState, handleSubmit, watch, reset, setValue, getValues } =
-        useForm<LocationType>({
-            mode: 'onChange',
-            shouldUnregister: true,
+    const { control, formState, handleSubmit, reset, setValue, getValues } = useForm<LocationType>({
+        mode: 'onChange',
+        shouldUnregister: true,
+    });
+    const handleBlur = useCallback(() => {
+        const { latitude, longitude } = getValues();
+
+        if (!editing || !latitude || !longitude || Object.keys(formState.errors).length) return;
+
+        setLocation(d => {
+            if (d && isPosEqual([latitude, longitude], [d.latitude, d.longitude])) {
+                return d;
+            }
+
+            // @ts-ignore
+            mapInstance?.setView([latitude, longitude], undefined, { reset: true });
+            return {
+                ...d,
+                latitude,
+                longitude,
+            };
         });
-    const formItems = useLocationFormItems();
-    const [formLat, formLng] = watch(['latitude', 'longitude']);
+    }, [editing, formState.errors, mapInstance, getValues]);
+    const formItems = useLocationFormItems({ onBlur: handleBlur });
 
     // Edit Save
     const onSubmit: SubmitHandler<LocationType> = async () => {
@@ -155,7 +176,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
     const handlePositionChange = useCallback<NonNullable<LocationMapProps['onPositionChange']>>(
         position => {
             setLocation(d => {
-                if (position.toString() === [d?.latitude, d?.longitude].toString()) return d;
+                if (d && isPosEqual(position, [d.latitude, d.longitude])) return d;
                 return {
                     ...d,
                     latitude: position[0],
@@ -186,24 +207,10 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
         mapInstance?.setView([data.location.latitude, data.location.longitude], PREFER_ZOOM_LEVEL);
     }, [data, mapInstance]);
 
-    // Update Location when form values change
-    useDebounceEffect(
-        () => {
-            if (!editing || !formLat || !formLng || Object.keys(formState.errors).length) return;
-            setLocation(d => ({
-                ...d,
-                latitude: formLat,
-                longitude: formLng,
-            }));
-            mapInstance?.setView([formLat, formLng]);
-        },
-        [editing, formLat, formLng, formState.errors],
-        { wait: 300 },
-    );
-
     // Update Form Values when location change
     useEffect(() => {
         if (!editing || !location?.latitude || !location?.longitude) return;
+
         setValue('address', location.address);
         setValue('latitude', location.latitude);
         setValue('longitude', location.longitude);
