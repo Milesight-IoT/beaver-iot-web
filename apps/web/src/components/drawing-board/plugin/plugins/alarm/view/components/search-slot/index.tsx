@@ -1,11 +1,17 @@
-import React, { useMemo, useContext } from 'react';
+import React, { useMemo, useContext, useState } from 'react';
 import { IconButton, Divider, type SelectChangeEvent, type SxProps } from '@mui/material';
 import { isNil } from 'lodash-es';
-import { useMemoizedFn } from 'ahooks';
+import { useMemoizedFn, useDebounceFn } from 'ahooks';
 import cls from 'classnames';
 
 import { useI18n, useTheme, useTime } from '@milesight/shared/src/hooks';
-import { SaveAltIcon, Select, SearchIcon, toast } from '@milesight/shared/src/components';
+import {
+    SaveAltIcon,
+    Select,
+    SearchIcon,
+    toast,
+    LoadingWrapper,
+} from '@milesight/shared/src/components';
 import { linkDownload, genRandomString } from '@milesight/shared/src/utils/tools';
 
 import { deviceAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
@@ -34,6 +40,8 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
     const { getTimeFormat, dayjs } = useTime();
     const { setShowMobileSearch, searchConditionRef, isPreview, setPaginationModel } =
         useContext(AlarmContext) || {};
+
+    const [exportLoading, setExportLoading] = useState(false);
 
     const timeOptions = useMemo(() => {
         return [
@@ -85,26 +93,36 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
         }
     });
 
-    const handleExport = useMemoizedFn(async () => {
-        const params = searchConditionRef?.current;
-        if (!params) {
-            return;
-        }
+    const { run: handleExport } = useDebounceFn(
+        async () => {
+            try {
+                setExportLoading(true);
+                const params = searchConditionRef?.current;
+                if (!params) {
+                    return;
+                }
 
-        const [error, resp] = await awaitWrap(deviceAPI.exportDeviceAlarms(params));
-        if (error || !isRequestSuccess(resp)) {
-            return;
-        }
+                const [error, resp] = await awaitWrap(deviceAPI.exportDeviceAlarms(params));
+                if (error || !isRequestSuccess(resp)) {
+                    return;
+                }
 
-        const blobData = getResponseData(resp);
-        const fileName = `AlarmData_${getTimeFormat(dayjs(), 'simpleDateFormat').replace(
-            /-/g,
-            '_',
-        )}_${genRandomString(6, { upperCase: false, lowerCase: true })}.csv`;
+                const blobData = getResponseData(resp);
+                const fileName = `AlarmData_${getTimeFormat(dayjs(), 'simpleDateFormat').replace(
+                    /-/g,
+                    '_',
+                )}_${genRandomString(6, { upperCase: false, lowerCase: true })}.csv`;
 
-        linkDownload(blobData!, fileName);
-        toast.success(getIntlText('common.message.operation_success'));
-    });
+                linkDownload(blobData!, fileName);
+                toast.success(getIntlText('common.message.operation_success'));
+            } finally {
+                setExportLoading(false);
+            }
+        },
+        {
+            wait: 300,
+        },
+    );
 
     const saveAltIconSx = useMemo((): SxProps => {
         const baseSx: SxProps = {
@@ -189,9 +207,11 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
                 )}
             </div>
             {!matchTablet && (
-                <IconButton sx={saveAltIconSx} onClick={handleExport}>
-                    <SaveAltIcon sx={{ width: 20, height: 20 }} />
-                </IconButton>
+                <LoadingWrapper size={20} loading={exportLoading}>
+                    <IconButton sx={saveAltIconSx} onClick={handleExport}>
+                        <SaveAltIcon sx={{ width: 20, height: 20 }} />
+                    </IconButton>
+                </LoadingWrapper>
             )}
         </div>
     );
