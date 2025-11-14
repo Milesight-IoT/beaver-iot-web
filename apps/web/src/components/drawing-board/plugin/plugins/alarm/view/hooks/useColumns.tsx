@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Stack, IconButton } from '@mui/material';
-import { get, isEmpty } from 'lodash-es';
+import { get, isEmpty, isNil } from 'lodash-es';
 
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
 import {
@@ -176,8 +176,12 @@ const useColumns = <T extends TableRowDataType>({
                                     </IconButton>
                                 </Tooltip>
                             </LoadingWrapper>
-                            <Tooltip title={getIntlText('dashboard.tip.navigate_here')}>
+                            <Tooltip
+                                isDisabledButton={isNil(row?.latitude) || isNil(row?.longitude)}
+                                title={getIntlText('dashboard.tip.navigate_here')}
+                            >
                                 <IconButton
+                                    disabled={isNil(row?.latitude) || isNil(row?.longitude)}
                                     sx={{
                                         width: 30,
                                         height: 30,

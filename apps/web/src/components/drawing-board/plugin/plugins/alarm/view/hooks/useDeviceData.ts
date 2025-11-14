@@ -51,6 +51,7 @@ export function useDeviceData({
         }
 
         if (selectTimeRef.current !== defaultTime) {
+            setPaginationModel(model => ({ ...model, page: 0 }));
             setSelectTime(defaultTime);
             selectTimeRef.current = defaultTime;
         }

@@ -130,6 +130,7 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
                 rows={data?.content || []}
                 rowCount={data?.total || 0}
                 toolbarRender={RenderTitle}
+                pageSizeOptions={[10, 20, 30, 40, 50, 100]}
                 paginationModel={paginationModel}
                 onPaginationModelChange={setPaginationModel}
                 searchSlot={RenderSearch}
