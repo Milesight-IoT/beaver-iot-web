@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import { useMemoizedFn, useRequest } from 'ahooks';
 import { isEmpty } from 'lodash-es';
 
@@ -26,6 +26,7 @@ export function useDeviceData({
 }) {
     const [keyword, setKeyword] = useState('');
     const [selectTime, setSelectTime] = useState<number>(defaultTime || 1440 * 60 * 1000);
+    const selectTimeRef = useRef<number>(defaultTime || 1440 * 60 * 1000);
     const [modalVisible, setModalVisible] = useState(false);
     const [timeRange, setTimeRange] = useState<DateRangePickerValueType | null>(null);
     const [showMobileSearch, setShowMobileSearch] = useState(false);
@@ -37,6 +38,23 @@ export function useDeviceData({
 
     const alarmRef = useRef<HTMLDivElement>(null);
     const alarmContainerWidth = alarmRef.current?.getBoundingClientRect()?.width || 0;
+
+    /**
+     * Update selectTime when defaultTime changes
+     */
+    useEffect(() => {
+        selectTimeRef.current = selectTime;
+    }, [selectTime]);
+    useEffect(() => {
+        if (!defaultTime) {
+            return;
+        }
+
+        if (selectTimeRef.current !== defaultTime) {
+            setSelectTime(defaultTime);
+            selectTimeRef.current = defaultTime;
+        }
+    }, [defaultTime]);
 
     /**
      * Get alarm status from filtered info
