@@ -50,6 +50,7 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
         searchConditionRef,
         paginationModel,
         setPaginationModel,
+        filteredInfo,
         handleFilterChange,
     } = useDeviceData({
         devices,
@@ -71,6 +72,7 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
     const { columns } = useColumns({
         isPreview,
         refreshList: getDeviceAlarmData,
+        filteredInfo,
     });
 
     const contextVal = useMemo(
@@ -83,6 +85,7 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
             searchConditionRef,
             selectTime,
             isPreview,
+            setPaginationModel,
         }),
         [
             devices,
@@ -93,6 +96,7 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
             searchConditionRef,
             selectTime,
             isPreview,
+            setPaginationModel,
         ],
     );
 
@@ -129,6 +133,7 @@ const AlarmView: React.FC<AlarmViewProps> = props => {
                 paginationModel={paginationModel}
                 onPaginationModelChange={setPaginationModel}
                 searchSlot={RenderSearch}
+                filterCondition={[keyword, filteredInfo, selectTime]}
                 onFilterInfoChange={handleFilterChange}
                 rowHeight={64}
                 slots={{

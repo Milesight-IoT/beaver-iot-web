@@ -15,7 +15,7 @@ import {
     type AlarmSearchCondition,
 } from '@/services/http';
 import { getAlarmTimeRange } from '../utils';
-import { type TableRowDataType } from './useColumns';
+import { type TableRowDataType, AlarmStatus } from './useColumns';
 
 export function useDeviceData({
     devices,
@@ -43,17 +43,11 @@ export function useDeviceData({
      */
     const alarmStatus = useMemo(() => {
         const status = filteredInfo?.alarmStatus;
-
         if (!Array.isArray(status) || isEmpty(status)) {
             return;
         }
 
-        const statusList = (status as string[]).map(s => !!Number(s));
-        if (statusList?.length === 2) {
-            return;
-        }
-
-        return statusList[0];
+        return (status as string[]).map(s => s === AlarmStatus.Unclaimed);
     }, [filteredInfo]);
 
     /**
@@ -114,6 +108,8 @@ export function useDeviceData({
     );
 
     const handleCustomTimeRange = useMemoizedFn(() => {
+        setPaginationModel(model => ({ ...model, page: 0 }));
+
         /**
          * Custom time range, set select time to -1
          */
@@ -121,6 +117,8 @@ export function useDeviceData({
     });
 
     const onSelectTime = useMemoizedFn((time: number) => {
+        setPaginationModel(model => ({ ...model, page: 0 }));
+
         if (time !== -1 && timeRange) {
             setTimeRange(null);
         }
@@ -129,6 +127,7 @@ export function useDeviceData({
     const handleFilterChange: TableProProps<TableRowDataType>['onFilterInfoChange'] = (
         filters: Record<string, FilterValue | null>,
     ) => {
+        setPaginationModel(model => ({ ...model, page: 0 }));
         setFilteredInfo(filters);
     };
 
@@ -157,6 +156,7 @@ export function useDeviceData({
          * Used to get device alarm data search condition
          */
         searchConditionRef,
+        filteredInfo,
         handleFilterChange,
         paginationModel,
         setPaginationModel,

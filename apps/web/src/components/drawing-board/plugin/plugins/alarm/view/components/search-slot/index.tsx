@@ -32,7 +32,8 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
     const { getIntlText } = useI18n();
     const { matchTablet } = useTheme();
     const { getTimeFormat, dayjs } = useTime();
-    const { setShowMobileSearch, searchConditionRef, isPreview } = useContext(AlarmContext) || {};
+    const { setShowMobileSearch, searchConditionRef, isPreview, setPaginationModel } =
+        useContext(AlarmContext) || {};
 
     const timeOptions = useMemo(() => {
         return [
@@ -62,6 +63,11 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
             },
         ];
     }, [getIntlText]);
+
+    const handleSearch = useMemoizedFn((newKeyword: string) => {
+        setPaginationModel?.(model => ({ ...model, page: 0 }));
+        setKeyword(newKeyword);
+    });
 
     const handleSelectTimeChange = useMemoizedFn((e: SelectChangeEvent<number>) => {
         const val = e?.target?.value as number;
@@ -177,7 +183,7 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
                     <HoverSearchInput
                         inputWidth={125}
                         keyword={keyword}
-                        changeKeyword={setKeyword}
+                        changeKeyword={handleSearch}
                         placeholder={getIntlText('dashboard.placeholder.search_alarm')}
                     />
                 )}
