@@ -22,7 +22,7 @@ import {
 } from '@/services/http';
 import { PERMISSIONS } from '@/constants';
 import useLocationFormItems from '@/pages/device/hooks/useLocationFormItems';
-import { LocationMap, type LocationMapProps } from '@/pages/device/components';
+import { LocationMap, type LocationMapProps, type LocationMapRef } from '@/pages/device/components';
 import { DEVICE_LOCATION_PRECISION } from '@/pages/device/constants';
 import './style.less';
 
@@ -76,6 +76,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
     const rootRef = useRef<HTMLDivElement>(null);
     const size = useSize(rootRef);
     const [mapInstance, setMapInstance] = useState<MapInstance>();
+    const locationMapRef = useRef<LocationMapRef>(null);
 
     // ---------- Form Items and Actions ----------
     const [loading, setLoading] = useState(false);
@@ -94,14 +95,15 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
             }
 
             // @ts-ignore
-            mapInstance?.setView([latitude, longitude], undefined, { reset: true });
+            // mapInstance?.setView([latitude, longitude], undefined, { reset: true });
+            locationMapRef.current?.setPosition([latitude, longitude]);
             return {
                 ...d,
                 latitude,
                 longitude,
             };
         });
-    }, [editing, formState.errors, mapInstance, getValues]);
+    }, [editing, formState.errors, getValues]);
     const formItems = useLocationFormItems({ onBlur: handleBlur });
 
     // Edit Save
@@ -339,6 +341,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
                 )}
             </div>
             <LocationMap
+                ref={locationMapRef}
                 width={size?.width}
                 height={size?.height}
                 preferZoomLevel={PREFER_ZOOM_LEVEL}
