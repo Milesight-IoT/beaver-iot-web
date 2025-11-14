@@ -8,7 +8,7 @@ import { getGeoLocation } from '@milesight/shared/src/utils/tools';
 import { PREFER_ZOOM_LEVEL, type MapInstance } from '@/components';
 import { type LocationType } from '@/services/http';
 // import { DEVICE_LOCATION_PRECISION } from '../../constants';
-import LocationMap, { type Props as LocationMapProps } from '../location-map';
+import LocationMap, { type Props as LocationMapProps, type LocationMapRef } from '../location-map';
 import useLocationFormItems from '../../hooks/useLocationFormItems';
 
 interface Props extends Omit<ModalProps, 'onOk'> {
@@ -29,6 +29,7 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
     // ---------- Map ----------
     const [mapInstance, setMapInstance] = useState<MapInstance>();
     const mapContainerRef = useRef<HTMLDivElement>(null);
+    const locationMapRef = useRef<LocationMapRef>(null);
     const mapSize = useSize(mapContainerRef);
 
     // ---------- Form Items and Actions ----------
@@ -47,14 +48,15 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
             }
 
             // @ts-ignore
-            mapInstance?.setView([latitude, longitude], undefined, { reset: true });
+            // mapInstance?.setView([latitude, longitude], undefined, { reset: true });
+            locationMapRef.current?.setPosition([latitude, longitude]);
             return {
                 ...d,
                 latitude,
                 longitude,
             };
         });
-    }, [visible, formState.errors, mapInstance, getValues]);
+    }, [visible, formState.errors, getValues]);
     const formItems = useLocationFormItems({ onBlur: handleBlur });
     // const [formLat, formLng] = watch(['latitude', 'longitude']);
 
@@ -143,7 +145,8 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
         >
             <div className="map-wrap" ref={mapContainerRef}>
                 <LocationMap
-                    state="edit"
+                    ref={locationMapRef}
+                    state={visible ? 'edit' : 'view'}
                     width={mapSize?.width}
                     height={mapSize?.height}
                     onReady={setMapInstance}

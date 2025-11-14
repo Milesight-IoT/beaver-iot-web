@@ -19,6 +19,15 @@ export interface AlarmContextProps {
      * Select time, -1 means custom time range
      */
     selectTime?: number;
+    /**
+     * Set pagination model
+     */
+    setPaginationModel?: React.Dispatch<
+        React.SetStateAction<{
+            page: number;
+            pageSize: number;
+        }>
+    >;
 }
 
 export const AlarmContext = createContext<AlarmContextProps | null>(null);

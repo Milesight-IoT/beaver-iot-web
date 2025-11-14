@@ -105,7 +105,7 @@ export interface AlarmSearchCondition {
     device_ids?: ApiKey[];
     start_timestamp: number;
     end_timestamp: number;
-    alarm_status?: boolean;
+    alarm_status?: boolean[];
 }
 
 /**

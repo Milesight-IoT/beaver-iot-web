@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Stack, IconButton } from '@mui/material';
-import { get } from 'lodash-es';
+import { get, isEmpty, isNil } from 'lodash-es';
 
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
 import {
@@ -31,8 +31,8 @@ export interface UseColumnsProps {
 }
 
 export enum AlarmStatus {
-    Claimed = 0,
-    Unclaimed = 1,
+    Claimed = 'Claimed',
+    Unclaimed = 'Unclaimed',
 }
 
 const useColumns = <T extends TableRowDataType>({
@@ -57,6 +57,20 @@ const useColumns = <T extends TableRowDataType>({
         ];
     }, [getIntlText]);
 
+    /**
+     * Filter alarm status
+     */
+    const filterAlarmStatus = useMemo(() => {
+        const status = filteredInfo?.alarmStatus;
+        if (!Array.isArray(status) || isEmpty(status)) {
+            return;
+        }
+
+        return (status as boolean[]).map(s =>
+            s ? AlarmStatus.Unclaimed : AlarmStatus.Claimed,
+        ) as unknown as string;
+    }, [filteredInfo]);
+
     const columns: ColumnType<T>[] = useMemo(() => {
         return [
             {
@@ -64,7 +78,7 @@ const useColumns = <T extends TableRowDataType>({
                 headerName: getIntlText('device.label.device_status'),
                 flex: 1,
                 minWidth: 120,
-                filteredValue: filteredInfo?.alarmStatus,
+                filteredValue: filterAlarmStatus,
                 filterIcon: (filtered: boolean) => {
                     return (
                         <FilterAltIcon
@@ -162,8 +176,12 @@ const useColumns = <T extends TableRowDataType>({
                                     </IconButton>
                                 </Tooltip>
                             </LoadingWrapper>
-                            <Tooltip title={getIntlText('dashboard.tip.navigate_here')}>
+                            <Tooltip
+                                isDisabledButton={isNil(row?.latitude) || isNil(row?.longitude)}
+                                title={getIntlText('dashboard.tip.navigate_here')}
+                            >
                                 <IconButton
+                                    disabled={isNil(row?.latitude) || isNil(row?.longitude)}
                                     sx={{
                                         width: 30,
                                         height: 30,
@@ -189,10 +207,10 @@ const useColumns = <T extends TableRowDataType>({
         getIntlText,
         getTimeFormat,
         isPreview,
-        filteredInfo,
         statusFilterOptions,
         claimLoading,
         claimAlarm,
+        filterAlarmStatus,
     ]);
 
     return {

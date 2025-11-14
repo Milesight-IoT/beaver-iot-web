@@ -37,7 +37,6 @@ const BaseMap: React.FC<BaseMapProps> = props => {
     const size = useSize(ref);
     const mapRef = useRef<MapInstance>(null);
     const currentOpenMarker = useRef<MarkerInstance | null>(null);
-    const isComponentDestroy = useRef(false);
     const [markers, setMarkers] = useState<Record<string, MarkerInstance>>({});
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -133,21 +132,10 @@ const BaseMap: React.FC<BaseMapProps> = props => {
      * Listener popup close
      */
     const handlePopupclose = useMemoizedFn((id: ApiKey) => {
-        if (selectDevice?.id && id && selectDevice.id === id && !isComponentDestroy?.current) {
+        if (selectDevice?.id && id && selectDevice.id === id) {
             cancelSelectDevice?.();
         }
     });
-
-    /**
-     * Component destroy
-     */
-    useEffect(() => {
-        isComponentDestroy.current = false;
-
-        return () => {
-            isComponentDestroy.current = true;
-        };
-    }, []);
 
     const closeMarkerPopup = useMemoizedFn((id: ApiKey) => {
         const marker = get(markers, String(id));
@@ -168,6 +156,8 @@ const BaseMap: React.FC<BaseMapProps> = props => {
         >
             {size && (
                 <Map
+                    touchZoom="center"
+                    scrollWheelZoom="center"
                     ref={mapRef}
                     width={size.width}
                     height={size.height}
