@@ -23,6 +23,8 @@ interface DateRangePickerProps
     onChange?: (value: DateRangePickerValueType | null) => void;
     views?: ViewsType[];
     hasError?: boolean;
+    startMinDateTime?: Dayjs;
+    endMaxDateTime?: Dayjs;
 }
 
 /**
@@ -48,6 +50,8 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     onChange,
     slotProps,
     hasError,
+    startMinDateTime,
+    endMaxDateTime,
     ...props
 }) => {
     const { getIntlText } = useI18n();
@@ -103,6 +107,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                         setStartDate(start);
                     }
                 }}
+                minDateTime={startMinDateTime}
                 maxDateTime={value?.end || undefined}
                 {...props}
             />
@@ -134,6 +139,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                     }
                 }}
                 minDateTime={value?.start || undefined}
+                maxDateTime={endMaxDateTime}
                 {...props}
             />
         </DateRangePickerStyled>

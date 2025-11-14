@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect } from 'react';
 import { useForm, Controller, type SubmitHandler, type ControllerProps } from 'react-hook-form';
 import { Box, FormControl, FormHelperText } from '@mui/material';
+import { type Dayjs } from 'dayjs';
 
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 import { Modal, toast, type ModalProps } from '@milesight/shared/src/components';
@@ -92,6 +93,21 @@ const DateRangeModal: React.FC<IProps> = ({
                                     },
                                 }}
                                 hasError={Boolean(error)}
+                                startMinDateTime={
+                                    (value as DateRangePickerValueType | null)?.end
+                                        ? (
+                                              (value as DateRangePickerValueType).end as Dayjs
+                                          ).subtract(1, 'year')
+                                        : undefined
+                                }
+                                endMaxDateTime={
+                                    (value as DateRangePickerValueType | null)?.start
+                                        ? ((value as DateRangePickerValueType).start as Dayjs).add(
+                                              1,
+                                              'year',
+                                          )
+                                        : undefined
+                                }
                             />
                             {error && <FormHelperText error>{error.message}</FormHelperText>}
                         </FormControl>
