@@ -32,7 +32,9 @@ export default (props: PluginListProps) => {
         <div className="board-plugin-list">
             <Grid container gap={2}>
                 {pluginsControlPanel
-                    ?.filter(p => !(['radarChart'] as PluginType[]).includes(p?.type))
+                    ?.filter(
+                        p => !(['radarChart', 'horizonBarChart'] as PluginType[]).includes(p?.type),
+                    )
                     ?.map((pluginConfig: BoardPluginProps) => {
                         return (
                             <Grid

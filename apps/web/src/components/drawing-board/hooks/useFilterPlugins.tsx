@@ -37,9 +37,7 @@ export default function useFilterPlugins(
         //     return pluginsControlPanel.filter(p => p.type !== 'deviceList');
         // }
 
-        return pluginsControlPanel.filter(
-            p => !(['deviceList', 'alarm', 'map'] as PluginType[]).includes(p.type),
-        );
+        return pluginsControlPanel.filter(p => !(['deviceList'] as PluginType[]).includes(p.type));
     }, [pluginsControlPanel]);
 
     return {
