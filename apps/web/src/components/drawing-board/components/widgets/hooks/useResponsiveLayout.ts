@@ -97,6 +97,7 @@ export function useResponsiveLayout(widgets: WidgetDetail[]) {
 
         switch (plugin.type) {
             case 'deviceList':
+            case 'alarm':
                 return smallScreenSize && (widgets?.length || 0) > 1 ? 4 : height;
             default:
                 return height;
