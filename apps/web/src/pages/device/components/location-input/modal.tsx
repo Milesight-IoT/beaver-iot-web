@@ -143,7 +143,7 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
         >
             <div className="map-wrap" ref={mapContainerRef}>
                 <LocationMap
-                    state="edit"
+                    state={visible ? 'edit' : 'view'}
                     width={mapSize?.width}
                     height={mapSize?.height}
                     onReady={setMapInstance}
