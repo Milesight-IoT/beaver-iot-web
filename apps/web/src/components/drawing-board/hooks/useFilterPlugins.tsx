@@ -33,12 +33,14 @@ export default function useFilterPlugins(
          * Device drawing board needs to filter
          * device list plugin
          */
-        // if (currentDevice?.id) {
-        //     return pluginsControlPanel.filter(p => p.type !== 'deviceList');
-        // }
+        if (currentDevice?.id) {
+            return pluginsControlPanel.filter(
+                p => !(['deviceList', 'map', 'alarm'] as PluginType[]).includes(p.type),
+            );
+        }
 
         return pluginsControlPanel.filter(p => !(['deviceList'] as PluginType[]).includes(p.type));
-    }, [pluginsControlPanel]);
+    }, [pluginsControlPanel, currentDevice]);
 
     return {
         pluginsControlPanel: newPlugins,
