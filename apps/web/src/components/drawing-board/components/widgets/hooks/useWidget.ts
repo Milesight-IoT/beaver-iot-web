@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useMemoizedFn } from 'ahooks';
 
 import {
@@ -8,6 +8,7 @@ import {
 import type { WidgetDetail } from '@/services/http/dashboard';
 
 export function useWidget() {
+    const [pluginFullscreen, setPluginFullscreen] = useState<Record<string, boolean>>({});
     const drawingBoardContext = useContext(DrawingBoardContext);
 
     const newDrawingBoardContext = useMemoizedFn(
@@ -28,5 +29,13 @@ export function useWidget() {
          * The context of drawing board widget
          */
         newDrawingBoardContext,
+        /**
+         * Whether the plugin is fullscreen
+         */
+        pluginFullscreen,
+        /**
+         * Set whether the plugin is fullscreen
+         */
+        setPluginFullscreen,
     };
 }

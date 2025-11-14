@@ -174,4 +174,16 @@
     .react-resizable-handle {
         display: none !important;
     }
+
+    &__plugin-fullscreen {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        /* stylelint-disable-next-line custom-property-pattern */
+        z-index: var(--mui-zIndex-modal, 1300);
+        width: 100% !important;
+        height: 100% !important;
+        transition: none !important;
+        transform: none !important;
+    }
 }
