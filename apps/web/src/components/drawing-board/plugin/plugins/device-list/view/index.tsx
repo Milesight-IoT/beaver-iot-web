@@ -1,6 +1,6 @@
-import React, { useMemo, useContext, useRef } from 'react';
-import { useMemoizedFn, useRequest } from 'ahooks';
-import { isEmpty, isNil, get } from 'lodash-es';
+import React, { useMemo, useContext, useRef, useState } from 'react';
+import { useRequest } from 'ahooks';
+import { isEmpty, isNil } from 'lodash-es';
 import { Controller } from 'react-hook-form';
 import cls from 'classnames';
 import { GridRow } from '@mui/x-data-grid';
@@ -12,7 +12,6 @@ import { type EntityFormDataProps } from '@/hooks';
 import { TablePro, HoverSearchInput, Tooltip } from '@/components';
 import { deviceAPI, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
-import { PluginFullscreenContext } from '@/components/drawing-board/components';
 import { DEVICE_STATUS_ENTITY_UNIQUE_ID } from '@/constants';
 import { type DeviceListControlPanelConfig } from '../control-panel';
 import { type BoardPluginProps } from '../../../types';
@@ -39,18 +38,8 @@ const DeviceListView: React.FC<DeviceListViewProps> = props => {
     const { devices: unStableDevices } = config || {};
     const { isPreview } = configJson || {};
     const context = useContext(DrawingBoardContext);
-    const pluginFullscreenCxt = useContext(PluginFullscreenContext);
     const deviceListRef = useRef<HTMLDivElement>(null);
-
-    const keyword = useMemo(() => {
-        return get(pluginFullscreenCxt?.extraParams, 'keyword', '');
-    }, [pluginFullscreenCxt?.extraParams]);
-
-    const setKeyword = useMemoizedFn((newVal: string) => {
-        pluginFullscreenCxt?.setExtraParams({
-            keyword: newVal,
-        });
-    });
+    const [keyword, setKeyword] = useState('');
 
     const { getIntlText } = useI18n();
     const { matchTablet } = useTheme();

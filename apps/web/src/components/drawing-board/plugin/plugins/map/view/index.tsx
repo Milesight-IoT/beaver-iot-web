@@ -48,7 +48,7 @@ const MapView: React.FC<MapViewProps> = props => {
         setSelectDevice,
         mobileKeyword,
         setMobileKeyword,
-    } = useDeviceData(pluginFullscreenCxt, devices);
+    } = useDeviceData(devices);
     const {
         entitiesStatus,
         getDeviceStatus,

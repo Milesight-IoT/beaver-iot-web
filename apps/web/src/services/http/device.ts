@@ -331,15 +331,15 @@ export default attachAPI<DeviceAPISchema>(client, {
         setLocation: `PUT ${API_PREFIX}/device/:id/location`,
         getLocation: `GET ${API_PREFIX}/device/:id/location`,
         clearLocation: `POST ${API_PREFIX}/device/:id/clear-location`,
-        getDeviceAlarms: `POST ${API_PREFIX}/device/alarms/search`,
+        getDeviceAlarms: `POST ${API_PREFIX}/alarms/search`,
         async exportDeviceAlarms(params) {
-            const resp = await client.get(`${API_PREFIX}/device/alarms/export`, {
+            const resp = await client.get(`${API_PREFIX}/alarms/export`, {
                 responseType: 'blob',
                 params,
             });
 
             return resp;
         },
-        claimDeviceAlarm: `POST ${API_PREFIX}/device/alarms/claim`,
+        claimDeviceAlarm: `POST ${API_PREFIX}/alarms/claim`,
     },
 });
