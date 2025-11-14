@@ -20,7 +20,7 @@ export interface MapContextProps {
     /**
      * Set selected device
      */
-    setSelectDevice?: (newVal?: DeviceDetail | null) => void;
+    setSelectDevice?: React.Dispatch<React.SetStateAction<DeviceDetail | null>>;
     getDeviceStatus?: (device?: DeviceDetail) => DeviceStatus | undefined;
     getNoOnlineDevicesCount?: () => number;
     /**

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import GRL, { WidthProvider, type Layout } from 'react-grid-layout';
-import { isEqual, omitBy, isNil } from 'lodash-es';
+import { isEqual, omitBy, isNil, get } from 'lodash-es';
+import cls from 'classnames';
 
 import { type WidgetDetail } from '@/services/http/dashboard';
 import { GRID_LAYOUT_MARGIN } from '@/components/drawing-board/constants';
@@ -50,7 +51,7 @@ const Widgets = (props: WidgetProps) => {
         useResponsiveLayout(widgets);
     const { helperBg, showHelperBg, setShowHelperBg } = useBackgroundHelper();
     const { handleGridLayoutResize } = useWidgetResize(mainRef);
-    const { newDrawingBoardContext } = useWidget();
+    const { newDrawingBoardContext, pluginFullscreen, setPluginFullscreen } = useWidget();
 
     const widgetRef = useRef<WidgetDetail[]>();
     const requestRef = useRef<any>(null);
@@ -174,10 +175,19 @@ const Widgets = (props: WidgetProps) => {
                     <div
                         key={id}
                         data-grid={positionWidgets.get(id)}
-                        className={!isEdit ? 'drawing-board__widget-grid-edit' : ''}
+                        className={cls({
+                            'drawing-board__plugin-fullscreen': get(
+                                pluginFullscreen,
+                                String(id),
+                                false,
+                            ),
+                        })}
                     >
                         <DrawingBoardContext.Provider value={newDrawingBoardContext(data)}>
                             <FullscreenModal
+                                id={id}
+                                isFullscreen={pluginFullscreen}
+                                setIsFullscreen={setPluginFullscreen}
                                 plugin={plugin}
                                 disabled={!plugin?.fullscreenable || isEdit}
                                 sx={plugin?.fullscreenIconSx}
