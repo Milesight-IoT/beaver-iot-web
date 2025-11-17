@@ -137,35 +137,37 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                     icon={false}
                     severity="error"
                     action={
-                        <LoadingWrapper
-                            size={16}
-                            loading={get(claimLoading, String(device?.key), false)}
-                        >
-                            <Tooltip
-                                PopperProps={{
-                                    disablePortal: true,
-                                    sx: {
-                                        minWidth: 'max-content',
-                                    },
-                                }}
-                                title={getIntlText('common.tip.click_to_claim')}
+                        !isPreview && (
+                            <LoadingWrapper
+                                size={16}
+                                loading={get(claimLoading, String(device?.key), false)}
                             >
-                                <IconButton
-                                    sx={{
-                                        width: '24px',
-                                        height: '24px',
-                                        '&.MuiButtonBase-root.MuiIconButton-root:hover': {
-                                            color: 'inherit',
+                                <Tooltip
+                                    PopperProps={{
+                                        disablePortal: true,
+                                        sx: {
+                                            minWidth: 'max-content',
                                         },
                                     }}
-                                    color="inherit"
-                                    size="small"
-                                    onClick={() => claimAlarm(device?.id, device?.key)}
+                                    title={getIntlText('common.tip.click_to_claim')}
                                 >
-                                    <CheckCircleOutlineIcon fontSize="inherit" />
-                                </IconButton>
-                            </Tooltip>
-                        </LoadingWrapper>
+                                    <IconButton
+                                        sx={{
+                                            width: '24px',
+                                            height: '24px',
+                                            '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                                                color: 'inherit',
+                                            },
+                                        }}
+                                        color="inherit"
+                                        size="small"
+                                        onClick={() => claimAlarm(device?.id, device?.key)}
+                                    >
+                                        <CheckCircleOutlineIcon fontSize="inherit" />
+                                    </IconButton>
+                                </Tooltip>
+                            </LoadingWrapper>
+                        )
                     }
                     sx={{
                         '&.MuiAlert-root': {
@@ -238,31 +240,36 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                 <div
                     className={styles['info-item__name']}
                 >{`${toSixDecimals(getDeviceLatitude(device))}, ${toSixDecimals(getDeviceLongitude(device))}`}</div>
-                <Tooltip
-                    PopperProps={{
-                        disablePortal: true,
-                        sx: {
-                            minWidth: 'max-content',
-                        },
-                    }}
-                    title={getIntlText('dashboard.tip.navigate_here')}
-                >
-                    <IconButton
-                        sx={{ paddingLeft: '4px' }}
-                        size="small"
-                        onClick={() =>
-                            openGoogleMap(device?.location?.latitude, device?.location?.longitude)
-                        }
+                {!isPreview && (
+                    <Tooltip
+                        PopperProps={{
+                            disablePortal: true,
+                            sx: {
+                                minWidth: 'max-content',
+                            },
+                        }}
+                        title={getIntlText('dashboard.tip.navigate_here')}
                     >
-                        <NearMeIcon
-                            color="primary"
-                            sx={{
-                                width: '16px',
-                                height: '16px',
-                            }}
-                        />
-                    </IconButton>
-                </Tooltip>
+                        <IconButton
+                            sx={{ paddingLeft: '4px' }}
+                            size="small"
+                            onClick={() =>
+                                openGoogleMap(
+                                    device?.location?.latitude,
+                                    device?.location?.longitude,
+                                )
+                            }
+                        >
+                            <NearMeIcon
+                                color="primary"
+                                sx={{
+                                    width: '16px',
+                                    height: '16px',
+                                }}
+                            />
+                        </IconButton>
+                    </Tooltip>
+                )}
             </div>
         </div>
     );
