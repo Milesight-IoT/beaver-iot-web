@@ -99,5 +99,8 @@
     "error.http.device_location_latitude_type_error": "设备位置的纬度类型错误",
     "error.http.device_location_longitude_type_error": "设备位置的经度类型错误",
     "error.http.duplicated_device_on_gateway": "网关上已存在相同eui或者名称的设备",
-    "error.http.device_num_limited_on_gateway": "UG63/SG50: 网关上的节点设备数量达到上限"
+    "error.http.device_num_limited_on_gateway": "UG63/SG50: 网关上的节点设备数量达到上限",
+    "error.http.entity_rounded_value_less_than_min": "实体值四舍五入后（{rounded_value}）小于允许的最小值 {min}",
+    "error.http.entity_rounded_value_greater_than_max": "实体值四舍五入后（{rounded_value}）大于允许的最大值 {max}",
+    "error.http.entity_rounded_value_out_of_range": "实体值四舍五入后（{rounded_value}）不在允许的范围内 {min} - {max}"
 }
