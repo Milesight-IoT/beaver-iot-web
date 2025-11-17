@@ -63,6 +63,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
         const [err, latlng] = await awaitWrap(getGeoLocation());
 
         if (err || !latlng) {
+            setFormLatLng(0, 0);
             setLocation({ latitude: 0, longitude: 0 });
             toast.error(getIntlText('device.message.get_location_failed'));
             return;
@@ -80,10 +81,32 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
 
     // ---------- Form Items and Actions ----------
     const [loading, setLoading] = useState(false);
-    const { control, formState, handleSubmit, reset, setValue, getValues } = useForm<LocationType>({
+    const {
+        control,
+        formState,
+        handleSubmit,
+        reset,
+        setValue,
+        getValues,
+        trigger: triggerValidation,
+    } = useForm<LocationType>({
         mode: 'onChange',
         shouldUnregister: true,
     });
+    const setFormLatLng = useCallback(
+        (lat: number | string, lng: number | string) => {
+            const formatConfig = {
+                precision: DEVICE_LOCATION_PRECISION,
+                resultType: 'string',
+            } as const;
+
+            // @ts-ignore
+            setValue('latitude', formatPrecision(lat, formatConfig));
+            // @ts-ignore
+            setValue('longitude', formatPrecision(lng, formatConfig));
+        },
+        [setValue],
+    );
     const handleBlur = useCallback(() => {
         const { latitude, longitude } = getValues();
 
@@ -215,130 +238,116 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
     // Update Form Values when location change
     useEffect(() => {
         if (!editing || !location?.latitude || !location?.longitude) return;
-        const formatConfig = {
-            precision: DEVICE_LOCATION_PRECISION,
-            resultType: 'string',
-        } as const;
 
         setValue('address', location.address);
-        // @ts-ignore
-        setValue('latitude', formatPrecision(location.latitude, formatConfig));
-        // @ts-ignore
-        setValue('longitude', formatPrecision(location.longitude, formatConfig));
-    }, [editing, location, setValue]);
+        setFormLatLng(location.latitude, location.longitude);
+        triggerValidation();
+    }, [editing, location, setValue, setFormLatLng, triggerValidation]);
 
     return (
         <div className="ms-com-device-location" ref={rootRef}>
             <div className={cls('ms-com-location-edit-panel', `state-${state}`)}>
-                {state === 'nodata' && (
-                    <div className="edit-panel-nodata">
+                <div className={cls('edit-panel-nodata', { 'd-none': state !== 'nodata' })}>
+                    <PermissionControlHidden permissions={PERMISSIONS.DEVICE_EDIT}>
+                        <Button
+                            variant="contained"
+                            startIcon={<EditIcon />}
+                            onClick={openEditState}
+                        >
+                            {getIntlText('device.label.edit_position')}
+                        </Button>
+                    </PermissionControlHidden>
+                    <div className="empty-tip">
+                        {getIntlText('device.message.no_device_location')}
+                    </div>
+                </div>
+                <div className={cls('edit-panel-edit', { 'd-none': state !== 'edit' })}>
+                    <div className="edit-panel-edit-header">
+                        {getIntlText('device.label.edit_position')}
+                    </div>
+                    <div className="edit-panel-edit-body">
+                        {formItems.map(item => (
+                            <Controller key={item.name} control={control} {...item} />
+                        ))}
+                    </div>
+                    <div className="edit-panel-edit-footer">
+                        <Button
+                            variant="contained"
+                            startIcon={!loading ? <CheckIcon /> : <CircularProgress size={16} />}
+                            disabled={loading}
+                            onClick={handleSubmit(onSubmit)}
+                        >
+                            {getIntlText('common.button.save')}
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            startIcon={<CloseIcon />}
+                            disabled={loading}
+                            onClick={handleCancel}
+                        >
+                            {getIntlText('common.button.cancel')}
+                        </Button>
+                    </div>
+                </div>
+                <div className={cls('edit-panel-view', { 'd-none': state !== 'view' })}>
+                    <div className="edit-panel-view-body">
+                        <ul className="location-detail-list">
+                            <li className="location-detail-item">
+                                <div className="location-detail-item-label">
+                                    {getIntlText('common.label.latitude')}
+                                    {getIntlText('common.symbol.colon')}
+                                </div>
+                                <div className="location-detail-item-value">
+                                    {location?.latitude || '-'}
+                                </div>
+                            </li>
+                            <li className="location-detail-item">
+                                <div className="location-detail-item-label">
+                                    {getIntlText('common.label.longitude')}
+                                    {getIntlText('common.symbol.colon')}
+                                </div>
+                                <div className="location-detail-item-value">
+                                    {location?.longitude || '-'}
+                                </div>
+                            </li>
+                            <li className="location-detail-item">
+                                <div className="location-detail-item-label">
+                                    {getIntlText('common.label.address')}
+                                    {getIntlText('common.symbol.colon')}
+                                </div>
+                                <div className="location-detail-item-value">
+                                    {location?.address || '-'}
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="edit-panel-view-footer">
                         <PermissionControlHidden permissions={PERMISSIONS.DEVICE_EDIT}>
                             <Button
                                 variant="contained"
                                 startIcon={<EditIcon />}
-                                onClick={() => openEditState()}
+                                disabled={loading}
+                                onClick={openEditState}
                             >
                                 {getIntlText('device.label.edit_position')}
                             </Button>
-                        </PermissionControlHidden>
-                        <div className="empty-tip">
-                            {getIntlText('device.message.no_device_location')}
-                        </div>
-                    </div>
-                )}
-                {state === 'edit' && (
-                    <div className="edit-panel-edit">
-                        <div className="edit-panel-edit-header">
-                            {getIntlText('device.label.edit_position')}
-                        </div>
-                        <div className="edit-panel-edit-body">
-                            {formItems.map(item => (
-                                <Controller key={item.name} control={control} {...item} />
-                            ))}
-                        </div>
-                        <div className="edit-panel-edit-footer">
-                            <Button
-                                variant="contained"
-                                startIcon={
-                                    !loading ? <CheckIcon /> : <CircularProgress size={16} />
-                                }
-                                disabled={loading}
-                                onClick={handleSubmit(onSubmit)}
-                            >
-                                {getIntlText('common.button.save')}
-                            </Button>
                             <Button
                                 variant="outlined"
-                                startIcon={<CloseIcon />}
+                                startIcon={
+                                    !loading ? (
+                                        <DeleteOutlineIcon />
+                                    ) : (
+                                        <CircularProgress size={16} />
+                                    )
+                                }
                                 disabled={loading}
-                                onClick={handleCancel}
+                                onClick={handleRemove}
                             >
-                                {getIntlText('common.button.cancel')}
+                                {getIntlText('common.label.remove')}
                             </Button>
-                        </div>
+                        </PermissionControlHidden>
                     </div>
-                )}
-                {state === 'view' && (
-                    <div className="edit-panel-view">
-                        <div className="edit-panel-view-body">
-                            <ul className="location-detail-list">
-                                <li className="location-detail-item">
-                                    <div className="location-detail-item-label">
-                                        {getIntlText('common.label.latitude')}
-                                        {getIntlText('common.symbol.colon')}
-                                    </div>
-                                    <div className="location-detail-item-value">
-                                        {location?.latitude || '-'}
-                                    </div>
-                                </li>
-                                <li className="location-detail-item">
-                                    <div className="location-detail-item-label">
-                                        {getIntlText('common.label.longitude')}
-                                        {getIntlText('common.symbol.colon')}
-                                    </div>
-                                    <div className="location-detail-item-value">
-                                        {location?.longitude || '-'}
-                                    </div>
-                                </li>
-                                <li className="location-detail-item">
-                                    <div className="location-detail-item-label">
-                                        {getIntlText('common.label.address')}
-                                        {getIntlText('common.symbol.colon')}
-                                    </div>
-                                    <div className="location-detail-item-value">
-                                        {location?.address || '-'}
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div className="edit-panel-view-footer">
-                            <PermissionControlHidden permissions={PERMISSIONS.DEVICE_EDIT}>
-                                <Button
-                                    variant="contained"
-                                    startIcon={<EditIcon />}
-                                    disabled={loading}
-                                    onClick={openEditState}
-                                >
-                                    {getIntlText('device.label.edit_position')}
-                                </Button>
-                                <Button
-                                    variant="outlined"
-                                    startIcon={
-                                        !loading ? (
-                                            <DeleteOutlineIcon />
-                                        ) : (
-                                            <CircularProgress size={16} />
-                                        )
-                                    }
-                                    disabled={loading}
-                                    onClick={handleRemove}
-                                >
-                                    {getIntlText('common.label.remove')}
-                                </Button>
-                            </PermissionControlHidden>
-                        </div>
-                    </div>
-                )}
+                </div>
             </div>
             <LocationMap
                 ref={locationMapRef}

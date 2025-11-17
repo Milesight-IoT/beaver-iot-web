@@ -132,7 +132,7 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                 autoEllipsis
                 title={device?.identifier || ''}
             />
-            {aStatus(device) && (
+            {getDeviceStatus?.(device) === 'ONLINE' && aStatus(device) && (
                 <Alert
                     icon={false}
                     severity="error"

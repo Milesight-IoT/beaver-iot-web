@@ -35,6 +35,9 @@
             // Mobile Responsive
             .bp-down(@grid-breakpoints[md], {
                 display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
 
                 &:not(:first-child) {
                     margin-left: 0;
@@ -88,8 +91,8 @@
         // Mobile Responsive
         .bp-down(@grid-breakpoints[md], {
             width: 100%;
-            height: 334px;
-            max-height: calc((100vh - 187px) / 2);
+            height: 320px;
+            // max-height: calc((100vh - 187px) / 2);
         });
 
         .location-input-map-marker {

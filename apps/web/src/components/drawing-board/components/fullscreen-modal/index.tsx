@@ -36,6 +36,7 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
 
     const { matchTablet } = useTheme();
 
+    const [onFullscreen, setOnFullscreen] = useState<() => void>();
     const [extraFullscreenSx, setExtraFullscreenSx] = useState<SxProps>();
 
     const iconSx = useMemo((): SxProps => {
@@ -55,6 +56,7 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
         return {
             pluginFullScreen,
             setExtraFullscreenSx,
+            setOnFullscreen,
         };
     }, [pluginFullScreen]);
 
@@ -64,10 +66,12 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
         }
 
         setIsFullscreen?.({ [id]: true });
+        onFullscreen?.();
     });
 
     const exitFullscreen = useMemoizedFn(() => {
         setIsFullscreen?.({});
+        onFullscreen?.();
     });
 
     /**

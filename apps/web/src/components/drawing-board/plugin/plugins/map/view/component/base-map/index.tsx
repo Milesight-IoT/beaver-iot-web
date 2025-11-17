@@ -31,7 +31,7 @@ const BaseMap: React.FC<BaseMapProps> = props => {
     const mapContext = useContext(MapContext);
     const { getColorType } = mapContext || {};
     const pluginFullscreenCxt = useContext(PluginFullscreenContext);
-    const { pluginFullScreen } = pluginFullscreenCxt || {};
+    const { pluginFullScreen, setOnFullscreen } = pluginFullscreenCxt || {};
 
     const ref = useRef<HTMLDivElement>(null);
     const size = useSize(ref);
@@ -39,6 +39,17 @@ const BaseMap: React.FC<BaseMapProps> = props => {
     const currentOpenMarker = useRef<MarkerInstance | null>(null);
     const [markers, setMarkers] = useState<Record<string, MarkerInstance>>({});
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+    /**
+     *  Whether the map is operating fullscreen
+     */
+    const operateFullscreenAndPopupOpen = useRef(false);
+    useEffect(() => {
+        setOnFullscreen?.(() => {
+            return () => {
+                operateFullscreenAndPopupOpen.current = !!currentOpenMarker?.current?.isPopupOpen();
+            };
+        });
+    }, [setOnFullscreen]);
 
     const mapData = useMemo(() => {
         if (!Array.isArray(devices) || isEmpty(devices)) {
@@ -132,9 +143,19 @@ const BaseMap: React.FC<BaseMapProps> = props => {
      * Listener popup close
      */
     const handlePopupclose = useMemoizedFn((id: ApiKey) => {
-        if (selectDevice?.id && id && selectDevice.id === id) {
+        if (
+            selectDevice?.id &&
+            id &&
+            selectDevice.id === id &&
+            !operateFullscreenAndPopupOpen?.current
+        ) {
             cancelSelectDevice?.();
         }
+
+        /**
+         * Set the operate fullscreen and popup open flag to false
+         */
+        operateFullscreenAndPopupOpen.current = false;
     });
 
     const closeMarkerPopup = useMemoizedFn((id: ApiKey) => {
