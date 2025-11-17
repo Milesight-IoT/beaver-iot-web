@@ -4,10 +4,28 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
+    padding: 10px @padding-md @padding-md;
     background-color: var(--main-background);
     border-radius: @border-radius-base;
 
     &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 10px;
+
+        &.mt-10 {
+            margin-top: 10px;
+        }
+
+        &.pe-7 {
+            padding-right: 1.75rem;
+        }
+    }
+
+    &__title {
+        flex: 1;
+        width: 0;
         font-weight: @font-weight-medium;
         .text-size(@font-size-lg);
     }
@@ -18,26 +36,8 @@
         right: 60px;
         z-index: 1000;
 
-        &.has-title {
-            top: 10px;
-            right: 48px;
-
-            &.has-title-edit {
-                right: 10px;
-            }
-
-            &.has-title-mobile {
-                top: 13px;
-            }
-        }
-
         &.edit-search {
             right: 20px;
-        }
-
-        &.search-mobile {
-            top: 24px;
-            right: 64px;
         }
     }
 

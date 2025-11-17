@@ -109,6 +109,8 @@ const MapView: React.FC<MapViewProps> = props => {
                 <IconButton
                     onClick={() => setShowMobileSearch(true)}
                     sx={{
+                        width: '36px',
+                        height: '36px',
                         color: 'text.secondary',
                         '&.MuiButtonBase-root.MuiIconButton-root:hover': {
                             color: 'text.secondary',
@@ -181,11 +183,7 @@ const MapView: React.FC<MapViewProps> = props => {
         <>
             <div
                 className={cls('map-plugin-view__search', {
-                    'has-title': !!title,
-                    'has-title-edit': !!context?.isEdit && !!title,
-                    'has-title-mobile': !!title && matchTablet,
                     'edit-search': !!context?.isEdit && !title,
-                    'search-mobile': !title && matchTablet,
                 })}
             >
                 {renderSearch()}
@@ -211,25 +209,27 @@ const MapView: React.FC<MapViewProps> = props => {
 
     return (
         <MapContext.Provider value={mapContextValue}>
-            <div
-                className={cls('map-plugin-view', [
-                    !!pluginFullScreen && matchTablet ? 'p-0' : 'p-4',
-                ])}
-            >
+            <div className={cls('map-plugin-view', { 'p-0': !!pluginFullScreen && matchTablet })}>
                 {title && (
-                    <Tooltip
+                    <div
                         className={cls(
                             'map-plugin-view__header',
-                            [!!pluginFullScreen && matchTablet ? 'p-4' : 'pb-4'],
-                            {
-                                'text-center': !!pluginFullScreen && matchTablet,
-                            },
+                            ...(!!pluginFullScreen && matchTablet ? ['mt-10', 'me-4', 'ps-6'] : []),
+                            { 'pe-7': !context?.isEdit },
                         )}
-                        autoEllipsis
-                        title={title}
-                    />
+                    >
+                        <Tooltip
+                            className={cls('map-plugin-view__title', {
+                                'text-center': !!pluginFullScreen && matchTablet,
+                            })}
+                            autoEllipsis
+                            title={title}
+                        />
+                        {!isPreview && renderSearch()}
+                    </div>
                 )}
-                {!isPreview && RenderSearchAutocomplete}
+
+                {!isPreview && !title && RenderSearchAutocomplete}
 
                 {!showMobileSearch && RenderBaseMap}
 
