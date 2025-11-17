@@ -42,7 +42,7 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
         getValues,
         trigger: triggerValidation,
     } = useForm<LocationType>({
-        mode: 'onBlur',
+        mode: 'onChange',
         shouldUnregister: true,
     });
     const setFormLatLng = useCallback(
