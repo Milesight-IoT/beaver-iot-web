@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stack, Button, Grid2 as Grid } from '@mui/material';
 import cls from 'classnames';
-import { get } from 'lodash-es';
+import { get, isNil } from 'lodash-es';
 
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
 import {
@@ -99,6 +99,7 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
                 }}
             >
                 <Button
+                    disabled={isNil(device?.latitude) || isNil(device?.longitude)}
                     variant="outlined"
                     sx={{ height: 36, textTransform: 'none' }}
                     startIcon={<NearMeOutlinedIcon sx={{ width: '1.25rem', height: '1.25rem' }} />}
