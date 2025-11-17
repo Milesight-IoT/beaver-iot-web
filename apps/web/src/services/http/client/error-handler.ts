@@ -31,7 +31,7 @@ type ErrorHandlerConfig = {
 
 /** Server error copy key */
 const serverErrorKey = getHttpErrorKey('server_error');
-/** Network timeout错误文案 key */
+/** Network timeout i18n key */
 const networkErrorKey = getHttpErrorKey('network_timeout');
 
 const handlerConfigs: ErrorHandlerConfig[] = [
@@ -108,7 +108,7 @@ const handler: ErrorHandlerConfig['handler'] = (errCode, resp) => {
     }
 
     const { status } = resp || {};
-    // 网络超时
+    // Network or gateway timeout
     if (status && [408, 504].includes(status)) {
         const message = intl.get(networkErrorKey);
         toast.error({ key: errCode || status, content: message });
@@ -119,7 +119,7 @@ const handler: ErrorHandlerConfig['handler'] = (errCode, resp) => {
 
     if (!errCode || !resp) {
         // eslint-disable-next-line
-        console.warn('接口错误，且无任何响应，请通知后端处理');
+        console.warn('The API is error with empty response. Please notify the backend to handle it.');
         // message.error(serverErrorText);
         toast.error({ key: 'commonError', content: serverErrorText });
         return;
