@@ -33,8 +33,16 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
     const mapSize = useSize(mapContainerRef);
 
     // ---------- Form Items and Actions ----------
-    const { control, formState, handleSubmit, reset, setValue, getValues } = useForm<LocationType>({
-        mode: 'onChange',
+    const {
+        control,
+        formState,
+        handleSubmit,
+        reset,
+        setValue,
+        getValues,
+        trigger: triggerValidation,
+    } = useForm<LocationType>({
+        mode: 'onBlur',
         shouldUnregister: true,
     });
     const handleBlur = useCallback(() => {
@@ -127,7 +135,8 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
         setValue('latitude', location.latitude);
         setValue('longitude', location.longitude);
         setValue('address', location.address);
-    }, [location, setValue]);
+        triggerValidation();
+    }, [location, setValue, triggerValidation]);
 
     return (
         <Modal

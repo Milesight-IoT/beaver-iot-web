@@ -80,8 +80,16 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
 
     // ---------- Form Items and Actions ----------
     const [loading, setLoading] = useState(false);
-    const { control, formState, handleSubmit, reset, setValue, getValues } = useForm<LocationType>({
-        mode: 'onChange',
+    const {
+        control,
+        formState,
+        handleSubmit,
+        reset,
+        setValue,
+        getValues,
+        trigger: triggerValidation,
+    } = useForm<LocationType>({
+        mode: 'onBlur',
         shouldUnregister: true,
     });
     const handleBlur = useCallback(() => {
@@ -225,7 +233,8 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
         setValue('latitude', formatPrecision(location.latitude, formatConfig));
         // @ts-ignore
         setValue('longitude', formatPrecision(location.longitude, formatConfig));
-    }, [editing, location, setValue]);
+        triggerValidation();
+    }, [editing, location, setValue, triggerValidation]);
 
     return (
         <div className="ms-com-device-location" ref={rootRef}>
