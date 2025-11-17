@@ -1,6 +1,5 @@
 import React, { useMemo, forwardRef, useImperativeHandle } from 'react';
 import { TextField, Autocomplete, type SxProps } from '@mui/material';
-import { omit, pick } from 'lodash-es';
 
 import { useI18n } from '@milesight/shared/src/hooks';
 import { SearchIcon } from '@milesight/shared/src/components';
@@ -37,20 +36,26 @@ function HoverSearchInput<T>(
         };
     });
 
-    const textFieldSx = useMemo(() => {
-        const result: SxProps = {
-            inputWidth: 0,
+    /**
+     * No show search input custom style
+     */
+    const noShowSearchTextFieldSx = useMemo((): SxProps | undefined => {
+        if (showSearch) {
+            return;
+        }
+
+        return {
             '& .MuiOutlinedInput-notchedOutline': {
                 border: 'none',
             },
+            '&.MuiFormControl-root.MuiTextField-root .MuiInputBase-root': {
+                paddingRight: '25px',
+                paddingLeft: 0,
+                input: {
+                    paddingRight: 1,
+                },
+            },
         };
-
-        if (showSearch) {
-            result.inputWidth = 185;
-            return pick(result, ['inputWidth']);
-        }
-
-        return result;
     }, [showSearch]);
 
     return (
@@ -70,14 +75,16 @@ function HoverSearchInput<T>(
                         backgroundColor: 'transparent',
                         '&.MuiFormControl-root': {
                             maxWidth: '240px',
-                            marginBottom: 0,
                             '.MuiInputBase-root': {
                                 backgroundColor: showSearch ? undefined : 'transparent',
                             },
                         },
+                        '&.MuiFormControl-root.MuiFormControl-marginDense.MuiTextField-root': {
+                            marginBottom: 0,
+                        },
                         '.MuiAutocomplete-inputRoot input.MuiAutocomplete-input': {
                             minWidth: 0,
-                            width: textFieldSx.inputWidth,
+                            width: showSearch ? 185 : 0,
                             transition: 'all .2s',
                             '&:focus': {
                                 boxShadow: 'none',
@@ -86,7 +93,10 @@ function HoverSearchInput<T>(
                         svg: {
                             cursor: 'pointer',
                         },
-                        ...omit(textFieldSx, ['inputWidth']),
+                        '&.MuiFormControl-root.MuiTextField-root .MuiInputBase-root': {
+                            paddingRight: '25px',
+                        },
+                        ...noShowSearchTextFieldSx,
                     }}
                     {...params}
                 />
@@ -109,6 +119,10 @@ function HoverSearchInput<T>(
                         display: 'none',
                     },
                 },
+                '&.MuiAutocomplete-hasPopupIcon.MuiAutocomplete-hasClearIcon .MuiTextField-root .MuiOutlinedInput-root':
+                    {
+                        paddingRight: '39px',
+                    },
             }}
         />
     );

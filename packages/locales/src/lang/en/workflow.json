@@ -80,6 +80,7 @@
     "workflow.label.design_mode_advanced_name": "Advanced Model",
     "workflow.label.design_mode_canvas_name": "Canvas Mode",
     "workflow.label.email_node_name": "Email Notification",
+    "workflow.label.entity_count": "{1} Entities",
     "workflow.label.entry_node_number_limit_tip": "The workflow must have exactly {1} entry node and no more",
     "workflow.label.free_node_limit_tip": "No stray nodes allowed in the workflow",
     "workflow.label.handle_tooltip": "<b>Click</b> to add Node<br /><b>Drag</b> to connect",
@@ -114,6 +115,8 @@
     "workflow.label.placeholder_please_enter_curl": "Please enter the cURL command here.",
     "workflow.label.placeholder_please_enter_json": "Please enter JSON",
     "workflow.label.placeholder_please_enter_raw_text": "Please enter Raw text",
+    "workflow.label.select_by_tags": "Select by Tags",
+    "workflow.label.select_entities": "Select Entities",
     "workflow.label.select_node_name": "Entity Selection",
     "workflow.label.service_node_name": "Service Invocation",
     "workflow.label.timer_node_desc": "Trigger a workflow run at regular intervals or periodically.",
@@ -122,6 +125,7 @@
     "workflow.label.trigger_node_name": "Trigger",
     "workflow.label.use_system_smtp_settings": "Use system SMTP settings",
     "workflow.label.webhook_node_name": "Webhook Push",
+    "workflow.message.batch_select_by_tags_tip": "Modifying tags will synchronize the selected tags.",
     "workflow.message.delete_tip": "Are you sure you want to delete the workflow? It cannot be restore after deletion.",
     "workflow.message.import_dsl_error": "The DSL file contains errors. Please update the file and try again.",
     "workflow.modal.add_workflow_modal": "Create Workflow",
@@ -156,9 +160,5 @@
     "workflow.valid.parameter_required": "The {1} node parameter is required.",
     "workflow.valid.range_length": "The length of the {1} field value should be greater than or equal to {2} and less than or equal to {3}.",
     "workflow.valid.range_num": "The value assigned to entity {1} shall be greater than or equal to {2} and less than or equal to {3}.",
-    "workflow.valid.required": "The {1} field is required.",
-    "workflow.label.select_entities": "Select Entities",
-    "workflow.label.select_by_tags": "Select by Tags",
-    "workflow.message.batch_select_by_tags_tip": "Modifying tags will synchronize the selected tags.",
-    "workflow.label.entity_count": "{1} Entities"
+    "workflow.valid.required": "The {1} field is required."
 }

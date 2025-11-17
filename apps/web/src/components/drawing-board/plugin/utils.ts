@@ -151,7 +151,7 @@ export const toSixDecimals = (num?: number) => {
         return '';
     }
 
-    return toNum.toFixed(6);
+    return parseFloat(toNum.toFixed(6));
 };
 
 /**
