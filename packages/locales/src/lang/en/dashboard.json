@@ -65,5 +65,6 @@
     "dashboard.plugin_name_text": "Text",
     "dashboard.plugin_name_device_list": "Device List",
     "dashboard.title.add_widget": "Add {1} Widget",
-    "dashboard.title.edit_widget": "Edit {1} Widget"
+    "dashboard.title.edit_widget": "Edit {1} Widget",
+    "dashboard.tip.abnormal_soil_conditions": "Abnormal soil conditions at the site."
 }

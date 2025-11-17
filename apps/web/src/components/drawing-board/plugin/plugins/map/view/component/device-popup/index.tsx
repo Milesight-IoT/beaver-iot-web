@@ -191,7 +191,7 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                             disablePortal: true,
                         }}
                         autoEllipsis
-                        title={aContent(device) || ''}
+                        title={getIntlText('dashboard.tip.abnormal_soil_conditions')}
                     />
                 </Alert>
             )}
