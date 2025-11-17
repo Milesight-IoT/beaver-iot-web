@@ -1,6 +1,5 @@
 import React, { useMemo, forwardRef, useImperativeHandle } from 'react';
 import { TextField, Autocomplete, type SxProps } from '@mui/material';
-import { omit, pick } from 'lodash-es';
 
 import { useI18n } from '@milesight/shared/src/hooks';
 import { SearchIcon } from '@milesight/shared/src/components';
@@ -49,7 +48,7 @@ function HoverSearchInput<T>(
             '& .MuiOutlinedInput-notchedOutline': {
                 border: 'none',
             },
-            '&.MuiFormControl-root .MuiInputBase-root': {
+            '&.MuiFormControl-root.MuiTextField-root .MuiInputBase-root': {
                 paddingRight: '25px',
                 paddingLeft: 0,
                 input: {
@@ -94,7 +93,7 @@ function HoverSearchInput<T>(
                         svg: {
                             cursor: 'pointer',
                         },
-                        '&.MuiFormControl-root .MuiInputBase-root': {
+                        '&.MuiFormControl-root.MuiTextField-root .MuiInputBase-root': {
                             paddingRight: '25px',
                         },
                         ...noShowSearchTextFieldSx,
