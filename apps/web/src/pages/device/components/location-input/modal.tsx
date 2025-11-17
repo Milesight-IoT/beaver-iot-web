@@ -148,7 +148,7 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
                     ref={locationMapRef}
                     state={visible ? 'edit' : 'view'}
                     width={mapSize?.width}
-                    height={mapSize?.height}
+                    height={matchTablet ? 320 : mapSize?.height}
                     onReady={setMapInstance}
                     onPositionChange={handlePositionChange}
                 />
