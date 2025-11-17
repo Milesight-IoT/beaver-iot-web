@@ -42,15 +42,8 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
     const mapContext = useContext(MapContext);
     const { isPreview, entitiesStatus, getDeviceStatus, getNewestEntitiesStatus } =
         mapContext || {};
-    const {
-        getDeviceLatitude,
-        getDeviceLongitude,
-        aStatus,
-        aContent,
-        temperature,
-        moisture,
-        conductivity,
-    } = useEntityStatus(entitiesStatus);
+    const { getDeviceLatitude, getDeviceLongitude, aStatus, temperature, moisture, conductivity } =
+        useEntityStatus(entitiesStatus);
     const { claimLoading, claimAlarm } = useAlarmClaim(getNewestEntitiesStatus);
 
     const { run: handleDeleteSpot } = useDebounceFn(
@@ -132,7 +125,7 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                 autoEllipsis
                 title={device?.identifier || ''}
             />
-            {getDeviceStatus?.(device) === 'ONLINE' && aStatus(device) && (
+            {aStatus(device) && (
                 <Alert
                     icon={false}
                     severity="error"
