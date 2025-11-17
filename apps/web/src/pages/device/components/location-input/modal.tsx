@@ -4,10 +4,10 @@ import { useSize } from 'ahooks';
 import { useForm, Controller } from 'react-hook-form';
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 import { Modal, toast, type ModalProps } from '@milesight/shared/src/components';
-import { getGeoLocation } from '@milesight/shared/src/utils/tools';
+import { getGeoLocation, formatPrecision } from '@milesight/shared/src/utils/tools';
 import { PREFER_ZOOM_LEVEL, type MapInstance } from '@/components';
 import { type LocationType } from '@/services/http';
-// import { DEVICE_LOCATION_PRECISION } from '../../constants';
+import { DEVICE_LOCATION_PRECISION } from '../../constants';
 import LocationMap, { type Props as LocationMapProps, type LocationMapRef } from '../location-map';
 import useLocationFormItems from '../../hooks/useLocationFormItems';
 
@@ -45,6 +45,20 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
         mode: 'onBlur',
         shouldUnregister: true,
     });
+    const setFormLatLng = useCallback(
+        (lat: number | string, lng: number | string) => {
+            const formatConfig = {
+                precision: DEVICE_LOCATION_PRECISION,
+                resultType: 'string',
+            } as const;
+
+            // @ts-ignore
+            setValue('latitude', formatPrecision(lat, formatConfig));
+            // @ts-ignore
+            setValue('longitude', formatPrecision(lng, formatConfig));
+        },
+        [setValue],
+    );
     const handleBlur = useCallback(() => {
         const { latitude, longitude } = getValues();
 
@@ -124,19 +138,33 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
             })
             .catch(err => {
                 console.error(err);
-                toast.error(getIntlText('device.message.get_location_failed'));
+                setFormLatLng(0, 0);
+                setLocation(d => {
+                    if (d && isPosEqual([0, 0], [d.latitude, d.longitude])) {
+                        return d;
+                    }
+
+                    return {
+                        ...d,
+                        latitude: 0,
+                        longitude: 0,
+                    };
+                });
+                toast.error({
+                    key: 'get_location_failed',
+                    content: getIntlText('device.message.get_location_failed'),
+                });
             });
-    }, [data, visible, mapInstance, location, reset, getIntlText]);
+    }, [data, visible, mapInstance, location, setFormLatLng, getIntlText]);
 
     // Update Form Values when location change
     useEffect(() => {
         if (!location?.latitude || !location?.longitude) return;
 
-        setValue('latitude', location.latitude);
-        setValue('longitude', location.longitude);
+        setFormLatLng(location.latitude, location.longitude);
         setValue('address', location.address);
         triggerValidation();
-    }, [location, setValue, triggerValidation]);
+    }, [location, setValue, setFormLatLng, triggerValidation]);
 
     return (
         <Modal

@@ -63,6 +63,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
         const [err, latlng] = await awaitWrap(getGeoLocation());
 
         if (err || !latlng) {
+            setFormLatLng(0, 0);
             setLocation({ latitude: 0, longitude: 0 });
             toast.error(getIntlText('device.message.get_location_failed'));
             return;
@@ -92,6 +93,20 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
         mode: 'onBlur',
         shouldUnregister: true,
     });
+    const setFormLatLng = useCallback(
+        (lat: number | string, lng: number | string) => {
+            const formatConfig = {
+                precision: DEVICE_LOCATION_PRECISION,
+                resultType: 'string',
+            } as const;
+
+            // @ts-ignore
+            setValue('latitude', formatPrecision(lat, formatConfig));
+            // @ts-ignore
+            setValue('longitude', formatPrecision(lng, formatConfig));
+        },
+        [setValue],
+    );
     const handleBlur = useCallback(() => {
         const { latitude, longitude } = getValues();
 
@@ -223,18 +238,11 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
     // Update Form Values when location change
     useEffect(() => {
         if (!editing || !location?.latitude || !location?.longitude) return;
-        const formatConfig = {
-            precision: DEVICE_LOCATION_PRECISION,
-            resultType: 'string',
-        } as const;
 
         setValue('address', location.address);
-        // @ts-ignore
-        setValue('latitude', formatPrecision(location.latitude, formatConfig));
-        // @ts-ignore
-        setValue('longitude', formatPrecision(location.longitude, formatConfig));
+        setFormLatLng(location.latitude, location.longitude);
         triggerValidation();
-    }, [editing, location, setValue, triggerValidation]);
+    }, [editing, location, setValue, setFormLatLng, triggerValidation]);
 
     return (
         <div className="ms-com-device-location" ref={rootRef}>
