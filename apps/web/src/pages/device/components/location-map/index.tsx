@@ -159,7 +159,10 @@ const LocationMap = (
             scrollwheelzoom({ target, nextZoom }) {
                 const map = target as MapInstance;
                 preventMoveEventRef.current = true;
-                map.setView(zoomCenterRef.current || map.getCenter(), nextZoom);
+                map.setView(
+                    !editing ? map.getCenter() : zoomCenterRef.current || map.getCenter(),
+                    nextZoom,
+                );
             },
         }),
         [editing, handlePositionChange],
