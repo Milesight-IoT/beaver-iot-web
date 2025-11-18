@@ -214,7 +214,9 @@ const MapView: React.FC<MapViewProps> = props => {
                     <div
                         className={cls(
                             'map-plugin-view__header',
-                            ...(!!pluginFullScreen && matchTablet ? ['mt-10', 'me-4', 'ps-6'] : []),
+                            ...(!!pluginFullScreen && matchTablet
+                                ? ['mt-10', 'me-4', 'ps-82']
+                                : []),
                             { 'pe-7': !context?.isEdit },
                         )}
                     >
