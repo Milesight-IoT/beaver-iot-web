@@ -42,15 +42,8 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
     const mapContext = useContext(MapContext);
     const { isPreview, entitiesStatus, getDeviceStatus, getNewestEntitiesStatus } =
         mapContext || {};
-    const {
-        getDeviceLatitude,
-        getDeviceLongitude,
-        aStatus,
-        aContent,
-        temperature,
-        moisture,
-        conductivity,
-    } = useEntityStatus(entitiesStatus);
+    const { getDeviceLatitude, getDeviceLongitude, aStatus, temperature, moisture, conductivity } =
+        useEntityStatus(entitiesStatus);
     const { claimLoading, claimAlarm } = useAlarmClaim(getNewestEntitiesStatus);
 
     const { run: handleDeleteSpot } = useDebounceFn(
@@ -132,40 +125,42 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                 autoEllipsis
                 title={device?.identifier || ''}
             />
-            {getDeviceStatus?.(device) === 'ONLINE' && aStatus(device) && (
+            {aStatus(device) && (
                 <Alert
                     icon={false}
                     severity="error"
                     action={
-                        <LoadingWrapper
-                            size={16}
-                            loading={get(claimLoading, String(device?.key), false)}
-                        >
-                            <Tooltip
-                                PopperProps={{
-                                    disablePortal: true,
-                                    sx: {
-                                        minWidth: 'max-content',
-                                    },
-                                }}
-                                title={getIntlText('common.tip.click_to_claim')}
+                        !isPreview && (
+                            <LoadingWrapper
+                                size={16}
+                                loading={get(claimLoading, String(device?.key), false)}
                             >
-                                <IconButton
-                                    sx={{
-                                        width: '24px',
-                                        height: '24px',
-                                        '&.MuiButtonBase-root.MuiIconButton-root:hover': {
-                                            color: 'inherit',
+                                <Tooltip
+                                    PopperProps={{
+                                        disablePortal: true,
+                                        sx: {
+                                            minWidth: 'max-content',
                                         },
                                     }}
-                                    color="inherit"
-                                    size="small"
-                                    onClick={() => claimAlarm(device?.id, device?.key)}
+                                    title={getIntlText('common.tip.click_to_claim')}
                                 >
-                                    <CheckCircleOutlineIcon fontSize="inherit" />
-                                </IconButton>
-                            </Tooltip>
-                        </LoadingWrapper>
+                                    <IconButton
+                                        sx={{
+                                            width: '24px',
+                                            height: '24px',
+                                            '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                                                color: 'inherit',
+                                            },
+                                        }}
+                                        color="inherit"
+                                        size="small"
+                                        onClick={() => claimAlarm(device?.id, device?.key)}
+                                    >
+                                        <CheckCircleOutlineIcon fontSize="inherit" />
+                                    </IconButton>
+                                </Tooltip>
+                            </LoadingWrapper>
+                        )
                     }
                     sx={{
                         '&.MuiAlert-root': {
@@ -238,31 +233,36 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                 <div
                     className={styles['info-item__name']}
                 >{`${toSixDecimals(getDeviceLatitude(device))}, ${toSixDecimals(getDeviceLongitude(device))}`}</div>
-                <Tooltip
-                    PopperProps={{
-                        disablePortal: true,
-                        sx: {
-                            minWidth: 'max-content',
-                        },
-                    }}
-                    title={getIntlText('dashboard.tip.navigate_here')}
-                >
-                    <IconButton
-                        sx={{ paddingLeft: '4px' }}
-                        size="small"
-                        onClick={() =>
-                            openGoogleMap(device?.location?.latitude, device?.location?.longitude)
-                        }
+                {!isPreview && (
+                    <Tooltip
+                        PopperProps={{
+                            disablePortal: true,
+                            sx: {
+                                minWidth: 'max-content',
+                            },
+                        }}
+                        title={getIntlText('dashboard.tip.navigate_here')}
                     >
-                        <NearMeIcon
-                            color="primary"
-                            sx={{
-                                width: '16px',
-                                height: '16px',
-                            }}
-                        />
-                    </IconButton>
-                </Tooltip>
+                        <IconButton
+                            sx={{ paddingLeft: '4px' }}
+                            size="small"
+                            onClick={() =>
+                                openGoogleMap(
+                                    device?.location?.latitude,
+                                    device?.location?.longitude,
+                                )
+                            }
+                        >
+                            <NearMeIcon
+                                color="primary"
+                                sx={{
+                                    width: '16px',
+                                    height: '16px',
+                                }}
+                            />
+                        </IconButton>
+                    </Tooltip>
+                )}
             </div>
         </div>
     );
