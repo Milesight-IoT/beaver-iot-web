@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
     Popover,
     Button,
@@ -69,6 +69,7 @@ const FilterDropdown = (props: FilterDropdownProps) => {
 
     const [visible, setVisible] = useState(false);
     const [openColumn, setOpenColumn] = useState<Element | null>(null);
+    const filterIconRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setOpenColumn(document.querySelector(`[data-field='${column.field}']`));
@@ -269,6 +270,7 @@ const FilterDropdown = (props: FilterDropdownProps) => {
 
         return (
             <div
+                ref={filterIconRef}
                 className={classNames('ms-table-pro-columns-header-icon', {
                     'ms-table-pro-columns-header-icon-active': filtered,
                 })}
@@ -292,7 +294,7 @@ const FilterDropdown = (props: FilterDropdownProps) => {
             </div>
             <Popover
                 open={visible}
-                anchorEl={openColumn}
+                anchorEl={filterIconRef.current}
                 onClose={onClose}
                 anchorOrigin={{
                     vertical: 'bottom',
