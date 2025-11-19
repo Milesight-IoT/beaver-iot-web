@@ -33,6 +33,7 @@ const useMqtt = () => {
             if (err || !isRequestSuccess(basicResp) || !isRequestSuccess(brokerResp)) {
                 return;
             }
+            const debug = window.sessionStorage.getItem('vconsole') === 'true';
             const basicInfo = getResponseData(basicResp);
             const brokerInfo = getResponseData(brokerResp);
             const isHttps = window.location.protocol === 'https:';
@@ -43,6 +44,7 @@ const useMqtt = () => {
                 : brokerInfo?.ws_port || location.port;
 
             return {
+                debug,
                 username: basicInfo?.username,
                 password: basicInfo?.password,
                 clientId: basicInfo?.client_id,
