@@ -106,6 +106,7 @@ export interface AlarmSearchCondition {
     start_timestamp: number;
     end_timestamp: number;
     alarm_status?: boolean[];
+    timezone?: string;
 }
 
 /**
