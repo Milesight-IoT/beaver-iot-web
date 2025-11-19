@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import cls from 'classnames';
 import { useSize } from 'ahooks';
-import { isNumber } from 'lodash-es';
+import { isNil } from 'lodash-es';
 import { Button, CircularProgress } from '@mui/material';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { useI18n } from '@milesight/shared/src/hooks';
@@ -241,7 +241,9 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
 
     // Update Form Values when location change
     useEffect(() => {
-        if (!editing || !isNumber(location?.latitude) || !isNumber(location?.longitude)) return;
+        if (!editing || !location || isNil(location.latitude) || isNil(location.longitude)) {
+            return;
+        }
 
         setValue('address', location.address);
         setFormLatLng(location.latitude, location.longitude);
@@ -302,7 +304,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
                                     {getIntlText('common.symbol.colon')}
                                 </div>
                                 <div className="location-detail-item-value">
-                                    {isNumber(location?.latitude) ? location.latitude : '-'}
+                                    {isNil(location?.latitude) ? '-' : location.latitude}
                                 </div>
                             </li>
                             <li className="location-detail-item">
@@ -311,7 +313,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
                                     {getIntlText('common.symbol.colon')}
                                 </div>
                                 <div className="location-detail-item-value">
-                                    {isNumber(location?.longitude) ? location.longitude : '-'}
+                                    {isNil(location?.longitude) ? '-' : location.longitude}
                                 </div>
                             </li>
                             <li className="location-detail-item">
