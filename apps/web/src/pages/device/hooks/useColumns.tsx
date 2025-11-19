@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Stack, IconButton } from '@mui/material';
+import { isNumber } from 'lodash-es';
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
 import {
     ListAltIcon,
@@ -87,11 +88,9 @@ const useColumns = <T extends TableRowDataType>({
                 minWidth: 250,
                 renderCell({ row }) {
                     const { location } = row;
-                    if (!location?.latitude || !location?.longitude) {
-                        return '-';
-                    }
 
-                    return `${location?.latitude}, ${location?.longitude}`;
+                    if (!location) return '-';
+                    return `${location.latitude}, ${location.longitude}`;
                 },
             },
             {

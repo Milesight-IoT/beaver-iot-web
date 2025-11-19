@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import cls from 'classnames';
 import { useSize } from 'ahooks';
+import { isNumber } from 'lodash-es';
 import { Button, CircularProgress } from '@mui/material';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { useI18n } from '@milesight/shared/src/hooks';
@@ -108,7 +109,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
         [setValue],
     );
     const handleBlur = useCallback(() => {
-        const { latitude, longitude } = getValues();
+        const { latitude, longitude, address } = getValues();
 
         if (!editing || !latitude || !longitude || Object.keys(formState.errors).length) return;
 
@@ -122,6 +123,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
             locationMapRef.current?.setPosition([latitude, longitude]);
             return {
                 ...d,
+                address,
                 latitude,
                 longitude,
             };
@@ -158,7 +160,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
         reset();
         if (!originLocation) {
             setState('nodata');
-            setLocation(data?.location);
+            setLocation(undefined);
             return;
         }
 
@@ -201,18 +203,20 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
 
     const handlePositionChange = useCallback<NonNullable<LocationMapProps['onPositionChange']>>(
         pos => {
+            const { address } = getValues();
             setLocation(d => {
                 if (d && isPosEqual(pos, [d.latitude, d.longitude])) return d;
 
                 mapInstance?.setView([pos[0], pos[1]]);
                 return {
                     ...d,
+                    address,
                     latitude: pos[0],
                     longitude: pos[1],
                 };
             });
         },
-        [mapInstance],
+        [mapInstance, getValues],
     );
 
     // Reset form data panel state change
@@ -237,7 +241,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
 
     // Update Form Values when location change
     useEffect(() => {
-        if (!editing || !location?.latitude || !location?.longitude) return;
+        if (!editing || !isNumber(location?.latitude) || !isNumber(location?.longitude)) return;
 
         setValue('address', location.address);
         setFormLatLng(location.latitude, location.longitude);
@@ -298,7 +302,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
                                     {getIntlText('common.symbol.colon')}
                                 </div>
                                 <div className="location-detail-item-value">
-                                    {location?.latitude || '-'}
+                                    {isNumber(location?.latitude) ? location.latitude : '-'}
                                 </div>
                             </li>
                             <li className="location-detail-item">
@@ -307,7 +311,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
                                     {getIntlText('common.symbol.colon')}
                                 </div>
                                 <div className="location-detail-item-value">
-                                    {location?.longitude || '-'}
+                                    {isNumber(location?.longitude) ? location.longitude : '-'}
                                 </div>
                             </li>
                             <li className="location-detail-item">
@@ -354,7 +358,7 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
                 width={size?.width}
                 height={size?.height}
                 preferZoomLevel={PREFER_ZOOM_LEVEL}
-                state={editing && !loading ? 'edit' : 'view'}
+                state={editing ? 'edit' : 'view'}
                 className={cls({ 'd-none': !size?.width || !size?.height })}
                 marker={!editing && location ? [location.latitude, location.longitude] : undefined}
                 onPositionChange={handlePositionChange}
