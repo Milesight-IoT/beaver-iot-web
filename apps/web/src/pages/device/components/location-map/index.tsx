@@ -10,6 +10,7 @@ import cls from 'classnames';
 import { Tooltip } from '@mui/material';
 import { useMemoizedFn, useThrottleFn } from 'ahooks';
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
+import { isAppleDevice } from '@milesight/shared/src/utils/userAgent';
 import { formatPrecision } from '@milesight/shared/src/utils/tools';
 import { MyLocationIcon, LocationPinIcon } from '@milesight/shared/src/components';
 import {
@@ -217,7 +218,11 @@ const LocationMap = (
                     onClose={() => setTooltipOpen(false)}
                     onOpen={() => setTooltipOpen(true)}
                 >
-                    <LocationPinIcon className="ms-com-location-map-marker" />
+                    <LocationPinIcon
+                        className={cls('ms-com-location-map-marker', {
+                            'is-apple': isAppleDevice(),
+                        })}
+                    />
                 </Tooltip>
             )}
         </Map>

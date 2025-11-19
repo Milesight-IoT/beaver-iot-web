@@ -1,4 +1,4 @@
-import { isSafari } from './userAgent';
+import { isSafari, isMobile } from './userAgent';
 
 /* eslint-disable no-console */
 type Methods = 'log' | 'info' | 'warn' | 'error' | 'debug' | 'groupCollapsed' | 'groupEnd';
@@ -39,7 +39,12 @@ export class Logger {
             `padding: 2px 0.5em`,
         ];
         // When in a group, the workbox prefix is not displayed.
-        const logPrefix = inGroup || !this.topic ? [] : [`%c${this.topic}`, styles.join(';')];
+        const logPrefix =
+            inGroup || !this.topic
+                ? []
+                : isMobile()
+                  ? [`【${this.topic}】`]
+                  : [`%c${this.topic}`, styles.join(';')];
 
         console[method](...logPrefix, ...args);
         if (method === 'groupCollapsed') {

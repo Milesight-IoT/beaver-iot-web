@@ -85,16 +85,19 @@ export function useDashboardDetail(drawingBoardId: ApiKey) {
             });
         });
 
-        return removeTriggerListener;
+        return () => {
+            removeTriggerListener?.();
+            mqttClient?.unsubscribe(MQTT_EVENT_TYPE.EXCHANGE);
+        };
     }, [mqttStatus, mqttClient, drawingBoardId, triggerEntityListener]);
 
     // Unsubscribe the topic when the dashboard page is unmounted
-    useEffect(() => {
-        return () => {
-            mqttClient?.unsubscribe(MQTT_EVENT_TYPE.EXCHANGE);
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // useEffect(() => {
+    //     return () => {
+    //         mqttClient?.unsubscribe(MQTT_EVENT_TYPE.EXCHANGE);
+    //     };
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
 
     return {
         loading,

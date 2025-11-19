@@ -82,7 +82,8 @@ const Controls: React.FC<ControlsProps> = ({
         useStoreShallow(['selectedNode', 'isLogMode']),
     );
     const isPanMode = moveMode === 'hand';
-    const shortcutDisable = !!selectedNode || designMode === 'advanced' || isLogMode();
+    const shortcutDisable =
+        !nodes.length || !!selectedNode || designMode === 'advanced' || isLogMode();
 
     const handleMoveModeChange = useCallback(
         (mode: MoveMode) => {
@@ -109,7 +110,12 @@ const Controls: React.FC<ControlsProps> = ({
     useKeyPress(
         'ctrl.v',
         e => {
-            if (shortcutDisable) return;
+            const { nodeName } = e.target as HTMLElement;
+
+            if (shortcutDisable || ['input', 'textarea'].includes(nodeName.toLocaleLowerCase())) {
+                return;
+            }
+
             e.preventDefault();
             handleMoveModeChange('pointer');
         },

@@ -60,7 +60,7 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
         [setValue],
     );
     const handleBlur = useCallback(() => {
-        const { latitude, longitude } = getValues();
+        const { latitude, longitude, address } = getValues();
 
         if (!visible || !latitude || !longitude || Object.keys(formState.errors).length) return;
 
@@ -74,6 +74,7 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
             locationMapRef.current?.setPosition([latitude, longitude]);
             return {
                 ...d,
+                address,
                 latitude,
                 longitude,
             };
@@ -91,6 +92,7 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
     const [location, setLocation] = useState<LocationType>();
     const handlePositionChange = useCallback<NonNullable<LocationMapProps['onPositionChange']>>(
         pos => {
+            const { address } = getValues();
             setLocation(d => {
                 if (d && isPosEqual([pos[0], pos[1]], [d.latitude, d.longitude])) {
                     return d;
@@ -99,12 +101,13 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
                 mapInstance?.setView([pos[0], pos[1]]);
                 return {
                     ...d,
+                    address,
                     latitude: pos[0],
                     longitude: pos[1],
                 };
             });
         },
-        [mapInstance],
+        [mapInstance, getValues],
     );
 
     // Reset form data when modal close

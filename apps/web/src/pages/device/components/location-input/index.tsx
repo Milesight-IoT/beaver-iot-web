@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useControllableValue } from 'ahooks';
+import { isNil } from 'lodash-es';
 import {
     Button,
     IconButton,
@@ -54,7 +55,7 @@ const LocationInput: React.FC<Props> = ({
         >
             {!!label && <InputLabel required={required}>{label}</InputLabel>}
             <div className="ms-com-location-input">
-                {!value?.latitude || !value?.longitude ? (
+                {isNil(value?.latitude) || isNil(value?.longitude) ? (
                     <Button
                         fullWidth
                         variant="outlined"
@@ -72,7 +73,7 @@ const LocationInput: React.FC<Props> = ({
                                     {getIntlText('common.symbol.colon')}
                                 </span>
                                 <span className="location-input-detail-item-value">
-                                    {!value ? '' : +value.latitude}
+                                    {isNil(value.latitude) ? '-' : +value.latitude}
                                 </span>
                             </div>
                             <div className="location-input-detail-item">
@@ -81,7 +82,7 @@ const LocationInput: React.FC<Props> = ({
                                     {getIntlText('common.symbol.colon')}
                                 </span>
                                 <span className="location-input-detail-item-value">
-                                    {!value ? '' : +value.longitude}
+                                    {isNil(value.longitude) ? '-' : +value.longitude}
                                 </span>
                             </div>
                             <div className="location-input-detail-item">

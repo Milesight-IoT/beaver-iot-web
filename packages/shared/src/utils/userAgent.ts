@@ -49,6 +49,28 @@ export function isIOS() {
 }
 
 /**
+ * @description Check if the device is an Apple device (iOS, iPadOS, macOS)
+ * Detects iPhone, iPad, iPod, and Mac devices
+ */
+export function isAppleDevice(): boolean {
+    if (typeof window === 'undefined') return false;
+
+    const { userAgent: ua, platform } = window.navigator;
+
+    // Check for iOS devices (iPhone, iPod)
+    const isIOSDevice = /iPhone|iPod/.test(ua);
+
+    // Check for iPad
+    // iPadOS 13+ reports as Mac in UA, so we need additional checks
+    const isIPad = /iPad/.test(ua) || (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    // Check for macOS
+    const isMac = /Macintosh|Mac OS X/.test(ua) && !isIPad;
+
+    return isIOSDevice || isIPad || isMac;
+}
+
+/**
  * @description Check if the client is Safari browser
  */
 export function isSafari() {

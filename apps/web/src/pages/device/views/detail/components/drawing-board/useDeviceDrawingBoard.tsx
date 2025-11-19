@@ -109,16 +109,19 @@ export default function useDeviceDrawingBoard(
             });
         });
 
-        return removeTriggerListener;
+        return () => {
+            removeTriggerListener?.();
+            mqttClient?.unsubscribe(MQTT_EVENT_TYPE.EXCHANGE);
+        };
     }, [drawingBoardId, mqttStatus, mqttClient, triggerEntityListener]);
 
     // Unsubscribe the topic when the dashboard page is unmounted
-    useEffect(() => {
-        return () => {
-            mqttClient?.unsubscribe(MQTT_EVENT_TYPE.EXCHANGE);
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // useEffect(() => {
+    //     return () => {
+    //         mqttClient?.unsubscribe(MQTT_EVENT_TYPE.EXCHANGE);
+    //     };
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
 
     return {
         loading,
