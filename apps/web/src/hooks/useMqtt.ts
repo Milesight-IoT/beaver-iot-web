@@ -18,7 +18,8 @@ const useMqttStore = create<{
 const useMqtt = () => {
     const userInfo = useUserStore(state => state.userInfo);
     const { client, setClient } = useMqttStore();
-    const { data } = useRequest(
+
+    useRequest(
         async () => {
             if (client || !userInfo?.user_id) return;
             const [err, resp] = await awaitWrap(
@@ -51,23 +52,32 @@ const useMqtt = () => {
         {
             debounceWait: 300,
             refreshDeps: [client, userInfo],
+            onSuccess(data) {
+                if (client || !data || Object.values(data).some(item => !item)) return;
+
+                const debug = window.sessionStorage.getItem('vconsole') === 'true';
+                const mqttClient = new MqttService({ debug, ...data });
+
+                console.warn('【MQTT】', 'init 000');
+                setClient(mqttClient);
+            },
         },
     );
 
-    useDebounceEffect(
-        () => {
-            console.warn('【MQTT】', 'init 111');
-            if (client || !data || Object.values(data).some(item => !item)) return;
+    // useDebounceEffect(
+    //     () => {
+    //         console.warn('【MQTT】', 'init 111');
+    //         if (client || !data || Object.values(data).some(item => !item)) return;
 
-            console.warn('【MQTT】', 'init 222');
-            const debug = window.sessionStorage.getItem('vconsole') === 'true';
-            const mqttClient = new MqttService({ debug, ...data });
-            console.warn('【MQTT】', 'init 333');
-            setClient(mqttClient);
-        },
-        [data, client, setClient],
-        { wait: 300 },
-    );
+    //         console.warn('【MQTT】', 'init 222');
+    //         const debug = window.sessionStorage.getItem('vconsole') === 'true';
+    //         const mqttClient = new MqttService({ debug, ...data });
+    //         console.warn('【MQTT】', 'init 333');
+    //         setClient(mqttClient);
+    //     },
+    //     [data, client, setClient],
+    //     { wait: 300 },
+    // );
 
     return {
         status: client?.status || MQTT_STATUS.DISCONNECTED,
