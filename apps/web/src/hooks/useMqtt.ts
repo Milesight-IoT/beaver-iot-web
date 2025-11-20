@@ -56,10 +56,18 @@ const useMqtt = () => {
     );
 
     useEffect(() => {
+        console.warn('【MQTT】', 'init 111');
         if (client || !data || Object.values(data).some(item => !item)) return;
+
+        console.warn('【MQTT】', 'init 222');
         const debug = window.sessionStorage.getItem('vconsole') === 'true';
         const mqttClient = new MqttService({ debug, ...data });
+        console.warn('【MQTT】', 'init 333');
         setClient(mqttClient);
+        // return () => {
+        //     console.warn('【MQTT】', 'destroy 111');
+        //     setClient(null);
+        // };
     }, [data, client, setClient]);
 
     return {
