@@ -207,7 +207,7 @@
     "common.message.click_to_upload_file": " Click or drag files to this area to upload.",
     "common.message.copy_successful": "Copied successfully.",
     "common.message.delete_success": "Deleted successfully.",
-    "common.message.drag_or_click_to_update_coord": "推拽地图或单击空白处来更新坐标位置",
+    "common.message.drag_or_click_to_update_coord": "Drag the map or click on an empty area to update the coordinates.",
     "common.message.error_user_business_details_not_exist": "User has no business parameters",
     "common.message.json_format_error": "JSON Formatting Error",
     "common.message.no_results_found": "No Results found.",

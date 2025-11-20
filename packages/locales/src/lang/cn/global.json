@@ -207,7 +207,7 @@
     "common.message.click_to_upload_file": "点击或拖拽文件至此区域进行上传。",
     "common.message.copy_successful": "复制成功。",
     "common.message.delete_success": "删除成功。",
-    "common.message.drag_or_click_to_update_coord": "推拽地图或单击空白处来更新坐标位置",
+    "common.message.drag_or_click_to_update_coord": "拖拽地图或单击空白处来更新坐标位置",
     "common.message.error_user_business_details_not_exist": "用户无商务参数",
     "common.message.json_format_error": "JSON格式错误",
     "common.message.no_results_found": "未找到结果。",
