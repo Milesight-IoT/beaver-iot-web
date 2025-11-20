@@ -37,7 +37,7 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
 }) => {
     const { getIntlText } = useI18n();
     const { matchTablet } = useTheme();
-    const { getTimeFormat, dayjs } = useTime();
+    const { getTimeFormat, dayjs, timezone } = useTime();
     const { setShowMobileSearch, searchConditionRef, isPreview, setPaginationModel } =
         useContext(AlarmContext) || {};
 
@@ -102,7 +102,12 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
                     return;
                 }
 
-                const [error, resp] = await awaitWrap(deviceAPI.exportDeviceAlarms(params));
+                const [error, resp] = await awaitWrap(
+                    deviceAPI.exportDeviceAlarms({
+                        ...params,
+                        timezone,
+                    }),
+                );
                 if (error || !isRequestSuccess(resp)) {
                     return;
                 }

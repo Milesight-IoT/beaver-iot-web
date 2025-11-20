@@ -51,7 +51,7 @@ const alarmControlPanelConfig = (): ControlPanelConfig<AlarmConfigType> => {
                             label: t('common.label.default_time'),
                             controllerProps: {
                                 name: 'defaultTime',
-                                defaultValue: 1440 * 60 * 1000,
+                                defaultValue: 1440 * 60 * 1000 * 30,
                             },
                             componentProps: {
                                 style: {
