@@ -82,9 +82,9 @@ class MqttService {
             this.log('MQTT reconnecting...');
         });
 
-        this.client.on('disconnect', () => {
+        this.client.on('disconnect', packet => {
             this.status = MQTT_STATUS.DISCONNECTED;
-            this.log(MQTT_STATUS.DISCONNECTED);
+            this.log(['MQTT disconnected:', packet]);
         });
 
         this.client.on('offline', () => {

@@ -204,7 +204,7 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
                     </IconButton>
                 ) : (
                     <HoverSearchInput
-                        inputWidth={125}
+                        inputWidth={135}
                         keyword={keyword}
                         changeKeyword={handleSearch}
                         placeholder={getIntlText('dashboard.placeholder.search_alarm')}

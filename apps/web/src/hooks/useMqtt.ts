@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { create } from 'zustand';
 import { useRequest } from 'ahooks';
 import { useUserStore } from '@/stores';
@@ -19,7 +18,8 @@ const useMqttStore = create<{
 const useMqtt = () => {
     const userInfo = useUserStore(state => state.userInfo);
     const { client, setClient } = useMqttStore();
-    const { data } = useRequest(
+
+    useRequest(
         async () => {
             if (client || !userInfo?.user_id) return;
             const [err, resp] = await awaitWrap(
@@ -52,15 +52,16 @@ const useMqtt = () => {
         {
             debounceWait: 300,
             refreshDeps: [client, userInfo],
+            onSuccess(data) {
+                if (client || !data || Object.values(data).some(item => !item)) return;
+
+                const debug = window.sessionStorage.getItem('vconsole') === 'true';
+                const mqttClient = new MqttService({ debug, ...data });
+
+                setClient(mqttClient);
+            },
         },
     );
-
-    useEffect(() => {
-        if (client || !data || Object.values(data).some(item => !item)) return;
-        const debug = window.sessionStorage.getItem('vconsole') === 'true';
-        const mqttClient = new MqttService({ debug, ...data });
-        setClient(mqttClient);
-    }, [data, client, setClient]);
 
     return {
         status: client?.status || MQTT_STATUS.DISCONNECTED,
