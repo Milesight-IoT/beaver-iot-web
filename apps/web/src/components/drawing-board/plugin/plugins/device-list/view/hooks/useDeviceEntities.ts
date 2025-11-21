@@ -107,7 +107,13 @@ export function useDeviceEntities(props: useDeviceEntitiesProps) {
         return () => {
             removeEventListener();
         };
-    }, [widget, drawingBoardDetail, importantEntities, addEntityListener, getNewestEntitiesStatus]);
+    }, [
+        widget?.widget_id,
+        drawingBoardDetail?.id,
+        importantEntities,
+        addEntityListener,
+        getNewestEntitiesStatus,
+    ]);
 
     return {
         /**

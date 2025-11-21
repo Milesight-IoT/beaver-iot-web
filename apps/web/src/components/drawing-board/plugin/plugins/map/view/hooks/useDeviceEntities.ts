@@ -141,7 +141,13 @@ export function useDeviceEntities(props: useDeviceEntitiesProps) {
         return () => {
             removeEventListener();
         };
-    }, [widget, drawingBoardDetail, importantEntities, addEntityListener, getNewestEntitiesStatus]);
+    }, [
+        widget?.widget_id,
+        drawingBoardDetail?.id,
+        importantEntities,
+        addEntityListener,
+        getNewestEntitiesStatus,
+    ]);
 
     const getDeviceStatus = useMemoizedFn((device?: DeviceDetail): DeviceStatus | undefined => {
         const deviceStatusEntity = device?.common_entities?.find(c =>

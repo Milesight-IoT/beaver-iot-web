@@ -7,12 +7,23 @@ export interface ISubscribe {
 }
 
 /**
- * Publish&Subscribe implementation class
+ * High-performance Publish-Subscribe implementation using Map + Set
+ * Time Complexity:
+ *   - subscribe: O(1)
+ *   - unsubscribe: O(1)
+ *   - publish: O(k), k = number of callbacks for the topic
  */
 export class EventEmitter<T extends ISubscribe = ISubscribe> {
-    private subscribeHandles: T[];
+    private readonly subscribeMap: Map<
+        T['topic'],
+        {
+            attrs?: T['attrs'];
+            callbacks: Set<T['callbacks'][number]>;
+        }
+    >;
+
     constructor() {
-        this.subscribeHandles = [];
+        this.subscribeMap = new Map();
     }
 
     /**
@@ -21,11 +32,17 @@ export class EventEmitter<T extends ISubscribe = ISubscribe> {
      * @param {...any[]} args The arguments to execute the callback
      */
     publish(topic: T['topic'], ...args: Parameters<T['callbacks'][number]>): void {
-        const subscriber = this.subscribeHandles.find(
-            (subscriber: T) => subscriber.topic === topic,
-        );
+        const subscriber = this.subscribeMap.get(topic);
         if (!subscriber) return;
-        subscriber.callbacks.forEach(cb => cb(...args));
+
+        /**
+         * Copy the callbacks array to avoid the case that the callback is removed
+         * by unsubscribe during the execution
+         */
+        const callbacks = [...subscriber.callbacks];
+        for (const cb of callbacks) {
+            cb?.(...args);
+        }
     }
 
     /**
@@ -36,20 +53,29 @@ export class EventEmitter<T extends ISubscribe = ISubscribe> {
      * @returns {boolean} Whether subscribed the topic before
      */
     subscribe(topic: T['topic'], callback: T['callbacks'][number], attrs?: T['attrs']): boolean {
-        const subscriber = this.subscribeHandles.find(
-            (subscriber: T) => subscriber.topic === topic,
-        );
+        const subscriber = this.subscribeMap.get(topic);
+
+        /**
+         * If the topic has been subscribed before
+         */
         if (subscriber) {
+            /** Update attrs if provided */
             attrs && (subscriber.attrs = attrs);
-            subscriber.callbacks.push(callback);
+
+            /**
+             * Add callback to the set to dedupe automatically
+             */
+            subscriber.callbacks.add(callback);
             return true;
         }
 
-        this.subscribeHandles.push({
-            topic,
+        /**
+         * Add a new subscriber
+         */
+        this.subscribeMap.set(topic, {
             attrs,
-            callbacks: [callback],
-        } as T);
+            callbacks: new Set([callback]),
+        });
         return false;
     }
 
@@ -60,25 +86,42 @@ export class EventEmitter<T extends ISubscribe = ISubscribe> {
      * @returns {boolean} Whether the topic has been cleared
      */
     unsubscribe(topic: T['topic'], callback?: T['callbacks'][number]): boolean {
+        const subscriber = this.subscribeMap.get(topic);
+        if (!subscriber) return true;
+
         if (!callback) {
-            this.subscribeHandles = this.subscribeHandles.filter(
-                (subscribers: T) => subscribers.topic !== topic,
-            );
+            this.subscribeMap.delete(topic);
             return true;
         }
 
-        let isEmpty = false;
-        this.subscribeHandles = this.subscribeHandles.reduce((handles: T[], subscriber: T) => {
-            if (subscriber.topic === topic) {
-                subscriber.callbacks = subscriber.callbacks.filter(cb => cb !== callback);
-                isEmpty = !subscriber.callbacks?.length;
-                if (isEmpty) return handles;
-            }
+        /**
+         * Remove the callback from the set
+         */
+        const existed = subscriber.callbacks.delete(callback);
+        /**
+         * If the set is empty after removing the callback, delete the topic
+         */
+        if (subscriber.callbacks.size === 0) {
+            this.subscribeMap.delete(topic);
+            return true;
+        }
 
-            return [...handles, subscriber];
-        }, []);
+        return !existed ? false : subscriber.callbacks.size === 0;
+    }
 
-        return isEmpty;
+    /**
+     * Subscribe once
+     * @param topic Topic
+     * @param callback Callback function
+     * @param attrs Attributes
+     */
+    once(topic: T['topic'], callback: T['callbacks'][number], attrs?: T['attrs']) {
+        const wrapper = (...args: any[]) => {
+            callback?.(...args);
+            this.unsubscribe(topic, wrapper);
+        };
+
+        this.subscribe(topic, wrapper, attrs);
     }
 
     /**
@@ -87,13 +130,17 @@ export class EventEmitter<T extends ISubscribe = ISubscribe> {
      * @returns {object}
      */
     getSubscriber(topic: T['topic']): Readonly<T> | undefined {
-        const subscriber = this.subscribeHandles.find(
-            (subscriber: T) => subscriber.topic === topic,
-        );
+        const subscriber = this.subscribeMap.get(topic);
         if (!subscriber) return;
 
+        const newSubscriber: T = {
+            topic,
+            attrs: subscriber.attrs,
+            callbacks: [...subscriber.callbacks],
+        } as T;
+
         // Deep copy to prevent the original data from being tampered with
-        return cloneDeep(subscriber);
+        return cloneDeep(newSubscriber);
     }
 
     /**
@@ -101,14 +148,14 @@ export class EventEmitter<T extends ISubscribe = ISubscribe> {
      * @returns {string[]}
      */
     getTopics(): T['topic'][] {
-        return this.subscribeHandles.map((subscriber: T) => subscriber.topic);
+        return Array.from(this.subscribeMap.keys());
     }
 
     /**
      * Destroy all subscriptions
      */
     destroy(): void {
-        this.subscribeHandles = [];
+        this.subscribeMap.clear();
     }
 }
 

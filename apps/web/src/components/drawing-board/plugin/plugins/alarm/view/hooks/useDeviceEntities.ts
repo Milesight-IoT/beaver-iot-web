@@ -1,4 +1,4 @@
-import { useMemo, useContext, useEffect } from 'react';
+import { useMemo, useContext, useEffect, useRef } from 'react';
 import { isEmpty } from 'lodash-es';
 import { useRequest } from 'ahooks';
 
@@ -29,6 +29,11 @@ export interface useDeviceEntitiesProps {
  */
 export function useDeviceEntities(props: useDeviceEntitiesProps) {
     const { devices, refreshList } = props || {};
+
+    const refreshListRef = useRef(refreshList);
+    useEffect(() => {
+        refreshListRef.current = refreshList;
+    }, [refreshList]);
 
     const { data } = useRequest(
         async () => {
@@ -104,11 +109,11 @@ export function useDeviceEntities(props: useDeviceEntitiesProps) {
         const removeEventListener = addEntityListener(importantEntities, {
             widgetId: widget.widget_id,
             dashboardId: drawingBoardDetail.id,
-            callback: refreshList,
+            callback: refreshListRef.current,
         });
 
         return () => {
             removeEventListener();
         };
-    }, [widget, drawingBoardDetail, importantEntities, addEntityListener, refreshList]);
+    }, [widget?.widget_id, drawingBoardDetail?.id, importantEntities, addEntityListener]);
 }
