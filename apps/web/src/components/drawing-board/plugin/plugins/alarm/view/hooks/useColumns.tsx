@@ -99,7 +99,7 @@ const useColumns = <T extends TableRowDataType>({
             {
                 field: 'alarmContent',
                 headerName: getIntlText('common.label.content'),
-                flex: 1,
+                flex: 3,
                 minWidth: 240,
                 renderCell({ row }) {
                     return (
