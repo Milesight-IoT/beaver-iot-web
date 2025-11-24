@@ -49,6 +49,8 @@ export interface LocationMapRef {
  */
 const LocationMap = (
     {
+        width,
+        height,
         state,
         marker,
         className,
@@ -199,12 +201,26 @@ const LocationMap = (
         },
     }));
 
+    // ---------- Map Size ----------
+    const size = useMemo<React.CSSProperties>(() => {
+        if (!width || !height) return {};
+        /**
+         * Ensure the map size is even number to reduce the Marker jitter issue
+         * caused by 0.5px.
+         */
+        return {
+            width: width % 2 === 0 ? width : width + 1,
+            height: height % 2 === 0 ? height : height + 1,
+        };
+    }, [width, height]);
+
     return (
         <Map
             touchZoom="center"
             // @ts-ignore Extend the ScrollWheelZoom class of Leaflet
             scrollWheelZoom="custom"
             {...props}
+            {...size}
             ref={mapInstanceRef}
             events={events}
             zoomControl={zoomControl}
