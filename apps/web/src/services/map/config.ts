@@ -82,7 +82,7 @@ const configs: Record<MapType, MapConfigItem> = {
         },
         subdomains: 'abc',
         attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            '&copy; <a target="_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     },
 
     /**
