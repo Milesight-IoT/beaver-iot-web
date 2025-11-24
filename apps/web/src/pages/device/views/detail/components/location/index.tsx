@@ -299,31 +299,31 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
                     <div className="edit-panel-view-body">
                         <ul className="location-detail-list">
                             <li className="location-detail-item">
-                                <div className="location-detail-item-label">
+                                <span className="location-detail-item-label">
                                     {getIntlText('common.label.latitude')}
                                     {getIntlText('common.symbol.colon')}
-                                </div>
-                                <div className="location-detail-item-value">
+                                </span>
+                                <span className="location-detail-item-value">
                                     {isNil(location?.latitude) ? '-' : location.latitude}
-                                </div>
+                                </span>
                             </li>
                             <li className="location-detail-item">
-                                <div className="location-detail-item-label">
+                                <span className="location-detail-item-label">
                                     {getIntlText('common.label.longitude')}
                                     {getIntlText('common.symbol.colon')}
-                                </div>
-                                <div className="location-detail-item-value">
+                                </span>
+                                <span className="location-detail-item-value">
                                     {isNil(location?.longitude) ? '-' : location.longitude}
-                                </div>
+                                </span>
                             </li>
                             <li className="location-detail-item">
-                                <div className="location-detail-item-label">
+                                <span className="location-detail-item-label">
                                     {getIntlText('common.label.address')}
                                     {getIntlText('common.symbol.colon')}
-                                </div>
-                                <div className="location-detail-item-value">
+                                </span>
+                                <span className="location-detail-item-value">
                                     {location?.address || '-'}
-                                </div>
+                                </span>
                             </li>
                         </ul>
                     </div>
