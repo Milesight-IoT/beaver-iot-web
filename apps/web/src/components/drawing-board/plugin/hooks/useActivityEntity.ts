@@ -14,7 +14,7 @@ type ListenerOptions = {
     ) => void;
     /**
      * Whether to add entity to record
-     * @description If true, the entity will be added to the record that need to transform to backend format
+     * @description If true, the entity will be added to the record that need to passed to backend
      */
     isRecord?: boolean;
 };
@@ -86,7 +86,7 @@ const setEntityPool = (dashboardId: ApiKey, { timer, entities }: EntityPoolValue
 };
 
 /**
- * @description Collection of entity ids that need to transform to backend format
+ * @description Collection of entity ids that need to passed to backend
  * @param dashboardId Dashboard id
  * @param widgetId Widget id
  * @param entityId Entity id
@@ -174,7 +174,7 @@ const useActivityEntity = () => {
     });
 
     /**
-     * @description Get entity ids that need to transform to backend format
+     * @description Get entity ids that need to passed to backend
      * @param dashboardId Dashboard id
      */
     const getRecordEntityIds = useMemoizedFn((dashboardId: ApiKey) => {
@@ -330,7 +330,7 @@ const useActivityEntity = () => {
          */
         getCurrentEntityIds,
         /**
-         * Get entity ids in the record that need to transform to backend
+         * Get entity ids in the record that need to passed to backend
          */
         getRecordEntityIds,
     };
