@@ -88,9 +88,16 @@ export function useDeviceEntities(props: useDeviceEntitiesProps) {
     const context = useContext(DrawingBoardContext);
     const { widget, drawingBoardDetail } = context || {};
 
+    /**
+     * Widget id is required to listen entity status changes
+     */
+    const widgetId = useMemo(() => {
+        return widget?.widget_id || widget?.tempId;
+    }, [widget]);
+
     useEffect(() => {
         if (
-            !widget?.widget_id ||
+            !widgetId ||
             !drawingBoardDetail?.id ||
             !Array.isArray(importantEntities) ||
             isEmpty(importantEntities)
@@ -99,16 +106,17 @@ export function useDeviceEntities(props: useDeviceEntitiesProps) {
         }
 
         const removeEventListener = addEntityListener(importantEntities, {
-            widgetId: widget.widget_id,
+            widgetId,
             dashboardId: drawingBoardDetail.id,
             callback: getNewestEntitiesStatus,
+            isRecord: false,
         });
 
         return () => {
             removeEventListener();
         };
     }, [
-        widget?.widget_id,
+        widgetId,
         drawingBoardDetail?.id,
         importantEntities,
         addEntityListener,

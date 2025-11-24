@@ -69,7 +69,7 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
 
     const drawingBoardRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, { enterFullscreen, exitFullscreen }] = useFullscreen(document.body);
-    const { getCurrentEntityIds } = useActivityEntity();
+    const { getRecordEntityIds } = useActivityEntity();
     const confirm = useConfirm();
     const { showPrevent } = usePreventLeave({
         isPreventLeave: isEdit,
@@ -151,12 +151,12 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
                 return;
             }
 
-            const currentEntityIds = getCurrentEntityIds(id);
+            const recordEntityIds = getRecordEntityIds(id);
             const [error, resp] = await awaitWrap(
                 dashboardAPI.updateDrawingBoard({
                     canvas_id: id,
                     widgets: filterWidgets(widgets),
-                    entity_ids: currentEntityIds,
+                    entity_ids: recordEntityIds,
                     device_ids: getDeviceIdsInuse(widgets),
                     name,
                 }),
