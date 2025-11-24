@@ -1,7 +1,7 @@
 import { omit, isEmpty } from 'lodash-es';
 
 import type { WidgetDetail } from '@/services/http/dashboard';
-import type { BoardPluginProps } from './plugin/types';
+import type { BoardPluginProps, PluginType } from './plugin/types';
 import type { DeviceListControlPanelConfig } from './plugin/plugins/device-list/control-panel';
 
 /**
@@ -42,7 +42,7 @@ export const getDeviceIdsInuse = (widgets: WidgetDetail[]): ApiKey[] | undefined
     return widgets.reduce((a: ApiKey[], c) => {
         const plugin = c.data as BoardPluginProps;
         let ids: ApiKey[] = [];
-        if (plugin?.type === 'deviceList') {
+        if ((['deviceList', 'alarm', 'map'] as PluginType[]).includes(plugin?.type)) {
             ids = ((plugin?.config as DeviceListControlPanelConfig)?.devices || [])
                 .map(d => d.id)
                 .filter(Boolean);

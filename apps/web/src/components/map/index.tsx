@@ -4,7 +4,7 @@ import {
     type LeafletEventHandlerFnMap,
     type LatLngExpression as LatLng,
 } from 'leaflet';
-import { MapContainer, type MapContainerProps } from 'react-leaflet';
+import { MapContainer, AttributionControl, type MapContainerProps } from 'react-leaflet';
 import 'proj4leaflet';
 import cls from 'classnames';
 import { useDebounceEffect } from 'ahooks';
@@ -135,7 +135,7 @@ const Map = forwardRef<MapInstance, MapProps>(
                     whenReady={e => {
                         onReady?.(e.target);
                     }}
-                    // attributionControl={false}
+                    attributionControl={false}
                 >
                     <MapLayer
                         tms={tms}
@@ -149,6 +149,10 @@ const Map = forwardRef<MapInstance, MapProps>(
                         events={events}
                         onLocationError={onLocationError}
                         onLocationFound={onLocationFound}
+                    />
+                    <AttributionControl
+                        position="bottomright"
+                        prefix={`<a target="_blank" href="https://leafletjs.com" title="A JavaScript library for interactive maps">Leaflet</a>`}
                     />
                     {zoomControl}
                     {children}

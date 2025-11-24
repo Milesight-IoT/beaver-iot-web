@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { create } from 'zustand';
 import { isUndefined, isNull, cloneDeep } from 'lodash-es';
+import { useMemoizedFn } from 'ahooks';
 import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
 import { EventEmitter } from '@milesight/shared/src/utils/event-emitter';
 
@@ -11,6 +12,18 @@ type ListenerOptions = {
         payload: any,
         options: Omit<ListenerOptions, 'callback'> & { entityId: ApiKey },
     ) => void;
+    /**
+     * Whether to add entity to record
+     * @description If true, the entity will be added to the record that need to passed to backend
+     */
+    isRecord?: boolean;
+};
+
+type RecordEntityIdsProps = {
+    dashboardId: ApiKey;
+    widgetId?: ApiKey;
+    entityId: ApiKey | ApiKey[];
+    isRecord?: boolean;
 };
 
 interface ActivityEntityStore {
@@ -73,6 +86,14 @@ const setEntityPool = (dashboardId: ApiKey, { timer, entities }: EntityPoolValue
 };
 
 /**
+ * @description Collection of entity ids that need to passed to backend
+ * @param dashboardId Dashboard id
+ * @param widgetId Widget id
+ * @param entityId Entity id
+ */
+const recordEntityIds = new Map<ApiKey, Map<ApiKey, ApiKey[]>>();
+
+/**
  * Activity entity hook
  * @description The hook for managing the entity that is currently being displayed in dashboard
  */
@@ -109,26 +130,94 @@ const useActivityEntity = () => {
         [entities],
     );
 
+    /**
+     * @description Add entity id to record
+     * @param entityId Entity id
+     * @param dashboardId Dashboard id
+     */
+    const addEntityToRecord = useMemoizedFn((props: RecordEntityIdsProps) => {
+        const { entityId, widgetId, dashboardId, isRecord } = props || {};
+        if (!entityId || !dashboardId || !widgetId || !isRecord) return;
+
+        const ids = Array.isArray(entityId) ? entityId : [entityId];
+        const record = recordEntityIds.get(dashboardId);
+        if (!record) {
+            recordEntityIds.set(dashboardId, new Map([[widgetId, ids]]));
+            return;
+        }
+
+        record.set(widgetId, ids);
+    });
+
+    /**
+     * @description Remove entity id from record
+     * @param entityId Entity id
+     * @param dashboardId Dashboard id
+     */
+    const removeEntityFromRecord = useMemoizedFn((props: RecordEntityIdsProps) => {
+        const { entityId, widgetId, dashboardId, isRecord } = props || {};
+        if (!entityId || !dashboardId || !widgetId || !isRecord) return;
+
+        const record = recordEntityIds.get(dashboardId);
+        if (!record) return;
+
+        /**
+         * Remove entity id from record
+         */
+        record.delete(widgetId);
+        /**
+         * Remove dashboard id from record if it is empty
+         */
+        if (record.size === 0) {
+            recordEntityIds.delete(dashboardId);
+        }
+    });
+
+    /**
+     * @description Get entity ids that need to passed to backend
+     * @param dashboardId Dashboard id
+     */
+    const getRecordEntityIds = useMemoizedFn((dashboardId: ApiKey) => {
+        const record = recordEntityIds.get(dashboardId);
+        if (!record) return [];
+
+        return [...new Set(Array.from(record.values()).flat())];
+    });
+
     const addEntityListener = useCallback(
         (
             entityId: ApiKey | ApiKey[],
-            { widgetId, dashboardId, callback = () => {} }: ListenerOptions,
+            { widgetId, dashboardId, callback = () => {}, isRecord = true }: ListenerOptions,
         ) => {
             const topics = !Array.isArray(entityId)
                 ? [genTopic(dashboardId, entityId)]
                 : entityId.map(entityId => genTopic(dashboardId, entityId));
+
+            addEntityToRecord({
+                entityId,
+                widgetId,
+                dashboardId,
+                isRecord,
+            });
 
             topics.forEach(topic => {
                 eventEmitter.subscribe(topic, callback, { widgetId, dashboardId });
             });
 
             return () => {
+                removeEntityFromRecord({
+                    entityId,
+                    widgetId,
+                    dashboardId,
+                    isRecord,
+                });
+
                 topics.forEach(topic => {
                     eventEmitter.unsubscribe(topic, callback);
                 });
             };
         },
-        [],
+        [addEntityToRecord, removeEntityFromRecord],
     );
 
     const removeEntityListener = useCallback(
@@ -240,6 +329,10 @@ const useActivityEntity = () => {
          * Get entity ids in the current dashboard
          */
         getCurrentEntityIds,
+        /**
+         * Get entity ids in the record that need to passed to backend
+         */
+        getRecordEntityIds,
     };
 };
 
