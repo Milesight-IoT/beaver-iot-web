@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { isArray, isObject, isUndefined } from 'lodash-es';
+import { isArray, isObject, isUndefined, isNil } from 'lodash-es';
 import cls from 'classnames';
 import { useDebounceEffect } from 'ahooks';
 import { OutlinedInput, InputAdornment } from '@mui/material';
@@ -157,7 +157,7 @@ const TablePro = <DataType extends GridValidRowModel>({
                     return (
                         <Tooltip
                             autoEllipsis
-                            title={title || '-'}
+                            title={isNil(title) || title === '' ? '-' : title}
                             slotProps={{
                                 popper: {
                                     modifiers: [{ name: 'offset', options: { offset: [0, -20] } }],
