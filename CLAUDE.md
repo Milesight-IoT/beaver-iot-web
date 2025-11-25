@@ -109,6 +109,9 @@ Dashboard plugins are located in `apps/web/src/components/drawing-board/plugin/`
 - Theme variables and mixins from `@milesight/shared` are auto-injected into Less files
 - **Material-UI (MUI)** v6 is the primary component library
 - Dark/light theme support via theme service
+- All color values should reference the corresponding CSS variables in the theme
+- Prioritize the use of semantic CSS variables
+- The custom style class name should use the `@prefix` prefix, and the MUI style class name prefix should use the `@mui-prefix` prefix
 
 ## Configuration
 

@@ -51,6 +51,8 @@ const MobileSearchInput = forwardRef<MobileSearchInputExpose, MobileSearchInputP
             onChange={handleKeywordChange}
             active={showMobileSearch}
             onActiveChange={handleShowSearch}
+            inputPlaceholder={getIntlText('dashboard.placeholder.search_alarm')}
+            panelPlaceholder={getIntlText('dashboard.tip.alarm_list_search_panel_placeholder')}
         >
             <InfiniteScrollList
                 isNoMore={data.list.length >= data.total}
@@ -61,7 +63,7 @@ const MobileSearchInput = forwardRef<MobileSearchInputExpose, MobileSearchInputP
                 loadingMore={loading}
                 itemRenderer={itemRenderer}
                 onLoadMore={handleLoadMore}
-                emptyRenderer={<Empty text={getIntlText('device.search.placeholder_empty')} />}
+                emptyRenderer={<Empty text={getIntlText('common.label.empty')} />}
             />
         </MobileSearchPanel>
     );
