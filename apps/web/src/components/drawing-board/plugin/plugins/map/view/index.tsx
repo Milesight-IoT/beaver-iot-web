@@ -207,6 +207,15 @@ const MapView: React.FC<MapViewProps> = props => {
         />
     );
 
+    const mapFixedHeight = useMemo(() => {
+        const bodyHeight = document?.body?.getBoundingClientRect()?.height;
+        if (!bodyHeight || Number.isNaN(Number(bodyHeight))) {
+            return '100%';
+        }
+
+        return bodyHeight - 60;
+    }, []);
+
     return (
         <MapContext.Provider value={mapContextValue}>
             <div className={cls('map-plugin-view', { 'p-0': !!pluginFullScreen && matchTablet })}>
@@ -259,7 +268,14 @@ const MapView: React.FC<MapViewProps> = props => {
                             showSearch={showMobileSearch}
                             setShowSearch={setShowMobileSearch}
                         >
-                            {RenderBaseMap}
+                            <div
+                                className="map-plugin-view__mobile-map"
+                                style={{
+                                    height: mapFixedHeight,
+                                }}
+                            >
+                                {RenderBaseMap}
+                            </div>
                         </MobileSearchInput>
                     )}
                 </Modal>

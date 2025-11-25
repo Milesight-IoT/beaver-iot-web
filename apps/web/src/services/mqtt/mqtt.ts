@@ -2,13 +2,14 @@
 import mqtt from 'mqtt';
 import { safeJsonParse } from '@milesight/shared/src/utils/tools';
 import { Logger } from '@milesight/shared/src/utils/logger';
-import { EventEmitter } from '@milesight/shared/src/utils/event-emitter';
+import globalEventManager, { EventEmitter } from '@milesight/shared/src/utils/event-emitter';
 import {
     MQTT_STATUS,
     MQTT_EVENT_TYPE,
     TOPIC_PREFIX,
     TOPIC_SUFFIX,
     TOPIC_SEPARATOR,
+    TOPIC_MQTT_STATUS_CHANGE,
 } from './constant';
 import type { IEventEmitter, MqttMessageData, CallbackType } from './types';
 
@@ -75,27 +76,32 @@ class MqttService {
         this.client.on('connect', () => {
             this.status = MQTT_STATUS.CONNECTED;
             this.log('MQTT connected');
+            globalEventManager.publish(TOPIC_MQTT_STATUS_CHANGE, this.status);
         });
 
         this.client.on('reconnect', () => {
             this.status = MQTT_STATUS.CONNECTING;
             this.log('MQTT reconnecting...');
+            globalEventManager.publish(TOPIC_MQTT_STATUS_CHANGE, this.status);
         });
 
         this.client.on('disconnect', packet => {
             this.status = MQTT_STATUS.DISCONNECTED;
             this.log(['MQTT disconnected:', packet]);
+            globalEventManager.publish(TOPIC_MQTT_STATUS_CHANGE, this.status);
         });
 
         this.client.on('offline', () => {
             this.status = MQTT_STATUS.DISCONNECTED;
             this.log('MQTT offline');
+            globalEventManager.publish(TOPIC_MQTT_STATUS_CHANGE, this.status);
         });
 
         this.client.on('error', err => {
             this.status = MQTT_STATUS.DISCONNECTED;
             this.client?.end();
             this.log(['MQTT error:', err]);
+            globalEventManager.publish(TOPIC_MQTT_STATUS_CHANGE, this.status);
         });
 
         this.client.on('message', (topic, message) => {

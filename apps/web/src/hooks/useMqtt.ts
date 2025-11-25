@@ -1,23 +1,46 @@
+import { unstable_batchedUpdates as unstableBatchedUpdates } from 'react-dom';
 import { create } from 'zustand';
 import { useRequest } from 'ahooks';
+import eventEmitter from '@milesight/shared/src/utils/event-emitter';
 import { useUserStore } from '@/stores';
-import { MqttService, MQTT_STATUS, MQTT_EVENT_TYPE, BATCH_PUSH_TIME } from '@/services/mqtt';
+import {
+    MqttService,
+    MQTT_STATUS,
+    MQTT_EVENT_TYPE,
+    BATCH_PUSH_TIME,
+    TOPIC_MQTT_STATUS_CHANGE,
+} from '@/services/mqtt';
 import { credentialsApi, awaitWrap, getResponseData, isRequestSuccess } from '@/services/http';
 
 const useMqttStore = create<{
+    status: MQTT_STATUS;
     client: MqttService | null;
+
+    setStatus: (status: MQTT_STATUS) => void;
     setClient: (client: MqttService | null) => void;
 }>(set => ({
+    status: MQTT_STATUS.DISCONNECTED,
     client: null,
+    setStatus: status => set({ status }),
     setClient: client => set({ client }),
 }));
+
+eventEmitter.subscribe(TOPIC_MQTT_STATUS_CHANGE, status => {
+    /**
+     * Calling actions outside a React event handler in pre React 18
+     * https://docs.pmnd.rs/zustand/guides/event-handler-in-pre-react-18
+     */
+    unstableBatchedUpdates(() => {
+        useMqttStore.setState({ status });
+    });
+});
 
 /**
  * Get MQTT client
  */
 const useMqtt = () => {
     const userInfo = useUserStore(state => state.userInfo);
-    const { client, setClient } = useMqttStore();
+    const { status, client, setStatus, setClient } = useMqttStore();
 
     useRequest(
         async () => {
@@ -58,13 +81,14 @@ const useMqtt = () => {
                 const debug = window.sessionStorage.getItem('vconsole') === 'true';
                 const mqttClient = new MqttService({ debug, ...data });
 
+                setStatus(mqttClient.status);
                 setClient(mqttClient);
             },
         },
     );
 
     return {
-        status: client?.status || MQTT_STATUS.DISCONNECTED,
+        status,
         client,
     };
 };

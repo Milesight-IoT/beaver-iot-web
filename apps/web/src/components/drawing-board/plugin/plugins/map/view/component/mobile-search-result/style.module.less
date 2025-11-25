@@ -2,7 +2,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1000;
+    /* stylelint-disable-next-line custom-property-pattern */
+    z-index: var(--mui-zIndex-modal, 1300);
     width: 100%;
     padding-top: @padding-xxs;
     background-color: var(--component-background);

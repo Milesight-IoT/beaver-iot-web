@@ -27,6 +27,11 @@ export const TOPIC_SUFFIX: Record<MQTT_EVENT_TYPE, string> = {
     [MQTT_EVENT_TYPE.EXCHANGE]: 'web/exchange',
 };
 
+/**
+ * MQTT status change topic
+ */
+export const TOPIC_MQTT_STATUS_CHANGE = 'iot:mqtt:status_change';
+
 /** Topic separator */
 export const TOPIC_SEPARATOR = '/';
 
