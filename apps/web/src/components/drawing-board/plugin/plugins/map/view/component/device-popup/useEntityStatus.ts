@@ -1,4 +1,4 @@
-import { get } from 'lodash-es';
+import { get, isNil } from 'lodash-es';
 import { useMemoizedFn } from 'ahooks';
 
 import { type DeviceDetail } from '@/services/http';
@@ -48,7 +48,7 @@ export function useEntityStatus(entitiesStatus?: Record<string, EntityStatusData
         }
 
         const val = get(entitiesStatus, String(entity.id))?.value;
-        return `${val || '-'}${entity?.value_attribute?.unit || ''}`;
+        return `${isNil(val) ? '-' : val}${entity?.value_attribute?.unit || ''}`;
     });
 
     const temperature = useMemoizedFn((device?: DeviceDetail): string | undefined => {
