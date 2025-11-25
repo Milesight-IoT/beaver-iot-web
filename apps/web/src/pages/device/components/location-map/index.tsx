@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import cls from 'classnames';
 import { Tooltip } from '@mui/material';
-import { useMemoizedFn, useThrottleFn } from 'ahooks';
+import { useThrottleFn } from 'ahooks';
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 import { isAppleDevice } from '@milesight/shared/src/utils/userAgent';
 import { formatPrecision } from '@milesight/shared/src/utils/tools';
@@ -117,20 +117,23 @@ const LocationMap = (
     }, [editing, marker]);
 
     // ---------- Map Events ----------
-    const handlePositionChange = useMemoizedFn((position: [number, number]) => {
-        if (!onPositionChange) return;
-        const formatConfig = {
-            round: false,
-            resultType: 'number',
-            precision: DEVICE_LOCATION_PRECISION,
-        } as const;
+    const { run: handlePositionChange } = useThrottleFn(
+        (position: [number, number]) => {
+            if (!onPositionChange) return;
+            const formatConfig = {
+                round: false,
+                resultType: 'number',
+                precision: DEVICE_LOCATION_PRECISION,
+            } as const;
 
-        // onPositionChange(position);
-        onPositionChange([
-            formatPrecision(position[0], formatConfig),
-            formatPrecision(position[1], formatConfig),
-        ]);
-    });
+            // onPositionChange(position);
+            onPositionChange([
+                formatPrecision(position[0], formatConfig),
+                formatPrecision(position[1], formatConfig),
+            ]);
+        },
+        { wait: 300 },
+    );
     const events = useMemo<MapProps['events']>(
         () => ({
             click({ target, originalEvent, latlng }) {
