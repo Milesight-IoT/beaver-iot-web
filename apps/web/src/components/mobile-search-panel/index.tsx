@@ -38,6 +38,16 @@ interface Props {
     showSearchPlaceholder?: boolean;
 
     /**
+     * Placeholder for the search input
+     */
+    inputPlaceholder?: string;
+
+    /**
+     * Placeholder for the search panel
+     */
+    panelPlaceholder?: string;
+
+    /**
      * Additional props for the search input text field
      */
     textFieldProps?: TextFieldProps;
@@ -63,6 +73,8 @@ const MobileSearchPanel: React.FC<Props> = memo(
         textFieldProps,
         onClear,
         children,
+        inputPlaceholder,
+        panelPlaceholder,
         ...props
     }) => {
         const { getIntlText } = useI18n();
@@ -80,7 +92,7 @@ const MobileSearchPanel: React.FC<Props> = memo(
                         fullWidth
                         autoComplete="off"
                         className="ms-mobile-search-input"
-                        placeholder={getIntlText('common.label.search')}
+                        placeholder={inputPlaceholder || getIntlText('common.label.search')}
                         slotProps={{
                             input: {
                                 startAdornment: (
@@ -120,7 +132,9 @@ const MobileSearchPanel: React.FC<Props> = memo(
                     {!keyword && showSearchPlaceholder ? (
                         <div className="placeholder">
                             <SearchIcon />
-                            <span className="desc">{getIntlText('device.search.placeholder')}</span>
+                            <span className="desc">
+                                {panelPlaceholder || getIntlText('device.search.placeholder')}
+                            </span>
                         </div>
                     ) : (
                         children

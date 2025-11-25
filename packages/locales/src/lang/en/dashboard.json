@@ -66,5 +66,6 @@
     "dashboard.tip.small_screen_empty": "There are no widgets here. Please add them on the PC.",
     "dashboard.title.add_widget": "Add {1} Widget",
     "dashboard.title.edit_widget": "Edit {1} Widget",
-    "dashboard.unset_as_home_dashboard_tip": "Cancel Top"
+    "dashboard.unset_as_home_dashboard_tip": "Cancel Top",
+    "dashboard.tip.alarm_list_search_panel_placeholder": "Input the alarm content or location for search"
 }
