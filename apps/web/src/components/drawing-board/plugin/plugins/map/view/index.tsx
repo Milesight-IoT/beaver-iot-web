@@ -198,23 +198,32 @@ const MapView: React.FC<MapViewProps> = props => {
         </>
     );
 
+    const bodyHeight = useMemo(() => {
+        const bodyHeight = document?.body?.getBoundingClientRect()?.height;
+        if (!bodyHeight || Number.isNaN(Number(bodyHeight))) {
+            return null;
+        }
+
+        return bodyHeight;
+    }, []);
+
+    const mapFixedHeight = useMemo(() => {
+        return isNil(bodyHeight) ? '100%' : bodyHeight - 60;
+    }, [bodyHeight]);
+
+    const newMapFixedHeight = useMemo(() => {
+        return isNil(bodyHeight) ? '100%' : bodyHeight - 56;
+    }, [bodyHeight]);
+
     const RenderBaseMap = (
         <BaseMap
+            mapFixedHeight={newMapFixedHeight}
             showMobileSearch={showMobileSearch}
             devices={data}
             selectDevice={selectDevice}
             cancelSelectDevice={cancelSelectDevice}
         />
     );
-
-    const mapFixedHeight = useMemo(() => {
-        const bodyHeight = document?.body?.getBoundingClientRect()?.height;
-        if (!bodyHeight || Number.isNaN(Number(bodyHeight))) {
-            return '100%';
-        }
-
-        return bodyHeight - 60;
-    }, []);
 
     return (
         <MapContext.Provider value={mapContextValue}>

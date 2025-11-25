@@ -21,11 +21,12 @@ export interface BaseMapProps {
     selectDevice?: DeviceDetail | null;
     devices?: DeviceDetail[];
     showMobileSearch?: boolean;
+    mapFixedHeight?: string | number;
     cancelSelectDevice?: () => void;
 }
 
 const BaseMap: React.FC<BaseMapProps> = props => {
-    const { selectDevice, devices, showMobileSearch, cancelSelectDevice } = props;
+    const { selectDevice, devices, showMobileSearch, mapFixedHeight, cancelSelectDevice } = props;
 
     const { matchTablet } = useTheme();
     const mapContext = useContext(MapContext);
@@ -39,6 +40,7 @@ const BaseMap: React.FC<BaseMapProps> = props => {
     const currentOpenMarker = useRef<MarkerInstance | null>(null);
     const [markers, setMarkers] = useState<Record<string, MarkerInstance>>({});
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+    const readyTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
     /**
      *  Whether the map is operating fullscreen
      */
@@ -73,13 +75,19 @@ const BaseMap: React.FC<BaseMapProps> = props => {
     /**
      * Map fit bounds
      */
-    const mapFitBounds = useMemoizedFn(() => {
+    const mapFitBounds = useMemoizedFn((map?: MapInstance) => {
+        const currentMap = map || mapRef?.current;
         const latLangs = mapData.map(m => m.latLng);
-        if (!Array.isArray(latLangs) || isEmpty(latLangs) || !mapRef?.current) {
+        if (!Array.isArray(latLangs) || isEmpty(latLangs) || !currentMap) {
             return;
         }
 
-        mapRef.current?.fitBounds(latLangs, {
+        const leafletId = (currentMap as any)?._container?._leaflet_id;
+        if (!leafletId) {
+            return;
+        }
+
+        currentMap?.fitBounds(latLangs, {
             padding: [20, 20],
         });
     });
@@ -169,6 +177,10 @@ const BaseMap: React.FC<BaseMapProps> = props => {
 
     return (
         <div
+            style={{
+                height: pluginFullScreen && matchTablet ? mapFixedHeight : undefined,
+                maxHeight: pluginFullScreen && matchTablet ? mapFixedHeight : undefined,
+            }}
             className={cls('map-plugin-view__map', {
                 'rounded-none': (!!pluginFullScreen || showMobileSearch) && matchTablet,
                 'mobile-search-page': showMobileSearch,
@@ -182,11 +194,14 @@ const BaseMap: React.FC<BaseMapProps> = props => {
                     ref={mapRef}
                     width={size.width}
                     height={size.height}
-                    onLocationError={() => {
-                        mapFitBounds?.();
-                    }}
-                    onLocationFound={() => {
-                        mapFitBounds?.();
+                    onReady={map => {
+                        if (readyTimeoutRef.current) {
+                            clearTimeout(readyTimeoutRef.current);
+                        }
+
+                        readyTimeoutRef.current = setTimeout(() => {
+                            mapFitBounds?.(map);
+                        }, 100);
                     }}
                 >
                     {mapData.map(d => (
