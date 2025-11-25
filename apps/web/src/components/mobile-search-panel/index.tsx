@@ -102,7 +102,7 @@ const MobileSearchPanel: React.FC<Props> = memo(
                             },
                         }}
                         value={keyword}
-                        onChange={e => setKeyword(e.target.value.trim())}
+                        onChange={e => setKeyword(e.target.value)}
                         onFocus={() => setActive(true)}
                     />
                     {active && (
