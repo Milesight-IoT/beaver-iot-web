@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState, useContext } from 'react';
-import { useSize, useMemoizedFn, useDebounceEffect } from 'ahooks';
+import { useSize, useMemoizedFn, useDebounceEffect, useLatest } from 'ahooks';
 import { isEmpty, get } from 'lodash-es';
 import cls from 'classnames';
 
@@ -28,7 +28,7 @@ export interface BaseMapProps {
 const BaseMap: React.FC<BaseMapProps> = props => {
     const { selectDevice, devices, showMobileSearch, cancelSelectDevice } = props;
 
-    const { matchTablet } = useTheme();
+    const { matchTablet, matchLandscape } = useTheme();
     const mapContext = useContext(MapContext);
     const { getColorType } = mapContext || {};
     const pluginFullscreenCxt = useContext(PluginFullscreenContext);
@@ -39,8 +39,13 @@ const BaseMap: React.FC<BaseMapProps> = props => {
     const mapRef = useRef<MapInstance>(null);
     const currentOpenMarker = useRef<MarkerInstance | null>(null);
     const [markers, setMarkers] = useState<Record<string, MarkerInstance>>({});
+    const [mapFixedHeight, setMapFixedHeight] = useState<string | number>();
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
     const readyTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+    const pluginFullscreenRef = useLatest(pluginFullScreen);
+    const matchTabletRef = useLatest(matchTablet);
+
     /**
      *  Whether the map is operating fullscreen
      */
@@ -175,18 +180,47 @@ const BaseMap: React.FC<BaseMapProps> = props => {
         marker?.closePopup();
     });
 
-    const mapFixedHeight = useMemo(() => {
-        if (!pluginFullScreen || !matchTablet) {
-            return undefined;
-        }
-
+    const getBodyHeight = () => {
         const bodyHeight = document?.body?.getBoundingClientRect()?.height;
         if (!bodyHeight || Number.isNaN(Number(bodyHeight))) {
             return '100%';
         }
 
         return bodyHeight - 56;
-    }, [pluginFullScreen, matchTablet]);
+    };
+
+    /**
+     * Update map fixed height when plugin fullscreen or match tablet
+     */
+    useDebounceEffect(
+        () => {
+            if (!pluginFullScreen || !matchTablet) {
+                setMapFixedHeight?.(undefined);
+                return;
+            }
+
+            setMapFixedHeight?.(getBodyHeight());
+        },
+        [pluginFullScreen, matchTablet],
+        {
+            wait: 150,
+        },
+    );
+
+    /**
+     * Update map fixed height when match landscape
+     */
+    useDebounceEffect(
+        () => {
+            if (pluginFullscreenRef.current && matchTabletRef.current) {
+                setMapFixedHeight?.(getBodyHeight());
+            }
+        },
+        [matchLandscape],
+        {
+            wait: 150,
+        },
+    );
 
     return (
         <div
