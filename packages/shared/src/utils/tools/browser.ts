@@ -94,7 +94,7 @@ export const imageCompress = async (
  */
 export const getGeoLocation = (
     options: PositionOptions = {
-        timeout: 60 * 1000,
+        timeout: 10 * 1000,
         maximumAge: 30 * 60 * 1000,
         enableHighAccuracy: true,
     },
@@ -113,6 +113,7 @@ export const getGeoLocation = (
                 });
             },
             error => {
+                console.error('Geolocation error:', error.code, error.message);
                 reject(error);
             },
             options,

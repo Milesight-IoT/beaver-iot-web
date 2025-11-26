@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useState, useRef, useCallback } from 'react';
 import { Button } from '@mui/material';
 import { useSize } from 'ahooks';
+import { isNil } from 'lodash-es';
 import { useForm, Controller } from 'react-hook-form';
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
 import { Modal, toast, type ModalProps } from '@milesight/shared/src/components';
@@ -141,28 +142,31 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
             })
             .catch(err => {
                 console.error(err);
-                setFormLatLng(0, 0);
-                setLocation(d => {
-                    if (d && isPosEqual([0, 0], [d.latitude, d.longitude])) {
-                        return d;
-                    }
+                const { latitude, longitude } = getValues();
 
-                    return {
-                        ...d,
-                        latitude: 0,
-                        longitude: 0,
-                    };
-                });
+                if (!latitude && !longitude) {
+                    setLocation(d => {
+                        if (d && (!isNil(d.latitude) || !isNil(d.longitude))) {
+                            return d;
+                        }
+
+                        return {
+                            ...d,
+                            latitude: 0,
+                            longitude: 0,
+                        };
+                    });
+                }
                 toast.error({
                     key: 'get_location_failed',
                     content: getIntlText('device.message.get_location_failed'),
                 });
             });
-    }, [data, visible, mapInstance, location, setFormLatLng, getIntlText]);
+    }, [data, visible, mapInstance, location, getValues, setFormLatLng, getIntlText]);
 
     // Update Form Values when location change
     useEffect(() => {
-        if (!location?.latitude || !location?.longitude) return;
+        if (isNil(location?.latitude) || isNil(location?.longitude)) return;
 
         setFormLatLng(location.latitude, location.longitude);
         setValue('address', location.address);

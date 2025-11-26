@@ -12,7 +12,7 @@ import {
     DeleteOutlineIcon,
     toast,
 } from '@milesight/shared/src/components';
-import { getGeoLocation, formatPrecision } from '@milesight/shared/src/utils/tools';
+import { getGeoLocation, formatPrecision, delay } from '@milesight/shared/src/utils/tools';
 import { PermissionControlHidden, useConfirm, type MapInstance } from '@/components';
 import {
     deviceAPI,
@@ -64,8 +64,21 @@ const Location: React.FC<Props> = ({ data, onEditSuccess }) => {
         const [err, latlng] = await awaitWrap(getGeoLocation());
 
         if (err || !latlng) {
-            setFormLatLng(0, 0);
-            setLocation({ latitude: 0, longitude: 0 });
+            const { latitude, longitude } = getValues();
+
+            if (!latitude && !longitude) {
+                setLocation(d => {
+                    if (d && (!isNil(d.latitude) || !isNil(d.longitude))) {
+                        return d;
+                    }
+                    return {
+                        ...d,
+                        latitude: 0,
+                        longitude: 0,
+                    };
+                });
+            }
+
             toast.error(getIntlText('device.message.get_location_failed'));
             return;
         }

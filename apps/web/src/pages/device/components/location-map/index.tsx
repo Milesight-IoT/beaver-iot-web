@@ -132,7 +132,7 @@ const LocationMap = (
                 formatPrecision(position[1], formatConfig),
             ]);
         },
-        { wait: 300 },
+        { wait: 350 },
     );
     const events = useMemo<MapProps['events']>(
         () => ({
