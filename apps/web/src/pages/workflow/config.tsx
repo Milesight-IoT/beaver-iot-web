@@ -211,6 +211,10 @@ export const basicNodeConfigs: Record<WorkflowNodeType, NodeConfigItemType> = {
                 key: 'entities',
                 type: 'entities',
             },
+            {
+                key: 'entityData.keys',
+                type: 'entities',
+            },
         ],
     },
     mqtt: {
@@ -353,6 +357,10 @@ export const basicNodeConfigs: Record<WorkflowNodeType, NodeConfigItemType> = {
         outputs: [
             {
                 key: 'entities',
+                type: 'entities',
+            },
+            {
+                key: 'entityData.keys',
                 type: 'entities',
             },
         ],
