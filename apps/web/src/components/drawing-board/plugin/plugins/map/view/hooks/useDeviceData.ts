@@ -12,23 +12,19 @@ import {
 import { type DeviceSelectData } from '@/components/drawing-board/plugin/components';
 import { type HoverSearchAutocompleteExpose } from '@/components/hover-search-autocomplete/interface';
 
-// function randomFloatWithSixDecimals(isLatitude?: boolean) {
-//     const randomLat = (18 + Math.random() * (54 - 18)).toFixed(6);
-//     const randomLng = (73 + Math.random() * (135 - 73)).toFixed(6);
+export function useDeviceData(props: {
+    devices?: DeviceSelectData[];
+    pluginFullScreen?: boolean;
+    changeIsFullscreen: ((isFullscreen: boolean) => void) | undefined;
+}) {
+    const { devices, pluginFullScreen, changeIsFullscreen } = props || {};
 
-//     if (isLatitude) {
-//         return parseFloat(randomLat);
-//     }
-
-//     return parseFloat(randomLng);
-// }
-
-export function useDeviceData(devices?: DeviceSelectData[]) {
     const [showMobileSearch, setShowMobileSearch] = useState(false);
     const [mobileKeyword, setMobileKeyword] = useState('');
     const [selectDevice, setSelectDevice] = useState<DeviceDetail | null>(null);
 
     const hoverSearchRef = useRef<HoverSearchAutocompleteExpose>(null);
+    const searchFromFullscreenRef = useRef(false);
 
     const { loading, data } = useRequest(
         async () => {
@@ -68,6 +64,24 @@ export function useDeviceData(devices?: DeviceSelectData[]) {
         setMobileKeyword('');
     });
 
+    const displayMobileSearchInput = useMemoizedFn(() => {
+        searchFromFullscreenRef.current = !!pluginFullScreen;
+
+        if (!pluginFullScreen) {
+            changeIsFullscreen?.(true);
+        }
+
+        setShowMobileSearch(true);
+    });
+
+    const hiddenMobileSearchInput = useMemoizedFn(() => {
+        if (!searchFromFullscreenRef?.current) {
+            changeIsFullscreen?.(false);
+        }
+
+        setShowMobileSearch(false);
+    });
+
     return {
         loading,
         data,
@@ -80,5 +94,7 @@ export function useDeviceData(devices?: DeviceSelectData[]) {
         cancelSelectDevice,
         setSelectDevice,
         setMobileKeyword,
+        displayMobileSearchInput,
+        hiddenMobileSearchInput,
     };
 }

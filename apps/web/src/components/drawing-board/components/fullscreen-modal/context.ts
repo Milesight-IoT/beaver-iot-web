@@ -8,6 +8,7 @@ export interface PluginFullscreenContextProps {
     pluginFullScreen?: boolean;
     setExtraFullscreenSx: React.Dispatch<React.SetStateAction<SxProps | undefined>>;
     setOnFullscreen: React.Dispatch<React.SetStateAction<(() => void) | undefined>>;
+    changeIsFullscreen: (isFullscreen: boolean) => void;
 }
 
 export const PluginFullscreenContext = createContext<PluginFullscreenContextProps | null>(null);

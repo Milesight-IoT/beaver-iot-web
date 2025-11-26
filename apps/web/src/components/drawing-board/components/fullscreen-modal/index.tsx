@@ -52,13 +52,18 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
 
     const pluginFullScreen = useMemo(() => get(isFullscreen, id, false), [isFullscreen, id]);
 
+    const changeIsFullscreen = useMemoizedFn((isFullscreen: boolean) => {
+        setIsFullscreen?.(isFullscreen ? { [id]: true } : {});
+    });
+
     const contextVal = useMemo((): PluginFullscreenContextProps => {
         return {
             pluginFullScreen,
             setExtraFullscreenSx,
             setOnFullscreen,
+            changeIsFullscreen,
         };
-    }, [pluginFullScreen]);
+    }, [pluginFullScreen, changeIsFullscreen]);
 
     const enterFullscreen = useMemoizedFn(() => {
         if (disabled) {

@@ -1,6 +1,6 @@
 .search-result {
     position: absolute;
-    top: 0;
+    top: 56px;
     left: 0;
     /* stylelint-disable-next-line custom-property-pattern */
     z-index: var(--mui-zIndex-modal, 1300);
@@ -23,6 +23,12 @@
         .identifier {
             color: var(--text-color-tertiary);
             .text-size(@font-size-sm);
+        }
+    }
+
+    :global {
+        .ms-mobile-infinite-scroll-root .ms-mobile-infinite-scroll-indicator {
+            display: none;
         }
     }
 }
