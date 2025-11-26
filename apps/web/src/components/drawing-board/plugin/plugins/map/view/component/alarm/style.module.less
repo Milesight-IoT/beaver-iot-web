@@ -1,8 +1,9 @@
 .alarm {
     position: absolute;
-    bottom: @padding-xxl;
-    left: @padding-xxl;
-    z-index: 1000;
+    bottom: @padding-sm;
+    left: @padding-sm;
+    /* stylelint-disable-next-line custom-property-pattern */
+    z-index: var(--mui-zIndex-modal, 1300);
     display: flex;
     align-items: center;
     padding: @padding-xs;

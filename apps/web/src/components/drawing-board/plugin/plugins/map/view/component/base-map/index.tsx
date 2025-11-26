@@ -12,6 +12,7 @@ import { PluginFullscreenContext } from '@/components/drawing-board/components';
 import { type DeviceDetail } from '@/services/http';
 import DevicePopup from '../device-popup';
 import { MapContext } from '../../context';
+import Alarm from '../alarm';
 
 export interface MapDataProps extends DeviceDetail {
     latLng: LatLngTuple;
@@ -21,12 +22,11 @@ export interface BaseMapProps {
     selectDevice?: DeviceDetail | null;
     devices?: DeviceDetail[];
     showMobileSearch?: boolean;
-    mapFixedHeight?: string | number;
     cancelSelectDevice?: () => void;
 }
 
 const BaseMap: React.FC<BaseMapProps> = props => {
-    const { selectDevice, devices, showMobileSearch, mapFixedHeight, cancelSelectDevice } = props;
+    const { selectDevice, devices, showMobileSearch, cancelSelectDevice } = props;
 
     const { matchTablet } = useTheme();
     const mapContext = useContext(MapContext);
@@ -175,11 +175,25 @@ const BaseMap: React.FC<BaseMapProps> = props => {
         marker?.closePopup();
     });
 
+    const mapFixedHeight = useMemo(() => {
+        if (!pluginFullScreen || !matchTablet) {
+            return undefined;
+        }
+
+        const bodyHeight = document?.body?.getBoundingClientRect()?.height;
+        if (!bodyHeight || Number.isNaN(Number(bodyHeight))) {
+            return '100%';
+        }
+
+        return bodyHeight - 56;
+    }, [pluginFullScreen, matchTablet]);
+
     return (
         <div
             style={{
-                height: pluginFullScreen && matchTablet ? mapFixedHeight : undefined,
-                maxHeight: pluginFullScreen && matchTablet ? mapFixedHeight : undefined,
+                minHeight: mapFixedHeight,
+                height: mapFixedHeight,
+                maxHeight: mapFixedHeight,
             }}
             className={cls('map-plugin-view__map', {
                 'rounded-none': (!!pluginFullScreen || showMobileSearch) && matchTablet,
@@ -222,6 +236,8 @@ const BaseMap: React.FC<BaseMapProps> = props => {
                     ))}
                 </Map>
             )}
+
+            <Alarm />
         </div>
     );
 };

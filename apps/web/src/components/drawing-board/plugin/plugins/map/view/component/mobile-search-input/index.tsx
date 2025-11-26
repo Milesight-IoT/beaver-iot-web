@@ -1,7 +1,11 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import { useMemoizedFn } from 'ahooks';
+import { Button, TextField, InputAdornment } from '@mui/material';
 
-import { MobileSearchPanel, type InfiniteScrollListRef } from '@/components';
+import { useI18n } from '@milesight/shared/src/hooks';
+import { SearchIcon, CancelIcon } from '@milesight/shared/src/components';
+
+import { type InfiniteScrollListRef } from '@/components';
 import MobileSearchResult from '../mobile-search-result';
 import { MapContext } from '../../context';
 
@@ -10,12 +14,13 @@ export interface MobileSearchInputProps {
     setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
     keyword: string;
     setKeyword: React.Dispatch<React.SetStateAction<string>>;
-    children?: React.ReactNode;
+    hiddenSearch: () => void;
 }
 
 const MobileSearchInput: React.FC<MobileSearchInputProps> = props => {
-    const { showSearch, setShowSearch, keyword, setKeyword, children } = props;
+    const { showSearch, setShowSearch, keyword, setKeyword, hiddenSearch } = props;
 
+    const { getIntlText } = useI18n();
     const mapContext = useContext(MapContext);
     const { setSelectDevice } = mapContext || {};
 
@@ -48,18 +53,50 @@ const MobileSearchInput: React.FC<MobileSearchInputProps> = props => {
     }, []);
 
     return (
-        <MobileSearchPanel
-            value={keyword}
-            onChange={handleKeywordChange}
-            active={showSearch}
-            onActiveChange={handleShowSearch}
-            showSearchPlaceholder={false}
-            textFieldProps={{
-                inputRef,
-            }}
-            onClear={handleInputClear}
-        >
-            {children}
+        <>
+            <div className="map-plugin-view__mobile-search-input">
+                <TextField
+                    inputRef={inputRef}
+                    fullWidth
+                    autoComplete="off"
+                    className="ms-mobile-search-input"
+                    placeholder={getIntlText('common.label.search')}
+                    slotProps={{
+                        input: {
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            ),
+                            endAdornment: keyword && (
+                                <InputAdornment
+                                    position="end"
+                                    onClick={() => {
+                                        handleKeywordChange('');
+                                        handleInputClear();
+                                    }}
+                                >
+                                    <CancelIcon />
+                                </InputAdornment>
+                            ),
+                        },
+                    }}
+                    value={keyword}
+                    onChange={e => handleKeywordChange(e.target.value)}
+                    onFocus={() => handleShowSearch(true)}
+                />
+                {showSearch && (
+                    <Button
+                        onClick={() => {
+                            handleKeywordChange('');
+                            setOpen(false);
+                            hiddenSearch?.();
+                        }}
+                    >
+                        {getIntlText('common.button.cancel')}
+                    </Button>
+                )}
+            </div>
 
             <MobileSearchResult
                 listRef={listRef}
@@ -68,7 +105,7 @@ const MobileSearchInput: React.FC<MobileSearchInputProps> = props => {
                 open={open}
                 setOpen={setOpen}
             />
-        </MobileSearchPanel>
+        </>
     );
 };
 

@@ -4,14 +4,14 @@ import { Box, IconButton } from '@mui/material';
 import { isNil } from 'lodash-es';
 
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
-import { SearchIcon, Modal } from '@milesight/shared/src/components';
+import { SearchIcon } from '@milesight/shared/src/components';
 
 import { Tooltip, HoverSearchAutocomplete } from '@/components';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
 import { PluginFullscreenContext } from '@/components/drawing-board/components';
 import { type DeviceDetail } from '@/services/http';
 import { useStableValue } from '../../../hooks';
-import { BaseMap, Alarm, MobileSearchInput } from './component';
+import { BaseMap, MobileSearchInput } from './component';
 import { useDeviceData, useDeviceEntities } from './hooks';
 import { MapContext, type MapContextProps } from './context';
 
@@ -36,7 +36,8 @@ const MapView: React.FC<MapViewProps> = props => {
     const { stableValue: devices } = useStableValue(unStableValue);
     const context = useContext(DrawingBoardContext);
     const pluginFullscreenCxt = useContext(PluginFullscreenContext);
-    const { setExtraFullscreenSx, pluginFullScreen } = pluginFullscreenCxt || {};
+    const { setExtraFullscreenSx, pluginFullScreen, changeIsFullscreen } =
+        pluginFullscreenCxt || {};
     const {
         data,
         selectDevice,
@@ -48,7 +49,13 @@ const MapView: React.FC<MapViewProps> = props => {
         setSelectDevice,
         mobileKeyword,
         setMobileKeyword,
-    } = useDeviceData(devices);
+        displayMobileSearchInput,
+        hiddenMobileSearchInput,
+    } = useDeviceData({
+        devices,
+        pluginFullScreen,
+        changeIsFullscreen,
+    });
     const {
         entitiesStatus,
         getDeviceStatus,
@@ -107,7 +114,7 @@ const MapView: React.FC<MapViewProps> = props => {
         if (matchTablet) {
             return (
                 <IconButton
-                    onClick={() => setShowMobileSearch(true)}
+                    onClick={() => displayMobileSearchInput()}
                     sx={{
                         width: '36px',
                         height: '36px',
@@ -198,33 +205,6 @@ const MapView: React.FC<MapViewProps> = props => {
         </>
     );
 
-    const bodyHeight = useMemo(() => {
-        const bodyHeight = document?.body?.getBoundingClientRect()?.height;
-        if (!bodyHeight || Number.isNaN(Number(bodyHeight))) {
-            return null;
-        }
-
-        return bodyHeight;
-    }, []);
-
-    const mapFixedHeight = useMemo(() => {
-        return isNil(bodyHeight) ? '100%' : bodyHeight - 60;
-    }, [bodyHeight]);
-
-    const newMapFixedHeight = useMemo(() => {
-        return isNil(bodyHeight) ? '100%' : bodyHeight - 56;
-    }, [bodyHeight]);
-
-    const RenderBaseMap = (
-        <BaseMap
-            mapFixedHeight={newMapFixedHeight}
-            showMobileSearch={showMobileSearch}
-            devices={data}
-            selectDevice={selectDevice}
-            cancelSelectDevice={cancelSelectDevice}
-        />
-    );
-
     return (
         <MapContext.Provider value={mapContextValue}>
             <div className={cls('map-plugin-view', { 'p-0': !!pluginFullScreen && matchTablet })}>
@@ -251,43 +231,22 @@ const MapView: React.FC<MapViewProps> = props => {
 
                 {!isPreview && !title && RenderSearchAutocomplete}
 
-                {!showMobileSearch && RenderBaseMap}
+                <BaseMap
+                    showMobileSearch={showMobileSearch}
+                    devices={data}
+                    selectDevice={selectDevice}
+                    cancelSelectDevice={cancelSelectDevice}
+                />
 
-                <Alarm />
-
-                <Modal
-                    showCloseIcon={false}
-                    fullScreen
-                    visible={showMobileSearch}
-                    onCancel={() => setShowMobileSearch(false)}
-                    footer={null}
-                    sx={{
-                        '&.ms-modal-root .ms-mobile-search-panel-body': {
-                            padding: 0,
-                        },
-                        '.ms-mobile-infinite-scroll-root .ms-mobile-infinite-scroll-indicator': {
-                            display: 'none',
-                        },
-                    }}
-                >
-                    {showMobileSearch && (
-                        <MobileSearchInput
-                            keyword={mobileKeyword}
-                            setKeyword={setMobileKeyword}
-                            showSearch={showMobileSearch}
-                            setShowSearch={setShowMobileSearch}
-                        >
-                            <div
-                                className="map-plugin-view__mobile-map"
-                                style={{
-                                    height: mapFixedHeight,
-                                }}
-                            >
-                                {RenderBaseMap}
-                            </div>
-                        </MobileSearchInput>
-                    )}
-                </Modal>
+                {showMobileSearch && (
+                    <MobileSearchInput
+                        keyword={mobileKeyword}
+                        setKeyword={setMobileKeyword}
+                        showSearch={showMobileSearch}
+                        setShowSearch={setShowMobileSearch}
+                        hiddenSearch={hiddenMobileSearchInput}
+                    />
+                )}
             </div>
         </MapContext.Provider>
     );
