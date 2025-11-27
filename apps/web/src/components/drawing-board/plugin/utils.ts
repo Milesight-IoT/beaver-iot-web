@@ -1,5 +1,7 @@
 import { isEmpty, get, isNil } from 'lodash-es';
 
+import { isMobile } from '@milesight/shared/src/utils/userAgent';
+
 import { type DrawingBoardContextProps } from '@/components/drawing-board/context';
 import { type EntitySelectOption, type EntityValueType } from '@/components';
 import { chartColorList } from './constant';
@@ -165,5 +167,17 @@ export const openGoogleMap = (latitude?: number, longitude?: number) => {
     }
 
     const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+    if (isMobile()) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        return;
+    }
+
     window.open(url, '_blank');
 };
