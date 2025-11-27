@@ -231,7 +231,7 @@ const BaseMap: React.FC<BaseMapProps> = props => {
             }}
             className={cls('map-plugin-view__map', {
                 'rounded-none': (!!pluginFullScreen || showMobileSearch) && matchTablet,
-                'mobile-search-page': showMobileSearch,
+                // 'mobile-search-page': showMobileSearch,
             })}
             ref={ref}
         >
