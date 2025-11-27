@@ -1,4 +1,4 @@
-import React, { useContext, forwardRef, useImperativeHandle, useRef } from 'react';
+import React, { useContext, forwardRef, useImperativeHandle, useRef, useEffect } from 'react';
 import { useMemoizedFn } from 'ahooks';
 import cls from 'classnames';
 
@@ -46,6 +46,15 @@ const MobileDeviceList = forwardRef<MobileDeviceListExpose, MobileDeviceListProp
                 }
             },
         }));
+
+        /**
+         * Refresh list when search panel is closed
+         */
+        useEffect(() => {
+            if (!showMobileSearch) {
+                reloadList?.();
+            }
+        }, [showMobileSearch, reloadList]);
 
         const itemRenderer = useMemoizedFn((item: TableRowDataType) => (
             <MobileListItem

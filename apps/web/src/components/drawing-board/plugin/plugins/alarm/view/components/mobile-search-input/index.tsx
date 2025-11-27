@@ -42,7 +42,7 @@ const MobileSearchInput = forwardRef<MobileSearchInputExpose, MobileSearchInputP
     });
 
     const itemRenderer = (item: TableRowDataType) => (
-        <MobileListItem isSearchPage key={item.id} device={item} />
+        <MobileListItem isSearchPage key={item.id} device={item} refreshList={reloadList} />
     );
 
     return (
