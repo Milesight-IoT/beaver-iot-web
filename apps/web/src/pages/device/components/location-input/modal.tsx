@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState, useRef, useCallback } from 'react';
 import { Button } from '@mui/material';
-import { useSize } from 'ahooks';
+import { useSize, useRequest } from 'ahooks';
 import { isNil } from 'lodash-es';
 import { useForm, Controller } from 'react-hook-form';
 import { useI18n, useTheme } from '@milesight/shared/src/hooks';
@@ -91,6 +91,39 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
 
     // ---------- Location Data Update and Interactions ----------
     const [location, setLocation] = useState<LocationType>();
+    const { run: getLocation, cancel: cancelGetLocation } = useRequest(getGeoLocation, {
+        manual: true,
+        onError(err) {
+            console.error(err);
+            const { latitude, longitude } = getValues();
+
+            if (!latitude && !longitude) {
+                setLocation(d => {
+                    if (d && (!isNil(d.latitude) || !isNil(d.longitude))) {
+                        return d;
+                    }
+
+                    return {
+                        ...d,
+                        latitude: 0,
+                        longitude: 0,
+                    };
+                });
+            }
+            toast.error({
+                key: 'get_location_failed',
+                content: getIntlText('device.message.get_location_failed'),
+            });
+        },
+        onSuccess(latlng) {
+            setLocation(d => ({
+                ...d,
+                latitude: latlng.lat,
+                longitude: latlng.lng,
+            }));
+            mapInstance?.setView([latlng.lat, latlng.lng], PREFER_ZOOM_LEVEL);
+        },
+    });
     const handlePositionChange = useCallback<NonNullable<LocationMapProps['onPositionChange']>>(
         pos => {
             const { address } = getValues();
@@ -120,7 +153,7 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
 
     // Update form data when external data change
     useEffect(() => {
-        if (!visible || !mapInstance || location?.latitude || location?.longitude) return;
+        if (!visible || !mapInstance) return;
 
         if (data?.latitude && data?.longitude) {
             setLocation({ ...data });
@@ -131,38 +164,9 @@ const InputModal: React.FC<Props> = memo(({ data, visible, onCancel, onConfirm, 
             return;
         }
 
-        getGeoLocation()
-            .then(resp => {
-                setLocation(d => ({
-                    ...d,
-                    latitude: resp.lat,
-                    longitude: resp.lng,
-                }));
-                mapInstance?.setView([resp.lat, resp.lng], PREFER_ZOOM_LEVEL);
-            })
-            .catch(err => {
-                console.error(err);
-                const { latitude, longitude } = getValues();
-
-                if (!latitude && !longitude) {
-                    setLocation(d => {
-                        if (d && (!isNil(d.latitude) || !isNil(d.longitude))) {
-                            return d;
-                        }
-
-                        return {
-                            ...d,
-                            latitude: 0,
-                            longitude: 0,
-                        };
-                    });
-                }
-                toast.error({
-                    key: 'get_location_failed',
-                    content: getIntlText('device.message.get_location_failed'),
-                });
-            });
-    }, [data, visible, mapInstance, location, getValues, setFormLatLng, getIntlText]);
+        getLocation();
+        return () => cancelGetLocation();
+    }, [data, visible, mapInstance, getLocation, cancelGetLocation, getIntlText]);
 
     // Update Form Values when location change
     useEffect(() => {
