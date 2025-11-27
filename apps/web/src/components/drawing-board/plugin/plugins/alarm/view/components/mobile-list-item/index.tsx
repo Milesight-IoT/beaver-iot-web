@@ -84,7 +84,7 @@ const MobileListItem: React.FC<MobileListItemProps> = props => {
                 >
                     <Tooltip autoEllipsis title={getIntlText('common.label.content')} />
                 </Grid>
-                <Grid size={9} sx={{ minHeight: 66 }}>
+                <Grid size={9} sx={{ minHeight: 66, wordBreak: 'break-all' }}>
                     {device?.alarmContent || ''}
                 </Grid>
             </Grid>
