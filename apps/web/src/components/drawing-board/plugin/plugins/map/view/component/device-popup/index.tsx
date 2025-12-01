@@ -106,6 +106,14 @@ const DevicePopup: React.FC<DevicePopupProps> = props => {
                             sx={{
                                 width: '24px',
                                 height: '24px',
+                                color: 'text.secondary',
+                                '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                                    color: 'text.secondary',
+                                },
+                                '&.MuiIconButton-root:hover': {
+                                    backgroundColor: 'var(--hover-background-1)',
+                                    borderRadius: '50%',
+                                },
                             }}
                             size="small"
                             onClick={handleDeleteSpot}
