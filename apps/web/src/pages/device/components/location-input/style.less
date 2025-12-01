@@ -50,6 +50,7 @@
             align-items: center;
             justify-content: center;
             background-color: var(--component-background);
+            border-left: 1px solid var(--border-color-base);
 
             .@{mui-prefix}ButtonBase-root {
                 padding: 9px 10px;
@@ -92,7 +93,7 @@
         .bp-down(@grid-breakpoints[md], {
             width: 100%;
             height: 320px;
-            // max-height: calc((100vh - 187px) / 2);
+            box-shadow: 0 1px var(--border-color-base);
         });
 
         .location-input-map-marker {
