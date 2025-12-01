@@ -56,11 +56,15 @@
     .leaflet-popup-close-button {
         top: @margin-xs;
         right: @margin-xs;
-        color: var(--icon-color-gray-tertiary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--icon-color-gray-secondary);
+        border-radius: 50%;
 
         &:hover,
         &:focus {
-            color: var(--icon-color-gray-secondary);
+            background-color: var(--hover-background-1);
         }
     }
 }
