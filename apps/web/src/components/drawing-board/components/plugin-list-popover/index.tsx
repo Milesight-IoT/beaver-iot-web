@@ -121,7 +121,7 @@ export default (props: PluginListProps) => {
                                                       return (
                                                           <Grid
                                                               key={pluginConfig.type}
-                                                              size={3}
+                                                              size={2.4}
                                                               className="board-plugin-class-item"
                                                           >
                                                               <div

@@ -134,15 +134,13 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
             width: 36,
             height: 36,
             color: 'text.secondary',
+            '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                color: 'text.secondary',
+            },
         };
 
         if (matchTablet) {
-            return {
-                ...baseSx,
-                '&.MuiButtonBase-root.MuiIconButton-root:hover': {
-                    color: 'text.secondary',
-                },
-            };
+            return baseSx;
         }
 
         return {
@@ -166,12 +164,20 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
                 onChange={handleSelectTimeChange}
                 placeholder={getIntlText('common.label.please_select')}
                 sx={{
+                    marginRight: '4px',
+                    '&:hover': {
+                        backgroundColor: 'var(--hover-background-1)',
+                    },
                     '&.MuiInputBase-root .MuiOutlinedInput-notchedOutline': {
                         border: 'none',
                     },
                     '&.MuiInputBase-root.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':
                         {
                             boxShadow: 'none',
+                        },
+                    '&.MuiInputBase-root.MuiOutlinedInput-root .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input':
+                        {
+                            paddingRight: '20px',
                         },
                 }}
                 onOptionClick={handleOptionClick}

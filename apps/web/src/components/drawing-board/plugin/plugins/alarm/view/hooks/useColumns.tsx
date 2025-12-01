@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Stack, IconButton } from '@mui/material';
+import { Stack, IconButton, type SxProps } from '@mui/material';
 import { get, isEmpty, isNil } from 'lodash-es';
 
 import { useI18n, useTime } from '@milesight/shared/src/hooks';
@@ -70,6 +70,21 @@ const useColumns = <T extends TableRowDataType>({
             s ? AlarmStatus.Unclaimed : AlarmStatus.Claimed,
         ) as unknown as string;
     }, [filteredInfo]);
+
+    const operationIconSx = useMemo((): SxProps => {
+        return {
+            width: 36,
+            height: 36,
+            color: 'text.secondary',
+            '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                color: 'text.secondary',
+            },
+            '&.MuiIconButton-root:hover': {
+                backgroundColor: 'var(--hover-background-1)',
+                borderRadius: '50%',
+            },
+        };
+    }, []);
 
     const columns: ColumnType<T>[] = useMemo(() => {
         return [
@@ -159,11 +174,7 @@ const useColumns = <T extends TableRowDataType>({
                                 >
                                     <IconButton
                                         disabled={!row?.alarmStatus}
-                                        sx={{
-                                            width: 30,
-                                            height: 30,
-                                            color: 'text.secondary',
-                                        }}
+                                        sx={operationIconSx}
                                         onClick={() => {
                                             if (isPreview) {
                                                 return;
@@ -182,11 +193,7 @@ const useColumns = <T extends TableRowDataType>({
                             >
                                 <IconButton
                                     disabled={isNil(row?.latitude) || isNil(row?.longitude)}
-                                    sx={{
-                                        width: 30,
-                                        height: 30,
-                                        color: 'text.secondary',
-                                    }}
+                                    sx={operationIconSx}
                                     onClick={() => {
                                         if (isPreview) {
                                             return;
@@ -211,6 +218,7 @@ const useColumns = <T extends TableRowDataType>({
         claimLoading,
         claimAlarm,
         filterAlarmStatus,
+        operationIconSx,
     ]);
 
     return {

@@ -102,18 +102,19 @@ const MapView: React.FC<MapViewProps> = props => {
             setExtraFullscreenSx?.(undefined);
         } else {
             setExtraFullscreenSx?.({
-                top: '24px',
-                right: '24px',
+                top: !!pluginFullScreen && matchTablet ? '12px' : '24px',
+                right: !!pluginFullScreen && matchTablet ? '12px' : '24px',
                 borderRadius: '50%',
                 backgroundColor: 'var(--component-background)',
             });
         }
-    }, [title, setExtraFullscreenSx]);
+    }, [title, pluginFullScreen, matchTablet, setExtraFullscreenSx]);
 
     const renderSearch = () => {
         if (matchTablet) {
             return (
                 <IconButton
+                    disableRipple
                     onClick={() => displayMobileSearchInput()}
                     sx={{
                         width: '36px',
@@ -191,6 +192,7 @@ const MapView: React.FC<MapViewProps> = props => {
             <div
                 className={cls('map-plugin-view__search', {
                     'edit-search': !!context?.isEdit && !title,
+                    'mobile-fullscreen': !!pluginFullScreen && matchTablet,
                 })}
             >
                 {renderSearch()}
@@ -199,6 +201,7 @@ const MapView: React.FC<MapViewProps> = props => {
                 <div
                     className={cls('map-plugin-view__search-bg', {
                         'edit-search': !!context?.isEdit,
+                        'mobile-fullscreen': !!pluginFullScreen && matchTablet,
                     })}
                 />
             )}
@@ -207,7 +210,12 @@ const MapView: React.FC<MapViewProps> = props => {
 
     return (
         <MapContext.Provider value={mapContextValue}>
-            <div className={cls('map-plugin-view', { 'p-0': !!pluginFullScreen && matchTablet })}>
+            <div
+                className={cls('map-plugin-view', {
+                    'pt-4': !title && !(matchTablet && pluginFullScreen),
+                    'p-0': !!pluginFullScreen && matchTablet,
+                })}
+            >
                 {title && (
                     <div
                         className={cls(
@@ -232,6 +240,7 @@ const MapView: React.FC<MapViewProps> = props => {
                 {!isPreview && !title && RenderSearchAutocomplete}
 
                 <BaseMap
+                    title={title}
                     showMobileSearch={showMobileSearch}
                     devices={data}
                     selectDevice={selectDevice}

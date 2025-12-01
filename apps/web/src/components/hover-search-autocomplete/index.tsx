@@ -123,6 +123,9 @@ function HoverSearchInput<T>(
                     {
                         paddingRight: '39px',
                     },
+                '.MuiInputBase-root.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                    boxShadow: showSearch ? undefined : 'none',
+                },
             }}
         />
     );

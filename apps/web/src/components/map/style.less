@@ -1,4 +1,21 @@
 .@{prefix}-map-root {
     width: 100%;
     height: 100%;
+
+    // ========== Control Position ==========
+    .leaflet-top .leaflet-control {
+        margin-top: @margin-sm;
+    }
+
+    .leaflet-right .leaflet-control:not(.leaflet-control-attribution) {
+        margin-right: @margin-sm;
+    }
+
+    .leaflet-bottom .leaflet-control:not(.leaflet-control-attribution) {
+        margin-bottom: @margin-sm;
+    }
+
+    .leaflet-left .leaflet-control {
+        margin-left: @margin-sm;
+    }
 }

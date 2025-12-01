@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Stack, IconButton } from '@mui/material';
+import { Stack, IconButton, type SxProps } from '@mui/material';
 import { useMemoizedFn } from 'ahooks';
 import { get, isNil } from 'lodash-es';
 
@@ -77,6 +77,21 @@ const useColumns = <T extends TableRowDataType>({
         return `${entity.name}: ${getIEntityEnumDisplayVal(status.value, entity)}`;
     });
 
+    const operationIconSx = useMemo((): SxProps => {
+        return {
+            width: 36,
+            height: 36,
+            color: 'text.secondary',
+            '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                color: 'text.secondary',
+            },
+            '&.MuiIconButton-root:hover': {
+                backgroundColor: 'var(--hover-background-1)',
+                borderRadius: '50%',
+            },
+        };
+    }, []);
+
     const columns: ColumnType<T>[] = useMemo(() => {
         return [
             {
@@ -128,7 +143,7 @@ const useColumns = <T extends TableRowDataType>({
                 field: '$operation',
                 headerName: getIntlText('common.label.operation'),
                 display: 'flex',
-                width: 120,
+                width: 138,
                 align: 'left',
                 headerAlign: 'left',
                 fixed: 'right',
@@ -146,7 +161,7 @@ const useColumns = <T extends TableRowDataType>({
                                 }
                             >
                                 <IconButton
-                                    sx={{ width: 30, height: 30, color: 'text.secondary' }}
+                                    sx={operationIconSx}
                                     onClick={() => {
                                         handleServiceClick(row?.serviceEntities?.[0]);
                                     }}
@@ -161,11 +176,7 @@ const useColumns = <T extends TableRowDataType>({
                                 }
                             >
                                 <IconButton
-                                    sx={{
-                                        width: 30,
-                                        height: 30,
-                                        color: 'text.secondary',
-                                    }}
+                                    sx={operationIconSx}
                                     onClick={() => {
                                         handleServiceClick(row?.serviceEntities?.[1]);
                                     }}
@@ -183,11 +194,7 @@ const useColumns = <T extends TableRowDataType>({
                             >
                                 <Tooltip title={getIntlText('common.label.detail')}>
                                     <IconButton
-                                        sx={{
-                                            width: 30,
-                                            height: 30,
-                                            color: 'text.secondary',
-                                        }}
+                                        sx={operationIconSx}
                                         onClick={() => handleDeviceDrawingBoard(row?.id)}
                                     >
                                         <SpaceDashboardIcon sx={{ width: 20, height: 20 }} />
@@ -206,6 +213,7 @@ const useColumns = <T extends TableRowDataType>({
         entityNameAndStatus,
         loadingDeviceDrawingBoard,
         entitiesStatus,
+        operationIconSx,
     ]);
 
     return {

@@ -42,12 +42,12 @@ interface Props<CustomActionType extends string = never> {
  */
 const DEFAULT_ACTIONS: Props['actions'] = [
     {
-        type: 'zoom-in',
-        icon: <AddIcon />,
-    },
-    {
         type: 'zoom-out',
         icon: <RemoveIcon />,
+    },
+    {
+        type: 'zoom-in',
+        icon: <AddIcon />,
     },
 ];
 

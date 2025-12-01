@@ -72,8 +72,22 @@ const MobileSearchResult: React.FC<MobileSearchResultProps> = props => {
             })}
             onClick={() => handleSelectDevice(item)}
         >
-            <Tooltip autoEllipsis className={styles.name} title={item.name} />
-            <Tooltip autoEllipsis className={styles.identifier} title={item.identifier} />
+            <Tooltip
+                PopperProps={{
+                    disablePortal: true,
+                }}
+                autoEllipsis
+                className={styles.name}
+                title={item.name}
+            />
+            <Tooltip
+                PopperProps={{
+                    disablePortal: true,
+                }}
+                autoEllipsis
+                className={styles.identifier}
+                title={item.identifier}
+            />
         </div>
     );
 

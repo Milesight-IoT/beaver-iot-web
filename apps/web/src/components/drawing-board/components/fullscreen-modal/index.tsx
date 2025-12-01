@@ -42,7 +42,7 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
     const iconSx = useMemo((): SxProps => {
         return {
             position: 'absolute',
-            top: '12px',
+            top: '10px',
             right: '12px',
             zIndex: 'var(--mui-zIndex-modal, 1300)',
             ...sx,
@@ -88,16 +88,16 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
 
     const fullscreenIconSx: SxProps = useMemo(() => {
         const baseSx: SxProps = {
+            width: '36px',
+            height: '36px',
             color: 'text.secondary',
+            '&.MuiButtonBase-root.MuiIconButton-root:hover': {
+                color: 'text.secondary',
+            },
         };
 
         if (matchTablet) {
-            return {
-                ...baseSx,
-                '&.MuiButtonBase-root.MuiIconButton-root:hover': {
-                    color: 'text.secondary',
-                },
-            };
+            return baseSx;
         }
 
         return {
@@ -114,7 +114,7 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
             {children}
             {pluginFullScreen ? (
                 <Box component="div" sx={iconSx} onClick={exitFullscreen}>
-                    <IconButton size="small" sx={fullscreenIconSx}>
+                    <IconButton disableRipple size="small" sx={fullscreenIconSx}>
                         <FullscreenExitIcon sx={{ width: '20px', height: '20px' }} />
                     </IconButton>
                 </Box>
@@ -127,7 +127,7 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
                     }}
                     onClick={enterFullscreen}
                 >
-                    <IconButton size="small" sx={fullscreenIconSx}>
+                    <IconButton disableRipple size="small" sx={fullscreenIconSx}>
                         <FullscreenIcon sx={{ width: '20px', height: '20px' }} />
                     </IconButton>
                 </Box>
