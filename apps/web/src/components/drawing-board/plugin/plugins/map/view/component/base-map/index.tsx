@@ -43,6 +43,7 @@ const BaseMap: React.FC<BaseMapProps> = props => {
     const [mapFixedHeight, setMapFixedHeight] = useState<string | number>();
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
     const readyTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+    const [markerPopupStatus, setMarkerPopupStatus] = useState<Record<string, boolean>>({});
 
     const pluginFullscreenRef = useLatest(pluginFullScreen);
     const matchTabletRef = useLatest(matchTablet);
@@ -260,12 +261,30 @@ const BaseMap: React.FC<BaseMapProps> = props => {
                             key={d.id}
                             colorType={getColorType?.(d)}
                             position={d.latLng}
+                            size={get(markerPopupStatus, String(d?.id), false) ? 'large' : 'small'}
                             popup={<DevicePopup device={d} closeMarkerPopup={closeMarkerPopup} />}
                             onReady={marker => {
                                 handleMarkerReady(d.id, marker);
                             }}
                             events={{
+                                popupopen: () => {
+                                    /**
+                                     * Set the marker popup status to true
+                                     */
+                                    setMarkerPopupStatus(prev => ({
+                                        ...prev,
+                                        [d.id]: true,
+                                    }));
+                                },
                                 popupclose: () => {
+                                    /**
+                                     * Set the marker popup status to false
+                                     */
+                                    setMarkerPopupStatus(prev => ({
+                                        ...prev,
+                                        [d.id]: false,
+                                    }));
+
                                     handlePopupclose(d.id);
                                 },
                             }}
