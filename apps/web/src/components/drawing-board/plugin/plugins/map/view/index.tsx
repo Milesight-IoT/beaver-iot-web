@@ -103,7 +103,7 @@ const MapView: React.FC<MapViewProps> = props => {
         } else {
             setExtraFullscreenSx?.({
                 top: !!pluginFullScreen && matchTablet ? '12px' : '24px',
-                right: '24px',
+                right: !!pluginFullScreen && matchTablet ? '12px' : '24px',
                 borderRadius: '50%',
                 backgroundColor: 'var(--component-background)',
             });
@@ -210,7 +210,12 @@ const MapView: React.FC<MapViewProps> = props => {
 
     return (
         <MapContext.Provider value={mapContextValue}>
-            <div className={cls('map-plugin-view', { 'p-0': !!pluginFullScreen && matchTablet })}>
+            <div
+                className={cls('map-plugin-view', {
+                    'pt-4': !title && !(matchTablet && pluginFullScreen),
+                    'p-0': !!pluginFullScreen && matchTablet,
+                })}
+            >
                 {title && (
                     <div
                         className={cls(
