@@ -114,7 +114,7 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
             {children}
             {pluginFullScreen ? (
                 <Box component="div" sx={iconSx} onClick={exitFullscreen}>
-                    <IconButton size="small" sx={fullscreenIconSx}>
+                    <IconButton disableRipple size="small" sx={fullscreenIconSx}>
                         <FullscreenExitIcon sx={{ width: '20px', height: '20px' }} />
                     </IconButton>
                 </Box>
@@ -127,7 +127,7 @@ const FullscreenModal: React.FC<FullscreenModalProps> = props => {
                     }}
                     onClick={enterFullscreen}
                 >
-                    <IconButton size="small" sx={fullscreenIconSx}>
+                    <IconButton disableRipple size="small" sx={fullscreenIconSx}>
                         <FullscreenIcon sx={{ width: '20px', height: '20px' }} />
                     </IconButton>
                 </Box>

@@ -19,6 +19,7 @@ export interface MapDataProps extends DeviceDetail {
 }
 
 export interface BaseMapProps {
+    title?: string;
     selectDevice?: DeviceDetail | null;
     devices?: DeviceDetail[];
     showMobileSearch?: boolean;
@@ -26,7 +27,7 @@ export interface BaseMapProps {
 }
 
 const BaseMap: React.FC<BaseMapProps> = props => {
-    const { selectDevice, devices, showMobileSearch, cancelSelectDevice } = props;
+    const { title, selectDevice, devices, showMobileSearch, cancelSelectDevice } = props;
 
     const { matchTablet, matchLandscape } = useTheme();
     const mapContext = useContext(MapContext);
@@ -186,7 +187,9 @@ const BaseMap: React.FC<BaseMapProps> = props => {
             return '100%';
         }
 
-        return bodyHeight - 56;
+        const subtractHeight = title ? 56 : 0;
+
+        return bodyHeight - subtractHeight;
     };
 
     /**

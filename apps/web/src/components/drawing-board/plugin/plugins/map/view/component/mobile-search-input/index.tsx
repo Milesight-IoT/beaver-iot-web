@@ -36,11 +36,12 @@ const MobileSearchInput: React.FC<MobileSearchInputProps> = props => {
 
         setKeyword?.(keyword || '');
         setSelectDevice?.(null);
+        setOpen(!!keyword);
     });
 
     const handleShowSearch = useMemoizedFn((show: boolean) => {
         setShowSearch(show);
-        setOpen(show);
+        setOpen(!!keyword);
     });
 
     /**

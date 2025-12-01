@@ -36,27 +36,35 @@
 
     &__search {
         position: absolute;
-        top: 22px;
-        right: 60px;
+        top: 24px;
+        right: 62px;
         z-index: 1000;
 
         &.edit-search {
             right: 20px;
+        }
+
+        &.mobile-fullscreen {
+            top: 12px;
         }
     }
 
     &__search-bg {
         position: absolute;
         top: 24px;
-        right: 65px;
+        right: 64px;
         z-index: 999;
-        width: 30px;
-        height: 30px;
+        width: 36px;
+        height: 36px;
         background-color: var(--component-background);
         border-radius: @border-radius-xxl;
 
         &.edit-search {
             right: 24px;
+        }
+
+        &.mobile-fullscreen {
+            top: 12px;
         }
     }
 
