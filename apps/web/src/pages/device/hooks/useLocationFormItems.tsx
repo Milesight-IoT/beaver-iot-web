@@ -60,6 +60,21 @@ const useLocationFormItems = ({ onBlur }: Options = {}) => {
                                 onChange(result);
                                 onBlur?.('latitude', result);
                             }}
+                            onKeyUp={event => {
+                                if (event.key !== 'Enter') return;
+
+                                const value = (event?.target as HTMLInputElement)?.value?.trim();
+                                if (isNaN(+value)) return;
+
+                                const result = !value
+                                    ? ''
+                                    : formatPrecision(value, {
+                                          precision: DEVICE_LOCATION_PRECISION,
+                                          resultType: 'string',
+                                      });
+                                onChange(result);
+                                onBlur?.('latitude', result);
+                            }}
                         />
                     );
                 },
@@ -98,7 +113,22 @@ const useLocationFormItems = ({ onBlur }: Options = {}) => {
                                           resultType: 'string',
                                       });
                                 onChange(result);
-                                onBlur?.('latitude', result);
+                                onBlur?.('longitude', result);
+                            }}
+                            onKeyUp={event => {
+                                if (event.key !== 'Enter') return;
+
+                                const value = (event?.target as HTMLInputElement)?.value?.trim();
+                                if (isNaN(+value)) return;
+
+                                const result = !value
+                                    ? ''
+                                    : formatPrecision(value, {
+                                          precision: DEVICE_LOCATION_PRECISION,
+                                          resultType: 'string',
+                                      });
+                                onChange(result);
+                                onBlur?.('longitude', result);
                             }}
                         />
                     );
