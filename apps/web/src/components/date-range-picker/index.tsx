@@ -111,7 +111,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                 maxDateTime={value?.end || undefined}
                 {...props}
             />
-            {!matchTablet && <Box sx={{ mx: 2 }}> — </Box>}
+            {!matchTablet && <Box sx={{ mx: 1, color: 'text.secondary' }}> — </Box>}
             <DateTimePicker
                 ampm={false}
                 value={value?.end || endDate}

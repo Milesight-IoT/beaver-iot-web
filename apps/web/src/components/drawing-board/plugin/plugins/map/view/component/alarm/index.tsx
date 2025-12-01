@@ -20,7 +20,9 @@ const Alarm: React.FC = () => {
             </Tooltip>
             <div className={`${styles.text} pe-3`}>{getAlarmDevicesCount?.() || 0}</div>
             <Tooltip title={getIntlText('dashboard.tip.offline_device')}>
-                <LocationOnIcon color="disabled" sx={{ width: '16px', height: '16px' }} />
+                <LocationOnIcon
+                    sx={{ width: '16px', height: '16px', color: 'var(--icon-color-gray-tertiary)' }}
+                />
             </Tooltip>
             <div className={styles.text}>{getNoOnlineDevicesCount?.() || 0}</div>
         </div>
