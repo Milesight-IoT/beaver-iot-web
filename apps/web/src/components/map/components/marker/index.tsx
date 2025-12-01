@@ -117,6 +117,24 @@ const BMarker = forwardRef<MarkerInstance, BMarkerProps>(
 
         useImperativeHandle(ref, () => markerRef.current!);
 
+        // ---------- Popup & Tooltip ReLocation ----------
+        const hasPopup = Boolean(popup);
+        const hasTooltip = Boolean(tooltip);
+
+        useEffect(() => {
+            const marker = markerRef.current;
+
+            /**
+             * If the popup is open, should reopen to relocation it
+             */
+            if (hasPopup && marker?.isPopupOpen()) marker.openPopup();
+
+            /**
+             * If the tooltip is open, should reopen to relocation it
+             */
+            if (hasTooltip && marker?.isTooltipOpen()) marker.openTooltip();
+        }, [size, hasPopup, hasTooltip]);
+
         return (
             <Marker
                 {...props}
