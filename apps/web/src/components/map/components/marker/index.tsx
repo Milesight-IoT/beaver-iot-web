@@ -62,6 +62,7 @@ const genLocationIcon = ({
     size?: SizeType;
 }) => {
     const sizeValue = sizeMap[size];
+    const anchorY = -(sizeValue / 4 + sizeValue / 2 + 4);
 
     return L.divIcon({
         className: cls(
@@ -83,8 +84,8 @@ const genLocationIcon = ({
         `.trim(),
         iconSize: [sizeValue, sizeValue],
         iconAnchor: [sizeValue / 2, sizeValue],
-        popupAnchor: [0, -7 - sizeValue / 2 - 8],
-        tooltipAnchor: [0, -(sizeValue - 8)],
+        popupAnchor: [0, anchorY],
+        tooltipAnchor: [0, anchorY],
     });
 };
 
