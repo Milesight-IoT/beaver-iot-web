@@ -33,6 +33,9 @@ const HoverSearchInput: React.FC<HoverSearchInputProps> = props => {
             '& .MuiOutlinedInput-notchedOutline': {
                 border: 'none',
             },
+            '& .MuiInputBase-root.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                boxShadow: 'none',
+            },
             '&.MuiFormControl-root .MuiInputBase-root': {
                 paddingRight: 1,
                 paddingLeft: 0,
