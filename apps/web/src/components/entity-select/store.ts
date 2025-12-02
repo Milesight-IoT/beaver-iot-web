@@ -58,7 +58,7 @@ export default create(
                     exclude_children: excludeChildren,
                     not_scan_key: notScanKey,
                     page_number: 1,
-                    page_size: 99999,
+                    page_size: 999999,
                 }),
             );
 
