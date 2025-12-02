@@ -165,12 +165,18 @@ const useColumns = <T extends TableRowDataType>({
                             sx={{ height: '100%', alignItems: 'center', justifyContent: 'end' }}
                         >
                             <LoadingWrapper
+                                wrapperStyle={{
+                                    cursor: !row?.alarmStatus ? 'not-allowed' : undefined,
+                                }}
                                 size={20}
                                 loading={get(claimLoading, String(row?.id), false)}
                             >
                                 <Tooltip
-                                    isDisabledButton={!row?.alarmStatus}
-                                    title={getIntlText('common.tip.click_to_claim')}
+                                    title={
+                                        !row?.alarmStatus
+                                            ? null
+                                            : getIntlText('common.tip.click_to_claim')
+                                    }
                                 >
                                     <IconButton
                                         disabled={!row?.alarmStatus}

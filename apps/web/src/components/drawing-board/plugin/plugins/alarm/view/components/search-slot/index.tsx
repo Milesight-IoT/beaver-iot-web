@@ -171,7 +171,7 @@ const SearchSlot: React.FC<SearchSlotProps> = ({
                     '&.MuiInputBase-root .MuiOutlinedInput-notchedOutline': {
                         border: 'none',
                     },
-                    '&.MuiInputBase-root.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':
+                    '&.MuiInputBase-root.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline, &.MuiInputBase-root.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
                         {
                             boxShadow: 'none',
                         },

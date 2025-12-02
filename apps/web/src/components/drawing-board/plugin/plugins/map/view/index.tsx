@@ -102,8 +102,8 @@ const MapView: React.FC<MapViewProps> = props => {
             setExtraFullscreenSx?.(undefined);
         } else {
             setExtraFullscreenSx?.({
-                top: !!pluginFullScreen && matchTablet ? '12px' : '24px',
-                right: !!pluginFullScreen && matchTablet ? '12px' : '24px',
+                top: !!pluginFullScreen && matchTablet ? '12px' : '28px',
+                right: !!pluginFullScreen && matchTablet ? '12px' : '28px',
                 borderRadius: '50%',
                 backgroundColor: 'var(--component-background)',
             });
