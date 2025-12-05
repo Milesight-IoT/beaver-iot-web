@@ -74,6 +74,7 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
     const stageRef = useRef<Konva.Stage>(null);
     const layerRef = useRef<Konva.Layer>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
     // Handle stage click - add marker or clear selection
     const handleStageClick = useMemoizedFn((e: KonvaEventObject<MouseEvent>) => {
@@ -185,7 +186,6 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
     const [markers, setMarkers] = useState<Marker<T>[]>(propMarkers);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [alignmentGuides, setAlignmentGuides] = useState<AlignmentGuide[]>([]);
-    const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
     const [popupState, setPopupState] = useState<{
         markerId: string | null;
         position: { x: number; y: number; width: number; height: number } | null;
@@ -745,7 +745,7 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
         <div
             ref={containerRef}
             className={`ms-image-marker ${className || ''}`}
-            style={{ width, height, position: 'relative', ...style }}
+            style={{ width: containerSize.width, height: containerSize.height, ...style }}
         >
             <Stage
                 ref={stageRef}
@@ -814,25 +814,12 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
                                 onClick={e => {
                                     handleMarkerSelect(e, marker.id);
                                     // Handle click trigger for popup
-                                    if (enablePopup && !editable && popupTrigger === 'click') {
-                                        if (popupState.markerId === marker.id) {
-                                            setPopupState({ markerId: null, position: null });
-                                        } else {
-                                            setPopupState({
-                                                markerId: marker.id,
-                                                position: {
-                                                    x: x * imageSize.scale,
-                                                    y: y * imageSize.scale,
-                                                    width: markerWidth * imageSize.scale,
-                                                    height: markerHeight * imageSize.scale,
-                                                },
-                                            });
-                                        }
+                                    if (editable || !enablePopup || popupTrigger !== 'click') {
+                                        return;
                                     }
-                                }}
-                                onMouseEnter={() => {
-                                    // Handle hover trigger for popup
-                                    if (enablePopup && !editable && popupTrigger === 'hover') {
+                                    if (popupState.markerId === marker.id) {
+                                        setPopupState({ markerId: null, position: null });
+                                    } else {
                                         setPopupState({
                                             markerId: marker.id,
                                             position: {
@@ -844,21 +831,35 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
                                         });
                                     }
                                 }}
+                                onMouseEnter={() => {
+                                    // Handle hover trigger for popup
+                                    if (editable || !enablePopup || popupTrigger !== 'hover') {
+                                        return;
+                                    }
+                                    setPopupState({
+                                        markerId: marker.id,
+                                        position: {
+                                            x: x * imageSize.scale,
+                                            y: y * imageSize.scale,
+                                            width: markerWidth * imageSize.scale,
+                                            height: markerHeight * imageSize.scale,
+                                        },
+                                    });
+                                }}
                                 onMouseLeave={() => {
                                     // Clear popup on mouse leave for all trigger
-                                    if (enablePopup && !editable) {
-                                        setPopupState({ markerId: null, position: null });
-                                    }
+                                    if (editable || !enablePopup) return;
+                                    setPopupState({ markerId: null, position: null });
                                 }}
                                 onTap={e => {
                                     e.cancelBubble = true;
                                     const m = markers.find(mk => mk.id === marker.id);
-                                    if (m) {
-                                        // onTap uses Event type, cast to MouseEvent for callback
-                                        onMarkerClick?.(e as any, m);
-                                        if (editable) {
-                                            setSelectedIds(new Set([marker.id]));
-                                        }
+
+                                    if (!m) return;
+                                    // onTap uses Event type, cast to MouseEvent for callback
+                                    onMarkerClick?.(e as any, m);
+                                    if (editable) {
+                                        setSelectedIds(new Set([marker.id]));
                                     }
                                 }}
                                 onDblClick={e => handleMarkerDoubleClick(e, marker.id)}
