@@ -46,8 +46,7 @@ The component supports TypeScript generics to provide type-safe custom marker da
 
 ```tsx
 import { useState, useRef } from 'react';
-import { ImageMarker, type Marker, type ImageMarkerInstance, type MarkerChangeEvent } from '@/components';
-import type { KonvaEventObject } from 'konva/lib/Node';
+import { ImageMarker, type Marker, type ImageMarkerProps, type ImageMarkerInstance, type MarkerChangeEvent } from '@/components';
 
 // Define your custom marker data type
 interface DeviceData {
@@ -87,7 +86,7 @@ function DeviceMap() {
         setMarkers(event.markers);
     };
 
-    const handleMarkerClick = (event: KonvaEventObject<MouseEvent>, marker: Marker<DeviceData>) => {
+    const handleMarkerClick: ImageMarkerProps<DeviceData>['onMarkerClick'] = (event, marker) => {
         // marker.data is fully typed as DeviceData
         console.log('Device ID:', marker.data?.deviceId);
         console.log('Status:', marker.data?.status);
@@ -366,12 +365,10 @@ The component automatically scales the image and markers based on the container 
 ### Event Handling with Konva Events
 
 ```tsx
-import type { KonvaEventObject } from 'konva/lib/Node';
-
 <ImageMarker
     image="..."
     markers={markers}
-    onMarkerClick={(event: KonvaEventObject<MouseEvent>, marker) => {
+    onMarkerClick={(event, marker) => {
         // Access native event
         console.log('Click position:', event.evt.clientX, event.evt.clientY);
 
