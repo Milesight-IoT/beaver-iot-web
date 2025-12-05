@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRequest } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
@@ -14,12 +14,14 @@ interface Props extends ModalProps {
     detail?: TableRowDataType | null;
 }
 
+const DEFAULT_PAGINATION_MODEL = { page: 0, pageSize: 10 };
+
 /**
  * Entity detail modal
  */
 const DetailModal: React.FC<Props> = ({ detail, visible, ...props }) => {
     const { getIntlText } = useI18n();
-    const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
+    const [paginationModel, setPaginationModel] = useState(DEFAULT_PAGINATION_MODEL);
     const [filteredInfo, setFilteredInfo] = useState<FiltersRecordType>({});
     const columns = useColumns<HistoryRowDataType>({
         filteredInfo,
@@ -58,6 +60,12 @@ const DetailModal: React.FC<Props> = ({ detail, visible, ...props }) => {
             refreshDeps: [detail, visible, paginationModel, filteredInfo],
         },
     );
+
+    // Reset pagination model when modal is closed
+    useEffect(() => {
+        if (visible) return;
+        setPaginationModel(DEFAULT_PAGINATION_MODEL);
+    }, [visible]);
 
     return (
         <Modal
