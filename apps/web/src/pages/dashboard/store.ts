@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import { type NavigateFunction } from 'react-router-dom';
 
 import {
     iotLocalStorage,
@@ -26,6 +27,12 @@ interface DashboardStore {
     clearPaths: () => void;
     /** Reset all drawing board paths */
     resetPaths: (path?: DrawingBoardPath[]) => void;
+    /** Navigate router function */
+    navigate?: NavigateFunction;
+    /** Set navigate react router function */
+    setNavigate: (navigate: NavigateFunction) => void;
+    /** Navigate to a specific canvas */
+    navigateToCanvas: (path?: DrawingBoardPath) => void;
 }
 
 /**
@@ -86,6 +93,31 @@ const useDashboardStore = create(
 
             set(() => ({ paths }));
             iotLocalStorage.setItem(DASHBOARD_DRAWING_BOARD_PATHS_KEY, paths);
+        },
+        setNavigate(navigate) {
+            if (!navigate) {
+                return;
+            }
+
+            set(() => ({ navigate }));
+        },
+        navigateToCanvas(path) {
+            if (!path) {
+                return;
+            }
+
+            const { setPath, navigate } = get();
+            setPath(path);
+
+            /**
+             * Navigate to a specific canvas
+             * If it is a device, add deviceId to the query string
+             */
+            let navigatePath = `/dashboard?id=${path.id}`;
+            if (path.attach_type === 'DEVICE') {
+                navigatePath += `&deviceId=${path.attach_id}`;
+            }
+            navigate?.(navigatePath);
         },
     })),
 );
