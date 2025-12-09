@@ -116,7 +116,8 @@ export type PluginType =
     | 'trigger'
     | 'deviceList'
     | 'map'
-    | 'alarm';
+    | 'alarm'
+    | 'occupancyMarker';
 
 /**
  * The plugin control panel config
@@ -228,4 +229,12 @@ export interface ToiletBuildingProps {
         /** Disability Toilet Count */
         disabilityToiletCount: number;
     };
+    toilets?: {
+        /** Toilet id */
+        id: string;
+        /** Toilet Name */
+        name: string;
+        /** Toilet Type */
+        type?: 'STANDARD' | 'DISABILITY';
+    }[];
 }
