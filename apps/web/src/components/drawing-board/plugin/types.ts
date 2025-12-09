@@ -208,3 +208,24 @@ export interface BoardPluginProps extends ControlPanelConfig {
     originalControlPanel?: ControlPanelConfig | (() => ControlPanelConfig);
     pos?: Layout;
 }
+
+/**
+ * Toilet Building Props
+ */
+export interface ToiletBuildingProps {
+    /** Toilet Building Key */
+    key: ApiKey;
+    /** Toilet Building Name */
+    name: string;
+    /** Toilet Building Basic Info */
+    basicInfo: {
+        /** Toilet Building Type */
+        buildingToiletType: 'MALE' | 'FEMALE';
+        /** Total Toilet Count */
+        totalToiletCount: number;
+        /** Standard Toilet Count */
+        standardToiletCount: number;
+        /** Disability Toilet Count */
+        disabilityToiletCount: number;
+    };
+}
