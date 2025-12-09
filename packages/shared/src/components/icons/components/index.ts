@@ -13,3 +13,7 @@ export { default as UncheckedCheckboxIcon } from './unchecked-checkbox';
 export { default as CheckedCheckboxIcon } from './checked-checkbox';
 export { default as DisabledCheckboxIcon } from './disabled-checkbox';
 export { default as LocationPinIcon } from './location-pin';
+export { default as ArabManIcon } from './arab-man';
+export { default as ArabWomanIcon } from './arab-woman';
+export { default as ToiletCapacityIcon } from './toilet-capacity';
+export { default as ToiletDisabilityIcon } from './toilet-disability';
