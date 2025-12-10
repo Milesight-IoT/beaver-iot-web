@@ -146,7 +146,7 @@
     "workflow.valid.invalid_node_id": "The {1} node ID is invalid.",
     "workflow.valid.invalid_node_type": "The {1} node type is invalid.",
     "workflow.valid.invalid_reference_param": "The reference param of {1} field is invalid.",
-    "workflow.valid.invalid_timer_interval": "The timer interval must be less than {1}.",
+    "workflow.valid.invalid_timer_interval": "The timer interval must be greater than or equal to {1} and less than {2}.",
     "workflow.valid.invalid_url": "The {1} field value is not a valid URL.",
     "workflow.valid.invalid_url_path": "The {1} field must start with /, supporting alphanumeric and {2} formats.",
     "workflow.valid.max_length": "The {1} field length of the value you entered cannot exceed {2} digits.",
