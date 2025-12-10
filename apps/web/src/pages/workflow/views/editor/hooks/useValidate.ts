@@ -375,6 +375,7 @@ const useValidate = () => {
                     value?: NonNullable<TimerNodeDataType['parameters']>['timerSettings'],
                     fieldName?: string,
                 ) {
+                    const MIN_INTERVAL_SECONDS = 10;
                     const MAX_INTERVAL_HOURS = 24;
                     const { type, intervalTime, intervalTimeUnit } = value || {};
                     if (
@@ -399,12 +400,16 @@ const useValidate = () => {
                                 break;
                         }
 
-                        if (seconds < MAX_INTERVAL_HOURS * 3600) {
+                        if (
+                            seconds >= MIN_INTERVAL_SECONDS &&
+                            seconds < MAX_INTERVAL_HOURS * 3600
+                        ) {
                             return true;
                         }
 
                         const message = getIntlText('workflow.valid.invalid_timer_interval', {
-                            1: getIntlText('common.label.hours', { 1: MAX_INTERVAL_HOURS }),
+                            1: getIntlText('common.label.seconds', { 1: MIN_INTERVAL_SECONDS }),
+                            2: getIntlText('common.label.hours', { 1: MAX_INTERVAL_HOURS }),
                         });
                         return message;
                     }
