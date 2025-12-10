@@ -117,7 +117,8 @@ export type PluginType =
     | 'deviceList'
     | 'map'
     | 'alarm'
-    | 'buildingToiletCard';
+    | 'buildingToiletCard'
+    | 'buildingToiletStatusCard';
 
 /**
  * The plugin control panel config
