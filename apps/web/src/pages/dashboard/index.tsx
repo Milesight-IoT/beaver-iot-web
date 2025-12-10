@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { List } from '@mui/material';
 
 import { LoadingWrapper } from '@milesight/shared/src/components';
@@ -10,7 +10,8 @@ import { useMainCanvas } from './hooks';
 
 const DashboardContainer: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const { clearPaths } = useDashboardStore();
+    const navigate = useNavigate();
+    const { clearPaths, setNavigate } = useDashboardStore();
     const { loading, defaultId, setDefaultId } = useMainCanvas();
 
     const id = useMemo(() => {
@@ -20,6 +21,13 @@ const DashboardContainer: React.FC = () => {
     const deviceId = useMemo(() => {
         return searchParams?.get('deviceId');
     }, [searchParams]);
+
+    /**
+     * Set navigate function to store
+     */
+    useEffect(() => {
+        setNavigate(navigate);
+    }, [navigate, setNavigate]);
 
     /**
      * Returning to the dashboard list will
