@@ -35,3 +35,4 @@ export {
     type DeviceSelectData,
 } from './multi-device-select';
 export { default as AlarmTimeSelect } from './alarm-time-select';
+export { default as MarkerDrawer, type MarkerDrawerProps } from './marker-drawer';

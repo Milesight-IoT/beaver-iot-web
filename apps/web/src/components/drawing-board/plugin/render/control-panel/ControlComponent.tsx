@@ -21,6 +21,7 @@ import {
     ChartMetricsSelect,
     MultiDeviceSelect,
     AlarmTimeSelect,
+    MarkerDrawer,
 } from '../../components';
 
 export interface ControlComponentProps {
@@ -147,6 +148,8 @@ const ControlComponent: React.FC<ControlComponentProps> = (props: ControlCompone
                     {...config?.componentProps}
                 />
             );
+        case 'MarkerDrawer':
+            return <MarkerDrawer {...commonProps} {...config?.componentProps} />;
         default:
             return null;
     }

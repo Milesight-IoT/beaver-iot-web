@@ -71,6 +71,15 @@ const occupancyMarkerControlPanelConfig = (): ControlPanelConfig<OccupancyMarker
                             },
                         },
                     },
+                    {
+                        name: 'markerDrawer',
+                        config: {
+                            type: 'MarkerDrawer',
+                            controllerProps: {
+                                name: 'markerDrawer',
+                            },
+                        },
+                    },
                 ],
             },
         ],

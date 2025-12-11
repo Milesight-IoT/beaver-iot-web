@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDebounceEffect } from 'ahooks';
 import { isEmpty } from 'lodash-es';
 
@@ -20,10 +20,14 @@ const DISABILITY_SIGN = 'D';
 export interface OccupiedMarkerProps {
     isPreview?: boolean;
     config: OccupancyMarkerConfigType;
+    size?: {
+        width: number;
+        height: number;
+    };
 }
 
 const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
-    const { isPreview, config } = props;
+    const { isPreview, config, size } = props;
     const {
         markerExtraInfos,
         buildingInfo = {
@@ -78,6 +82,7 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
     );
 
     const [markers, setMarkers] = useState<Marker[]>([]);
+
     /**
      * Debounce update markers by stableMarkerPositions
      */
@@ -180,9 +185,49 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
         },
     );
 
+    /**
+     * Calculate canvas width
+     */
+    const canvasWidth = useMemo(() => {
+        if (!size?.width) {
+            return undefined;
+        }
+
+        /**
+         * Subtract width to fit image marker
+         */
+        const subtractWidth = 16 + 16;
+        if (size.width <= subtractWidth) {
+            return undefined;
+        }
+
+        return size.width - subtractWidth;
+    }, [size?.width]);
+
+    /**
+     * Calculate canvas height
+     */
+    const canvasHeight = useMemo(() => {
+        if (!size?.height) {
+            return undefined;
+        }
+
+        /**
+         * Subtract height to fit image marker
+         */
+        const subtractHeight = 16 + 30 + 16 + 16;
+        if (size.height <= subtractHeight) {
+            return undefined;
+        }
+
+        return size.height - subtractHeight;
+    }, [size?.height]);
+
     return (
         <div className="occupancy-marker-view__body">
             <ImageMarker
+                width={canvasWidth}
+                height={canvasHeight}
                 image={buildingInfo?.basicInfo?.totalToiletCount === 120 ? SmallSvg : LargeSvg}
                 markers={markers}
                 onMarkersChange={handleMarkersChange}

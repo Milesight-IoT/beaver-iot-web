@@ -10,6 +10,7 @@ export interface DrawingBoardContextProps extends DrawingBoardProps {
      * 2. The widget plugin currently being edited.
      */
     widget?: WidgetDetail;
+    panelMountedRef?: React.RefObject<HTMLDivElement>;
 }
 
 /**

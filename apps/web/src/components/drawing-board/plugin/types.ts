@@ -13,6 +13,7 @@ import {
     type ChartMetricsSelectProps,
     type SingleEntitySelectProps,
     type MultiDeviceSelectProps,
+    type MarkerDrawerProps,
 } from './components';
 import { COMPONENT_CLASS } from './constant';
 
@@ -31,7 +32,8 @@ export type ControlType =
     | 'MultiEntitySelect'
     | 'ChartMetricsSelect'
     | 'MultiDeviceSelect'
-    | 'AlarmTimeSelect';
+    | 'AlarmTimeSelect'
+    | 'MarkerDrawer';
 
 export type ControlTypePropsMap = {
     Input: Partial<TextFieldProps>;
@@ -46,6 +48,7 @@ export type ControlTypePropsMap = {
     ChartMetricsSelect: Partial<ChartMetricsSelectProps>;
     MultiDeviceSelect: MultiDeviceSelectProps;
     AlarmTimeSelect: Partial<PluginSelectProps>;
+    MarkerDrawer: MarkerDrawerProps;
 };
 
 // Check the completeness of ControlTypePropsMap

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import cls from 'classnames';
+import { useSize } from 'ahooks';
 
 import { useI18n } from '@milesight/shared/src/hooks';
 import {
@@ -36,8 +37,11 @@ const OccupancyMarkerView: React.FC<OccupancyMarkerViewProps> = props => {
 
     const { getIntlText } = useI18n();
 
+    const markerContainerRef = useRef<HTMLDivElement>(null);
+    const markerContainerSize = useSize(markerContainerRef);
+
     return (
-        <div className="occupancy-marker-view">
+        <div className="occupancy-marker-view" ref={markerContainerRef}>
             <div className="occupancy-marker-view__header">
                 <div
                     className={cls('gender-wrapper', {
@@ -95,7 +99,7 @@ const OccupancyMarkerView: React.FC<OccupancyMarkerViewProps> = props => {
                 </div>
             </div>
 
-            <OccupiedMarker isPreview={isPreview} config={config} />
+            <OccupiedMarker isPreview={isPreview} config={config} size={markerContainerSize} />
         </div>
     );
 };
