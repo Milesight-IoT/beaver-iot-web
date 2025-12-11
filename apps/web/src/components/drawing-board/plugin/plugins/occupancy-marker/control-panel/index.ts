@@ -1,9 +1,42 @@
 import { t } from '@milesight/shared/src/utils/tools';
 
-import type { ControlPanelConfig } from '@/components/drawing-board/plugin/types';
+import type {
+    ControlPanelConfig,
+    ToiletBuildingProps,
+} from '@/components/drawing-board/plugin/types';
+
+export interface MarkerExtraInfoProps {
+    /** Unique marker ID S001~S112/D1~D8 */
+    toiletId: string;
+    /** Toilet name */
+    toiletName: string;
+    /** Occupied entity key */
+    occupiedState?: string;
+    /** Online entity key */
+    onlineState?: string;
+    /** Notification device array JSON string */
+    notification?: string;
+    /** Is Active */
+    isActive?: boolean;
+    /** Entity key to ID mapping */
+    entityKeyToId?: Record<string, string>;
+}
 
 export interface OccupancyMarkerConfigType {
     title: string;
+    markerExtraInfos?: MarkerExtraInfoProps[];
+    buildingInfo?: ToiletBuildingProps;
+    makerPositions?: {
+        /** Marker ID */
+        id: string;
+        /** Marker position */
+        position: {
+            /** X coordinate */
+            x: number;
+            /** Y coordinate */
+            y: number;
+        };
+    }[];
 }
 
 /**
