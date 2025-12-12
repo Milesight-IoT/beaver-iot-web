@@ -63,8 +63,8 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
             {
                 id: 'S002',
                 position: {
-                    x: 10.13105413105413,
-                    y: 4.939994014220584,
+                    x: 38.33618233618233,
+                    y: 9.445019453783098,
                 },
             },
             {
@@ -92,12 +92,11 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                 return;
             }
 
-            console.log('stableMarkerPositions ? ', stableMarkerPositions);
             const newMarkers: Marker[] = stableMarkerPositions.map(item => ({
                 ...item,
                 style: {
-                    width: 14,
-                    height: 14,
+                    width: 16,
+                    height: 16,
                     borderRadius: 2,
                     backgroundColor: '#1eba62',
                 },
@@ -119,8 +118,6 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
     };
 
     const handleMarkerClick = (event: any, marker: Marker) => {
-        console.log('handleMarkerClick:', event, marker);
-
         /**
          * Only preview mode can click marker
          */
@@ -165,8 +162,6 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
 
     useDebounceEffect(
         () => {
-            console.log('markerExtraInfos ? ', markerExtraInfos);
-
             setMarkers(prevMarkers =>
                 prevMarkers.map(item => ({
                     ...item,
@@ -231,8 +226,6 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                 image={buildingInfo?.basicInfo?.totalToiletCount === 120 ? SmallSvg : LargeSvg}
                 markers={markers}
                 onMarkersChange={handleMarkersChange}
-                minMarkerWidth={14}
-                minMarkerHeight={14}
                 onMarkerClick={handleMarkerClick}
                 editable={false}
             />

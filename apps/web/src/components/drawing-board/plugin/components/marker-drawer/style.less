@@ -1,15 +1,36 @@
 .toi-marker-drawer {
-    height: 580px;
-    padding: @padding-md @padding-lg;
+    display: flex;
+    flex-direction: column;
+    padding: @padding-md 0 0 @padding-lg;
+    margin-top: 32px;
+    overflow: auto;
+    background-color: var(--white);
+    border-radius: 12px 12px 0 0;
 
     .header {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        padding: 0 @padding-sm @padding-md 0;
 
         .title {
             font-weight: @font-weight-medium;
             .text-size(@font-size-xxl);
         }
+    }
+
+    .body {
+        height: 500px;
+        padding-right: @padding-lg;
+        margin-bottom: 52px;
+        overflow: auto;
+    }
+
+    .save-button {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 0 16px;
     }
 }

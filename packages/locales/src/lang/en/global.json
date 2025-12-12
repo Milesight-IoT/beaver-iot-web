@@ -318,5 +318,6 @@
     "valid.input.version": "The version number does not comply with the specification.",
     "valid.resp.at_least_one": "Please select at least one {1}.",
     "common.label.woman": "Woman",
-    "common.label.man": "Man"
+    "common.label.man": "Man",
+    "common.label.notification": "Notification"
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, { useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { isEmpty } from 'lodash-es';
 import { Drawer, Box, IconButton } from '@mui/material';
 
@@ -7,6 +7,7 @@ import { CloseIcon } from '@milesight/shared/src/components';
 import { DrawingBoardContext } from '@/components/drawing-board/context';
 import useControlPanelStore from '../../store';
 import { type MarkerExtraInfoProps } from '../../plugins/occupancy-marker/control-panel';
+import EntityForm from './EntityForm';
 
 import './style.less';
 
@@ -22,22 +23,32 @@ const MarkerDrawer: React.FC<MarkerDrawerProps> = () => {
     const drawingBoardContext = useContext(DrawingBoardContext);
     const [open, setOpen] = useState(false);
 
+    /**
+     * Get active marker extra info
+     */
+    const activeMarker = useMemo(() => {
+        return ((formData?.markerExtraInfos || []) as MarkerExtraInfoProps[]).find(m => m.isActive);
+    }, [formData?.markerExtraInfos]);
+
+    /**
+     * Update drawer open state when active marker changed
+     */
     useEffect(() => {
         const markerExtraInfos = formData?.markerExtraInfos || [];
-        if (!Array.isArray(markerExtraInfos) || isEmpty(markerExtraInfos)) {
+        const mountedNode = drawingBoardContext?.panelMountedRef?.current;
+        if (!Array.isArray(markerExtraInfos) || isEmpty(markerExtraInfos) || !mountedNode) {
             return;
         }
 
-        const hasActiveMarker = (markerExtraInfos as MarkerExtraInfoProps[])?.some(m => m.isActive);
-        console.log('hasActiveMarker ? ', hasActiveMarker);
+        const hasActiveMarker = (markerExtraInfos as MarkerExtraInfoProps[]).some(m => m.isActive);
 
-        const mountedNode = drawingBoardContext?.panelMountedRef?.current;
-        if (mountedNode) {
-            mountedNode.style.display = hasActiveMarker ? 'block' : 'none';
-        }
+        /**
+         * Show the drawer container when active marker exists, otherwise hide it
+         */
+        mountedNode.style.display = hasActiveMarker ? 'block' : 'none';
 
         setOpen(hasActiveMarker);
-    }, [formData?.markerExtraInfos]);
+    }, [formData?.markerExtraInfos, drawingBoardContext?.panelMountedRef]);
 
     const handleCloseDrawer = useCallback(() => {
         let newMarkerExtraInfos: MarkerExtraInfoProps[] = formData?.markerExtraInfos || [];
@@ -69,6 +80,7 @@ const MarkerDrawer: React.FC<MarkerDrawerProps> = () => {
                     '.MuiPaper-root.MuiDrawer-paper': {
                         position: 'absolute',
                         marginBottom: 0,
+                        backgroundColor: 'transparent',
                     },
                 },
             }}
@@ -83,7 +95,7 @@ const MarkerDrawer: React.FC<MarkerDrawerProps> = () => {
         >
             <Box className="toi-marker-drawer">
                 <Box className="header">
-                    <Box className="title">A008</Box>
+                    <Box className="title">{activeMarker?.toiletName || ''}</Box>
                     <IconButton
                         sx={{
                             width: '36px',
@@ -103,7 +115,7 @@ const MarkerDrawer: React.FC<MarkerDrawerProps> = () => {
                     </IconButton>
                 </Box>
 
-                {JSON.stringify(formData?.markerExtraInfos)}
+                <EntityForm />
             </Box>
         </Drawer>
     ) : null;
