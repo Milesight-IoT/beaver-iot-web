@@ -75,7 +75,6 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
     const stageRef = useRef<Konva.Stage>(null);
     const layerRef = useRef<Konva.Layer>(null);
     const [cursor, setCursor] = useState<CSSProperties['cursor']>('default');
-    const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
     // Handle stage click - add marker or clear selection
     const handleStageClick = useMemoizedFn((e: KonvaEventObject<MouseEvent>) => {
@@ -138,7 +137,6 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
             };
 
             setImageSize(newImageSize);
-            setContainerSize({ width: displayWidth, height: displayHeight });
             onImageLoaded?.(newImageSize);
         },
         [width, height, onImageLoaded],
@@ -739,8 +737,8 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
             className={`ms-image-marker ${className || ''}`}
             style={{
                 position: 'relative',
-                width: containerSize?.width,
-                height: containerSize?.height,
+                width: imageSize.width,
+                height: imageSize.height,
                 ...style,
             }}
         >
@@ -774,7 +772,7 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
                                         : [0, guide.position, imageSize.width, guide.position]
                                 }
                                 stroke={alignmentLineColor}
-                                strokeWidth={1}
+                                strokeWidth={0.5}
                                 dash={[4, 4]}
                                 listening={false}
                             />
@@ -793,7 +791,7 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
                         );
 
                         return (
-                            <MarkerItem
+                            <MarkerItem<T>
                                 key={marker.id}
                                 marker={marker}
                                 isSelected={selectedIds.has(marker.id)}
@@ -809,7 +807,7 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
                                 border={marker.style?.border}
                                 boxShadow={marker.style?.boxShadow}
                                 editable={editable}
-                                renderMarker={renderMarker as any}
+                                renderMarker={renderMarker}
                                 onClick={e => {
                                     handleMarkerSelect(e, marker.id);
                                     // Handle click trigger for popup
@@ -847,24 +845,19 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
                                     });
                                 }}
                                 onMouseLeave={() => {
+                                    if (!popupEnabled) return;
+
                                     setCursor('default');
                                     // Clear popup on mouse leave for hover trigger
-                                    if (!popupEnabled || popupTrigger !== 'hover') {
-                                        return;
-                                    }
+                                    if (popupTrigger !== 'hover') return;
 
                                     setPopupState({ markerId: null, position: null });
                                 }}
                                 onTap={e => {
                                     e.cancelBubble = true;
-                                    const m = markers.find(mk => mk.id === marker.id);
+                                    if (!editable) return;
 
-                                    if (!m) return;
-                                    // onTap uses Event type, cast to MouseEvent for callback
-                                    onMarkerClick?.(e as any, m);
-                                    if (editable) {
-                                        setSelectedIds(new Set([marker.id]));
-                                    }
+                                    setSelectedIds(new Set([marker.id]));
                                 }}
                                 onDblClick={e => handleMarkerDoubleClick(e, marker.id)}
                                 onDblTap={e => handleMarkerDoubleClick(e, marker.id)}
