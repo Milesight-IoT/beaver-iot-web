@@ -181,3 +181,64 @@ export const openGoogleMap = (latitude?: number, longitude?: number) => {
 
     window.open(url, '_blank');
 };
+
+/**
+ * Extract and validate number from input string
+ * Handles mixed alphanumeric input and extracts valid numeric value
+ *
+ * @param inputValue - Input string that may contain letters, numbers, decimals, and symbols
+ * @param options - Validation options
+ * @param options.min - Minimum allowed value (default: -999999)
+ * @param options.max - Maximum allowed value (default: 999999)
+ * @returns Validated number or null if invalid
+ *
+ * @example
+ * extractAndValidateNumber('abc2') // returns 2
+ * extractAndValidateNumber('-abc2') // returns -2
+ * extractAndValidateNumber('abc2.44') // returns 2.44
+ * extractAndValidateNumber('12.34.56') // returns 12.34
+ * extractAndValidateNumber('abc') // returns null
+ */
+export const extractAndValidateNumber = (
+    inputValue: string,
+    options?: {
+        min?: number;
+        max?: number;
+    },
+): number | null => {
+    const trimmedValue = inputValue.trim();
+
+    // If empty, return null
+    if (!trimmedValue) {
+        return null;
+    }
+
+    const MIN_VALUE = options?.min ?? -999999;
+    const MAX_VALUE = options?.max ?? 999999;
+    // Extract valid numeric part using regex
+    // 1. Extract leading negative sign (if present)
+    const hasNegativeSign = /^-/.test(trimmedValue);
+    // 2. Remove all non-digit and non-decimal-point characters
+    let digitsPart = trimmedValue.replace(/[^\d.]/g, '');
+    // 3. Keep only the first decimal point
+    const dotIndex = digitsPart.indexOf('.');
+    if (dotIndex !== -1) {
+        // Keep first decimal point, remove all subsequent decimal points
+        digitsPart =
+            digitsPart.substring(0, dotIndex + 1) +
+            digitsPart.substring(dotIndex + 1).replace(/\./g, '');
+    }
+    // 4. If no digits extracted, return null
+    if (!digitsPart || digitsPart === '.') {
+        return null;
+    }
+    // 5. Combine negative sign and digits
+    const extractedNumber = hasNegativeSign ? `-${digitsPart}` : digitsPart;
+    // 6. Convert to number and validate
+    const numValue = parseFloat(extractedNumber);
+    if (isNaN(numValue)) {
+        return null;
+    }
+    // 7. Constrain to range
+    return Math.max(MIN_VALUE, Math.min(MAX_VALUE, numValue));
+};

@@ -7,6 +7,7 @@ import {
     POSITION_AXIS,
     type ChartEntityPositionValueType,
 } from '@/components/drawing-board/plugin/components/chart-entity-position';
+import { type ChartMarkLineValueType } from '@/components/drawing-board/plugin/components/chart-mark-line';
 import LineChartIcon from '../icon.svg';
 
 export interface LineChartControlPanelProps {
@@ -15,6 +16,8 @@ export interface LineChartControlPanelProps {
     time: number;
     leftYAxisUnit?: string;
     rightYAxisUnit?: string;
+    leftYAxisMarkLine?: ChartMarkLineValueType[];
+    rightYAxisMarkLine?: ChartMarkLineValueType[];
 }
 
 /**
@@ -63,6 +66,33 @@ const axisUnitSetValue = (
 
     update?.({
         [key]: newUnitName,
+    });
+};
+
+const axisMarkLineSetValue = (
+    position: POSITION_AXIS,
+    update: (newData: Partial<LineChartControlPanelProps>) => void,
+    formData?: LineChartControlPanelProps,
+) => {
+    const key = position === POSITION_AXIS.LEFT ? 'leftYAxisMarkLine' : 'rightYAxisMarkLine';
+    const isExisted = (formData?.entityPosition || [])?.find(p => p?.position === position);
+
+    if (!isExisted) {
+        // Only clear when current value is not empty array, avoid redundant updates
+        if (!isEmpty(formData?.[key])) {
+            update?.({
+                [key]: [],
+            });
+        }
+        return;
+    }
+    // If already has value, don't set again
+    if (!isNil(formData?.[key])) {
+        return;
+    }
+    // Set default empty array
+    update?.({
+        [key]: [],
     });
 };
 
@@ -163,6 +193,23 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
                         },
                     },
                     {
+                        name: 'chartMarkLine',
+                        config: {
+                            type: 'ChartMarkLine',
+                            controllerProps: {
+                                name: 'leftYAxisMarkLine',
+                                defaultValue: [],
+                            },
+                            componentProps: {},
+                            visibility(formData) {
+                                return isAxisUnitVisibility(POSITION_AXIS.LEFT, formData);
+                            },
+                            setValuesToFormConfig(update, formData) {
+                                axisMarkLineSetValue?.(POSITION_AXIS.LEFT, update, formData);
+                            },
+                        },
+                    },
+                    {
                         name: 'input',
                         config: {
                             type: 'Input',
@@ -186,6 +233,23 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
                             },
                             setValuesToFormConfig(update, formData) {
                                 axisUnitSetValue?.(POSITION_AXIS.RIGHT, update, formData);
+                            },
+                        },
+                    },
+                    {
+                        name: 'chartMarkLine',
+                        config: {
+                            type: 'ChartMarkLine',
+                            controllerProps: {
+                                name: 'rightYAxisMarkLine',
+                                defaultValue: [],
+                            },
+                            componentProps: {},
+                            visibility(formData) {
+                                return isAxisUnitVisibility(POSITION_AXIS.RIGHT, formData);
+                            },
+                            setValuesToFormConfig(update, formData) {
+                                axisMarkLineSetValue?.(POSITION_AXIS.RIGHT, update, formData);
                             },
                         },
                     },
