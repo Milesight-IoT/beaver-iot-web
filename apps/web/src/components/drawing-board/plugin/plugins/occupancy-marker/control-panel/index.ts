@@ -5,6 +5,12 @@ import type {
     ToiletBuildingProps,
 } from '@/components/drawing-board/plugin/types';
 
+export interface MarkerNotificationProps {
+    name: string;
+    status: string;
+    battery: string;
+}
+
 export interface MarkerExtraInfoProps {
     /** Unique marker ID S001~S112/D1~D8 */
     toiletId: string;
@@ -19,7 +25,7 @@ export interface MarkerExtraInfoProps {
     /** Is Active */
     isActive?: boolean;
     /** Entity key to ID mapping */
-    entityKeyToId?: Record<string, string>;
+    entityKeyToId?: Record<ApiKey, ApiKey>;
 }
 
 export interface OccupancyMarkerConfigType {

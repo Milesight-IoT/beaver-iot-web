@@ -7,8 +7,12 @@ import { useI18n } from '@milesight/shared/src/hooks';
 import { LoadingButton } from '@milesight/shared/src/components';
 
 import { type EntitySelectOption } from '@/components/entity-select';
+import { entityAPI, isRequestSuccess, awaitWrap, getResponseData } from '@/services/http';
 import { useFormItems } from './useFormItems';
-import { type MarkerExtraInfoProps } from '../../plugins/occupancy-marker/control-panel';
+import {
+    type MarkerExtraInfoProps,
+    type MarkerNotificationProps,
+} from '../../plugins/occupancy-marker/control-panel';
 
 export interface OperateProps {
     occupiedEntity: EntitySelectOption<ApiKey>;
@@ -31,7 +35,7 @@ const EntityForm: React.FC<Props> = props => {
 
     const { getIntlText } = useI18n();
 
-    const { control, handleSubmit, reset } = useForm<OperateProps>();
+    const { control, handleSubmit, reset, setError } = useForm<OperateProps>();
     const { formItems } = useFormItems();
 
     const [loading, setLoading] = useState(false);
@@ -40,7 +44,7 @@ const EntityForm: React.FC<Props> = props => {
      * Config form data
      */
     const handleConfigFormData = useCallback(
-        (params: OperateProps) => {
+        (params: OperateProps, newEntityKeyToId: MarkerExtraInfoProps['entityKeyToId']) => {
             const markerExtraInfos: MarkerExtraInfoProps[] = formData?.markerExtraInfos || [];
             if (!Array.isArray(markerExtraInfos) || isEmpty(markerExtraInfos) || !data) {
                 return;
@@ -64,9 +68,9 @@ const EntityForm: React.FC<Props> = props => {
                 deviceStatus: statusKey,
                 notification,
                 entityKeyToId: {
-                    ...markerExtraInfo?.entityKeyToId,
                     ...(occupiedKey && occ?.value ? { [occupiedKey]: String(occ.value) } : {}),
                     ...(statusKey && status?.value ? { [statusKey]: String(status.value) } : {}),
+                    ...newEntityKeyToId,
                 },
             };
 
@@ -92,9 +96,66 @@ const EntityForm: React.FC<Props> = props => {
         [updateFormData, formData?.markerExtraInfos, data],
     );
 
+    /**
+     * Validate notification entity key and return entity key to id map
+     */
+    const validateNotificationEntity = useCallback(
+        async (notification: string): Promise<MarkerExtraInfoProps['entityKeyToId']> => {
+            if (!notification) {
+                return;
+            }
+
+            try {
+                const nObj: MarkerNotificationProps[] = JSON.parse(notification);
+                if (!Array.isArray(nObj)) {
+                    return;
+                }
+
+                const entityKeys: { entity_key: ApiKey }[] = [];
+                for (const item of nObj) {
+                    entityKeys.push(...[{ entity_key: item.status }, { entity_key: item.battery }]);
+                }
+                if (!Array.isArray(entityKeys) || isEmpty(entityKeys)) {
+                    return;
+                }
+
+                const [error, resp] = await awaitWrap(
+                    entityAPI.notificationEntityValidation({
+                        entity_data: entityKeys,
+                    }),
+                );
+                if (error || !isRequestSuccess(resp)) {
+                    return;
+                }
+
+                const result = getResponseData(resp);
+                const errorCode = result?.error_data?.[0]?.error_code;
+                if (errorCode) {
+                    setError('notification', {
+                        type: 'validate',
+                        message: getIntlText(`error.http.${errorCode}`),
+                    });
+                    return;
+                }
+
+                return result?.success_data?.entity_key_to_id;
+            } catch {}
+        },
+        [getIntlText, setError],
+    );
+
     const onSubmit: SubmitHandler<OperateProps> = async params => {
         setLoading(true);
-        handleConfigFormData(params);
+        const entityKeyToId = await validateNotificationEntity(params.notification);
+        if (!entityKeyToId) {
+            setLoading(false);
+            return;
+        }
+
+        /**
+         * Update form data
+         */
+        handleConfigFormData(params, entityKeyToId);
 
         /**
          * reset form value and call onSuccess callback

@@ -239,6 +239,24 @@ export interface EntityAPISchema extends APISchema {
             }
         >;
     };
+
+    /** odm toilet single entity validation */
+    notificationEntityValidation: {
+        request: {
+            entity_data: {
+                entity_key: ApiKey;
+            }[];
+        };
+        response: {
+            success_data: {
+                entity_key_to_id: Record<ApiKey, ApiKey>;
+            };
+            error_data: {
+                error_code: string;
+                args?: Record<string, any>;
+            }[];
+        };
+    };
 }
 
 /**
@@ -274,5 +292,6 @@ export default attachAPI<EntityAPISchema>(client, {
 
             return resp;
         },
+        notificationEntityValidation: `POST ${API_PREFIX}/odm-shrine-toilet/entity-validation/notification`,
     },
 });
