@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useDebounceEffect } from 'ahooks';
 import { isEmpty } from 'lodash-es';
+import { type KonvaEventObject } from 'konva/lib/Node';
 
 import { useStoreShallow } from '@milesight/shared/src/hooks';
 import { ToiletDisabilityIcon } from '@milesight/shared/src/components';
@@ -40,15 +41,15 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
             toilets: [
                 {
                     id: 'S001',
-                    name: 'A001',
+                    number: 'A001',
                 },
                 {
                     id: 'S002',
-                    name: 'A002',
+                    number: 'A002',
                 },
                 {
                     id: 'D1',
-                    name: 'F1',
+                    number: 'F1',
                 },
             ],
         },
@@ -117,7 +118,7 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
         setMarkers(event.markers);
     };
 
-    const handleMarkerClick = (event: any, marker: Marker) => {
+    const handleMarkerClick = (_: KonvaEventObject<MouseEvent>, marker: Marker) => {
         /**
          * Only preview mode can click marker
          */
@@ -147,7 +148,8 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
         } else {
             newMarkerExtraInfos.push({
                 toiletId: marker.id,
-                toiletName: buildingInfo?.toilets?.find(item => item.id === marker.id)?.name || '',
+                toiletNumber:
+                    buildingInfo?.toilets?.find(item => item.id === marker.id)?.number || '',
                 isActive: true,
             });
         }

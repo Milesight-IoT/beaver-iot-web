@@ -235,8 +235,8 @@ export interface ToiletBuildingProps {
     toilets?: {
         /** Toilet id */
         id: string;
-        /** Toilet Name */
-        name: string;
+        /** Toilet number */
+        number: string;
         /** Toilet Type */
         type?: 'STANDARD' | 'DISABILITY';
     }[];

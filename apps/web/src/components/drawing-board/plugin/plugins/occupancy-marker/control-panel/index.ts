@@ -8,12 +8,12 @@ import type {
 export interface MarkerExtraInfoProps {
     /** Unique marker ID S001~S112/D1~D8 */
     toiletId: string;
-    /** Toilet name */
-    toiletName: string;
+    /** Toilet number */
+    toiletNumber: string;
     /** Occupied entity key */
     occupiedState?: string;
-    /** Online entity key */
-    onlineState?: string;
+    /** Device status entity key */
+    deviceStatus?: string;
     /** Notification device array JSON string */
     notification?: string;
     /** Is Active */

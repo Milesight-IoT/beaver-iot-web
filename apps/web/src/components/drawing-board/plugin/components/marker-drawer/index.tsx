@@ -50,7 +50,21 @@ const MarkerDrawer: React.FC<MarkerDrawerProps> = () => {
         setOpen(hasActiveMarker);
     }, [formData?.markerExtraInfos, drawingBoardContext?.panelMountedRef]);
 
+    /**
+     * Hide the drawer container when close drawer
+     */
+    const hiddenDrawerModal = useCallback(() => {
+        const mountedNode = drawingBoardContext?.panelMountedRef?.current;
+        if (mountedNode) {
+            mountedNode.style.display = 'none';
+        }
+
+        setOpen(false);
+    }, [drawingBoardContext?.panelMountedRef]);
+
     const handleCloseDrawer = useCallback(() => {
+        hiddenDrawerModal();
+
         let newMarkerExtraInfos: MarkerExtraInfoProps[] = formData?.markerExtraInfos || [];
         if (!Array.isArray(newMarkerExtraInfos) || isEmpty(newMarkerExtraInfos)) {
             newMarkerExtraInfos = [];
@@ -67,7 +81,7 @@ const MarkerDrawer: React.FC<MarkerDrawerProps> = () => {
         updateFormData({
             markerExtraInfos: newMarkerExtraInfos,
         });
-    }, [formData?.markerExtraInfos, updateFormData]);
+    }, [formData?.markerExtraInfos, updateFormData, hiddenDrawerModal]);
 
     return drawingBoardContext?.panelMountedRef?.current ? (
         <Drawer
@@ -95,7 +109,7 @@ const MarkerDrawer: React.FC<MarkerDrawerProps> = () => {
         >
             <Box className="toi-marker-drawer">
                 <Box className="header">
-                    <Box className="title">{activeMarker?.toiletName || ''}</Box>
+                    <Box className="title">{activeMarker?.toiletNumber || ''}</Box>
                     <IconButton
                         sx={{
                             width: '36px',
@@ -115,7 +129,12 @@ const MarkerDrawer: React.FC<MarkerDrawerProps> = () => {
                     </IconButton>
                 </Box>
 
-                <EntityForm />
+                <EntityForm
+                    data={activeMarker}
+                    formData={formData}
+                    updateFormData={updateFormData}
+                    onSuccess={hiddenDrawerModal}
+                />
             </Box>
         </Drawer>
     ) : null;

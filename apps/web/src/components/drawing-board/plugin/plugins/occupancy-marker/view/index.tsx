@@ -62,7 +62,7 @@ const OccupancyMarkerView: React.FC<OccupancyMarkerViewProps> = props => {
                 <div className="title">
                     <Tooltip
                         autoEllipsis
-                        title={`${buildingInfo?.name || ''} Bathroom Occupancy Status`}
+                        title={`${buildingInfo?.name || ''} Toilet Occupancy Status`}
                     />
                 </div>
                 <div className="building-info-statistics">
