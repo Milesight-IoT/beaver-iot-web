@@ -10,10 +10,10 @@ import styles from './style.module.less';
 
 export interface ChartMarkLineValueType {
     id: ApiKey;
-    label: string; // 标签名称
-    value: number | string; // 刻度值
-    unit: string; // 单位
-    color: string; // 颜色
+    label: string; // Label name
+    value: number | string; // Scale value
+    unit: string; // Unit
+    color: string; // Color
 }
 
 export interface ChartMarkLineProps {
@@ -90,7 +90,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                 <div className={styles['list-content']}>
                     {list.map((item, index) => (
                         <div className={styles.item} key={getKey(index)}>
-                            {/* Label 输入框 */}
+                            {/* Label input field */}
                             <TextField
                                 required={required}
                                 label={getIntlText('common.label.label')}
@@ -104,14 +104,14 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                 }}
                                 sx={{ flex: 1 }}
                             />
-                            {/* 刻度输入框 */}
+                            {/* Scale value input field */}
                             <TextField
                                 required={required}
                                 classes={{ root: 'input-box' }}
                                 label={getIntlText('common.label.scale')}
                                 value={item?.value || ''}
                                 onChange={e => {
-                                    // 在输入过程中不做任何过滤，允许用户自由输入
+                                    // Allow free input during typing without any filtering
                                     replace(index, {
                                         ...item,
                                         value: e.target.value,
@@ -119,13 +119,13 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                 }}
                                 onBlur={e => {
                                     const inputValue = e.target.value;
-                                    // 如果为空，不做处理
+                                    // If empty, do nothing
                                     if (!inputValue.trim()) {
                                         return;
                                     }
-                                    // 使用工具函数提取并验证数字
+                                    // Use utility function to extract and validate number
                                     const validatedValue = extractAndValidateNumber(inputValue);
-                                    // 更新为验证后的值（可能是数字或空字符串）
+                                    // Update with validated value (number or empty string)
                                     replace(index, {
                                         ...item,
                                         value: validatedValue ?? '',
@@ -133,7 +133,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                 }}
                                 sx={{ width: '60px' }}
                             />
-                            {/* 单位输入框 */}
+                            {/* Unit input field */}
                             <TextField
                                 label={getIntlText('common.label.unit')}
                                 classes={{ root: 'input-box' }}
@@ -147,7 +147,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                 }}
                                 sx={{ width: '60px' }}
                             />
-                            {/* 颜色选择器 */}
+                            {/* Color picker */}
                             <IconColorSelect
                                 label={getIntlText('common.label.color')}
                                 className={styles['icon-color-select']}
@@ -161,7 +161,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                 sx={{ width: '60px' }}
                             />
 
-                            {/* 删除按钮 */}
+                            {/* Delete button */}
                             <div className={styles.icon}>
                                 <IconButton onClick={() => remove(index)}>
                                     <DeleteOutlineIcon />
