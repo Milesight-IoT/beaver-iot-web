@@ -14,6 +14,7 @@ import {
 } from '@milesight/shared/src/components';
 import { Tooltip } from '@/components';
 import { useActivityEntity } from '@/components/drawing-board/plugin/hooks';
+import useDashboardStore from '@/pages/dashboard/store';
 import { entityAPI, awaitWrap, isRequestSuccess, getResponseData } from '@/services/http';
 import type { BoardPluginProps, ToiletBuildingProps } from '../../../types';
 import './style.less';
@@ -159,10 +160,10 @@ const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
     ]);
 
     // ========== Interaction ==========
+    const { navigateToCanvas } = useDashboardStore();
     const handleNavigate = () => {
         if (!actionCanvasId || configJson?.isPreview) return;
-        // TODO: Use `navigateToCanvas` to navigate to the target canvas
-        console.log({ actionCanvasId });
+        navigateToCanvas({ id: actionCanvasId });
     };
 
     return (

@@ -11,9 +11,9 @@ import { type AttachType } from '@/services/http';
 
 export interface DrawingBoardPath {
     id: ApiKey;
-    name: string;
-    attach_type: AttachType;
-    attach_id: ApiKey;
+    name?: string;
+    attach_type?: AttachType;
+    attach_id?: ApiKey;
 }
 
 interface DashboardStore {
