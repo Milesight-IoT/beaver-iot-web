@@ -8,6 +8,7 @@ import {
     type ChartEntityPositionValueType,
 } from '@/components/drawing-board/plugin/components/chart-entity-position';
 import { type ChartMarkLineValueType } from '@/components/drawing-board/plugin/components/chart-mark-line';
+import { isRangeValue } from '@milesight/shared/src/utils/validators';
 import LineChartIcon from '../icon.svg';
 
 export interface LineChartControlPanelProps {
@@ -94,6 +95,28 @@ const axisMarkLineSetValue = (
     update?.({
         [key]: [],
     });
+};
+
+// Check mark line value is in -999999 to 999999
+const checkMarkLineValue = (value: ChartMarkLineValueType[]) => {
+    if (!value || value.length === 0) {
+        return true;
+    }
+    const min = -999999;
+    const max = 999999;
+    for (const item of value) {
+        const val = item.value;
+        if (val && !isRangeValue(val as number, min, max)) {
+            const message =
+                t('common.label.scale') +
+                t('valid.input.range_value', {
+                    0: min,
+                    1: max,
+                });
+            return message;
+        }
+    }
+    return true;
 };
 
 /**
@@ -199,6 +222,9 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
                             controllerProps: {
                                 name: 'leftYAxisMarkLine',
                                 defaultValue: [],
+                                rules: {
+                                    validate: checkMarkLineValue,
+                                },
                             },
                             componentProps: {},
                             visibility(formData) {
@@ -243,6 +269,9 @@ const lineChartControlPanelConfig = (): ControlPanelConfig<LineChartControlPanel
                             controllerProps: {
                                 name: 'rightYAxisMarkLine',
                                 defaultValue: [],
+                                rules: {
+                                    validate: checkMarkLineValue,
+                                },
                             },
                             componentProps: {},
                             visibility(formData) {

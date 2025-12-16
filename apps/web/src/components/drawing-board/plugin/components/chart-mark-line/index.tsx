@@ -4,8 +4,8 @@ import { isEqual } from 'lodash-es';
 import { useDynamicList, useControllableValue } from 'ahooks';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { DeleteOutlineIcon, AddIcon } from '@milesight/shared/src/components';
+import { generateUUID } from '@milesight/shared/src/utils/tools';
 import IconColorSelect from '../icon-color-select';
-import { extractAndValidateNumber } from '../../utils';
 import styles from './style.module.less';
 
 export interface ChartMarkLineValueType {
@@ -80,8 +80,9 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                 <Checkbox
                     checked={showContent}
                     onChange={e => {
-                        setShowContent(e.target.checked);
-                        resetList(e.target.checked ? [defaultMarkLine] : []);
+                        const isChecked = e.target.checked;
+                        setShowContent(isChecked);
+                        resetList(isChecked ? [{ ...defaultMarkLine, id: generateUUID() }] : []);
                     }}
                 />
                 {getIntlText('common.label.mark_line')}
@@ -111,24 +112,9 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                 label={getIntlText('common.label.scale')}
                                 value={item?.value || ''}
                                 onChange={e => {
-                                    // Allow free input during typing without any filtering
                                     replace(index, {
                                         ...item,
                                         value: e.target.value,
-                                    });
-                                }}
-                                onBlur={e => {
-                                    const inputValue = e.target.value;
-                                    // If empty, do nothing
-                                    if (!inputValue.trim()) {
-                                        return;
-                                    }
-                                    // Use utility function to extract and validate number
-                                    const validatedValue = extractAndValidateNumber(inputValue);
-                                    // Update with validated value (number or empty string)
-                                    replace(index, {
-                                        ...item,
-                                        value: validatedValue ?? '',
                                     });
                                 }}
                                 sx={{ width: '60px' }}
