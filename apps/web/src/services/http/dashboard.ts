@@ -235,6 +235,56 @@ export interface DashboardAPISchema extends APISchema {
             main_canvas_id: string;
         };
     };
+    /**
+     * Get odm toilet binding entities batch template
+     */
+    getToiletBindTemplate: {
+        request: {
+            building_key: ApiKey;
+        };
+        response: Blob;
+    };
+    /**
+     * Parse odm toilet binding entities batch template
+     */
+    parseToiletBindTemplate: {
+        request: {
+            building_key: ApiKey;
+            file: File;
+        };
+        response: {
+            success_data?: {
+                count: number;
+                items: {
+                    toilet_id: string;
+                    toilet_number: string;
+                    occupied_state: string;
+                    device_status: string;
+                    notification: string;
+                    entity_key_to_id: Record<ApiKey, ApiKey>;
+                }[];
+            };
+            failed_data?: {
+                count: number;
+                items: {
+                    id: ApiKey;
+                    error_data: {
+                        error_code: string;
+                        args?: Record<string, any>;
+                    }[];
+                }[];
+            };
+        };
+    };
+    /** Generate error file */
+    generateToiletBindErrorFile: {
+        request: {
+            building_key: ApiKey;
+            file: File;
+            errors: string;
+        };
+        response: Blob;
+    };
 }
 
 /**
@@ -260,5 +310,20 @@ export default attachAPI<DashboardAPISchema>(client, {
         getDrawingBoardList: `GET ${API_PREFIX}/dashboard/:dashboard_id/canvas`,
         getDeviceDrawingBoard: `GET ${API_PREFIX}/device/:device_id/canvas`,
         getDefaultMainDrawingBoard: `GET ${API_PREFIX}/dashboard/main-canvas`,
+        getToiletBindTemplate: `POST ${API_PREFIX}/odm-shrine-toilet/binding-batch/template`,
+        parseToiletBindTemplate: {
+            method: 'POST',
+            path: `${API_PREFIX}/odm-shrine-toilet/binding-batch/parse`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        },
+        generateToiletBindErrorFile: {
+            method: 'POST',
+            path: `${API_PREFIX}/odm-shrine-toilet/binding-batch/fill-error`,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        },
     },
 });

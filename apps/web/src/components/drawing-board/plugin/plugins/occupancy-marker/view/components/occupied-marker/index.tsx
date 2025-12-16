@@ -75,6 +75,20 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                     y: 4.939994014220584,
                 },
             },
+            {
+                id: 'S003',
+                position: {
+                    x: 74.09116809116809,
+                    y: 26.670116722698594,
+                },
+            },
+            {
+                id: 'S005',
+                position: {
+                    x: 66.54131054131054,
+                    y: 19.515076318687548,
+                },
+            },
         ],
     } = config || {};
     const { stableValue: stableMarkerPositions } = useStableValue(makerPositions);
@@ -99,11 +113,13 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                     width: 16,
                     height: 16,
                     borderRadius: 2,
-                    backgroundColor: '#1eba62',
+                    // backgroundColor: '#1eba62',
+                    backgroundColor: 'transparent',
+                    border: '1px solid #C9CDD4',
                 },
-                content: item?.id?.includes?.(DISABILITY_SIGN) ? (
-                    <ToiletDisabilityIcon sx={{ width: '70%', height: '70%' }} />
-                ) : undefined,
+                // content: item?.id?.includes?.(DISABILITY_SIGN) ? (
+                //     <ToiletDisabilityIcon sx={{ width: '70%', height: '70%' }} />
+                // ) : undefined,
             }));
 
             setMarkers(newMarkers);
@@ -171,7 +187,7 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                         ...item.style,
                         border: markerExtraInfos?.find(m => m.toiletId === item.id)?.isActive
                             ? '2px solid #8e66ff'
-                            : undefined,
+                            : '1px solid #C9CDD4',
                     },
                 })),
             );

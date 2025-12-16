@@ -22,6 +22,7 @@ import {
     MultiDeviceSelect,
     AlarmTimeSelect,
     MarkerDrawer,
+    ToiletBindEntities,
 } from '../../components';
 
 export interface ControlComponentProps {
@@ -150,6 +151,8 @@ const ControlComponent: React.FC<ControlComponentProps> = (props: ControlCompone
             );
         case 'MarkerDrawer':
             return <MarkerDrawer {...commonProps} {...config?.componentProps} />;
+        case 'ToiletBindEntities':
+            return <ToiletBindEntities {...commonProps} {...config?.componentProps} />;
         default:
             return null;
     }

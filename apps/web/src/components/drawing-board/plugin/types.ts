@@ -14,6 +14,7 @@ import {
     type SingleEntitySelectProps,
     type MultiDeviceSelectProps,
     type MarkerDrawerProps,
+    type ToiletBindEntitiesProps,
 } from './components';
 import { COMPONENT_CLASS } from './constant';
 
@@ -33,7 +34,8 @@ export type ControlType =
     | 'ChartMetricsSelect'
     | 'MultiDeviceSelect'
     | 'AlarmTimeSelect'
-    | 'MarkerDrawer';
+    | 'MarkerDrawer'
+    | 'ToiletBindEntities';
 
 export type ControlTypePropsMap = {
     Input: Partial<TextFieldProps>;
@@ -49,6 +51,7 @@ export type ControlTypePropsMap = {
     MultiDeviceSelect: MultiDeviceSelectProps;
     AlarmTimeSelect: Partial<PluginSelectProps>;
     MarkerDrawer: MarkerDrawerProps;
+    ToiletBindEntities: ToiletBindEntitiesProps;
 };
 
 // Check the completeness of ControlTypePropsMap

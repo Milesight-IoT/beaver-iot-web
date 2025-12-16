@@ -70,5 +70,10 @@
     "dashboard.unset_as_home_dashboard_tip": "Cancel Top",
     "dashboard.plugin_name_occupancy_marker": "Occupied Marker",
     "dashboard.title.occupied_state_entity": "Occupied State Entity",
-    "dashboard.title.online_or_offline_entity": "Online or Offline Entity"
+    "dashboard.title.online_or_offline_entity": "Online or Offline Entity",
+    "dashboard.tip.toilet_bind_entities": "在左侧单击选中某个卫生间标记可进行单个编辑",
+    "dashboard.label.batch_bind_entities": "Batch Bind Entities",
+    "dashboard.title.batch_bind_result": "Batch Bind Result",
+    "dashboard.tip.batch_bind_entities_success": "{1} 个实体绑定成功",
+    "dashboard.tip.batch_bind_entities_failed": "{1} 个实体绑定失败, 请下载文件查看详情"
 }

@@ -1,5 +1,3 @@
-import { t } from '@milesight/shared/src/utils/tools';
-
 import type {
     ControlPanelConfig,
     ToiletBuildingProps,
@@ -64,15 +62,13 @@ const occupancyMarkerControlPanelConfig = (): ControlPanelConfig<OccupancyMarker
                 label: 'occupancy marker config',
                 controlSetItems: [
                     {
-                        name: 'input',
+                        name: 'bind entities',
                         config: {
-                            type: 'Input',
-                            label: t('common.label.title'),
+                            type: 'ToiletBindEntities',
                             controllerProps: {
-                                name: 'title',
-                                defaultValue: t('dashboard.plugin_name_occupancy_marker'),
+                                name: 'markerExtraInfos',
                                 rules: {
-                                    maxLength: 35,
+                                    required: true,
                                 },
                             },
                         },

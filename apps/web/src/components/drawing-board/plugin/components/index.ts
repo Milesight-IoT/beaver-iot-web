@@ -36,3 +36,7 @@ export {
 } from './multi-device-select';
 export { default as AlarmTimeSelect } from './alarm-time-select';
 export { default as MarkerDrawer, type MarkerDrawerProps } from './marker-drawer';
+export {
+    default as ToiletBindEntities,
+    type ToiletBindEntitiesProps,
+} from './toilet-bind-entities';

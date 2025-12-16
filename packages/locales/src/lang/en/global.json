@@ -73,6 +73,7 @@
     "common.label.detail": "Detail",
     "common.label.device": "Device",
     "common.label.download": "Download",
+    "common.label.template": "Template",
     "common.label.download_template": "Download Template",
     "common.label.edit_title": "Edit {1}",
     "common.label.editor": "Editor",
