@@ -59,6 +59,10 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                     id: 'S005',
                     number: 'A005',
                 },
+                {
+                    id: 'S006',
+                    number: 'A006',
+                },
             ],
         },
         makerPositions = [
@@ -95,6 +99,13 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                 position: {
                     x: 66.54131054131054,
                     y: 19.515076318687548,
+                },
+            },
+            {
+                id: 'S006',
+                position: {
+                    x: 66.54131054131054,
+                    y: 80.20041900455908,
                 },
             },
         ],
@@ -168,7 +179,7 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
          */
         const clickMarker = newMarkerExtraInfos.find(item => item.toiletId === marker.id);
         if (clickMarker) {
-            clickMarker.isActive = true;
+            Reflect.set(clickMarker, 'isActive', true);
         } else {
             newMarkerExtraInfos.push({
                 toiletId: marker.id,

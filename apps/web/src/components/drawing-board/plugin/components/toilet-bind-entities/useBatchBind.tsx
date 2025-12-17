@@ -32,9 +32,9 @@ export function useBatchBind(
 
     const [currentStatus, setCurrentStatus] = useState<CurrentStatus>('before');
     const [parseResult, setParseResult] = useState<{
-        key: ApiKey;
         file: File;
         data: ParseRes;
+        building: ToiletBuildingProps;
     }>();
     const [downloading, setDownloading] = useState(false);
 
@@ -67,16 +67,16 @@ export function useBatchBind(
     const { run: handleDownloadErrorFile } = useDebounceFn(
         async () => {
             try {
-                const { key, file } = parseResult || {};
+                const { building, file } = parseResult || {};
                 const failedData = parseResult?.data?.failed_data;
-                if (!failedData?.count || !key || !file) {
+                if (!failedData?.count || !building || !file) {
                     return;
                 }
 
                 const [error, resp] = await awaitWrap(
                     dashboardAPI.generateToiletBindErrorFile(
                         {
-                            building_key: key,
+                            building_key: building.key,
                             file,
                             errors: JSON.stringify({
                                 errors: (failedData?.items || []).map(item => {
@@ -103,7 +103,10 @@ export function useBatchBind(
                     return;
                 }
 
-                linkDownload(data, `${dayjs().format('YYYY_MM_DD_HH_mm_ss')}_error_messages.xlsx`);
+                linkDownload(
+                    data,
+                    `${dayjs().format('YYYY_MM_DD_HH_mm_ss')}_${building.name}_error_messages.xlsx`,
+                );
                 toast.success(getIntlText('common.message.operation_success'));
             } finally {
                 setDownloading(false);
@@ -116,6 +119,7 @@ export function useBatchBind(
         // TODO-Toilet Remove test code
         const building: ToiletBuildingProps = buildingInfo || {
             key: 'b112',
+            name: 'B112',
         };
         if (!building?.key || !file?.original) {
             return;
@@ -136,7 +140,7 @@ export function useBatchBind(
 
         if (data?.failed_data?.count) {
             setParseResult({
-                key: building.key,
+                building,
                 file: file.original,
                 data,
             });
