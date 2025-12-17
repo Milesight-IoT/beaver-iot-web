@@ -13,7 +13,9 @@ import {
 import { Tooltip } from '@/components';
 import { type OccupancyMarkerConfigType } from '../control-panel';
 import { type BoardPluginProps } from '../../../types';
-import { OccupiedMarker } from './components';
+import OccupiedMarker from './OccupiedMarker';
+import { useEntities } from './useEntities';
+import { useData } from './useData';
 
 import './style.less';
 
@@ -24,18 +26,26 @@ export interface OccupancyMarkerViewProps {
 
 const OccupancyMarkerView: React.FC<OccupancyMarkerViewProps> = props => {
     const { config, configJson } = props;
-    const {
-        buildingInfo = {
-            key: '112',
-            name: 'Building 112',
-            basicInfo: {
-                buildingToiletType: 'FEMALE',
-            },
-        },
-    } = config || {};
     const { isPreview } = configJson || {};
 
     const { getIntlText } = useI18n();
+
+    const { entitiesStatus } = useEntities({
+        data: config?.markerExtraInfos,
+    });
+    const {
+        markers,
+        buildingInfo,
+        isAvailableToiletCount,
+        standardOccupiedToiletCount,
+        standardUnoccupiedToiletCount,
+        disabilityOccupiedToiletCount,
+        disabilityUnoccupiedToiletCount,
+        offlineToiletCount,
+    } = useData({
+        config,
+        entitiesStatus,
+    });
 
     const markerContainerRef = useRef<HTMLDivElement>(null);
     const markerContainerSize = useSize(markerContainerRef);
@@ -67,39 +77,56 @@ const OccupancyMarkerView: React.FC<OccupancyMarkerViewProps> = props => {
                 </div>
                 <div className="building-info-statistics">
                     <div className="item">
-                        <Tooltip title="Total: 12; No data available: 666">
+                        <Tooltip
+                            title={
+                                isAvailableToiletCount?.unavailable
+                                    ? getIntlText('dashboard.tip.available_unavailable_toilet', {
+                                          1: isAvailableToiletCount.available,
+                                          2: isAvailableToiletCount.unavailable,
+                                      })
+                                    : null
+                            }
+                        >
                             <ToiletCapacityIcon sx={{ width: 20, height: 20 }} />
                         </Tooltip>
-                        <span className="item__text">136</span>
+                        <span className="item__text">
+                            {buildingInfo?.basicInfo?.totalToiletCount || 0}
+                        </span>
                     </div>
                     <div className="item">
                         <div className="item__block unoccupied" />
-                        <span className="item__text">112</span>
+                        <span className="item__text">{standardUnoccupiedToiletCount}</span>
                     </div>
                     <div className="item">
                         <div className="item__block occupied" />
-                        <span className="item__text">16</span>
+                        <span className="item__text">{standardOccupiedToiletCount}</span>
                     </div>
                     <div className="item">
                         <div className="item__block unoccupied">
                             <ToiletDisabilityIcon sx={{ width: 12.5, height: 12.5 }} />
                         </div>
-                        <span className="item__text">112</span>
+                        <span className="item__text">{disabilityUnoccupiedToiletCount}</span>
                     </div>
                     <div className="item">
                         <div className="item__block occupied">
                             <ToiletDisabilityIcon sx={{ width: 12.5, height: 12.5 }} />
                         </div>
-                        <span className="item__text">16</span>
+                        <span className="item__text">{disabilityOccupiedToiletCount}</span>
                     </div>
                     <div className="item">
                         <div className="item__block offline" />
-                        <span className="item__text">0</span>
+                        <span className="item__text">{offlineToiletCount}</span>
                     </div>
                 </div>
             </div>
 
-            <OccupiedMarker isPreview={isPreview} config={config} size={markerContainerSize} />
+            <OccupiedMarker
+                isPreview={isPreview}
+                size={markerContainerSize}
+                markers={markers}
+                buildingInfo={buildingInfo}
+                markerExtraInfos={config?.markerExtraInfos}
+            />
         </div>
     );
 };

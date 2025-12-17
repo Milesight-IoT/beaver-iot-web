@@ -76,5 +76,6 @@
     "dashboard.title.batch_bind_result": "Batch Bind Result",
     "dashboard.tip.batch_bind_entities_success": "{1} 个实体绑定成功",
     "dashboard.tip.batch_bind_entities_failed": "{1} 个实体绑定失败, 请下载文件查看详情",
-    "dashboard.tip.all_batch_bind_entities_success": "All coordinate entities have been successfully bound"
+    "dashboard.tip.all_batch_bind_entities_success": "All coordinate entities have been successfully bound",
+    "dashboard.tip.available_unavailable_toilet": "Available: {1}, Unavailable: {2}"
 }
