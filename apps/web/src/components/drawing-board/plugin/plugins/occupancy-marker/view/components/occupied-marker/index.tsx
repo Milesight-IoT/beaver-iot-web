@@ -51,6 +51,14 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                     id: 'D1',
                     number: 'F1',
                 },
+                {
+                    id: 'S003',
+                    number: 'A003',
+                },
+                {
+                    id: 'S005',
+                    number: 'A005',
+                },
             ],
         },
         makerPositions = [

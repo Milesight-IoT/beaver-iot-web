@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useMemoizedFn, useDebounceFn } from 'ahooks';
 import dayjs from 'dayjs';
+import { isEmpty } from 'lodash-es';
 
 import { toast } from '@milesight/shared/src/components';
 import { useI18n, useStoreShallow } from '@milesight/shared/src/hooks';
-import { linkDownload } from '@milesight/shared/src/utils/tools';
+import { linkDownload, objectToCamelCase } from '@milesight/shared/src/utils/tools';
 
 import { type FileValueType } from '@/components';
 import useControlPanelStore from '@/components/drawing-board/plugin/store';
@@ -16,12 +17,15 @@ import {
     getResponseData,
 } from '@/services/http';
 import { type ToiletBuildingProps } from '../../types';
+import { type MarkerExtraInfoProps } from '../../plugins/occupancy-marker/control-panel';
 
 export type CurrentStatus = 'before' | 'completed';
 
 type ParseRes = DashboardAPISchema['parseToiletBindTemplate']['response'];
 
-export function useBatchBind() {
+export function useBatchBind(
+    setValue: (v: React.SetStateAction<MarkerExtraInfoProps[]>, ...args: any[]) => void,
+) {
     const { getIntlText } = useI18n();
     const { formData } = useControlPanelStore(useStoreShallow(['formData']));
     const { buildingInfo } = formData || {};
@@ -39,7 +43,25 @@ export function useBatchBind() {
             return;
         }
 
-        console.log('handleSuccessData ? ', successData);
+        const successItems: MarkerExtraInfoProps[] = objectToCamelCase(successData?.items || []);
+        const successKeys = successItems.map(item => item?.toiletId).filter(Boolean);
+        if (!Array.isArray(successKeys) || isEmpty(successKeys)) {
+            return;
+        }
+
+        setValue(prev => {
+            /**
+             * Filter out marker extra info items that are not in the success keys
+             */
+            const oldMarkerExtraInfos = ((prev || []) as MarkerExtraInfoProps[]).filter(
+                item => !successKeys.includes(item.toiletId),
+            );
+
+            /**
+             * Set the updated marker extra info items to the form config
+             */
+            return [...oldMarkerExtraInfos, ...successItems];
+        });
     });
 
     const { run: handleDownloadErrorFile } = useDebounceFn(
@@ -91,6 +113,7 @@ export function useBatchBind() {
     );
 
     const handleUploadFile = useMemoizedFn(async (file: FileValueType, callback?: () => void) => {
+        // TODO-Toilet Remove test code
         const building: ToiletBuildingProps = buildingInfo || {
             key: 'b112',
         };
@@ -122,6 +145,7 @@ export function useBatchBind() {
         }
 
         callback?.();
+        toast.success(getIntlText('dashboard.tip.all_batch_bind_entities_success'));
     });
 
     return {

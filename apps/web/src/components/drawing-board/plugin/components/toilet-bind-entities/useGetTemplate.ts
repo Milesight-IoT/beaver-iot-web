@@ -15,6 +15,7 @@ export function useGetTemplate() {
 
     const { loading: downloadTemplateLoading, run: getTemplate } = useRequest(
         async () => {
+            // TODO-Toilet Remove test code
             const building: ToiletBuildingProps | undefined = formData?.buildingInfo || {
                 key: 'b112',
                 name: 'B112',

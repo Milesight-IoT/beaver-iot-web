@@ -27,7 +27,7 @@ const ToiletBindEntities: React.FC<ToiletBindEntitiesProps> = ({
     ...restProps
 }) => {
     const { getIntlText } = useI18n();
-    const [value, setValue] = useControllableValue(restProps);
+    const [_, setValue] = useControllableValue<MarkerExtraInfoProps[]>(restProps);
 
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -52,7 +52,11 @@ const ToiletBindEntities: React.FC<ToiletBindEntitiesProps> = ({
             <FormHelperText error={!!error}>{helperText}</FormHelperText>
 
             {modalVisible && (
-                <BindEntitiesModal visible={modalVisible} onCancel={() => setModalVisible(false)} />
+                <BindEntitiesModal
+                    visible={modalVisible}
+                    onCancel={() => setModalVisible(false)}
+                    setValue={setValue}
+                />
             )}
         </div>
     );

@@ -17,17 +17,22 @@ import { type FileValueType } from '@/components';
 import { useFormItems } from './useFormItems';
 import { type ToiletBuildingProps } from '../../types';
 import { useBatchBind } from './useBatchBind';
+import { type MarkerExtraInfoProps } from '../../plugins/occupancy-marker/control-panel';
 
 export interface BatchAddProps {
     buildingTemplate: ToiletBuildingProps;
     uploadFile: FileValueType;
 }
 
+export interface BatchAddModalProps extends Omit<ModalProps, 'onOk'> {
+    setValue: (v: React.SetStateAction<MarkerExtraInfoProps[]>, ...args: any[]) => void;
+}
+
 /**
  * Batch add Modal
  */
-const BatchAddModal: React.FC<ModalProps> = props => {
-    const { visible, onCancel, ...restProps } = props;
+const BatchAddModal: React.FC<BatchAddModalProps> = props => {
+    const { visible, onCancel, setValue, ...restProps } = props;
 
     const { getIntlText } = useI18n();
     const { control, formState, handleSubmit, reset } = useForm<BatchAddProps>();
@@ -39,7 +44,7 @@ const BatchAddModal: React.FC<ModalProps> = props => {
         handleDownloadErrorFile,
         setDownloading,
         downloading,
-    } = useBatchBind();
+    } = useBatchBind(setValue);
 
     const onSubmit: SubmitHandler<BatchAddProps> = async params => {
         if (currentStatus === 'completed') {
