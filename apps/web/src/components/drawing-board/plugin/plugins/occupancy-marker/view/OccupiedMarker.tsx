@@ -213,7 +213,17 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                                                 backgroundColor: 'var(--component-background-gray)',
                                             }}
                                         >
-                                            <Box sx={{ fontWeight: '500' }}>{item.name}</Box>
+                                            <Box
+                                                title={item.name}
+                                                sx={{
+                                                    fontWeight: '500',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    whiteSpace: 'nowrap',
+                                                }}
+                                            >
+                                                {item.name}
+                                            </Box>
                                             <Box
                                                 sx={{
                                                     display: 'flex',
