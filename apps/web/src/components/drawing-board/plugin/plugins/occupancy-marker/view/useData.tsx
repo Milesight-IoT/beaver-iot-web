@@ -10,6 +10,9 @@ import { type OccupancyMarkerConfigType } from '../control-panel';
 import { useStableValue } from '../../../hooks';
 import { ToiletBuildingProps } from '../../../types';
 
+import positions136 from './assets/136.json';
+import positions120 from './assets/120.json';
+
 /**
  * Disability sign marker id specification
  */
@@ -67,50 +70,7 @@ export function useData(props: {
                 },
             ],
         } as ToiletBuildingProps,
-        makerPositions = [
-            {
-                id: 'S001',
-                position: {
-                    x: 6.284900284900284,
-                    y: 4.939994014220584,
-                },
-            },
-            {
-                id: 'S002',
-                position: {
-                    x: 38.33618233618233,
-                    y: 9.445019453783098,
-                },
-            },
-            {
-                id: 'D1',
-                position: {
-                    x: 53.008547008547005,
-                    y: 4.939994014220584,
-                },
-            },
-            {
-                id: 'S003',
-                position: {
-                    x: 74.09116809116809,
-                    y: 26.670116722698594,
-                },
-            },
-            {
-                id: 'S005',
-                position: {
-                    x: 66.54131054131054,
-                    y: 19.515076318687548,
-                },
-            },
-            {
-                id: 'S006',
-                position: {
-                    x: 66.54131054131054,
-                    y: 80.20041900455908,
-                },
-            },
-        ],
+        makerPositions = positions136,
     } = config || {};
 
     const { stableValue: stableMarkerPositions } = useStableValue(makerPositions);
