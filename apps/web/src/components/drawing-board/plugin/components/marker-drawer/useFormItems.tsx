@@ -1,10 +1,12 @@
 import { useMemo } from 'react';
-import { TextField } from '@mui/material';
+import { TextField, Box } from '@mui/material';
 import { type ControllerProps } from 'react-hook-form';
 
+import { InfoOutlinedIcon } from '@milesight/shared/src/components';
 import { checkRequired } from '@milesight/shared/src/utils/validators';
 import { useI18n } from '@milesight/shared/src/hooks';
 
+import { Tooltip } from '@/components';
 import EntitySelect from '../entity-select';
 import { type OperateProps } from './EntityForm';
 
@@ -25,7 +27,90 @@ export function useFormItems() {
                         <EntitySelect
                             required
                             fullWidth
-                            label={getIntlText('dashboard.title.occupied_state_entity')}
+                            label={
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '4px',
+                                    }}
+                                >
+                                    <Box>
+                                        {getIntlText('dashboard.title.occupied_state_entity')}
+                                    </Box>
+                                    <Tooltip
+                                        title={
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    gap: '8px',
+                                                    padding: '4px 0',
+                                                }}
+                                            >
+                                                <Box
+                                                    sx={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '8px',
+                                                    }}
+                                                >
+                                                    <Box
+                                                        sx={{
+                                                            width: '12px',
+                                                            height: '12px',
+                                                            borderRadius: '4px',
+                                                            backgroundColor: 'var(--red-base)',
+                                                        }}
+                                                    />
+                                                    <Box
+                                                        sx={{
+                                                            fontSize: '12px',
+                                                            fontWeight: 500,
+                                                            lineHeight: '14px',
+                                                        }}
+                                                    >
+                                                        {getIntlText('common.label.occupied')}
+                                                    </Box>
+                                                </Box>
+                                                <Box
+                                                    sx={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '8px',
+                                                    }}
+                                                >
+                                                    <Box
+                                                        sx={{
+                                                            width: '12px',
+                                                            height: '12px',
+                                                            borderRadius: '4px',
+                                                            backgroundColor: 'var(--green-base)',
+                                                        }}
+                                                    />
+                                                    <Box
+                                                        sx={{
+                                                            fontSize: '12px',
+                                                            fontWeight: 500,
+                                                            lineHeight: '14px',
+                                                        }}
+                                                    >
+                                                        {getIntlText('common.label.vacant')}
+                                                    </Box>
+                                                </Box>
+                                            </Box>
+                                        }
+                                    >
+                                        <InfoOutlinedIcon
+                                            sx={{
+                                                width: 16,
+                                                height: 16,
+                                                color: 'var(--icon-color-gray-tertiary)',
+                                            }}
+                                        />
+                                    </Tooltip>
+                                </Box>
+                            }
                             error={!!error}
                             helperText={error ? error.message : null}
                             value={value as EntityOptionType}
