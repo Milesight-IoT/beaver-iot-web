@@ -1,3 +1,7 @@
+import { isEmpty } from 'lodash-es';
+
+import { t } from '@milesight/shared/src/utils/tools';
+
 import type {
     ControlPanelConfig,
     ToiletBuildingProps,
@@ -69,6 +73,27 @@ const occupancyMarkerControlPanelConfig = (): ControlPanelConfig<OccupancyMarker
                                 name: 'markerExtraInfos',
                                 rules: {
                                     required: true,
+                                    validate: val => {
+                                        const extraInfos = val as MarkerExtraInfoProps[];
+
+                                        /**
+                                         * Validate marker extra info required fields
+                                         */
+                                        if (
+                                            !Array.isArray(extraInfos) ||
+                                            isEmpty(extraInfos) ||
+                                            !extraInfos?.some(
+                                                e =>
+                                                    e?.occupiedState &&
+                                                    e?.deviceStatus &&
+                                                    e?.notification,
+                                            )
+                                        ) {
+                                            return t('valid.input.required');
+                                        }
+
+                                        return true;
+                                    },
                                 },
                             },
                         },
