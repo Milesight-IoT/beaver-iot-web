@@ -4,7 +4,7 @@ import { isEmpty, get, isNil } from 'lodash-es';
 
 import { ToiletDisabilityIcon } from '@milesight/shared/src/components';
 
-import { type EntityAPISchema } from '@/services/http';
+import { type EntityAPISchema, type DeviceStatus } from '@/services/http';
 import { type Marker } from '@/components';
 import { type OccupancyMarkerConfigType } from '../control-panel';
 import { useStableValue } from '../../../hooks';
@@ -160,7 +160,7 @@ export function useData(props: {
                 const occupiedId = get(extraInfo?.entityKeyToId, extraInfo?.occupiedState || '');
                 const statusId = get(extraInfo?.entityKeyToId, extraInfo?.deviceStatus || '');
                 const isOccupied = get(entitiesStatus, String(occupiedId))?.value;
-                const status = get(entitiesStatus, String(statusId))?.value;
+                const status = get(entitiesStatus, String(statusId))?.value as DeviceStatus;
                 if (isNil(isOccupied) || isNil(status)) {
                     return PLAIN_COLOR;
                 }

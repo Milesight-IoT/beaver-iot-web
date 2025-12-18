@@ -1,14 +1,17 @@
 import React, { useMemo } from 'react';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, get } from 'lodash-es';
 import { type KonvaEventObject } from 'konva/lib/Node';
+import { Box } from '@mui/material';
+import { useMemoizedFn } from 'ahooks';
 
 import { useStoreShallow } from '@milesight/shared/src/hooks';
 
 import { ImageMarker, type Marker, type MarkerChangeEvent } from '@/components';
 import useControlPanelStore from '@/components/drawing-board/plugin/store';
+import { type EntityAPISchema, type DeviceStatus } from '@/services/http';
 import SmallSvg from './assets/120.svg';
 import LargeSvg from './assets/136.svg';
-import { type MarkerExtraInfoProps } from '../control-panel';
+import { type MarkerExtraInfoProps, MarkerNotificationProps } from '../control-panel';
 import { type ToiletBuildingProps } from '../../../types';
 
 export interface OccupiedMarkerProps {
@@ -20,10 +23,11 @@ export interface OccupiedMarkerProps {
     markers: Marker[];
     markerExtraInfos?: MarkerExtraInfoProps[];
     buildingInfo?: ToiletBuildingProps;
+    entitiesStatus?: EntityAPISchema['getEntitiesStatus']['response'];
 }
 
 const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
-    const { isPreview, size, markers, markerExtraInfos, buildingInfo } = props;
+    const { isPreview, size, markers, markerExtraInfos, buildingInfo, entitiesStatus } = props;
 
     const { setValuesToFormConfig } = useControlPanelStore(
         useStoreShallow(['setValuesToFormConfig']),
@@ -116,6 +120,24 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
         return size.height - subtractHeight;
     }, [size?.height]);
 
+    const getDeviceStatus = useMemoizedFn(
+        (device: MarkerNotificationProps, extraInfo?: MarkerExtraInfoProps) => {
+            const statusId = get(extraInfo?.entityKeyToId, String(device?.status));
+            const statusVal = get(entitiesStatus, String(statusId))?.value as DeviceStatus;
+
+            return statusVal === 'ONLINE' ? 'Online' : statusVal === 'OFFLINE' ? 'Offline' : '-';
+        },
+    );
+
+    const getDeviceBattery = useMemoizedFn(
+        (device: MarkerNotificationProps, extraInfo?: MarkerExtraInfoProps) => {
+            const batteryId = get(extraInfo?.entityKeyToId, String(device?.battery));
+            const batteryVal = get(entitiesStatus, String(batteryId))?.value;
+
+            return batteryVal || '-';
+        },
+    );
+
     return (
         <div className="occupancy-marker-view__body">
             <ImageMarker
@@ -126,6 +148,91 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                 onMarkersChange={handleMarkersChange}
                 onMarkerClick={handleMarkerClick}
                 editable={false}
+                enablePopup
+                popupTrigger="click"
+                renderPopup={marker => {
+                    const name =
+                        buildingInfo?.toilets?.find(item => item.id === marker.id)?.number || '';
+
+                    const extraInfo = markerExtraInfos?.find(item => item.toiletId === marker.id);
+                    const deviceInfoStr = extraInfo?.notification;
+                    if (!deviceInfoStr) {
+                        return name;
+                    }
+
+                    try {
+                        const deviceInfo: MarkerNotificationProps[] = JSON.parse(deviceInfoStr);
+                        if (!Array.isArray(deviceInfo) || isEmpty(deviceInfo)) {
+                            return name;
+                        }
+
+                        return (
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '8px',
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        fontSize: '16px',
+                                        fontWeight: '500',
+                                        lineHeight: '24px',
+                                    }}
+                                >
+                                    {name}
+                                </Box>
+                                {deviceInfo.map(item => {
+                                    const statusVal = getDeviceStatus(item, extraInfo);
+                                    const s = (
+                                        <span
+                                            style={{
+                                                color:
+                                                    statusVal === 'Online'
+                                                        ? 'var(--green-base)'
+                                                        : undefined,
+                                            }}
+                                        >
+                                            {statusVal}
+                                        </span>
+                                    );
+                                    const b = getDeviceBattery(item, extraInfo);
+
+                                    return (
+                                        <Box
+                                            key={item.name}
+                                            sx={{
+                                                width: '256px',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '4px',
+                                                padding: '8px 12px',
+                                                borderRadius: '6px',
+                                                border: '1px solid var(--border-color-gray)',
+                                                backgroundColor: 'var(--component-background-gray)',
+                                            }}
+                                        >
+                                            <Box sx={{ fontWeight: '500' }}>{item.name}</Box>
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '4px',
+                                                }}
+                                            >
+                                                <Box sx={{ flex: '50%' }}>Status: {s}</Box>
+                                                <Box sx={{ flex: '50%' }}>Battery: {b}%</Box>
+                                            </Box>
+                                        </Box>
+                                    );
+                                })}
+                            </Box>
+                        );
+                    } catch {
+                        return name;
+                    }
+                }}
             />
         </div>
     );

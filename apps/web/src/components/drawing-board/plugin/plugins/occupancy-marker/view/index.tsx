@@ -126,6 +126,7 @@ const OccupancyMarkerView: React.FC<OccupancyMarkerViewProps> = props => {
                 markers={markers}
                 buildingInfo={buildingInfo}
                 markerExtraInfos={config?.markerExtraInfos}
+                entitiesStatus={entitiesStatus}
             />
         </div>
     );
