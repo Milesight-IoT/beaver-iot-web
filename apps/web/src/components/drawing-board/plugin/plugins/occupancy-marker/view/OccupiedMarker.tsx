@@ -151,19 +151,31 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                 enablePopup
                 popupTrigger="click"
                 renderPopup={marker => {
-                    const name =
-                        buildingInfo?.toilets?.find(item => item.id === marker.id)?.number || '';
+                    const bName = buildingInfo?.toilets?.find(
+                        item => item.id === marker.id,
+                    )?.number;
+                    const nameJsx = bName ? (
+                        <Box
+                            sx={{
+                                fontSize: '16px',
+                                fontWeight: '500',
+                                lineHeight: '24px',
+                            }}
+                        >
+                            {bName}
+                        </Box>
+                    ) : null;
 
                     const extraInfo = markerExtraInfos?.find(item => item.toiletId === marker.id);
                     const deviceInfoStr = extraInfo?.notification;
                     if (!deviceInfoStr) {
-                        return name;
+                        return nameJsx;
                     }
 
                     try {
                         const deviceInfo: MarkerNotificationProps[] = JSON.parse(deviceInfoStr);
                         if (!Array.isArray(deviceInfo) || isEmpty(deviceInfo)) {
-                            return name;
+                            return nameJsx;
                         }
 
                         return (
@@ -174,15 +186,7 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                                     gap: '8px',
                                 }}
                             >
-                                <Box
-                                    sx={{
-                                        fontSize: '16px',
-                                        fontWeight: '500',
-                                        lineHeight: '24px',
-                                    }}
-                                >
-                                    {name}
-                                </Box>
+                                {nameJsx}
                                 {deviceInfo.map(item => {
                                     const statusVal = getDeviceStatus(item, extraInfo);
                                     const s = (
@@ -240,7 +244,7 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                             </Box>
                         );
                     } catch {
-                        return name;
+                        return nameJsx;
                     }
                 }}
             />
