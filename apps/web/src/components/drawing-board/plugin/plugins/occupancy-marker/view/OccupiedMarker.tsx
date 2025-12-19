@@ -9,8 +9,9 @@ import { useStoreShallow } from '@milesight/shared/src/hooks';
 import { ImageMarker, type Marker, type MarkerChangeEvent } from '@/components';
 import useControlPanelStore from '@/components/drawing-board/plugin/store';
 import { type EntityAPISchema, type DeviceStatus } from '@/services/http';
-import SmallSvg from './assets/120.svg';
-import LargeSvg from './assets/136.svg';
+import svg120 from './assets/120.svg';
+import svg136 from './assets/136.svg';
+import svg120B104 from './assets/120_B104.svg';
 import { type MarkerExtraInfoProps, MarkerNotificationProps } from '../control-panel';
 import { type ToiletBuildingProps } from '../../../types';
 
@@ -39,6 +40,8 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
     };
 
     const handleMarkerClick = (_: KonvaEventObject<MouseEvent>, marker: Marker) => {
+        console.log('handleMarkerClick ? ', marker);
+
         /**
          * Only preview mode can click marker
          */
@@ -141,7 +144,15 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
             <ImageMarker
                 width={canvasWidth}
                 height={canvasHeight}
-                image={buildingInfo?.basicInfo?.totalToiletCount === 120 ? SmallSvg : LargeSvg}
+                image={get(
+                    {
+                        LAYOUT_120: svg120,
+                        LAYOUT_120_SPECIAL: svg120B104,
+                        LAYOUT_136: svg136,
+                    },
+                    buildingInfo?.basicInfo?.toiletsLayout || 'LAYOUT_120',
+                    svg120,
+                )}
                 markers={markers}
                 onMarkersChange={handleMarkersChange}
                 onMarkerClick={handleMarkerClick}

@@ -12,6 +12,7 @@ import { ToiletBuildingProps } from '../../../types';
 
 import positions136 from './assets/136.json';
 import positions120 from './assets/120.json';
+import positions120B104 from './assets/120_B104.json';
 
 /**
  * Disability sign marker id specification
@@ -42,6 +43,7 @@ export function useData(props: {
                 totalToiletCount: 136,
                 standardToiletCount: 128,
                 disabilityToiletCount: 8,
+                toiletsLayout: 'LAYOUT_136',
             },
             toilets: [
                 {
@@ -70,7 +72,15 @@ export function useData(props: {
                 },
             ],
         } as ToiletBuildingProps,
-        makerPositions = positions136,
+        makerPositions = get(
+            {
+                LAYOUT_120: positions120,
+                LAYOUT_120_SPECIAL: positions120B104,
+                LAYOUT_136: positions136,
+            },
+            buildingInfo?.basicInfo?.toiletsLayout || 'LAYOUT_120',
+            positions120,
+        ),
     } = config || {};
 
     const { stableValue: stableMarkerPositions } = useStableValue(makerPositions);

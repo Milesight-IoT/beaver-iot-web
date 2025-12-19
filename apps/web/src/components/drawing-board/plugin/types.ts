@@ -234,6 +234,8 @@ export interface ToiletBuildingProps {
         standardToiletCount: number;
         /** Disability Toilet Count */
         disabilityToiletCount: number;
+        /** Toilet Building Layout */
+        toiletsLayout: 'LAYOUT_120' | 'LAYOUT_120_SPECIAL' | 'LAYOUT_136';
     };
     toilets?: {
         /** Toilet id */
