@@ -110,11 +110,11 @@ const toiletOccupancyControlPanelConfig =
             type: 'toiletOccupancy',
             name: 'dashboard.plugin_name_toilet_occupancy',
             defaultRow: 4,
-            defaultCol: 12,
+            defaultCol: 10,
             minRow: 4,
-            minCol: 12,
+            minCol: 10,
             maxRow: 4,
-            maxCol: 12,
+            maxCol: 10,
             configProps: [
                 {
                     label: 'Toilet Occupancy Config',
