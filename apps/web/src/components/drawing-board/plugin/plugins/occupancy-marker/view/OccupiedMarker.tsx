@@ -52,20 +52,18 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
         }
 
         /**
-         * Set all marker extra info to inactive
+         * Set marker extra info to inactive or active
          */
         newMarkerExtraInfos = newMarkerExtraInfos.map(item => ({
             ...item,
-            isActive: false,
+            isActive: item.toiletId === marker.id,
         }));
 
         /**
-         * Set click marker to active
+         * Add marker extra info if not exists
          */
-        const clickMarker = newMarkerExtraInfos.find(item => item.toiletId === marker.id);
-        if (clickMarker) {
-            Reflect.set(clickMarker, 'isActive', true);
-        } else {
+        const exists = newMarkerExtraInfos.some(item => item.toiletId === marker.id);
+        if (!exists) {
             newMarkerExtraInfos.push({
                 toiletId: marker.id,
                 toiletNumber:
