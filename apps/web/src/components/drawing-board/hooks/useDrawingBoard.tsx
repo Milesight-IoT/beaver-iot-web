@@ -32,6 +32,8 @@ export interface UseDrawingBoardProps {
     disabledEditTip?: string;
     disabledEdit?: boolean;
     deviceDetail?: ObjectToCamelCase<DeviceAPISchema['getDetail']['response']>;
+    /** Whether the new widget is addable */
+    addable?: boolean;
     onSave?: (widgets?: WidgetDetail[]) => void;
 }
 
@@ -55,7 +57,14 @@ export type DrawingBoardPropsType = {
  * Drawing board operation
  */
 export default function useDrawingBoard(props?: UseDrawingBoardProps) {
-    const { disabled, disabledEdit, disabledEditTip, deviceDetail, onSave } = props || {};
+    const {
+        disabled,
+        disabledEdit,
+        disabledEditTip,
+        deviceDetail,
+        addable = true,
+        onSave,
+    } = props || {};
 
     const { getIntlText } = useI18n();
     const { setDrawingBoardFullscreen } = useDrawingBoardStore(
@@ -179,12 +188,16 @@ export default function useDrawingBoard(props?: UseDrawingBoardProps) {
 
     const renderEditMode = (
         <Stack className="xl:d-none" direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
-            <PluginListPopover
-                disabled={loading}
-                deviceDetail={deviceDetail}
-                onSelect={updateOperatingPlugin}
-            />
-            <Divider orientation="vertical" variant="middle" flexItem />
+            {addable && (
+                <>
+                    <PluginListPopover
+                        disabled={loading}
+                        deviceDetail={deviceDetail}
+                        onSelect={updateOperatingPlugin}
+                    />
+                    <Divider orientation="vertical" variant="middle" flexItem />
+                </>
+            )}
             <Button
                 disabled={loading}
                 variant="outlined"
