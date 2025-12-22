@@ -119,7 +119,8 @@ export type PluginType =
     | 'trigger'
     | 'deviceList'
     | 'map'
-    | 'alarm';
+    | 'alarm'
+    | 'toiletOccupancy';
 
 /**
  * The plugin control panel config
