@@ -1,6 +1,6 @@
 import { forwardRef, useImperativeHandle, useMemo } from 'react';
 import cls from 'classnames';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, isNil } from 'lodash-es';
 import { List } from '@mui/material';
 
 import { useI18n, useTheme, useMediaQuery } from '@milesight/shared/src/hooks';
@@ -122,7 +122,13 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
         <DrawingBoardContext.Provider value={drawingBoardContext}>
             <div className="drawing-board">
                 <div ref={drawingBoardRef} className="drawing-board__wrapper ms-perfect-scrollbar">
-                    <div className="drawing-board__container">{renderDrawingBoard()}</div>
+                    <div
+                        className={cls('drawing-board__container', {
+                            'remove-max-width': !isNil(drawingBoardDetail?.attributes?.fullscreen),
+                        })}
+                    >
+                        {renderDrawingBoard()}
+                    </div>
                 </div>
 
                 {!!operatingPlugin && (
