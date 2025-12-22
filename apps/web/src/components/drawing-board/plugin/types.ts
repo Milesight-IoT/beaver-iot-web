@@ -126,7 +126,8 @@ export type PluginType =
     | 'deviceList'
     | 'map'
     | 'alarm'
-    | 'occupancyMarker';
+    | 'occupancyMarker'
+    | 'toiletOccupancy';
 
 /**
  * The plugin control panel config
