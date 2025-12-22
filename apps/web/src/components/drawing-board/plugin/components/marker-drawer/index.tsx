@@ -79,9 +79,10 @@ const MarkerDrawer: React.FC<MarkerDrawerProps> = () => {
         }));
 
         updateFormData({
+            ...formData,
             markerExtraInfos: newMarkerExtraInfos,
         });
-    }, [formData?.markerExtraInfos, updateFormData, hiddenDrawerModal]);
+    }, [formData, updateFormData, hiddenDrawerModal]);
 
     return drawingBoardContext?.panelMountedRef?.current ? (
         <Drawer
