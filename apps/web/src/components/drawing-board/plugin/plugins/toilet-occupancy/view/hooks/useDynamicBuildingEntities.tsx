@@ -22,24 +22,30 @@ export const useDynamicBuildingEntities = (props: IProps) => {
 
     const [entitiesStatus, setEntitiesStatus] = useState<Record<EntityType, any>>({});
 
+    // Extract entity values that are actually used
+    const allWomenId = config?.allWomenOccupiedEntity?.value;
+    const allMenId = config?.allMenOccupiedEntity?.value;
+    const allDisabilityId = config?.allDisabilityOccupiedEntity?.value;
+    const buildingStandId = (config as any)?.[`${selectValue}StandOccupiedEntity`]?.value;
+    const buildingDisabilityId = (config as any)?.[`${selectValue}DisabilityOccupiedEntity`]?.value;
+
     // Get entity IDs based on selectValue (memoized to prevent unnecessary re-renders)
     const entityIds = useMemo(() => {
         if (selectValue === BUILDING_ALL) {
             return {
-                [ENTITY_TYPE.women]: config?.allWomenOccupiedEntity?.value,
-                [ENTITY_TYPE.men]: config?.allMenOccupiedEntity?.value,
-                [ENTITY_TYPE.disability]: config?.allDisabilityOccupiedEntity?.value,
+                [ENTITY_TYPE.women]: allWomenId,
+                [ENTITY_TYPE.men]: allMenId,
+                [ENTITY_TYPE.disability]: allDisabilityId,
             };
         }
 
         // For building-specific selection (e.g., 'b102', 'b103')
         return {
-            [ENTITY_TYPE.women]: (config as any)[`${selectValue}StandOccupiedEntity`]?.value,
+            [ENTITY_TYPE.women]: buildingStandId,
             [ENTITY_TYPE.men]: undefined, // Most buildings don't have separate men toilet
-            [ENTITY_TYPE.disability]: (config as any)[`${selectValue}DisabilityOccupiedEntity`]
-                ?.value,
+            [ENTITY_TYPE.disability]: buildingDisabilityId,
         };
-    }, [selectValue, config]);
+    }, [selectValue, allWomenId, allMenId, allDisabilityId, buildingStandId, buildingDisabilityId]);
 
     // Batch fetch all entities status (used when switching buildings)
     const fetchAllEntitiesStatus = async () => {
@@ -128,7 +134,7 @@ export const useDynamicBuildingEntities = (props: IProps) => {
             [ENTITY_TYPE.disability]: {},
         });
         fetchAllStatus();
-    }, [selectValue, fetchAllStatus]);
+    }, [selectValue, fetchAllStatus, entityIds]);
 
     // ---------- Entity listeners management ----------
     const { addEntityListener } = useActivityEntity();

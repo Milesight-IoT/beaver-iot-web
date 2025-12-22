@@ -192,7 +192,7 @@ const View = (props: Props) => {
         // Create a new array with "All Buildings" at the beginning
         const selectOptions = [
             {
-                name: getIntlText('dashboard.label.all_buildings'),
+                name: 'All Buildings',
                 key: BUILDING_ALL,
                 basicInfo: {
                     totalToiletCount: 0,
