@@ -116,11 +116,7 @@ export function useBatchBind(
     );
 
     const handleUploadFile = useMemoizedFn(async (file: FileValueType, callback?: () => void) => {
-        // TODO-Toilet Remove test code
-        const building: ToiletBuildingProps = buildingInfo || {
-            key: 'b112',
-            name: 'B112',
-        };
+        const building: ToiletBuildingProps | undefined = buildingInfo;
         if (!building?.key || !file?.original) {
             return;
         }

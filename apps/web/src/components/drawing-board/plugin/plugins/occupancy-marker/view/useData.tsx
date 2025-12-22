@@ -8,11 +8,6 @@ import { type EntityAPISchema, type DeviceStatus } from '@/services/http';
 import { type Marker } from '@/components';
 import { type OccupancyMarkerConfigType } from '../control-panel';
 import { useStableValue } from '../../../hooks';
-import { ToiletBuildingProps } from '../../../types';
-
-import positions136 from './assets/136.json';
-import positions120 from './assets/120.json';
-import positions120B104 from './assets/120_B104.json';
 
 /**
  * Disability sign marker id specification
@@ -33,55 +28,7 @@ export function useData(props: {
     entitiesStatus: EntityAPISchema['getEntitiesStatus']['response'];
 }) {
     const { config, entitiesStatus } = props || {};
-    const {
-        markerExtraInfos,
-        buildingInfo = {
-            key: '112',
-            name: 'Building 112',
-            basicInfo: {
-                buildingToiletType: 'FEMALE',
-                totalToiletCount: 136,
-                standardToiletCount: 128,
-                disabilityToiletCount: 8,
-                toiletsLayout: 'LAYOUT_136',
-            },
-            toilets: [
-                {
-                    id: 'S001',
-                    number: 'A001',
-                },
-                {
-                    id: 'S002',
-                    number: 'A002',
-                },
-                {
-                    id: 'D1',
-                    number: 'F1',
-                },
-                {
-                    id: 'S003',
-                    number: 'A003',
-                },
-                {
-                    id: 'S005',
-                    number: 'A005',
-                },
-                {
-                    id: 'S006',
-                    number: 'A006',
-                },
-            ],
-        } as ToiletBuildingProps,
-        makerPositions = get(
-            {
-                LAYOUT_120: positions120,
-                LAYOUT_120_SPECIAL: positions120B104,
-                LAYOUT_136: positions136,
-            },
-            buildingInfo?.basicInfo?.toiletsLayout || 'LAYOUT_120',
-            positions120,
-        ),
-    } = config || {};
+    const { markerExtraInfos, buildingInfo, makerPositions } = config || {};
 
     const { stableValue: stableMarkerPositions } = useStableValue(makerPositions);
     const [markers, setMarkers] = useState<Marker[]>([]);

@@ -6,7 +6,7 @@ import { useMemoizedFn } from 'ahooks';
 
 import { useStoreShallow } from '@milesight/shared/src/hooks';
 
-import { ImageMarker, type Marker, type MarkerChangeEvent } from '@/components';
+import { ImageMarker, type Marker } from '@/components';
 import useControlPanelStore from '@/components/drawing-board/plugin/store';
 import { type EntityAPISchema, type DeviceStatus } from '@/services/http';
 import svg120 from './assets/120.svg';
@@ -34,14 +34,12 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
         useStoreShallow(['setValuesToFormConfig']),
     );
 
-    const handleMarkersChange = (event: MarkerChangeEvent) => {
-        console.log('Change type:', event.type);
-        console.log('Changed marker:', event.marker);
-    };
+    // const handleMarkersChange = (event: MarkerChangeEvent) => {
+    //     console.log('Change type:', event.type);
+    //     console.log('Changed marker:', event.marker);
+    // };
 
     const handleMarkerClick = (_: KonvaEventObject<MouseEvent>, marker: Marker) => {
-        console.log('handleMarkerClick ? ', marker);
-
         /**
          * Only preview mode can click marker
          */
@@ -154,7 +152,7 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                     svg120,
                 )}
                 markers={markers}
-                onMarkersChange={handleMarkersChange}
+                // onMarkersChange={handleMarkersChange}
                 onMarkerClick={handleMarkerClick}
                 editable={false}
                 enablePopup
