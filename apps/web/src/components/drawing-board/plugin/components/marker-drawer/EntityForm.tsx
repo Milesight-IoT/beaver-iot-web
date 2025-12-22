@@ -78,6 +78,7 @@ const EntityForm: React.FC<Props> = props => {
              * Update marker extra info and close drawer
              */
             updateFormData?.({
+                ...formData,
                 markerExtraInfos: markerExtraInfos.map(item => {
                     if (item.toiletId === data.toiletId) {
                         return {
@@ -93,7 +94,7 @@ const EntityForm: React.FC<Props> = props => {
                 }),
             });
         },
-        [updateFormData, formData?.markerExtraInfos, data],
+        [updateFormData, formData, data],
     );
 
     /**
