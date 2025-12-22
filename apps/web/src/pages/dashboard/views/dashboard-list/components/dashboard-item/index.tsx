@@ -131,7 +131,7 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
                             />
                         )}
                     </div>
-                    <MoreDropdown onOperation={handleDashboardOperation} />
+                    <MoreDropdown data={item} onOperation={handleDashboardOperation} />
                 </div>
                 <div
                     className={cls('dashboard-item__select', {
