@@ -15,6 +15,7 @@ import {
     type MultiDeviceSelectProps,
     type MarkerDrawerProps,
     type ToiletBindEntitiesProps,
+    type ChartMarkLineProps,
 } from './components';
 import { COMPONENT_CLASS } from './constant';
 
@@ -35,11 +36,13 @@ export type ControlType =
     | 'MultiDeviceSelect'
     | 'AlarmTimeSelect'
     | 'MarkerDrawer'
-    | 'ToiletBindEntities';
+    | 'ToiletBindEntities'
+    | 'ChartMarkLine';
 
 export type ControlTypePropsMap = {
     Input: Partial<TextFieldProps>;
     ChartEntityPosition: Partial<ChartEntityPositionProps>;
+    ChartMarkLine: Partial<ChartMarkLineProps>;
     ChartTimeSelect: Partial<PluginSelectProps>;
     ToggleRadio: ToggleRadioProps;
     EntitySelect: Partial<SingleEntitySelectProps>;

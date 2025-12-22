@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useRef, useMemo } from 'react';
+import { Suspense, useCallback, useRef, useMemo, useContext } from 'react';
 import classnames from 'classnames';
 import {
     DeleteOutlineIcon as DeleteOutline,
@@ -9,6 +9,7 @@ import { WidgetDetail } from '@/services/http/dashboard';
 import plugins from '../../plugin/plugins';
 import { RenderView } from '../../plugin/render';
 import type { BoardPluginProps } from '../../plugin/types';
+import { DrawingBoardContext } from '../../context';
 
 interface WidgetProps {
     data: WidgetDetail;
@@ -24,6 +25,7 @@ const Widget = (props: WidgetProps) => {
     const { data, isEdit, dashboardId, onEdit, onDelete, mainRef } = props;
     const ComponentView = (plugins as any)[`${data.data.type}View`];
     const widgetRef = useRef<HTMLDivElement>(null);
+    const drawingBoardContext = useContext(DrawingBoardContext);
 
     const handleEdit = useCallback(() => {
         onEdit(data);
@@ -52,9 +54,12 @@ const Widget = (props: WidgetProps) => {
                     <span className="drawing-board__widget-icon-img" onClick={handleEdit}>
                         <EditOutlined />
                     </span>
-                    <span className="drawing-board__widget-icon-img" onClick={handleDelete}>
-                        <DeleteOutline />
-                    </span>
+                    {drawingBoardContext?.drawingBoardDetail?.attributes?.widgets_deletable !==
+                        false && (
+                        <span className="drawing-board__widget-icon-img" onClick={handleDelete}>
+                            <DeleteOutline />
+                        </span>
+                    )}
                 </div>
             )}
             {ComponentView ? (

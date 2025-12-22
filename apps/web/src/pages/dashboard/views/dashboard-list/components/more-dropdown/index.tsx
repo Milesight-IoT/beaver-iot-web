@@ -11,6 +11,7 @@ import { useI18n, usePopoverCloseDelay, useTheme } from '@milesight/shared/src/h
 
 import { PermissionControlDisabled } from '@/components';
 import { PERMISSIONS } from '@/constants';
+import { type DashboardListProps } from '@/services/http';
 
 export enum MORE_OPERATION {
     EDIT = 'edit',
@@ -18,6 +19,7 @@ export enum MORE_OPERATION {
 }
 
 export interface MoreDropdownProps {
+    data?: DashboardListProps;
     onOperation?: (operation: MORE_OPERATION) => void;
 }
 
@@ -25,7 +27,7 @@ export interface MoreDropdownProps {
  * More Dropdown component
  */
 const MoreDropdown: React.FC<MoreDropdownProps> = props => {
-    const { onOperation } = props;
+    const { data, onOperation } = props;
 
     const { matchTablet } = useTheme();
     const { getIntlText } = useI18n();
@@ -113,6 +115,10 @@ const MoreDropdown: React.FC<MoreDropdownProps> = props => {
                 {options.map(option => (
                     <PermissionControlDisabled key={option.value} permissions={option.permission}>
                         <MenuItem
+                            disabled={
+                                option?.value === MORE_OPERATION.DELETE &&
+                                data?.attributes?.deletable === false
+                            }
                             onClick={e =>
                                 handleMenuItemClick({ e, popupState, operate: option.value })
                             }

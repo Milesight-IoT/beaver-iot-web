@@ -23,6 +23,7 @@ import {
     AlarmTimeSelect,
     MarkerDrawer,
     ToiletBindEntities,
+    ChartMarkLine,
 } from '../../components';
 
 export interface ControlComponentProps {
@@ -153,6 +154,8 @@ const ControlComponent: React.FC<ControlComponentProps> = (props: ControlCompone
             return <MarkerDrawer {...commonProps} {...config?.componentProps} />;
         case 'ToiletBindEntities':
             return <ToiletBindEntities {...commonProps} {...config?.componentProps} />;
+        case 'ChartMarkLine':
+            return <ChartMarkLine {...omit(commonProps, ['label'])} {...config?.componentProps} />;
         default:
             return null;
     }

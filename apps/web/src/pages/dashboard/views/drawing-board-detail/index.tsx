@@ -28,6 +28,7 @@ const DrawingBoardDetail: React.FC<DashboardDetailProps> = props => {
         disabled: !dashboardDetail,
         disabledEdit: !isNil(deviceId) || dashboardDetail?.attach_type === 'DEVICE',
         disabledEditTip: getIntlText('dashboard.tip.disabled_edit_device_drawing_board'),
+        addable: dashboardDetail?.attributes?.widgets_addable,
         onSave: () => {
             getDashboardDetail?.();
         },
