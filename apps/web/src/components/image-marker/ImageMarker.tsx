@@ -6,8 +6,9 @@ import {
     useCallback,
     useEffect,
     useMemo,
+    type CSSProperties,
 } from 'react';
-import { useMemoizedFn } from 'ahooks';
+import { useMemoizedFn, useClickAway } from 'ahooks';
 import Konva from 'konva';
 import type { KonvaEventObject } from 'konva/lib/Node';
 import { Stage, Layer, Image as KonvaImage, Transformer, Line } from 'react-konva';
@@ -41,8 +42,8 @@ import './style.less';
  */
 const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
     {
-        width = '100%',
-        height = '100%',
+        width = 500,
+        height = 300,
         image,
         markers: propMarkers = [],
         defaultMarkerStyle = {},
@@ -73,36 +74,31 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
     // ========== Stage ==========
     const stageRef = useRef<Konva.Stage>(null);
     const layerRef = useRef<Konva.Layer>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+    const [cursor, setCursor] = useState<CSSProperties['cursor']>('default');
 
     // Handle stage click - add marker or clear selection
     const handleStageClick = useMemoizedFn((e: KonvaEventObject<MouseEvent>) => {
         const clickedOnEmpty = e.target === e.target.getStage() || e.target === imageRef.current;
 
-        if (clickedOnEmpty) {
-            if (editable && imageSize) {
-                const stage = e.target.getStage();
-                if (!stage) return;
+        if (!clickedOnEmpty) return;
+        if (editable && imageSize) {
+            const stage = e.target.getStage();
+            if (!stage) return;
 
-                const pointerPos = stage.getPointerPosition();
-                if (!pointerPos) return;
+            const pointerPos = stage.getPointerPosition();
+            if (!pointerPos) return;
 
-                // Convert to natural image coordinates
-                const x = pointerPos.x / imageSize.scale;
-                const y = pointerPos.y / imageSize.scale;
+            // Convert to natural image coordinates
+            const x = pointerPos.x / imageSize.scale;
+            const y = pointerPos.y / imageSize.scale;
 
-                const position = pixelToPercent(
-                    x,
-                    y,
-                    imageSize.naturalWidth,
-                    imageSize.naturalHeight,
-                );
-                handleAddMarker(position);
-            } else {
-                setSelectedIds(new Set());
-            }
+            const position = pixelToPercent(x, y, imageSize.naturalWidth, imageSize.naturalHeight);
+            handleAddMarker(position);
+            return;
         }
+
+        setSelectedIds(new Set());
+        setPopupState({ markerId: null, position: null });
     });
 
     // ========== Image ==========
@@ -113,14 +109,8 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
     // Calculate image size based on container
     const calculateImageSize = useCallback(
         (img: HTMLImageElement) => {
-            if (!containerRef.current) return;
-
-            const container = containerRef.current;
-            const containerWidth = container.clientWidth;
-            const containerHeight = container.clientHeight;
-
             const imageAspectRatio = img.naturalWidth / img.naturalHeight;
-            const containerAspectRatio = containerWidth / containerHeight;
+            const containerAspectRatio = width / height;
 
             let displayWidth: number;
             let displayHeight: number;
@@ -128,13 +118,13 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
 
             if (imageAspectRatio > containerAspectRatio) {
                 // Image is wider than container
-                displayWidth = containerWidth;
-                displayHeight = containerWidth / imageAspectRatio;
+                displayWidth = width;
+                displayHeight = width / imageAspectRatio;
                 scale = displayWidth / img.naturalWidth;
             } else {
                 // Image is taller than container
-                displayHeight = containerHeight;
-                displayWidth = containerHeight * imageAspectRatio;
+                displayHeight = height;
+                displayWidth = height * imageAspectRatio;
                 scale = displayHeight / img.naturalHeight;
             }
 
@@ -147,10 +137,9 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
             };
 
             setImageSize(newImageSize);
-            setContainerSize({ width: displayWidth, height: displayHeight });
             onImageLoaded?.(newImageSize);
         },
-        [onImageLoaded],
+        [width, height, onImageLoaded],
     );
 
     // Load image
@@ -170,26 +159,16 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
         img.src = image;
     }, [image, onImageError, calculateImageSize]);
 
-    // Handle window resize to recalculate image size
+    // Handle container size changes to recalculate image size
     useEffect(() => {
         if (!konvaImage) return;
-
-        const handleResize = () => {
-            calculateImageSize(konvaImage);
-        };
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, [konvaImage, calculateImageSize]);
+        calculateImageSize(konvaImage);
+    }, [width, height, konvaImage, calculateImageSize]);
 
     // ========== Marker ==========
     const [markers, setMarkers] = useState<Marker<T>[]>(propMarkers);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [alignmentGuides, setAlignmentGuides] = useState<AlignmentGuide[]>([]);
-    const [popupState, setPopupState] = useState<{
-        markerId: string | null;
-        position: { x: number; y: number; width: number; height: number } | null;
-    }>({ markerId: null, position: null });
 
     // Merge default styles
     const mergedDefaultStyle: DefaultMarkerStyle = useMemo(
@@ -472,6 +451,18 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
         onMarkersChange,
     ]);
 
+    // ========== Popup ==========
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    const popupEnabled = enablePopup && !editable && !!renderPopup;
+    const [popupState, setPopupState] = useState<{
+        markerId: string | null;
+        position: { x: number; y: number; width: number; height: number } | null;
+    }>({ markerId: null, position: null });
+
+    useClickAway(() => {
+        setPopupState({ markerId: null, position: null });
+    }, [wrapperRef]);
+
     // ========== Transformer ==========
     const transformerRef = useRef<Konva.Transformer>(null);
 
@@ -734,7 +725,6 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
     if (!konvaImage || !imageSize) {
         return (
             <div
-                ref={containerRef}
                 className={`ms-image-marker ${className || ''}`}
                 style={{ width, height, ...style }}
             />
@@ -743,16 +733,23 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
 
     return (
         <div
-            ref={containerRef}
+            ref={wrapperRef}
             className={`ms-image-marker ${className || ''}`}
-            style={{ width: containerSize.width, height: containerSize.height, ...style }}
+            style={{
+                position: 'relative',
+                width: imageSize.width,
+                height: imageSize.height,
+                ...style,
+            }}
         >
             <Stage
+                className="ms-image-marker-stage"
                 ref={stageRef}
-                width={containerSize.width}
-                height={containerSize.height}
+                width={imageSize.width}
+                height={imageSize.height}
                 onClick={handleStageClick}
                 onTap={handleStageClick}
+                style={{ cursor }}
             >
                 <Layer ref={layerRef}>
                     {/* Background Image */}
@@ -775,7 +772,7 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
                                         : [0, guide.position, imageSize.width, guide.position]
                                 }
                                 stroke={alignmentLineColor}
-                                strokeWidth={1}
+                                strokeWidth={0.5}
                                 dash={[4, 4]}
                                 listening={false}
                             />
@@ -794,7 +791,7 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
                         );
 
                         return (
-                            <MarkerItem
+                            <MarkerItem<T>
                                 key={marker.id}
                                 marker={marker}
                                 isSelected={selectedIds.has(marker.id)}
@@ -810,11 +807,11 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
                                 border={marker.style?.border}
                                 boxShadow={marker.style?.boxShadow}
                                 editable={editable}
-                                renderMarker={renderMarker as any}
+                                renderMarker={renderMarker}
                                 onClick={e => {
                                     handleMarkerSelect(e, marker.id);
                                     // Handle click trigger for popup
-                                    if (editable || !enablePopup || popupTrigger !== 'click') {
+                                    if (!popupEnabled || popupTrigger !== 'click') {
                                         return;
                                     }
                                     if (popupState.markerId === marker.id) {
@@ -832,10 +829,11 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
                                     }
                                 }}
                                 onMouseEnter={() => {
-                                    // Handle hover trigger for popup
-                                    if (editable || !enablePopup || popupTrigger !== 'hover') {
-                                        return;
-                                    }
+                                    if (!popupEnabled) return;
+
+                                    setCursor('pointer');
+                                    if (popupTrigger !== 'hover') return;
+
                                     setPopupState({
                                         markerId: marker.id,
                                         position: {
@@ -847,20 +845,19 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
                                     });
                                 }}
                                 onMouseLeave={() => {
-                                    // Clear popup on mouse leave for all trigger
-                                    if (editable || !enablePopup) return;
+                                    if (!popupEnabled) return;
+
+                                    setCursor('default');
+                                    // Clear popup on mouse leave for hover trigger
+                                    if (popupTrigger !== 'hover') return;
+
                                     setPopupState({ markerId: null, position: null });
                                 }}
                                 onTap={e => {
                                     e.cancelBubble = true;
-                                    const m = markers.find(mk => mk.id === marker.id);
+                                    if (!editable) return;
 
-                                    if (!m) return;
-                                    // onTap uses Event type, cast to MouseEvent for callback
-                                    onMarkerClick?.(e as any, m);
-                                    if (editable) {
-                                        setSelectedIds(new Set([marker.id]));
-                                    }
+                                    setSelectedIds(new Set([marker.id]));
                                 }}
                                 onDblClick={e => handleMarkerDoubleClick(e, marker.id)}
                                 onDblTap={e => handleMarkerDoubleClick(e, marker.id)}
@@ -906,8 +903,7 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
             </Stage>
 
             {/* Popup using MUI Tooltip - rendered in DOM layer */}
-            {enablePopup &&
-                !editable &&
+            {popupEnabled &&
                 popupState.markerId &&
                 popupState.position &&
                 (() => {
@@ -915,8 +911,6 @@ const ImageMarkerKonva = <T extends Record<string, any> = Record<string, any>>(
                     if (!currentMarker) return null;
 
                     const pos = popupState.position;
-
-                    // Calculate position relative to container
                     const left = pos.x - pos.width / 2;
                     const top = pos.y - pos.height / 2;
 

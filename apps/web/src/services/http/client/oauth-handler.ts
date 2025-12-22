@@ -24,9 +24,6 @@ type TokenDataType = {
     expires_in: number;
 };
 
-let timer: number | null = null;
-/** Token delay refreshing time */
-const REFRESH_TOKEN_TIMEOUT = 1 * 1000;
 /** Token refresh API path */
 const tokenApiPath = `${API_PREFIX}/oauth2/token`;
 /**
@@ -38,42 +35,31 @@ const genAuthorization = (token?: string) => {
     return `Bearer ${token}`;
 };
 
-/**
- * Token Processing Logic (Silent processing)
- *
- * 1. Check whether the token in the cache is valid. If yes, write the token into the request header
- * 2. Refresh the token periodically every 60 minutes
- */
-const oauthHandler = async (config: AxiosRequestConfig) => {
-    const token = iotStorage.getItem<TokenDataType>(TOKEN_CACHE_KEY);
-    const isExpired = token && Date.now() >= token.expires_in;
-    const isOauthRequest = config.url?.includes('oauth2/token');
+let refreshPending = false;
+const pendingPromises: {
+    resolve: (token: TokenDataType | undefined) => void;
+    reject: (reason?: any) => void;
+}[] = [];
+const getTokenSilent = () => {
+    return new Promise<TokenDataType | undefined>((resolve, reject) => {
+        const token = iotStorage.getItem<TokenDataType>(TOKEN_CACHE_KEY);
+        const isExpired = token && Date.now() >= token.expires_in;
 
-    if (token?.access_token && !isOauthRequest) {
-        config.headers = config.headers || {};
-        config.headers.Authorization = genAuthorization(token?.access_token);
-    }
+        if (!token || !isExpired) {
+            resolve(token);
+            return;
+        }
 
-    /**
-     * 1. If the request is oauth, the token is not refreshed
-     * 2. If there is no local cache token, do not refresh the token
-     * 3. If the local cache token does not expire, do not refresh the token
-     */
-    if (isOauthRequest || !token?.access_token || !isExpired) {
-        return config;
-    }
+        pendingPromises.push({ resolve, reject });
+        if (refreshPending) return;
 
-    /**
-     * After one second of delay, a token update request is sent to ensure that the request using the old token can still pass the back-end authentication within one second
-     */
-    if (timer) window.clearTimeout(timer);
-    timer = window.setTimeout(() => {
         const requestConfig = {
             baseURL: apiOrigin,
             headers: {
-                Authorization: genAuthorization(token?.access_token),
+                Authorization: genAuthorization(token.access_token),
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
+            timeout: 10000,
             withCredentials: true,
         };
         const requestData = {
@@ -83,21 +69,65 @@ const oauthHandler = async (config: AxiosRequestConfig) => {
             client_secret: oauthClientSecret,
         };
 
+        refreshPending = true;
         axios
             .post<ApiResponse<TokenDataType>>(tokenApiPath, requestData, requestConfig)
             .then(resp => {
-                const data = getResponseData(resp)!;
+                const data = getResponseData(resp);
+                const promiseToResolve = pendingPromises.slice();
 
-                // The token is refreshed every 60 minutes
-                data.expires_in = Date.now() + 60 * 60 * 1000;
-                iotStorage.setItem(TOKEN_CACHE_KEY, data);
+                refreshPending = false;
+                pendingPromises.length = 0;
+
+                if (data) {
+                    // The token is refreshed every 60 minutes
+                    data.expires_in = Date.now() + 60 * 60 * 1000;
+                    iotStorage.setItem(TOKEN_CACHE_KEY, data);
+                }
+
+                promiseToResolve.forEach(({ resolve }) => {
+                    resolve(data);
+                });
+
                 eventEmitter.publish(REFRESH_TOKEN_TOPIC);
             })
-            .catch(_ => {
-                // TODO: If the token is invalid, the token is directly removed
-                // iotStorage.removeItem(TOKEN_CACHE_KEY);
+            .catch(err => {
+                const promiseToResolve = pendingPromises.slice();
+
+                console.error(err);
+                refreshPending = false;
+                pendingPromises.length = 0;
+
+                /**
+                 * If the refresh token fails, set the original token expiration time to 1 minute later
+                 * to avoid repeated requests to refresh the token
+                 */
+                token.expires_in = Date.now() + 1 * 60 * 1000;
+                iotStorage.setItem(TOKEN_CACHE_KEY, token);
+
+                promiseToResolve.forEach(({ resolve }) => {
+                    resolve(token);
+                });
             });
-    }, REFRESH_TOKEN_TIMEOUT);
+    });
+};
+
+/**
+ * Token Processing Logic (Silent processing)
+ *
+ * 1. Check whether the token in the cache is valid. If yes, write the token into the request header
+ * 2. Refresh the token periodically every 60 minutes
+ */
+const oauthHandler = async (config: AxiosRequestConfig) => {
+    const isOauthRequest = config.url?.includes('oauth2/token');
+    if (isOauthRequest) return config;
+
+    const token = await getTokenSilent();
+
+    if (token?.access_token) {
+        config.headers = config.headers || {};
+        config.headers.Authorization = genAuthorization(token?.access_token);
+    }
 
     return config;
 };

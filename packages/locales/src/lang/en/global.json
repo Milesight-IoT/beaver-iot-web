@@ -199,6 +199,8 @@
     "common.label.workflow": "Workflow",
     "common.label.workflow_id": "Workflow ID",
     "common.label.writable": "Writable",
+    "common.label.scale": "Scale",
+    "common.label.mark_line": "MarkLine",
     "common.language.cn": "中文",
     "common.language.cn_short": "ZH",
     "common.language.en": "English",

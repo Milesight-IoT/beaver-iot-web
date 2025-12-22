@@ -111,7 +111,7 @@ function DeviceMap() {
             <button onClick={handleAddDevice}>Add Device</button>
             <ImageMarker<DeviceData>
                 ref={markerRef}
-                width="100%"
+                width={800}
                 height={600}
                 image="https://example.com/floor-plan.jpg"
                 markers={markers}
@@ -146,7 +146,7 @@ function FloorPlanWithPopup() {
 
     return (
         <ImageMarker<DeviceData>
-            width="100%"
+            width={800}
             height={600}
             image="https://example.com/floor-plan.jpg"
             markers={markers}
@@ -170,8 +170,8 @@ function FloorPlanWithPopup() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `width` | `number \| string` | `'100%'` | Container width |
-| `height` | `number \| string` | `'100%'` | Container height |
+| `width` | `number` | `500` | Container width in pixels |
+| `height` | `number` | `300` | Container height in pixels |
 | `image` | `string` | - | Image source (URL or base64) |
 | `markers` | `Marker<T>[]` | `[]` | Array of markers |
 | `defaultMarkerStyle` | `Partial<DefaultMarkerStyle>` | - | Default marker style configuration |
@@ -348,19 +348,21 @@ interface MarkerData {
 />
 ```
 
-### Responsive Container
+### Fixed Size Container
 
-The component automatically scales the image and markers based on the container size:
+The component uses fixed pixel dimensions for width and height:
 
 ```tsx
-<div style={{ width: '100%', height: '100vh' }}>
-    <ImageMarker
-        image="https://example.com/large-image.jpg"
-        markers={markers}
-        onMarkersChange={handleChange}
-    />
-</div>
+<ImageMarker
+    width={800}
+    height={600}
+    image="https://example.com/large-image.jpg"
+    markers={markers}
+    onMarkersChange={handleChange}
+/>
 ```
+
+The image will be automatically scaled to fit within the specified dimensions while maintaining its aspect ratio.
 
 ### Event Handling with Konva Events
 
@@ -427,13 +429,15 @@ function Demo() {
 - Marker sizes (width/height) are stored in original image coordinates
 - The component automatically handles image aspect ratio and scaling
 - Multi-selection resize applies transformations to all selected markers simultaneously
+- **Container dimensions**: The component uses fixed pixel dimensions (default: 500x300). The image will be automatically scaled to fit within these dimensions while maintaining aspect ratio. When `width` or `height` props change, the component automatically recalculates image and canvas dimensions.
 - **Resize step**: Marker dimensions are automatically rounded to the nearest `resizeStep` value (default: 0.1px, max: 5px) during resize operations. This ensures consistent sizing increments.
 - **Marker popup**:
   - Popups are only enabled when `enablePopup` is `true` and `editable` is `false`
-  - Supports two trigger modes: `hover` (default) or `click`
+  - Supports two trigger modes: `click` (default) or `hover`
   - If no `renderPopup` function is provided, the popup displays the marker's `content`
   - Popup content can be customized using the `renderPopup` prop
   - Uses MUI Tooltip component for positioning and styling with automatic arrow placement
+  - Clicking outside the component will automatically close the popup (using `useClickAway` from ahooks)
 - **Alignment guides**:
   - When dragging: Shows guides for all four edges (top, bottom, left, right) of the marker
   - When resizing: Shows guides only for the two edges near the active resize handle
