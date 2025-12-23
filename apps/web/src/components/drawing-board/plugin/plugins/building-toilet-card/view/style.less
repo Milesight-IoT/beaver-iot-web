@@ -1,0 +1,192 @@
+.@{prefix}-building-toilet-card-view {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-color: var(--component-background);
+    border-radius: @border-radius-md;
+
+    &.is-preview {
+        width: 256px;
+        height: 364px;
+    }
+
+    &-header {
+        display: flex;
+        gap: @margin-xs;
+        align-items: center;
+        justify-content: space-between;
+        padding: @padding-md;
+        font-weight: @font-weight-medium;
+        .text-size(@font-size-xxl);
+
+        .title {
+            display: inline-flex;
+            flex: 1;
+            gap: @margin-xxs;
+            align-items: center;
+            min-width: 0;
+
+            &.is-link {
+                cursor: pointer;
+
+                .@{mui-prefix}SvgIcon-root {
+                    display: block;
+                }
+            }
+
+            .@{prefix}-tooltip {
+                // flex: 1;
+                min-width: 0;
+            }
+
+            .@{mui-prefix}SvgIcon-root {
+                display: none;
+            }
+        }
+
+        .detail {
+            flex-shrink: 0;
+
+            .count {
+                display: flex;
+                gap: @margin-xs;
+                align-items: center;
+                color: var(--text-color-secondary);
+            }
+        }
+    }
+
+    &-content {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: @margin-xs;
+        padding: 0 @padding-xs @padding-xs;
+
+        .toilet-info-card {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            gap: @margin-xs;
+            justify-content: space-between;
+            padding: @padding-md;
+            color: var(--white);
+            background: linear-gradient(180deg, var(--gray-color-4) 0%, var(--gray-color-5) 100%);
+            border-radius: @border-radius-base;
+
+            &.normal {
+                background: linear-gradient(180deg, #33B165 0%, var(--green-6) 100%);
+            }
+
+            &.warning {
+                background: linear-gradient(180deg, #F88A4E 0%, var(--orange-6) 100%);
+            }
+
+            &.alarm {
+                background: linear-gradient(180deg, #FF5751 0%, var(--red-6) 100%);
+            }
+
+            .category {
+                display: flex;
+                align-items: center;
+
+                .@{mui-prefix}SvgIcon-root {
+                    font-size: 45px;
+                }
+            }
+
+            .detail {
+                display: flex;
+                align-items: end;
+                justify-content: end;
+                height: 56px;
+
+                .placeholder {
+                    font-weight: @font-weight-bold;
+                    text-align: right;
+                    // white-space: nowrap;
+                    .text-size(@font-size-6);
+                }
+
+                .count {
+                    display: flex;
+                    gap: @margin-sm;
+                    align-items: end;
+                    font-weight: @font-weight-bold;
+                    white-space: nowrap;
+                    .text-size(@font-size-6);
+
+                    .alarm-icon {
+                        display: inline-flex;
+                        .@{mui-prefix}SvgIcon-root:last-child {
+                            margin-left: -20px;
+                        }
+                    }
+
+                    .@{mui-prefix}SvgIcon-root {
+                        margin-bottom: @margin-xxs;
+                        font-size: 30px;
+                    }
+
+                    .occupied {
+                        font-size: 56px;
+                        line-height: 1;
+                    }
+                }
+            }
+        }
+    }
+
+    // ========== Simple Mode ==========
+    &.simple {
+        &.is-preview {
+            height: 194px;
+        }
+
+        .@{prefix}-building-toilet-card-view-header {
+            .text-size(@font-size-base);
+
+            .detail {
+                .text-size(@font-size-sm);
+
+                .@{mui-prefix}SvgIcon-root {
+                    font-size: 14px;
+                }
+            }
+        }
+
+        .@{prefix}-building-toilet-card-view-content {
+            gap: @margin-xxs;
+
+            .toilet-info-card {
+                flex-direction: row;
+                align-items: center;
+                padding: @padding-xs;
+
+                .category .@{mui-prefix}SvgIcon-root {
+                    font-size: 24px;
+                }
+
+                .detail {
+                    height: @font-size-6 + 8;
+
+                    .placeholder {
+                        font-weight: @font-weight-medium;
+                    }
+                }
+
+                .count {
+                    .alarm-icon,
+                    .@{mui-prefix}SvgIcon-root {
+                        display: none;
+                    }
+
+                    .occupied {
+                        .text-size(@font-size-6);
+                    }
+                }
+            }
+        }
+    }
+}

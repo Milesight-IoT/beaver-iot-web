@@ -101,6 +101,7 @@ export {
     SettingsOutlined as SettingsOutlinedIcon,
     KeyboardArrowUp as KeyboardArrowUpIcon,
     KeyboardArrowDown as KeyboardArrowDownIcon,
+    KeyboardArrowRight as KeyboardArrowRightIcon,
     Sync as SyncIcon,
     MoreHoriz as MoreHorizIcon,
     Help as HelpIcon,
@@ -173,6 +174,7 @@ export {
     NotListedLocation as NotListedLocationIcon,
     NearMeOutlined as NearMeOutlinedIcon,
     AccessTimeFilled as AccessTimeFilledIcon,
+    PriorityHigh as PriorityHighIcon,
 } from '@mui/icons-material';
 
 export * from './iot-icons';

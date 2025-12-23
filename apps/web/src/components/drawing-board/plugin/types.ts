@@ -120,6 +120,8 @@ export type PluginType =
     | 'deviceList'
     | 'map'
     | 'alarm'
+    | 'buildingToiletCard'
+    | 'buildingToiletStatusCard'
     | 'toiletOccupancy';
 
 /**

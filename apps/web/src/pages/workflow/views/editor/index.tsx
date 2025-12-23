@@ -16,7 +16,7 @@ import {
 import { useI18n, useStoreShallow, usePreventLeave } from '@milesight/shared/src/hooks';
 import { objectToCamelCase } from '@milesight/shared/src/utils/tools';
 import { LoadingButton, toast } from '@milesight/shared/src/components';
-import { CodeEditor, useConfirm, useEntityStore } from '@/components';
+import { CodeEditor, useConfirm, useEntityStore, useTagSelectStore } from '@/components';
 import {
     workflowAPI,
     awaitWrap,
@@ -269,15 +269,15 @@ const WorkflowEditor = () => {
     );
 
     // ---------- Fetch Tag List ----------
-    // const refreshTags = useTagSelectStore(state => state.refreshTags);
+    const refreshTags = useTagSelectStore(state => state.refreshTags);
 
-    // useDebounceEffect(
-    //     () => {
-    //         refreshTags(true);
-    //     },
-    //     [refreshTags],
-    //     { wait: 300 },
-    // );
+    useDebounceEffect(
+        () => {
+            refreshTags(true);
+        },
+        [refreshTags],
+        { wait: 300 },
+    );
 
     // ---------- Handle Import Data ----------
     const { state } = useLocation();
