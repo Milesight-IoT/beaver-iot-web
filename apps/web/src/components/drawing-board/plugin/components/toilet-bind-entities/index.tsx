@@ -34,7 +34,7 @@ const ToiletBindEntities: React.FC<ToiletBindEntitiesProps> = ({
     return (
         <div className="toilet-bind-entities">
             <div className="header-label">
-                <span className="asterisk">*</span>
+                {/* <span className="asterisk">*</span> */}
                 {getIntlText('common.label.data_source')}
             </div>
 

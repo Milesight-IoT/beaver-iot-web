@@ -71,30 +71,6 @@ const occupancyMarkerControlPanelConfig = (): ControlPanelConfig<OccupancyMarker
                             type: 'ToiletBindEntities',
                             controllerProps: {
                                 name: 'markerExtraInfos',
-                                rules: {
-                                    required: true,
-                                    validate: val => {
-                                        const extraInfos = val as MarkerExtraInfoProps[];
-
-                                        /**
-                                         * Validate marker extra info required fields
-                                         */
-                                        if (
-                                            !Array.isArray(extraInfos) ||
-                                            isEmpty(extraInfos) ||
-                                            !extraInfos?.some(
-                                                e =>
-                                                    e?.occupiedState &&
-                                                    e?.deviceStatus &&
-                                                    e?.notification,
-                                            )
-                                        ) {
-                                            return t('valid.input.required');
-                                        }
-
-                                        return true;
-                                    },
-                                },
                             },
                         },
                     },

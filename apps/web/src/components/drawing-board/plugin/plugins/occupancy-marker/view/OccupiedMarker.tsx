@@ -229,7 +229,9 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                                                 color:
                                                     statusVal === 'Online'
                                                         ? 'var(--green-base)'
-                                                        : undefined,
+                                                        : statusVal === 'Offline'
+                                                          ? 'var(--orange-base)'
+                                                          : '-',
                                             }}
                                         >
                                             {statusVal}
