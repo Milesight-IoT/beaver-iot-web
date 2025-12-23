@@ -75,8 +75,8 @@
     "dashboard.placeholder.unbound_entity": "Unbound Entity",
     "dashboard.plugin_name_building_toilet_card": "Building Toilet Card",
     "dashboard.plugin_name_building_toilet_status_card": "Building Toilet Status Card",
-    "dashboard.label.standard_occupied_toilet": "Occupied Standard Toilet",
-    "dashboard.label.disability_occupied_toilet": "Occupied Disability Toilet",
-    "dashboard.label.standard_idle_toilet": "Idle Standard Toilet",
-    "dashboard.label.disability_idle_toilet": "Idle Disability Toilet"
+    "dashboard.label.standard_occupied_toilet": "Occupied Standard Restroom",
+    "dashboard.label.disability_occupied_toilet": "Occupied Disability Restroom",
+    "dashboard.label.standard_idle_toilet": "Vacant Standard Restroom",
+    "dashboard.label.disability_idle_toilet": "Vacant Disability Restroom"
 }
