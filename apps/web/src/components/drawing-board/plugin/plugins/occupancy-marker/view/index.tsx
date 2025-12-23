@@ -35,6 +35,7 @@ const OccupancyMarkerView: React.FC<OccupancyMarkerViewProps> = props => {
     });
     const {
         markers,
+        setMarkers,
         buildingInfo,
         isAvailableToiletCount,
         standardOccupiedToiletCount,
@@ -124,6 +125,7 @@ const OccupancyMarkerView: React.FC<OccupancyMarkerViewProps> = props => {
                 isPreview={isPreview}
                 size={markerContainerSize}
                 markers={markers}
+                setMarkers={setMarkers}
                 buildingInfo={buildingInfo}
                 markerExtraInfos={config?.markerExtraInfos}
                 entitiesStatus={entitiesStatus}

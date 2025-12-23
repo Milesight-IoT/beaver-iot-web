@@ -127,16 +127,30 @@ export function useData(props: {
      */
     useDebounceEffect(
         () => {
+            if (!Array.isArray(markerExtraInfos) || isEmpty(markerExtraInfos)) {
+                return;
+            }
+
+            /**
+             * Only update markers when there is no active marker
+             */
+            const hasActive = markerExtraInfos.some(m => m.isActive);
+            if (hasActive) {
+                return;
+            }
+
+            /**
+             * Update markers border when there is no active marker
+             */
             setMarkers(prevMarkers =>
                 prevMarkers.map(item => ({
                     ...item,
                     style: {
                         ...item.style,
-                        border: markerExtraInfos?.find(m => m.toiletId === item.id)?.isActive
-                            ? `2px solid ${ACTIVE_COLOR}`
-                            : item?.style?.backgroundColor === PLAIN_COLOR
-                              ? `1px solid ${OFFLINE_COLOR}`
-                              : undefined,
+                        border:
+                            item?.style?.backgroundColor === PLAIN_COLOR
+                                ? `1px solid ${OFFLINE_COLOR}`
+                                : undefined,
                     },
                 })),
             );
@@ -245,6 +259,7 @@ export function useData(props: {
 
     return {
         markers,
+        setMarkers,
         buildingInfo,
         /**
          * Calculate the number of standard unoccupied toilets

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { isEmpty, get } from 'lodash-es';
 import { type KonvaEventObject } from 'konva/lib/Node';
 import { Box } from '@mui/material';
-import { useMemoizedFn } from 'ahooks';
+import { useMemoizedFn, useDebounceFn } from 'ahooks';
 
 import { useStoreShallow } from '@milesight/shared/src/hooks';
 
@@ -14,6 +14,7 @@ import svg136 from './assets/136.svg';
 import svg120B104 from './assets/120_B104.svg';
 import { type MarkerExtraInfoProps, MarkerNotificationProps } from '../control-panel';
 import { type ToiletBuildingProps } from '../../../types';
+import { ACTIVE_COLOR, PLAIN_COLOR, OFFLINE_COLOR } from './useData';
 
 export interface OccupiedMarkerProps {
     isPreview?: boolean;
@@ -22,13 +23,15 @@ export interface OccupiedMarkerProps {
         height: number;
     };
     markers: Marker[];
+    setMarkers: React.Dispatch<React.SetStateAction<Marker[]>>;
     markerExtraInfos?: MarkerExtraInfoProps[];
     buildingInfo?: ToiletBuildingProps;
     entitiesStatus?: EntityAPISchema['getEntitiesStatus']['response'];
 }
 
 const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
-    const { isPreview, size, markers, markerExtraInfos, buildingInfo, entitiesStatus } = props;
+    const { isPreview, size, markers, setMarkers, markerExtraInfos, buildingInfo, entitiesStatus } =
+        props;
 
     const { setValuesToFormConfig } = useControlPanelStore(
         useStoreShallow(['setValuesToFormConfig']),
@@ -39,6 +42,17 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
     //     console.log('Changed marker:', event.marker);
     // };
 
+    const { run: handleUpdateFormData } = useDebounceFn(
+        (newExtraInfos: MarkerExtraInfoProps[]) => {
+            setValuesToFormConfig({
+                markerExtraInfos: newExtraInfos,
+            });
+        },
+        {
+            wait: 150,
+        },
+    );
+
     const handleMarkerClick = (_: KonvaEventObject<MouseEvent>, marker: Marker) => {
         /**
          * Only preview mode can click marker
@@ -46,6 +60,21 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
         if (!isPreview) {
             return;
         }
+
+        setMarkers(prevMarkers =>
+            prevMarkers.map(item => ({
+                ...item,
+                style: {
+                    ...item.style,
+                    border:
+                        item.id === marker.id
+                            ? `2px solid ${ACTIVE_COLOR}`
+                            : item?.style?.backgroundColor === PLAIN_COLOR
+                              ? `1px solid ${OFFLINE_COLOR}`
+                              : undefined,
+                },
+            })),
+        );
 
         let newMarkerExtraInfos = markerExtraInfos;
         if (!Array.isArray(newMarkerExtraInfos) || isEmpty(newMarkerExtraInfos)) {
@@ -76,9 +105,7 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
         /**
          * Set new marker extra infos to form config
          */
-        setValuesToFormConfig({
-            markerExtraInfos: newMarkerExtraInfos,
-        });
+        handleUpdateFormData(newMarkerExtraInfos);
     };
 
     /**

@@ -221,4 +221,4 @@ const EntityForm: React.FC<Props> = props => {
     );
 };
 
-export default EntityForm;
+export default React.memo(EntityForm);
