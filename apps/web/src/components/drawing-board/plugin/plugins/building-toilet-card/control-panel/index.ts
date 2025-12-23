@@ -17,12 +17,12 @@ const ControlPanel = (): ControlPanelConfig<any> => {
                 label: 'Entities Config',
                 controlSetItems: [
                     {
-                        name: 'standardOccupiedEntity',
+                        name: 'standardIdleEntity',
                         config: {
                             type: 'EntitySelect',
-                            label: t('dashboard.label.standard_occupied_toilet'),
+                            label: t('dashboard.label.standard_idle_toilet'),
                             controllerProps: {
-                                name: 'standardOccupiedEntity',
+                                name: 'standardIdleEntity',
                                 rules: {
                                     required: true,
                                 },
@@ -36,12 +36,12 @@ const ControlPanel = (): ControlPanelConfig<any> => {
                         },
                     },
                     {
-                        name: 'disabilityOccupiedEntity',
+                        name: 'disabilityIdleEntity',
                         config: {
                             type: 'EntitySelect',
-                            label: t('dashboard.label.disability_occupied_toilet'),
+                            label: t('dashboard.label.disability_idle_toilet'),
                             controllerProps: {
-                                name: 'disabilityOccupiedEntity',
+                                name: 'disabilityIdleEntity',
                                 rules: {
                                     required: true,
                                 },

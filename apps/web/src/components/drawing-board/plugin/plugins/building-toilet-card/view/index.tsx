@@ -26,8 +26,8 @@ export interface ViewProps {
     config: {
         actionCanvasId?: ApiKey;
         buildingInfo?: ToiletBuildingProps;
-        standardOccupiedEntity: EntityOptionType;
-        disabilityOccupiedEntity: EntityOptionType;
+        standardIdleEntity: EntityOptionType;
+        disabilityIdleEntity: EntityOptionType;
     };
     configJson: BoardPluginProps;
 }
@@ -72,70 +72,71 @@ const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
     const {
         buildingInfo = mockBuildingInfo,
         actionCanvasId,
-        standardOccupiedEntity,
-        disabilityOccupiedEntity,
+        standardIdleEntity,
+        disabilityIdleEntity,
     } = config || {};
     const { name: buildingName, basicInfo: buildingBasicInfo } = buildingInfo || {};
     const { getIntlText } = useI18n();
 
-    // ========== Fetch Occupied Data ==========
-    const { data: { standardOccupied, disabilityOccupied } = {}, run: getLatestEntityValues } =
-        useRequest(
-            async () => {
-                const standardEntityId = standardOccupiedEntity?.value;
-                const disabilityEntityId = disabilityOccupiedEntity?.value;
+    // ========== Fetch Idle Data ==========
+    const { data: { standardIdle, disabilityIdle } = {}, run: getLatestEntityValues } = useRequest(
+        async () => {
+            const standardEntityId = standardIdleEntity?.value;
+            const disabilityEntityId = disabilityIdleEntity?.value;
 
-                if (!standardEntityId && !disabilityEntityId) return;
-                const [error, resp] = await awaitWrap(
-                    entityAPI.getEntitiesStatus({
-                        entity_ids: [standardEntityId, disabilityEntityId].filter(Boolean),
-                    }),
-                );
+            if (!standardEntityId && !disabilityEntityId) return;
+            const [error, resp] = await awaitWrap(
+                entityAPI.getEntitiesStatus({
+                    entity_ids: [standardEntityId, disabilityEntityId].filter(Boolean),
+                }),
+            );
 
-                if (error || !isRequestSuccess(resp)) return;
-                const values = getResponseData(resp);
-                // eslint-disable-next-line no-unsafe-optional-chaining
-                const standardOccupied = isNaN(+values?.[standardEntityId]?.value)
-                    ? undefined
-                    : Number(values?.[standardEntityId]?.value);
-                // eslint-disable-next-line no-unsafe-optional-chaining
-                const disabilityOccupied = isNaN(+values?.[disabilityEntityId]?.value)
-                    ? undefined
-                    : Number(values?.[disabilityEntityId]?.value);
+            if (error || !isRequestSuccess(resp)) return;
+            const values = getResponseData(resp);
+            // eslint-disable-next-line no-unsafe-optional-chaining
+            const standardIdle = isNaN(+values?.[standardEntityId]?.value)
+                ? undefined
+                : Number(values?.[standardEntityId]?.value);
+            // eslint-disable-next-line no-unsafe-optional-chaining
+            const disabilityIdle = isNaN(+values?.[disabilityEntityId]?.value)
+                ? undefined
+                : Number(values?.[disabilityEntityId]?.value);
 
-                return { standardOccupied, disabilityOccupied };
-            },
-            {
-                // manual: true,
-                debounceWait: 300,
-                refreshDeps: [standardOccupiedEntity, disabilityOccupiedEntity],
-            },
-        );
+            return { standardIdle, disabilityIdle };
+        },
+        {
+            // manual: true,
+            debounceWait: 300,
+            refreshDeps: [standardIdleEntity, disabilityIdleEntity],
+        },
+    );
     const { standard: standardSeverity, disability: disabilitySeverity } = useMemo(() => {
         const result: { standard?: SeverityConfig; disability?: SeverityConfig } = {};
 
         if (!buildingBasicInfo) return result;
-        if (!isNil(standardOccupied)) {
-            const standardRatio = standardOccupied / buildingBasicInfo.standardToiletCount;
+        if (!isNil(standardIdle)) {
+            const standardTotal = buildingBasicInfo.standardToiletCount;
+            const standardRatio = (standardTotal - standardIdle) / standardTotal;
             const index = severityThresholds.findIndex(threshold => standardRatio <= threshold);
             result.standard = severityConfigs[index];
         }
 
-        if (!isNil(disabilityOccupied)) {
-            const disabilityRatio = disabilityOccupied / buildingBasicInfo.disabilityToiletCount;
+        if (!isNil(disabilityIdle)) {
+            const disabilityTotal = buildingBasicInfo.disabilityToiletCount;
+            const disabilityRatio = (disabilityTotal - disabilityIdle) / disabilityTotal;
             const index = severityThresholds.findIndex(threshold => disabilityRatio <= threshold);
             result.disability = severityConfigs[index];
         }
 
         return result;
-    }, [standardOccupied, disabilityOccupied, buildingBasicInfo]);
+    }, [standardIdle, disabilityIdle, buildingBasicInfo]);
 
     // ========== Entity Status Listener ==========
     const { addEntityListener } = useActivityEntity();
 
     useEffect(() => {
-        const standardEntityId = standardOccupiedEntity?.value;
-        const disabilityEntityId = disabilityOccupiedEntity?.value;
+        const standardEntityId = standardIdleEntity?.value;
+        const disabilityEntityId = disabilityIdleEntity?.value;
         if (!widgetId || !dashboardId || (!standardEntityId && !disabilityEntityId)) return;
 
         const removeEventListener = addEntityListener(
@@ -153,8 +154,8 @@ const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
     }, [
         widgetId,
         dashboardId,
-        standardOccupiedEntity,
-        disabilityOccupiedEntity,
+        standardIdleEntity,
+        disabilityIdleEntity,
         addEntityListener,
         getLatestEntityValues,
     ]);
@@ -198,15 +199,15 @@ const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
                         )}
                     </div>
                     <div className="detail">
-                        {!standardOccupiedEntity ? (
+                        {!standardIdleEntity ? (
                             <span className="placeholder">
                                 {getIntlText('dashboard.placeholder.unbound_entity')}
                             </span>
                         ) : (
                             <span className="count">
                                 {standardSeverity?.icon}
-                                <span className="occupied">
-                                    {isNil(standardOccupied) ? '-' : standardOccupied}
+                                <span className="idle">
+                                    {isNil(standardIdle) ? '-' : standardIdle}
                                 </span>
                                 <span className="total">
                                     /{buildingBasicInfo?.standardToiletCount}
@@ -220,15 +221,15 @@ const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
                         <ToiletDisabilityIcon />
                     </div>
                     <div className="detail">
-                        {!disabilityOccupiedEntity ? (
+                        {!disabilityIdleEntity ? (
                             <span className="placeholder">
                                 {getIntlText('dashboard.placeholder.unbound_entity')}
                             </span>
                         ) : (
                             <span className="count">
                                 {disabilitySeverity?.icon}
-                                <span className="occupied">
-                                    {isNil(disabilityOccupied) ? '-' : disabilityOccupied}
+                                <span className="idle">
+                                    {isNil(disabilityIdle) ? '-' : disabilityIdle}
                                 </span>
                                 <span className="total">
                                     /{buildingBasicInfo?.disabilityToiletCount}
