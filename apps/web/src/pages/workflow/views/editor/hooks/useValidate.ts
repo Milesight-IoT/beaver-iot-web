@@ -292,9 +292,9 @@ const useValidate = () => {
                 },
             },
             // Check listener.entities, select.entities
-            'listener.entities': entitiesChecker,
+            // 'listener.entities': entitiesChecker,
             'listener.entityData': entityDataChecker,
-            'select.entities': entitiesChecker,
+            // 'select.entities': entitiesChecker,
             'select.entityData': entityDataChecker,
             'trigger.entityConfigs': {
                 checkRequired(

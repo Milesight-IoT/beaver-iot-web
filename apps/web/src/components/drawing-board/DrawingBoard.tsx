@@ -1,9 +1,10 @@
-import { forwardRef, useImperativeHandle, useMemo } from 'react';
+import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import cls from 'classnames';
 import { isEmpty, isNil } from 'lodash-es';
+import { useInterval } from 'ahooks';
 import { List } from '@mui/material';
 
-import { useI18n, useTheme, useMediaQuery } from '@milesight/shared/src/hooks';
+import { useI18n, useTheme, useTime, useMediaQuery } from '@milesight/shared/src/hooks';
 import { LoadingWrapper } from '@milesight/shared/src/components';
 
 import { Empty } from '@/components';
@@ -111,6 +112,14 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
         );
     };
 
+    // ========== Interval update dateTime ==========
+    const { getTimeFormat } = useTime();
+    const [dateTime, setDateTime] = useState(getTimeFormat());
+
+    useInterval(() => {
+        setDateTime(getTimeFormat());
+    }, 5000);
+
     if (loadingWidgets) {
         return (
             <LoadingWrapper loading>
@@ -121,6 +130,13 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
     return (
         <DrawingBoardContext.Provider value={drawingBoardContext}>
             <div className="drawing-board">
+                {!!drawingBoardDetail.attributes?.show_extra && (
+                    <div className="drawing-board__header">
+                        <span className="title">{drawingBoardDetail.name}</span>
+                        <span className="date">{dateTime}</span>
+                    </div>
+                )}
+
                 <div ref={drawingBoardRef} className="drawing-board__wrapper ms-perfect-scrollbar">
                     <div
                         className={cls('drawing-board__container', {

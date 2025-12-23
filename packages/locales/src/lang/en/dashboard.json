@@ -81,5 +81,10 @@
     "dashboard.tip.batch_bind_entities_success": "{1} 个实体绑定成功",
     "dashboard.tip.batch_bind_entities_failed": "{1} 个实体绑定失败, 请下载文件查看详情",
     "dashboard.tip.all_batch_bind_entities_success": "All coordinate entities have been successfully bound",
-    "dashboard.tip.available_unavailable_toilet": "Available: {1}, Unavailable: {2}"
+    "dashboard.tip.available_unavailable_toilet": "Available: {1}, Unavailable: {2}",
+    "dashboard.placeholder.unbound_entity": "Unbound Entity",
+    "dashboard.plugin_name_building_toilet_card": "Building Toilet Card",
+    "dashboard.plugin_name_building_toilet_status_card": "Building Toilet Status Card",
+    "dashboard.label.standard_occupied_toilet": "Standard Occupied Toilet",
+    "dashboard.label.disability_occupied_toilet": "Disability Occupied Toilet"
 }

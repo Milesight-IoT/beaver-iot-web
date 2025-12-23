@@ -127,6 +127,8 @@ export type PluginType =
     | 'map'
     | 'alarm'
     | 'occupancyMarker'
+    | 'buildingToiletCard'
+    | 'buildingToiletStatusCard'
     | 'toiletOccupancy';
 
 /**
