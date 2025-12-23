@@ -140,10 +140,10 @@ export interface MarkerItemProps {
  * ImageMarker component props
  */
 export interface ImageMarkerProps<T = unknown> {
-    /** Container width */
-    width?: number | string;
-    /** Container height */
-    height?: number | string;
+    /** Container width in pixels (default: 500) */
+    width?: number;
+    /** Container height in pixels (default: 300) */
+    height?: number;
     /** Image source (URL or base64) */
     image: string;
     /** Marker list */

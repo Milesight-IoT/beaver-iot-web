@@ -1,9 +1,9 @@
-.chart-entity-position {
+.chart-mark-line {
     position: relative;
     margin-bottom: @margin-md;
 
     .list-content {
-        padding: @padding-xs;
+        padding: @padding-sm;
         background: var(--component-background-gray);
         border-radius: @border-radius-base;
 
@@ -14,6 +14,18 @@
 
             .@{mui-prefix}TextField-root:first-child {
                 margin: 0 !important;
+            }
+
+            .icon-color-select {
+                .@{mui-prefix}Select-select {
+                    padding-right: 0;
+                }
+            }
+
+            .input-box {
+                .@{mui-prefix}OutlinedInput-input {
+                    padding-right: 0;
+                }
             }
         }
     }

@@ -19,6 +19,7 @@ import {
     TransformComponent,
     DataZoomComponent,
     GraphicComponent,
+    MarkLineComponent,
 } from 'echarts/components';
 import * as echarts from 'echarts/core';
 import { LabelLayout, UniversalTransition } from 'echarts/features';
@@ -51,6 +52,7 @@ echarts.use([
     ToolboxComponent,
     DataZoomComponent,
     GraphicComponent,
+    MarkLineComponent,
     BarChart,
     RadarChart,
     GaugeChart,

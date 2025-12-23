@@ -33,6 +33,13 @@ export interface DrawingBoardDetail {
     widgets: WidgetDetail[];
     entity_ids?: ApiKey[];
     entities?: EntityData[];
+    attributes?: {
+        widgets_addable?: boolean;
+        widgets_deletable?: boolean;
+        fullscreen?: number;
+        grid_layout_cols?: number;
+        show_extra?: boolean;
+    };
 }
 
 /** Dashboard list props */
@@ -47,6 +54,10 @@ export interface DashboardListProps {
     description?: string;
     cover_type?: DashboardCoverType;
     cover_data?: string;
+    attributes?: {
+        editable?: boolean;
+        deletable?: boolean;
+    };
 }
 
 export interface WidgetDetail {

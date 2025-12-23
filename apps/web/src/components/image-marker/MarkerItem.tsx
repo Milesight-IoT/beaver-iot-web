@@ -62,8 +62,8 @@ function parseBoxShadow(boxShadow?: string): {
     };
 }
 
-interface MarkerItemProps {
-    marker: Marker;
+interface MarkerItemProps<T = unknown> {
+    marker: Marker<T>;
     isSelected: boolean;
     x: number;
     y: number;
@@ -74,7 +74,7 @@ interface MarkerItemProps {
     border?: string;
     boxShadow?: string;
     editable: boolean;
-    renderMarker?: (marker: Marker, isSelected: boolean) => ReactNode;
+    renderMarker?: (marker: Marker<T>, isSelected: boolean) => ReactNode;
     onClick: (e: KonvaEventObject<MouseEvent>) => void;
     onTap: (e: KonvaEventObject<Event>) => void;
     onDblClick: (e: KonvaEventObject<Event>) => void;
@@ -89,82 +89,82 @@ interface MarkerItemProps {
  * MarkerItem Component
  * Renders a single marker with optional custom content using Html from react-konva-utils
  */
-const MarkerItem = memo<MarkerItemProps>(
-    ({
-        marker,
-        isSelected,
-        x,
-        y,
-        width,
-        height,
-        fill,
-        cornerRadius,
-        border,
-        boxShadow,
-        editable,
-        renderMarker,
-        onClick,
-        onTap,
-        onDblClick,
-        onDblTap,
-        onDragMove,
-        onDragEnd,
-        onMouseEnter,
-        onMouseLeave,
-    }) => {
-        const hasContent = marker.content !== undefined || renderMarker !== undefined;
+function MarkerItemComponent<T = unknown>({
+    marker,
+    isSelected,
+    x,
+    y,
+    width,
+    height,
+    fill,
+    cornerRadius,
+    border,
+    boxShadow,
+    editable,
+    renderMarker,
+    onClick,
+    onTap,
+    onDblClick,
+    onDblTap,
+    onDragMove,
+    onDragEnd,
+    onMouseEnter,
+    onMouseLeave,
+}: MarkerItemProps<T>) {
+    const hasContent = marker.content !== undefined || renderMarker !== undefined;
 
-        // Parse border and boxShadow CSS strings to Konva properties
-        const borderProps = useMemo(() => parseBorder(border), [border]);
-        const shadowProps = useMemo(() => parseBoxShadow(boxShadow), [boxShadow]);
+    // Parse border and boxShadow CSS strings to Konva properties
+    const borderProps = useMemo(() => parseBorder(border), [border]);
+    const shadowProps = useMemo(() => parseBoxShadow(boxShadow), [boxShadow]);
 
-        return (
-            <Group
-                id={`marker-${marker.id}`}
-                x={x}
-                y={y}
-                offsetX={width / 2}
-                offsetY={height / 2}
-                draggable={editable}
-                onClick={onClick}
-                onTap={onTap}
-                onDblClick={onDblClick}
-                onDblTap={onDblTap}
-                onDragMove={onDragMove}
-                onDragEnd={onDragEnd}
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-            >
-                {/* Background rectangle */}
-                <Rect
-                    width={width}
-                    height={height}
-                    fill={fill}
-                    cornerRadius={cornerRadius}
-                    {...borderProps}
-                    {...shadowProps}
-                />
+    return (
+        <Group
+            id={`marker-${marker.id}`}
+            x={x}
+            y={y}
+            offsetX={width / 2}
+            offsetY={height / 2}
+            draggable={editable}
+            onClick={onClick}
+            onTap={onTap}
+            onDblClick={onDblClick}
+            onDblTap={onDblTap}
+            onDragMove={onDragMove}
+            onDragEnd={onDragEnd}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+        >
+            {/* Background rectangle */}
+            <Rect
+                width={width}
+                height={height}
+                fill={fill}
+                cornerRadius={cornerRadius}
+                {...borderProps}
+                {...shadowProps}
+            />
 
-                {/* Custom content using Html component */}
-                {hasContent && (
-                    <Html
-                        divProps={{
-                            style: {
-                                userSelect: 'none',
-                                pointerEvents: 'none',
-                            },
-                        }}
-                    >
-                        <div className="ms-image-marker-content" style={{ width, height }}>
-                            {renderMarker ? renderMarker(marker, isSelected) : marker.content}
-                        </div>
-                    </Html>
-                )}
-            </Group>
-        );
-    },
-);
+            {/* Custom content using Html component */}
+            {hasContent && (
+                <Html
+                    divProps={{
+                        style: {
+                            userSelect: 'none',
+                            pointerEvents: 'none',
+                        },
+                    }}
+                >
+                    <div className="ms-image-marker-content" style={{ width, height }}>
+                        {renderMarker ? renderMarker(marker, isSelected) : marker.content}
+                    </div>
+                </Html>
+            )}
+        </Group>
+    );
+}
 
-MarkerItem.displayName = 'MarkerItem';
+MarkerItemComponent.displayName = 'MarkerItem';
+
+const MarkerItem = memo(MarkerItemComponent) as typeof MarkerItemComponent;
 
 export default MarkerItem;
