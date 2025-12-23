@@ -42,6 +42,7 @@ export function useResponsiveLayout(widgets: WidgetDetail[]) {
      */
     const newPcRowHeight = useMemo(() => {
         const fullscreenNum = drawingBoardContext?.drawingBoardDetail?.attributes?.fullscreen;
+        const isShowExtra = drawingBoardContext?.drawingBoardDetail?.attributes?.show_extra;
         const isFs = drawingBoardContext?.isFullscreen;
         const { height } = bodySize || {};
         if (!fullscreenNum || !height) {
@@ -51,6 +52,9 @@ export function useResponsiveLayout(widgets: WidgetDetail[]) {
         let newBodyHeight = height;
         if (!isFs) {
             newBodyHeight -= 10 + 36 + 10 + 1;
+        }
+        if (isShowExtra) {
+            newBodyHeight -= 16 + 32;
         }
 
         return (newBodyHeight - (fullscreenNum + 1) * GRID_LAYOUT_MARGIN) / fullscreenNum;
