@@ -115,6 +115,17 @@ function renderMarkLineTooltip(markLineSeries: any[]) {
                         }}
                     >
                         <div>
+                            <span
+                                style={{
+                                    display: 'inline-block',
+                                    marginRight: 4,
+                                    marginBottom: 2,
+                                    borderRadius: 1,
+                                    width: 8,
+                                    height: 4,
+                                    backgroundColor: series?.itemStyle?.color,
+                                }}
+                            />
                             <span>{series?.name || ''}：</span>
                         </div>
                         <div>{`${series?.customConfig?.value}${
@@ -224,13 +235,6 @@ const View = (props: ViewProps) => {
         leftYAxisMarkLine,
         rightYAxisMarkLine,
     });
-
-    const markLineNames = useMemo(() => {
-        return [
-            ...leftYAxisMarkLine.map(item => item.label).filter(Boolean),
-            ...rightYAxisMarkLine.map(item => item.label).filter(Boolean),
-        ];
-    }, [leftYAxisMarkLine, rightYAxisMarkLine]);
 
     // Create tooltip formatter function with dependencies
     const createTooltipFormatter = useCallback(
@@ -451,17 +455,6 @@ const View = (props: ViewProps) => {
                 mousePos = [e.offsetX, e.offsetY];
             });
 
-            currentChart.on('legendselectchanged', function (params) {
-                const { name = '', selected = {} } = (params as LegendSelectChangedParams) || {};
-                // Prevent deselecting markLine legend items
-                if (markLineNames.includes(name) && !selected[name]) {
-                    currentChart.dispatchAction({
-                        type: 'legendSelect',
-                        name,
-                    });
-                }
-            });
-
             hoverZoomBtn();
             zoomChart(currentChart);
         });
@@ -485,7 +478,6 @@ const View = (props: ViewProps) => {
         leftYAxisMarkLine,
         rightYAxisMarkLine,
         getLineSeries,
-        markLineNames,
         createTooltipFormatter,
     ]);
 
