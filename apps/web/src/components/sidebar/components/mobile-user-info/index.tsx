@@ -111,7 +111,7 @@ const MobileUserInfo: React.FC<MobileUserInfoProps> = ({ userInfo }) => {
                     <Tooltip autoEllipsis className="user-info__email" title={userInfo?.email} />
                 </div>
                 <List className="action-list">
-                    <ListItem>
+                    {/* <ListItem>
                         <ListItemButton
                             onClick={() => {
                                 // setOpenUserPanel(false);
@@ -124,7 +124,7 @@ const MobileUserInfo: React.FC<MobileUserInfoProps> = ({ userInfo }) => {
                             </div>
                             <ArrowForwardIosIcon className="icon-end" />
                         </ListItemButton>
-                    </ListItem>
+                    </ListItem> */}
                     <ListItem>
                         <ListItemButton>
                             <InfoOutlinedIcon className="icon-start" onClick={handleVersionClick} />

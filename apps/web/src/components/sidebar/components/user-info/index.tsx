@@ -88,15 +88,15 @@ const MoreUserInfo: React.FC<MoreUserInfoProps> = ({ userInfo }) => {
                             sx={{ marginBottom: '8px' }}
                             className="ms-sidebar-menu__divider"
                         />
-                        <LangItem onChange={() => state.close()} />
-                        <MenuItem className="ms-sidebar-menu__link" onClick={() => state.close()}>
+                        {/* <LangItem onChange={() => state.close()} /> */}
+                        {/* <MenuItem className="ms-sidebar-menu__link" onClick={() => state.close()}>
                             <a href={helpCenterUrl || '/'} target="_blank" rel="noreferrer">
                                 <ListItemIcon>
                                     <HelpOutlineIcon />
                                 </ListItemIcon>
                                 {getIntlText('common.label.help_center')}
                             </a>
-                        </MenuItem>
+                        </MenuItem> */}
                         <ListItem className="ms-sidebar-menu__version">
                             <ListItemIcon>
                                 <InfoOutlinedIcon />
