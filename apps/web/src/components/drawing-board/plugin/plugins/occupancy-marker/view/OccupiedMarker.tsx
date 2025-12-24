@@ -148,7 +148,8 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
 
     const getDeviceStatus = useMemoizedFn(
         (device: MarkerNotificationProps, extraInfo?: MarkerExtraInfoProps) => {
-            const statusId = get(extraInfo?.entityKeyToId, String(device?.status));
+            const statusKey = typeof device?.status === 'string' ? device.status.trim() : '';
+            const statusId = get(extraInfo?.entityKeyToId, statusKey);
             const statusVal = get(entitiesStatus, String(statusId))?.value as DeviceStatus;
 
             return statusVal === 'ONLINE' ? 'Online' : statusVal === 'OFFLINE' ? 'Offline' : '-';
@@ -157,7 +158,8 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
 
     const getDeviceBattery = useMemoizedFn(
         (device: MarkerNotificationProps, extraInfo?: MarkerExtraInfoProps) => {
-            const batteryId = get(extraInfo?.entityKeyToId, String(device?.battery));
+            const batteryKey = typeof device?.battery === 'string' ? device.battery.trim() : '';
+            const batteryId = get(extraInfo?.entityKeyToId, batteryKey);
             const batteryVal = get(entitiesStatus, String(batteryId))?.value;
             const type = get(entitiesStatus, String(batteryId))?.value_type;
             if (type !== 'LONG') {
