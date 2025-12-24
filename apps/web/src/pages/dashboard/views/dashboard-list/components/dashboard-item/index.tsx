@@ -135,7 +135,7 @@ const DashboardItem: React.FC<DashboardItemProps> = props => {
                 </div>
                 <div
                     className={cls('dashboard-item__select', {
-                        'd-none': matchTablet,
+                        'd-none': matchTablet || item?.attributes?.deletable === false,
                     })}
                     onClick={e => e?.stopPropagation()}
                 >
