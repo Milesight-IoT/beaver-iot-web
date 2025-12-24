@@ -56,25 +56,8 @@ const severityConfigs: SeverityConfig[] = [
     },
 ];
 
-// TODO: Remove mock data
-const mockBuildingInfo: ToiletBuildingProps = {
-    key: 'A101',
-    name: 'Building 101',
-    basicInfo: {
-        buildingToiletType: 'MALE',
-        totalToiletCount: 120,
-        standardToiletCount: 118,
-        disabilityToiletCount: 8,
-    },
-};
-
 const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
-    const {
-        buildingInfo = mockBuildingInfo,
-        actionCanvasId,
-        standardIdleEntity,
-        disabilityIdleEntity,
-    } = config || {};
+    const { buildingInfo, actionCanvasId, standardIdleEntity, disabilityIdleEntity } = config || {};
     const { name: buildingName, basicInfo: buildingBasicInfo } = buildingInfo || {};
     const { getIntlText } = useI18n();
 
@@ -210,7 +193,7 @@ const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
                                     {isNil(standardIdle) ? '-' : standardIdle}
                                 </span>
                                 <span className="total">
-                                    /{buildingBasicInfo?.standardToiletCount}
+                                    /{buildingBasicInfo?.standardToiletCount || '-'}
                                 </span>
                             </span>
                         )}
@@ -232,7 +215,7 @@ const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
                                     {isNil(disabilityIdle) ? '-' : disabilityIdle}
                                 </span>
                                 <span className="total">
-                                    /{buildingBasicInfo?.disabilityToiletCount}
+                                    /{buildingBasicInfo?.disabilityToiletCount || '-'}
                                 </span>
                             </span>
                         )}

@@ -42,29 +42,13 @@ const severityConfigs: SeverityConfig[] = [
     },
 ];
 
-const getRatioString = (num: number, total: number) => {
-    if (total === 0) return '0%';
+const getRatioString = (num: number, total?: number) => {
+    if (total === 0 || !total) return '0%';
     return `${((num / total) * 100).toFixed(0)}%`;
 };
 
-// TODO: Remove mock data
-const mockBuildingInfo: ToiletBuildingProps = {
-    key: 'A101',
-    name: 'Building 101',
-    basicInfo: {
-        buildingToiletType: 'MALE',
-        totalToiletCount: 120,
-        standardToiletCount: 118,
-        disabilityToiletCount: 8,
-    },
-};
-
 const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
-    const {
-        buildingInfo = mockBuildingInfo,
-        standardOccupiedEntity,
-        disabilityOccupiedEntity,
-    } = config || {};
+    const { buildingInfo, standardOccupiedEntity, disabilityOccupiedEntity } = config || {};
     const { name: buildingName, basicInfo: buildingBasicInfo } = buildingInfo || {};
     const { getIntlText } = useI18n();
 
@@ -159,7 +143,7 @@ const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
                     <div className={cls('count', { 'is-placeholder': isNil(occupiedCount) })}>
                         {isNil(occupiedCount)
                             ? getIntlText('dashboard.placeholder.unbound_entity')
-                            : getRatioString(occupiedCount, buildingBasicInfo.totalToiletCount)}
+                            : getRatioString(occupiedCount, buildingBasicInfo?.totalToiletCount)}
                     </div>
                 </div>
             </div>
