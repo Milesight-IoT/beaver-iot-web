@@ -6,7 +6,7 @@ import { useMemoizedFn, useDebounceFn } from 'ahooks';
 
 import { useStoreShallow } from '@milesight/shared/src/hooks';
 
-import { ImageMarker, type Marker } from '@/components';
+import { ImageMarker, type Marker, Tooltip } from '@/components';
 import useControlPanelStore from '@/components/drawing-board/plugin/store';
 import { type EntityAPISchema, type DeviceStatus } from '@/services/http';
 import svg120 from './assets/120.svg';
@@ -159,6 +159,10 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
         (device: MarkerNotificationProps, extraInfo?: MarkerExtraInfoProps) => {
             const batteryId = get(extraInfo?.entityKeyToId, String(device?.battery));
             const batteryVal = get(entitiesStatus, String(batteryId))?.value;
+            const type = get(entitiesStatus, String(batteryId))?.value_type;
+            if (type !== 'LONG') {
+                return '-';
+            }
 
             return batteryVal || '-';
         },
@@ -231,7 +235,7 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                                                         ? 'var(--green-base)'
                                                         : statusVal === 'Offline'
                                                           ? 'var(--orange-base)'
-                                                          : '-',
+                                                          : undefined,
                                             }}
                                         >
                                             {statusVal}
@@ -272,7 +276,12 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                                                 }}
                                             >
                                                 <Box sx={{ flex: '50%' }}>Status: {s}</Box>
-                                                <Box sx={{ flex: '50%' }}>Battery: {b}%</Box>
+                                                <Box sx={{ flex: '50%', width: 0 }}>
+                                                    <Tooltip
+                                                        autoEllipsis
+                                                        title={`Battery: ${b}%`}
+                                                    />
+                                                </Box>
                                             </Box>
                                         </Box>
                                     );
