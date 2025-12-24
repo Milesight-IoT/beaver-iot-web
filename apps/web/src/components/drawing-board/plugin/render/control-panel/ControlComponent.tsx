@@ -21,6 +21,8 @@ import {
     ChartMetricsSelect,
     MultiDeviceSelect,
     AlarmTimeSelect,
+    MarkerDrawer,
+    ToiletBindEntities,
     ChartMarkLine,
 } from '../../components';
 
@@ -148,6 +150,10 @@ const ControlComponent: React.FC<ControlComponentProps> = (props: ControlCompone
                     {...config?.componentProps}
                 />
             );
+        case 'MarkerDrawer':
+            return <MarkerDrawer {...commonProps} {...config?.componentProps} />;
+        case 'ToiletBindEntities':
+            return <ToiletBindEntities {...commonProps} {...config?.componentProps} />;
         case 'ChartMarkLine':
             return <ChartMarkLine {...omit(commonProps, ['label'])} {...config?.componentProps} />;
         default:

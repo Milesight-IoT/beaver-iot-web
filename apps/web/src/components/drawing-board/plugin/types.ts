@@ -13,6 +13,8 @@ import {
     type ChartMetricsSelectProps,
     type SingleEntitySelectProps,
     type MultiDeviceSelectProps,
+    type MarkerDrawerProps,
+    type ToiletBindEntitiesProps,
     type ChartMarkLineProps,
 } from './components';
 import { COMPONENT_CLASS } from './constant';
@@ -33,6 +35,8 @@ export type ControlType =
     | 'ChartMetricsSelect'
     | 'MultiDeviceSelect'
     | 'AlarmTimeSelect'
+    | 'MarkerDrawer'
+    | 'ToiletBindEntities'
     | 'ChartMarkLine';
 
 export type ControlTypePropsMap = {
@@ -49,6 +53,8 @@ export type ControlTypePropsMap = {
     ChartMetricsSelect: Partial<ChartMetricsSelectProps>;
     MultiDeviceSelect: MultiDeviceSelectProps;
     AlarmTimeSelect: Partial<PluginSelectProps>;
+    MarkerDrawer: MarkerDrawerProps;
+    ToiletBindEntities: ToiletBindEntitiesProps;
 };
 
 // Check the completeness of ControlTypePropsMap
@@ -120,6 +126,7 @@ export type PluginType =
     | 'deviceList'
     | 'map'
     | 'alarm'
+    | 'occupancyMarker'
     | 'buildingToiletCard'
     | 'buildingToiletStatusCard'
     | 'toiletOccupancy';
@@ -233,5 +240,15 @@ export interface ToiletBuildingProps {
         standardToiletCount: number;
         /** Disability Toilet Count */
         disabilityToiletCount: number;
+        /** Toilet Building Layout */
+        toiletsLayout: 'LAYOUT_120' | 'LAYOUT_120_SPECIAL' | 'LAYOUT_136';
     };
+    toilets?: {
+        /** Toilet id */
+        id: string;
+        /** Toilet number */
+        number: string;
+        /** Toilet Type */
+        type?: 'STANDARD' | 'DISABILITY';
+    }[];
 }

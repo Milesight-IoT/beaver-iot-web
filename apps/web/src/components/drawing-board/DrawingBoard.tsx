@@ -1,6 +1,6 @@
 import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import cls from 'classnames';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, isNil } from 'lodash-es';
 import { useInterval } from 'ahooks';
 import { List } from '@mui/material';
 
@@ -130,7 +130,6 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
     return (
         <DrawingBoardContext.Provider value={drawingBoardContext}>
             <div className="drawing-board">
-                {/* @ts-ignore TODO: fix type when merged */}
                 {!!drawingBoardDetail.attributes?.show_extra && (
                     <div className="drawing-board__header">
                         <span className="title">{drawingBoardDetail.name}</span>
@@ -139,7 +138,13 @@ const DrawingBoard = forwardRef<DrawingBoardExpose, DrawingBoardProps>((props, r
                 )}
 
                 <div ref={drawingBoardRef} className="drawing-board__wrapper ms-perfect-scrollbar">
-                    <div className="drawing-board__container">{renderDrawingBoard()}</div>
+                    <div
+                        className={cls('drawing-board__container', {
+                            'remove-max-width': !isNil(drawingBoardDetail?.attributes?.fullscreen),
+                        })}
+                    >
+                        {renderDrawingBoard()}
+                    </div>
                 </div>
 
                 {!!operatingPlugin && (

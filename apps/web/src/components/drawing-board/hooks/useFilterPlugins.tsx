@@ -38,7 +38,18 @@ export default function useFilterPlugins(
         // }
 
         return pluginsControlPanel.filter(
-            p => !(['deviceList', 'alarm', 'map'] as PluginType[]).includes(p.type),
+            p =>
+                !(
+                    [
+                        'deviceList',
+                        'alarm',
+                        'map',
+                        'buildingToiletCard',
+                        'buildingToiletStatusCard',
+                        'occupancyMarker',
+                        'toiletOccupancy',
+                    ] as PluginType[]
+                ).includes(p.type),
         );
     }, [pluginsControlPanel]);
 

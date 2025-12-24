@@ -1,6 +1,7 @@
 import { Grid2 as Grid } from '@mui/material';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { WidgetDetail } from '@/services/http/dashboard';
+import { Tooltip } from '@/components';
 import pluginImg from '@/assets/plugin.png';
 import { useFilterPlugins } from '../../hooks';
 import type { BoardPluginProps, PluginType } from '../../plugin/types';
@@ -50,7 +51,13 @@ export default (props: PluginListProps) => {
                                         src={pluginConfig?.icon || pluginImg}
                                         alt="plugin"
                                     />
-                                    <span>{getIntlText(pluginConfig.name)}</span>
+                                    <Tooltip
+                                        sx={{
+                                            padding: '0 4px',
+                                        }}
+                                        autoEllipsis
+                                        title={getIntlText(pluginConfig.name)}
+                                    />
                                 </div>
                             </Grid>
                         );

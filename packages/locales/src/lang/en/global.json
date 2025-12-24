@@ -73,6 +73,7 @@
     "common.label.detail": "Detail",
     "common.label.device": "Device",
     "common.label.download": "Download",
+    "common.label.template": "Template",
     "common.label.download_template": "Download Template",
     "common.label.edit_title": "Edit {1}",
     "common.label.editor": "Editor",
@@ -321,5 +322,10 @@
     "valid.input.username": "Minimum username length is 5.",
     "valid.input.value": "Input value: {0} only.",
     "valid.input.version": "The version number does not comply with the specification.",
-    "valid.resp.at_least_one": "Please select at least one {1}."
+    "valid.resp.at_least_one": "Please select at least one {1}.",
+    "common.label.woman": "Woman",
+    "common.label.man": "Man",
+    "common.label.notification": "Notification",
+    "common.label.occupied": "Occupied",
+    "common.label.vacant": "Vacant"
 }

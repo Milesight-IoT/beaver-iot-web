@@ -1,0 +1,88 @@
+.occupancy-marker-view {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: @padding-md;
+    background-color: var(--main-background);
+    border-radius: @border-radius-base;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        margin-bottom: @margin-md;
+
+        .gender-wrapper {
+            display: flex;
+            align-items: center;
+            padding: @padding-xxs;
+            margin-right: @margin-xs;
+            color: var(--white);
+            background-color: #ec407a;
+            border-radius: @border-radius-base;
+
+            &.male {
+                background-color: var(--blue-base);
+            }
+
+            &__text {
+                padding-left: @padding-xxs;
+                font-weight: @font-weight-bold;
+                .text-size(@font-size-base);
+            }
+        }
+
+        .title {
+            flex: 1;
+            width: 0;
+        }
+
+        .building-info-statistics {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-left: @margin-xl;
+
+            .item {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+
+                &__block {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 20px;
+                    height: 20px;
+                    color: var(--white);
+                    border-radius: @border-radius-xs;
+
+                    &.occupied {
+                        background-color: var(--red-base);
+                    }
+
+                    &.unoccupied {
+                        background-color: var(--green-base);
+                    }
+
+                    &.offline {
+                        background-color: var(--gray-4);
+                    }
+                }
+
+                &__text {
+                    font-weight: @font-weight-medium;
+                    .text-size(@font-size-base);
+                }
+            }
+        }
+    }
+
+    &__body {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+    }
+}
