@@ -44,22 +44,27 @@ export const useYAxisRange = ({ entity, newChartShowData }: IProps) => {
 
             let min = entityValueAttribute?.min;
             let max = entityValueAttribute?.max;
+            const numberValues = (entityValues || [])
+                .map(entityValue => {
+                    if (isLikeNumber(entityValue!)) {
+                        return +entityValue!;
+                    }
+                    return null;
+                })
+                .filter(item => item !== null);
 
-            (entityValues || []).forEach(entityValue => {
-                if (isLikeNumber(entityValue!)) {
-                    const value = +entityValue!;
-
-                    min = Math.min(min ?? Math.floor(value * 0.8), value);
-                    max = Math.max(max ?? Math.ceil(value * 1.2), value);
-                }
-            });
-
-            const newMin = minFun([min, result[resultIndex]?.min]);
-            const newMax = maxFun([max, result[resultIndex]?.max]);
+            if (numberValues.length) {
+                min = Math.floor((minFun(numberValues) as number) * 0.8);
+                max = Math.ceil((maxFun(numberValues) as number) * 1.2);
+            }
+            min = minFun([min, result[resultIndex]?.min]);
+            max = maxFun([max, result[resultIndex]?.max]);
+            const currentMin = min ?? MIN;
+            const currentMax = max ?? MAX;
             result[resultIndex] = {
-                min: newMin ?? MIN,
-                max: newMax ?? MAX,
-                interval: ((newMax ?? MAX) - (newMin ?? MIN)) / SPLIT_NUMBER,
+                min: currentMin,
+                max: currentMax,
+                interval: (currentMax - currentMin) / SPLIT_NUMBER,
             };
         });
 
