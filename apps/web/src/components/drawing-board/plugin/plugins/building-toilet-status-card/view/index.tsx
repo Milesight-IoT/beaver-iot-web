@@ -26,7 +26,7 @@ export interface ViewProps {
 type SeverityType = 'normal' | 'warning' | 'alarm';
 type SeverityConfig = { type: SeverityType; desc?: string[] };
 
-const severityThresholds = [0.5, 0.8, 1];
+const severityThresholds = [0.5, 0.8, Infinity];
 const severityConfigs: SeverityConfig[] = [
     {
         type: 'normal',
@@ -43,9 +43,22 @@ const severityConfigs: SeverityConfig[] = [
 ];
 
 const getRatioString = (num: number, total?: number) => {
-    if (total === 0 || !total) return '0%';
+    if (isNil(total)) return '-';
     return `${((num / total) * 100).toFixed(0)}%`;
 };
+
+// Mock data
+// const mockBuildingInfo: ToiletBuildingProps = {
+//     key: 'A101',
+//     name: 'Building 101',
+//     basicInfo: {
+//         toiletsLayout: 'LAYOUT_120',
+//         buildingToiletType: 'MALE',
+//         totalToiletCount: 120,
+//         standardToiletCount: 118,
+//         disabilityToiletCount: 8,
+//     },
+// };
 
 const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
     const { buildingInfo, standardOccupiedEntity, disabilityOccupiedEntity } = config || {};

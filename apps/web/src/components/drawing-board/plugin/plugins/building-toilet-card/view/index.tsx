@@ -35,7 +35,7 @@ export interface ViewProps {
 type SeverityType = 'normal' | 'warning' | 'alarm';
 type SeverityConfig = { type: SeverityType; icon: React.ReactNode };
 
-const severityThresholds = [0.5, 0.8, 1];
+const severityThresholds = [0.5, 0.8, Infinity];
 const severityConfigs: SeverityConfig[] = [
     {
         type: 'normal',
@@ -55,6 +55,19 @@ const severityConfigs: SeverityConfig[] = [
         ),
     },
 ];
+
+// Mock data
+// const mockBuildingInfo: ToiletBuildingProps = {
+//     key: 'A101',
+//     name: 'Building 101',
+//     basicInfo: {
+//         toiletsLayout: 'LAYOUT_120',
+//         buildingToiletType: 'MALE',
+//         totalToiletCount: 120,
+//         standardToiletCount: 118,
+//         disabilityToiletCount: 8,
+//     },
+// };
 
 const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
     const { buildingInfo, actionCanvasId, standardIdleEntity, disabilityIdleEntity } = config || {};
@@ -168,7 +181,7 @@ const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
                 <div className="detail">
                     <span className="count">
                         <ToiletCapacityIcon />
-                        {buildingBasicInfo?.totalToiletCount}
+                        {buildingBasicInfo?.totalToiletCount || '-'}
                     </span>
                 </div>
             </div>
