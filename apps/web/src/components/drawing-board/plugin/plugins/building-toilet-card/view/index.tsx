@@ -22,7 +22,7 @@ import './style.less';
 export interface ViewProps {
     widgetId: ApiKey;
     dashboardId: ApiKey;
-    // isEdit: boolean;
+    isEdit: boolean;
     config: {
         actionCanvasId?: ApiKey;
         buildingInfo?: ToiletBuildingProps;
@@ -69,7 +69,7 @@ const severityConfigs: SeverityConfig[] = [
 //     },
 // };
 
-const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
+const View = ({ config, configJson, isEdit, widgetId, dashboardId }: ViewProps) => {
     const { buildingInfo, actionCanvasId, standardIdleEntity, disabilityIdleEntity } = config || {};
     const { name: buildingName, basicInfo: buildingBasicInfo } = buildingInfo || {};
     const { getIntlText } = useI18n();
@@ -159,7 +159,7 @@ const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
     // ========== Interaction ==========
     const { navigateToCanvas } = useDashboardStore();
     const handleNavigate = () => {
-        if (!actionCanvasId || configJson?.isPreview) return;
+        if (isEdit || !actionCanvasId || configJson?.isPreview) return;
         navigateToCanvas({ id: actionCanvasId });
     };
 
