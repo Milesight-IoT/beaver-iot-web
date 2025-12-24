@@ -55,6 +55,7 @@ const DrawingBoardDetail: React.FC<DashboardDetailProps> = props => {
     return (
         <div className="ms-main">
             <Toolbar
+                isEdit={drawingBoardProps?.isEdit}
                 drawingBoardDetail={dashboardDetail}
                 drawingBoardOperation={renderDrawingBoardOperation}
             />

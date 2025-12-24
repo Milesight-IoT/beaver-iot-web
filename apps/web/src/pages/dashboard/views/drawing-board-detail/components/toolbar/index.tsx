@@ -13,6 +13,7 @@ import { type DrawingBoardDetail } from '@/services/http';
 import DrawingBoardPath from '../drawing-board-path';
 
 export interface ToolbarProps {
+    isEdit?: boolean;
     drawingBoardDetail?: DrawingBoardDetail;
     drawingBoardOperation: () => JSX.Element;
 }
@@ -21,7 +22,7 @@ export interface ToolbarProps {
  * Dashboard detail toolbar
  */
 const Toolbar: React.FC<ToolbarProps> = props => {
-    const { drawingBoardDetail, drawingBoardOperation } = props;
+    const { isEdit, drawingBoardDetail, drawingBoardOperation } = props;
 
     const { getIntlText } = useI18n();
     const navigate = useNavigate();
@@ -88,6 +89,7 @@ const Toolbar: React.FC<ToolbarProps> = props => {
                     }}
                 />
                 <DrawingBoardPath
+                    disabled={isEdit}
                     className={cls({
                         'd-none': matchTablet,
                     })}

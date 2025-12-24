@@ -34,6 +34,16 @@
         transition: color 0.2s;
         .text-size(@font-size-4);
 
+        &.disabled {
+            color: var(--text-color-secondary);
+            cursor: default;
+
+            &:hover {
+                color: var(--text-color-secondary);
+                background-color: transparent;
+            }
+        }
+
         &:hover {
             color: var(--text-color-primary);
             background-color: var(--hover-background-1);
