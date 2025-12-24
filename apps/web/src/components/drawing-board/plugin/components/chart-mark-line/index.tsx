@@ -45,7 +45,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
 }) => {
     const { getIntlText } = useI18n();
     const [data, setData] = useControllableValue<ChartMarkLineValueType[]>(props);
-    const [showContent, setShowContent] = useState(Boolean(data?.length));
+    const [showContent, setShowContent] = useState(false);
     const { list, remove, getKey, insert, replace, resetList } =
         useDynamicList<ChartMarkLineValueType>(data);
 
@@ -65,6 +65,10 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
     useEffect(() => {
         setData?.(list.filter(item => Boolean(item.id)));
     }, [list, setData]);
+
+    useEffect(() => {
+        setShowContent(Boolean(data?.length));
+    }, []);
 
     const defaultMarkLine = {
         id: Date.now().toString(),

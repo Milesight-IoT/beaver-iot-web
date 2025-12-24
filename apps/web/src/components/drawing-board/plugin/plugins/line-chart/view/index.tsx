@@ -116,15 +116,8 @@ function renderMarkLineTooltip(markLineSeries: any[]) {
                     >
                         <div>
                             <span
-                                style={{
-                                    display: 'inline-block',
-                                    marginRight: 4,
-                                    marginBottom: 2,
-                                    borderRadius: 1,
-                                    width: 8,
-                                    height: 4,
-                                    backgroundColor: series?.itemStyle?.color,
-                                }}
+                                className={styles['mark-line-tooltip-icon']}
+                                style={{ backgroundColor: series?.itemStyle?.color }}
                             />
                             <span>{series?.name || ''}：</span>
                         </div>
