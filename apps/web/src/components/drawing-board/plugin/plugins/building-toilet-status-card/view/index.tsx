@@ -44,6 +44,8 @@ const severityConfigs: SeverityConfig[] = [
 
 const getRatioString = (num: number, total?: number) => {
     if (isNil(total)) return '-';
+
+    num = Math.max(0, Math.min(num, total));
     return `${((num / total) * 100).toFixed(0)}%`;
 };
 
