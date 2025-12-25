@@ -14,7 +14,7 @@ import svg136 from './assets/136.svg';
 import svg120B104 from './assets/120_B104.svg';
 import { type MarkerExtraInfoProps, MarkerNotificationProps } from '../control-panel';
 import { type ToiletBuildingProps } from '../../../types';
-import { ACTIVE_COLOR, PLAIN_COLOR, OFFLINE_COLOR } from './useData';
+import { ACTIVE_BORDER, PLAIN_COLOR, PLAIN_BORDER } from './useData';
 
 export interface OccupiedMarkerProps {
     isPreview?: boolean;
@@ -68,9 +68,9 @@ const OccupiedMarker: React.FC<OccupiedMarkerProps> = props => {
                     ...item.style,
                     border:
                         item.id === marker.id
-                            ? `2px solid ${ACTIVE_COLOR}`
+                            ? ACTIVE_BORDER
                             : item?.style?.backgroundColor === PLAIN_COLOR
-                              ? `1px solid ${OFFLINE_COLOR}`
+                              ? PLAIN_BORDER
                               : undefined,
                 },
             })),

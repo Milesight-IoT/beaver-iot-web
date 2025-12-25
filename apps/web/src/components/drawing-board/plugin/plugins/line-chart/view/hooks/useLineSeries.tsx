@@ -127,45 +127,47 @@ export function useLineSeries(props: UseLineSeriesProps) {
             const { isBigData, resultColor, matchTablet, xAxisMin, xAxisMax } = config;
             if (!Array.isArray(newChartShowData)) return [];
 
-            const lineSeries = newChartShowData.map((chart, index) => {
-                // Determine yAxisIndex based on chart count and yAxisID
-                const yAxisIndex =
-                    newChartShowData.length < 2
-                        ? LEFT_Y_AXIS_INDEX
-                        : chart.yAxisID === 'y1'
-                          ? RIGHT_Y_AXIS_INDEX
-                          : LEFT_Y_AXIS_INDEX;
-                const color = resultColor[index];
-                const isBigDataTrue = isBigData?.[index];
+            const lineSeries = newChartShowData
+                .map((chart, index) => {
+                    // Determine yAxisIndex based on chart count and yAxisID
+                    const yAxisIndex =
+                        newChartShowData.length < 2
+                            ? LEFT_Y_AXIS_INDEX
+                            : chart.yAxisID === 'y1'
+                              ? RIGHT_Y_AXIS_INDEX
+                              : LEFT_Y_AXIS_INDEX;
+                    const color = resultColor[index];
+                    const isBigDataTrue = isBigData?.[index];
 
-                return {
-                    sampling: isBigDataTrue ? 'lttb' : 'none',
-                    name: chart.entityLabel,
-                    type: 'line',
-                    data: chart.chartOwnData.map(v => [v.timestamp, v.value]),
-                    yAxisIndex,
-                    lineStyle: {
-                        color, // Line color
-                        width: 2, // The thickness of the line
-                    },
-                    itemStyle: {
-                        color, // Data dot color
-                    },
-                    connectNulls: true,
-                    showSymbol: !isBigDataTrue, // Whether to display data dots
-                    symbolSize: 2, // Data dot size
-                    emphasis: {
-                        disabled: matchTablet,
-                        focus: 'series',
-                        scale: 4,
-                        itemStyle: {
-                            borderColor: color,
-                            borderWidth: 0, // Set it to 0 to make the dot solid when hovering
-                            color, // Make sure the color is consistent with the lines
+                    return {
+                        sampling: isBigDataTrue ? 'lttb' : 'none',
+                        name: chart.entityLabel,
+                        type: 'line',
+                        data: chart.chartOwnData.map(v => [v.timestamp, v.value]),
+                        yAxisIndex,
+                        lineStyle: {
+                            color, // Line color
+                            width: 2, // The thickness of the line
                         },
-                    },
-                };
-            });
+                        itemStyle: {
+                            color, // Data dot color
+                        },
+                        connectNulls: true,
+                        showSymbol: !isBigDataTrue, // Whether to display data dots
+                        symbolSize: 2, // Data dot size
+                        emphasis: {
+                            disabled: matchTablet,
+                            focus: 'series',
+                            scale: 4,
+                            itemStyle: {
+                                borderColor: color,
+                                borderWidth: 0, // Set it to 0 to make the dot solid when hovering
+                                color, // Make sure the color is consistent with the lines
+                            },
+                        },
+                    };
+                })
+                .sort((a, b) => a.yAxisIndex - b.yAxisIndex);
 
             // Insert left Y-axis markLines
             insertMarkLines(lineSeries, leftYAxisMarkLine, {

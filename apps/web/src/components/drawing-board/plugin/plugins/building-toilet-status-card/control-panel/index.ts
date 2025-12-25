@@ -50,7 +50,7 @@ const ControlPanel = (): ControlPanelConfig<any> => {
                             componentProps: {
                                 required: true,
                                 entityType: ['PROPERTY'],
-                                entityValueType: ['STRING', 'LONG', 'DOUBLE', 'BOOLEAN'],
+                                entityValueType: ['LONG'],
                                 entityAccessMod: ['RW'],
                             },
                         },
