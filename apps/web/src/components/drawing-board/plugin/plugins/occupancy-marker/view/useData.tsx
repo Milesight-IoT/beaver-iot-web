@@ -19,6 +19,8 @@ export const UNOCCUPIED_COLOR = '#1eba62';
 export const OFFLINE_COLOR = '#c9cdd4';
 export const PLAIN_COLOR = 'transparent';
 export const ACTIVE_COLOR = '#8e66ff';
+export const PLAIN_BORDER = `1px solid ${OFFLINE_COLOR}`;
+export const ACTIVE_BORDER = `2px solid ${ACTIVE_COLOR}`;
 
 /**
  * Handle marker data
@@ -56,7 +58,7 @@ export function useData(props: {
                 height: 16,
                 borderRadius: 2,
                 backgroundColor: PLAIN_COLOR,
-                border: `1px solid ${OFFLINE_COLOR}`,
+                border: PLAIN_BORDER,
             },
         }));
 
@@ -97,6 +99,22 @@ export function useData(props: {
                 return PLAIN_COLOR;
             }
 
+            function getBorder(marker: Marker, newBg: string) {
+                const cb = newBg === PLAIN_COLOR ? PLAIN_BORDER : undefined;
+
+                const currentBorder = marker.style?.border;
+                if (!currentBorder) {
+                    return cb;
+                }
+
+                const isActive = currentBorder.includes(ACTIVE_COLOR);
+                if (isActive) {
+                    return ACTIVE_BORDER;
+                }
+
+                return cb;
+            }
+
             setMarkers(prevMarkers =>
                 prevMarkers.map(item => {
                     const newBg = getBg(item.id);
@@ -106,8 +124,7 @@ export function useData(props: {
                         style: {
                             ...item.style,
                             backgroundColor: newBg,
-                            border:
-                                newBg === PLAIN_COLOR ? `1px solid ${OFFLINE_COLOR}` : undefined,
+                            border: getBorder(item, newBg),
                         },
                         content:
                             item?.id?.includes?.(DISABILITY_SIGN) &&
@@ -148,9 +165,7 @@ export function useData(props: {
                     style: {
                         ...item.style,
                         border:
-                            item?.style?.backgroundColor === PLAIN_COLOR
-                                ? `1px solid ${OFFLINE_COLOR}`
-                                : undefined,
+                            item?.style?.backgroundColor === PLAIN_COLOR ? PLAIN_BORDER : undefined,
                     },
                 })),
             );
