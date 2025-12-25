@@ -54,8 +54,8 @@ export const useYAxisRange = ({ entity, newChartShowData }: IProps) => {
                 .filter(item => item !== null);
 
             if (numberValues.length) {
-                min = Math.floor((minFun(numberValues) as number) * 0.8);
-                max = Math.ceil((maxFun(numberValues) as number) * 1.2);
+                min = Math.floor((minFun(numberValues) as number) * 0.9);
+                max = Math.ceil((maxFun(numberValues) as number) * 1.1);
             }
             min = minFun([min, result[resultIndex]?.min]);
             max = maxFun([max, result[resultIndex]?.max]);
