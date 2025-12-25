@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash-es';
 
 import { toast } from '@milesight/shared/src/components';
 import { useI18n, useStoreShallow } from '@milesight/shared/src/hooks';
-import { linkDownload, objectToCamelCase } from '@milesight/shared/src/utils/tools';
+import { linkDownload } from '@milesight/shared/src/utils/tools';
 
 import { type FileValueType } from '@/components';
 import useControlPanelStore from '@/components/drawing-board/plugin/store';
@@ -43,7 +43,14 @@ export function useBatchBind(
             return;
         }
 
-        const successItems: MarkerExtraInfoProps[] = objectToCamelCase(successData?.items || []);
+        const successItems: MarkerExtraInfoProps[] = (successData?.items || []).map(s => ({
+            toiletId: s.toilet_id,
+            toiletNumber: s.toilet_number,
+            occupiedState: s.occupied_state,
+            deviceStatus: s.device_status,
+            notification: s.notification,
+            entityKeyToId: s.entity_key_to_id,
+        }));
         const successKeys = successItems.map(item => item?.toiletId).filter(Boolean);
         if (!Array.isArray(successKeys) || isEmpty(successKeys)) {
             return;

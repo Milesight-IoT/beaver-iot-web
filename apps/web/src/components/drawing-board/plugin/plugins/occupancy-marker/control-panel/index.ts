@@ -1,7 +1,3 @@
-import { isEmpty } from 'lodash-es';
-
-import { t } from '@milesight/shared/src/utils/tools';
-
 import type {
     ControlPanelConfig,
     ToiletBuildingProps,
