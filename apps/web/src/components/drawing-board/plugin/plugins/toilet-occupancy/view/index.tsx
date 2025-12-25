@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useI18n } from '@milesight/shared/src/hooks';
 import { isNil } from 'lodash-es';
+import { t } from '@milesight/shared/src/utils/tools';
 
 import { Select } from '@milesight/shared/src/components';
 import { EchartsUI, useEcharts } from '@/components/echarts';
@@ -82,7 +83,7 @@ const DEFAULT_LABEL_CONFIG = {
                 showLabel = `${Math.round(params.percent ?? 0)}%`;
                 break;
             case CHART_DATA_NAME.unboundEntity:
-                showLabel = 'Unbound entity';
+                showLabel = t('dashboard.placeholder.unbound_entity');
                 break;
             case CHART_DATA_NAME.nonData:
                 showLabel = '-';
