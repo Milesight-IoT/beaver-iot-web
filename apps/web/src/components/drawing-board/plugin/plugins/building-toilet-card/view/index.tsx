@@ -64,7 +64,7 @@ const severityConfigs: SeverityConfig[] = [
 //         toiletsLayout: 'LAYOUT_120',
 //         buildingToiletType: 'MALE',
 //         totalToiletCount: 120,
-//         standardToiletCount: 118,
+//         standardToiletCount: 112,
 //         disabilityToiletCount: 8,
 //     },
 // };
@@ -112,14 +112,16 @@ const View = ({ config, configJson, isEdit, widgetId, dashboardId }: ViewProps) 
         if (!buildingBasicInfo) return result;
         if (!isNil(standardIdle)) {
             const standardTotal = buildingBasicInfo.standardToiletCount;
-            const standardRatio = (standardTotal - standardIdle) / standardTotal;
+            const standardRatio = +((standardTotal - standardIdle) / standardTotal).toFixed(2);
             const index = severityThresholds.findIndex(threshold => standardRatio <= threshold);
             result.standard = severityConfigs[index];
         }
 
         if (!isNil(disabilityIdle)) {
             const disabilityTotal = buildingBasicInfo.disabilityToiletCount;
-            const disabilityRatio = (disabilityTotal - disabilityIdle) / disabilityTotal;
+            const disabilityRatio = +((disabilityTotal - disabilityIdle) / disabilityTotal).toFixed(
+                2,
+            );
             const index = severityThresholds.findIndex(threshold => disabilityRatio <= threshold);
             result.disability = severityConfigs[index];
         }
