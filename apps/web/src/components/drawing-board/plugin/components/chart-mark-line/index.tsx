@@ -98,9 +98,14 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
         setData?.(list.filter(item => Boolean(item.id)));
     }, [list, setData]);
 
+    // When data has value, show content by default. When data is empty, do nothing
+    // and only allow manual interaction, because the add button will be displayed even when empty
     useEffect(() => {
-        setShowContent(Boolean(data?.length));
-    }, []);
+        if (!data?.length) {
+            return;
+        }
+        setShowContent(true);
+    }, [data]);
 
     const defaultMarkLine = {
         id: Date.now().toString(),
