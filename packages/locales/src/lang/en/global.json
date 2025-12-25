@@ -327,5 +327,6 @@
     "common.label.man": "Man",
     "common.label.notification": "Notification",
     "common.label.occupied": "Occupied",
-    "common.label.vacant": "Vacant"
+    "common.label.vacant": "Vacant",
+    "valid.input.legal_value": "Please enter a legal value."
 }
