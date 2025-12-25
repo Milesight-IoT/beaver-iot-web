@@ -129,67 +129,7 @@ const View = (props: Props) => {
         config,
     });
     const selectOptions = useMemo(() => {
-        const demo = [
-            {
-                name: 'Building 102',
-                key: 'b102',
-                basicInfo: {
-                    totalToiletCount: 136,
-                    standardToiletCount: 128,
-                    disabilityToiletCount: 8,
-                    buildingToiletType: 'FEMALE',
-                },
-            },
-            {
-                name: 'Building 103',
-                key: 'b103',
-                basicInfo: {
-                    totalToiletCount: 136,
-                    standardToiletCount: 128,
-                    disabilityToiletCount: 8,
-                    buildingToiletType: 'FEMALE',
-                },
-            },
-            {
-                name: 'Building 104',
-                key: 'b104',
-                basicInfo: {
-                    totalToiletCount: 120,
-                    standardToiletCount: 112,
-                    disabilityToiletCount: 8,
-                    buildingToiletType: 'MALE',
-                },
-            },
-            {
-                name: 'Building 105',
-                key: 'b105',
-            },
-            {
-                name: 'Building 106',
-                key: 'b106',
-            },
-            {
-                name: 'Building 109',
-                key: 'b109',
-            },
-            {
-                name: 'Building 110',
-                key: 'b110',
-            },
-            {
-                name: 'Building 111',
-                key: 'b111',
-            },
-            {
-                name: 'Building 112',
-                key: 'b112',
-            },
-            {
-                name: 'Building 113',
-                key: 'b113',
-            },
-        ];
-        const buildings = stableBuildingInfos || demo;
+        const buildings = stableBuildingInfos || [];
         // Create a new array with "All Buildings" at the beginning
         const selectOptions = [
             {
