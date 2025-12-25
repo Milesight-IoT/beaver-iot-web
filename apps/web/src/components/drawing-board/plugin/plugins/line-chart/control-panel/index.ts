@@ -98,25 +98,35 @@ const axisMarkLineSetValue = (
 };
 
 // Check mark line value is in -999999 to 999999
-const checkMarkLineValue = (value: ChartMarkLineValueType[]) => {
-    if (!value || value.length === 0) {
+const checkMarkLineValue = (valueList: ChartMarkLineValueType[]) => {
+    if (!valueList || valueList.length === 0) {
         return true;
     }
     const min = -999999;
     const max = 999999;
-    for (const item of value) {
-        const val = item.value;
-        if (val && !isRangeValue(val as number, min, max)) {
-            const message =
-                t('common.label.scale') +
-                t('valid.input.range_value', {
-                    0: min,
-                    1: max,
-                });
-            return message;
+    let message = '';
+    valueList.some((item, index) => {
+        const { label = '', value: markLineValue } = item;
+        if (label.trim() === '') {
+            message = `label__${index}__${t('valid.input.required')}`;
+            return true;
         }
-    }
-    return true;
+        if (label.length > 35) {
+            message = `label__${index}__${t('valid.input.max_length', { 1: 35 })}`;
+            return true;
+        }
+        if (isNil(markLineValue) || markLineValue === '') {
+            message = `value__${index}__${t('valid.input.required')}`;
+            return true;
+        }
+
+        if (!isRangeValue(markLineValue as number, min, max)) {
+            message = `value__${index}__${t('valid.input.legal_value')}`;
+            return true;
+        }
+        return false;
+    });
+    return message || true;
 };
 
 /**
