@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { Button, IconButton, FormHelperText, TextField, Checkbox } from '@mui/material';
 import { isEqual } from 'lodash-es';
 import { useDynamicList, useControllableValue } from 'ahooks';
@@ -27,6 +27,12 @@ export interface ChartMarkLineProps {
     onChange?: (value: ChartMarkLineValueType[]) => void;
 }
 
+interface ChartMarkLineErrorInfo {
+    label: Record<string, string>;
+    value: Record<string, string>;
+    message: string;
+}
+
 const MAX_VALUE_LENGTH = 3;
 
 const DEFAULT_COLORS = ['#F13535', '#F77234', '#F7BA1E'];
@@ -48,6 +54,32 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
     const [showContent, setShowContent] = useState(false);
     const { list, remove, getKey, insert, replace, resetList } =
         useDynamicList<ChartMarkLineValueType>(data);
+    const errorInfo = useMemo(() => {
+        const errorMap: ChartMarkLineErrorInfo = {
+            label: {},
+            value: {},
+            message: '',
+        };
+        if (!error) {
+            return errorMap;
+        }
+        const [type, index, message] = helperText?.toString().split('__') || [];
+        if (type === 'label') {
+            return {
+                label: { [index]: message },
+                value: {},
+                message,
+            };
+        }
+        if (type === 'value') {
+            return {
+                label: {},
+                value: { [index]: message },
+                message,
+            };
+        }
+        return errorMap;
+    }, [error, helperText]);
 
     useLayoutEffect(() => {
         if (
@@ -100,7 +132,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                 required={required}
                                 label={getIntlText('common.label.label')}
                                 value={item?.label || ''}
-                                slotProps={{ htmlInput: { maxLength: 35 } }}
+                                error={Boolean(errorInfo.label[index])}
                                 onChange={e => {
                                     replace(index, {
                                         ...item,
@@ -115,6 +147,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                 classes={{ root: 'input-box' }}
                                 label={getIntlText('common.label.scale')}
                                 value={item?.value || ''}
+                                error={Boolean(errorInfo.value[index])}
                                 onChange={e => {
                                     replace(index, {
                                         ...item,
@@ -133,6 +166,12 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                     replace(index, {
                                         ...item,
                                         unit: e.target.value,
+                                    });
+                                }}
+                                onBlur={e => {
+                                    replace(index, {
+                                        ...item,
+                                        unit: (e.target.value || '').trim(),
                                     });
                                 }}
                                 sx={{ width: '60px' }}
@@ -181,7 +220,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                     )}
                 </div>
             )}
-            <FormHelperText error={Boolean(error)}>{helperText}</FormHelperText>
+            <FormHelperText error={Boolean(error)}>{errorInfo.message}</FormHelperText>
         </div>
     );
 };

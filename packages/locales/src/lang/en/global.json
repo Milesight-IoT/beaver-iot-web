@@ -318,5 +318,6 @@
     "valid.input.username": "Minimum username length is 5.",
     "valid.input.value": "Input value: {0} only.",
     "valid.input.version": "The version number does not comply with the specification.",
+    "valid.input.legal_value": "Please enter a legal value.",
     "valid.resp.at_least_one": "Please select at least one {1}."
 }
