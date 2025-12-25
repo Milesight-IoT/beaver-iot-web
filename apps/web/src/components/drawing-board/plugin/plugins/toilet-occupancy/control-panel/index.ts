@@ -8,34 +8,34 @@ export interface ToiletOccupancyControlPanelConfig {
     allMenOccupiedEntity?: EntityOptionType;
     allWomenOccupiedEntity?: EntityOptionType;
     allDisabilityOccupiedEntity?: EntityOptionType;
-    // Building 102
+    // B102
     b102StandOccupiedEntity?: EntityOptionType;
     b102DisabilityOccupiedEntity?: EntityOptionType;
-    // Building 103
+    // B103
     b103StandOccupiedEntity?: EntityOptionType;
     b103DisabilityOccupiedEntity?: EntityOptionType;
-    // Building 104
+    // B104
     b104StandOccupiedEntity?: EntityOptionType;
     b104DisabilityOccupiedEntity?: EntityOptionType;
-    // Building 105
+    // B105
     b105StandOccupiedEntity?: EntityOptionType;
     b105DisabilityOccupiedEntity?: EntityOptionType;
-    // Building 106
+    // B106
     b106StandOccupiedEntity?: EntityOptionType;
     b106DisabilityOccupiedEntity?: EntityOptionType;
-    // Building 109
+    // B109
     b109StandOccupiedEntity?: EntityOptionType;
     b109DisabilityOccupiedEntity?: EntityOptionType;
-    // Building 110
+    // B110
     b110StandOccupiedEntity?: EntityOptionType;
     b110DisabilityOccupiedEntity?: EntityOptionType;
-    // Building 111
+    // B111
     b111StandOccupiedEntity?: EntityOptionType;
     b111DisabilityOccupiedEntity?: EntityOptionType;
-    // Building 112
+    // B112
     b112StandOccupiedEntity?: EntityOptionType;
     b112DisabilityOccupiedEntity?: EntityOptionType;
-    // Building 113
+    // B113
     b113StandOccupiedEntity?: EntityOptionType;
     b113DisabilityOccupiedEntity?: EntityOptionType;
 }
@@ -139,7 +139,7 @@ const toiletOccupancyControlPanelConfig =
                             entityAccessMod: ['RW'],
                         }),
                         createLine(),
-                        createGroupTitle('Building 102'),
+                        createGroupTitle('B102'),
                         createEntityConfig({
                             label: PANEL_OPTION_LABEL.women,
                             name: 'b102StandOccupiedEntity',
@@ -149,7 +149,7 @@ const toiletOccupancyControlPanelConfig =
                             name: 'b102DisabilityOccupiedEntity',
                         }),
                         createLine(),
-                        createGroupTitle('Building 103'),
+                        createGroupTitle('B103'),
                         createEntityConfig({
                             label: PANEL_OPTION_LABEL.women,
                             name: 'b103StandOccupiedEntity',
@@ -159,7 +159,7 @@ const toiletOccupancyControlPanelConfig =
                             name: 'b103DisabilityOccupiedEntity',
                         }),
                         createLine(),
-                        createGroupTitle('Building 104'),
+                        createGroupTitle('B104'),
                         createEntityConfig({
                             label: PANEL_OPTION_LABEL.men,
                             name: 'b104StandOccupiedEntity',
@@ -169,7 +169,7 @@ const toiletOccupancyControlPanelConfig =
                             name: 'b104DisabilityOccupiedEntity',
                         }),
                         createLine(),
-                        createGroupTitle('Building 105'),
+                        createGroupTitle('B105'),
                         createEntityConfig({
                             label: PANEL_OPTION_LABEL.men,
                             name: 'b105StandOccupiedEntity',
@@ -179,7 +179,7 @@ const toiletOccupancyControlPanelConfig =
                             name: 'b105DisabilityOccupiedEntity',
                         }),
                         createLine(),
-                        createGroupTitle('Building 106'),
+                        createGroupTitle('B106'),
                         createEntityConfig({
                             label: PANEL_OPTION_LABEL.men,
                             name: 'b106StandOccupiedEntity',
@@ -189,7 +189,7 @@ const toiletOccupancyControlPanelConfig =
                             name: 'b106DisabilityOccupiedEntity',
                         }),
                         createLine(),
-                        createGroupTitle('Building 109'),
+                        createGroupTitle('B109'),
                         createEntityConfig({
                             label: PANEL_OPTION_LABEL.women,
                             name: 'b109StandOccupiedEntity',
@@ -199,7 +199,7 @@ const toiletOccupancyControlPanelConfig =
                             name: 'b109DisabilityOccupiedEntity',
                         }),
                         createLine(),
-                        createGroupTitle('Building 110'),
+                        createGroupTitle('B110'),
                         createEntityConfig({
                             label: PANEL_OPTION_LABEL.women,
                             name: 'b110StandOccupiedEntity',
@@ -209,7 +209,7 @@ const toiletOccupancyControlPanelConfig =
                             name: 'b110DisabilityOccupiedEntity',
                         }),
                         createLine(),
-                        createGroupTitle('Building 111'),
+                        createGroupTitle('B111'),
                         createEntityConfig({
                             label: PANEL_OPTION_LABEL.women,
                             name: 'b111StandOccupiedEntity',
@@ -219,7 +219,7 @@ const toiletOccupancyControlPanelConfig =
                             name: 'b111DisabilityOccupiedEntity',
                         }),
                         createLine(),
-                        createGroupTitle('Building 112'),
+                        createGroupTitle('B112'),
                         createEntityConfig({
                             label: PANEL_OPTION_LABEL.men,
                             name: 'b112StandOccupiedEntity',
@@ -229,7 +229,7 @@ const toiletOccupancyControlPanelConfig =
                             name: 'b112DisabilityOccupiedEntity',
                         }),
                         createLine(),
-                        createGroupTitle('Building 113'),
+                        createGroupTitle('B113'),
                         createEntityConfig({
                             label: PANEL_OPTION_LABEL.men,
                             name: 'b113StandOccupiedEntity',
