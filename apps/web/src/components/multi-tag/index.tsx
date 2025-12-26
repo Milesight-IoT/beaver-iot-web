@@ -174,7 +174,7 @@ const MultiTag = <T extends Record<string, unknown>>({
         let charLen = 0;
         let index = 0;
         for (; index < data.length && charLen <= containerWidth; index++) {
-            charLen += SMALL_CHAR_WIDTH * data[index].label.length;
+            charLen += SMALL_CHAR_WIDTH * (data[index].label?.length || 1);
         }
         return Math.max(index, data.length ? 1 : 0);
     };
