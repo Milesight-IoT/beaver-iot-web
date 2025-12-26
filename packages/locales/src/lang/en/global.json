@@ -112,6 +112,7 @@
     "common.label.log": "Log",
     "common.label.login": "Login",
     "common.label.longitude": "Longitude",
+    "common.label.mark_line": "Threshold line",
     "common.label.max": "Max.",
     "common.label.metrics": "Metrics",
     "common.label.min": "Min.",
@@ -149,6 +150,7 @@
     "common.label.required": "Required",
     "common.label.result": "Result",
     "common.label.run": "Run",
+    "common.label.scale": "Scale",
     "common.label.scan_qr_code": "Scan QR Code",
     "common.label.search": "Search",
     "common.label.second": "{1} Second",
@@ -203,8 +205,6 @@
     "common.label.men": "Men",
     "common.label.women": "Women",
     "common.label.disability": "Disability",
-    "common.label.scale": "Scale",
-    "common.label.mark_line": "MarkLine",
     "common.language.cn": "中文",
     "common.language.cn_short": "ZH",
     "common.language.en": "English",
@@ -279,6 +279,7 @@
     "valid.input.ip_address": "Please enter your IP address in the following format: XXX.XXX.XXX.XXX. XXX should be 1-255.",
     "valid.input.ip_or_domain": "Please enter a valid IP address or domain name.",
     "valid.input.ipv6_address": "Please enter your IP address in this format: XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX (XXXX is 0000-FFFF).",
+    "valid.input.legal_value": "Please enter a legal value.",
     "valid.input.length": "Allowed input length: {0}.",
     "valid.input.letters": "Letters only (upper and lower case)",
     "valid.input.letters_and_num": "Letters and numbers only (upper and lower case)",
@@ -327,6 +328,5 @@
     "common.label.man": "Man",
     "common.label.notification": "Notification",
     "common.label.occupied": "Occupied",
-    "common.label.vacant": "Vacant",
-    "valid.input.legal_value": "Please enter a legal value."
+    "common.label.vacant": "Vacant"
 }
