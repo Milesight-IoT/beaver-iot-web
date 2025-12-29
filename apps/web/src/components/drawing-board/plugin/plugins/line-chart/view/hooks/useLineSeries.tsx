@@ -127,15 +127,15 @@ export function useLineSeries(props: UseLineSeriesProps) {
             const { isBigData, resultColor, matchTablet, xAxisMin, xAxisMax } = config;
             if (!Array.isArray(newChartShowData)) return [];
 
+            const isSameY1AxisID = newChartShowData.every(chartData => chartData?.yAxisID === 'y1');
             const lineSeries = newChartShowData
                 .map((chart, index) => {
                     // Determine yAxisIndex based on chart count and yAxisID
-                    const yAxisIndex =
-                        newChartShowData.length < 2
-                            ? LEFT_Y_AXIS_INDEX
-                            : chart.yAxisID === 'y1'
-                              ? RIGHT_Y_AXIS_INDEX
-                              : LEFT_Y_AXIS_INDEX;
+                    const yAxisIndex = isSameY1AxisID
+                        ? LEFT_Y_AXIS_INDEX
+                        : chart.yAxisID === 'y1'
+                          ? RIGHT_Y_AXIS_INDEX
+                          : LEFT_Y_AXIS_INDEX;
                     const color = resultColor[index];
                     const isBigDataTrue = isBigData?.[index];
 
@@ -177,7 +177,7 @@ export function useLineSeries(props: UseLineSeriesProps) {
             });
             // Insert right Y-axis markLines (search after left markLines are added)
             insertMarkLines(lineSeries, rightYAxisMarkLine, {
-                axisIndex: RIGHT_Y_AXIS_INDEX,
+                axisIndex: isSameY1AxisID ? LEFT_Y_AXIS_INDEX : RIGHT_Y_AXIS_INDEX,
                 xAxisMin,
                 xAxisMax,
             });

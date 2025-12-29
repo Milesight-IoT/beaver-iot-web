@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { min as minFun, max as maxFun } from 'lodash-es';
+import { isUndefined } from 'lodash-es';
 
 import type { ChartShowDataProps } from '@/components/drawing-board/plugin/hooks';
 
@@ -25,25 +25,20 @@ export const isLikeNumber = (value: string | number) => {
 export const useYAxisRange = ({ entity, newChartShowData }: IProps) => {
     // If there is no data, display the default range
     const getYAxisRange = useCallback(() => {
-        const SPLIT_NUMBER = 5;
         const [MIN, MAX] = [0, 100];
         if (!newChartShowData?.length) return [{ min: MIN, max: MAX }];
 
-        const result: {
-            min: number;
-            max: number;
-            interval: number;
-        }[] = [];
+        const result: ({ min: number; max: number } | null)[] = [];
+        // if all yAxisID are 'y1', then change the resultIndex to 0
+        const isSameY1AxisID = newChartShowData.every(chartData => chartData?.yAxisID === 'y1');
         // If there is data, take it according to the range of the data
-        (newChartShowData || []).forEach((chartData, index) => {
+        newChartShowData.forEach((chartData, index) => {
             const { entityValues, yAxisID } = chartData || {};
-            const resultIndex = yAxisID === 'y1' ? 1 : 0;
+            const resultIndex = isSameY1AxisID ? 0 : yAxisID === 'y1' ? 1 : 0;
 
             const currentEntity = entity?.[index];
             const { entityValueAttribute } = currentEntity?.rawData || {};
 
-            let min = entityValueAttribute?.min;
-            let max = entityValueAttribute?.max;
             const numberValues = (entityValues || [])
                 .map(entityValue => {
                     if (isLikeNumber(entityValue!)) {
@@ -53,19 +48,18 @@ export const useYAxisRange = ({ entity, newChartShowData }: IProps) => {
                 })
                 .filter(item => item !== null);
 
+            // If there is reported data, let the y-axis range be automatically calculated based on the reported data
             if (numberValues.length) {
-                min = Math.floor((minFun(numberValues) as number) * 0.9);
-                max = Math.ceil((maxFun(numberValues) as number) * 1.1);
+                // Cover the case of multiple Y-axes
+                result[resultIndex] = null;
+                return;
             }
-            min = minFun([min, result[resultIndex]?.min]);
-            max = maxFun([max, result[resultIndex]?.max]);
-            const currentMin = min ?? MIN;
-            const currentMax = max ?? MAX;
-            result[resultIndex] = {
-                min: currentMin,
-                max: currentMax,
-                interval: (currentMax - currentMin) / SPLIT_NUMBER,
-            };
+            // If there is no reported data and result[resultIndex] already has a value or is null, no processing is needed
+            if (!isUndefined(result[resultIndex])) return;
+            // Otherwise take the entity's min and max as the y-axis range
+            const min = entityValueAttribute?.min ?? MIN;
+            const max = entityValueAttribute?.max ?? MAX;
+            result[resultIndex] = { min, max };
         });
 
         return result;
