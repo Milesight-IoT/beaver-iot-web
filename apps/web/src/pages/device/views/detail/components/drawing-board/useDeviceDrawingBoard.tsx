@@ -94,12 +94,12 @@ export default function useDeviceDrawingBoard(
 
     // ---------- Listen the entities change by Mqtt ----------
     const { status: mqttStatus, client: mqttClient } = useMqtt();
+    const unsubTimerRef = useRef<number>();
 
     // Subscribe the entity exchange topic
     useEffect(() => {
-        if (!drawingBoardId || !mqttClient || mqttStatus !== MQTT_STATUS.CONNECTED) {
-            return;
-        }
+        if (!drawingBoardId || !mqttClient || mqttStatus !== MQTT_STATUS.CONNECTED) return;
+        unsubTimerRef.current && clearTimeout(unsubTimerRef.current);
 
         const removeTriggerListener = mqttClient.subscribe(MQTT_EVENT_TYPE.EXCHANGE, payload => {
             triggerEntityListener(payload.payload?.entity_ids || [], {
@@ -111,7 +111,9 @@ export default function useDeviceDrawingBoard(
 
         return () => {
             removeTriggerListener?.();
-            mqttClient?.unsubscribe(MQTT_EVENT_TYPE.EXCHANGE);
+            unsubTimerRef.current = window.setTimeout(() => {
+                mqttClient?.unsubscribe(MQTT_EVENT_TYPE.EXCHANGE);
+            }, 300);
         };
     }, [drawingBoardId, mqttStatus, mqttClient, triggerEntityListener]);
 
