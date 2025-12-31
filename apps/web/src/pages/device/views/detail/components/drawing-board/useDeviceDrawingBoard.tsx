@@ -94,12 +94,12 @@ export default function useDeviceDrawingBoard(
 
     // ---------- Listen the entities change by Mqtt ----------
     const { status: mqttStatus, client: mqttClient } = useMqtt();
-    const unsubTimerRef = useRef<number>();
 
     // Subscribe the entity exchange topic
     useEffect(() => {
-        if (!drawingBoardId || !mqttClient || mqttStatus !== MQTT_STATUS.CONNECTED) return;
-        unsubTimerRef.current && clearTimeout(unsubTimerRef.current);
+        if (!drawingBoardId || !mqttClient || mqttStatus !== MQTT_STATUS.CONNECTED) {
+            return;
+        }
 
         const removeTriggerListener = mqttClient.subscribe(MQTT_EVENT_TYPE.EXCHANGE, payload => {
             triggerEntityListener(payload.payload?.entity_ids || [], {
@@ -111,19 +111,16 @@ export default function useDeviceDrawingBoard(
 
         return () => {
             removeTriggerListener?.();
-            unsubTimerRef.current = window.setTimeout(() => {
-                mqttClient?.unsubscribe(MQTT_EVENT_TYPE.EXCHANGE);
-            }, 300);
+            // mqttClient?.unsubscribe(MQTT_EVENT_TYPE.EXCHANGE);
         };
     }, [drawingBoardId, mqttStatus, mqttClient, triggerEntityListener]);
 
     // Unsubscribe the topic when the dashboard page is unmounted
-    // useEffect(() => {
-    //     return () => {
-    //         mqttClient?.unsubscribe(MQTT_EVENT_TYPE.EXCHANGE);
-    //     };
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
+    useEffect(() => {
+        return () => {
+            mqttClient?.unsubscribe(MQTT_EVENT_TYPE.EXCHANGE);
+        };
+    }, [mqttClient]);
 
     return {
         loading,
