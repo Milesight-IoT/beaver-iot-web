@@ -129,105 +129,107 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                 {getIntlText('common.label.mark_line')}
             </div>
             {showContent && (
-                <div className={styles['list-content']}>
-                    {list.map((item, index) => (
-                        <div className={styles.item} key={getKey(index)}>
-                            {/* Label input field */}
-                            <TextField
-                                required={required}
-                                label={getIntlText('common.label.label')}
-                                value={item?.label || ''}
-                                error={Boolean(errorInfo.label[index])}
-                                onChange={e => {
-                                    replace(index, {
-                                        ...item,
-                                        label: e.target.value,
-                                    });
-                                }}
-                                sx={{ flex: 1 }}
-                            />
-                            {/* Scale value input field */}
-                            <TextField
-                                required={required}
-                                classes={{ root: 'input-box' }}
-                                label={getIntlText('common.label.scale')}
-                                value={item?.value || ''}
-                                error={Boolean(errorInfo.value[index])}
-                                onChange={e => {
-                                    replace(index, {
-                                        ...item,
-                                        value: e.target.value,
-                                    });
-                                }}
-                                sx={{ width: '60px' }}
-                            />
-                            {/* Unit input field */}
-                            <TextField
-                                label={getIntlText('common.label.unit')}
-                                classes={{ root: 'input-box' }}
-                                slotProps={{ htmlInput: { maxLength: 10 } }}
-                                value={item?.unit || ''}
-                                onChange={e => {
-                                    replace(index, {
-                                        ...item,
-                                        unit: e.target.value,
-                                    });
-                                }}
-                                onBlur={e => {
-                                    replace(index, {
-                                        ...item,
-                                        unit: (e.target.value || '').trim(),
-                                    });
-                                }}
-                                sx={{ width: '60px' }}
-                            />
-                            {/* Color picker */}
-                            <IconColorSelect
-                                label={getIntlText('common.label.color')}
-                                className={styles['icon-color-select']}
-                                value={item?.color}
-                                onChange={color => {
-                                    replace(index, {
-                                        ...item,
-                                        color,
-                                    });
-                                }}
-                                sx={{ width: '60px' }}
-                            />
+                <>
+                    <div className={styles['list-content']}>
+                        {list.map((item, index) => (
+                            <div className={styles.item} key={getKey(index)}>
+                                {/* Label input field */}
+                                <TextField
+                                    required={required}
+                                    label={getIntlText('common.label.label')}
+                                    value={item?.label || ''}
+                                    error={Boolean(errorInfo.label[index])}
+                                    onChange={e => {
+                                        replace(index, {
+                                            ...item,
+                                            label: e.target.value,
+                                        });
+                                    }}
+                                    sx={{ flex: 1 }}
+                                />
+                                {/* Scale value input field */}
+                                <TextField
+                                    required={required}
+                                    classes={{ root: 'input-box' }}
+                                    label={getIntlText('common.label.scale')}
+                                    value={item?.value || ''}
+                                    error={Boolean(errorInfo.value[index])}
+                                    onChange={e => {
+                                        replace(index, {
+                                            ...item,
+                                            value: e.target.value,
+                                        });
+                                    }}
+                                    sx={{ width: '60px' }}
+                                />
+                                {/* Unit input field */}
+                                <TextField
+                                    label={getIntlText('common.label.unit')}
+                                    classes={{ root: 'input-box' }}
+                                    slotProps={{ htmlInput: { maxLength: 10 } }}
+                                    value={item?.unit || ''}
+                                    onChange={e => {
+                                        replace(index, {
+                                            ...item,
+                                            unit: e.target.value,
+                                        });
+                                    }}
+                                    onBlur={e => {
+                                        replace(index, {
+                                            ...item,
+                                            unit: (e.target.value || '').trim(),
+                                        });
+                                    }}
+                                    sx={{ width: '60px' }}
+                                />
+                                {/* Color picker */}
+                                <IconColorSelect
+                                    label={getIntlText('common.label.color')}
+                                    className={styles['icon-color-select']}
+                                    value={item?.color}
+                                    onChange={color => {
+                                        replace(index, {
+                                            ...item,
+                                            color,
+                                        });
+                                    }}
+                                    sx={{ width: '60px' }}
+                                />
 
-                            {/* Delete button */}
-                            <div className={styles.icon}>
-                                <IconButton onClick={() => remove(index)}>
-                                    <DeleteOutlineIcon />
-                                </IconButton>
+                                {/* Delete button */}
+                                <div className={styles.icon}>
+                                    <IconButton onClick={() => remove(index)}>
+                                        <DeleteOutlineIcon />
+                                    </IconButton>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                    {multiple && (
-                        <Button
-                            fullWidth
-                            variant="outlined"
-                            startIcon={<AddIcon />}
-                            disabled={list.length >= MAX_VALUE_LENGTH}
-                            onClick={() => {
-                                if (list.length >= MAX_VALUE_LENGTH) return;
-                                insert(list.length, {
-                                    id: Date.now().toString(),
-                                    label: '',
-                                    value: '',
-                                    unit: '',
-                                    color: DEFAULT_COLORS[list.length % 3],
-                                });
-                            }}
-                        >
-                            {getIntlText('common.label.add')}
-                        </Button>
-                    )}
-                </div>
+                        ))}
+                        {multiple && (
+                            <Button
+                                fullWidth
+                                variant="outlined"
+                                startIcon={<AddIcon />}
+                                disabled={list.length >= MAX_VALUE_LENGTH}
+                                onClick={() => {
+                                    if (list.length >= MAX_VALUE_LENGTH) return;
+                                    insert(list.length, {
+                                        id: Date.now().toString(),
+                                        label: '',
+                                        value: '',
+                                        unit: '',
+                                        color: DEFAULT_COLORS[list.length % 3],
+                                    });
+                                }}
+                            >
+                                {getIntlText('common.label.add')}
+                            </Button>
+                        )}
+                    </div>
+                    <FormHelperText error={Boolean(error)}>{errorInfo.message}</FormHelperText>
+                </>
             )}
-            <FormHelperText error={Boolean(error)}>{errorInfo.message}</FormHelperText>
         </div>
     );
 };
 
-export default ChartMarkLine;
+export default React.memo(ChartMarkLine);
