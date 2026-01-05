@@ -75,7 +75,9 @@ const LEGEND_CONFIG = {
  */
 function isNearMarkLine(chart: echarts.ECharts, mouseY: number, series: any) {
     const yAxisIndex = series?.yAxisIndex ?? 0;
-    const [timeValue, yValue] = series.data[0];
+    const [timeValue] = series.data[0];
+    // Get the yAxis value from markLine data
+    const yValue = series.markLine?.data?.[0]?.yAxis;
 
     const pointInGrid = chart.convertToPixel({ xAxisIndex: 0, yAxisIndex }, [timeValue, yValue]);
 
@@ -233,12 +235,16 @@ const View = (props: ViewProps) => {
     const createTooltipFormatter = useCallback(
         (params: any, mousePos: number[], myChart: echarts.ECharts | null) => {
             if (!myChart) return '';
-
-            const allSeries = (myChart.getOption()?.series || []) as any[];
+            const { series: allSeries = [] as any, legend: legends = [] as any } =
+                myChart.getOption();
 
             // Check for markLine hover
             const allMarkLineSeries = allSeries.filter((series: any) => {
                 if (series?.customConfig?.type !== 'markLine') return false;
+                // Check if the series is selected，true and undefined are both valid
+                if (legends[0].selected[series.name] === false) {
+                    return false;
+                }
                 return isNearMarkLine(myChart, mousePos[1], series);
             });
 
@@ -255,8 +261,7 @@ const View = (props: ViewProps) => {
             // Check for data point hover
             const timeValue = params[0].axisValue;
             const yValue = params[0].data[1];
-            const yAxisIndex =
-                (myChart.getOption() as any)?.series?.[params[0].seriesIndex].yAxisIndex ?? 0;
+            const yAxisIndex = allSeries[params[0].seriesIndex].yAxisIndex ?? 0;
 
             if (!isNearDataPoint(myChart, mousePos[0], timeValue, yValue, yAxisIndex)) {
                 return '';
