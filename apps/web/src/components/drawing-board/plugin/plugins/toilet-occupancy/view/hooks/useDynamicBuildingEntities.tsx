@@ -65,7 +65,8 @@ export const useDynamicBuildingEntities = (props: IProps) => {
                 if (error || !isRequestSuccess(resp)) {
                     return { type, data: {} };
                 }
-                return { type, data: getResponseData(resp) };
+                // Successfully fetched data but entityValue is null is mean no data available
+                return { type, data: getResponseData(resp) || {} };
             }),
         );
         // Update all statuses at once (single setState)
@@ -90,7 +91,7 @@ export const useDynamicBuildingEntities = (props: IProps) => {
         }
         setEntitiesStatus(prev => ({
             ...prev,
-            [type]: getResponseData(resp),
+            [type]: getResponseData(resp) || {},
         }));
     };
 
