@@ -175,4 +175,4 @@ const ChartEntityPosition: React.FC<ChartEntityPositionProps> = ({
     );
 };
 
-export default ChartEntityPosition;
+export default React.memo(ChartEntityPosition);

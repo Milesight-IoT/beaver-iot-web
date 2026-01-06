@@ -118,7 +118,7 @@ const BatchAddModal: React.FC<BatchAddModalProps> = props => {
 
     return (
         <Modal
-            size={currentStatus === 'completed' ? 'md' : 'lg'}
+            size="lg"
             visible={visible}
             title={getIntlText('dashboard.label.batch_bind_entities')}
             className={classNames({ loading: formState.isSubmitting })}

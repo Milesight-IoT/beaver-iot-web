@@ -12,7 +12,6 @@ const ControlPanel = (): ControlPanelConfig<any> => {
         minCol: 12,
         maxRow: 8,
         maxCol: 12,
-        fullscreenable: true,
         configProps: [
             {
                 label: 'Entities Config',

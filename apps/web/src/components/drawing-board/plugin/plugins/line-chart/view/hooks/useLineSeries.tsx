@@ -24,7 +24,7 @@ type MarkLineSeriesItem = ReturnType<typeof getMarkLineSeries>[number];
 type LineSeries = (MarkLineSeriesItem | any)[];
 
 // Constants
-const POINT_COUNT = 100;
+const POINT_COUNT = 1;
 const MARK_LINE_LEGEND_ICON =
     'path://M 1 0 H 7 Q 8 0 8 1 V 3 Q 8 4 7 4 H 1 Q 0 4 0 3 V 1 Q 0 0 1 0 Z';
 const LEFT_Y_AXIS_INDEX = 0;
@@ -32,6 +32,7 @@ const RIGHT_Y_AXIS_INDEX = 1;
 
 /**
  * Generate smooth markLine data points for hover detection
+ * POINT_COUNT=1: At present, only two values are needed to solve the display of the guide line on the hover
  */
 function generateMarkLineData(xMin: number, xMax: number, yValue: number | string) {
     const data: [number, number | string][] = [];
@@ -47,7 +48,12 @@ function generateMarkLineData(xMin: number, xMax: number, yValue: number | strin
  */
 function getMarkLineSeries(
     markLines: ChartMarkLineValueType[],
-    { xAxisMin, xAxisMax, axisIndex }: { xAxisMin: number; xAxisMax: number; axisIndex: number },
+    {
+        xAxisMin,
+        xAxisMax,
+        axisIndex,
+        yValue,
+    }: { xAxisMin: number; xAxisMax: number; axisIndex: number; yValue?: number | string },
 ) {
     return (
         markLines
@@ -65,7 +71,7 @@ function getMarkLineSeries(
                     value: markLine.value,
                     unit: markLine.unit || '',
                 },
-                data: generateMarkLineData(xAxisMin, xAxisMax, markLine.value),
+                data: generateMarkLineData(xAxisMin, xAxisMax, yValue ?? markLine.value),
                 yAxisIndex: axisIndex,
                 // Fully transparent line
                 lineStyle: { opacity: 0 },
@@ -111,7 +117,14 @@ function insertMarkLines(
 ) {
     const targetIndex = findLastIndex(lineSeries, series => series.yAxisIndex === config.axisIndex);
     if (targetIndex !== -1) {
-        const markLineSeries = getMarkLineSeries(markLines, config);
+        const theHasDataTargetSeries = lineSeries.find(
+            series => series.yAxisIndex === config.axisIndex && series.data.length,
+        );
+        // Requirement: The values of the markline axis do not participate in the calculation of the maximum and minimum values;
+        // Solution: If the corresponding Y axis has reported data, then the maximum and minimum values are calculated by the line chart
+        // based on the actual reported data, taking one of the values as the value of the markline axis, which can solve the problem of the markline axis value participating in the calculation
+        const yValue = theHasDataTargetSeries ? theHasDataTargetSeries.data[0][1] : undefined;
+        const markLineSeries = getMarkLineSeries(markLines, { ...config, yValue });
         lineSeries.splice(targetIndex + 1, 0, ...markLineSeries);
     }
 }
@@ -127,15 +140,14 @@ export function useLineSeries(props: UseLineSeriesProps) {
             const { isBigData, resultColor, matchTablet, xAxisMin, xAxisMax } = config;
             if (!Array.isArray(newChartShowData)) return [];
 
+            const isSameY1AxisID = newChartShowData.every(chartData => chartData?.yAxisID === 'y1');
             const lineSeries = newChartShowData
                 .map((chart, index) => {
                     // Determine yAxisIndex based on chart count and yAxisID
                     const yAxisIndex =
-                        newChartShowData.length < 2
+                        isSameY1AxisID || chart.yAxisID !== 'y1'
                             ? LEFT_Y_AXIS_INDEX
-                            : chart.yAxisID === 'y1'
-                              ? RIGHT_Y_AXIS_INDEX
-                              : LEFT_Y_AXIS_INDEX;
+                            : RIGHT_Y_AXIS_INDEX;
                     const color = resultColor[index];
                     const isBigDataTrue = isBigData?.[index];
 
@@ -177,7 +189,7 @@ export function useLineSeries(props: UseLineSeriesProps) {
             });
             // Insert right Y-axis markLines (search after left markLines are added)
             insertMarkLines(lineSeries, rightYAxisMarkLine, {
-                axisIndex: RIGHT_Y_AXIS_INDEX,
+                axisIndex: isSameY1AxisID ? LEFT_Y_AXIS_INDEX : RIGHT_Y_AXIS_INDEX,
                 xAxisMin,
                 xAxisMax,
             });
