@@ -42,8 +42,8 @@ const severityConfigs: SeverityConfig[] = [
     },
 ];
 
-const getRatioString = (num: number, total?: number) => {
-    if (isNil(total)) return '-';
+const getRatioString = (num?: number, total?: number) => {
+    if (isNil(num) || isNil(total)) return '-';
 
     num = Math.max(0, Math.min(num, total));
     return `${((num / total) * 100).toFixed(0)}%`;
@@ -66,6 +66,7 @@ const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
     const { buildingInfo, standardOccupiedEntity, disabilityOccupiedEntity } = config || {};
     const { name: buildingName, basicInfo: buildingBasicInfo } = buildingInfo || {};
     const { getIntlText } = useI18n();
+    const unboundEntity = !standardOccupiedEntity?.value || !disabilityOccupiedEntity?.value;
 
     // ========== Fetch Occupied Data ==========
     const { data: occupiedCount, run: getLatestEntityValues } = useRequest(
@@ -82,14 +83,18 @@ const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
 
             if (error || !isRequestSuccess(resp)) return;
             const values = getResponseData(resp);
-            // eslint-disable-next-line no-unsafe-optional-chaining
-            const standardOccupied = isNaN(+values?.[standardEntityId]?.value)
-                ? 0
-                : Number(values?.[standardEntityId]?.value);
-            // eslint-disable-next-line no-unsafe-optional-chaining
-            const disabilityOccupied = isNaN(+values?.[disabilityEntityId]?.value)
-                ? 0
-                : Number(values?.[disabilityEntityId]?.value);
+
+            if (
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                isNaN(+values?.[standardEntityId]?.value) ||
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                isNaN(+values?.[disabilityEntityId]?.value)
+            ) {
+                return;
+            }
+
+            const standardOccupied = Number(values?.[standardEntityId]?.value);
+            const disabilityOccupied = Number(values?.[disabilityEntityId]?.value);
 
             return standardOccupied + disabilityOccupied;
         },
@@ -155,8 +160,8 @@ const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
                             <ArabManIcon />
                         )}
                     </div>
-                    <div className={cls('count', { 'is-placeholder': isNil(occupiedCount) })}>
-                        {isNil(occupiedCount)
+                    <div className={cls('count', { 'is-placeholder': unboundEntity })}>
+                        {isNil(unboundEntity)
                             ? getIntlText('dashboard.placeholder.unbound_entity')
                             : getRatioString(occupiedCount, buildingBasicInfo?.totalToiletCount)}
                     </div>
