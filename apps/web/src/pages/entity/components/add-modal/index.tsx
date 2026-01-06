@@ -50,8 +50,8 @@ const AddModal: React.FC<Props> = ({
             if (data?.entityId) {
                 const { entityValueType, entityValueAttribute } = data;
                 const {
-                    min,
-                    max,
+                    min = '-',
+                    max = '-',
                     minLength,
                     maxLength,
                     enum: enums,
