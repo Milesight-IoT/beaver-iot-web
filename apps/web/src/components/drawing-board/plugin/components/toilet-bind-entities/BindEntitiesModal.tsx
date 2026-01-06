@@ -152,7 +152,7 @@ const BatchAddModal: React.FC<BatchAddModalProps> = props => {
                             marginLeft: 1,
                             '.download-wrapper': {
                                 display: 'flex',
-                                marginLeft: 1,
+                                marginLeft: 0.25,
                                 cursor: 'pointer',
                                 color: 'var(--primary-color-base)',
                                 '.download-text': {
