@@ -145,6 +145,20 @@ export function useData(props: {
     useDebounceEffect(
         () => {
             if (!Array.isArray(markerExtraInfos) || isEmpty(markerExtraInfos)) {
+                /**
+                 * If markerExtraInfos is empty, set all markers to plain
+                 */
+                setMarkers(prevMarkers =>
+                    prevMarkers.map(item => ({
+                        ...item,
+                        style: {
+                            ...item.style,
+                            backgroundColor: PLAIN_COLOR,
+                            border: PLAIN_BORDER,
+                        },
+                    })),
+                );
+
                 return;
             }
 
