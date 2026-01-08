@@ -459,6 +459,7 @@
   "error.http.msc_connection_not_ready": "Milesight Development平台集成尚未连接成功。",
   "error.http.name_repeated": "名称重复",
   "error.http.network_timeout": "网络连接超时。",
+  "error.http.no_data_permission": "无数据权限",
   "error.http.no_valid_profile_for_device": "网关未提供设备需要的profile。",
   "error.http.ns_gateway_device_data_encode_failed": "设备下行数据编码失败。",
   "error.http.number_of_entity_tags_exceeded": "创建的标签数量超过上限。",
