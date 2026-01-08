@@ -68,6 +68,7 @@
     "error.http.msc_connection_not_ready": "Milesight Development platform integration has not been successfully connected.",
     "error.http.name_repeated": "Repetition of names",
     "error.http.network_timeout": "Network connection timeout.",
+    "error.http.no_data_permission": "No data permission",
     "error.http.no_valid_profile_for_device": "The gateway does not provide the profile required by the device.",
     "error.http.ns_gateway_device_data_encode_failed": "Device downlink data encoding failed.",
     "error.http.number_of_entity_tags_exceeded": "The number of tags created exceeds the limit.",
