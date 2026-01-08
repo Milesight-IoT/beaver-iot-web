@@ -430,7 +430,7 @@
   "error.http.binding_list_notification_array_items_length_invalid": "Notification array must contain 1 or 2 elements",
   "error.http.binding_list_notification_entity_duplicate": "Notification column entity must be unique",
   "error.http.binding_list_notification_entity_not_exist": "Notification entity does not exist",
-  "error.http.binding_list_notification_json_invalid": "The content does not conform to JSON format.",
+  "error.http.binding_list_notification_json_invalid": "Notification content does not conform to the JSON format.",
   "error.http.binding_list_notification_key_or_value_incomplete": "Notification JSON keys and values cannot be empty",
   "error.http.binding_list_notification_required": "Notification column cannot be empty",
   "error.http.binding_list_notification_too_long": "Notification length cannot exceed 600 characters",
