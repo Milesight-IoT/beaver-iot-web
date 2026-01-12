@@ -57,7 +57,10 @@ export function useResponsiveLayout(widgets: WidgetDetail[]) {
             newBodyHeight -= 16 + 32;
         }
 
-        return (newBodyHeight - (fullscreenNum + 1) * GRID_LAYOUT_MARGIN) / fullscreenNum;
+        const rowHeight =
+            (newBodyHeight - (fullscreenNum + 1) * GRID_LAYOUT_MARGIN) / fullscreenNum;
+
+        return Math.max(rowHeight, 88);
     }, [bodySize, drawingBoardContext]);
 
     const gridRowHeight = useMemo(() => {
