@@ -71,7 +71,10 @@ export default React.memo(({ visible, data, ...props }: IProps) => {
                                     {virtualList.map(({ data }) => {
                                         if (data?.$$isFooterNode) {
                                             return (
-                                                <div className="ms-log-left-bar__more">
+                                                <div
+                                                    key={data.id}
+                                                    className="ms-log-left-bar__more"
+                                                >
                                                     <CircularProgress size={22} />
                                                 </div>
                                             );
