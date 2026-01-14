@@ -65,5 +65,12 @@ export default React.memo(({ traceData, workflowData, logType }: ActionLogProps)
         );
     };
 
-    return <div className="ms-action-log">{roots.map(child => renderAccordion(child))}</div>;
+    // map each root node is need key for child node
+    return (
+        <div className="ms-action-log">
+            {roots.map(child => (
+                <Fragment key={child?.attrs?.$$token}>{renderAccordion(child)}</Fragment>
+            ))}
+        </div>
+    );
 });

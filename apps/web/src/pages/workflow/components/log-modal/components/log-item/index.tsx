@@ -23,9 +23,9 @@ export default React.memo(({ data, isActive, onClick }: IProps) => {
         >
             <div className={cls('ms-log-status', statusClassName)}>{icon}</div>
             <div className="ms-log-content">
-                <p className="ms-log-title">
+                <div className="ms-log-title">
                     <Tooltip title={title} autoEllipsis />
-                </p>
+                </div>
             </div>
         </div>
     );
