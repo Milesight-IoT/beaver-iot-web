@@ -57,6 +57,7 @@ export default () => {
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
     const [selectedIds, setSelectedIds] = useState<readonly ApiKey[]>([]);
     const [exportVisible, setExportVisible] = useState<boolean>(false);
+    const [exportLoading, setExportLoading] = useState<boolean>(false);
     const [detail, setDetail] = useState<TableRowDataType | null>(null);
     const [detailVisible, setDetailVisible] = useState<boolean>(false);
     const [editVisible, setEditVisible] = useState<boolean>(false);
@@ -143,6 +144,7 @@ export default () => {
         if (!selectedIds?.length) {
             return;
         }
+        setExportLoading(true);
         let url = `${API_PREFIX}/entity/export?`;
         selectedIds.forEach((id: ApiKey) => {
             url += `&ids=${id}`;
@@ -167,10 +169,12 @@ export default () => {
         })
             .then(() => {
                 refreshListByOperator();
+                setExportLoading(false);
                 handleCloseExport();
                 toast.success(getIntlText('common.message.operation_success'));
             })
             .catch(error => {
+                setExportLoading(false);
                 /**
                  * Handle blob errors
                  * Convert to string message alert
@@ -394,7 +398,11 @@ export default () => {
                 <EditEntity onCancel={handleEditClose} onOk={handleEdit} data={detail} />
             )}
             {!!exportVisible && (
-                <ExportModal onCancel={handleCloseExport} onOk={handleExportConfirm} />
+                <ExportModal
+                    onCancel={handleCloseExport}
+                    onOk={handleExportConfirm}
+                    okButtonProps={{ loading: exportLoading }}
+                />
             )}
             {manageTagsModalVisible && (
                 <ManageTagsModal

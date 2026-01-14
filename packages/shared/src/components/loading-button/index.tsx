@@ -19,7 +19,13 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
     return (
         <Button disabled={disabled || loading === true || false} {...otherProps}>
             <div className="ms-loading-icon">
-                {loading && <CircularProgress size={16} color={indicatorColor} sx={{ mr: 1 }} />}
+                {loading && (
+                    <CircularProgress
+                        size={16}
+                        color={indicatorColor}
+                        sx={{ mr: 1, display: 'block' }}
+                    />
+                )}
             </div>
             {children}
         </Button>
