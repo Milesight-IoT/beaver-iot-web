@@ -74,13 +74,22 @@ export const useRenderList = ({ getLogList, containerRef, listRef }: IProps) => 
     /** generate log render list */
     const renderLogList = useMemo(() => {
         const { list = [], hasMore } = data || {};
-        if (!hasMore) return list;
+        // Remove duplicate items by id
+        const seenIds = new Set<string | number>();
+        const logList = list.filter(item => {
+            if (seenIds.has(item.id)) {
+                return false;
+            }
+            seenIds.add(item.id);
+            return true;
+        });
+        if (!hasMore) return logList;
 
         const footer = {
             id: generateUUID(),
             $$isFooterNode: true,
         } as unknown as LogRenderListType;
-        return list.concat(footer);
+        return logList.concat(footer);
     }, [data]);
 
     /** virtual list */
