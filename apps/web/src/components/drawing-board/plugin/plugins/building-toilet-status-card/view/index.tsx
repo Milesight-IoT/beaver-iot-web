@@ -161,7 +161,7 @@ const View = ({ config, configJson, widgetId, dashboardId }: ViewProps) => {
                         )}
                     </div>
                     <div className={cls('count', { 'is-placeholder': unboundEntity })}>
-                        {isNil(unboundEntity)
+                        {unboundEntity
                             ? getIntlText('dashboard.placeholder.unbound_entity')
                             : getRatioString(occupiedCount, buildingBasicInfo?.totalToiletCount)}
                     </div>
