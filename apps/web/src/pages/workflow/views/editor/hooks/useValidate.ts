@@ -293,9 +293,9 @@ const useValidate = () => {
             },
             // Check listener.entities, select.entities
             'listener.entities': entitiesChecker,
-            'listener.entityData': entityDataChecker,
+            // 'listener.entityData': entityDataChecker,
             'select.entities': entitiesChecker,
-            'select.entityData': entityDataChecker,
+            // 'select.entityData': entityDataChecker,
             'trigger.entityConfigs': {
                 checkRequired(
                     value?: NonNullable<TriggerNodeDataType['parameters']>['entityConfigs'],
