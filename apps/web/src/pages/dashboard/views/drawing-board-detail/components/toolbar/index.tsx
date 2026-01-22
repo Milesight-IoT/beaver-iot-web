@@ -67,7 +67,11 @@ const Toolbar: React.FC<ToolbarProps> = props => {
 
     return (
         <div className="dashboard-detail__toolbar">
-            <div className="dashboard-detail__toolbar-left">
+            <div
+                className={cls('dashboard-detail__toolbar-left', {
+                    'adaptive-width': !matchTablet,
+                })}
+            >
                 {renderSidebar()}
                 <Tooltip
                     className={cls({
@@ -90,9 +94,9 @@ const Toolbar: React.FC<ToolbarProps> = props => {
                 />
                 <DrawingBoardPath
                     disabled={isEdit}
-                    className={cls({
-                        'd-none': matchTablet,
-                    })}
+                    className={cls([
+                        matchTablet ? 'd-none' : 'dashboard-detail__toolbar-left-breadcrumbs',
+                    ])}
                 />
             </div>
             {matchTablet && (

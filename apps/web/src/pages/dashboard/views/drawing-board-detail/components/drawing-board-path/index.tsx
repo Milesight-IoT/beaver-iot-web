@@ -21,11 +21,20 @@ const DrawingBoardPath: React.FC<DrawingBoardPathProps> = props => {
     const navigate = useNavigate();
 
     return (
-        <Breadcrumbs className={className}>
+        <Breadcrumbs
+            className={cls(className, {
+                'adaptive-width': paths?.length === 1,
+            })}
+        >
             {paths.map((path, index) => {
                 if (index === paths.length - 1) {
                     return (
-                        <div key={path.id} className="dashboard-detail__path-text">
+                        <div
+                            key={path.id}
+                            className={cls('dashboard-detail__path-text', [
+                                paths?.length === 1 ? 'adaptive-width' : 'limit-width',
+                            ])}
+                        >
                             <Tooltip title={path.name} autoEllipsis />
                         </div>
                     );

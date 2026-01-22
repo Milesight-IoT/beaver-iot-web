@@ -12,6 +12,21 @@
         &-left {
             display: flex;
             align-items: center;
+
+            &.adaptive-width {
+                flex: 1;
+                width: 0;
+                padding-right: @padding-md;
+            }
+
+            &-breadcrumbs {
+                flex: 1;
+                width: 0;
+
+                &.adaptive-width .MuiBreadcrumbs-ol .MuiBreadcrumbs-li {
+                    width: 100%;
+                }
+            }
         }
 
         &-middle {
@@ -52,10 +67,17 @@
 
     &__path-text {
         display: inline-block;
-        max-width: 200px;
         font-weight: @font-weight-medium;
         color: var(--text-color-primary);
         .text-size(@font-size-4);
+
+        &.adaptive-width {
+            width: 100%;
+        }
+
+        &.limit-width {
+            max-width: 200px;
+        }
     }
 }
 
