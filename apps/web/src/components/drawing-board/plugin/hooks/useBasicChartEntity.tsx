@@ -14,6 +14,7 @@ export interface UseBasicChartEntityProps {
     entity?: EntityOptionType[];
     time: number;
     isPreview?: boolean;
+    enableRenaming?: boolean; // 是否启用重命名
 }
 
 /** Types of the data required for the chart */
@@ -82,7 +83,7 @@ const X_RANGE_MAP: Record<number, { stepSize: number; unit: 'minute' | 'hour' | 
  * Currently used in (column diagram, horizontal column diagram, folding drawing, area diagram)
  */
 export function useBasicChartEntity(props: UseBasicChartEntityProps) {
-    const { entity, time, isPreview, widgetId, dashboardId } = props;
+    const { entity, time, enableRenaming, widgetId, dashboardId } = props;
 
     const { getTimeFormat, getTime } = useTime();
 
@@ -220,6 +221,22 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
                     }
                 });
 
+                // 在处理图表系列的名称, 若entityLabel 相同，则更改name的值，规则如下：
+                // 1. 如果有相同的entityLabel，第一个保持不变
+                // 2. 之后相同的entityLabel，添加后缀 (1), (2) 等
+                if (enableRenaming) {
+                    const nameSet = new Set<string>();
+                    const nameMap = new Map<string, number>();
+                    newChartShowData.forEach(series => {
+                        const { entityLabel } = series;
+                        if (nameSet.has(entityLabel)) {
+                            nameMap.set(entityLabel, (nameMap.get(entityLabel) || 0) + 1);
+                            series.entityLabel = `${entityLabel}(${nameMap.get(entityLabel)})`;
+                        } else {
+                            nameSet.add(entityLabel);
+                        }
+                    });
+                }
                 setChartShowData(newChartShowData);
             } finally {
                 setXAxisRange([Date.now() - time, Date.now()]);

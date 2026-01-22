@@ -181,6 +181,25 @@ export function useLineSeries(props: UseLineSeriesProps) {
                 })
                 .sort((a, b) => a.yAxisIndex - b.yAxisIndex);
 
+            // 在处理折线图系列的名称, 若name 相同，则更改name的值，规则如下：
+            // 1. 如果有相同的name，第一个保持不变
+            // 2. 之后相同的name，根据yAxisIndex添加后缀：
+            //  2.1 yAxisIndex=0(左轴) 添加 (L1), (L2) 等
+            //  2.2 yAxisIndex=1(右轴) 添加 (R1), (R2) 等
+            const nameSet = new Set<string>();
+            const nameMap = new Map<string, number>();
+            lineSeries.forEach(series => {
+                const { name, yAxisIndex } = series;
+                if (nameSet.has(name)) {
+                    const axisFlag = yAxisIndex === LEFT_Y_AXIS_INDEX ? 'L' : 'R';
+                    const key = `${axisFlag}__${name}`;
+                    nameMap.set(key, (nameMap.get(key) || 0) + 1);
+                    series.name = `${name}(${axisFlag}${nameMap.get(key)})`;
+                } else {
+                    nameSet.add(name);
+                }
+            });
+
             // Insert left Y-axis markLines
             insertMarkLines(lineSeries, leftYAxisMarkLine, {
                 axisIndex: LEFT_Y_AXIS_INDEX,
