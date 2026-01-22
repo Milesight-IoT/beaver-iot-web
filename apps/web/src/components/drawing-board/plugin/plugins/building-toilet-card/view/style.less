@@ -73,7 +73,7 @@
             padding: @padding-md;
             color: var(--white);
             background: linear-gradient(180deg, var(--gray-color-4) 0%, var(--gray-color-5) 100%);
-            border-radius: @border-radius-base;
+            border-radius: @border-radius-md;
 
             &.normal {
                 background: linear-gradient(180deg, #33B165 0%, var(--green-6) 100%);
@@ -98,14 +98,16 @@
 
             .detail {
                 display: flex;
+                flex: 1;
                 align-items: end;
                 justify-content: end;
+                min-width: 0;
                 height: 56px;
 
                 .placeholder {
+                    width: 100%;
                     font-weight: @font-weight-bold;
                     text-align: right;
-                    // white-space: nowrap;
                     .text-size(@font-size-6);
                 }
 
@@ -150,7 +152,12 @@
             .detail {
                 .text-size(@font-size-sm);
 
+                .count {
+                    gap: @margin-xxs;
+                }
+
                 .@{mui-prefix}SvgIcon-root {
+                    margin-top: -2px;
                     font-size: 14px;
                 }
             }
@@ -163,6 +170,7 @@
                 flex-direction: row;
                 align-items: center;
                 padding: @padding-xs;
+                border-radius: 8px;
 
                 .category .@{mui-prefix}SvgIcon-root {
                     font-size: 24px;
@@ -177,6 +185,7 @@
                 }
 
                 .count {
+                    gap: @margin-xs;
                     .alarm-icon,
                     .@{mui-prefix}SvgIcon-root {
                         display: none;

@@ -198,9 +198,11 @@ const View = ({ config, configJson, isEdit, widgetId, dashboardId }: ViewProps) 
                     </div>
                     <div className="detail">
                         {!standardIdleEntity ? (
-                            <span className="placeholder">
-                                {getIntlText('dashboard.placeholder.unbound_entity')}
-                            </span>
+                            <Tooltip
+                                autoEllipsis
+                                className="placeholder"
+                                title={getIntlText('dashboard.placeholder.unbound_entity')}
+                            />
                         ) : (
                             <span className="count">
                                 {standardSeverity?.icon}
@@ -220,9 +222,11 @@ const View = ({ config, configJson, isEdit, widgetId, dashboardId }: ViewProps) 
                     </div>
                     <div className="detail">
                         {!disabilityIdleEntity ? (
-                            <span className="placeholder">
-                                {getIntlText('dashboard.placeholder.unbound_entity')}
-                            </span>
+                            <Tooltip
+                                autoEllipsis
+                                className="placeholder"
+                                title={getIntlText('dashboard.placeholder.unbound_entity')}
+                            />
                         ) : (
                             <span className="count">
                                 {disabilitySeverity?.icon}
