@@ -181,6 +181,25 @@ export function useLineSeries(props: UseLineSeriesProps) {
                 })
                 .sort((a, b) => a.yAxisIndex - b.yAxisIndex);
 
+            // Handle line chart series names: if name is the same, change the name value with the following rules:
+            // 1. If there are duplicate names, the first one remains unchanged
+            // 2. Subsequent duplicate names get suffixes based on yAxisIndex:
+            //  2.1 yAxisIndex=0 (left axis) add (L1), (L2), etc.
+            //  2.2 yAxisIndex=1 (right axis) add (R1), (R2), etc.
+            const nameSet = new Set<string>();
+            const nameMap = new Map<string, number>();
+            lineSeries.forEach(series => {
+                const { name, yAxisIndex } = series;
+                if (nameSet.has(name)) {
+                    const axisFlag = yAxisIndex === LEFT_Y_AXIS_INDEX ? 'L' : 'R';
+                    const key = `${axisFlag}__${name}`;
+                    nameMap.set(key, (nameMap.get(key) || 0) + 1);
+                    series.name = `${name}(${axisFlag}${nameMap.get(key)})`;
+                } else {
+                    nameSet.add(name);
+                }
+            });
+
             // Insert left Y-axis markLines
             insertMarkLines(lineSeries, leftYAxisMarkLine, {
                 axisIndex: LEFT_Y_AXIS_INDEX,
