@@ -14,7 +14,7 @@ export interface UseBasicChartEntityProps {
     entity?: EntityOptionType[];
     time: number;
     isPreview?: boolean;
-    enableRenaming?: boolean; // 是否启用重命名
+    enableRenaming?: boolean; // Whether to enable renaming
 }
 
 /** Types of the data required for the chart */
@@ -221,9 +221,9 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
                     }
                 });
 
-                // 在处理图表系列的名称, 若entityLabel 相同，则更改name的值，规则如下：
-                // 1. 如果有相同的entityLabel，第一个保持不变
-                // 2. 之后相同的entityLabel，添加后缀 (1), (2) 等
+                // Handle chart series names: if entityLabel is the same, change the name value with the following rules:
+                // 1. If there are duplicate entityLabels, the first one remains unchanged
+                // 2. Subsequent duplicate entityLabels get suffixes (1), (2), etc.
                 if (enableRenaming) {
                     const nameSet = new Set<string>();
                     const nameMap = new Map<string, number>();

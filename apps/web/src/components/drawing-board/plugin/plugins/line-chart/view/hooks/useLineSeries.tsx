@@ -181,11 +181,11 @@ export function useLineSeries(props: UseLineSeriesProps) {
                 })
                 .sort((a, b) => a.yAxisIndex - b.yAxisIndex);
 
-            // 在处理折线图系列的名称, 若name 相同，则更改name的值，规则如下：
-            // 1. 如果有相同的name，第一个保持不变
-            // 2. 之后相同的name，根据yAxisIndex添加后缀：
-            //  2.1 yAxisIndex=0(左轴) 添加 (L1), (L2) 等
-            //  2.2 yAxisIndex=1(右轴) 添加 (R1), (R2) 等
+            // Handle line chart series names: if name is the same, change the name value with the following rules:
+            // 1. If there are duplicate names, the first one remains unchanged
+            // 2. Subsequent duplicate names get suffixes based on yAxisIndex:
+            //  2.1 yAxisIndex=0 (left axis) add (L1), (L2), etc.
+            //  2.2 yAxisIndex=1 (right axis) add (R1), (R2), etc.
             const nameSet = new Set<string>();
             const nameMap = new Map<string, number>();
             lineSeries.forEach(series => {
