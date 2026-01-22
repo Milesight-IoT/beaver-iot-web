@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useState, useRef } from 'react';
 import { Button, IconButton, FormHelperText, TextField, Checkbox } from '@mui/material';
 import { isEqual } from 'lodash-es';
 import { useDynamicList, useControllableValue } from 'ahooks';
@@ -53,7 +53,10 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
     const [data, setData] = useControllableValue<ChartMarkLineValueType[]>(props);
     const [showContent, setShowContent] = useState(false);
     const { list, remove, getKey, insert, replace, resetList } =
-        useDynamicList<ChartMarkLineValueType>(data);
+        useDynamicList<ChartMarkLineValueType>(data || []);
+
+    // Track all pending internal setData values (multiple may be in-flight)
+    const pendingUpdatesRef = useRef(new Set<string>());
     const errorInfo = useMemo(() => {
         const errorMap: ChartMarkLineErrorInfo = {
             label: {},
@@ -82,22 +85,35 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
     }, [error, helperText]);
 
     useLayoutEffect(() => {
-        if (
-            isEqual(
-                data,
-                list.filter(item => Boolean(item.id)),
-            )
-        ) {
+        const filteredList = list.filter(item => Boolean(item.id));
+        const listKey = JSON.stringify(filteredList || []);
+        // If this data is from our internal setData, remove it from pending set and skip resetList
+        if (pendingUpdatesRef.current.has(listKey)) {
+            pendingUpdatesRef.current.delete(listKey);
+            return;
+        }
+
+        if (isEqual(data, filteredList)) {
             return;
         }
 
         resetList(data);
     }, [data, resetList]);
 
+    // Real-time sync list to data
     useEffect(() => {
-        setData?.(list.filter(item => Boolean(item.id)));
+        const filteredList = list.filter(item => Boolean(item.id));
+        // Add to pending set before setData
+        pendingUpdatesRef.current.add(JSON.stringify(filteredList));
+        setData?.(filteredList);
     }, [list, setData]);
 
+    // Clear pending set when component unmounts
+    useEffect(() => {
+        return () => {
+            pendingUpdatesRef.current.clear();
+        };
+    }, []);
     // When data has value, show content by default. When data is empty, do nothing
     // and only allow manual interaction, because the add button will be displayed even when empty
     useEffect(() => {
