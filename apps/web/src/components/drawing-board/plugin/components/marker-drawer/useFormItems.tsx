@@ -25,6 +25,7 @@ export function useFormItems() {
                 render({ field: { onChange, value }, fieldState: { error } }) {
                     return (
                         <EntitySelect
+                            data-identity="marker-drawer-form__occupied_entity"
                             required
                             fullWidth
                             label={
@@ -132,6 +133,7 @@ export function useFormItems() {
                 render({ field: { onChange, value }, fieldState: { error } }) {
                     return (
                         <EntitySelect
+                            data-identity="marker-drawer-form__status_entity"
                             required
                             fullWidth
                             label={getIntlText('dashboard.title.online_or_offline_entity')}
@@ -220,6 +222,7 @@ export function useFormItems() {
                 render({ field: { onChange, value }, fieldState: { error } }) {
                     return (
                         <TextField
+                            data-identity="marker-drawer-form__notification"
                             required
                             fullWidth
                             type="text"

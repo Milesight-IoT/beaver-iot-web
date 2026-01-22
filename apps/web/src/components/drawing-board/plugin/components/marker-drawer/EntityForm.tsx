@@ -8,6 +8,7 @@ import { LoadingButton } from '@milesight/shared/src/components';
 
 import { type EntitySelectOption } from '@/components/entity-select';
 import { entityAPI, isRequestSuccess, awaitWrap, getResponseData } from '@/services/http';
+import { useFormErrorScroll } from './useFormErrorScroll';
 import { useFormItems } from './useFormItems';
 import {
     type MarkerExtraInfoProps,
@@ -35,8 +36,11 @@ const EntityForm: React.FC<Props> = props => {
 
     const { getIntlText } = useI18n();
 
-    const { control, handleSubmit, reset, setError } = useForm<OperateProps>();
+    const { control, handleSubmit, reset, setError, formState } = useForm<OperateProps>();
     const { formItems } = useFormItems();
+
+    // Scroll to first error field when validation fails
+    useFormErrorScroll(formState);
 
     const [loading, setLoading] = useState(false);
 
