@@ -7,6 +7,7 @@ import { DeleteOutlineIcon, AddIcon } from '@milesight/shared/src/components';
 import { generateUUID } from '@milesight/shared/src/utils/tools';
 import IconColorSelect from '../icon-color-select';
 import styles from './style.module.less';
+import Input from '../input';
 
 export interface ChartMarkLineValueType {
     id: ApiKey;
@@ -134,21 +135,21 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                         {list.map((item, index) => (
                             <div className={styles.item} key={getKey(index)}>
                                 {/* Label input field */}
-                                <TextField
+                                <Input
                                     required={required}
                                     label={getIntlText('common.label.label')}
                                     value={item?.label || ''}
                                     error={Boolean(errorInfo.label[index])}
-                                    onChange={e => {
+                                    onChange={label => {
                                         replace(index, {
                                             ...item,
-                                            label: e.target.value,
+                                            label: label as unknown as string,
                                         });
                                     }}
                                     sx={{ flex: 1 }}
                                 />
                                 {/* Scale value input field */}
-                                <TextField
+                                <Input
                                     required={required}
                                     classes={{ root: 'input-box' }}
                                     label={getIntlText('common.label.scale')}
@@ -157,27 +158,21 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                     onChange={e => {
                                         replace(index, {
                                             ...item,
-                                            value: e.target.value,
+                                            value: e as unknown as string,
                                         });
                                     }}
                                     sx={{ width: '60px' }}
                                 />
                                 {/* Unit input field */}
-                                <TextField
+                                <Input
                                     label={getIntlText('common.label.unit')}
                                     classes={{ root: 'input-box' }}
                                     slotProps={{ htmlInput: { maxLength: 10 } }}
                                     value={item?.unit || ''}
-                                    onChange={e => {
+                                    onChange={unit => {
                                         replace(index, {
                                             ...item,
-                                            unit: e.target.value,
-                                        });
-                                    }}
-                                    onBlur={e => {
-                                        replace(index, {
-                                            ...item,
-                                            unit: (e.target.value || '').trim(),
+                                            unit: unit as unknown as string,
                                         });
                                     }}
                                     sx={{ width: '60px' }}
