@@ -138,6 +138,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                 {/* Label input field */}
                                 <Input
                                     required={required}
+                                    fullWidth={false}
                                     label={getIntlText('common.label.label')}
                                     value={item?.label || ''}
                                     error={Boolean(errorInfo.label[index])}
@@ -153,6 +154,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                 {/* Scale value input field */}
                                 <Input
                                     required={required}
+                                    fullWidth={false}
                                     classes={{ root: 'input-box' }}
                                     label={getIntlText('common.label.scale')}
                                     value={item?.value || ''}
@@ -170,6 +172,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                 <Input
                                     label={getIntlText('common.label.unit')}
                                     classes={{ root: 'input-box' }}
+                                    fullWidth={false}
                                     slotProps={{
                                         htmlInput: { maxLength: 10 },
                                         input: { size: 'small' },
