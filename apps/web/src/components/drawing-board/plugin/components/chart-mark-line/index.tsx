@@ -121,6 +121,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
             <div className={styles.label}>
                 <Checkbox
                     checked={showContent}
+                    sx={{ padding: '0 9px' }}
                     onChange={e => {
                         const isChecked = e.target.checked;
                         setShowContent(isChecked);
@@ -140,6 +141,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                     label={getIntlText('common.label.label')}
                                     value={item?.label || ''}
                                     error={Boolean(errorInfo.label[index])}
+                                    slotProps={{ input: { size: 'small' } }}
                                     onChange={label => {
                                         replace(index, {
                                             ...item,
@@ -155,6 +157,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                     label={getIntlText('common.label.scale')}
                                     value={item?.value || ''}
                                     error={Boolean(errorInfo.value[index])}
+                                    slotProps={{ input: { size: 'small' } }}
                                     onChange={e => {
                                         replace(index, {
                                             ...item,
@@ -167,7 +170,10 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                 <Input
                                     label={getIntlText('common.label.unit')}
                                     classes={{ root: 'input-box' }}
-                                    slotProps={{ htmlInput: { maxLength: 10 } }}
+                                    slotProps={{
+                                        htmlInput: { maxLength: 10 },
+                                        input: { size: 'small' },
+                                    }}
                                     value={item?.unit || ''}
                                     onChange={unit => {
                                         replace(index, {
@@ -179,6 +185,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                 />
                                 {/* Color picker */}
                                 <IconColorSelect
+                                    size="small"
                                     label={getIntlText('common.label.color')}
                                     className={styles['icon-color-select']}
                                     value={item?.color}
@@ -194,7 +201,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                 {/* Delete button */}
                                 <div className={styles.icon}>
                                     <IconButton onClick={() => remove(index)}>
-                                        <DeleteOutlineIcon />
+                                        <DeleteOutlineIcon sx={{ fontSize: 16 }} />
                                     </IconButton>
                                 </div>
                             </div>
@@ -205,6 +212,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
                                 variant="outlined"
                                 startIcon={<AddIcon />}
                                 disabled={list.length >= MAX_VALUE_LENGTH}
+                                size="small"
                                 onClick={() => {
                                     if (list.length >= MAX_VALUE_LENGTH) return;
                                     insert(list.length, {
