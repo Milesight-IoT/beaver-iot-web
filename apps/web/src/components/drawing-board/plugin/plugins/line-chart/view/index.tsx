@@ -276,7 +276,7 @@ const View = (props: ViewProps) => {
         const resultColor = getChartColor(chartShowData);
         const [xAxisMin, xAxisMax] = xAxisRange || [];
 
-        const yRangeList = getYAxisRange() || {};
+        const yRangeList = getYAxisRange() || [];
         const yAxisNumber = yRangeList?.length || 1;
 
         let mousePos = [0, 0];
@@ -334,6 +334,8 @@ const View = (props: ViewProps) => {
                     axisLabel: {
                         hideOverlap: true,
                     },
+                    // right yAxis not show splitLine
+                    splitLine: { show: index === 0 },
                     ...(yRangeList[index] || {}),
                 })),
             series: lineSeries,
@@ -359,8 +361,8 @@ const View = (props: ViewProps) => {
                 pageIconSize: LEGEND_CONFIG.PAGE_ICON_SIZE,
                 pageIcons: {
                     horizontal: [
-                        'path://M8 5.33337L4 9.33337L4.94 10.2734L8 7.22004L11.06 10.2734L12 9.33337L8 5.33337Z',
-                        'path://M11.06 5.72668L8 8.78002L4.94 5.72668L4 6.66668L8 10.6667L12 6.66668L11.06 5.72668Z',
+                        'path://M10.2733 11.06L7.21998 8L10.2733 4.94L9.33331 4L5.33331 8L9.33331 12L10.2733 11.06Z',
+                        'path://M5.72668 11.06L8.78002 8L5.72668 4.94L6.66668 4L10.6667 8L6.66668 12L5.72668 11.06Z',
                     ],
                 },
             },
