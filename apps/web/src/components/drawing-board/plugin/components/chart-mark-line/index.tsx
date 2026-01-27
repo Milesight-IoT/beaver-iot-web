@@ -121,7 +121,7 @@ const ChartMarkLine: React.FC<ChartMarkLineProps> = ({
             <div className={styles.label}>
                 <Checkbox
                     checked={showContent}
-                    sx={{ padding: '0 9px' }}
+                    sx={{ padding: '0 9px 0 0', '&:hover': { backgroundColor: 'transparent' } }}
                     onChange={e => {
                         const isChecked = e.target.checked;
                         setShowContent(isChecked);
