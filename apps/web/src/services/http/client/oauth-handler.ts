@@ -270,7 +270,7 @@ const getTokenSilent = () => {
                 // Notify local subscribers
                 eventEmitter.publish(REFRESH_TOKEN_TOPIC, data);
             })
-            .catch(err => {
+            .catch(async err => {
                 const promiseToResolve = pendingPromises.slice();
 
                 console.error(err);
@@ -278,10 +278,19 @@ const getTokenSilent = () => {
                 pendingPromises.length = 0;
                 releaseLock();
 
-                /**
-                 * If the refresh token fails, set the original token expiration time to 1 minute later
-                 * to avoid repeated requests to refresh the token
-                 */
+                // Delay 1 second to avoid repeated requests to refresh the token
+                await delay(1000);
+                const newToken = iotStorage.getItem<TokenDataType>(TOKEN_CACHE_KEY);
+                const isExpired = newToken && Date.now() >= newToken.expires_in;
+
+                // Multi-tab refresh token race condition
+                if (newToken && !isExpired) {
+                    promiseToResolve.forEach(({ resolve }) => {
+                        resolve(newToken);
+                    });
+                    return;
+                }
+
                 token.expires_in = Date.now() + 1 * 60 * 1000;
                 iotStorage.setItem(TOKEN_CACHE_KEY, token);
 
