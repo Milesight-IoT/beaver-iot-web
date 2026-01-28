@@ -14,6 +14,7 @@ export interface UseBasicChartEntityProps {
     entity?: EntityOptionType[];
     time: number;
     isPreview?: boolean;
+    enableRenaming?: boolean; // Whether to enable renaming
 }
 
 /** Types of the data required for the chart */
@@ -82,7 +83,7 @@ const X_RANGE_MAP: Record<number, { stepSize: number; unit: 'minute' | 'hour' | 
  * Currently used in (column diagram, horizontal column diagram, folding drawing, area diagram)
  */
 export function useBasicChartEntity(props: UseBasicChartEntityProps) {
-    const { entity, time, isPreview, widgetId, dashboardId } = props;
+    const { entity, time, enableRenaming, widgetId, dashboardId } = props;
 
     const { getTimeFormat, getTime } = useTime();
 
@@ -220,6 +221,22 @@ export function useBasicChartEntity(props: UseBasicChartEntityProps) {
                     }
                 });
 
+                // Handle chart series names: if entityLabel is the same, change the name value with the following rules:
+                // 1. If there are duplicate entityLabels, the first one remains unchanged
+                // 2. Subsequent duplicate entityLabels get suffixes (1), (2), etc.
+                if (enableRenaming) {
+                    const nameSet = new Set<string>();
+                    const nameMap = new Map<string, number>();
+                    newChartShowData.forEach(series => {
+                        const { entityLabel } = series;
+                        if (nameSet.has(entityLabel)) {
+                            nameMap.set(entityLabel, (nameMap.get(entityLabel) || 0) + 1);
+                            series.entityLabel = `${entityLabel}(${nameMap.get(entityLabel)})`;
+                        } else {
+                            nameSet.add(entityLabel);
+                        }
+                    });
+                }
                 setChartShowData(newChartShowData);
             } finally {
                 setXAxisRange([Date.now() - time, Date.now()]);

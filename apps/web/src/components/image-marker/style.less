@@ -1,0 +1,38 @@
+.@{prefix}-image-marker {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        font-size: @font-size-base;
+        color: var(--white);
+        word-break: break-word;
+    }
+
+    // ========== Popup ==========
+    &-popup {
+        .@{mui-prefix}Tooltip {
+            &-tooltip {
+                max-width: 280px;
+                padding: @padding-sm;
+                color: var(--text-color-base);
+                background-color: var(--component-background);
+                border: 1px solid var(--border-color-base);
+                border-radius: @border-radius-md;
+            }
+
+            &-arrow {
+                color: var(--component-background);
+
+                &::before {
+                    border: 1px solid var(--border-color-base);
+                }
+            }
+        }
+    }
+}

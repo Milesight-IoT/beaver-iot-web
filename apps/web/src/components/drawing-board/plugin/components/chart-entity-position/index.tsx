@@ -113,6 +113,7 @@ const ChartEntityPosition: React.FC<ChartEntityPositionProps> = ({
                             label={getIntlText('common.label.entity')}
                             popupIcon={<KeyboardArrowDownIcon />}
                             filterOption={filterEntityOption(customFilterEntity, context)}
+                            size="small"
                             value={String(item?.id || '')}
                             onChange={option => {
                                 replace(index, {
@@ -130,6 +131,7 @@ const ChartEntityPosition: React.FC<ChartEntityPositionProps> = ({
                         <Select
                             label={getIntlText('dashboard.label.y_axis')}
                             sx={{ width: '105px' }}
+                            size="small"
                             options={positionOptions}
                             defaultValue={POSITION_AXIS.LEFT}
                             value={item.position}
@@ -146,7 +148,7 @@ const ChartEntityPosition: React.FC<ChartEntityPositionProps> = ({
                         />
                         <div className={styles.icon}>
                             <IconButton onClick={() => remove(index)}>
-                                <DeleteOutlineIcon />
+                                <DeleteOutlineIcon sx={{ fontSize: 16 }} />
                             </IconButton>
                         </div>
                     </div>
@@ -157,6 +159,7 @@ const ChartEntityPosition: React.FC<ChartEntityPositionProps> = ({
                         variant="outlined"
                         startIcon={<AddIcon />}
                         disabled={list.length >= MAX_VALUE_LENGTH}
+                        size="small"
                         onClick={() => {
                             if (list.length >= MAX_VALUE_LENGTH) return;
                             insert(list.length, {
@@ -175,4 +178,4 @@ const ChartEntityPosition: React.FC<ChartEntityPositionProps> = ({
     );
 };
 
-export default ChartEntityPosition;
+export default React.memo(ChartEntityPosition);

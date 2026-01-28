@@ -66,6 +66,7 @@ const View = (props: ViewProps) => {
         entity: latestEntities,
         time,
         isPreview,
+        enableRenaming: true,
     });
     const { renderEcharts } = useEcharts(chartRef);
     const { getYAxisRange } = useYAxisRange({ chartShowData, entity: latestEntities });

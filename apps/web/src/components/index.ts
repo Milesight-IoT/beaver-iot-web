@@ -101,3 +101,13 @@ export {
 } from './map';
 export { default as HoverSearchAutocomplete } from './hover-search-autocomplete';
 export { default as TagSelect, useTagSelectStore } from './tag-select';
+export {
+    default as ImageMarker,
+    type ImageMarkerProps,
+    type ImageMarkerInstance,
+    type Marker,
+    type MarkerStyle,
+    type MarkerPosition,
+    type MarkerChangeEvent,
+    type ImageSize as MarkerImageSize,
+} from './image-marker';

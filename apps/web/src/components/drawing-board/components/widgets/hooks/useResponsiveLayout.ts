@@ -1,12 +1,13 @@
-import { useMemo } from 'react';
-import { useMemoizedFn } from 'ahooks';
+import { useMemo, useContext } from 'react';
+import { useMemoizedFn, useSize } from 'ahooks';
 import { type Layout } from 'react-grid-layout';
 
 import { useTheme, useMediaQuery } from '@milesight/shared/src/hooks';
 
 import { type WidgetDetail } from '@/services/http/dashboard';
 import { type BoardPluginProps } from '@/components/drawing-board/plugin/types';
-import { PC_LAYOUT_COLS } from '@/components/drawing-board/constants';
+import { PC_LAYOUT_COLS, GRID_LAYOUT_MARGIN } from '@/components/drawing-board/constants';
+import { DrawingBoardContext } from '@/components/drawing-board/context';
 
 /**
  * Responsive layout based on screen size
@@ -15,6 +16,14 @@ export function useResponsiveLayout(widgets: WidgetDetail[]) {
     const { breakpoints } = useTheme();
     const smallScreenSize = useMediaQuery(breakpoints.down('md'));
     const mediumScreenSize = useMediaQuery(breakpoints.between('md', 'xl'));
+    const drawingBoardContext = useContext(DrawingBoardContext);
+    const bodySize = useSize(document.body);
+
+    const pcLayoutCols = useMemo(() => {
+        return (
+            drawingBoardContext?.drawingBoardDetail?.attributes?.grid_layout_cols || PC_LAYOUT_COLS
+        );
+    }, [drawingBoardContext]);
 
     const gridLayoutCols = useMemo(() => {
         if (smallScreenSize) {
@@ -25,16 +34,35 @@ export function useResponsiveLayout(widgets: WidgetDetail[]) {
             return 6;
         }
 
-        return PC_LAYOUT_COLS;
-    }, [smallScreenSize, mediumScreenSize]);
+        return pcLayoutCols;
+    }, [smallScreenSize, mediumScreenSize, pcLayoutCols]);
+
+    /**
+     * Calculate the height of each row in the PC layout
+     */
+    const newPcRowHeight = useMemo(() => {
+        const fullscreenNum = drawingBoardContext?.drawingBoardDetail?.attributes?.fullscreen;
+        const isFs = drawingBoardContext?.isFullscreen;
+        const { height } = bodySize || {};
+        if (!fullscreenNum || !height) {
+            return 88;
+        }
+
+        let newBodyHeight = height;
+        if (!isFs) {
+            newBodyHeight -= 10 + 36 + 10 + 1;
+        }
+
+        return (newBodyHeight - (fullscreenNum + 1) * GRID_LAYOUT_MARGIN) / fullscreenNum;
+    }, [bodySize, drawingBoardContext]);
 
     const gridRowHeight = useMemo(() => {
         if (smallScreenSize) {
             return 72;
         }
 
-        return 88;
-    }, [smallScreenSize]);
+        return newPcRowHeight;
+    }, [smallScreenSize, newPcRowHeight]);
 
     const minWidth = useMemoizedFn((plugin: BoardPluginProps) => {
         return plugin?.minCol || 2;
@@ -207,13 +235,14 @@ export function useResponsiveLayout(widgets: WidgetDetail[]) {
         /**
          * New greed masonry layout algorithm
          */
-        if (gridLayoutCols !== PC_LAYOUT_COLS) {
+        if (gridLayoutCols !== pcLayoutCols) {
             return generateGridLayout(positionMap, gridLayoutCols);
         }
 
         return positionMap;
     }, [
         gridLayoutCols,
+        pcLayoutCols,
         widgets,
         generateGridLayout,
         currentHeight,

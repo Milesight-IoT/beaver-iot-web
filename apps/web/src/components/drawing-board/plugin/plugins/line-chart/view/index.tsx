@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useContext } from 'react';
+import React, { useEffect, useMemo, useRef, useContext, useCallback } from 'react';
 import { renderToString } from 'react-dom/server';
 import cls from 'classnames';
 import * as echarts from 'echarts/core';
@@ -14,10 +14,12 @@ import { Tooltip } from '@/components/drawing-board/plugin/view-components';
 import { type ChartEntityPositionValueType } from '@/components/drawing-board/plugin/components/chart-entity-position';
 import { PluginFullscreenContext } from '@/components/drawing-board/components';
 import { EchartsUI, useEcharts } from '@/components/echarts';
+import { type ChartMarkLineValueType } from '@/components/drawing-board/plugin/components/chart-mark-line';
 import { useLineChart, useYAxisRange, useZoomChart } from './hooks';
 import type { BoardPluginProps } from '../../../types';
 
 import styles from './style.module.less';
+import { useLineSeries } from './hooks/useLineSeries';
 
 export interface ViewProps {
     widgetId: ApiKey;
@@ -28,9 +30,143 @@ export interface ViewProps {
         time: number;
         leftYAxisUnit: string;
         rightYAxisUnit: string;
+        leftYAxisMarkLine: ChartMarkLineValueType[];
+        rightYAxisMarkLine: ChartMarkLineValueType[];
     };
     configJson: BoardPluginProps;
     isEdit?: boolean;
+}
+
+interface LegendSelectChangedParams {
+    name: string;
+    selected: Record<string, boolean>;
+}
+
+// Constants
+const GRID_SIZE_THRESHOLD = {
+    SMALL: 2,
+    MEDIUM: 3,
+    LARGE: 4,
+} as const;
+
+const TOOLTIP_DISTANCE_THRESHOLD = {
+    MARKLINE_Y: 4, // pixels
+    DATA_POINT_X: 5, // pixels
+} as const;
+
+const Y_AXIS_UNIT_FONT =
+    "12px '-apple-system', 'Helvetica Neue', 'PingFang SC', 'SegoeUI', 'Noto Sans CJK SC', sans-serif, 'Helvetica', 'Microsoft YaHei', '微软雅黑', 'Arial'";
+
+const DATA_ZOOM_COLOR = '#7b4efa';
+const DATA_ZOOM_BORDER_COLOR = '#E5E6EB';
+
+const LEGEND_CONFIG = {
+    ITEM_WIDTH: 10,
+    ITEM_HEIGHT: 10,
+    PAGE_ICON_COLOR: '#6B7785',
+    PAGE_ICON_INACTIVE_COLOR: '#C9CDD4',
+    PAGE_ICON_SIZE: 10,
+    LEFT: 10,
+    RIGHT: 10,
+};
+
+/**
+ * Check if mouse is near markLine on Y axis
+ */
+function isNearMarkLine(chart: echarts.ECharts, mouseY: number, series: any) {
+    const yAxisIndex = series?.yAxisIndex ?? 0;
+    const [timeValue] = series.data[0];
+    // Get the yAxis value from markLine data
+    const yValue = series.markLine?.data?.[0]?.yAxis;
+
+    const pointInGrid = chart.convertToPixel({ xAxisIndex: 0, yAxisIndex }, [timeValue, yValue]);
+
+    if (!pointInGrid) return false;
+
+    return Math.abs(pointInGrid[1] - mouseY) <= TOOLTIP_DISTANCE_THRESHOLD.MARKLINE_Y;
+}
+
+/**
+ * Check if mouse is near data point on X axis
+ */
+function isNearDataPoint(
+    chart: echarts.ECharts,
+    mouseX: number,
+    timeValue: number,
+    yValue: number,
+    yAxisIndex: number,
+) {
+    const pointInGrid = chart.convertToPixel({ xAxisIndex: 0, yAxisIndex }, [timeValue, yValue]);
+
+    const distance = Math.abs(pointInGrid[0] - mouseX);
+    return distance <= TOOLTIP_DISTANCE_THRESHOLD.DATA_POINT_X;
+}
+
+/**
+ * Render markLine tooltip content
+ */
+function renderMarkLineTooltip(markLineSeries: any[]) {
+    return renderToString(
+        <div>
+            {markLineSeries.map(series => (
+                <div key={series?.name}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}
+                    >
+                        <div>
+                            <span
+                                className={styles['mark-line-tooltip-icon']}
+                                style={{ backgroundColor: series?.itemStyle?.color }}
+                            />
+                            <span>{series?.name || ''}：</span>
+                        </div>
+                        <div>{`${series?.customConfig?.value}${
+                            series?.customConfig?.unit || ''
+                        }`}</div>
+                    </div>
+                </div>
+            ))}
+        </div>,
+    );
+}
+
+/**
+ * Render data series tooltip content
+ */
+function renderDataTooltip(params: any[], entity: EntityOptionType[]): string {
+    return renderToString(
+        <div>
+            {params.map((item: any, index: number) => {
+                const { data, marker, seriesName, axisValueLabel, seriesIndex } = item || {};
+
+                const unit = entity?.[seriesIndex]?.rawData?.entityValueAttribute?.unit;
+
+                return (
+                    <div key={item?.dataIndex}>
+                        {index === 0 && <div>{axisValueLabel}</div>}
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <div>
+                                <span
+                                    //  eslint-disable-next-line react/no-danger
+                                    dangerouslySetInnerHTML={{ __html: marker }}
+                                />
+                                <span>{seriesName || ''}:&nbsp;&nbsp;</span>
+                            </div>
+                            <div>{`${data?.[1]}${unit || ''}`}</div>
+                        </div>
+                    </div>
+                );
+            })}
+        </div>,
+    );
 }
 
 const View = (props: ViewProps) => {
@@ -41,6 +177,8 @@ const View = (props: ViewProps) => {
         time,
         leftYAxisUnit,
         rightYAxisUnit,
+        leftYAxisMarkLine: leftYMarkLine,
+        rightYAxisMarkLine: rightYMarkLine,
     } = config || {};
     const { isPreview, pos } = configJson || {};
 
@@ -53,6 +191,8 @@ const View = (props: ViewProps) => {
     );
 
     const { stableValue: entityPosition = [] } = useStableValue(unStableValue);
+    const { stableValue: leftYAxisMarkLine = [] } = useStableValue(leftYMarkLine);
+    const { stableValue: rightYAxisMarkLine = [] } = useStableValue(rightYMarkLine);
     const { getLatestEntityDetail } = useActivityEntity();
     const entity = useMemo(() => {
         if (!Array.isArray(entityPosition)) return [];
@@ -85,33 +225,87 @@ const View = (props: ViewProps) => {
         chartShowData,
     });
     const { getYAxisRange } = useYAxisRange({ newChartShowData, entity });
+    const { getLineSeries } = useLineSeries({
+        newChartShowData,
+        leftYAxisMarkLine,
+        rightYAxisMarkLine,
+    });
+
+    // Create tooltip formatter function with dependencies
+    const createTooltipFormatter = useCallback(
+        (params: any, mousePos: number[], myChart: echarts.ECharts | null) => {
+            if (!myChart) return '';
+            const { series: allSeries = [] as any, legend: legends = [] as any } =
+                myChart.getOption();
+
+            // Check for markLine hover
+            const allMarkLineSeries = allSeries.filter((series: any) => {
+                if (series?.customConfig?.type !== 'markLine') return false;
+                // Check if the series is selected，true and undefined are both valid
+                if (legends[0].selected[series.name] === false) {
+                    return false;
+                }
+                return isNearMarkLine(myChart, mousePos[1], series);
+            });
+
+            if (allMarkLineSeries.length) {
+                return renderMarkLineTooltip(allMarkLineSeries);
+            }
+
+            // Check if all params are markLine type
+            const isAllMarkLineParams = params.every(
+                (param: any) => allSeries[param.seriesIndex]?.customConfig?.type === 'markLine',
+            );
+            if (isAllMarkLineParams) return '';
+
+            // Check for data point hover
+            const timeValue = params[0].axisValue;
+            const yValue = params[0].data[1];
+            const yAxisIndex = allSeries[params[0].seriesIndex].yAxisIndex ?? 0;
+
+            if (!isNearDataPoint(myChart, mousePos[0], timeValue, yValue, yAxisIndex)) {
+                return '';
+            }
+
+            return renderDataTooltip(params, entity);
+        },
+        [entity],
+    );
 
     useEffect(() => {
         const resultColor = getChartColor(chartShowData);
         const [xAxisMin, xAxisMax] = xAxisRange || [];
 
-        const yRangeList = getYAxisRange() || {};
+        const yRangeList = getYAxisRange() || [];
         const yAxisNumber = yRangeList?.length || 1;
 
         let mousePos = [0, 0];
         let myChart: echarts.ECharts | null = null;
 
+        const lineSeries = getLineSeries({
+            isBigData,
+            resultColor,
+            matchTablet,
+            xAxisMin,
+            xAxisMax,
+        });
+
         renderEcharts({
             graphic: new Array(Math.min(newChartShowData.length, 2)).fill(0).map((_, index) => ({
-                invisible: hGrid <= 2,
+                invisible: hGrid <= GRID_SIZE_THRESHOLD.SMALL,
                 type: 'text',
                 left: index === 0 ? 0 : void 0,
                 right: index === 0 ? void 0 : 0,
                 top: 'center',
-                rotation: Math.PI / 2, // Rotate 90 degrees, with the unit being radians
+                rotation: Math.PI / 2, // Rotate 90 degrees
                 style: {
                     fill: grey[600],
                     text: index === 0 ? leftYAxisUnit : rightYAxisUnit,
-                    font: "12px '-apple-system', 'Helvetica Neue', 'PingFang SC', 'SegoeUI', 'Noto Sans CJK SC', sans-serif, 'Helvetica', 'Microsoft YaHei', '微软雅黑', 'Arial'",
+                    font: Y_AXIS_UNIT_FONT,
                 },
             })),
             xAxis: {
-                show: wGrid > 2,
+                show: wGrid > GRID_SIZE_THRESHOLD.SMALL,
                 type: 'time',
                 min: xAxisMin,
                 max: xAxisMax,
@@ -133,60 +327,57 @@ const View = (props: ViewProps) => {
             yAxis: new Array(newChartShowData.length || 1)
                 .fill({ type: 'value' })
                 .map((_, index) => ({
-                    show: hGrid > 2,
+                    show: hGrid > GRID_SIZE_THRESHOLD.SMALL,
                     type: 'value',
                     nameLocation: 'middle',
                     nameGap: 40,
                     axisLabel: {
                         hideOverlap: true,
                     },
+                    // right yAxis not show splitLine
+                    splitLine: { show: index === 0 },
                     ...(yRangeList[index] || {}),
                 })),
-            series: newChartShowData.map((chart, index) => ({
-                sampling: isBigData?.[index] ? 'lttb' : 'none',
-                name: chart.entityLabel,
-                type: 'line',
-                data: chart.chartOwnData.map(v => [v.timestamp, v.value]),
-                yAxisIndex: newChartShowData?.length < 2 ? 0 : chart.yAxisID === 'y1' ? 1 : 0,
-                lineStyle: {
-                    color: resultColor[index], // Line color
-                    width: 2, // The thickness of the line
-                },
-                itemStyle: {
-                    color: resultColor[index], // Data dot color
-                },
-                connectNulls: true,
-                showSymbol: !isBigData?.[index], // Whether to display data dots
-                symbolSize: 2, // Data dot size
-                emphasis: {
-                    disabled: matchTablet,
-                    focus: 'series',
-                    scale: 4,
-                    itemStyle: {
-                        borderColor: resultColor[index],
-                        borderWidth: 0, // Set it to 0 to make the dot solid when hovering
-                        color: resultColor[index], // Make sure the color is consistent with the lines
-                    },
-                },
-            })),
+            series: lineSeries,
             legend: {
-                show: wGrid > 2,
-                data: chartShowData.map(chartData => chartData.entityLabel),
-                itemWidth: 10,
-                itemHeight: 10,
-                icon: 'roundRect', // Set the legend item as a square
+                show: wGrid > GRID_SIZE_THRESHOLD.SMALL,
+                data: lineSeries.map(series => ({
+                    name: series.name,
+                    icon: series?.customConfig?.legendIcon || 'circle',
+                })),
+                itemWidth: LEGEND_CONFIG.ITEM_WIDTH,
+                itemHeight: LEGEND_CONFIG.ITEM_HEIGHT,
                 textStyle: {
-                    borderRadius: 10,
+                    borderRadius: LEGEND_CONFIG.ITEM_WIDTH,
                 },
                 itemStyle: {
-                    borderRadius: 10,
+                    borderRadius: LEGEND_CONFIG.ITEM_WIDTH,
+                },
+                type: 'scroll',
+                left: LEGEND_CONFIG.LEFT,
+                right: LEGEND_CONFIG.RIGHT,
+                pageIconColor: LEGEND_CONFIG.PAGE_ICON_COLOR,
+                pageIconInactiveColor: LEGEND_CONFIG.PAGE_ICON_INACTIVE_COLOR,
+                pageIconSize: LEGEND_CONFIG.PAGE_ICON_SIZE,
+                pageIcons: {
+                    horizontal: [
+                        'path://M10.2733 11.06L7.21998 8L10.2733 4.94L9.33331 4L5.33331 8L9.33331 12L10.2733 11.06Z',
+                        'path://M5.72668 11.06L8.78002 8L5.72668 4.94L6.66668 4L10.6667 8L6.66668 12L5.72668 11.06Z',
+                    ],
                 },
             },
             grid: {
                 containLabel: true,
-                top: hGrid >= 4 ? '42px' : 30, // Adjust the top blank space of the chart area
-                left: hGrid > 2 ? 15 : -25,
-                right: yAxisNumber >= 2 ? (hGrid > 2 ? 17 : -20) : wGrid > 2 || hGrid > 2 ? 15 : 0,
+                top: hGrid >= GRID_SIZE_THRESHOLD.LARGE ? '42px' : 30,
+                left: hGrid > GRID_SIZE_THRESHOLD.SMALL ? 15 : -25,
+                right:
+                    yAxisNumber >= 2
+                        ? hGrid > GRID_SIZE_THRESHOLD.SMALL
+                            ? 17
+                            : -20
+                        : wGrid > GRID_SIZE_THRESHOLD.SMALL || hGrid > GRID_SIZE_THRESHOLD.SMALL
+                          ? 15
+                          : 0,
                 ...getChartGridBottom(wGrid, hGrid),
             },
             tooltip: {
@@ -197,85 +388,26 @@ const View = (props: ViewProps) => {
                 textStyle: {
                     color: '#fff',
                 },
-                formatter: (params: any) => {
-                    if (!myChart) {
-                        return '';
-                    }
-
-                    const timeValue = params[0].axisValue;
-                    // Take the y value of the current data point
-                    const yValue = params[0].data[1];
-                    // Take the yAxisIndex of the current series
-                    const yAxisIndex =
-                        (myChart?.getOption() as any)?.series?.[params[0].seriesIndex].yAxisIndex ??
-                        0;
-                    // Pass in the complete xAxisIndex/yAxisIndex
-                    const pointInGrid = myChart.convertToPixel({ xAxisIndex: 0, yAxisIndex }, [
-                        timeValue,
-                        yValue,
-                    ]);
-
-                    // Calculate the distance between the mouse and the data points
-                    const distance = Math.abs(pointInGrid[0] - mousePos[0]);
-                    // The Tooltip is displayed only when the distance is less than the threshold (5 pixels)
-                    if (distance > 5) return '';
-
-                    return renderToString(
-                        <div>
-                            {params.map((item: any, index: number) => {
-                                const { data, marker, seriesName, axisValueLabel, seriesIndex } =
-                                    item || {};
-
-                                const getUnit = () => {
-                                    const { rawData: currentEntity } = entity?.[seriesIndex] || {};
-                                    if (!currentEntity) return;
-                                    const { entityValueAttribute } = currentEntity || {};
-                                    const { unit } = entityValueAttribute || {};
-                                    return unit;
-                                };
-                                const unit = getUnit();
-
-                                return (
-                                    <div key={item?.dataIndex}>
-                                        {index === 0 && <div>{axisValueLabel}</div>}
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                            }}
-                                        >
-                                            <div>
-                                                <span
-                                                    //  eslint-disable-next-line react/no-danger
-                                                    dangerouslySetInnerHTML={{ __html: marker }}
-                                                />
-                                                <span>{seriesName || ''}:&nbsp;&nbsp;</span>
-                                            </div>
-                                            <div>{`${data?.[1]}${unit || ''}`}</div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>,
-                    );
+                formatter: params => {
+                    return createTooltipFormatter(params, mousePos, myChart);
                 },
             },
             dataZoom: [
                 {
-                    type: 'inside', // Built-in data scaling component
+                    type: 'inside',
                     filterMode: 'none',
-                    zoomOnMouseWheel: 'ctrl', // Hold down the ctrl key to zoom
+                    zoomOnMouseWheel: 'ctrl',
                     preventDefaultMouseMove: false,
                 },
                 {
                     type: 'slider',
-                    show: hGrid >= 4,
+                    show: hGrid >= GRID_SIZE_THRESHOLD.LARGE,
                     start: 0,
                     end: 100,
                     fillerColor: 'rgba(123, 78, 250, 0.15)',
                     showDetail: false,
                     moveHandleStyle: {
-                        color: '#7b4efa',
+                        color: DATA_ZOOM_COLOR,
                         opacity: 0.16,
                     },
                     emphasis: {
@@ -283,55 +415,44 @@ const View = (props: ViewProps) => {
                             show: true,
                         },
                         moveHandleStyle: {
-                            color: '#7b4efa',
+                            color: DATA_ZOOM_COLOR,
                             opacity: 1,
                         },
                     },
-                    borderColor: '#E5E6EB',
+                    borderColor: DATA_ZOOM_BORDER_COLOR,
                     dataBackground: {
                         lineStyle: {
-                            color: '#7b4efa',
+                            color: DATA_ZOOM_COLOR,
                             opacity: 0.36,
                         },
                         areaStyle: {
-                            color: '#7b4efa',
+                            color: DATA_ZOOM_COLOR,
                             opacity: 0.08,
                         },
                     },
                     selectedDataBackground: {
                         lineStyle: {
-                            color: '#7b4efa',
+                            color: DATA_ZOOM_COLOR,
                             opacity: 0.8,
                         },
                         areaStyle: {
-                            color: '#7b4efa',
+                            color: DATA_ZOOM_COLOR,
                             opacity: 0.2,
                         },
                     },
                     brushStyle: {
-                        color: '#7b4efa',
+                        color: DATA_ZOOM_COLOR,
                         opacity: 0.16,
                     },
                 },
             ],
         }).then(currentChart => {
-            if (!currentChart) {
-                return;
-            }
+            if (!currentChart) return;
 
             myChart = currentChart;
 
             currentChart.getZr().on('mousemove', e => {
                 mousePos = [e.offsetX, e.offsetY];
-            });
-
-            currentChart.on('mousemove', params => {
-                currentChart.dispatchAction({
-                    type: 'showTip',
-                    seriesIndex: params?.seriesIndex,
-                    dataIndex: params?.dataIndex,
-                    name: params?.name,
-                });
             });
 
             hoverZoomBtn();
@@ -354,26 +475,35 @@ const View = (props: ViewProps) => {
         zoomChart,
         getYAxisRange,
         renderEcharts,
+        leftYAxisMarkLine,
+        rightYAxisMarkLine,
+        getLineSeries,
+        createTooltipFormatter,
     ]);
 
     return (
         <div
             className={cls(styles['line-chart-wrapper'], {
                 [styles['line-chart-wrapper__preview']]: isPreview,
-                'px-0': hGrid <= 2 && wGrid <= 2,
+                'px-0': hGrid <= GRID_SIZE_THRESHOLD.SMALL && wGrid <= GRID_SIZE_THRESHOLD.SMALL,
             })}
             ref={chartWrapperRef}
         >
             {hGrid > 1 && (
                 <Tooltip
-                    className={cls(styles.name, { 'ps-4': hGrid <= 2 && wGrid <= 2 })}
+                    className={cls(styles.name, {
+                        'ps-4':
+                            hGrid <= GRID_SIZE_THRESHOLD.SMALL &&
+                            wGrid <= GRID_SIZE_THRESHOLD.SMALL,
+                    })}
                     autoEllipsis
                     title={title}
                 />
             )}
             <div
                 className={cls(styles['line-chart-content'], {
-                    'px-3': hGrid <= 2 && wGrid <= 2,
+                    'px-3':
+                        hGrid <= GRID_SIZE_THRESHOLD.SMALL && wGrid <= GRID_SIZE_THRESHOLD.SMALL,
                 })}
             >
                 <EchartsUI ref={chartRef} />

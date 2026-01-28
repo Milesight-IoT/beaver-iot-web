@@ -110,9 +110,9 @@ const intervalConfigs: Partial<
     MINUTES: {
         labelIntlKey: 'common.label.minutes',
     },
-    // SECONDS: {
-    //     labelIntlKey: 'common.label.seconds',
-    // },
+    SECONDS: {
+        labelIntlKey: 'common.label.seconds',
+    },
 };
 
 const MAX_VALUE_LENGTH = 10;

@@ -21,6 +21,7 @@ import {
     ChartMetricsSelect,
     MultiDeviceSelect,
     AlarmTimeSelect,
+    ChartMarkLine,
 } from '../../components';
 
 export interface ControlComponentProps {
@@ -147,6 +148,8 @@ const ControlComponent: React.FC<ControlComponentProps> = (props: ControlCompone
                     {...config?.componentProps}
                 />
             );
+        case 'ChartMarkLine':
+            return <ChartMarkLine {...omit(commonProps, ['label'])} {...config?.componentProps} />;
         default:
             return null;
     }

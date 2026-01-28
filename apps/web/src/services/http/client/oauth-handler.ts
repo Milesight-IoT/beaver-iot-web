@@ -8,7 +8,11 @@ import {
 } from '@milesight/shared/src/config';
 import eventEmitter from '@milesight/shared/src/utils/event-emitter';
 import { getResponseData } from '@milesight/shared/src/utils/request';
-import iotStorage, { TOKEN_CACHE_KEY } from '@milesight/shared/src/utils/storage';
+import { delay } from '@milesight/shared/src/utils/tools';
+import iotStorage, {
+    TOKEN_CACHE_KEY,
+    DEFAULT_CACHE_PREFIX,
+} from '@milesight/shared/src/utils/storage';
 import { API_PREFIX } from './constant';
 
 type TokenDataType = {
@@ -24,11 +28,15 @@ type TokenDataType = {
     expires_in: number;
 };
 
-let timer: number | null = null;
-/** Token delay refreshing time */
-const REFRESH_TOKEN_TIMEOUT = 1 * 1000;
 /** Token refresh API path */
 const tokenApiPath = `${API_PREFIX}/oauth2/token`;
+/** Storage key for cross-tab token refresh lock */
+const TOKEN_REFRESH_LOCK_KEY = 'token_refresh_lock';
+/** Lock timeout: 30 seconds */
+const LOCK_TIMEOUT = 30 * 1000;
+/** Max wait time for token refresh across tabs: 35 seconds */
+const MAX_WAIT_TIME = 35 * 1000;
+
 /**
  * Generate Authorization request header data
  * @param token Login certificate
@@ -39,41 +47,196 @@ const genAuthorization = (token?: string) => {
 };
 
 /**
- * Token Processing Logic (Silent processing)
- *
- * 1. Check whether the token in the cache is valid. If yes, write the token into the request header
- * 2. Refresh the token periodically every 60 minutes
+ * Cross-tab lock structure
  */
-const oauthHandler = async (config: AxiosRequestConfig) => {
-    const token = iotStorage.getItem<TokenDataType>(TOKEN_CACHE_KEY);
-    const isExpired = token && Date.now() >= token.expires_in;
-    const isOauthRequest = config.url?.includes('oauth2/token');
+type RefreshLock = {
+    /** Tab ID that holds the lock */
+    tabId: string;
+    /** Lock timestamp */
+    timestamp: number;
+};
 
-    if (token?.access_token && !isOauthRequest) {
-        config.headers = config.headers || {};
-        config.headers.Authorization = genAuthorization(token?.access_token);
+/**
+ * Generate unique tab ID
+ */
+const tabId = `tab_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+
+/**
+ * Try to acquire cross-tab lock for token refresh
+ */
+const tryAcquireLock = async (): Promise<boolean> => {
+    // 0-100 Random delay to avoid the lock being acquired at the same millisecond
+    await delay(Math.random() * 95 + 5);
+
+    const lockData = iotStorage.getItem<RefreshLock>(TOKEN_REFRESH_LOCK_KEY);
+    const now = Date.now();
+
+    // No lock exists or lock has expired
+    if (!lockData || now - lockData.timestamp > LOCK_TIMEOUT) {
+        iotStorage.setItem(TOKEN_REFRESH_LOCK_KEY, {
+            tabId,
+            timestamp: now,
+        });
+        return true;
     }
 
-    /**
-     * 1. If the request is oauth, the token is not refreshed
-     * 2. If there is no local cache token, do not refresh the token
-     * 3. If the local cache token does not expire, do not refresh the token
-     */
-    if (isOauthRequest || !token?.access_token || !isExpired) {
-        return config;
-    }
+    // Lock is held by another tab
+    return false;
+};
 
-    /**
-     * After one second of delay, a token update request is sent to ensure that the request using the old token can still pass the back-end authentication within one second
-     */
-    if (timer) window.clearTimeout(timer);
-    timer = window.setTimeout(() => {
+/**
+ * Release the cross-tab lock
+ */
+const releaseLock = () => {
+    const lockData = iotStorage.getItem<RefreshLock>(TOKEN_REFRESH_LOCK_KEY);
+    // Only release if this tab holds the lock
+    if (lockData?.tabId === tabId) {
+        iotStorage.removeItem(TOKEN_REFRESH_LOCK_KEY);
+    }
+};
+
+/**
+ * Wait for token to be refreshed by another tab
+ * Uses storage event for real-time notification, with polling as fallback
+ */
+const waitForTokenRefresh = (initialToken: TokenDataType): Promise<TokenDataType | undefined> => {
+    return new Promise(resolve => {
+        const startTime = Date.now();
+        const initialExpiry = initialToken.expires_in;
+        let timeoutId: NodeJS.Timeout | null = null;
+        let resolved = false;
+
+        const cleanup = (token?: TokenDataType) => {
+            if (resolved) return;
+            resolved = true;
+
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+            window.removeEventListener('storage', storageHandler);
+
+            // Notify local subscribers when token is updated
+            if (token) {
+                eventEmitter.publish(REFRESH_TOKEN_TOPIC, token);
+            }
+
+            resolve(token);
+        };
+
+        // Storage event handler for real-time updates from other tabs
+        const storageHandler = (event: StorageEvent) => {
+            // console.log('Storage event received:', event);
+            if (event.key !== `${DEFAULT_CACHE_PREFIX}${TOKEN_CACHE_KEY}` || !event.newValue) {
+                return;
+            }
+
+            try {
+                const newToken = JSON.parse(event.newValue)?.value as TokenDataType;
+
+                // Verify token was actually refreshed
+                if (newToken.expires_in !== initialExpiry) {
+                    // console.log('Token successfully refreshed:', newToken);
+                    cleanup(newToken);
+                }
+            } catch (error) {
+                console.error('Failed to parse token from storage event:', error);
+            }
+        };
+
+        // Fallback polling in case storage event doesn't fire
+        const checkToken = () => {
+            const elapsed = Date.now() - startTime;
+
+            // Timeout: let caller handle retry
+            if (elapsed > MAX_WAIT_TIME) {
+                cleanup(undefined);
+                return;
+            }
+
+            const currentToken = iotStorage.getItem<TokenDataType>(TOKEN_CACHE_KEY);
+            // Token has been updated
+            if (currentToken && currentToken.expires_in !== initialExpiry) {
+                cleanup(currentToken);
+                return;
+            }
+
+            // Check again after a short delay
+            timeoutId = setTimeout(checkToken, 200);
+        };
+
+        // Listen to storage events for real-time updates
+        window.addEventListener('storage', storageHandler);
+
+        // Start polling as fallback
+        checkToken();
+    });
+};
+
+let refreshPending = false;
+const pendingPromises: {
+    resolve: (token: TokenDataType | undefined) => void;
+    reject: (reason?: any) => void;
+}[] = [];
+
+const getTokenSilent = () => {
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise<TokenDataType | undefined>(async (resolve, reject) => {
+        const token = iotStorage.getItem<TokenDataType>(TOKEN_CACHE_KEY);
+        const isExpired = token && Date.now() >= token.expires_in;
+
+        if (!token || !isExpired) {
+            resolve(token);
+            return;
+        }
+
+        pendingPromises.push({ resolve, reject });
+
+        // Try to acquire cross-tab lock
+        const hasLock = await tryAcquireLock();
+        // console.log('hasLock', hasLock, Date.now());
+
+        if (!hasLock) {
+            // Another tab is refreshing, wait for it
+            refreshPending = true;
+            waitForTokenRefresh(token)
+                .then(refreshedToken => {
+                    const promiseToResolve = pendingPromises.slice();
+                    refreshPending = false;
+                    pendingPromises.length = 0;
+
+                    if (refreshedToken) {
+                        // Another tab successfully refreshed the token
+                        promiseToResolve.forEach(({ resolve }) => {
+                            resolve(refreshedToken);
+                        });
+                    } else {
+                        // Timeout: retry token refresh
+                        promiseToResolve.forEach(({ resolve }) => {
+                            getTokenSilent().then(resolve).catch(reject);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error waiting for token refresh:', error);
+                    const promiseToResolve = pendingPromises.slice();
+                    refreshPending = false;
+                    pendingPromises.length = 0;
+
+                    promiseToResolve.forEach(({ reject }) => {
+                        reject(error);
+                    });
+                });
+        }
+        if (refreshPending) return;
+
+        // This tab acquired the lock, proceed with refresh
         const requestConfig = {
             baseURL: apiOrigin,
             headers: {
-                Authorization: genAuthorization(token?.access_token),
+                Authorization: genAuthorization(token.access_token),
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
+            timeout: 10000,
             withCredentials: true,
         };
         const requestData = {
@@ -83,21 +246,77 @@ const oauthHandler = async (config: AxiosRequestConfig) => {
             client_secret: oauthClientSecret,
         };
 
+        refreshPending = true;
         axios
             .post<ApiResponse<TokenDataType>>(tokenApiPath, requestData, requestConfig)
             .then(resp => {
-                const data = getResponseData(resp)!;
+                const data = getResponseData(resp);
+                const promiseToResolve = pendingPromises.slice();
 
-                // The token is refreshed every 60 minutes
-                data.expires_in = Date.now() + 60 * 60 * 1000;
-                iotStorage.setItem(TOKEN_CACHE_KEY, data);
-                eventEmitter.publish(REFRESH_TOKEN_TOPIC);
+                refreshPending = false;
+                pendingPromises.length = 0;
+                releaseLock();
+
+                if (data) {
+                    // The token is refreshed every 60 minutes
+                    data.expires_in = Date.now() + 60 * 60 * 1000;
+                    iotStorage.setItem(TOKEN_CACHE_KEY, data);
+                }
+
+                promiseToResolve.forEach(({ resolve }) => {
+                    resolve(data);
+                });
+
+                // Notify local subscribers
+                eventEmitter.publish(REFRESH_TOKEN_TOPIC, data);
             })
-            .catch(_ => {
-                // TODO: If the token is invalid, the token is directly removed
-                // iotStorage.removeItem(TOKEN_CACHE_KEY);
+            .catch(async err => {
+                const promiseToResolve = pendingPromises.slice();
+
+                console.error(err);
+                refreshPending = false;
+                pendingPromises.length = 0;
+                releaseLock();
+
+                // Delay 1 second to avoid repeated requests to refresh the token
+                await delay(1000);
+                const newToken = iotStorage.getItem<TokenDataType>(TOKEN_CACHE_KEY);
+                const isExpired = newToken && Date.now() >= newToken.expires_in;
+
+                // Multi-tab refresh token race condition
+                if (newToken && !isExpired) {
+                    promiseToResolve.forEach(({ resolve }) => {
+                        resolve(newToken);
+                    });
+                    return;
+                }
+
+                token.expires_in = Date.now() + 1 * 60 * 1000;
+                iotStorage.setItem(TOKEN_CACHE_KEY, token);
+
+                promiseToResolve.forEach(({ resolve }) => {
+                    resolve(token);
+                });
             });
-    }, REFRESH_TOKEN_TIMEOUT);
+    });
+};
+
+/**
+ * Token Processing Logic (Silent processing)
+ *
+ * 1. Check whether the token in the cache is valid. If yes, write the token into the request header
+ * 2. Refresh the token periodically every 60 minutes
+ */
+const oauthHandler = async (config: AxiosRequestConfig) => {
+    const isOauthRequest = config.url?.includes('oauth2/token');
+    if (isOauthRequest) return config;
+
+    const token = await getTokenSilent();
+
+    if (token?.access_token) {
+        config.headers = config.headers || {};
+        config.headers.Authorization = genAuthorization(token?.access_token);
+    }
 
     return config;
 };
