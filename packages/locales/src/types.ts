@@ -27,4 +27,5 @@ export enum LANGUAGE {
     RU = 'RU',
     AR = 'AR',
     PT_BR = 'PT_BR',
+    JA = 'JA',
 }

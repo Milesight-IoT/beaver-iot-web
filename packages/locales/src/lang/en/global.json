@@ -205,6 +205,8 @@
     "common.language.cn_short": "ZH",
     "common.language.en": "English",
     "common.language.en_short": "EN",
+    "common.language.ja": "Japanese",
+    "common.language.ja_short": "JA",
     "common.message.add_success": "Added successfully.",
     "common.message.click_to_upload_file": " Click or drag files to this area to upload.",
     "common.message.copy_successful": "Copied successfully.",

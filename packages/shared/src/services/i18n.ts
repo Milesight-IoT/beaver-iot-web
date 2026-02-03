@@ -8,13 +8,14 @@
 import intl from 'react-intl-universal';
 import dayjs from 'dayjs';
 import { isEmpty } from 'lodash-es';
-import { zhCN, enUS, type Localization } from '@mui/material/locale';
+import { zhCN, enUS, jaJP, type Localization } from '@mui/material/locale';
 import i18nHelper, { LANGUAGE, HTTP_ERROR_CODE_PREFIX } from '@milesight/locales';
 import iotStorage from '../utils/storage';
 import eventEmitter from '../utils/event-emitter';
 
 // https://github.com/iamkun/dayjs/tree/dev/src/locale
 import 'dayjs/locale/zh-cn';
+import 'dayjs/locale/ja';
 
 // import type { WeekStartWithType } from '../utils/time/interface';
 /**
@@ -70,6 +71,12 @@ export const langs: LangListType = {
         value: i18nHelper.getComponentLanguage(LANGUAGE.CN, 'dayjs'),
         muiLocale: zhCN,
         labelIntlKey: 'common.language.cn',
+    },
+    JA: {
+        key: LANGUAGE.JA,
+        value: i18nHelper.getComponentLanguage(LANGUAGE.JA, 'dayjs'),
+        muiLocale: jaJP,
+        labelIntlKey: 'common.language.ja',
     },
 };
 
@@ -144,6 +151,13 @@ export const initI18n = async (platform: AppType, defaultLang?: LangType) => {
          */
         if (/^zh(_\w+)?/i.test(language)) {
             language = LANGUAGE.CN;
+        }
+
+        /**
+         * Match Japanese characters ja / ja_jp
+         */
+        if (/^ja(_\w+)?/i.test(language)) {
+            language = LANGUAGE.JA;
         }
 
         lang = langs[language as LangType] ? (language as LangType) : DEFAULT_LANGUAGE;

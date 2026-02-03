@@ -1,0 +1,20 @@
+{
+    "tag.label.append_tag": "選択したタグを追加",
+    "tag.label.overwrite_tag": "選択したタグを非表示",
+    "tag.label.remove_tag": "選択したタグを削除",
+    "tag.label.replace_tag": "選択したタグを置換",
+    "tag.label.tags": "タグ",
+    "tag.tip.bulk_delete_tag": "これら {1} 件のタグを削除すると、関連付けられているすべてのエンティティからも削除されます。削除してもよろしいですか？",
+    "tag.tip.edit_tag_info": "このタグ情報を変更すると、このタグを使用しているすべてのエンティティに変更内容が同期されます。",
+    "tag.tip.not_any_tags": "タグなし",
+    "tag.tip.selected_entities_contain_follow_tags": "選択した {1} 件のエンティティには、次のタグが設定されています。",
+    "tag.tip.single_delete_tag": "このタグを削除すると、関連するすべてのアイテムからタグが削除され、表示されなくなります。タグ {1} を削除してもよろしいですか？",
+    "tag.title.add_tag": "タグを追加",
+    "tag.title.edit_tag": "タグを編集",
+    "tag.title.manage_tags": "タグ管理",
+    "tag.title.original_tag": "オリジナルタグ",
+    "tag.title.replace_with": "置換",
+    "tag.title.tag_management": "タグ管理",
+    "tag.title.tag_name": "タグ名称",
+    "tag.title.tagged_entities": "タグ付けされたエンティティ"
+}
