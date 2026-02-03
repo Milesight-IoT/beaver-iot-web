@@ -33,6 +33,7 @@ const componentMapLanguage: Record<LanguageComponentType, Record<LANGUAGE, strin
         [LANGUAGE.AR]: 'en',
         [LANGUAGE.RU]: 'ru',
         [LANGUAGE.PT_BR]: 'pt-br',
+        [LANGUAGE.JA]: 'ja',
     },
     dayjs: {
         [LANGUAGE.EN]: 'en',
@@ -52,6 +53,7 @@ const componentMapLanguage: Record<LanguageComponentType, Record<LANGUAGE, strin
         [LANGUAGE.AR]: 'ar',
         [LANGUAGE.RU]: 'ru',
         [LANGUAGE.PT_BR]: 'pt-br',
+        [LANGUAGE.JA]: 'ja',
     },
     antd: {
         [LANGUAGE.EN]: 'en_US',
@@ -68,6 +70,7 @@ const componentMapLanguage: Record<LanguageComponentType, Record<LANGUAGE, strin
         [LANGUAGE.AR]: 'ar_EG',
         [LANGUAGE.RU]: 'ru_RU',
         [LANGUAGE.PT_BR]: 'pt_BR',
+        [LANGUAGE.JA]: 'ja_JP',
     },
     mui: {
         [LANGUAGE.EN]: 'enUS',
@@ -84,6 +87,7 @@ const componentMapLanguage: Record<LanguageComponentType, Record<LANGUAGE, strin
         [LANGUAGE.AR]: 'arEG',
         [LANGUAGE.RU]: 'ruRU',
         [LANGUAGE.PT_BR]: 'ptBR',
+        [LANGUAGE.JA]: 'jaJP',
     },
 };
 

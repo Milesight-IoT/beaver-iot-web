@@ -205,6 +205,8 @@
     "common.language.cn_short": "ZH",
     "common.language.en": "English",
     "common.language.en_short": "EN",
+    "common.language.ja": "日语",
+    "common.language.ja_short": "JA",
     "common.message.add_success": "添加成功。",
     "common.message.click_to_upload_file": "点击或拖拽文件至此区域进行上传。",
     "common.message.copy_successful": "复制成功。",
