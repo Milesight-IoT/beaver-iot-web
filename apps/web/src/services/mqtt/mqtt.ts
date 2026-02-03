@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import mqtt from 'mqtt';
-import { safeJsonParse } from '@milesight/shared/src/utils/tools';
+import { safeJsonParse, delay } from '@milesight/shared/src/utils/tools';
 import { Logger } from '@milesight/shared/src/utils/logger';
 import globalEventManager, { EventEmitter } from '@milesight/shared/src/utils/event-emitter';
 import {
@@ -31,6 +31,8 @@ const DEFAULT_OPTIONS: mqtt.IClientOptions = {
     reconnectPeriod: 5000,
     /** Time to wait before a CONNACK is received */
     connectTimeout: 6000,
+    /** Whether to reconnect when the connection is broken and the CONNACK returns an error code */
+    reconnectOnConnackError: true,
     /**
      * If connection is broken and reconnects, subscribed topics are automatically subscribed again */
     resubscribe: true,
@@ -97,11 +99,14 @@ class MqttService {
             globalEventManager.publish(TOPIC_MQTT_STATUS_CHANGE, this.status);
         });
 
-        this.client.on('error', err => {
+        this.client.on('error', async err => {
             this.status = MQTT_STATUS.DISCONNECTED;
             this.client?.end();
             this.log(['MQTT error:', err]);
             globalEventManager.publish(TOPIC_MQTT_STATUS_CHANGE, this.status);
+
+            await delay(DEFAULT_OPTIONS.reconnectPeriod!);
+            this.client?.reconnect();
         });
 
         this.client.on('message', (topic, message) => {
