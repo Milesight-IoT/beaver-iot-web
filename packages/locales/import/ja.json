@@ -253,6 +253,7 @@
   "common.tip.selected_and_max_count": "{1}が選択されました。最大{2}",
   "common.unit.minute_short": "最小",
   "common.unit.second": "秒",
+  "common.valid.input_letter_num_special_char": "大文字と小文字の英字、数字、および{1}のみ入力可能です。",
   "dashboard.add_title": "ダッシュボードを追加",
   "dashboard.add_widget": "ウィジェットを追加",
   "dashboard.dashboard_name": "ダッシュボード名",

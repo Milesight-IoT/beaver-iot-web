@@ -253,6 +253,7 @@
     "common.tip.selected_and_max_count": "{1}が選択されました。最大{2}",
     "common.unit.minute_short": "最小",
     "common.unit.second": "秒",
+    "common.valid.input_letter_num_special_char": "大文字と小文字の英字、数字、および{1}のみ入力可能です。",
     "valid.date.selected_time_greater_than_now_time": "現在時刻より前の時刻はサポートされていません",
     "valid.date.start_time_greater_than_end_time": "開始時刻は終了時刻より遅く設定できません",
     "valid.date.start_time_less_than_pre_end_time": "開始時刻は、終了時刻より早く設定できません",
