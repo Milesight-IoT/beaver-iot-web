@@ -260,6 +260,7 @@
   "common.tip.selected_and_max_count": "{1} selected, maximum {2}",
   "common.unit.minute_short": "min",
   "common.unit.second": "s",
+  "common.valid.input_letter_num_special_char": "Only uppercase and lowercase English letters, numbers, and {1} are allowed.",
   "dashboard.add_title": "Add a Dashboard",
   "dashboard.add_widget": "Add widget",
   "dashboard.dashboard_name": "Dashboard Name",
