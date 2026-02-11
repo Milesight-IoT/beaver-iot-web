@@ -253,6 +253,7 @@
     "common.tip.selected_and_max_count": "已选 {1}, 最多选择 {2}",
     "common.unit.minute_short": "分钟",
     "common.unit.second": "秒",
+    "common.valid.input_letter_num_special_char": "仅大小写英文字母、数字和{1}允许输入。",
     "valid.date.selected_time_greater_than_now_time": "不支持早于当前时间的时间。",
     "valid.date.start_time_greater_than_end_time": "开始时间不能晚于结束时间。",
     "valid.date.start_time_less_than_pre_end_time": "开始时间不能早于上次结束时间。",

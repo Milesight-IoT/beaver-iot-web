@@ -253,6 +253,7 @@
   "common.tip.selected_and_max_count": "已选 {1}, 最多选择 {2}",
   "common.unit.minute_short": "分钟",
   "common.unit.second": "秒",
+  "common.valid.input_letter_num_special_char": "仅大小写英文字母、数字和{1}允许输入。",
   "dashboard.add_title": "添加仪表板",
   "dashboard.add_widget": "添加组件",
   "dashboard.dashboard_name": "仪表板名称",
