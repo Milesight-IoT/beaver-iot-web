@@ -1,5 +1,26 @@
 # @app/web
 
+## 1.3.1
+
+### Minor Changes
+
+-   dc0a35f: add japanese locale
+
+### Patch Changes
+
+-   df8d118: Add basic map service and components
+-   ad74d78: Support batch entity selection based on tags
+-   4dab16e: New alarm plugin added to the dashboard drawing board.
+-   13e3fed: Support to view and edit location info at device detail page
+-   4dab16e: Dashboard drawing board plugins names internationalization.
+-   4dab16e: New map plugin added to the dashboard drawing board.
+-   ebc62ff: update japanese locale
+-   766ba39: Add markLine for line-echart plugin
+-   eb911f5: Support to fill location data when add device
+-   Updated dependencies [b22640e]
+    -   @milesight/locales@0.1.0
+    -   @milesight/shared@1.0.1
+
 ## 1.3.0
 
 ### Minor Changes
